@@ -82,7 +82,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "IN", "OUT", resistance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
-            ckt.Objects["V1"].ParameterSets.SetParameter("acmag", 1.0);
+            ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1.0e6, 10));

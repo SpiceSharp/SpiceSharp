@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
@@ -57,7 +56,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Create a method for exporting a property using reflection. Supported:
         /// </summary>
-        /// <typeparam name="T">Input type</typeparam>
         /// <typeparam name="TResult">Return type</typeparam>
         /// <param name="simulation">Simulation</param>
         /// <param name="property">Property name</param>
@@ -79,7 +77,7 @@ namespace SpiceSharp.Behaviors
 
                 // Use properties
                 if (member is PropertyInfo pi)
-                    result = CreatePropertyExport<TResult>(simulation, pi);
+                    result = CreatePropertyExport<TResult>(pi);
                 
                 // Return
                 if (result != null)
@@ -139,10 +137,9 @@ namespace SpiceSharp.Behaviors
         /// Create an export method from a PropertyInfo (reflection)
         /// </summary>
         /// <typeparam name="TResult">Return type</typeparam>
-        /// <param name="simulation">Simulation</param>
         /// <param name="property">Property</param>
         /// <returns></returns>
-        private Func<TResult> CreatePropertyExport<TResult>(Simulation simulation, PropertyInfo property)
+        private Func<TResult> CreatePropertyExport<TResult>(PropertyInfo property)
         {
             // First make sure it is the correct return type
             if (property.PropertyType != typeof(TResult))

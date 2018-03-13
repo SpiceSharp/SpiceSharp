@@ -33,6 +33,22 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// Sets a parameter
+        /// </summary>
+        /// <param name="name">Parameter name</param>
+        /// <param name="value">Value</param>
+        /// <returns>False if the parameter could not be found</returns>
+        public bool SetParameter(string name, double value) => ParameterSets.SetParameter(name, value);
+
+        /// <summary>
+        /// Sets a parameter
+        /// </summary>
+        /// <param name="name">Parameter name</param>
+        /// <param name="value">Value</param>
+        /// <returns>False if the parameter could not be found</returns>
+        public bool SetParameter(string name, object value) => ParameterSets.SetParameter(name, value);
+
+        /// <summary>
         /// Gets a behavior from the entity
         /// </summary>
         /// <typeparam name="T">Behavior base type</typeparam>

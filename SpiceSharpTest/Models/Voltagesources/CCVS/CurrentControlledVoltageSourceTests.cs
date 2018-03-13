@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", 0.0),
                 new CurrentControlledVoltageSource("F1", "0", "out", "V1", transimpedance)
                 );
-            ckt.Objects["I1"].ParameterSets.SetParameter("acmag", magnitude);
+            ckt.Objects["I1"].SetParameter("acmag", magnitude);
 
             // Build simulation, exports and references
             AC ac = new AC("AC", new DecadeSweep(1.0, 10e3, 4));

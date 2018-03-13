@@ -86,7 +86,7 @@ namespace SpiceSharpTest.Models
                 CreateMOS1("M1", "out", "g", "0", "0",
                     "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
-            ckt.Objects["V1"].ParameterSets.SetParameter("acmag", 1.0);
+            ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
@@ -148,9 +148,9 @@ namespace SpiceSharpTest.Models
                 CreateMOS1("M1", "out", "g", "0", "0",
                     "MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
-            ckt.Objects["V1"].ParameterSets.SetParameter("acmag", 1.0);
-            ckt.Objects["M1"].ParameterSets.SetParameter("w", 100e-6);
-            ckt.Objects["M1"].ParameterSets.SetParameter("l", 100e-6);
+            ckt.Objects["V1"].SetParameter("acmag", 1.0);
+            ckt.Objects["M1"].SetParameter("w", 100e-6);
+            ckt.Objects["M1"].SetParameter("l", 100e-6);
 
             // Create simulation, exports and references
             Noise noise = new Noise("noise", "out", "V1", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 10));
