@@ -26,7 +26,7 @@ namespace SpiceSharp
             foreach (var member in members)
             {
                 // Skip properties without a SpiceName attribute
-                if (!member.IsDefined(typeof(PropertyNameAttribute), true))
+                if (!member.IsDefined(typeof(ParameterNameAttribute), true))
                     continue;
 
                 // Create setter
@@ -43,7 +43,7 @@ namespace SpiceSharp
                     continue;
 
                 // Store the setter
-                var names = member.GetCustomAttributes<PropertyNameAttribute>();
+                var names = member.GetCustomAttributes<ParameterNameAttribute>();
                 foreach (var name in names)
                     result[name.Name] = setter;
             }
@@ -220,7 +220,7 @@ namespace SpiceSharp
         /// <returns>True if the member has the property name as an attribute</returns>
         private bool HasName(MemberInfo member, string property)
         {
-            var names = (PropertyNameAttribute[])member.GetCustomAttributes(typeof(PropertyNameAttribute), true);
+            var names = (ParameterNameAttribute[])member.GetCustomAttributes(typeof(ParameterNameAttribute), true);
             foreach (var attribute in names)
             {
                 if (attribute.Name == property)

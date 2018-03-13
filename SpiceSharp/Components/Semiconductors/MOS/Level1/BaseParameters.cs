@@ -12,42 +12,42 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("off"), PropertyInfo("Device initially off")]
+        [ParameterName("off"), PropertyInfo("Device initially off")]
         public bool Off { get; set; }
-        [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
+        [ParameterName("icvbs"), PropertyInfo("Initial B-S voltage")]
         public Parameter InitialVoltageBs { get; } = new Parameter();
-        [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
+        [ParameterName("icvds"), PropertyInfo("Initial D-S voltage")]
         public Parameter InitialVoltageDs { get; } = new Parameter();
-        [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
+        [ParameterName("icvgs"), PropertyInfo("Initial G-S voltage")]
         public Parameter InitialVoltageGs { get; } = new Parameter();
-        [PropertyName("temp"), PropertyInfo("Instance temperature")]
+        [ParameterName("temp"), PropertyInfo("Instance temperature")]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter Temperature { get; } = new Parameter();
-        [PropertyName("w"), PropertyInfo("Width")]
+        [ParameterName("w"), PropertyInfo("Width")]
         public Parameter Width { get; } = new Parameter(1e-4);
-        [PropertyName("l"), PropertyInfo("Length")]
+        [ParameterName("l"), PropertyInfo("Length")]
         public Parameter Length { get; } = new Parameter(1e-4);
-        [PropertyName("as"), PropertyInfo("Source area")]
+        [ParameterName("as"), PropertyInfo("Source area")]
         public Parameter SourceArea { get; } = new Parameter();
-        [PropertyName("ad"), PropertyInfo("Drain area")]
+        [ParameterName("ad"), PropertyInfo("Drain area")]
         public Parameter DrainArea { get; } = new Parameter();
-        [PropertyName("ps"), PropertyInfo("Source perimeter")]
+        [ParameterName("ps"), PropertyInfo("Source perimeter")]
         public Parameter SourcePerimeter { get; } = new Parameter();
-        [PropertyName("pd"), PropertyInfo("Drain perimeter")]
+        [ParameterName("pd"), PropertyInfo("Drain perimeter")]
         public Parameter DrainPerimeter { get; } = new Parameter();
-        [PropertyName("nrs"), PropertyInfo("Source squares")]
+        [ParameterName("nrs"), PropertyInfo("Source squares")]
         public Parameter SourceSquares { get; } = new Parameter(1);
-        [PropertyName("nrd"), PropertyInfo("Drain squares")]
+        [ParameterName("nrd"), PropertyInfo("Drain squares")]
         public Parameter DrainSquares { get; } = new Parameter(1);
 
         /// <summary>
         /// Methods
         /// </summary>
-        [PropertyName("ic"), PropertyInfo("Vector of D-S, G-S, B-S voltages")]
+        [ParameterName("ic"), PropertyInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIc(double[] value)
         {
             if (value == null)

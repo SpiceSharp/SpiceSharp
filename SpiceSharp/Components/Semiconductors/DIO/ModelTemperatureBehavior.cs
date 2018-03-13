@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Conductance
         /// </summary>
-        [PropertyName("cond"), PropertyInfo("Ohmic conductance")]
+        [ParameterName("cond"), PropertyInfo("Ohmic conductance")]
         public double Conductance { get; internal set; }
 
         /// <summary>

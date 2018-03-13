@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Methods
         /// </summary>
-        [PropertyName("v"), PropertyInfo("Switch voltage")]
+        [ParameterName("v"), PropertyInfo("Switch voltage")]
         public double GetVoltage(RealState state)
         {
             if (state == null)
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [PropertyName("i"), PropertyInfo("Switch current")]
+        [ParameterName("i"), PropertyInfo("Switch current")]
         public double GetCurrent(RealState state)
         {
             if (state == null)
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 
             return (state.Solution[_posNode] - state.Solution[_negNode]) * Cond;
         }
-        [PropertyName("p"), PropertyInfo("Instantaneous power")]
+        [ParameterName("p"), PropertyInfo("Instantaneous power")]
         public double GetPower(RealState state)
         {
             if (state == null)

@@ -12,15 +12,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [PropertyName("pos_node")]
+        [ParameterName("pos_node")]
         public int PosNode { get; private set; }
-        [PropertyName("neg_node")]
+        [ParameterName("neg_node")]
         public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), PropertyInfo("Number of pins")]
 		public const int VoltageSourcePinCount = 2;
 
         /// <summary>

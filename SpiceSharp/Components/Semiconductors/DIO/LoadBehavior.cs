@@ -40,20 +40,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Extra variables
         /// </summary>
-        [PropertyName("vd"), PropertyInfo("Voltage across the internal diode")]
+        [ParameterName("vd"), PropertyInfo("Voltage across the internal diode")]
         public double InternalVoltage { get; protected set; }
-        [PropertyName("v"), PropertyInfo("Voltage across the diode")]
+        [ParameterName("v"), PropertyInfo("Voltage across the diode")]
         public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
+        [ParameterName("i"), ParameterName("id"), PropertyInfo("Current through the diode")]
         public double Current { get; protected set; }
-        [PropertyName("gd"), PropertyInfo("Small-signal conductance")]
+        [ParameterName("gd"), PropertyInfo("Small-signal conductance")]
         public double Conduct { get; protected set; }
-        [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
+        [ParameterName("p"), ParameterName("pd"), PropertyInfo("Power")]
         public double GetPower(RealState state)
         {
             if (state == null)

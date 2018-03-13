@@ -15,22 +15,22 @@ namespace SpiceSharpTest.Parameters
         /// </summary>
         public class ParameterExample : ParameterSet
         {
-            [PropertyName("field1")]
+            [ParameterName("field1")]
             public double Field1;
 
-            [PropertyName("property1")]
+            [ParameterName("property1")]
             public double Property1 { get; private set; }
 
-            [PropertyName("property2")]
+            [ParameterName("property2")]
             public double Property2 { get; set; }
 
-            [PropertyName("method1")]
+            [ParameterName("method1")]
             public void SetMethod1(double value) => Property1 = value;
 
-            [PropertyName("method2")]
+            [ParameterName("method2")]
             public double GetMethod() => 1.0;
 
-            [PropertyName("parameter1")]
+            [ParameterName("parameter1")]
             public Parameter Parameter1 { get; } = new Parameter();
         }
 

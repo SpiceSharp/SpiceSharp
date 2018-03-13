@@ -12,25 +12,25 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("temp"), PropertyInfo("Instance temperature")]
+        [ParameterName("temp"), PropertyInfo("Instance temperature")]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter Temperature { get; } = new Parameter(300.15);
-        [PropertyName("area"), PropertyInfo("Area factor")]
+        [ParameterName("area"), PropertyInfo("Area factor")]
         public Parameter Area { get; } = new Parameter(1);
-        [PropertyName("off"), PropertyInfo("Device initially off")]
+        [ParameterName("off"), PropertyInfo("Device initially off")]
         public bool Off { get; set; }
-        [PropertyName("icvbe"), PropertyInfo("Initial B-E voltage")]
+        [ParameterName("icvbe"), PropertyInfo("Initial B-E voltage")]
         public Parameter InitialVoltageBe { get; } = new Parameter();
-        [PropertyName("icvce"), PropertyInfo("Initial C-E voltage")]
+        [ParameterName("icvce"), PropertyInfo("Initial C-E voltage")]
         public Parameter InitialVoltageCe { get; } = new Parameter();
-        [PropertyName("sens_area"), PropertyInfo("flag to request sensitivity WRT area")]
+        [ParameterName("sens_area"), PropertyInfo("flag to request sensitivity WRT area")]
         public bool Sensitivity { get; set; }
 
-        [PropertyName("ic"), PropertyInfo("Initial condition vector")]
+        [ParameterName("ic"), PropertyInfo("Initial condition vector")]
         public void SetIc(double[] value)
         {
             if (value == null)

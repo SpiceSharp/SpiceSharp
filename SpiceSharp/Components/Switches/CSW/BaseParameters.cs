@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("on"), PropertyInfo("Initially closed")]
+        [ParameterName("on"), PropertyInfo("Initially closed")]
         public void SetZeroStateOn() { ZeroState = true; }
-        [PropertyName("off"), PropertyInfo("Initially open")]
+        [ParameterName("off"), PropertyInfo("Initially open")]
         public void SetZeroStateOff() { ZeroState = false; }
 
         /// <summary>

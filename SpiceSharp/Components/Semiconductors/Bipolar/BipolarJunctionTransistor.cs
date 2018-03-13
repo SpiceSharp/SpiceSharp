@@ -17,19 +17,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [PropertyName("colnode"), PropertyInfo("Number of collector node")]
+        [ParameterName("colnode"), PropertyInfo("Number of collector node")]
         public int CollectorNode { get; private set; }
-        [PropertyName("basenode"), PropertyInfo("Number of base node")]
+        [ParameterName("basenode"), PropertyInfo("Number of base node")]
         public int BaseNode { get; private set; }
-        [PropertyName("emitnode"), PropertyInfo("Number of emitter node")]
+        [ParameterName("emitnode"), PropertyInfo("Number of emitter node")]
         public int EmitterNode { get; private set; }
-        [PropertyName("substnode"), PropertyInfo("Number of substrate node")]
+        [ParameterName("substnode"), PropertyInfo("Number of substrate node")]
         public int SubstrateNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), PropertyInfo("Number of pins")]
 		public const int BipolarJunctionTransistorPinCount = 4;
 
         /// <summary>

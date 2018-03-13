@@ -10,13 +10,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("capacitance"), PropertyInfo("Device capacitance", IsPrincipal = true)]
+        [ParameterName("capacitance"), PropertyInfo("Device capacitance", IsPrincipal = true)]
         public Parameter Capacitance { get; } = new Parameter();
-        [PropertyName("ic"), PropertyInfo("Initial capacitor voltage", Interesting = false)]
+        [ParameterName("ic"), PropertyInfo("Initial capacitor voltage", Interesting = false)]
         public Parameter InitialCondition { get; } = new Parameter();
-        [PropertyName("w"), PropertyInfo("Device width", Interesting = false)]
+        [ParameterName("w"), PropertyInfo("Device width", Interesting = false)]
         public Parameter Width { get; } = new Parameter();
-        [PropertyName("l"), PropertyInfo("Device length", Interesting = false)]
+        [ParameterName("l"), PropertyInfo("Device length", Interesting = false)]
         public Parameter Length { get; } = new Parameter();
 
         /// <summary>

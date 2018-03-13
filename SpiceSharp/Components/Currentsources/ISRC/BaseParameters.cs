@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("waveform"), PropertyInfo("The waveform object for this source")]
+        [ParameterName("waveform"), PropertyInfo("The waveform object for this source")]
         public Waveform Waveform { get; set; }
-        [PropertyName("dc"), PropertyInfo("D.C. source value")]
+        [ParameterName("dc"), PropertyInfo("D.C. source value")]
         public Parameter DcValue { get; } = new Parameter();
 
         /// <summary>

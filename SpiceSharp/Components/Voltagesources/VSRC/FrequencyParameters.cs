@@ -12,11 +12,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("acmag"), PropertyInfo("A.C. Magnitude")]
+        [ParameterName("acmag"), PropertyInfo("A.C. Magnitude")]
         public Parameter AcMagnitude { get; } = new Parameter();
-        [PropertyName("acphase"), PropertyInfo("A.C. Phase")]
+        [ParameterName("acphase"), PropertyInfo("A.C. Phase")]
         public Parameter AcPhase { get; } = new Parameter();
-        [PropertyName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
+        [ParameterName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
             if (ac == null)

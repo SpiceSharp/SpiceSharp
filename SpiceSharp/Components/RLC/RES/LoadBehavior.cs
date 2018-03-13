@@ -21,21 +21,21 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("v"), PropertyInfo("Voltage")]
+        [ParameterName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [PropertyName("i"), PropertyInfo("Current")]
+        [ParameterName("i"), PropertyInfo("Current")]
         public double GetCurrent(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return (state.Solution[_posNode] - state.Solution[_negNode]) * _temp.Conductance;
         }
-        [PropertyName("p"), PropertyInfo("Power")]
+        [ParameterName("p"), PropertyInfo("Power")]
         public double GetPower(RealState state)
         {
 			if (state == null)

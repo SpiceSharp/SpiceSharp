@@ -21,19 +21,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The initial value of the sweep
         /// </summary>
-        [PropertyName("start"), PropertyInfo("Initial value")]
+        [ParameterName("start"), PropertyInfo("Initial value")]
         public T Initial { get; protected set; }
 
         /// <summary>
         /// The final value of the sweep
         /// </summary>
-        [PropertyName("final"), PropertyInfo("Final value")]
+        [ParameterName("final"), PropertyInfo("Final value")]
         public T Final { get; protected set; }
 
         /// <summary>
         /// The number of points in the sweep
         /// </summary>
-        [PropertyName("steps"), PropertyName("n"), PropertyInfo("Number of steps")]
+        [ParameterName("steps"), ParameterName("n"), PropertyInfo("Number of steps")]
         public int Count { get; protected set; }
 
         /// <summary>

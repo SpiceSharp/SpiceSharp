@@ -27,25 +27,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public int DrainNodePrime { get; protected set; }
         public int SourceNodePrime { get; protected set; }
 
-        [PropertyName("von"), PropertyInfo(" ")]
+        [ParameterName("von"), PropertyInfo(" ")]
         public double Von { get; protected set; }
-        [PropertyName("vdsat"), PropertyInfo("Saturation drain voltage")]
+        [ParameterName("vdsat"), PropertyInfo("Saturation drain voltage")]
         public double SaturationVoltageDs { get; protected set; }
-        [PropertyName("id"), PropertyInfo("Drain current")]
+        [ParameterName("id"), PropertyInfo("Drain current")]
         public double DrainCurrent { get; protected set; }
-        [PropertyName("ibs"), PropertyInfo("B-S junction current")]
+        [ParameterName("ibs"), PropertyInfo("B-S junction current")]
         public double BsCurrent { get; protected set; }
-        [PropertyName("ibd"), PropertyInfo("B-D junction current")]
+        [ParameterName("ibd"), PropertyInfo("B-D junction current")]
         public double BdCurrent { get; protected set; }
-        [PropertyName("gmb"), PropertyName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
+        [ParameterName("gmb"), ParameterName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
         public double TransconductanceBs { get; protected set; }
-        [PropertyName("gm"), PropertyInfo("Transconductance")]
+        [ParameterName("gm"), PropertyInfo("Transconductance")]
         public double Transconductance { get; protected set; }
-        [PropertyName("gds"), PropertyInfo("Drain-Source conductance")]
+        [ParameterName("gds"), PropertyInfo("Drain-Source conductance")]
         public double CondDs { get; protected set; }
-        [PropertyName("gbd"), PropertyInfo("Bulk-Drain conductance")]
+        [ParameterName("gbd"), PropertyInfo("Bulk-Drain conductance")]
         public double CondBd { get; protected set; }
-        [PropertyName("gbs"), PropertyInfo("Bulk-Source conductance")]
+        [ParameterName("gbs"), PropertyInfo("Bulk-Source conductance")]
         public double CondBs { get; protected set; }
 
         /// <summary>

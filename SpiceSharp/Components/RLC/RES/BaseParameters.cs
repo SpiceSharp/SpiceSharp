@@ -10,18 +10,18 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("resistance"), PropertyInfo("Resistance", IsPrincipal = true)]
+        [ParameterName("resistance"), PropertyInfo("Resistance", IsPrincipal = true)]
         public Parameter Resistance { get; } = new Parameter();
-        [PropertyName("temp"), PropertyInfo("Instance operating temperature", Interesting = false)]
+        [ParameterName("temp"), PropertyInfo("Instance operating temperature", Interesting = false)]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter Temperature { get; } = new Parameter(300.15);
-        [PropertyName("w"), PropertyInfo("Width", Interesting = false)]
+        [ParameterName("w"), PropertyInfo("Width", Interesting = false)]
         public Parameter Width { get; } = new Parameter();
-        [PropertyName("l"), PropertyInfo("Length", Interesting = false)]
+        [ParameterName("l"), PropertyInfo("Length", Interesting = false)]
         public Parameter Length { get; } = new Parameter();
 
         /// <summary>

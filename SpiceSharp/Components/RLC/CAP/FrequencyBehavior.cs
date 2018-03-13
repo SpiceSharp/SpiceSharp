@@ -27,14 +27,14 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         protected MatrixElement<Complex> PosNegPtr { get; private set; }
         protected MatrixElement<Complex> NegPosPtr { get; private set; }
 
-        [PropertyName("v"), PropertyInfo("Capacitor voltage")]
+        [ParameterName("v"), PropertyInfo("Capacitor voltage")]
         public Complex GetVoltage(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [PropertyName("i"), PropertyName("c"), PropertyInfo("Capacitor current")]
+        [ParameterName("i"), ParameterName("c"), PropertyInfo("Capacitor current")]
         public Complex GetCurrent(ComplexState state)
         {
             if (state == null)
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             Complex conductance = state.Laplace * _bp.Capacitance.Value;
             return (state.Solution[_posNode] - state.Solution[_negNode]) * conductance;
         }
-        [PropertyName("p"), PropertyInfo("Capacitor power")]
+        [ParameterName("p"), PropertyInfo("Capacitor power")]
         public Complex GetPower(ComplexState state)
         {
             if (state == null)

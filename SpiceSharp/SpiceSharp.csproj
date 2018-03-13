@@ -265,7 +265,7 @@
     <Compile Include="Simulations\IntegrationMethods\Breakpoints.cs" />
     <Compile Include="Simulations\IntegrationMethods\Trapezoidal.cs" />
     <Compile Include="Attributes\PropertyInfoAttribute.cs" />
-    <Compile Include="Attributes\PropertyNameAttribute.cs" />
+    <Compile Include="Attributes\ParameterNameAttribute.cs" />
     <Compile Include="Circuits\Entities.cs" />
     <Compile Include="Circuits\Circuit.cs" />
     <Compile Include="Circuits\Node.cs" />

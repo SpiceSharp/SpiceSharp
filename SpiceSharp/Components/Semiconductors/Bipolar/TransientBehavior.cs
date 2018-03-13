@@ -58,31 +58,31 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Device methods and properties
         /// </summary>
-        [PropertyName("qbe"), PropertyInfo("Charge storage B-E junction")]
+        [ParameterName("qbe"), PropertyInfo("Charge storage B-E junction")]
         public double ChargeBe => StateChargeBe.Current;
-        [PropertyName("cqbe"), PropertyInfo("Capacitance current due to charges in the B-E junction")]
+        [ParameterName("cqbe"), PropertyInfo("Capacitance current due to charges in the B-E junction")]
         public double CurrentBe => StateChargeBe.Derivative;
-        [PropertyName("qbc"), PropertyInfo("Charge storage B-C junction")]
+        [ParameterName("qbc"), PropertyInfo("Charge storage B-C junction")]
         public double ChargeBc => StateChargeBc.Current;
-        [PropertyName("cqbc"), PropertyInfo("Capacitance current due to charges in the B-C junction")]
+        [ParameterName("cqbc"), PropertyInfo("Capacitance current due to charges in the B-C junction")]
         public double CurrentBc => StateChargeBc.Derivative;
-        [PropertyName("qcs"), PropertyInfo("Charge storage C-S junction")]
+        [ParameterName("qcs"), PropertyInfo("Charge storage C-S junction")]
         public double ChargeCs => StateChargeCs.Current;
-        [PropertyName("cqcs"), PropertyInfo("Capacitance current due to charges in the C-S junction")]
+        [ParameterName("cqcs"), PropertyInfo("Capacitance current due to charges in the C-S junction")]
         public double CurrentCs => StateChargeCs.Derivative;
-        [PropertyName("qbx"), PropertyInfo("Charge storage B-X junction")]
+        [ParameterName("qbx"), PropertyInfo("Charge storage B-X junction")]
         public double ChargeBx => StateChargeBx.Current;
-        [PropertyName("cqbx"), PropertyInfo("Capacitance current due to charges in the B-X junction")]
+        [ParameterName("cqbx"), PropertyInfo("Capacitance current due to charges in the B-X junction")]
         public double CurrentBx => StateChargeBx.Derivative;
-        [PropertyName("cexbc"), PropertyInfo("Total capacitance in B-X junction")]
+        [ParameterName("cexbc"), PropertyInfo("Total capacitance in B-X junction")]
         public double CurrentExBc => StateExcessPhaseCurrentBc.Current;
-        [PropertyName("cpi"), PropertyInfo("Internal base to emitter capactance")]
+        [ParameterName("cpi"), PropertyInfo("Internal base to emitter capactance")]
         public double CapBe { get; internal set; }
-        [PropertyName("cmu"), PropertyInfo("Internal base to collector capactiance")]
+        [ParameterName("cmu"), PropertyInfo("Internal base to collector capactiance")]
         public double CapBc { get; internal set; }
-        [PropertyName("cbx"), PropertyInfo("Base to collector capacitance")]
+        [ParameterName("cbx"), PropertyInfo("Base to collector capacitance")]
         public double CapBx { get; internal set; }
-        [PropertyName("ccs"), PropertyInfo("Collector to substrate capacitance")]
+        [ParameterName("ccs"), PropertyInfo("Collector to substrate capacitance")]
         public double CapCs { get; internal set; }
 
         /// <summary>

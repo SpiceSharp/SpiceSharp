@@ -12,11 +12,11 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("acmag"), PropertyInfo("A.C. magnitude value")]
+        [ParameterName("acmag"), PropertyInfo("A.C. magnitude value")]
         public Parameter AcMagnitude { get; } = new Parameter();
-        [PropertyName("acphase"), PropertyInfo("A.C. phase value")]
+        [ParameterName("acphase"), PropertyInfo("A.C. phase value")]
         public Parameter AcPhase { get; } = new Parameter();
-        [PropertyName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
+        [ParameterName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
             if (ac == null)

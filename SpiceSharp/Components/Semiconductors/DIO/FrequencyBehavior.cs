@@ -37,23 +37,23 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the junction capacitance
         /// </summary>
-        [PropertyName("cd"), PropertyInfo("Diode capacitance")]
+        [ParameterName("cd"), PropertyInfo("Diode capacitance")]
         public double Capacitance { get; protected set; }
-        [PropertyName("vd"), PropertyInfo("Voltage across the internal diode")]
+        [ParameterName("vd"), PropertyInfo("Voltage across the internal diode")]
         public Complex GetDiodeVoltage(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posPrimeNode] - state.Solution[_negNode];
         }
-        [PropertyName("v"), PropertyInfo("Voltage across the diode")]
+        [ParameterName("v"), PropertyInfo("Voltage across the diode")]
         public Complex GetVoltage(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
+        [ParameterName("i"), ParameterName("id"), PropertyInfo("Current through the diode")]
         public Complex GetCurrent(ComplexState state)
         {
             if (state == null)
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             Complex voltage = state.Solution[_posPrimeNode] - state.Solution[_negNode];
             return voltage * geq;
         }
-        [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
+        [ParameterName("p"), ParameterName("pd"), PropertyInfo("Power")]
         public Complex GetPower(ComplexState state)
         {
             if (state == null)

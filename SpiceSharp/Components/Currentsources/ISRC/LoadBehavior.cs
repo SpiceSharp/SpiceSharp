@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        [PropertyName("v"), PropertyInfo("Voltage accross the supply")]
+        [ParameterName("v"), PropertyInfo("Voltage accross the supply")]
         public double GetV(RealState state)
         {
 			if (state == null)
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [PropertyName("p"), PropertyInfo("Power supplied by the source")]
+        [ParameterName("p"), PropertyInfo("Power supplied by the source")]
         public double GetP(RealState state)
         {
 			if (state == null)
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 
             return (state.Solution[_posNode] - state.Solution[_posNode]) * -Current;
         }
-        [PropertyName("c"), PropertyName("i"), PropertyInfo("Current through current source")]
+        [ParameterName("c"), ParameterName("i"), PropertyInfo("Current through current source")]
         public double Current { get; protected set; }
 
         /// <summary>

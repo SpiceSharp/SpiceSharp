@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyName("kf"), PropertyInfo("Flicker Noise Coefficient")]
+        [ParameterName("kf"), PropertyInfo("Flicker Noise Coefficient")]
         public Parameter FlickerNoiseCoefficient { get; } = new Parameter();
-        [PropertyName("af"), PropertyInfo("Flicker Noise Exponent")]
+        [ParameterName("af"), PropertyInfo("Flicker Noise Exponent")]
         public Parameter FlickerNoiseExponent { get; } = new Parameter(1);
     }
 }
