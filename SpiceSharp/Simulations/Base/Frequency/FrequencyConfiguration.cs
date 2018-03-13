@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations.Sweeps;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Parameters for a <see cref="FrequencySimulation"/>

@@ -117,7 +117,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         int expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix[crow, i + 1], 1e-12);
+                        Assert.AreEqual(expected, matrix.GetValue(crow, i + 1), 1e-12);
                     }
                     else
                         Assert.AreEqual(null, matrix.FindElement(crow, i + 1));
@@ -168,7 +168,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         int expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix[i + 1, ccolumn], 1e-12);
+                        Assert.AreEqual(expected, matrix.GetValue(i + 1, ccolumn), 1e-12);
                     }
                     else
                         Assert.AreEqual(null, matrix.FindElement(i + 1, ccolumn));

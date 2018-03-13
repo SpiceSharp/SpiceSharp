@@ -79,7 +79,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1e3, 10e6, 5));
+            AC ac = new AC("ac", new DecadeSweep(1e3, 10e6, 5));
 
             // Create exports
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "V1", "i") };
@@ -141,7 +141,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create the noise, exports and reference values
-            Noise noise = new Noise("Noise", "out", "V1", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 10));
+            Noise noise = new Noise("Noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
             Export<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {

@@ -395,7 +395,7 @@ namespace SpiceSharp.Simulations
             while (element != null)
             {
                 element.Value = 0.0;
-                element = element.Next;
+                element = element.Below;
             }
 
             // Go over all nodes

@@ -84,7 +84,7 @@ namespace SpiceSharp.Simulations
                 do
                 {
                     Execute();
-                } while (controller.Continue(this));
+                } while (controller.ContinueExecution(this));
                 controller.Finalize(this);
             }
             else

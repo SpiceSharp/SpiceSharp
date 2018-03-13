@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Simulations.Sweeps
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A linear sweep

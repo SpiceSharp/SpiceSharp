@@ -223,7 +223,7 @@ namespace SpiceSharp.Algebra
             while (rhsElement != null)
             {
                 rhsElement.Value = default;
-                rhsElement = rhsElement.Next;
+                rhsElement = rhsElement.Below;
             }
         }
 
@@ -275,7 +275,7 @@ namespace SpiceSharp.Algebra
                 }
 
                 if (rhsElement != null && rhsElement.Index < r)
-                    rhsElement = rhsElement.Next;
+                    rhsElement = rhsElement.Below;
 
                 // Show the element
                 if (rhsElement != null && rhsElement.Index == r)

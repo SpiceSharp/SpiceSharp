@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Simulations.Sweeps
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Logarithmic sweep (points per decade)

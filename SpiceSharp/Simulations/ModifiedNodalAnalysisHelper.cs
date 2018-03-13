@@ -16,6 +16,9 @@ namespace SpiceSharp.Simulations
         /// <param name="magnitude">Magnitude method</param>
         public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+
             /*
              * MNA often has patterns that we can already use for pivoting
              * 
@@ -90,6 +93,9 @@ namespace SpiceSharp.Simulations
         /// <param name="gmin">Conductance</param>
         public static void ApplyDiagonalGmin(this Solver<double> solver, double gmin)
         {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+
             // Skip if not necessary
             if (gmin <= 0.0)
                 return;

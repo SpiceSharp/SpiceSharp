@@ -106,7 +106,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
+            AC ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };

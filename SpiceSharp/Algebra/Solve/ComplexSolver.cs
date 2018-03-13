@@ -141,7 +141,7 @@ namespace SpiceSharp.Algebra
                 while (index < rhsElement.Index)
                     _intermediate[index++] = 0.0;
                 _intermediate[index++] = rhsElement.Value;
-                rhsElement = rhsElement.Next;
+                rhsElement = rhsElement.Below;
             }
             while (index <= Order)
                 _intermediate[index++] = 0.0;
@@ -208,7 +208,7 @@ namespace SpiceSharp.Algebra
             {
                 int newIndex = Column[Row.Reverse(rhsElement.Index)];
                 _intermediate[newIndex] = rhsElement.Value;
-                rhsElement = rhsElement.Next;
+                rhsElement = rhsElement.Below;
             }
 
             // Forward elimination

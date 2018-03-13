@@ -31,11 +31,11 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the next element
         /// </summary>
-        public abstract VectorElement<T> Next { get; }
+        public abstract VectorElement<T> Below { get; }
 
         /// <summary>
         /// Gets the previous element
         /// </summary>
-        public abstract VectorElement<T> Previous { get; }
+        public abstract VectorElement<T> Above { get; }
     }
 }

@@ -21,9 +21,9 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <param name="magnitude">Magnitude method</param>
-        public abstract void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step, Func<T, double> magnitude);
+        public abstract void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude);
 
         /// <summary>
         /// Update the strategy before the pivot is moved
@@ -31,23 +31,23 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Right-hand side</param>
         /// <param name="pivot">Pivot</param>
-        /// <param name="step">Step</param>
-        public abstract void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int step);
+        /// <param name="eliminationStep">Step</param>
+        public abstract void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int eliminationStep);
 
         /// <summary>
         /// Update the strategy after the pivot is moved
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="pivot">Pivot</param>
-        /// <param name="step">Step</param>
-        public abstract void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int step);
+        /// <param name="eliminationStep">Step</param>
+        public abstract void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep);
 
         /// <summary>
         /// Find a pivot
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <returns></returns>
-        public abstract MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int step);
+        public abstract MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int eliminationStep);
     }
 }

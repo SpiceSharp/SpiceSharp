@@ -29,39 +29,6 @@ namespace SpiceSharp.Algebra
         private int _allocatedSize;
 
         /// <summary>
-        /// Gets or sets an element
-        /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
-        public override T this[int row, int column]
-        {
-            get
-            {
-                var element = FindElement(row, column);
-                if (element == null)
-                    return default;
-                return element.Value;
-            }
-            set
-            {
-                if (value.Equals(default))
-                {
-                    // We don't need to create a new element unnecessarily
-                    var element = FindElement(row, column);
-                    if (element != null)
-                        element.Value = default;
-                }
-                else
-                {
-                    // We have to create an element if it doesn't exist yet
-                    var element = GetElement(row, column);
-                    element.Value = value;
-                }
-            }
-        }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public SparseMatrix()
@@ -107,6 +74,45 @@ namespace SpiceSharp.Algebra
             _diagonal = new SparseMatrixElement<T>[_allocatedSize + 1];
             _trashCan = new SparseMatrixElement<T>(0, 0);
         }
+
+        /// <summary>
+        /// Gets a value in the matrix at a specific row and column
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <returns></returns>
+        public override T GetValue(int row, int column)
+        {
+            var element = FindElement(row, column);
+            if (element == null)
+                return default;
+            return element.Value;
+        }
+
+        /// <summary>
+        /// Sets the value in the matrix at a specific row and column
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        public override void SetValue(int row, int column, T value)
+        {
+            if (value.Equals(default))
+            {
+                // We don't need to create a new element unnecessarily
+                var element = FindElement(row, column);
+                if (element != null)
+                    element.Value = default;
+            }
+            else
+            {
+                // We have to create an element if it doesn't exist yet
+                var element = GetElement(row, column);
+                element.Value = value;
+            }
+        }
+
 
         /// <summary>
         /// Get an element

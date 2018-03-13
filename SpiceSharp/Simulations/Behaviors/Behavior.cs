@@ -155,7 +155,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="member">Member</param>
         /// <param name="property">Property name</param>
         /// <returns></returns>
-        private bool HasProperty(MemberInfo member, string property)
+        private static bool HasProperty(MemberInfo member, string property)
         {
             var names = (ParameterNameAttribute[]) member.GetCustomAttributes(typeof(ParameterNameAttribute), true);
             foreach (var attribute in names)

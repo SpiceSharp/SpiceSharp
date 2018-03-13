@@ -145,7 +145,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
 
                 // Include elements on the Rhs vector
                 while (rhsElement != null && rhsElement.Index < step)
-                    rhsElement = rhsElement.Next;
+                    rhsElement = rhsElement.Below;
                 if (rhsElement != null && rhsElement.Index == i)
                     count++;
                 

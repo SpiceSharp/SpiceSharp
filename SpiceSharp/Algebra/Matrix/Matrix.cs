@@ -13,14 +13,6 @@ namespace SpiceSharp.Algebra
         public int Size { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value in the matrix
-        /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
-        public abstract T this[int row, int column] { get; set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="size">Size</param>
@@ -30,5 +22,22 @@ namespace SpiceSharp.Algebra
                 throw new SparseException("Invalid matrix size {0}".FormatString(size)); 
             Size = size;
         }
+
+        /// <summary>
+        /// Gets a value in the matrix at a specific row and column
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <returns></returns>
+        public abstract T GetValue(int row, int column);
+
+        /// <summary>
+        /// Sets the value in the matrix at a specific row and column
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        public abstract void SetValue(int row, int column, T value);
     }
 }

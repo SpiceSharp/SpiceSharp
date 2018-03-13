@@ -70,6 +70,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <returns></returns>
         public override Func<double> CreateExport(Simulation simulation, string propertyName)
         {
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
             // We avoid using reflection for common components
             var state = simulation.States.Get<RealState>();
             if (state == null)

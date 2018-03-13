@@ -31,12 +31,12 @@ namespace SpiceSharp.Algebra.Vector
         /// <summary>
         /// Gets the next element
         /// </summary>
-        public override VectorElement<T> Next => NextInVector;
+        public override VectorElement<T> Below => NextInVector;
 
         /// <summary>
         /// Gets the previous element
         /// </summary>
-        public override VectorElement<T> Previous => PreviousInVector;
+        public override VectorElement<T> Above => PreviousInVector;
 
         /// <summary>
         /// Constructor

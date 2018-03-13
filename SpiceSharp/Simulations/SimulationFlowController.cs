@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="simulation">Simulation</param>
         /// <returns>True if another simulation needs to be executed</returns>
-        public abstract bool Continue(Simulation simulation);
+        public abstract bool ContinueExecution(Simulation simulation);
 
         /// <summary>
         /// Finalize simulation flow

@@ -41,7 +41,8 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Simulation {0} uses whole complex plane".FormatString(_simulation));
                     return frequencySimulation.ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
                 }
-                throw new CircuitException("Simulation {0} does not simulate in frequency".FormatString(_simulation));
+
+                return double.NaN;
             }
         }
 
@@ -54,7 +55,7 @@ namespace SpiceSharp.Simulations
             {
                 if (_simulation is FrequencySimulation frequencySimulation && frequencySimulation.ComplexState != null)
                     return frequencySimulation.ComplexState.Laplace;
-                throw new CircuitException("Simulation {0} does not simulate in the complex plain".FormatString(_simulation));
+                return double.NaN;
             }
         }
 
@@ -67,7 +68,7 @@ namespace SpiceSharp.Simulations
             {
                 if (_simulation is DC dc && dc.Sweeps.Count > 0)
                     return dc.Sweeps.Top.CurrentValue;
-                throw new CircuitException("Simulation {0} is not a DC analysis".FormatString(_simulation));
+                return double.NaN;
             }
         }
         

@@ -341,7 +341,7 @@ namespace SpiceSharp.Algebra
             for (int i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
-                    element = element.Next;
+                    element = element.Below;
                 sb.AppendLine(element.Index == i ? element.Value.ToString() : "...");
             }
             sb.Append("]");
@@ -362,7 +362,7 @@ namespace SpiceSharp.Algebra
             for (int i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
-                    element = element.Next;
+                    element = element.Below;
                 sb.AppendLine(element.Index == i ? element.Value.ToString(format, formatProvider) : "...");
             }
             sb.Append("]");

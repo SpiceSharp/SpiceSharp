@@ -58,7 +58,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation, exports and references
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.LinearSweep(1.0, 10001, 10));
+            AC ac = new AC("ac", new LinearSweep(1.0, 10001, 10));
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { f => 1e-3 };
             AnalyzeAC(ac, ckt, exports, references);

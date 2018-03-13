@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["I1"].SetParameter("acmag", magnitude);
 
             // Make the simulation, exports and references
-            AC ac = new AC("AC", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e4, 3));
+            AC ac = new AC("AC", new DecadeSweep(1, 1e4, 3));
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
             AnalyzeAC(ac, ckt, exports, references);
