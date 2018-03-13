@@ -19,6 +19,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Create an export method for AC analysis
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
         public virtual Func<Complex> CreateAcExport(Simulation simulation, string propertyName)

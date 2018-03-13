@@ -67,6 +67,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Create exports
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Parameter</param>
         /// <returns></returns>
         public override Func<double> CreateExport(Simulation simulation, string propertyName)

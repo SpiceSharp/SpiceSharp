@@ -65,6 +65,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Create an export method
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
         public override Func<double> CreateExport(Simulation simulation, string propertyName)

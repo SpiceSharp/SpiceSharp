@@ -55,6 +55,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Create delegate for a property
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
         public override Func<Complex> CreateAcExport(Simulation simulation, string propertyName)
