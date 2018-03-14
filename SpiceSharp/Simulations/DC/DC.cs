@@ -36,6 +36,8 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The simulation name</param>
         public DC(Identifier name) : base(name)
         {
+            var config = new DcConfiguration();
+            ParameterSets.Add(config);
         }
 
         /// <summary>
@@ -108,6 +110,7 @@ namespace SpiceSharp.Simulations
             Sweeps = new NestedSweeps(dcconfig.Sweeps);
             Parameter[] swept = new Parameter[Sweeps.Count];
             Parameter[] original = new Parameter[Sweeps.Count];
+            int levelNeedsTemperature = -1;
 
             // Initialize first time
             for (int i = 0; i < dcconfig.Sweeps.Count; i++)
@@ -116,8 +119,13 @@ namespace SpiceSharp.Simulations
                 var sweep = Sweeps[i];
 
                 // Try finding the parameter to sweep
-                var args = new DCParameterSearchEventArgs(sweep.Parameter);
+                var args = new DCParameterSearchEventArgs(sweep.Parameter, i);
                 OnParameterSearch?.Invoke(this, args);
+
+                // Keep track of the highest level that needs to recalculate temperature
+                if (args.TemperatureNeeded)
+                    levelNeedsTemperature = Math.Max(levelNeedsTemperature, i);
+
                 if (args.Result != null)
                     swept[i] = args.Result;
                 else
@@ -137,6 +145,13 @@ namespace SpiceSharp.Simulations
 
                 original[i] = (Parameter)swept[i].Clone();
                 swept[i].Set(sweep.Initial);
+            }
+
+            // Execute temperature behaviors if necessary the first time
+            if (levelNeedsTemperature >= 0)
+            {
+                foreach (var behavior in TemperatureBehaviors)
+                    behavior.Temperature(this);
             }
 
             // Execute the sweeps
@@ -171,6 +186,13 @@ namespace SpiceSharp.Simulations
                 {
                     Sweeps[level].Increment();
                     swept[level].Set(Sweeps[level].CurrentValue);
+
+                    // If temperature behavior is needed for this level or higher, run behaviors
+                    if (levelNeedsTemperature >= level)
+                    {
+                        foreach (var behavior in TemperatureBehaviors)
+                            behavior.Temperature(this);
+                    }
                 }
             }
 
