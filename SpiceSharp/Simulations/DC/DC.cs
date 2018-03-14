@@ -122,12 +122,14 @@ namespace SpiceSharp.Simulations
                 var args = new DCParameterSearchEventArgs(sweep.Parameter, i);
                 OnParameterSearch?.Invoke(this, args);
 
-                // Keep track of the highest level that needs to recalculate temperature
-                if (args.TemperatureNeeded)
-                    levelNeedsTemperature = Math.Max(levelNeedsTemperature, i);
-
                 if (args.Result != null)
+                {
                     swept[i] = args.Result;
+
+                    // Keep track of the highest level that needs to recalculate temperature
+                    if (args.TemperatureNeeded)
+                        levelNeedsTemperature = Math.Max(levelNeedsTemperature, i);
+                }
                 else
                 {
                     if (!Circuit.Objects.Contains(sweep.Parameter))
