@@ -117,7 +117,7 @@
     <Compile Include="Algebra\Vector\SparseVectorElement.cs" />
     <Compile Include="Algebra\Vector\Vector.cs" />
     <Compile Include="Algebra\Vector\VectorElement.cs" />
-    <Compile Include="Parameter.cs" />
+    <Compile Include="Parameters\Parameter.cs" />
     <Compile Include="Simulations\Base\BaseConfiguration.cs" />
     <Compile Include="Simulations\Base\Frequency\ComplexState.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencyConfiguration.cs" />
@@ -150,8 +150,8 @@
     <Compile Include="Components\RLC\RES\ModelBaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\FrequencyParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\BaseParameters.cs" />
-    <Compile Include="ParameterSet.cs" />
-    <Compile Include="ParameterSetDictionary.cs" />
+    <Compile Include="Parameters\ParameterSet.cs" />
+    <Compile Include="Parameters\ParameterSetDictionary.cs" />
     <Compile Include="Components\RLC\CAP\FrequencyBehavior.cs" />
     <Compile Include="Components\RLC\CAP\TemperatureBehavior.cs" />
     <Compile Include="Components\RLC\CAP\TransientBehavior.cs" />
@@ -199,7 +199,7 @@
     <Compile Include="Components\Voltagesources\VSRC\FrequencyBehavior.cs" />
     <Compile Include="Components\Voltagesources\VSRC\AcceptBehavior.cs" />
     <Compile Include="Components\Voltagesources\VSRC\LoadBehavior.cs" />
-    <Compile Include="GivenParameter.cs" />
+    <Compile Include="Parameters\GivenParameter.cs" />
     <Compile Include="Simulations\Base\BaseSimulation.cs" />
     <Compile Include="Simulations\Behaviors\BehaviorPool.cs" />
     <Compile Include="Simulations\Behaviors\EntityBehaviorDictionary.cs" />
