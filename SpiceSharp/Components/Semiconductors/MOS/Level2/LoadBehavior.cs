@@ -30,25 +30,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [ParameterName("von"), PropertyInfo(" ")]
+        [ParameterName("von"), ParameterInfo(" ")]
         public double Von { get; protected set; }
-        [ParameterName("vdsat"), PropertyInfo("Saturation drain voltage")]
+        [ParameterName("vdsat"), ParameterInfo("Saturation drain voltage")]
         public double SaturationVoltageDs { get; protected set; }
-        [ParameterName("id"), ParameterName("cd"), PropertyInfo("Drain current")]
+        [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
         public double DrainCurrent { get; protected set; }
-        [ParameterName("ibs"), PropertyInfo("B-S junction current")]
+        [ParameterName("ibs"), ParameterInfo("B-S junction current")]
         public double BsCurrent { get; protected set; }
-        [ParameterName("ibd"), PropertyInfo("B-D junction current")]
+        [ParameterName("ibd"), ParameterInfo("B-D junction current")]
         public double BdCurrent { get; protected set; }
-        [ParameterName("gmb"), ParameterName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
+        [ParameterName("gmb"), ParameterName("gmbs"), ParameterInfo("Bulk-Source transconductance")]
         public double TransconductanceBs { get; protected set; }
-        [ParameterName("gm"), PropertyInfo("Transconductance")]
+        [ParameterName("gm"), ParameterInfo("Transconductance")]
         public double Transconductance { get; protected set; }
-        [ParameterName("gds"), PropertyInfo("Drain-Source conductance")]
+        [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
         public double CondDs { get; protected set; }
-        [ParameterName("gbd"), PropertyInfo("Bulk-Drain conductance")]
+        [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
         public double CondBd { get; protected set; }
-        [ParameterName("gbs"), PropertyInfo("Bulk-Source conductance")]
+        [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
         public double CondBs { get; protected set; }
         
         /// <summary>
@@ -64,9 +64,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Nodes
         /// </summary>
         private int _drainNode, _gateNode, _sourceNode, _bulkNode;
-        [ParameterName("dnodeprime"), PropertyInfo("Number of protected drain node")]
+        [ParameterName("dnodeprime"), ParameterInfo("Number of protected drain node")]
         public int DrainNodePrime { get; private set; }
-        [ParameterName("snodeprime"), PropertyInfo("Number of protected source node")]
+        [ParameterName("snodeprime"), ParameterInfo("Number of protected source node")]
         public int SourceNodePrime { get; private set; }
         protected MatrixElement<double> DrainDrainPtr { get; private set; }
         protected MatrixElement<double> GateGatePtr { get; private set; }

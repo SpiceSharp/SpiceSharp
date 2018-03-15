@@ -19,21 +19,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [ParameterName("invearlyvoltf"), PropertyInfo("Inverse early voltage:forward")]
+        [ParameterName("invearlyvoltf"), ParameterInfo("Inverse early voltage:forward")]
         public double InverseEarlyVoltForward { get; internal set; }
-        [ParameterName("invearlyvoltr"), PropertyInfo("Inverse early voltage:reverse")]
+        [ParameterName("invearlyvoltr"), ParameterInfo("Inverse early voltage:reverse")]
         public double InverseEarlyVoltReverse { get; internal set; }
-        [ParameterName("invrollofff"), PropertyInfo("Inverse roll off - forward")]
+        [ParameterName("invrollofff"), ParameterInfo("Inverse roll off - forward")]
         public double InverseRollOffForward { get; internal set; }
-        [ParameterName("invrolloffr"), PropertyInfo("Inverse roll off - reverse")]
+        [ParameterName("invrolloffr"), ParameterInfo("Inverse roll off - reverse")]
         public double InverseRollOffReverse { get; internal set; }
-        [ParameterName("collectorconduct"), PropertyInfo("Collector conductance")]
+        [ParameterName("collectorconduct"), ParameterInfo("Collector conductance")]
         public double CollectorConduct { get; internal set; }
-        [ParameterName("emitterconduct"), PropertyInfo("Emitter conductance")]
+        [ParameterName("emitterconduct"), ParameterInfo("Emitter conductance")]
         public double EmitterConduct { get; internal set; }
-        [ParameterName("transtimevbcfact"), PropertyInfo("Transit time VBC factor")]
+        [ParameterName("transtimevbcfact"), ParameterInfo("Transit time VBC factor")]
         public double TransitTimeVoltageBcFactor { get; internal set; }
-        [ParameterName("excessphasefactor"), PropertyInfo("Excess phase fact.")]
+        [ParameterName("excessphasefactor"), ParameterInfo("Excess phase fact.")]
         public double ExcessPhaseFactor { get; internal set; }
         
         public double Factor1 { get; protected set; }

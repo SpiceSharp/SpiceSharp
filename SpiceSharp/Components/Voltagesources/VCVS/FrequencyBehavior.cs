@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Device methods and properties
         /// </summary>
-        [ParameterName("v"), PropertyInfo("Complex voltage")]
+        [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexState state)
         {
 			if (state == null)
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [ParameterName("i"), ParameterName("c"), PropertyInfo("Complex current")]
+        [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 
             return state.Solution[_branchEq];
         }
-        [ParameterName("p"), PropertyInfo("Complex power")]
+        [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexState state)
         {
 			if (state == null)

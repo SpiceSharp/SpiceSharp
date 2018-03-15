@@ -10,84 +10,84 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("tnom"), PropertyInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter NominalTemperature { get; } = new Parameter();
-        [ParameterName("vto"), ParameterName("vt0"), PropertyInfo("Threshold voltage")]
+        [ParameterName("vto"), ParameterName("vt0"), ParameterInfo("Threshold voltage")]
         public Parameter Vt0 { get; } = new Parameter();
-        [ParameterName("kp"), PropertyInfo("Transconductance parameter")]
+        [ParameterName("kp"), ParameterInfo("Transconductance parameter")]
         public Parameter Transconductance { get; } = new Parameter(2e-5);
-        [ParameterName("gamma"), PropertyInfo("Bulk threshold parameter")]
+        [ParameterName("gamma"), ParameterInfo("Bulk threshold parameter")]
         public Parameter Gamma { get; } = new Parameter();
-        [ParameterName("phi"), PropertyInfo("Surface potential")]
+        [ParameterName("phi"), ParameterInfo("Surface potential")]
         public Parameter Phi { get; } = new Parameter(.6);
-        [ParameterName("lambda"), PropertyInfo("Channel length modulation")]
+        [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
         public Parameter Lambda { get; } = new Parameter();
-        [ParameterName("rd"), PropertyInfo("Drain ohmic resistance")]
+        [ParameterName("rd"), ParameterInfo("Drain ohmic resistance")]
         public Parameter DrainResistance { get; } = new Parameter();
-        [ParameterName("rs"), PropertyInfo("Source ohmic resistance")]
+        [ParameterName("rs"), ParameterInfo("Source ohmic resistance")]
         public Parameter SourceResistance { get; } = new Parameter();
-        [ParameterName("cbd"), PropertyInfo("B-D junction capacitance")]
+        [ParameterName("cbd"), ParameterInfo("B-D junction capacitance")]
         public Parameter CapBd { get; } = new Parameter();
-        [ParameterName("cbs"), PropertyInfo("B-S junction capacitance")]
+        [ParameterName("cbs"), ParameterInfo("B-S junction capacitance")]
         public Parameter CapBs { get; } = new Parameter();
-        [ParameterName("is"), PropertyInfo("Bulk junction sat. current")]
+        [ParameterName("is"), ParameterInfo("Bulk junction sat. current")]
         public Parameter JunctionSatCur { get; } = new Parameter(1e-14);
-        [ParameterName("pb"), PropertyInfo("Bulk junction potential")]
+        [ParameterName("pb"), ParameterInfo("Bulk junction potential")]
         public Parameter BulkJunctionPotential { get; } = new Parameter(.8);
-        [ParameterName("cgso"), PropertyInfo("Gate-source overlap cap.")]
+        [ParameterName("cgso"), ParameterInfo("Gate-source overlap cap.")]
         public Parameter GateSourceOverlapCapFactor { get; } = new Parameter();
-        [ParameterName("cgdo"), PropertyInfo("Gate-drain overlap cap.")]
+        [ParameterName("cgdo"), ParameterInfo("Gate-drain overlap cap.")]
         public Parameter GateDrainOverlapCapFactor { get; } = new Parameter();
-        [ParameterName("cgbo"), PropertyInfo("Gate-bulk overlap cap.")]
+        [ParameterName("cgbo"), ParameterInfo("Gate-bulk overlap cap.")]
         public Parameter GateBulkOverlapCapFactor { get; } = new Parameter();
-        [ParameterName("cj"), PropertyInfo("Bottom junction cap per area")]
+        [ParameterName("cj"), ParameterInfo("Bottom junction cap per area")]
         public Parameter BulkCapFactor { get; } = new Parameter();
-        [ParameterName("mj"), PropertyInfo("Bottom grading coefficient")]
+        [ParameterName("mj"), ParameterInfo("Bottom grading coefficient")]
         public Parameter BulkJunctionBotGradingCoefficient { get; } = new Parameter(.5);
-        [ParameterName("cjsw"), PropertyInfo("Side junction cap per area")]
+        [ParameterName("cjsw"), ParameterInfo("Side junction cap per area")]
         public Parameter SidewallCapFactor { get; } = new Parameter();
-        [ParameterName("mjsw"), PropertyInfo("Side grading coefficient")]
+        [ParameterName("mjsw"), ParameterInfo("Side grading coefficient")]
         public Parameter BulkJunctionSideGradingCoefficient { get; } = new Parameter(.5);
-        [ParameterName("js"), PropertyInfo("Bulk jct. sat. current density")]
+        [ParameterName("js"), ParameterInfo("Bulk jct. sat. current density")]
         public Parameter JunctionSatCurDensity { get; } = new Parameter();
-        [ParameterName("tox"), PropertyInfo("Oxide thickness")]
+        [ParameterName("tox"), ParameterInfo("Oxide thickness")]
         public Parameter OxideThickness { get; } = new Parameter();
-        [ParameterName("ld"), PropertyInfo("Lateral diffusion")]
+        [ParameterName("ld"), ParameterInfo("Lateral diffusion")]
         public Parameter LateralDiffusion { get; } = new Parameter();
-        [ParameterName("rsh"), PropertyInfo("Sheet resistance")]
+        [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
         public Parameter SheetResistance { get; } = new Parameter();
-        [ParameterName("u0"), ParameterName("uo"), PropertyInfo("Surface mobility")]
+        [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility")]
         public Parameter SurfaceMobility { get; } = new Parameter();
-        [ParameterName("fc"), PropertyInfo("Forward bias jct. fit parm.")]
+        [ParameterName("fc"), ParameterInfo("Forward bias jct. fit parm.")]
         public Parameter ForwardCapDepletionCoefficient { get; } = new Parameter(.5);
-        [ParameterName("nss"), PropertyInfo("Surface state density")]
+        [ParameterName("nss"), ParameterInfo("Surface state density")]
         public Parameter SurfaceStateDensity { get; } = new Parameter();
-        [ParameterName("nsub"), PropertyInfo("Substrate doping")]
+        [ParameterName("nsub"), ParameterInfo("Substrate doping")]
         public Parameter SubstrateDoping { get; } = new Parameter();
-        [ParameterName("tpg"), PropertyInfo("Gate type")]
+        [ParameterName("tpg"), ParameterInfo("Gate type")]
         public Parameter GateType { get; } = new Parameter();
 
         /// <summary>
         /// Methods
         /// </summary>
-        [ParameterName("nmos"), PropertyInfo("N type mosfet model")]
+        [ParameterName("nmos"), ParameterInfo("N type mosfet model")]
         public void SetNmos(bool value)
         {
             if (value)
                 MosfetType = 1.0;
         }
-        [ParameterName("pmos"), PropertyInfo("P type mosfet model")]
+        [ParameterName("pmos"), ParameterInfo("P type mosfet model")]
         public void SetPmos(bool value)
         {
             if (value)
                 MosfetType = -1.0;
         }
-        [ParameterName("type"), PropertyInfo("N-channel or P-channel mosfet")]
+        [ParameterName("type"), ParameterInfo("N-channel or P-channel mosfet")]
         public string TypeName
         {
             get

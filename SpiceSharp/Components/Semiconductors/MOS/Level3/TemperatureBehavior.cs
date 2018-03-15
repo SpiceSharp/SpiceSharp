@@ -21,24 +21,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [ParameterName("sourceconductance"), PropertyInfo("Source conductance")]
+        [ParameterName("sourceconductance"), ParameterInfo("Source conductance")]
         public double SourceConductance { get; protected set; }
-        [ParameterName("drainconductance"), PropertyInfo("Drain conductance")]
+        [ParameterName("drainconductance"), ParameterInfo("Drain conductance")]
         public double DrainConductance { get; protected set; }
-        [ParameterName("sourcevcrit"), PropertyInfo("Critical source voltage")]
+        [ParameterName("sourcevcrit"), ParameterInfo("Critical source voltage")]
         public double SourceVCritical { get; protected set; }
-        [ParameterName("drainvcrit"), PropertyInfo("Critical drain voltage")]
+        [ParameterName("drainvcrit"), ParameterInfo("Critical drain voltage")]
         public double DrainVCritical { get; protected set; }
-        [ParameterName("cbd0"), PropertyInfo("Zero-Bias B-D junction capacitance")]
+        [ParameterName("cbd0"), ParameterInfo("Zero-Bias B-D junction capacitance")]
         public double CapBd { get; protected set; }
-        [ParameterName("cbdsw0"), PropertyInfo("Zero-Bias B-D sidewall capacitance")]
+        [ParameterName("cbdsw0"), ParameterInfo("Zero-Bias B-D sidewall capacitance")]
         public double CapBdSidewall { get; protected set; }
-        [ParameterName("cbs0"), PropertyInfo("Zero-Bias B-S junction capacitance")]
+        [ParameterName("cbs0"), ParameterInfo("Zero-Bias B-S junction capacitance")]
         public double CapBs { get; protected set; }
-        [ParameterName("cbssw0"), PropertyInfo("Zero-Bias B-S sidewall capacitance")]
+        [ParameterName("cbssw0"), ParameterInfo("Zero-Bias B-S sidewall capacitance")]
         public double CapBsSidewall { get; protected set; }
 
-        [ParameterName("rs"), PropertyInfo("Source resistance")]
+        [ParameterName("rs"), ParameterInfo("Source resistance")]
         public double SourceResistance
         {
             get
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 return 0.0;
             }
         }
-        [ParameterName("rd"), PropertyInfo("Drain resistance")]
+        [ParameterName("rd"), ParameterInfo("Drain resistance")]
         public double DrainResistance
         {
             get

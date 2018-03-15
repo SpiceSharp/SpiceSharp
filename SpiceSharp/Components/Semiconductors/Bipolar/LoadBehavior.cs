@@ -25,21 +25,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Methods
         /// </summary>
-        [ParameterName("vbe"), PropertyInfo("B-E voltage")]
+        [ParameterName("vbe"), ParameterInfo("B-E voltage")]
         public double VoltageBe { get; protected set; }
-        [ParameterName("vbc"), PropertyInfo("B-C voltage")]
+        [ParameterName("vbc"), ParameterInfo("B-C voltage")]
         public double VoltageBc { get; protected set; }
-        [ParameterName("cc"), PropertyInfo("Current at collector node")]
+        [ParameterName("cc"), ParameterInfo("Current at collector node")]
         public double CollectorCurrent { get; protected set; }
-        [ParameterName("cb"), PropertyInfo("Current at base node")]
+        [ParameterName("cb"), ParameterInfo("Current at base node")]
         public double BaseCurrent { get; protected set; }
-        [ParameterName("gpi"), PropertyInfo("Small signal input conductance - pi")]
+        [ParameterName("gpi"), ParameterInfo("Small signal input conductance - pi")]
         public double ConductancePi { get; protected set; }
-        [ParameterName("gmu"), PropertyInfo("Small signal conductance - mu")]
+        [ParameterName("gmu"), ParameterInfo("Small signal conductance - mu")]
         public double ConductanceMu { get; protected set; }
-        [ParameterName("gm"), PropertyInfo("Small signal transconductance")]
+        [ParameterName("gm"), ParameterInfo("Small signal transconductance")]
         public double Transconductance { get; protected set; }
-        [ParameterName("go"), PropertyInfo("Small signal output conductance")]
+        [ParameterName("go"), ParameterInfo("Small signal output conductance")]
         public double OutputConductance { get; protected set; }
         public double ConductanceX { get; protected set; }
 

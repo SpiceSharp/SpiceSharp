@@ -261,7 +261,7 @@
     <Compile Include="Diagnostics\BadParameterException.cs" />
     <Compile Include="Simulations\IntegrationMethods\Breakpoints.cs" />
     <Compile Include="Simulations\IntegrationMethods\Trapezoidal.cs" />
-    <Compile Include="Attributes\PropertyInfoAttribute.cs" />
+    <Compile Include="Attributes\ParameterInfoAttribute.cs" />
     <Compile Include="Attributes\ParameterNameAttribute.cs" />
     <Compile Include="Circuits\EntityCollection.cs" />
     <Compile Include="Circuits\Circuit.cs" />

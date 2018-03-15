@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("gain"), PropertyInfo("Gain of the source")]
+        [ParameterName("gain"), ParameterInfo("Gain of the source")]
         public Parameter Coefficient { get; } = new Parameter();
 
         /// <summary>

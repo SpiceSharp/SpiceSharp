@@ -35,16 +35,16 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Device methods and properties
         /// </summary>
-        [ParameterName("v"), PropertyInfo("Complex voltage")]
+        [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex Voltage => Ac;
-        [ParameterName("i"), ParameterName("c"), PropertyInfo("Complex current")]
+        [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             return state.Solution[_branchEq];
         }
-        [ParameterName("p"), PropertyInfo("Complex power")]
+        [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexState state)
         {
 			if (state == null)

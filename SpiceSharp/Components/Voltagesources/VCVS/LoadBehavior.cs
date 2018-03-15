@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Device methods and properties
         /// </summary>
-        [ParameterName("i"), PropertyInfo("Output current")]
+        [ParameterName("i"), ParameterInfo("Output current")]
         public double GetCurrent(RealState state)
         {
             if (state == null)
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 
             return state.Solution[BranchEq];
         }
-        [ParameterName("v"), PropertyInfo("Output current")]
+        [ParameterName("v"), ParameterInfo("Output current")]
         public double GetVoltage(RealState state)
         {
             if (state == null)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [ParameterName("p"), PropertyInfo("Power")]
+        [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(RealState state)
         { 
             if (state == null)

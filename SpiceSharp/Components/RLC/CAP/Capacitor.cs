@@ -18,15 +18,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [ParameterName("pos"), PropertyInfo("Positive terminal of the capacitor")]
+        [ParameterName("pos"), ParameterInfo("Positive terminal of the capacitor")]
         public int PosNode { get; private set; }
-        [ParameterName("neg"), PropertyInfo("Negative terminal of the capacitor")]
+        [ParameterName("neg"), ParameterInfo("Negative terminal of the capacitor")]
         public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        [ParameterName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int CapacitorPinCount = 2;
 
         /// <summary>

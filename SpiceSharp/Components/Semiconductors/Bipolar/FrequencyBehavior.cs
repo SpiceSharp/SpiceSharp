@@ -53,15 +53,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Device methods and properties
         /// </summary>
-        [ParameterName("cpi"), PropertyInfo("Internal base to emitter capactance")]
+        [ParameterName("cpi"), ParameterInfo("Internal base to emitter capactance")]
         public double CapBe { get; protected set; }
-        [ParameterName("cmu"), PropertyInfo("Internal base to collector capactiance")]
+        [ParameterName("cmu"), ParameterInfo("Internal base to collector capactiance")]
         public double CapBc { get; protected set; }
-        [ParameterName("cbx"), PropertyInfo("Base to collector capacitance")]
+        [ParameterName("cbx"), ParameterInfo("Base to collector capacitance")]
         public double CapBx { get; protected set; }
-        [ParameterName("ccs"), PropertyInfo("Collector to substrate capacitance")]
+        [ParameterName("ccs"), ParameterInfo("Collector to substrate capacitance")]
         public double CapCs { get; protected set; }
-        [ParameterName("gcb"), PropertyInfo("Conductance of the C-B junction")]
+        [ParameterName("gcb"), ParameterInfo("Conductance of the C-B junction")]
         public double CondCb { get; protected set; }
 
         /// <summary>

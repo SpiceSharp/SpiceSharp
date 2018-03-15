@@ -20,11 +20,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [ParameterName("pos_node"), PropertyInfo("Positive node of the switch")]
+        [ParameterName("pos_node"), ParameterInfo("Positive node of the switch")]
         public int PosNode { get; internal set; }
-        [ParameterName("neg_node"), PropertyInfo("Negative node of the switch")]
+        [ParameterName("neg_node"), ParameterInfo("Negative node of the switch")]
         public int NegNode { get; internal set; }
-        [ParameterName("control"), PropertyInfo("Name of the controlling source")]
+        [ParameterName("control"), ParameterInfo("Name of the controlling source")]
         public Identifier ControllingName { get; set; }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        [ParameterName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int CurrentSwitchPinCount = 2;
 
         /// <summary>

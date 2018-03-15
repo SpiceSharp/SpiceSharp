@@ -25,9 +25,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Diode capacitance
         /// </summary>
-        [ParameterName("cd"), PropertyInfo("Diode capacitance")]
+        [ParameterName("cd"), ParameterInfo("Diode capacitance")]
         public double Capacitance { get; protected set; }
-        [ParameterName("id"), ParameterName("c"), PropertyInfo("Diode current")]
+        [ParameterName("id"), ParameterName("c"), ParameterInfo("Diode current")]
         public double Current { get; protected set; }
 
         /// <summary>

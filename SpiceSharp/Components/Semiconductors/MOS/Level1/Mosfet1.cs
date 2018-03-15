@@ -18,19 +18,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [ParameterName("dnode"), PropertyInfo("Number of the drain node ")]
+        [ParameterName("dnode"), ParameterInfo("Number of the drain node ")]
         public int DrainNode { get; protected set; }
-        [ParameterName("gnode"), PropertyInfo("Number of the gate node ")]
+        [ParameterName("gnode"), ParameterInfo("Number of the gate node ")]
         public int GateNode { get; protected set; }
-        [ParameterName("snode"), PropertyInfo("Number of the source node ")]
+        [ParameterName("snode"), ParameterInfo("Number of the source node ")]
         public int SourceNode { get; protected set; }
-        [ParameterName("bnode"), PropertyInfo("Number of the node ")]
+        [ParameterName("bnode"), ParameterInfo("Number of the node ")]
         public int BulkNode { get; protected set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        [ParameterName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int Mosfet1PinCount = 4;
 
         /// <summary>

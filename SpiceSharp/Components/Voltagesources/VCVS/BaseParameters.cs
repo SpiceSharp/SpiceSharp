@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("gain"), PropertyInfo("Voltage gain")]
+        [ParameterName("gain"), ParameterInfo("Voltage gain")]
         public Parameter Coefficient { get; } = new Parameter();
 
         /// <summary>

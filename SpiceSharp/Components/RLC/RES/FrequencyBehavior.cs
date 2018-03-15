@@ -21,14 +21,14 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("v"), PropertyInfo("Voltage")]
+        [ParameterName("v"), ParameterInfo("Voltage")]
         public Complex GetVoltage(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
-        [ParameterName("i"), PropertyInfo("Current")]
+        [ParameterName("i"), ParameterInfo("Current")]
         public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             var voltage = state.Solution[_posNode] - state.Solution[_negNode];
             return voltage * _temp.Conductance;
         }
-        [ParameterName("p"), PropertyInfo("Power")]
+        [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetPower(ComplexState state)
         {
 			if (state == null)

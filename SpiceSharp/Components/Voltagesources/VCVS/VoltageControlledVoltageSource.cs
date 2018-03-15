@@ -12,19 +12,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [ParameterName("pos_node"), PropertyInfo("Positive node of the source")]
+        [ParameterName("pos_node"), ParameterInfo("Positive node of the source")]
         public int PosNode { get; internal set; }
-        [ParameterName("neg_node"), PropertyInfo("Negative node of the source")]
+        [ParameterName("neg_node"), ParameterInfo("Negative node of the source")]
         public int NegNode { get; internal set; }
-        [ParameterName("cont_p_node"), PropertyInfo("Positive controlling node of the source")]
+        [ParameterName("cont_p_node"), ParameterInfo("Positive controlling node of the source")]
         public int ControlPosNode { get; internal set; }
-        [ParameterName("cont_n_node"), PropertyInfo("Negative controlling node of the source")]
+        [ParameterName("cont_n_node"), ParameterInfo("Negative controlling node of the source")]
         public int ControlNegNode { get; internal set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        [ParameterName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int VoltageControlledVoltageSourcePinCount = 4;
         
         /// <summary>

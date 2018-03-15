@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        [ParameterName("pincount"), PropertyInfo("Number of pins")]
+        [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int InductorPinCount = 2;
 
         /// <summary>
