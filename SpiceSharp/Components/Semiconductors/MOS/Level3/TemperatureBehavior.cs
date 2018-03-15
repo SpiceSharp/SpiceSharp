@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             if (!_bp.Temperature.Given)
             {
-                _bp.Temperature.Value = state.Temperature;
+                _bp.Temperature.RawValue = state.Temperature;
             }
             var vt = _bp.Temperature * Circuit.KOverQ;
             var ratio = _bp.Temperature / _mbp.NominalTemperature;

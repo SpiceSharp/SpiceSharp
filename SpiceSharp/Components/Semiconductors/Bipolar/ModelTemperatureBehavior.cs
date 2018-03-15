@@ -73,25 +73,25 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             if (!_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
+                _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
             Factor1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
 
             if (!_mbp.LeakBeCurrent.Given)
             {
                 if (_mbp.C2.Given)
-                    _mbp.LeakBeCurrent.Value = _mbp.C2 * _mbp.SatCur;
+                    _mbp.LeakBeCurrent.RawValue = _mbp.C2 * _mbp.SatCur;
                 else
-                    _mbp.LeakBeCurrent.Value = 0;
+                    _mbp.LeakBeCurrent.RawValue = 0;
             }
             if (!_mbp.LeakBcCurrent.Given)
             {
                 if (_mbp.C4.Given)
-                    _mbp.LeakBcCurrent.Value = _mbp.C4 * _mbp.SatCur;
+                    _mbp.LeakBcCurrent.RawValue = _mbp.C4 * _mbp.SatCur;
                 else
-                    _mbp.LeakBcCurrent.Value = 0;
+                    _mbp.LeakBcCurrent.RawValue = 0;
             }
             if (!_mbp.MinimumBaseResistance.Given)
-                _mbp.MinimumBaseResistance.Value = _mbp.BaseResist;
+                _mbp.MinimumBaseResistance.RawValue = _mbp.BaseResist;
 
             /* 
 			 * COMPATABILITY WARNING!
@@ -138,13 +138,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 if (_mbp.DepletionCapCoefficient > 0.9999)
                 {
-                    _mbp.DepletionCapCoefficient.Value = 0.9999;
+                    _mbp.DepletionCapCoefficient.RawValue = 0.9999;
                     throw new CircuitException("BJT model {0}, parameter fc limited to 0.9999".FormatString(Name));
                 }
             }
             else
             {
-                _mbp.DepletionCapCoefficient.Value = .5;
+                _mbp.DepletionCapCoefficient.RawValue = 0.5;
             }
             Xfc = Math.Log(1 - _mbp.DepletionCapCoefficient);
             F2 = Math.Exp((1 + _mbp.JunctionExpBe) * Xfc);

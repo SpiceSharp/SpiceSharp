@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             if (!_bp.Temperature.Given)
-                _bp.Temperature.Value = simulation.RealState.Temperature;
+                _bp.Temperature.RawValue = simulation.RealState.Temperature;
             var vt = _bp.Temperature * Circuit.KOverQ;
             var fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);

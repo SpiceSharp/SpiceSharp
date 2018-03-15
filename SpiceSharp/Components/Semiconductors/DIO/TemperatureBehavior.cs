@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // loop through all the instances
             if (!_bp.Temperature.Given)
-                _bp.Temperature.Value = simulation.RealState.Temperature;
+                _bp.Temperature.RawValue = simulation.RealState.Temperature;
             var vt = Circuit.KOverQ * _bp.Temperature;
 
             // this part gets really ugly - I won't even try to explain these equations

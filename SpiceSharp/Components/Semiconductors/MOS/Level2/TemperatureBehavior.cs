@@ -119,7 +119,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* perform the parameter defaulting */
             if (!_bp.Temperature.Given)
             {
-                _bp.Temperature.Value = simulation.RealState.Temperature;
+                _bp.Temperature.RawValue = simulation.RealState.Temperature;
             }
 
             var vt = _bp.Temperature * Circuit.KOverQ;

@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             if (!_mbp.NominalTemperature.Given)
             {
-                _mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
+                _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
             }
             Fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
             VtNominal = _mbp.NominalTemperature * Circuit.KOverQ;
@@ -70,10 +70,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             OxideCapFactor = 3.9 * 8.854214871e-12 / _mbp.OxideThickness;
             if (!_mbp.SurfaceMobility.Given)
-                _mbp.SurfaceMobility.Value = 600;
+                _mbp.SurfaceMobility.RawValue = 600;
             if (!_mbp.Transconductance.Given)
             {
-                _mbp.Transconductance.Value = _mbp.SurfaceMobility * OxideCapFactor * 1e-4;
+                _mbp.Transconductance.RawValue = _mbp.SurfaceMobility * OxideCapFactor * 1e-4;
             }
             if (_mbp.SubstrateDoping.Given)
             {
@@ -81,14 +81,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 {
                     if (!_mbp.Phi.Given)
                     {
-                        _mbp.Phi.Value = 2 * VtNominal * Math.Log(_mbp.SubstrateDoping * 1e6 /* (cm *  * 3 / m *  * 3) */  / 1.45e16);
-                        _mbp.Phi.Value = Math.Max(.1, _mbp.Phi);
+                        _mbp.Phi.RawValue = 2 * VtNominal * Math.Log(_mbp.SubstrateDoping * 1e6 /* (cm *  * 3 / m *  * 3) */  / 1.45e16);
+                        _mbp.Phi.RawValue = Math.Max(.1, _mbp.Phi);
                     }
                     var fermis = _mbp.MosfetType * .5 * _mbp.Phi;
                     var wkfng = 3.2;
                     if (!_mbp.GateType.Given)
-                        _mbp.GateType.Value = 1;
-                    if (!_mbp.GateType.Value.Equals(0.0))
+                        _mbp.GateType.RawValue = 1;
+                    if (!_mbp.GateType.RawValue.Equals(0.0))
                     {
                         var fermig = _mbp.MosfetType * _mbp.GateType * .5 * EgFet1;
                         wkfng = 3.25 + .5 * EgFet1 - fermig;
@@ -96,15 +96,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     var wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
                     if (!_mbp.Gamma.Given)
                     {
-                        _mbp.Gamma.Value = Math.Sqrt(2 * Transistor.EpsilonSilicon * Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
+                        _mbp.Gamma.RawValue = Math.Sqrt(2 * Transistor.EpsilonSilicon * Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
                             OxideCapFactor;
                     }
                     if (!_mbp.Vt0.Given)
                     {
                         if (!_mbp.SurfaceStateDensity.Given)
-                            _mbp.SurfaceStateDensity.Value = 0;
+                            _mbp.SurfaceStateDensity.RawValue = 0;
                         var vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
-                        _mbp.Vt0.Value = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
+                        _mbp.Vt0.RawValue = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
                     }
 
                     Alpha = (Transistor.EpsilonSilicon + Transistor.EpsilonSilicon) / (Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 }
                 else
                 {
-                    _mbp.SubstrateDoping.Value = 0;
+                    _mbp.SubstrateDoping.RawValue = 0;
                     throw new CircuitException("{0}: Nsub < Ni".FormatString(Name));
                 }
             }
