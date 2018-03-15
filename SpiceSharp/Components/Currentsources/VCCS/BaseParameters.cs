@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("gain"), ParameterInfo("Transconductance of the source (gain)")]
-        public Parameter Coefficient { get; } = new Parameter();
+        public GivenParameter Coefficient { get; } = new GivenParameter();
 
         /// <summary>
         /// Constructor
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <param name="gain">Gain</param>
         public BaseParameters(double gain)
         {
-            Coefficient.Set(gain);
+            Coefficient.Value = gain;
         }
     }
 }

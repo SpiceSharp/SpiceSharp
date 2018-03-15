@@ -16,17 +16,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
-            set => Temperature.Set(value + Circuit.CelsiusKelvin);
+            set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public Parameter Temperature { get; } = new Parameter(300.15);
+        public GivenParameter Temperature { get; } = new GivenParameter(300.15);
         [ParameterName("area"), ParameterInfo("Area factor")]
-        public Parameter Area { get; } = new Parameter(1);
+        public GivenParameter Area { get; } = new GivenParameter(1);
         [ParameterName("off"), ParameterInfo("Device initially off")]
         public bool Off { get; set; }
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage")]
-        public Parameter InitialVoltageBe { get; } = new Parameter();
+        public GivenParameter InitialVoltageBe { get; } = new GivenParameter();
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage")]
-        public Parameter InitialVoltageCe { get; } = new Parameter();
+        public GivenParameter InitialVoltageCe { get; } = new GivenParameter();
         [ParameterName("sens_area"), ParameterInfo("flag to request sensitivity WRT area")]
         public bool Sensitivity { get; set; }
 
@@ -38,8 +38,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             switch (value.Length)
             {
-                case 2: InitialVoltageCe.Set(value[1]); goto case 1;
-                case 1: InitialVoltageBe.Set(value[0]); break;
+                case 2: InitialVoltageCe.Value = value[1]; goto case 1;
+                case 1: InitialVoltageBe.Value = value[0]; break;
                 default:
                     throw new CircuitException("Bad parameter");
             }

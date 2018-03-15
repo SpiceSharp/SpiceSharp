@@ -31,10 +31,10 @@ namespace SpiceSharpTest.Parameters
             public double GetMethod() => 1.0;
 
             [ParameterName("parameter1")]
-            public Parameter Parameter1 { get; } = new Parameter();
+            public GivenParameter Parameter1 { get; } = new GivenParameter();
 
             [ParameterName("principal"), ParameterInfo("Principal parameter", IsPrincipal = true)]
-            public Parameter Principal { get; } = new Parameter(0.8);
+            public Parameter Principal { get; } = new GivenParameter(0.8);
         }
 
         [Test]

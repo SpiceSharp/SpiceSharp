@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("gain"), ParameterInfo("Gain of the source")]
-        public Parameter Coefficient { get; } = new Parameter();
+        public GivenParameter Coefficient { get; } = new GivenParameter();
 
         /// <summary>
         /// Constructor
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="gain">Gain</param>
         public BaseParameters(double gain)
         {
-            Coefficient.Set(gain);
+            Coefficient.Value = gain;
         }
     }
 }

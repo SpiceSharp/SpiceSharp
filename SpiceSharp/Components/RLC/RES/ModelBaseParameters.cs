@@ -14,18 +14,18 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
+            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public Parameter NominalTemperature { get; } = new Parameter(300.15);
+        public GivenParameter NominalTemperature { get; } = new GivenParameter(300.15);
         [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
-        public Parameter TemperatureCoefficient1 { get; } = new Parameter();
+        public GivenParameter TemperatureCoefficient1 { get; } = new GivenParameter();
         [ParameterName("tc2"), ParameterInfo("Second order temperature oefficient")]
-        public Parameter TemperatureCoefficient2 { get; } = new Parameter();
+        public GivenParameter TemperatureCoefficient2 { get; } = new GivenParameter();
         [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
-        public Parameter SheetResistance { get; } = new Parameter();
+        public GivenParameter SheetResistance { get; } = new GivenParameter();
         [ParameterName("defw"), ParameterInfo("Default device width")]
-        public Parameter DefaultWidth { get; } = new Parameter(10.0e-6);
+        public GivenParameter DefaultWidth { get; } = new GivenParameter(10.0e-6);
         [ParameterName("narrow"), ParameterInfo("Narrowing of resistor")]
-        public Parameter Narrow { get; } = new Parameter();
+        public GivenParameter Narrow { get; } = new GivenParameter();
     }
 }

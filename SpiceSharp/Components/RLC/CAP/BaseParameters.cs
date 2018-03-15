@@ -11,13 +11,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("capacitance"), ParameterInfo("Device capacitance", IsPrincipal = true)]
-        public Parameter Capacitance { get; } = new Parameter();
+        public GivenParameter Capacitance { get; } = new GivenParameter();
         [ParameterName("ic"), ParameterInfo("Initial capacitor voltage", Interesting = false)]
-        public Parameter InitialCondition { get; } = new Parameter();
+        public GivenParameter InitialCondition { get; } = new GivenParameter();
         [ParameterName("w"), ParameterInfo("Device width", Interesting = false)]
-        public Parameter Width { get; } = new Parameter();
+        public GivenParameter Width { get; } = new GivenParameter();
         [ParameterName("l"), ParameterInfo("Device length", Interesting = false)]
-        public Parameter Length { get; } = new Parameter();
+        public GivenParameter Length { get; } = new GivenParameter();
 
         /// <summary>
         /// Constructor
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="cap">Capacitance</param>
         public BaseParameters(double cap)
         {
-            Capacitance.Set(cap);
+            Capacitance.Value = cap;
         }
     }
 }

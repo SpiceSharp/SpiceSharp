@@ -13,15 +13,15 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("vo"), ParameterInfo("The offset of the sine wave")]
-        public Parameter Offset { get; } = new Parameter();
+        public GivenParameter Offset { get; } = new GivenParameter();
         [ParameterName("va"), ParameterInfo("The amplitude of the sine wave")]
-        public Parameter Amplitude { get; } = new Parameter();
+        public GivenParameter Amplitude { get; } = new GivenParameter();
         [ParameterName("freq"), ParameterInfo("The frequency in Hz")]
-        public Parameter Frequency { get; } = new Parameter();
+        public GivenParameter Frequency { get; } = new GivenParameter();
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
-        public Parameter Delay { get; } = new Parameter();
+        public GivenParameter Delay { get; } = new GivenParameter();
         [ParameterName("theta"), ParameterInfo("The damping factor")]
-        public Parameter Theta { get; } = new Parameter();
+        public GivenParameter Theta { get; } = new GivenParameter();
 
         /// <summary>
         /// Private variables
@@ -45,11 +45,11 @@ namespace SpiceSharp.Components
         /// <param name="theta">Damping factor</param>
         public Sine(double offset, double amplitude, double frequency, double delay, double theta)
         {
-            Offset.Set(offset);
-            Amplitude.Set(amplitude);
-            Frequency.Set(frequency);
-            Delay.Set(delay);
-            Theta.Set(theta);
+            Offset.Value = offset;
+            Amplitude.Value = amplitude;
+            Frequency.Value = frequency;
+            Delay.Value = delay;
+            Theta.Value = theta;
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace SpiceSharp.Components
         /// <param name="frequency">Frequency (Hz)</param>
         public Sine(double offset, double amplitude, double frequency)
         {
-            Offset.Set(offset);
-            Amplitude.Set(amplitude);
-            Frequency.Set(frequency);
+            Offset.Value = offset;
+            Amplitude.Value = amplitude;
+            Frequency.Value = frequency;
         }
 
         /// <summary>

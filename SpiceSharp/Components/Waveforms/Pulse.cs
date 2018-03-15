@@ -15,19 +15,19 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("v1"), ParameterInfo("The initial value")]
-        public Parameter InitialValue { get; } = new Parameter();
+        public GivenParameter InitialValue { get; } = new GivenParameter();
         [ParameterName("v2"), ParameterInfo("The peak value")]
-        public Parameter PulsedValue { get; } = new Parameter();
+        public GivenParameter PulsedValue { get; } = new GivenParameter();
         [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
-        public Parameter Delay { get; } = new Parameter();
+        public GivenParameter Delay { get; } = new GivenParameter();
         [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
-        public Parameter RiseTime { get; } = new Parameter();
+        public GivenParameter RiseTime { get; } = new GivenParameter();
         [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
-        public Parameter FallTime { get; } = new Parameter();
+        public GivenParameter FallTime { get; } = new GivenParameter();
         [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
-        public Parameter PulseWidth { get; } = new Parameter();
+        public GivenParameter PulseWidth { get; } = new GivenParameter();
         [ParameterName("per"), ParameterInfo("The period in seconds")]
-        public Parameter Period { get; } = new Parameter();
+        public GivenParameter Period { get; } = new GivenParameter();
 
         /// <summary>
         /// Private variables
@@ -53,13 +53,13 @@ namespace SpiceSharp.Components
         /// <param name="period">The period in seconds</param>
         public Pulse(double initialValue, double pulsedValue, double delay, double riseTime, double fallTime, double pulseWidth, double period)
         {
-            InitialValue.Set(initialValue);
-            PulsedValue.Set(pulsedValue);
-            Delay.Set(delay);
-            RiseTime.Set(riseTime);
-            FallTime.Set(fallTime);
-            PulseWidth.Set(pulseWidth);
-            Period.Set(period);
+            InitialValue.Value = initialValue;
+            PulsedValue.Value = pulsedValue;
+            Delay.Value = delay;
+            RiseTime.Value = riseTime;
+            FallTime.Value = fallTime;
+            PulseWidth.Value = pulseWidth;
+            Period.Value = period;
         }
 
         /// <summary>

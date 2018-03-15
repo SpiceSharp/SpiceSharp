@@ -37,95 +37,95 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
+            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public Parameter NominalTemperature { get; } = new Parameter();
+        public GivenParameter NominalTemperature { get; } = new GivenParameter();
         [ParameterName("is"), ParameterInfo("Saturation Current")]
-        public Parameter SatCur { get; } = new Parameter(1e-16);
+        public GivenParameter SatCur { get; } = new GivenParameter(1e-16);
         [ParameterName("bf"), ParameterInfo("Ideal forward beta")]
-        public Parameter BetaF { get; } = new Parameter(100);
+        public GivenParameter BetaF { get; } = new GivenParameter(100);
         [ParameterName("nf"), ParameterInfo("Forward emission coefficient")]
-        public Parameter EmissionCoefficientForward { get; } = new Parameter(1);
+        public GivenParameter EmissionCoefficientForward { get; } = new GivenParameter(1);
         [ParameterName("vaf"), ParameterName("va"), ParameterInfo("Forward Early voltage")]
-        public Parameter EarlyVoltageForward { get; } = new Parameter();
+        public GivenParameter EarlyVoltageForward { get; } = new GivenParameter();
         [ParameterName("ikf"), ParameterName("ik"), ParameterInfo("Forward beta roll-off corner current")]
-        public Parameter RollOffForward { get; } = new Parameter();
+        public GivenParameter RollOffForward { get; } = new GivenParameter();
         [ParameterName("ise"), ParameterInfo("B-E leakage saturation current")]
-        public Parameter LeakBeCurrent { get; } = new Parameter();
+        public GivenParameter LeakBeCurrent { get; } = new GivenParameter();
         [ParameterName("ne"), ParameterInfo("B-E leakage emission coefficient")]
-        public Parameter LeakBeEmissionCoefficient { get; } = new Parameter(1.5);
+        public GivenParameter LeakBeEmissionCoefficient { get; } = new GivenParameter(1.5);
         [ParameterName("br"), ParameterInfo("Ideal reverse beta")]
-        public Parameter BetaR { get; } = new Parameter(1);
+        public GivenParameter BetaR { get; } = new GivenParameter(1);
         [ParameterName("nr"), ParameterInfo("Reverse emission coefficient")]
-        public Parameter EmissionCoefficientReverse { get; } = new Parameter(1);
+        public GivenParameter EmissionCoefficientReverse { get; } = new GivenParameter(1);
         [ParameterName("var"), ParameterName("vb"), ParameterInfo("Reverse Early voltage")]
-        public Parameter EarlyVoltageReverse { get; } = new Parameter();
+        public GivenParameter EarlyVoltageReverse { get; } = new GivenParameter();
         [ParameterName("ikr"), ParameterInfo("reverse beta roll-off corner current")]
-        public Parameter RollOffReverse { get; } = new Parameter();
+        public GivenParameter RollOffReverse { get; } = new GivenParameter();
         [ParameterName("isc"), ParameterInfo("B-C leakage saturation current")]
-        public Parameter LeakBcCurrent { get; } = new Parameter();
+        public GivenParameter LeakBcCurrent { get; } = new GivenParameter();
         [ParameterName("nc"), ParameterInfo("B-C leakage emission coefficient")]
-        public Parameter LeakBcEmissionCoefficient { get; } = new Parameter(2);
+        public GivenParameter LeakBcEmissionCoefficient { get; } = new GivenParameter(2);
         [ParameterName("rb"), ParameterInfo("Zero bias base resistance")]
-        public Parameter BaseResist { get; } = new Parameter();
+        public GivenParameter BaseResist { get; } = new GivenParameter();
         [ParameterName("irb"), ParameterInfo("Current for base resistance=(rb+rbm)/2")]
-        public Parameter BaseCurrentHalfResist { get; } = new Parameter();
+        public GivenParameter BaseCurrentHalfResist { get; } = new GivenParameter();
         [ParameterName("rbm"), ParameterInfo("Minimum base resistance")]
-        public Parameter MinimumBaseResistance { get; } = new Parameter();
+        public GivenParameter MinimumBaseResistance { get; } = new GivenParameter();
         [ParameterName("re"), ParameterInfo("Emitter resistance")]
-        public Parameter EmitterResistance { get; } = new Parameter();
+        public GivenParameter EmitterResistance { get; } = new GivenParameter();
         [ParameterName("rc"), ParameterInfo("Collector resistance")]
-        public Parameter CollectorResistance { get; } = new Parameter();
+        public GivenParameter CollectorResistance { get; } = new GivenParameter();
         [ParameterName("cje"), ParameterInfo("Zero bias B-E depletion capacitance")]
-        public Parameter DepletionCapBe { get; } = new Parameter();
+        public GivenParameter DepletionCapBe { get; } = new GivenParameter();
         [ParameterName("vje"), ParameterName("pe"), ParameterInfo("B-E built in potential")]
-        public Parameter PotentialBe { get; } = new Parameter(0.75);
+        public GivenParameter PotentialBe { get; } = new GivenParameter(0.75);
         [ParameterName("mje"), ParameterName("me"), ParameterInfo("B-E junction grading coefficient")]
-        public Parameter JunctionExpBe { get; } = new Parameter(.33);
+        public GivenParameter JunctionExpBe { get; } = new GivenParameter(.33);
         [ParameterName("tf"), ParameterInfo("Ideal forward transit time")]
-        public Parameter TransitTimeForward { get; } = new Parameter();
+        public GivenParameter TransitTimeForward { get; } = new GivenParameter();
         [ParameterName("xtf"), ParameterInfo("Coefficient for bias dependence of TF")]
-        public Parameter TransitTimeBiasCoefficientForward { get; } = new Parameter();
+        public GivenParameter TransitTimeBiasCoefficientForward { get; } = new GivenParameter();
         [ParameterName("vtf"), ParameterInfo("Voltage giving VBC dependence of TF")]
-        public Parameter TransitTimeForwardVoltageBc { get; } = new Parameter();
+        public GivenParameter TransitTimeForwardVoltageBc { get; } = new GivenParameter();
         [ParameterName("itf"), ParameterInfo("High current dependence of TF")]
-        public Parameter TransitTimeHighCurrentForward { get; } = new Parameter();
+        public GivenParameter TransitTimeHighCurrentForward { get; } = new GivenParameter();
         [ParameterName("ptf"), ParameterInfo("Excess phase")]
-        public Parameter ExcessPhase { get; } = new Parameter();
+        public GivenParameter ExcessPhase { get; } = new GivenParameter();
         [ParameterName("cjc"), ParameterInfo("Zero bias B-C depletion capacitance")]
-        public Parameter DepletionCapBc { get; } = new Parameter();
+        public GivenParameter DepletionCapBc { get; } = new GivenParameter();
         [ParameterName("vjc"), ParameterName("pc"), ParameterInfo("B-C built in potential")]
-        public Parameter PotentialBc { get; } = new Parameter(0.75);
+        public GivenParameter PotentialBc { get; } = new GivenParameter(0.75);
         [ParameterName("mjc"), ParameterName("mc"), ParameterInfo("B-C junction grading coefficient")]
-        public Parameter JunctionExpBc { get; } = new Parameter(.33);
+        public GivenParameter JunctionExpBc { get; } = new GivenParameter(.33);
         [ParameterName("xcjc"), ParameterInfo("Fraction of B-C cap to internal base")]
-        public Parameter BaseFractionBcCap { get; } = new Parameter(1);
+        public GivenParameter BaseFractionBcCap { get; } = new GivenParameter(1);
         [ParameterName("tr"), ParameterInfo("Ideal reverse transit time")]
-        public Parameter TransitTimeReverse { get; } = new Parameter();
+        public GivenParameter TransitTimeReverse { get; } = new GivenParameter();
         [ParameterName("cjs"), ParameterName("ccs"), ParameterInfo("Zero bias C-S capacitance")]
-        public Parameter CapCs { get; } = new Parameter();
+        public GivenParameter CapCs { get; } = new GivenParameter();
         [ParameterName("vjs"), ParameterName("ps"), ParameterInfo("Substrate junction built in potential")]
-        public Parameter PotentialSubstrate { get; } = new Parameter(.75);
+        public GivenParameter PotentialSubstrate { get; } = new GivenParameter(.75);
         [ParameterName("mjs"), ParameterName("ms"), ParameterInfo("Substrate junction grading coefficient")]
-        public Parameter ExponentialSubstrate { get; } = new Parameter();
+        public GivenParameter ExponentialSubstrate { get; } = new GivenParameter();
         [ParameterName("xtb"), ParameterInfo("Forward and reverse beta temperature exponent")]
-        public Parameter BetaExponent { get; } = new Parameter();
+        public GivenParameter BetaExponent { get; } = new GivenParameter();
         [ParameterName("eg"), ParameterInfo("Energy gap for IS temperature dependency")]
-        public Parameter EnergyGap { get; } = new Parameter(1.11);
+        public GivenParameter EnergyGap { get; } = new GivenParameter(1.11);
         [ParameterName("xti"), ParameterInfo("Temp. exponent for IS")]
-        public Parameter TempExpIs { get; } = new Parameter(3);
+        public GivenParameter TempExpIs { get; } = new GivenParameter(3);
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        public Parameter DepletionCapCoefficient { get; } = new Parameter();
+        public GivenParameter DepletionCapCoefficient { get; } = new GivenParameter();
 
         /// <summary>
         /// Parameter that is not accessible in Spice 3f5
         /// </summary>
-        public Parameter C2 { get; } = new Parameter();
+        public GivenParameter C2 { get; } = new GivenParameter();
 
         /// <summary>
         /// Parameter that is not accessible in Spice 3f5
         /// </summary>
-        public Parameter C4 { get; } = new Parameter();
+        public GivenParameter C4 { get; } = new GivenParameter();
 
         /// <summary>
         /// Constants

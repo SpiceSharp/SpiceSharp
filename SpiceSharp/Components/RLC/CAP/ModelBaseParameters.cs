@@ -11,12 +11,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("cj"), ParameterInfo("Bottom capacitance per area")]
-        public Parameter JunctionCap { get; } = new Parameter();
+        public GivenParameter JunctionCap { get; } = new GivenParameter();
         [ParameterName("cjsw"), ParameterInfo("Sidewall capacitance per meter")]
-        public Parameter JunctionCapSidewall { get; } = new Parameter();
+        public GivenParameter JunctionCapSidewall { get; } = new GivenParameter();
         [ParameterName("defw"), ParameterInfo("Default width")]
-        public Parameter DefaultWidth { get; } = new Parameter(10.0e-6);
+        public GivenParameter DefaultWidth { get; } = new GivenParameter(10.0e-6);
         [ParameterName("narrow"), ParameterInfo("Width correction factor")]
-        public Parameter Narrow { get; } = new Parameter();
+        public GivenParameter Narrow { get; } = new GivenParameter();
     }
 }

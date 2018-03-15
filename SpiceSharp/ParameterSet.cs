@@ -66,14 +66,14 @@ namespace SpiceSharp
                 // Check for methods
                 if (member is MethodInfo mi)
                 {
-                    if (mi.ReturnType == typeof(Parameter) && mi.GetParameters().Length == 0)
+                    if ((mi.ReturnType == typeof(Parameter) || mi.ReturnType.IsSubclassOf(typeof(Parameter))) && mi.GetParameters().Length == 0)
                         return (Parameter) mi.Invoke(this, null);
                 }
 
                 // Check for properties
                 if (member is PropertyInfo pi)
                 {
-                    if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
+                    if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.IsSubclassOf(typeof(Parameter))) && pi.CanRead)
                         return (Parameter) pi.GetValue(this);
                 }
             }
@@ -99,14 +99,14 @@ namespace SpiceSharp
                 // Check for methods
                 if (member is MethodInfo mi)
                 {
-                    if (mi.ReturnType == typeof(Parameter) && mi.GetParameters().Length == 0)
+                    if ((mi.ReturnType == typeof(Parameter) || mi.ReturnType.IsSubclassOf(typeof(Parameter))) && mi.GetParameters().Length == 0)
                         return (Parameter)mi.Invoke(this, null);
                 }
 
                 // Check for properties
                 if (member is PropertyInfo pi)
                 {
-                    if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
+                    if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.IsSubclassOf(typeof(Parameter))) && pi.CanRead)
                         return (Parameter)pi.GetValue(this);
                 }
             }
@@ -317,9 +317,9 @@ namespace SpiceSharp
             if (member is PropertyInfo pi)
             {
                 // Properties
-                if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
+                if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.IsSubclassOf(typeof(Parameter))) && pi.CanRead)
                 {
-                    ((Parameter)pi.GetValue(this)).Set(value);
+                    ((Parameter) pi.GetValue(this)).Value = value;
                     return true;
                 }
 
@@ -373,11 +373,11 @@ namespace SpiceSharp
         private Action<double> CreateSetterForProperty(PropertyInfo property)
         {
             // Parameter objects are supported
-            if (property.PropertyType == typeof(Parameter))
+            if (property.PropertyType == typeof(Parameter) || property.PropertyType.IsSubclassOf(typeof(Parameter)))
             {
                 // We can use the setter of the parameter!
-                Parameter p = (Parameter) property.GetValue(this);
-                return p.Set;
+                var p = (Parameter) property.GetValue(this);
+                return value => p.Value = value;
             }
 
             // Double properties are supported

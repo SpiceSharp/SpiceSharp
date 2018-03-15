@@ -3,120 +3,47 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// This class describes a parameter that is optional. Whether or not it was specified can be
-    /// found using the Given variable.
+    /// Base class for parameters
+    /// Parameters are objects that contain a double value, and that have some basic manipulations. They
+    /// also make it easier to be referenced by simulations, sweeps and other features.
     /// </summary>
-    public class Parameter : ICloneable
+    public abstract class Parameter : ICloneable
     {
         /// <summary>
-        /// Gets or sets the raw value of the parameter without changing the Given parameter
+        /// Gets or sets the value of the parameter
         /// </summary>
-        public double Value { get; set; }
-
-        /// <summary>
-        /// Gets whether or not the parameter was specified
-        /// </summary>
-        public bool Given { get; private set; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Parameter()
-        {
-            Value = 0.0;
-            Given = false;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="defaultValue">The default value</param>
-        public Parameter(double defaultValue)
-        {
-            Value = defaultValue;
-            Given = false;
-        }
+        public abstract double Value { get; set; }
 
         /// <summary>
         /// Clone the parameter
         /// </summary>
         /// <returns></returns>
-        public virtual object Clone()
-        {
-            var clone = new Parameter
-            {
-                Given = Given,
-                Value = Value
-            };
-            return clone;
-        }
+        public abstract object Clone();
 
         /// <summary>
-        /// Copy the parameter from another parameter
+        /// Copy the parameter to this parameter
         /// </summary>
-        /// <param name="source">Copy from other parameters</param>
+        /// <param name="source">Source parameter</param>
         public virtual void CopyFrom(Parameter source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-
             Value = source.Value;
-            Given = source.Given;
         }
 
         /// <summary>
-        /// Copy the parameter to another parameter
+        /// Implicit conversion for a parameter to a double
         /// </summary>
-        /// <param name="target">Target parameter</param>
-        public virtual void CopyTo(Parameter target)
-        {
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-
-            target.Value = Value;
-            target.Given = Given;
-        }
+        /// <param name="parameter">Parameter</param>
+        public static implicit operator double(Parameter parameter) => parameter.Value;
 
         /// <summary>
-        /// Specify the parameter
-        /// </summary>
-        /// <param name="value"></param>
-        public virtual void Set(double value)
-        {
-            Value = value;
-            Given = true;
-        }
-
-        /// <summary>
-        /// Parameters can be implicitly converted to their base type
-        /// </summary>
-        /// <param name="parameter"></param>
-        public static implicit operator double(Parameter parameter)
-        {
-            if (parameter == null)
-                return double.NaN;
-            return parameter.Value;
-        }
-
-        /// <summary>
-        /// Assignment
-        /// Warning: This is the same as calling Set on the parameter!
-        /// </summary>
-        /// <param name="parameter">The double representation</param>
-        public static implicit operator Parameter(double parameter)
-        {
-            return new Parameter(parameter) { Given = true };
-        }
-
-        /// <summary>
-        /// Convert to string
+        /// Convert to a string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Given)
-                return "{0} (set)".FormatString(Value);
-            return "{0} (not set)".FormatString(Value);
+            return "Parameter {0}".FormatString(Value);
         }
     }
 }

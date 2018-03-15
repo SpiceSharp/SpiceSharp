@@ -11,35 +11,35 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("is"), ParameterInfo("Saturation current")]
-        public Parameter SaturationCurrent { get; } = new Parameter(1e-14);
+        public GivenParameter SaturationCurrent { get; } = new GivenParameter(1e-14);
         [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
+            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public Parameter NominalTemperature { get; } = new Parameter();
+        public GivenParameter NominalTemperature { get; } = new GivenParameter();
         [ParameterName("rs"), ParameterInfo("Ohmic resistance")]
-        public Parameter Resistance { get; } = new Parameter();
+        public GivenParameter Resistance { get; } = new GivenParameter();
         [ParameterName("n"), ParameterInfo("Emission Coefficient")]
-        public Parameter EmissionCoefficient { get; } = new Parameter(1);
+        public GivenParameter EmissionCoefficient { get; } = new GivenParameter(1);
         [ParameterName("tt"), ParameterInfo("Transit Time")]
-        public Parameter TransitTime { get; } = new Parameter();
+        public GivenParameter TransitTime { get; } = new GivenParameter();
         [ParameterName("cjo"), ParameterName("cj0"), ParameterInfo("Junction capacitance")]
-        public Parameter JunctionCap { get; } = new Parameter();
+        public GivenParameter JunctionCap { get; } = new GivenParameter();
         [ParameterName("vj"), ParameterInfo("Junction potential")]
-        public Parameter JunctionPotential { get; } = new Parameter(1);
+        public GivenParameter JunctionPotential { get; } = new GivenParameter(1);
         [ParameterName("m"), ParameterInfo("Grading coefficient")]
-        public Parameter GradingCoefficient { get; } = new Parameter(.5);
+        public GivenParameter GradingCoefficient { get; } = new GivenParameter(.5);
         [ParameterName("eg"), ParameterInfo("Activation energy")]
-        public Parameter ActivationEnergy { get; } = new Parameter(1.11);
+        public GivenParameter ActivationEnergy { get; } = new GivenParameter(1.11);
         [ParameterName("xti"), ParameterInfo("Saturation current temperature exp.")]
-        public Parameter SaturationCurrentExp { get; } = new Parameter(3);
+        public GivenParameter SaturationCurrentExp { get; } = new GivenParameter(3);
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        public Parameter DepletionCapCoefficient { get; } = new Parameter(.5);
+        public GivenParameter DepletionCapCoefficient { get; } = new GivenParameter(.5);
         [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage")]
-        public Parameter BreakdownVoltage { get; } = new Parameter();
+        public GivenParameter BreakdownVoltage { get; } = new GivenParameter();
         [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage")]
-        public Parameter BreakdownCurrent { get; } = new Parameter(1e-3);
+        public GivenParameter BreakdownCurrent { get; } = new GivenParameter(1e-3);
     }
 }

@@ -145,8 +145,8 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Invalid sweep object");
                 }
 
-                original[i] = (Parameter)swept[i].Clone();
-                swept[i].Set(sweep.Initial);
+                original[i] = (GivenParameter)swept[i].Clone();
+                swept[i].Value = sweep.Initial;
             }
 
             // Execute temperature behaviors if necessary the first time
@@ -165,7 +165,7 @@ namespace SpiceSharp.Simulations
                 {
                     level++;
                     Sweeps[level].Reset();
-                    swept[level].Set(Sweeps[level].CurrentValue);
+                    swept[level].Value = Sweeps[level].CurrentValue;
                     state.Init = RealState.InitializationStates.InitJunction;
                 }
 
@@ -187,7 +187,7 @@ namespace SpiceSharp.Simulations
                 if (level >= 0)
                 {
                     Sweeps[level].Increment();
-                    swept[level].Set(Sweeps[level].CurrentValue);
+                    swept[level].Value = Sweeps[level].CurrentValue;
 
                     // If temperature behavior is needed for this level or higher, run behaviors
                     if (levelNeedsTemperature >= level)
