@@ -47,6 +47,23 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Get a parameter from the parameter set
+        /// Returns null if no matching parameter was found
+        /// </summary>
+        /// <returns></returns>
+        public Parameter GetParameter()
+        {
+            foreach (var ps in Values)
+            {
+                var p = ps.GetParameter();
+                if (p != null)
+                    return p;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Get a setter for a parameter in the parameter set
         /// Returns null if no matching parameter was found
         /// </summary>
@@ -63,10 +80,27 @@ namespace SpiceSharp
 
             return null;
         }
-        
+
+        /// <summary>
+        /// Get a setter for a parameter in the parameter set
+        /// Returns null if no matching parameter was found
+        /// </summary>
+        /// <returns></returns>
+        public Action<double> GetSetter()
+        {
+            foreach (var ps in Values)
+            {
+                var s = ps.GetSetter();
+                if (s != null)
+                    return s;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Set a parameter by name
-        /// If multiple parameters
+        /// If multiple parameters exist by this name, all of them will be set
         /// </summary>
         /// <param name="name">Property name</param>
         /// <param name="value">Value</param>
@@ -75,9 +109,26 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                if (ps.Set(name, value))
+                if (ps.SetParameter(name, value))
                     return true;
             }
+            return false;
+        }
+
+        /// <summary>
+        /// Set the principal parameter
+        /// Only the first found principal parameter will be set
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        public bool SetParameter(double value)
+        {
+            foreach (var ps in Values)
+            {
+                if (ps.SetParameter(value))
+                    return true;
+            }
+
             return false;
         }
 
@@ -91,7 +142,7 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                if (ps.Set(name, value))
+                if (ps.SetParameter(name, value))
                     return true;
             }
             return false;

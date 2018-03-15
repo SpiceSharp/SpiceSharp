@@ -32,6 +32,9 @@ namespace SpiceSharpTest.Parameters
 
             [ParameterName("parameter1")]
             public Parameter Parameter1 { get; } = new Parameter();
+
+            [ParameterName("principal"), ParameterInfo("Principal parameter", IsPrincipal = true)]
+            public Parameter Principal { get; } = new Parameter(0.8);
         }
 
         [Test]
@@ -91,6 +94,25 @@ namespace SpiceSharpTest.Parameters
             var p = new ParameterExample();
             var param = p.GetParameter("parameter1");
             Assert.AreEqual(p.Parameter1, param);
+        }
+
+        [Test]
+        public void When_PrincipalParameter_Expect_DirectAccess()
+        {
+            var p = new ParameterExample();
+            var param = p.GetParameter();
+            Assert.AreEqual(param, p.Principal);
+        }
+
+        [Test]
+        public void When_PrincipalSetter_Expect_DirectAccess()
+        {
+            var p = new ParameterExample();
+            var setter = p.GetSetter();
+            setter(1.0);
+            Assert.AreEqual(1.0, p.Principal.Value, 1e-12);
+            setter(10.0);
+            Assert.AreEqual(10.0, p.Principal.Value, 1e-12);
         }
     }
 }

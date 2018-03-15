@@ -83,6 +83,39 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Get a parameter object
+        /// </summary>
+        /// <returns></returns>
+        public Parameter GetParameter()
+        {
+            // Get the property by name
+            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var member in members)
+            {
+                // Check for valid naming
+                if (!IsPrincipal(member))
+                    continue;
+
+                // Check for methods
+                if (member is MethodInfo mi)
+                {
+                    if (mi.ReturnType == typeof(Parameter) && mi.GetParameters().Length == 0)
+                        return (Parameter)mi.Invoke(this, null);
+                }
+
+                // Check for properties
+                if (member is PropertyInfo pi)
+                {
+                    if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
+                        return (Parameter)pi.GetValue(this);
+                }
+            }
+
+            // Not found
+            return null;
+        }
+
+        /// <summary>
         /// Get a setter for a parameter
         /// </summary>
         /// <param name="name">Parameter name</param>
@@ -115,12 +148,44 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Get a setter for a parameter
+        /// </summary>
+        /// <returns></returns>
+        public Action<double> GetSetter()
+        {
+            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var member in members)
+            {
+                // Skip members we're not interested in
+                if (!IsPrincipal(member))
+                    continue;
+
+                // Create a setter
+                Action<double> setter = null;
+                if (member is PropertyInfo pi)
+                    setter = CreateSetterForProperty(pi);
+                else if (member is MethodInfo mi)
+                    setter = CreateSetterForMethod(mi);
+                else if (member is FieldInfo fi)
+                    setter = CreateSetterForField(fi);
+
+                // Return the created setter if successful
+                if (setter != null)
+                    return setter;
+            }
+
+            // Could not create a setter
+            return null;
+        }
+
+        /// <summary>
         /// Set a parameter by name
+        /// If multiple parameters have the same name, they will all be set
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="value">Value</param>
         /// <returns>True if the parameter was set</returns>
-        public bool Set(string name, double value)
+        public bool SetParameter(string name, double value)
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
@@ -133,35 +198,36 @@ namespace SpiceSharp
                 if (!HasName(member, name))
                     continue;
 
-                if (member is PropertyInfo pi)
-                {
-                    // Properties
-                    if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
-                    {
-                        ((Parameter)pi.GetValue(this)).Set(value);
-                        isset = true;
-                    }
-                    else if (pi.PropertyType == typeof(double) && pi.CanWrite)
-                    {
-                        pi.SetValue(this, value);
-                        isset = true;
-                    }
-                }
-                else if (member is MethodInfo mi)
-                {
-                    // Methods
-                    if (mi.ReturnType == typeof(void))
-                    {
-                        var paraminfo = mi.GetParameters();
-                        if (paraminfo.Length == 1 && paraminfo[0].ParameterType == typeof(double))
-                        {
-                            mi.Invoke(this, new object[] { value });
-                            isset = true;
-                        }
-                    }
-                }
+                // Set the member
+                if (SetMember(member, value))
+                    isset = true;
             }
             return isset;
+        }
+
+        /// <summary>
+        /// Sets the principal parameter of the set
+        /// Only the first principal parameter is changed
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        public bool SetParameter(double value)
+        {
+            // Get the property by name
+            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+
+            // Find the principal value and set it
+            foreach (var member in members)
+            {
+                // Check if the parameter is principal
+                if (!IsPrincipal(member))
+                    continue;
+
+                if (SetMember(member, value))
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -171,7 +237,7 @@ namespace SpiceSharp
         /// <param name="name">Name</param>
         /// <param name="value">Value</param>
         /// <returns>Returns true if the parameter was set</returns>
-        public bool Set(string name, object value)
+        public bool SetParameter(string name, object value)
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
@@ -224,6 +290,59 @@ namespace SpiceSharp
                 if (attribute.Name == property)
                     return true;
             }
+            return false;
+        }
+
+        /// <summary>
+        /// Find out if the member if a principal parameter
+        /// </summary>
+        /// <param name="member">Member</param>
+        /// <returns></returns>
+        private static bool IsPrincipal(MemberInfo member)
+        {
+            var infos = (ParameterInfoAttribute[]) member.GetCustomAttributes(typeof(ParameterInfoAttribute), false);
+            if (infos.Length > 0)
+                return infos[0].IsPrincipal;
+            return false;
+        }
+
+        /// <summary>
+        /// Set the value of a member
+        /// </summary>
+        /// <param name="member">Member</param>
+        /// <param name="value">Value</param>
+        /// <returns>True if set succesfully</returns>
+        private bool SetMember(MemberInfo member, double value)
+        {
+            if (member is PropertyInfo pi)
+            {
+                // Properties
+                if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
+                {
+                    ((Parameter)pi.GetValue(this)).Set(value);
+                    return true;
+                }
+
+                if (pi.PropertyType == typeof(double) && pi.CanWrite)
+                {
+                    pi.SetValue(this, value);
+                    return true;
+                }
+            }
+            else if (member is MethodInfo mi)
+            {
+                // Methods
+                if (mi.ReturnType == typeof(void))
+                {
+                    var paraminfo = mi.GetParameters();
+                    if (paraminfo.Length == 1 && paraminfo[0].ParameterType == typeof(double))
+                    {
+                        mi.Invoke(this, new object[] { value });
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
