@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Invalid sweep object");
                 }
 
-                original[i] = (GivenParameter)swept[i].Clone();
+                original[i] = (Parameter)swept[i].Clone();
                 swept[i].Value = sweep.Initial;
             }
 
