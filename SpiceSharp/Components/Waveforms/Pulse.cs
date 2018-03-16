@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Attributes;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 

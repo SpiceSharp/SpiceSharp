@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {

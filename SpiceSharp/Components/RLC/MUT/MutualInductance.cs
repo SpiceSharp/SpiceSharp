@@ -2,7 +2,6 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MutualInductanceBehaviors;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {

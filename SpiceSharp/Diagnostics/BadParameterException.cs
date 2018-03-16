@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace SpiceSharp.Diagnostics
+namespace SpiceSharp
 {
     /// <summary>
     /// Exception for a bad parameter.

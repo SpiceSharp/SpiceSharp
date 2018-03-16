@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SpiceSharp.Diagnostics
+namespace SpiceSharp
 {
     /// <summary>
     /// Provides static methods for tracking warnings.

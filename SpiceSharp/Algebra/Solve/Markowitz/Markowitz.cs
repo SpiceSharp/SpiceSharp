@@ -192,9 +192,9 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <param name="magnitude">Magnitude method</param>
-        public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step, Func<T, double> magnitude)
+        public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -205,8 +205,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             if (_markowitzRow == null || _markowitzRow.Length != matrix.Size + 1)
                 Initialize(matrix);
 
-            Count(matrix, rhs, step);
-            Products(matrix, step);
+            Count(matrix, rhs, eliminationStep);
+            Products(matrix, eliminationStep);
         }
 
         /// <summary>
@@ -215,8 +215,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="pivot">Pivot</param>
-        /// <param name="step">Step</param>
-        public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int step)
+        /// <param name="eliminationStep">Step</param>
+        public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int eliminationStep)
         {
             // If we haven't setup, just skip
             if (_markowitzProduct == null)
@@ -232,12 +232,12 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                 Singletons--;
 
             // Exchange rows
-            if (pivot.Row != step)
+            if (pivot.Row != eliminationStep)
             {
                 // Swap row Markowitz numbers
                 int tmp = _markowitzRow[row];
-                _markowitzRow[row] = _markowitzRow[step];
-                _markowitzRow[step] = tmp;
+                _markowitzRow[row] = _markowitzRow[eliminationStep];
+                _markowitzRow[eliminationStep] = tmp;
 
                 // Update the Markowitz product
                 int oldProduct = _markowitzProduct[row];
@@ -255,12 +255,12 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             }
 
             // Exchange columns
-            if (column != step)
+            if (column != eliminationStep)
             {
                 // Swap column Markowitz numbers
                 int tmp = _markowitzColumn[column];
-                _markowitzColumn[column] = _markowitzColumn[step];
-                _markowitzColumn[step] = tmp;
+                _markowitzColumn[column] = _markowitzColumn[eliminationStep];
+                _markowitzColumn[eliminationStep] = tmp;
 
                 // Update the Markowitz product
                 int oldProduct = _markowitzProduct[column];
@@ -283,8 +283,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="pivot">Pivot</param>
-        /// <param name="step">Step</param>
-        public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int step)
+        /// <param name="eliminationStep">Step</param>
+        public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep)
         {
             // If we haven't setup, just skip
             if (_markowitzProduct == null)
@@ -326,13 +326,13 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// Find a pivot
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <returns></returns>
-        public override MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int step)
+        public override MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int eliminationStep)
         {
             foreach (var strategy in Strategies)
             {
-                MatrixElement<T> chosen = strategy.FindPivot(this, matrix, step);
+                MatrixElement<T> chosen = strategy.FindPivot(this, matrix, eliminationStep);
                 if (chosen != null)
                     return chosen;
             }

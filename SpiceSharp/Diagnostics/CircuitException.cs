@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace SpiceSharp.Diagnostics
+namespace SpiceSharp
 {
     /// <summary>
     /// A basic exception for circuits

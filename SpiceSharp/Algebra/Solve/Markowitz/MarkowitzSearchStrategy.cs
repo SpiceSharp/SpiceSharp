@@ -13,8 +13,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         /// <param name="markowitz">Markowitz</param>
         /// <param name="matrix">Matrix</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <returns></returns>
-        public abstract MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step);
+        public abstract MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep);
     }
 }

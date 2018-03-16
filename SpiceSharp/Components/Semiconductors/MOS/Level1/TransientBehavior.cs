@@ -2,7 +2,6 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 

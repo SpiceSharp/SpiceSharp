@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {

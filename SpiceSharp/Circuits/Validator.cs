@@ -4,7 +4,6 @@ using System.Linq;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {

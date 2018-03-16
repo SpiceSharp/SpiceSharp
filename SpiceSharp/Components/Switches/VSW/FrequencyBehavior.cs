@@ -2,7 +2,6 @@
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageSwitchBehaviors

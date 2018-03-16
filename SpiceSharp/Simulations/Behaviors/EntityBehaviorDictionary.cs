@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Behaviors
 {

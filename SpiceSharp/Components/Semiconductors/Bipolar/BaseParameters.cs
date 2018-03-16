@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Attributes;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {

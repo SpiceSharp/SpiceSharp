@@ -35,7 +35,7 @@ namespace SpiceSharp
         /// Implicit conversion for a parameter to a double
         /// </summary>
         /// <param name="parameter">Parameter</param>
-        public static implicit operator double(Parameter parameter) => parameter.Value;
+        public static implicit operator double(Parameter parameter) => parameter?.Value ?? double.NaN;
 
         /// <summary>
         /// Convert to a string
