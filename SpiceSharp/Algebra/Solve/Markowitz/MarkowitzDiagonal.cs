@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Algebra.Solve.Markowitz
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// Markowitz-based pivot strategy: diagonal search

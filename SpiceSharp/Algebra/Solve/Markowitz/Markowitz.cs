@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace SpiceSharp.Algebra.Solve.Markowitz
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// Markowitz
@@ -9,6 +9,13 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
     /// <typeparam name="T"></typeparam>
     public class Markowitz<T> : PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
+        /// <summary>
+        /// Markowitz numbers
+        /// </summary>
+        private int[] _markowitzRow;
+        private int[] _markowitzColumn;
+        private int[] _markowitzProduct;
+
         /// <summary>
         /// Gets the relative pivot threshold
         /// </summary>
@@ -30,21 +37,15 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         public int RowCount(int row) => _markowitzRow[row];
 
-        private int[] _markowitzRow;
-
         /// <summary>
         /// Gets the Markowitz column counts
         /// </summary>
         public int ColumnCount(int column) => _markowitzColumn[column];
 
-        private int[] _markowitzColumn;
-
         /// <summary>
         /// Gets the Markowitz products
         /// </summary>
         public int Product(int index) => _markowitzProduct[index];
-
-        private int[] _markowitzProduct;
 
         /// <summary>
         /// Gets the number of singletons
@@ -105,7 +106,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// Initialize
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public void Initialize(SparseMatrix<T> matrix)
+        public void Initialize(Matrix<T> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));

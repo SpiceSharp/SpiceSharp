@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Algebra.Solve.Markowitz
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// Markowitz-count based strategy for finding a pivot
