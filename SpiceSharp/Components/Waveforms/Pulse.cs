@@ -66,6 +66,7 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
+            // Cache parameter values
             _v1 = InitialValue;
             _v2 = PulsedValue;
             _td = Delay;
@@ -75,7 +76,15 @@ namespace SpiceSharp.Components
             _per = Period;
 
             // Some checks
-            if (_per <= _tr + _pw + _tf)
+            if (_tr < 0.0)
+                throw new CircuitException("Invalid rise time {0}".FormatString(_tr));
+            if (_tf < 0.0)
+                throw new CircuitException("Invalid fall time {0}".FormatString(_tf));
+            if (_pw < 0.0)
+                throw new CircuitException("Invalid pulse width {0}".FormatString(_pw));
+            if (_per < 0.0)
+                throw new CircuitException("Invalid period {0}".FormatString(_per));
+            if (_per < _tr + _pw + _tf)
                 throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(_per));
         }
 

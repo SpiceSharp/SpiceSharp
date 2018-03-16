@@ -70,11 +70,18 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
+            // Cache parameter values
             _vo = Offset;
             _va = Amplitude;
-            _freq = Frequency;
+            _freq = Frequency * 2.0 * Math.PI;
             _td = Delay;
             _theta = Theta;
+
+            // Some checks
+            if (_freq < 0)
+                throw new CircuitException("Invalid frequency {0}".FormatString(Frequency.Value));
+            if (Theta.Given && _theta <= 0.0)
+                throw new CircuitException("Invalid damping factor {0}".FormatString(_theta));
         }
 
         /// <summary>
@@ -91,7 +98,7 @@ namespace SpiceSharp.Components
             if (time <= 0.0)
                 result = 0.0;
             else
-                result = _va * Math.Sin(_freq * time * 2.0 * Math.PI);
+                result = _va * Math.Sin(_freq * time);
 
             // Modify with theta
             if (Theta.Given)

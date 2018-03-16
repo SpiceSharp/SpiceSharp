@@ -77,6 +77,7 @@
     <Compile Include="Algebra\SparseFactorTest.cs" />
     <Compile Include="Simulations\DCTests.cs" />
     <Compile Include="Simulations\TransientTests.cs" />
+    <Compile Include="Models\WaveformTests.cs" />
     <Compile Include="Utils\AssertExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
