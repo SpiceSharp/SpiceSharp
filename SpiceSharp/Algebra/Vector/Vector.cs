@@ -26,7 +26,7 @@ namespace SpiceSharp.Algebra
         /// <param name="length">Length</param>
         protected Vector(int length)
         {
-            if (length < 1)
+            if (length < 0)
                 throw new SparseException("Invalid vector length {0}".FormatString(length));
             Length = length;
         }
