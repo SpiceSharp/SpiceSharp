@@ -45,23 +45,20 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
-            Behavior behavior = eb.Get<BaseTransientBehavior>();
-            if (behavior != null)
+            if (eb.TryGetValue(typeof(BaseTransientBehavior), out var behavior))
                 Extractor = behavior.CreateExport(Simulation, PropertyName);
 
             // 2) Second, try the load behavior
             if (Extractor == null)
             {
-                behavior = eb.Get<BaseLoadBehavior>();
-                if (behavior != null)
+                if (eb.TryGetValue(typeof(BaseLoadBehavior), out behavior))
                     Extractor = behavior.CreateExport(Simulation, PropertyName);
             }
 
             // 3) Thirdly, check temperature behavior
             if (Extractor == null)
             {
-                behavior = eb.Get<BaseTemperatureBehavior>();
-                if (behavior != null)
+                if (eb.TryGetValue(typeof(BaseTemperatureBehavior), out behavior))
                     Extractor = behavior.CreateExport(Simulation, PropertyName);
             }
         }

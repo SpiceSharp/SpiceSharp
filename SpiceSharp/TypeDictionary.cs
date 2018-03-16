@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace SpiceSharp
 {
@@ -96,11 +97,24 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">Return type</typeparam>
         /// <returns></returns>
-        public TResult Get<TResult>() where TResult : T
+        public TResult Get<TResult>() where TResult : T => (TResult) Dictionary[typeof(TResult)];
+
+        /// <summary>
+        /// Try to get a strongly typed value from the dictionary
+        /// </summary>
+        /// <typeparam name="TResult">Return type</typeparam>
+        /// <param name="value">Found value (if it exists)</param>
+        /// <returns>True if the value was found</returns>
+        public bool TryGet<TResult>(out TResult value) where TResult : T
         {
-            if (Dictionary.TryGetValue(typeof(TResult), out var value))
-                return (TResult)value;
-            throw new CircuitException("Cannot find type {0}".FormatString(typeof(TResult).Name));
+            if (Dictionary.TryGetValue(typeof(TResult), out var result))
+            {
+                value = (TResult) result;
+                return true;
+            }
+
+            value = default;
+            return false;
         }
 
         /// <summary>

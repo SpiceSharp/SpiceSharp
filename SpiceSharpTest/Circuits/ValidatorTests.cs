@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharpTest.Validation
 {
