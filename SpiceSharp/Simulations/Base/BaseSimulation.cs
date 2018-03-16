@@ -164,7 +164,7 @@ namespace SpiceSharp.Simulations
             if (config.GminSteps > 1)
             {
                 state.Init = RealState.InitializationStates.InitJunction;
-                CircuitWarning.Warning(this, "Starting Gmin stepping");
+                CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
                 state.DiagonalGmin = config.Gmin;
                 for (int i = 0; i < config.GminSteps; i++)
                     state.DiagonalGmin *= 10.0;
@@ -174,7 +174,7 @@ namespace SpiceSharp.Simulations
                     if (!Iterate(maxIterations))
                     {
                         state.DiagonalGmin = 0.0;
-                        CircuitWarning.Warning(this, "Gmin step failed");
+                        CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
                         break;
                     }
                     state.DiagonalGmin /= 10.0;
@@ -191,15 +191,14 @@ namespace SpiceSharp.Simulations
             if (config.SourceSteps > 1)
             {
                 state.Init = RealState.InitializationStates.InitJunction;
-                CircuitWarning.Warning(this, "Starting source stepping");
+                CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
                 for (int i = 0; i <= config.SourceSteps; i++)
                 {
                     state.SourceFactor = i / (double)config.SourceSteps;
                     if (!Iterate(maxIterations))
                     {
                         state.SourceFactor = 1.0;
-                        // circuit.CurrentAnalysis = AnalysisType.DoingTran;
-                        CircuitWarning.Warning(this, "Source stepping failed");
+                        CircuitWarning.Warning(this, Properties.Resources.SourceSteppingFailed);
                         return;
                     }
                 }
