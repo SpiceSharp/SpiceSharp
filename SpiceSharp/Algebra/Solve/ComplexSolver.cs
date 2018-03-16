@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra.Solve;
-using SpiceSharp.Algebra.Solve.Markowitz;
 
 // ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra

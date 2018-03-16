@@ -2,7 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
-using SpiceSharp.Algebra.Solve.Markowitz;
+using SpiceSharp.Algebra.Solve;
 
 namespace SpiceSharpTest.Sparse
 {
