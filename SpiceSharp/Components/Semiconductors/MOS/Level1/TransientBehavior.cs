@@ -582,12 +582,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Truncate timestep
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public override void Truncate(ref double timestep)
+        /// <returns>The timestep that satisfies the LTE</returns>
+        public override double Truncate()
         {
-            ChargeGs.LocalTruncationError(ref timestep);
-            ChargeGd.LocalTruncationError(ref timestep);
-            ChargeGb.LocalTruncationError(ref timestep);
+            double timetmp = ChargeGs.LocalTruncationError();
+            timetmp = Math.Min(timetmp, ChargeGd.LocalTruncationError());
+            timetmp = Math.Min(timetmp, ChargeGb.LocalTruncationError());
+            return timetmp;
         }
     }
 }

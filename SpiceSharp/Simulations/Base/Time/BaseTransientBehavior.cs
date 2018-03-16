@@ -55,10 +55,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Truncate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public virtual void Truncate(ref double timestep)
-        {
-            // Do nothing (yet)
-        }
+        /// <returns>The timestep that should be used for this behavior</returns>
+        public virtual double Truncate() => double.PositiveInfinity;
     }
 }

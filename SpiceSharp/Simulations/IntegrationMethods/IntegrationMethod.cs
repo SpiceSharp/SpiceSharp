@@ -359,7 +359,7 @@ namespace SpiceSharp.IntegrationMethods
 
             double timetmp = double.PositiveInfinity;
             foreach (var behavior in _transientBehaviors)
-                behavior.Truncate(ref timetmp);
+                timetmp = Math.Min(timetmp, behavior.Truncate());
             args.Delta = timetmp;
         }
 
@@ -380,7 +380,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="history">The history of states</param>
         /// <param name="index">Index</param>
-        /// <param name="timestep">Timestep</param>
-        public abstract void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep);
+        /// <returns>The timestep that satisfies the LTE</returns>
+        public abstract double LocalTruncateError(History<Vector<double>> history, int index);
     }
 }

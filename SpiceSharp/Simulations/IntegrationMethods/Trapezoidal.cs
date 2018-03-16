@@ -224,8 +224,8 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="history">History</param>
         /// <param name="index">Index</param>
-        /// <param name="timestep">Timestep</param>
-        public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep)
+        /// <returns>The timestep that satisfies the LTE</returns>
+        public override double LocalTruncateError(History<Vector<double>> history, int index)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
@@ -277,7 +277,7 @@ namespace SpiceSharp.IntegrationMethods
                 del = Math.Exp(Math.Log(del) / Order);
 
             // Return the timestep
-            timestep = Math.Min(timestep, del);
+            return del;
         }
     }
 }

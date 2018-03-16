@@ -20,11 +20,6 @@ namespace SpiceSharp.Simulations
         protected Collection<BaseAcceptBehavior> AcceptBehaviors { get; private set; }
 
         /// <summary>
-        /// Behaviors for truncating the timestep
-        /// </summary>
-        protected Collection<BaseTruncateBehavior> TruncateBehaviors { get; private set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
@@ -62,7 +57,6 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors and configurations
             AcceptBehaviors = SetupBehaviors<BaseAcceptBehavior>();
-            TruncateBehaviors = SetupBehaviors<BaseTruncateBehavior>();
         }
 
         /// <summary>
@@ -71,12 +65,8 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in TruncateBehaviors)
-                behavior.Unsetup();
             foreach (var behavior in AcceptBehaviors)
                 behavior.Unsetup();
-            TruncateBehaviors.Clear();
-            TruncateBehaviors = null;
             AcceptBehaviors.Clear();
             AcceptBehaviors = null;
 

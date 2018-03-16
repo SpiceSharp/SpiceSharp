@@ -534,12 +534,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Truncate the timestep
         /// </summary>
-        /// <param name="timestep">Current timestep</param>
-        public override void Truncate(ref double timestep)
+        /// <returns>The timestep that satisfies the LTE</returns>
+        public override double Truncate()
         {
-            StateChargeBe.LocalTruncationError(ref timestep);
-            StateChargeBc.LocalTruncationError(ref timestep);
-            StateChargeCs.LocalTruncationError(ref timestep);
+            double timetmp = StateChargeBe.LocalTruncationError();
+            timetmp = Math.Min(timetmp, StateChargeBc.LocalTruncationError());
+            timetmp = Math.Min(timetmp, StateChargeCs.LocalTruncationError());
+            return timetmp;
         }
 
         /// <summary>

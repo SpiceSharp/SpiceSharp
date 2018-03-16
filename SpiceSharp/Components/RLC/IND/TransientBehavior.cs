@@ -159,10 +159,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Truncate timestep
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public override void Truncate(ref double timestep)
-        {
-            _flux.LocalTruncationError(ref timestep);
-        }
+        /// <returns>The timestep that satisfies the LTE</returns>
+        public override double Truncate() => _flux.LocalTruncationError();
     }
 }

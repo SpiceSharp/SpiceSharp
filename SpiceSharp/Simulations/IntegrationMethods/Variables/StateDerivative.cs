@@ -69,7 +69,7 @@
         /// <summary>
         /// Truncate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public void LocalTruncationError(ref double timestep) => Source.LocalTruncationError(StateIndex, ref timestep);
+        /// <returns>The timestep that satisfies the LTE</returns>
+        public double LocalTruncationError() => Source.LocalTruncationError(StateIndex);
     }
 }
