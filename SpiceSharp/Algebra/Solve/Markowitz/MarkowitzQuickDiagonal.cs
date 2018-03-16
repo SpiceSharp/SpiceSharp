@@ -13,21 +13,21 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         /// <param name="markowitz">Markowitz</param>
         /// <param name="matrix">Matrix</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <returns></returns>
-        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
+        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
         {
             if (markowitz == null)
                 throw new ArgumentNullException(nameof(markowitz));
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (step < 1)
+            if (eliminationStep < 1)
                 throw new ArgumentException("Invalid elimination step");
 
             int minMarkowitzProduct = int.MaxValue;
             MatrixElement<T> chosen = null;
 
-            for (int i = step; i <= matrix.Size; i++)
+            for (int i = eliminationStep; i <= matrix.Size; i++)
             {
                 // Skip diagonal elements with a Markowitz product worse than already found
                 int product = markowitz.Product(i);
@@ -81,7 +81,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                     element = element.Below;
                 }
                 element = chosen.Above;
-                while (element != null && element.Row >= step)
+                while (element != null && element.Row >= eliminationStep)
                 {
                     largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                     element = element.Above;

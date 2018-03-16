@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="solver">Solver</param>
         /// <param name="gmin">Conductance</param>
-        public static void ApplyDiagonalGmin(this Solver<double> solver, double gmin)
+        public static void ApplyDiagonalGmin(this SparseLinearSystem<double> solver, double gmin)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

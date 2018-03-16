@@ -100,7 +100,7 @@ namespace SpiceSharp
         {
             if (Dictionary.TryGetValue(typeof(TResult), out var value))
                 return (TResult)value;
-            return default;
+            throw new CircuitException("Cannot find type {0}".FormatString(typeof(TResult).Name));
         }
 
         /// <summary>

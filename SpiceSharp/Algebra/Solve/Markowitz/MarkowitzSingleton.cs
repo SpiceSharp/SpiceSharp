@@ -15,15 +15,15 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         /// <param name="markowitz">Markowitz object</param>
         /// <param name="matrix">Matrix</param>
-        /// <param name="step">Step</param>
+        /// <param name="eliminationStep">Step</param>
         /// <returns></returns>
-        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
+        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
         {
             if (markowitz == null)
                 throw new ArgumentNullException(nameof(markowitz));
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (step < 1)
+            if (eliminationStep < 1)
                 throw new ArgumentException("Invalid elimination step");
 
             // No singletons left, so don't bother
@@ -32,7 +32,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
 
             // Find the first valid singleton we can use
             int singletons = 0, index;
-            for (index = step; index <= matrix.Size; index++)
+            for (index = eliminationStep; index <= matrix.Size; index++)
             {
                 // Not a singleton, let's skip this one...
                 if (markowitz.Product(index) != 0)
@@ -75,7 +75,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                     // First find the biggest magnitude in the column, not counting the pivot candidate
                     MatrixElement<T> element = chosen.Above;
                     double largest = 0.0;
-                    while (element != null && element.Row >= step)
+                    while (element != null && element.Row >= eliminationStep)
                     {
                         largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                         element = element.Above;

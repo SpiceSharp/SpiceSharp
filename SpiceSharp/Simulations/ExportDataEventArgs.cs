@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
             {
                 if (_simulation is TimeSimulation timeSimulation && timeSimulation.Method != null)
                     return timeSimulation.Method.Time;
-                throw new CircuitException("Simulation {0} does not simulate in time".FormatString(_simulation));
+                return double.NaN;
             }
         }
 
@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
                 if (_simulation is FrequencySimulation frequencySimulation && frequencySimulation.ComplexState != null)
                 {
                     if (!frequencySimulation.ComplexState.Laplace.Real.Equals(0.0))
-                        throw new CircuitException("Simulation {0} uses whole complex plane".FormatString(_simulation));
+                        return double.NaN;
                     return frequencySimulation.ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
                 }
 

@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets the model of the circuit component (if any)
         /// </summary>
-        public Entity Model { get; protected set; } = null;
+        public Entity Model { get; set; } = null;
 
         /// <summary>
         /// Connect the component in the circuit
