@@ -20,7 +20,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "SrnU5tlFrkwpY2f6k4J4tQ=="
+          "hash": "3juKR8Kip3ywP0jkq1iBuQ=="
         }
       },
       "is_incremental": true,
@@ -32,10 +32,550 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "MO7xur1Bth2QygmZHSdwbQ=="
+          "hash": "8vBXt1NaQAunyeEb6cM7UA=="
         }
       },
       "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.ComplexSolver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.ComplexSolver.html",
+          "hash": "1UeUk5+mw2dHH684IKZdgg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.DenseVector-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.DenseVector-1.html",
+          "hash": "1G/9IeEG6mZq8oc0+0Hnkw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Matrix-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Matrix-1.html",
+          "hash": "8mf5hgz1Td25pki24tax7Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.MatrixElement-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.MatrixElement-1.html",
+          "hash": "leU1lFoLaxyN5OuV2glwug=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.RealSolver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.RealSolver.html",
+          "hash": "VkO+pZ44APK4cy3NyQBRyg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.SingularException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.SingularException.html",
+          "hash": "zhWNlV1pOV4GTJxqqXfslw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.Markowitz-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.Markowitz-1.html",
+          "hash": "lfVqjm7Lx87X1ddRYGQUMA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.MarkowitzDiagonal-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.MarkowitzDiagonal-1.html",
+          "hash": "eUnXoMn6yqQ6k4pE3/uAgg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.MarkowitzEntireMatrix-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.MarkowitzEntireMatrix-1.html",
+          "hash": "maYs9n2XS2FBsXo+0w3fNg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.MarkowitzQuickDiagonal-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.MarkowitzQuickDiagonal-1.html",
+          "hash": "48jJpQ13ixGxskAbAG6f4A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.MarkowitzSearchStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.MarkowitzSearchStrategy-1.html",
+          "hash": "wihXkkx/cGvSbKFO7VyF9w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.MarkowitzSingleton-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.MarkowitzSingleton-1.html",
+          "hash": "+cp6ydAFEwU2ElhsgxeFzA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.PivotStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.PivotStrategy-1.html",
+          "hash": "fp/JiZJJfHreKmsXFYvy/g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.Translation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.Translation.html",
+          "hash": "PeeLk5fuiA6mi0fo5PpRFQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solve.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solve.html",
+          "hash": "i/nJlmZwkcLXW7ipV0sjCA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Solver-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Solver-1.html",
+          "hash": "y3VuuYNA6IbQK3fQyNQDDw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.SparseException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.SparseException.html",
+          "hash": "fs81AFGTEQh/SlGrAjuXYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.SparseLinearSystem-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.SparseLinearSystem-1.html",
+          "hash": "ycln3R2JZEPjYGaOqzwRAQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.SparseMatrix-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.SparseMatrix-1.html",
+          "hash": "22FvFOudIE520+fuZI01GQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.SparseVector-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.SparseVector-1.html",
+          "hash": "Vzlu2MCqw+VpAa23yFIO4A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.Vector-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.Vector-1.html",
+          "hash": "Xwp2QDMARDmSVxUDa0TSnQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.VectorElement-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.VectorElement-1.html",
+          "hash": "/LHkSFxeYnyqthBcl6aQKQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Algebra.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Algebra.html",
+          "hash": "hrQ8zLvYF9zrCwIDTEeweA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.ConnectedAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.ConnectedAttribute.html",
+          "hash": "HiGmAdnsnrGdVIUVD/oorQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.IndependentSourceAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.IndependentSourceAttribute.html",
+          "hash": "h6eK+NDAMbLngH3Ausi2rg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.ParameterInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.ParameterInfoAttribute.html",
+          "hash": "ncpOjd6WSojmu9JAYOQPMg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.ParameterNameAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.ParameterNameAttribute.html",
+          "hash": "P3GT9lV5ZF1R2ssLzRZ2AQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.PinAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.PinAttribute.html",
+          "hash": "0jcGKShimaopqhoKs3+eDw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.VoltageDriverAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.VoltageDriverAttribute.html",
+          "hash": "4lURhe/sarwd41IMCt6wQg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Attributes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Attributes.html",
+          "hash": "7YKFSPdLaU5wO3NkbTKYKw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.BadParameterException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.BadParameterException.html",
+          "hash": "waL9la6VU/+GGJg9OgaCvA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BaseAcceptBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BaseAcceptBehavior.html",
+          "hash": "JVYUFQG9kVXaR39JOH+rEw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BaseFrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BaseFrequencyBehavior.html",
+          "hash": "zm+B5W8IG4G8GstCxZKnDw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BaseInitialConditionBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BaseInitialConditionBehavior.html",
+          "hash": "8NsgX3XGyjosXddirIf2hQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BaseLoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BaseLoadBehavior.html",
+          "hash": "XJOMJwmam4jry3Ps/IU4ig=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BaseTemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BaseTemperatureBehavior.html",
+          "hash": "tCjNbwUdLWGqaJN/TxzNaA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BaseTransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BaseTransientBehavior.html",
+          "hash": "F6/ZE+URsNI1al9UBSuheA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.Behavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.Behavior.html",
+          "hash": "N006ZTO2ZXc5adhAEHew1A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BehaviorFactoryDictionary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BehaviorFactoryDictionary.html",
+          "hash": "I8INCQux+oC+Ee920y9xYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BehaviorFactoryMethod.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BehaviorFactoryMethod.html",
+          "hash": "z+sdh61Lq4GDqtgZcVSdIg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.BehaviorPool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.BehaviorPool.html",
+          "hash": "UY5o6MIEJmWz8TXUgo2kTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.EntityBehaviorDictionary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.EntityBehaviorDictionary.html",
+          "hash": "2Yn2cbDymzEnhEx5Zc0bxw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.NoiseBehavior.html",
+          "hash": "NMhxv7ZWxdHKC61UP9NKTg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.SetupDataProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.SetupDataProvider.html",
+          "hash": "deHRawPBgCpd175oMPktYQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Behaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Behaviors.html",
+          "hash": "kd1Z2oiekiQqf3XsJ7w3rA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -44,7 +584,67 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuit.html",
-          "hash": "n5yMRavuSOnPx3ytgSh6AQ=="
+          "hash": "uyIIoEIJLIuxEEETl0VczA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.CircuitException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.CircuitException.html",
+          "hash": "HEMrTKKodAvbHqYC9xGcmA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.CircuitWarning.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.CircuitWarning.html",
+          "hash": "Xa4PZ0VZymffQ36oDCvxfw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Circuits.Entity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Circuits.Entity.html",
+          "hash": "Tn9I25B8sEZ59Brfih5crg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Circuits.EntityCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Circuits.EntityCollection.html",
+          "hash": "zau6WW+j9wH4RjbMR1vvDg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Circuits.Node.NodeType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Circuits.Node.NodeType.html",
+          "hash": "CPu/JUt9XVri2R9wc7XQJQ=="
         }
       },
       "is_incremental": true,
@@ -52,146 +652,38 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitCheck.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Circuits.Node.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitCheck.html",
-          "hash": "uDM3fpXpaoxzSxxejA266Q=="
+          "relative_path": "api/SpiceSharp.Circuits.Node.html",
+          "hash": "QynLdnSL79fzF+Cig09JXg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitNode.NodeType.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Circuits.NodeMap.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitNode.NodeType.html",
-          "hash": "IweYwju4cfLRWozBLyVVdg=="
+          "relative_path": "api/SpiceSharp.Circuits.NodeMap.html",
+          "hash": "EnCEaG6R5xxyQ6c8EOYiow=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitNode.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Circuits.Validator.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitNode.html",
-          "hash": "HJG7bwiEqsTl9qzCN+CHGA=="
+          "relative_path": "api/SpiceSharp.Circuits.Validator.html",
+          "hash": "t1WRdx7++QOKd9iRcQA9KQ=="
         }
       },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitObjects.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitObjects.html",
-          "hash": "ps7B7ZRTL5/WGSKvDjImHw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitState.DomainTypes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitState.DomainTypes.html",
-          "hash": "S3wZrFLfEvYCgvJtenjljw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitState.InitFlags.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitState.InitFlags.html",
-          "hash": "EOR91k7XPWrUve/xidRC2w=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitState.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitState.html",
-          "hash": "lfpmT3DWC1kfmWohzdBBvw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitStateComplex.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitStateComplex.html",
-          "hash": "KOB0G4a/lO/1vyO4erTOcg=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitStateReal.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitStateReal.html",
-          "hash": "+BJQeSBhmbvWGG7h08cE/w=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.CircuitStatistics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.CircuitStatistics.html",
-          "hash": "vnDVcqqnzbU+rCx0+Jxdrw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.ICircuitObject.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.ICircuitObject.html",
-          "hash": "hQJEeit4yyxP5IM/gnnR4A=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Circuits.Nodes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Circuits.Nodes.html",
-          "hash": "6/e3k6uVrlbSKswtGlPbvA=="
-        }
-      },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -200,34 +692,166 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.html",
-          "hash": "qAT9odqf4ZklP2PiyIINCg=="
+          "hash": "9pWfqzwyWSJWXTpJsuMwaA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.BJT.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.BaseParameters.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.BJT.html",
-          "hash": "albWi3XnOQi1nYKP96sUIA=="
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.BaseParameters.html",
+          "hash": "LfN7EHxt55UblZxxNQznqw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.BJTModel.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.ExcessPhaseEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.BJTModel.html",
-          "hash": "cdUsmvG/uV6fvh4N2JITZQ=="
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.ExcessPhaseEventArgs.html",
+          "hash": "p9of3zt2Mp0ecsffLoj72g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.html",
+          "hash": "XmZhbF2mMLLPg+oCG9goUA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.LoadBehavior.html",
+          "hash": "+tV7f1nvu6o2o5YksA4OUw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.ModelBaseParameters.html",
+          "hash": "c7MpEh/KGaa8ArtKvzVMhw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.ModelNoiseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.ModelNoiseParameters.html",
+          "hash": "1M9+USKLRwq7Dp7AbBeFdQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.ModelTemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.ModelTemperatureBehavior.html",
+          "hash": "R9IY50hfiopGqfhG657Z8w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.html",
+          "hash": "9VXanjF6dhJSq5b3l7G9tg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html",
+          "hash": "cmWqsEyvQfsOqW8+ilZc6g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.TransientBehavior.html",
+          "hash": "oMCuQZY+iyRdBRvk3A40ow=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarBehaviors.html",
+          "hash": "eRhZ3+2LtPWiq+HwLWvWxw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarJunctionTransistor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarJunctionTransistor.html",
+          "hash": "VpbzepnRi28QCZozUGKAKg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.BipolarJunctionTransistorModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.BipolarJunctionTransistorModel.html",
+          "hash": "YCogVK0U+BN5D8wMDGuCwA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -236,10 +860,82 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Capacitor.html",
-          "hash": "qdpSPt5elVsNr/sNUpJySQ=="
+          "hash": "vw/B9ebyuYXCeyRexHuFJQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CapacitorBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CapacitorBehaviors.BaseParameters.html",
+          "hash": "wNbzXCm16psQzK1PW1fNhQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.html",
+          "hash": "o96J8VYe3WNqxWhj5IowDw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CapacitorBehaviors.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CapacitorBehaviors.ModelBaseParameters.html",
+          "hash": "y0rMADRx96kVFkaF+zZhpw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html",
+          "hash": "9zbF9H93BYkobTCFsHGpGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.html",
+          "hash": "1UFTkUYoUeoys3iW1Fl1DA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CapacitorBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CapacitorBehaviors.html",
+          "hash": "GSN8jgyTWSqVvSPWKJwq3A=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -248,70 +944,166 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CapacitorModel.html",
-          "hash": "3pQQvZY8Y3W+FmurQvdKMQ=="
+          "hash": "vs4+95zsx3k9c8lHayQ+WA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.CircuitComponent-1.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Component.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.CircuitComponent-1.html",
-          "hash": "lHhpihkSbXZR3+aic2s0Pg=="
+          "relative_path": "api/SpiceSharp.Components.Component.html",
+          "hash": "sz1v95ZwXaqJ0fIS/f9Dkg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.CircuitModel-1.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ComponentNoise.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.CircuitModel-1.html",
-          "hash": "DJ1MFb1MsRE1mAttBnR4wQ=="
+          "relative_path": "api/SpiceSharp.Components.ComponentNoise.html",
+          "hash": "nrydnv/HFV7N1nGukmZYjQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.ConnectedPins.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledCurrentSource.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.ConnectedPins.html",
-          "hash": "XxZL3sHn0zYQjQKDDeBNOA=="
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentSource.html",
+          "hash": "w8P3/lVLScwUi/a/v6rQ/Q=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledCurrentsource.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.BaseParameters.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentsource.html",
-          "hash": "pyLd2SpfZQQxGqPcenTTgw=="
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.BaseParameters.html",
+          "hash": "ytoifNa8GhEfML6ukS82sA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledVoltagesource.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltagesource.html",
-          "hash": "pYYxLfaNU4BCzunUKvyTiQ=="
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.html",
+          "hash": "lTVvA3F4OfTQXOi47/5Hbg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.html",
+          "hash": "uT5znBYx8ZxBuviEIOt2JA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.html",
+          "hash": "Lg75EJQuJD5tEEirnvKAKA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledVoltageSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltageSource.html",
+          "hash": "pA8eJOsA75efTxmFpytOnw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.BaseParameters.html",
+          "hash": "vIR38E4HYRQU7AxEnAqleA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.html",
+          "hash": "sEhSM3Z6aoUCOBVDbo2GsA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.LoadBehavior.html",
+          "hash": "wVQ2KqaHfIzHvAEHsM60zQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.html",
+          "hash": "sk6SnD9NloGAsij44SIEtg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSource.html",
+          "hash": "MKI3wbVsREkl38d6EYcxLQ=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -320,10 +1112,94 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CurrentSwitch.html",
-          "hash": "fOjYgClKxtk8wGK7/rOrxQ=="
+          "hash": "eenaG0xhx2ktXsb5YnKgLw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.html",
+          "hash": "gloq/miu/6A1lByIu9zQLg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.BaseParameters.html",
+          "hash": "DReP5H0nTc14gscgVvVZsw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.html",
+          "hash": "m9Napn8i9I5+nPK4hBn0XQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html",
+          "hash": "BEM8eaPtCSDDdmvGc70hfw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.ModelBaseParameters.html",
+          "hash": "FkPzfU9geBCa03XUdcsxOw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.ModelLoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.ModelLoadBehavior.html",
+          "hash": "Yo6QUUdec4GnaKsFiOOGqw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentSwitchBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentSwitchBehaviors.html",
+          "hash": "kX4SeDq4FYaDvV1xCLH5dg=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -332,22 +1208,82 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CurrentSwitchModel.html",
-          "hash": "3XDUV4XbVRhQXZus5nrSLQ=="
+          "hash": "sVxrapjbrbvF+oRd6twBYg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Currentsource.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentsourceBehaviors.AcceptBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.Currentsource.html",
-          "hash": "9P+CFeelyx6+t9Xz62sEcQ=="
+          "relative_path": "api/SpiceSharp.Components.CurrentsourceBehaviors.AcceptBehavior.html",
+          "hash": "pnk4YMBHe9fy4pLo4vAlnQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentsourceBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentsourceBehaviors.BaseParameters.html",
+          "hash": "bN9+WPfkZbznPbYLJG+4sw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.html",
+          "hash": "txtmuBdUJ59I6dLOTLXpbw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentsourceBehaviors.FrequencyParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentsourceBehaviors.FrequencyParameters.html",
+          "hash": "miDlLKqUBzfTmvf9MZu55Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentsourceBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentsourceBehaviors.LoadBehavior.html",
+          "hash": "KUiQ0H5FSsRG4XE5GYuKMA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentsourceBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CurrentsourceBehaviors.html",
+          "hash": "D41uOQh1bSHEO1NnDJYj6g=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -356,10 +1292,130 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Diode.html",
-          "hash": "W5+bGgSxXxJXNQ+22rAbkw=="
+          "hash": "wibUpk348uifuUyPQURj9A=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.BaseParameters.html",
+          "hash": "wpGE6Voyw7stf9G+f0rPlw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.html",
+          "hash": "8+xUL76+s55reiwth1/FaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.LoadBehavior.html",
+          "hash": "/tVZOWefGoRSfPNzc03GRA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.ModelBaseParameters.html",
+          "hash": "Ga63+6LrqI2YArmrooUh7A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.ModelNoiseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.ModelNoiseParameters.html",
+          "hash": "55Q/0ZdPTDOxq2twnN4V9Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.ModelTemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.ModelTemperatureBehavior.html",
+          "hash": "Bll+oTEYfLwQRM4MFYm4Ow=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.NoiseBehavior.html",
+          "hash": "Y3h7+tNs79nCm0IjyKyskA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html",
+          "hash": "NNARG4yjBnNBRcfNVWMULQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.TransientBehavior.html",
+          "hash": "FnRVTqhmSgBgWHnnwbk8Jg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.DiodeBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.DiodeBehaviors.html",
+          "hash": "Tni+t3Ha1zccVPx/wO/kmw=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -368,55 +1424,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.DiodeModel.html",
-          "hash": "Ui6O4MxNB2G09bIHcuQ7zw=="
+          "hash": "AphLla/X2T0MjcTl05joVw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.ICircuitComponent.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.IConnectedBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.ICircuitComponent.html",
-          "hash": "GxprCIWGpVU2VYkq/L1qeA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.IWaveform.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Components.IWaveform.html",
-          "hash": "qa6yEEfJnfQJtFmS/zYxxw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.IndependentSource.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Components.IndependentSource.html",
-          "hash": "0a0oZXFu/Y7jYPLTHu8qlg=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Inductor.UpdateMutualInductanceEventHandler.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Components.Inductor.UpdateMutualInductanceEventHandler.html",
-          "hash": "FVroVJZpRR8AWuDMnSU5KA=="
+          "relative_path": "api/SpiceSharp.Components.IConnectedBehavior.html",
+          "hash": "CXHvjUVGm3EAn6Qrei9q2A=="
         }
       },
       "is_incremental": true,
@@ -428,82 +1448,550 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Inductor.html",
-          "hash": "1m3KJhgyXz8vBUHtGNIv2A=="
+          "hash": "iJ3toRO8t0C3p6LdLz+vHA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.MOS1.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.InductorBehaviors.BaseParameters.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.MOS1.html",
-          "hash": "8/u+OswPhxNIn1VezDak+w=="
+          "relative_path": "api/SpiceSharp.Components.InductorBehaviors.BaseParameters.html",
+          "hash": "wVNUXT0BJshmOdB4eYz0zQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.MOS1Model.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.MOS1Model.html",
-          "hash": "Z+WBnj/KB+hhdwk72yt8vA=="
+          "relative_path": "api/SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.html",
+          "hash": "1dpL8H9SuFWzktVs5n8ppw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.MOS2.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.InductorBehaviors.LoadBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.MOS2.html",
-          "hash": "plaqEeFeXQ2HFJZlFwnchA=="
+          "relative_path": "api/SpiceSharp.Components.InductorBehaviors.LoadBehavior.html",
+          "hash": "bzie9M+kvqeqZk19Zchr/w=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.MOS2Model.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.InductorBehaviors.TransientBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.MOS2Model.html",
-          "hash": "LzIg7fGhzbzJuUcs9KC5qg=="
+          "relative_path": "api/SpiceSharp.Components.InductorBehaviors.TransientBehavior.html",
+          "hash": "VTdfnRDP8ydJm8fZU2KSfA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.MOS3.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.InductorBehaviors.UpdateFluxEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.MOS3.html",
-          "hash": "gL8IRx5NY/N6yj9s+WJO9Q=="
+          "relative_path": "api/SpiceSharp.Components.InductorBehaviors.UpdateFluxEventArgs.html",
+          "hash": "K2HBQJg7ir+9SZXcT94bSg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.MOS3Model.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.InductorBehaviors.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.MOS3Model.html",
-          "hash": "aArFL/+D2Pwg1Gh4pZ556g=="
+          "relative_path": "api/SpiceSharp.Components.InductorBehaviors.html",
+          "hash": "m/5pzhAByhEoj3ygvb2RaQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Model.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Model.html",
+          "hash": "1v6FTV3+em9dcu4pKbZ/EA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Mosfet1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Mosfet1.html",
+          "hash": "iigI3neo1VRvk8MJVJCBgQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Mosfet1Model.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Mosfet1Model.html",
+          "hash": "D95CX+FyFeC/wMtdUs5xIQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Mosfet2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Mosfet2.html",
+          "hash": "vwlX5aSuuMM/wjmn+ka21Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Mosfet2Model.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Mosfet2Model.html",
+          "hash": "n43x2Oc5e1VoP0YFNDr5HQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Mosfet3.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Mosfet3.html",
+          "hash": "fkikFaRvt16VAtz2vS578g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Mosfet3Model.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Mosfet3Model.html",
+          "hash": "vZtBeo6NIyTDlrkNKeErYw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.BaseParameters.html",
+          "hash": "8qKj2QK2wtaIEUsBcjBLQQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.html",
+          "hash": "T8fRubmaGYmjmPG0MADTVw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.LoadBehavior.html",
+          "hash": "1/69DbGW/fld79tp2S8mAA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters.html",
+          "hash": "us67hMvbL4sEkIjDepZDFg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelNoiseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelNoiseParameters.html",
+          "hash": "CI9f0Ks5nlBKshi+6BiDrA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.html",
+          "hash": "IeZ17QDJrUkrE9cKcNvEqQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.html",
+          "hash": "glCkgU1kfeWASh91lKwo3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html",
+          "hash": "XhLGYwH8iiQ9A/rR0WXNlA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.TransientBehavior.html",
+          "hash": "iN7lftTRPLlY1dfGqM11iQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level1.html",
+          "hash": "StyA0bROPTq01OS9ecrAmA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.BaseParameters.html",
+          "hash": "R4P900Emt0vajlNG2qxehg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.html",
+          "hash": "oNiZBUH303hF8vN4DlXDcQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.LoadBehavior.html",
+          "hash": "y4En6y8qXzNBU2FzSASJAg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.ModelBaseParameters.html",
+          "hash": "cSOOPHA0GzwvdQvvkcP7ag=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.ModelNoiseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.ModelNoiseParameters.html",
+          "hash": "4AE1Mplantd0MvsHbk+EFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.ModelTemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.ModelTemperatureBehavior.html",
+          "hash": "6TtaxYHrCThy/yAbyrOyxA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.NoiseBehavior.html",
+          "hash": "tYhenVA5RXjPwETzV6Rjmw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.TemperatureBehavior.html",
+          "hash": "NmjHrU9JZLwuaBHNqPtYZw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.TransientBehavior.html",
+          "hash": "mNOsHTj5vNMU9PhJSK9eqw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level2.html",
+          "hash": "93m7ljJOmtubhoZKvmTrdQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.BaseParameters.html",
+          "hash": "15FEmjt3OGruFPBnffCYeg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html",
+          "hash": "6ra3KHMU8GvkVddYdmea/w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.LoadBehavior.html",
+          "hash": "CdbVnIg5okrAIyBECmIFfQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.ModelBaseParameters.html",
+          "hash": "G+DxLut+RAaYGl7VA4dmEg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.ModelNoiseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.ModelNoiseParameters.html",
+          "hash": "WiyCxowLdHZHZN2g5LGYxg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.ModelTemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.ModelTemperatureBehavior.html",
+          "hash": "iSvkh+kWTp8Q7gj6FP8InA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.html",
+          "hash": "cT36Tcfx2htgNHAhLu+mFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html",
+          "hash": "AXDDIlCyOqNhzTqnPUMI8g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.TransientBehavior.html",
+          "hash": "qI6brDR5YPI4+B7O5Pk97A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Level3.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Level3.html",
+          "hash": "nVdtwWTXoq57A8LTaNzK2Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.Transistor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.Transistor.html",
+          "hash": "whqAieLroo38xuAFC5imNw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MosfetBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MosfetBehaviors.html",
+          "hash": "UrykJtA8Vm6aQ4oGPeQpNA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -512,10 +2000,142 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MutualInductance.html",
-          "hash": "/X2C2RYYAuFh4QTnWkW/cg=="
+          "hash": "4YfFvs+rGjpjb4YqUFmWXg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MutualInductanceBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MutualInductanceBehaviors.BaseParameters.html",
+          "hash": "0TajV++jTpikW+c+YDTp4A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.html",
+          "hash": "Kxs4zmGtH6L1vox5KhkkYw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MutualInductanceBehaviors.TransientBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MutualInductanceBehaviors.TransientBehavior.html",
+          "hash": "6kKSrtNpUIvHdzCp6RpSiA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.MutualInductanceBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.MutualInductanceBehaviors.html",
+          "hash": "CKLlrQi+6IC6r0nfBKaT/g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.NodeCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.NodeCollection.html",
+          "hash": "ODNtZw/M/b9/GRnsrhJsFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.NoiseGain.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.NoiseGain.html",
+          "hash": "xQRozTsM5bWeqtcnAOhqnA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.NoiseGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.NoiseGenerator.html",
+          "hash": "FPyp2MNHw1cUGXco7NjWAg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.html",
+          "hash": "UmOSX2Qhe3GLyvydKKn6zQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.NoiseShot.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.NoiseShot.html",
+          "hash": "e4MvLvqZqKkcsyCWqqldiQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.NoiseThermal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.NoiseThermal.html",
+          "hash": "2wKuYb19k+fSA5E13pPfhw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.NoiseSources.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.NoiseSources.html",
+          "hash": "rhQFDTVzDSdOw7EOIYdvtA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -524,10 +2144,10 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Pulse.html",
-          "hash": "8xcrwj16IfTE40npvIg/zQ=="
+          "hash": "jAfCSYWEXmldgGWh+UC8eQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -536,10 +2156,94 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Resistor.html",
-          "hash": "6ydAjq/hydOTC2hugcNrNw=="
+          "hash": "s8PEgW81XAGieX8l06Ufig=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html",
+          "hash": "6djXpwtL/UFc8Qn15669zw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.html",
+          "hash": "U2pO0u/hVYeCcS6BIYbkvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.LoadBehavior.html",
+          "hash": "68xAtL0ZOqFlRr5Zh11R4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.ModelBaseParameters.html",
+          "hash": "3lCKKoPWElcVXuW4K/k4eA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.NoiseBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.NoiseBehavior.html",
+          "hash": "RgnIt9C67vb67bfGkJoMBA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.html",
+          "hash": "b2IEKBk1oFt3bUgPUkFmgw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.ResistorBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ResistorBehaviors.html",
+          "hash": "J4r5HQILvrgCb52fMvWH0Q=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -548,10 +2252,10 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.ResistorModel.html",
-          "hash": "4l4yIaTquMpq7BKrWUh7Vw=="
+          "hash": "nI8Uh0Tq+ZIjDp24RYRQhA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -560,10 +2264,10 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Semiconductors.Semiconductor.html",
-          "hash": "pLbXuPqB7vAlhHAtJXHsSg=="
+          "hash": "gFcWYUTQ0bkf0n/0m060ew=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -572,10 +2276,10 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Semiconductors.html",
-          "hash": "Lt5YJVFLpfChFEi3YScNEw=="
+          "hash": "oPz5vUOOWNDQVZwm/53W/Q=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -584,94 +2288,142 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Sine.html",
-          "hash": "kSbSX0b3HB/CiZBXm7gj5A=="
+          "hash": "3nmvTMoshZPT71pozas5NQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.SpicePins.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledCurrentSource.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.SpicePins.html",
-          "hash": "uV0ESxr1e8eLjSfDEnaMSQ=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentSource.html",
+          "hash": "jseErxv3SAwuQCO0Hd0geA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Subcircuit.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.BaseParameters.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.Subcircuit.html",
-          "hash": "V1HgEM1vEmFeGMI4skRV1w=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.BaseParameters.html",
+          "hash": "ejFbfVHtZm3VpCP8mP1jnQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Transistors.Transistor.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.Transistors.Transistor.html",
-          "hash": "iWryEr3Gas4StRONZv1bJg=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.html",
+          "hash": "pS1oPLu9JktGq3n6nEHkwg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Transistors.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.LoadBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.Transistors.html",
-          "hash": "d/ArmWFLHWuTYuqA6rmc+g=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.LoadBehavior.html",
+          "hash": "uqZ3LqBiR3gznR/hgvcsaw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledCurrentsource.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentsource.html",
-          "hash": "9HCM2zKv1FihskIQHWMITg=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.html",
+          "hash": "QWs3xjdtfJCWgWH1SXsG0g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledVoltagesource.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledVoltageSource.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltagesource.html",
-          "hash": "vg7Py5bY8HB3A/YX7cEL6A=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltageSource.html",
+          "hash": "lbIVii0wRc7ul2rg+/20Lw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageDriver.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.BaseParameters.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.VoltageDriver.html",
-          "hash": "hVMcEz3EURyYqCgyJpS3Pg=="
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.BaseParameters.html",
+          "hash": "BHLIsFRiz10L8birpDPfLg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.html",
+          "hash": "JvfYIlpIrnN2Du+Hhmrpnw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.LoadBehavior.html",
+          "hash": "HSrkHxc4zTETNGsSCqLh0w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.html",
+          "hash": "kdib2E1aJHWP+ffQu6VanQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSource.html",
+          "hash": "dCS5iZQHUJ6JqOkSropF+g=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -680,10 +2432,94 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageSwitch.html",
-          "hash": "1+yD+JEB4OeeHXXzxOC/UQ=="
+          "hash": "i0vR+T/ewHlqS2HoZmx6ug=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.html",
+          "hash": "hJmIsje2MruALC3bli8GKQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.BaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.BaseParameters.html",
+          "hash": "HcP54wffOeFvFdqFEy1ccA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.html",
+          "hash": "zGzH85Sv4bI0hkPA5Aqzlg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html",
+          "hash": "VSRiUJ1rBh0h1Z2UewqMIA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.ModelBaseParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.ModelBaseParameters.html",
+          "hash": "Vee919TGaL0Ftdahfddgbw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.ModelLoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.ModelLoadBehavior.html",
+          "hash": "N+Glfb5kGi5TAxM0bbcnPA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltageSwitchBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltageSwitchBehaviors.html",
+          "hash": "gNnjNjVdd9HVGRCD4AX11A=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -692,34 +2528,94 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageSwitchModel.html",
-          "hash": "9wMWgUASNkB/iIudpUZw9Q=="
+          "hash": "u0SXMh18n2Ag95X7OhSUrA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Voltagesource.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltagesourceBehaviors.AcceptBehavior.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.Voltagesource.html",
-          "hash": "1k0JvbhafMZ4KHt15EsEvQ=="
+          "relative_path": "api/SpiceSharp.Components.VoltagesourceBehaviors.AcceptBehavior.html",
+          "hash": "wdYmO+pUZLo+UAcrKZFD7g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.Waveform-1.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltagesourceBehaviors.BaseParameters.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Components.Waveform-1.html",
-          "hash": "ucXizuFhz0R37D7PFq91ng=="
+          "relative_path": "api/SpiceSharp.Components.VoltagesourceBehaviors.BaseParameters.html",
+          "hash": "1BvTFeZZIDgsUk7s/OmeHg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.html",
+          "hash": "hEJEVnh/2wPmDtV+jvDyIA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltagesourceBehaviors.FrequencyParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltagesourceBehaviors.FrequencyParameters.html",
+          "hash": "dMy4xdqVpcNAgoja4Pfguw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltagesourceBehaviors.LoadBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltagesourceBehaviors.LoadBehavior.html",
+          "hash": "Tk0b33fdw2dCGhU7UcZWoQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.VoltagesourceBehaviors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.VoltagesourceBehaviors.html",
+          "hash": "l+KSnbITlCFU4KjH5ie0hA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.Waveform.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Waveform.html",
+          "hash": "jd+pcOW3sNHKvIazBoF+gg=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -728,82 +2624,46 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.html",
-          "hash": "PXMvmNLPv7FNhp+dMMxKCg=="
+          "hash": "j2opjC/1ctd9Pla9VqgvAQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Diagnostics.BadParameterException.yml",
+      "source_relative_path": "obj/api/SpiceSharp.GivenParameter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Diagnostics.BadParameterException.html",
-          "hash": "zDPw7VwuoJ3WeJB8Z52o4w=="
+          "relative_path": "api/SpiceSharp.GivenParameter.html",
+          "hash": "hIujGRay0pEjxkmyBlDiTQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Diagnostics.CircuitException.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Identifier.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Diagnostics.CircuitException.html",
-          "hash": "mR9DaCHTJ7ouO2LnFPjS+A=="
+          "relative_path": "api/SpiceSharp.Identifier.html",
+          "hash": "Ws/8UzRq7pcUmZSr0/ldfQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Diagnostics.CircuitWarning.yml",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.ArrayHistory-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Diagnostics.CircuitWarning.html",
-          "hash": "A/EYIgi001Sc4BUeFN3cZw=="
+          "relative_path": "api/SpiceSharp.IntegrationMethods.ArrayHistory-1.html",
+          "hash": "8n/akPP82ttpETKXyEC/XQ=="
         }
       },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Diagnostics.WarningArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Diagnostics.WarningArgs.html",
-          "hash": "8wNgdeC0fXpaPgEnwNyvTA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Diagnostics.WarningEventHandler.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Diagnostics.WarningEventHandler.html",
-          "hash": "J0+i20MFZavr0GYXUcQRyA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Diagnostics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Diagnostics.html",
-          "hash": "oy5LtZN/0K4NTr1jSvo64Q=="
-        }
-      },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -812,34 +2672,22 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.Breakpoints.html",
-          "hash": "9FGhKwkv/u9Fy1NZ+MBu8Q=="
+          "hash": "LbzUmThrwsLVX2kH3XT4kA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.yml",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.History-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html",
-          "hash": "UjHhaqLf2wEjfGIyop5GUg=="
+          "relative_path": "api/SpiceSharp.IntegrationMethods.History-1.html",
+          "hash": "bkhglaSX0lwTFb4hC0m9Vg=="
         }
       },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.html",
-          "hash": "WarvSo86txb5qfObHIC68w=="
-        }
-      },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -848,10 +2696,106 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationMethod.html",
-          "hash": "M3beisjT7+cegTTPfpc3iQ=="
+          "hash": "ktF7Sbsk+Jv0Mn4GdJ/Dcg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationParameters.TruncationMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationParameters.TruncationMethods.html",
+          "hash": "5URwa/NI2lB0JinRApnM/Q=="
         }
       },
       "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationParameters.html",
+          "hash": "ZDs3daWY/SWdMEUTcAq+Iw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.NodeHistory-1.NodeHistoryPoint.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.NodeHistory-1.NodeHistoryPoint.html",
+          "hash": "9lNM+1c68lp7NHiAdoGpaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.NodeHistory-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.NodeHistory-1.html",
+          "hash": "Ir5E1Xj7Iyu+Pf3chJVyXQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.ReadOnlyHistory-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.ReadOnlyHistory-1.html",
+          "hash": "dTLr5knhB1tbmGFHAB+S0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.StateDerivative.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.StateDerivative.html",
+          "hash": "Ntrk8arLPwX2BCLke0KaqA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.StateHistory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.StateHistory.html",
+          "hash": "HI3swwwE8ShsnOwn7IfhDQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.StatePool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.StatePool.html",
+          "hash": "lHHVuuBzzd0vKV23iTKa9w=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -860,10 +2804,22 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.Trapezoidal.html",
-          "hash": "MXk5Y/t45UdU4HIgBMAsOA=="
+          "hash": "heTcRp+JoU0f51+YBzeUmQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.TruncationEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.TruncationEventArgs.html",
+          "hash": "bWyDgik/EwelAFmzHyhaEw=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -872,94 +2828,46 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.html",
-          "hash": "PEpvpFq5hZePrG8TfJZASA=="
+          "hash": "XHQYu7/mTR+wU7ucSP8QXA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parameters.IParameterized.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Parameter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Parameters.IParameterized.html",
-          "hash": "89nLU9MhubW531rwWn2gJg=="
+          "relative_path": "api/SpiceSharp.Parameter.html",
+          "hash": "yMKlvq4vYJTtg38opET9TQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parameters.Parameter.yml",
+      "source_relative_path": "obj/api/SpiceSharp.ParameterSet.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Parameters.Parameter.html",
-          "hash": "qm2KlT9ywlBZwSX7Cne62A=="
+          "relative_path": "api/SpiceSharp.ParameterSet.html",
+          "hash": "blULBCjs6XWJwN2vTG6vxw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parameters.Parameterized-1.yml",
+      "source_relative_path": "obj/api/SpiceSharp.ParameterSetDictionary.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Parameters.Parameterized-1.html",
-          "hash": "zQDp9kIbhbYFKgpYt+w4eA=="
+          "relative_path": "api/SpiceSharp.ParameterSetDictionary.html",
+          "hash": "k2AMc629cLM/0DCwcYQvwA=="
         }
       },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parameters.SpiceInfo.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Parameters.SpiceInfo.html",
-          "hash": "rHQcE22wb7BGwDmJwaWxhA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parameters.SpiceName.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Parameters.SpiceName.html",
-          "hash": "R8WEFRFpyeZENktzzQiLNQ=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parameters.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Parameters.html",
-          "hash": "ohYNMxoeuxh4SzGXJv5YMg=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.AC.StepTypes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.AC.StepTypes.html",
-          "hash": "C1lJeA8NuBdy1nEdagMLCA=="
-        }
-      },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -968,7 +2876,55 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.AC.html",
-          "hash": "rnxkEIh+0lN2laN8Dqn7Sg=="
+          "hash": "fSABapJdqwNTuwu+qJNNuw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.BaseConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.BaseConfiguration.html",
+          "hash": "jBo1vc0eZXoeq8XO1pFq8w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.BaseSimulation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.BaseSimulation.html",
+          "hash": "cZ7gxtuheerhhGUVzn/h3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.ComplexPropertyExport.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.ComplexPropertyExport.html",
+          "hash": "FG8EE+8lFCq5417tex72Fg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.ComplexState.SparseStates.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.ComplexState.SparseStates.html",
+          "hash": "/cAQGSLwoLq+RHVfDRQ7hw=="
         }
       },
       "is_incremental": true,
@@ -976,26 +2932,26 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.DC.IterationFailedEventHandler.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.ComplexState.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.DC.IterationFailedEventHandler.html",
-          "hash": "99jVVyfXPJANYWbXTUacFg=="
+          "relative_path": "api/SpiceSharp.Simulations.ComplexState.html",
+          "hash": "RUXpn11G7Aza2bYO1FpmHg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.DC.Sweep.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.ComplexVoltageExport.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.DC.Sweep.html",
-          "hash": "XK2UFkMBUxuW6LXVzJUUOw=="
+          "relative_path": "api/SpiceSharp.Simulations.ComplexVoltageExport.html",
+          "hash": "bItNU0c3xultktMfpVm2WQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1004,58 +2960,202 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.DC.html",
-          "hash": "yoXMJCZMhzLG3eElnt7Xgg=="
+          "hash": "AVgiaxgNrkuxx/4Bbcm/+g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.ExportSimulationDataEventHandler.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.DCParameterSearchEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.ExportSimulationDataEventHandler.html",
-          "hash": "PT008yG/CKokyPWMu+q4sA=="
+          "relative_path": "api/SpiceSharp.Simulations.DCParameterSearchEventArgs.html",
+          "hash": "StfhXA1T1NV/h1wXHY0ECA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.FinalizeSimulationExportEventHandler.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.DcConfiguration.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.FinalizeSimulationExportEventHandler.html",
-          "hash": "jfBkZmUFZ5ffYMHR4KPnvg=="
+          "relative_path": "api/SpiceSharp.Simulations.DcConfiguration.html",
+          "hash": "mypWxTQGZcX9cJD+yNzriQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.ISimulation.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.DecadeSweep.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.ISimulation.html",
-          "hash": "lxo6h+fOw3N5t35SeUimew=="
+          "relative_path": "api/SpiceSharp.Simulations.DecadeSweep.html",
+          "hash": "wt6cvTcA3GXg/pbwoxBp8g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.InitializeSimulationExportEventHandler.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.Export-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.InitializeSimulationExportEventHandler.html",
-          "hash": "T3UIQ9yxAMZKgVGBQZc/0w=="
+          "relative_path": "api/SpiceSharp.Simulations.Export-1.html",
+          "hash": "bDQT7RMizMjrEFHmFVc3eQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.ExportDataEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.ExportDataEventArgs.html",
+          "hash": "IIwbubBtFhX5nwzJDIhq6A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.FrequencyConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.FrequencyConfiguration.html",
+          "hash": "lopeWc2MIsIgstbDyqfo9A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.FrequencySimulation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.FrequencySimulation.html",
+          "hash": "X++8/hVrSTiApp56wa7tWw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.GenericExport-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.GenericExport-1.html",
+          "hash": "C5yfUD6IrfIzvUKzjOY94w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.InputNoiseDensityExport.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.InputNoiseDensityExport.html",
+          "hash": "Hs93MCM94/vjuKRQSzEsaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.LinearSweep.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.LinearSweep.html",
+          "hash": "4alVJmwut1Fqblmoxr3+Nw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.LoadStateEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.LoadStateEventArgs.html",
+          "hash": "397qtWUejMWBRNDEpoO35g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.html",
+          "hash": "AiXhH1xJN2Mhn7uMZ7rM5g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.NestedSweeps.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.NestedSweeps.html",
+          "hash": "rXAAEQLmSoLuiz6OVUrHhg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.Noise.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Noise.html",
+          "hash": "tH88MvpV97IHdPUwSJDauw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.NoiseConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.NoiseConfiguration.html",
+          "hash": "G5fytRCTBGcvokUKvc/S1w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.NoiseState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.NoiseState.html",
+          "hash": "pE1BS+itWX9k8588SLAwaA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1064,7 +3164,55 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.OP.html",
-          "hash": "PyDgudeVqYR0s/RepNy7dg=="
+          "hash": "u0E1fkcNmbvB2o2QiHaPQQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.OctaveSweep.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.OctaveSweep.html",
+          "hash": "ssdtIiFsi9IqC6UwQMBWXw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.OutputNoiseDensityExport.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.OutputNoiseDensityExport.html",
+          "hash": "c23D+z6Dei2dF9hqiSh/xw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.RealPropertyExport.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.RealPropertyExport.html",
+          "hash": "JQgxiVxZYb0SopLcHaatZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.RealState.DomainType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.RealState.DomainType.html",
+          "hash": "5VAuPKs0xvb19HdAADeAEQ=="
         }
       },
       "is_incremental": true,
@@ -1072,11 +3220,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.Simulation-1.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.RealState.InitializationStates.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.Simulation-1.html",
-          "hash": "BkaIoc/N+OKF5mKKX/gqcg=="
+          "relative_path": "api/SpiceSharp.Simulations.RealState.InitializationStates.html",
+          "hash": "fuYENMPwuulaKoYXw13I5Q=="
         }
       },
       "is_incremental": true,
@@ -1084,11 +3232,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.SimulationCircuit.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.RealState.SparseStates.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.SimulationCircuit.html",
-          "hash": "kOHyGBa8Zak/MU6/EdO8dQ=="
+          "relative_path": "api/SpiceSharp.Simulations.RealState.SparseStates.html",
+          "hash": "fedOFWTAG84z8VYIvh6GXA=="
         }
       },
       "is_incremental": true,
@@ -1096,11 +3244,155 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.SimulationConfiguration.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.RealState.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.SimulationConfiguration.html",
-          "hash": "lhLonPKfl1TckDCMg6jXLg=="
+          "relative_path": "api/SpiceSharp.Simulations.RealState.html",
+          "hash": "JKTde9lHSYmVRsZ5mZDR8g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.RealVoltageExport.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.RealVoltageExport.html",
+          "hash": "+EyAkkd/VsuG+SI1abV6Ww=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.Simulation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Simulation.html",
+          "hash": "iTwURXmXzKYPUqAbcdnCUw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.SimulationFlowController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.SimulationFlowController.html",
+          "hash": "rUfnHpahGvSJCVAjey7Zaw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.State.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.State.html",
+          "hash": "z6x7GXimRZPlOBar8IIj0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.StateDictionary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.StateDictionary.html",
+          "hash": "fRo4ebIdcdMR/2XcogrA5Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.Statistics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Statistics.html",
+          "hash": "6EAHKKU7u41ttkjYjf2vSQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.Sweep-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Sweep-1.html",
+          "hash": "i+mTch2s7T7fdzoZ41L+Dw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.SweepConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.SweepConfiguration.html",
+          "hash": "qQYCtCkvlAI72gguBUYHBA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.SweepInstance.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.SweepInstance.html",
+          "hash": "XR2bBzUmEgbvCYAGrOo9og=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.TimeConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.TimeConfiguration.html",
+          "hash": "GDQ5N1fcS904PuT2exiOGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.TimeSimulation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.TimeSimulation.html",
+          "hash": "iieQseVMARL4gzjVN23roQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.TimestepCutEventArgs.TimestepCutReason.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.TimestepCutEventArgs.TimestepCutReason.html",
+          "hash": "VdxA3k/HHTw+TTc45Hrmzw=="
         }
       },
       "is_incremental": true,
@@ -1108,62 +3400,14 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.SimulationData.yml",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.TimestepCutEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.SimulationData.html",
-          "hash": "R++k4s3adqSv8C5QO684tA=="
+          "relative_path": "api/SpiceSharp.Simulations.TimestepCutEventArgs.html",
+          "hash": "lFhVU+H0qYZyNdySTZmQ7w=="
         }
       },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.SimulationIterate.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.SimulationIterate.html",
-          "hash": "VXvZvahkWwiHJoj0uVUrdg=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.TimestepCutData.TimestepCutReason.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.TimestepCutData.TimestepCutReason.html",
-          "hash": "OgTaLQOOcRe/NqDFQ8yGdA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.TimestepCutData.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.TimestepCutData.html",
-          "hash": "SVcb+x0iP16RYE6I1Wx5qQ=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulations.Transient.TimestepCutEventHandler.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.Transient.TimestepCutEventHandler.html",
-          "hash": "gSwZVgzx6kWEeKb0HlvIBQ=="
-        }
-      },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1172,10 +3416,10 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Transient.html",
-          "hash": "ZRNFFUJwBvFy+Y+1XjKi9A=="
+          "hash": "Dm62rw9VjEj3f7ontEY+PA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1184,10 +3428,46 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.html",
-          "hash": "CnyR3+kKsNISBqsNnjLhQQ=="
+          "hash": "DUX40tYz1rk3u5+d/SPGQQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.TypeDictionary-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.TypeDictionary-1.html",
+          "hash": "zIZ2FpXrHZ9e1LYeQyuXsA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Utility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Utility.html",
+          "hash": "pLFML7p54F9jrft1/lrMRA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.WarningEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.WarningEventArgs.html",
+          "hash": "lQRgmc/Fn03mn0Pk/PEnSw=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1196,10 +3476,10 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.html",
-          "hash": "EcZqA/2ApAOrA3ZAplIM+w=="
+          "hash": "6pwYQ/e2bdAxMVoz+lXwEA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     }
   ],
@@ -1210,27 +3490,22 @@
         "incrementalPhase": "build"
       },
       "processors": {
-        "RestApiDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor RestApiDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build"
-        },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build"
-        },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build"
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
           "incrementalPhase": "build"
         },
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build"
         },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         }
       }
