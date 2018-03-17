@@ -231,6 +231,39 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Calls a parameter method by name without arguments
+        /// If multiple parameters by this name exist, all of them will be called
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool SetParameter(string name)
+        {
+            // Get the property by name
+            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+
+            // Set the property if any
+            bool isset = false;
+            foreach (var member in members)
+            {
+                // Skip members that are not interesting to use
+                if (!HasName(member, name))
+                    continue;
+
+                // Set the member
+                if (member is MethodInfo mi)
+                {
+                    var parameters = mi.GetParameters();
+                    if (parameters.Length == 0)
+                    {
+                        mi.Invoke(this, null);
+                        isset = true;
+                    }
+                }
+            }
+            return isset;
+        }
+
+        /// <summary>
         /// Set a parameter by name
         /// Use for non-double values, will ignore
         /// </summary>

@@ -107,12 +107,14 @@ namespace SpiceSharp
         /// <returns></returns>
         public bool SetParameter(string name, double value)
         {
+            bool isset = false;
             foreach (var ps in Values)
             {
                 if (ps.SetParameter(name, value))
-                    return true;
+                    isset = true;
             }
-            return false;
+
+            return isset;
         }
 
         /// <summary>
@@ -130,6 +132,24 @@ namespace SpiceSharp
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Calls a parameter method
+        /// Only 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool SetParameter(string name)
+        {
+            bool isset = false;
+            foreach (var ps in Values)
+            {
+                if (ps.SetParameter(name))
+                    isset = true;
+            }
+
+            return isset;
         }
 
         /// <summary>
