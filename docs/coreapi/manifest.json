@@ -20,10 +20,10 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "Rqvf35vE0rorEwzwZ5wrxQ=="
+          "hash": "8a0VTYWBeaKVda5553ZrZQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -44,10 +44,21 @@
       "output": {
         ".html": {
           "relative_path": "articles/gettingstarted.html",
-          "hash": "2Uy10bXtZWaoVbpGWBFhGA=="
+          "hash": "rYhHYp2ZJkkK+3VJy60Olg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/example01.svg",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/example01.svg"
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -56,10 +67,10 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "vLqLP8GkZY7hiQqRVAWoXg=="
+          "hash": "h0h4HsgiNFq49J76E/PJjA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -3514,11 +3525,11 @@
         "incrementalPhase": "build"
       },
       "processors": {
-        "ManagedReferenceDocumentProcessor": {
+        "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build"
         },
-        "ConceptualDocumentProcessor": {
+        "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build"
         },

@@ -51,6 +51,9 @@
                   <li class="active">
                     <a href="../articles/gettingstarted.html" title="Tutorial" class="active">Tutorial</a>
                   </li>
+                  <li class="">
+                    <a href="../api/index.html" title="API" class="">API</a>
+                  </li>
                 </ul>
             </div>
           </div>
@@ -96,7 +99,26 @@
 <h1 id="getting-started">Getting started</h1>
 
 <p>In this section we will quickly go over everything needed to create a simple circuit and simulate it.</p>
-</article>
+<h2 id="building-the-circuit">Building the circuit</h2>
+<p>Let&#39;s start with a very simple circuit called a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
+<p align="center"><img src="images/example01.svg"></p>
+
+<pre><code class="lang-csharp" name="Circuit">// Build the circuit
+Circuit ckt = new Circuit(
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 1.0),
+    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e4),
+    new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e4)
+    );
+</code></pre><h2 id="running-a-dc-simulation">Running a DC simulation</h2>
+<pre><code class="lang-csharp" name="Simulation">DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.1);
+dc.OnExportSimulationData += (sender, args) =&gt;
+{
+    double input = args.GetVoltage(&quot;in&quot;);
+    double output = args.GetVoltage(&quot;out&quot;);
+    Console.WriteLine($@&quot;{input:G3}V : {output:G3} V&quot;);
+};
+dc.Run(ckt);
+</code></pre></article>
           </div>
           
           <div class="hidden-sm col-md-2" role="complementary">

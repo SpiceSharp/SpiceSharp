@@ -49,6 +49,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicExampleTests.cs" />
     <Compile Include="Circuits\ValidatorTests.cs" />
     <Compile Include="Models\Currentsources\CCCS\CurrentControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />
