@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [ "*.csproj" ],
-          "cwd": ".",
+          "src": ".",
           "exclude": [ "**/obj/**", "**/bin/**", "_site/**" ]
         }
       ],
@@ -15,11 +15,11 @@
   "build": {
     "content": [
       {
-        "files": [ "api/**.yml" ],
-        "cwd": "obj"
+        "files": [ "api/*.yml" ],
+        "src": "obj"
       },
       {
-        "files": [ "api/*.md", "articles/**.md", "toc.yml", "*.md" ],
+        "files": [ "*.md", "*.yml", "api/*.md", "api/*.yml", "articles/*.md", "articles/*.yml" ],
         "exclude": [ "obj/**", "_site/**" ]
       }
     ],
