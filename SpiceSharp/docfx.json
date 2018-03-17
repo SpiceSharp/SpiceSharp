@@ -5,7 +5,7 @@
         {
           "files": [ "*.csproj" ],
           "src": ".",
-          "exclude": [ "**/obj/**", "**/bin/**", "_site/**" ]
+          "exclude": [ "**/obj/**", "**/bin/**" ]
         }
       ],
       "force": false,
@@ -19,23 +19,17 @@
         "src": "obj"
       },
       {
-        "files": [ "*.md", "*.yml", "api/*.md", "api/*.yml", "articles/*.md", "articles/*.yml" ],
-        "exclude": [ "obj/**", "_site/**" ]
+        "files": [ "*.md", "*.yml", "api/*.md", "articles/*.md", "articles/*.yml" ],
+        "exclude": [ "obj/**" ]
       }
     ],
     "resource": [
       {
-        "files": [ "images/**", "api/images/**", "articles/images/**" ],
-        "exclude": [ "obj/**", "_site/**" ]
+        "files": [ "api/images/**", "articles/images/**" ],
+        "exclude": [ "obj/**" ]
       }
     ],
-    "overwrite": [
-      {
-        "files": [ "apidoc/**.md" ],
-        "exclude": [ "obj/**", "_site/**" ]
-      }
-    ],
-    "dest": "../docs/coreapi",
+    "dest": "../docs",
     "maxParallelism": 4,
     "template": [ "statictoc" ]
   }
