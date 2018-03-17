@@ -310,20 +310,14 @@
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="api\index.md" />
-    <None Include="docfx.json" />
-    <None Include="index.md" />
     <None Include="SpiceSharp.nuspec" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="articles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
-    <Content Include="api\images\logo_full.svg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

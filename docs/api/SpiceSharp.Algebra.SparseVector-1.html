@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1044,7 +1055,7 @@
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><span class="xref">IFormattable</span></div>
+    <div><span class="xref">System.IFormattable</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -1054,12 +1065,31 @@
     <div>
       <a class="xref" href="SpiceSharp.Algebra.Vector-1.html#SpiceSharp_Algebra_Vector_1_CopyTo_SpiceSharp_Algebra_Vector__0__">Vector&lt;T&gt;.CopyTo(Vector&lt;T&gt;)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Algebra.html">SpiceSharp.Algebra</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_SparseVector_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SparseVector&lt;T&gt; : Vector&lt;T&gt;, IFormattable where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">[Serializable]
+public class SparseVector&lt;T&gt; : Vector&lt;T&gt;, IFormattable where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1412,15 +1442,17 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_Algebra_SparseVector_1_ToString_System_String_IFormatProvider_.md&amp;value=---%0Auid%3A%20SpiceSharp.Algebra.SparseVector%601.ToString(System.String%2CIFormatProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_Algebra_SparseVector_1_ToString_System_String_System_IFormatProvider_.md&amp;value=---%0Auid%3A%20SpiceSharp.Algebra.SparseVector%601.ToString(System.String%2CSystem.IFormatProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/Algebra/Vector/SparseVector.cs/#L357">View Source</a>
   </span>
   <a id="SpiceSharp_Algebra_SparseVector_1_ToString_" data-uid="SpiceSharp.Algebra.SparseVector`1.ToString*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseVector_1_ToString_System_String_IFormatProvider_" data-uid="SpiceSharp.Algebra.SparseVector`1.ToString(System.String,IFormatProvider)">ToString(String, IFormatProvider)</h4>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_ToString_System_String_System_IFormatProvider_" data-uid="SpiceSharp.Algebra.SparseVector`1.ToString(System.String,System.IFormatProvider)">ToString(String, IFormatProvider)</h4>
   <div class="markdown level1 summary"><p>Convert to string</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1445,7 +1477,7 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">IFormatProvider</span></td>
+        <td><span class="xref">System.IFormatProvider</span></td>
         <td><span class="parametername">formatProvider</span></td>
         <td><p>Format provider</p>
 </td>
@@ -1469,7 +1501,7 @@
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">IFormattable</span>
+      <span class="xref">System.IFormattable</span>
   </div>
 </article>
           </div>

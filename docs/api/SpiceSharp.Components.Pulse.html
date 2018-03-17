@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1042,6 +1053,30 @@
     <div class="level1"><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></div>
     <div class="level2"><span class="xref">Pulse</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.html">SpiceSharp.Components</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Pulse_syntax">Syntax</h5>
@@ -1151,7 +1186,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Delay { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;td&quot;)]
+[ParameterInfo(&quot;The initial delay time in seconds&quot;)]
+public GivenParameter Delay { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1181,7 +1218,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter FallTime { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;tf&quot;)]
+[ParameterInfo(&quot;The fall time in seconds&quot;)]
+public GivenParameter FallTime { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1212,7 +1251,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter InitialValue { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;v1&quot;)]
+[ParameterInfo(&quot;The initial value&quot;)]
+public GivenParameter InitialValue { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1242,7 +1283,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Period { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;per&quot;)]
+[ParameterInfo(&quot;The period in seconds&quot;)]
+public GivenParameter Period { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1272,7 +1315,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter PulsedValue { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;v2&quot;)]
+[ParameterInfo(&quot;The peak value&quot;)]
+public GivenParameter PulsedValue { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1302,7 +1347,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter PulseWidth { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pw&quot;)]
+[ParameterInfo(&quot;The pulse width in seconds&quot;)]
+public GivenParameter PulseWidth { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1332,7 +1379,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter RiseTime { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;tr&quot;)]
+[ParameterInfo(&quot;The rise time in seconds&quot;)]
+public GivenParameter RiseTime { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

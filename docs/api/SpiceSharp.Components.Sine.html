@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1042,6 +1053,30 @@
     <div class="level1"><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></div>
     <div class="level2"><span class="xref">Sine</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.html">SpiceSharp.Components</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Sine_syntax">Syntax</h5>
@@ -1185,7 +1220,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Amplitude { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;va&quot;)]
+[ParameterInfo(&quot;The amplitude of the sine wave&quot;)]
+public GivenParameter Amplitude { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1215,7 +1252,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Delay { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;td&quot;)]
+[ParameterInfo(&quot;The delay in seconds&quot;)]
+public GivenParameter Delay { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1245,7 +1284,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Frequency { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;freq&quot;)]
+[ParameterInfo(&quot;The frequency in Hz&quot;)]
+public GivenParameter Frequency { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1276,7 +1317,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Offset { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vo&quot;)]
+[ParameterInfo(&quot;The offset of the sine wave&quot;)]
+public GivenParameter Offset { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1306,7 +1349,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Theta { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;theta&quot;)]
+[ParameterInfo(&quot;The damping factor&quot;)]
+public GivenParameter Theta { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

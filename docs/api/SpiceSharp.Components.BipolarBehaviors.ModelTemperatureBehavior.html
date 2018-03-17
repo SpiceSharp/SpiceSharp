@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1057,6 +1068,27 @@
     <div>
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateExport__1_SpiceSharp_Simulations_Simulation_System_String_">Behavior.CreateExport&lt;TResult&gt;(Simulation, String)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.html">SpiceSharp.Components.BipolarBehaviors</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
@@ -1115,7 +1147,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CollectorConduct { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;collectorconduct&quot;)]
+[ParameterInfo(&quot;Collector conductance&quot;)]
+public double CollectorConduct { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1145,7 +1179,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double EmitterConduct { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;emitterconduct&quot;)]
+[ParameterInfo(&quot;Emitter conductance&quot;)]
+public double EmitterConduct { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1175,7 +1211,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double ExcessPhaseFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;excessphasefactor&quot;)]
+[ParameterInfo(&quot;Excess phase fact.&quot;)]
+public double ExcessPhaseFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1356,7 +1394,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double InverseEarlyVoltForward { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;invearlyvoltf&quot;)]
+[ParameterInfo(&quot;Inverse early voltage:forward&quot;)]
+public double InverseEarlyVoltForward { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1386,7 +1426,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double InverseEarlyVoltReverse { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;invearlyvoltr&quot;)]
+[ParameterInfo(&quot;Inverse early voltage:reverse&quot;)]
+public double InverseEarlyVoltReverse { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1416,7 +1458,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double InverseRollOffForward { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;invrollofff&quot;)]
+[ParameterInfo(&quot;Inverse roll off - forward&quot;)]
+public double InverseRollOffForward { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1446,7 +1490,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double InverseRollOffReverse { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;invrolloffr&quot;)]
+[ParameterInfo(&quot;Inverse roll off - reverse&quot;)]
+public double InverseRollOffReverse { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1476,7 +1522,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double TransitTimeVoltageBcFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;transtimevbcfact&quot;)]
+[ParameterInfo(&quot;Transit time VBC factor&quot;)]
+public double TransitTimeVoltageBcFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

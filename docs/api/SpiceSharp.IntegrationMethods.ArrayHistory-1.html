@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1042,6 +1053,11 @@
     <div class="level1"><a class="xref" href="SpiceSharp.IntegrationMethods.History-1.html">History</a>&lt;T&gt;</div>
     <div class="level2"><span class="xref">ArrayHistory&lt;T&gt;</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -1050,12 +1066,36 @@
     <div>
       <a class="xref" href="SpiceSharp.IntegrationMethods.History-1.html#SpiceSharp_IntegrationMethods_History_1_GetEnumerator">History&lt;T&gt;.GetEnumerator()</a>
     </div>
+    <div>
+      <a class="xref" href="SpiceSharp.IntegrationMethods.History-1.html#SpiceSharp_IntegrationMethods_History_1_System_Collections_IEnumerable_GetEnumerator">History&lt;T&gt;.IEnumerable.GetEnumerator()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.IntegrationMethods.html">SpiceSharp.IntegrationMethods</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_IntegrationMethods_ArrayHistory_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ArrayHistory&lt;T&gt; : History&lt;T&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class ArrayHistory&lt;T&gt; : History&lt;T&gt;, IEnumerable&lt;T&gt;, IEnumerable</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1150,13 +1190,13 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_System_Int32_Func_System_Int32__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.ArrayHistory%601.%23ctor(System.Int32%2CFunc%7BSystem.Int32%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_System_Int32_System_Func_System_Int32__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.ArrayHistory%601.%23ctor(System.Int32%2CSystem.Func%7BSystem.Int32%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/Simulations/IntegrationMethods/Histories/ArrayHistory.cs/#L68">View Source</a>
   </span>
   <a id="SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_" data-uid="SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor*"></a>
-  <h4 id="SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_System_Int32_Func_System_Int32__0__" data-uid="SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor(System.Int32,Func{System.Int32,`0})">ArrayHistory(Int32, Func&lt;Int32, T&gt;)</h4>
+  <h4 id="SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_System_Int32_System_Func_System_Int32__0__" data-uid="SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor(System.Int32,System.Func{System.Int32,`0})">ArrayHistory(Int32, Func&lt;Int32, T&gt;)</h4>
   <div class="markdown level1 summary"><p>Constructor</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1181,7 +1221,7 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">Func</span>&lt;<span class="xref">System.Int32</span>, T&gt;</td>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Int32</span>, T&gt;</td>
         <td><span class="parametername">generator</span></td>
         <td><p>Default value generator</p>
 </td>
@@ -1300,7 +1340,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1347,13 +1387,13 @@
   <div><span class="xref">SpiceSharp.IntegrationMethods.History&lt;T&gt;.Clear(T)</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_Func_System_Int32__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.ArrayHistory%601.Clear(Func%7BSystem.Int32%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_System_Func_System_Int32__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.ArrayHistory%601.Clear(System.Func%7BSystem.Int32%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/Simulations/IntegrationMethods/Histories/ArrayHistory.cs/#L115">View Source</a>
   </span>
   <a id="SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_" data-uid="SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear*"></a>
-  <h4 id="SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_Func_System_Int32__0__" data-uid="SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear(Func{System.Int32,`0})">Clear(Func&lt;Int32, T&gt;)</h4>
+  <h4 id="SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_System_Func_System_Int32__0__" data-uid="SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear(System.Func{System.Int32,`0})">Clear(Func&lt;Int32, T&gt;)</h4>
   <div class="markdown level1 summary"><p>Clear the history using a generator</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1372,7 +1412,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Func</span>&lt;<span class="xref">System.Int32</span>, T&gt;</td>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Int32</span>, T&gt;</td>
         <td><span class="parametername">generator</span></td>
         <td><p>Generator</p>
 </td>
@@ -1380,7 +1420,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.IntegrationMethods.History&lt;T&gt;.Clear(Func&lt;System.Int32, T&gt;)</span></div>
+  <div><span class="xref">SpiceSharp.IntegrationMethods.History&lt;T&gt;.Clear(System.Func&lt;System.Int32, T&gt;)</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_ArrayHistory_1_Cycle.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.ArrayHistory%601.Cycle%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -1434,6 +1474,13 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">SpiceSharp.IntegrationMethods.History&lt;T&gt;.Store(T)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
 </article>
           </div>
           

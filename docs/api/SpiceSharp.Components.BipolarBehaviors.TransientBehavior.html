@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1058,6 +1069,27 @@
     <div>
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateExport__1_SpiceSharp_Simulations_Simulation_System_String_">Behavior.CreateExport&lt;TResult&gt;(Simulation, String)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.html">SpiceSharp.Components.BipolarBehaviors</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
@@ -1386,7 +1418,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapBc { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cmu&quot;)]
+[ParameterInfo(&quot;Internal base to collector capactiance&quot;)]
+public double CapBc { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1416,7 +1450,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapBe { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cpi&quot;)]
+[ParameterInfo(&quot;Internal base to emitter capactance&quot;)]
+public double CapBe { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1446,7 +1482,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapBx { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cbx&quot;)]
+[ParameterInfo(&quot;Base to collector capacitance&quot;)]
+public double CapBx { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1476,7 +1514,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapCs { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ccs&quot;)]
+[ParameterInfo(&quot;Collector to substrate capacitance&quot;)]
+public double CapCs { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1506,7 +1546,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double ChargeBc { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qbc&quot;)]
+[ParameterInfo(&quot;Charge storage B-C junction&quot;)]
+public double ChargeBc { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1537,7 +1579,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double ChargeBe { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qbe&quot;)]
+[ParameterInfo(&quot;Charge storage B-E junction&quot;)]
+public double ChargeBe { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1567,7 +1611,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double ChargeBx { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qbx&quot;)]
+[ParameterInfo(&quot;Charge storage B-X junction&quot;)]
+public double ChargeBx { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1597,7 +1643,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double ChargeCs { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qcs&quot;)]
+[ParameterInfo(&quot;Charge storage C-S junction&quot;)]
+public double ChargeCs { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1897,7 +1945,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CurrentBc { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cqbc&quot;)]
+[ParameterInfo(&quot;Capacitance current due to charges in the B-C junction&quot;)]
+public double CurrentBc { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1927,7 +1977,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CurrentBe { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cqbe&quot;)]
+[ParameterInfo(&quot;Capacitance current due to charges in the B-E junction&quot;)]
+public double CurrentBe { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1957,7 +2009,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CurrentBx { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cqbx&quot;)]
+[ParameterInfo(&quot;Capacitance current due to charges in the B-X junction&quot;)]
+public double CurrentBx { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1987,7 +2041,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CurrentCs { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cqcs&quot;)]
+[ParameterInfo(&quot;Capacitance current due to charges in the C-S junction&quot;)]
+public double CurrentCs { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -2017,7 +2073,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CurrentExBc { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cexbc&quot;)]
+[ParameterInfo(&quot;Total capacitance in B-X junction&quot;)]
+public double CurrentExBc { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

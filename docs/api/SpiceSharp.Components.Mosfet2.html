@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1091,12 +1102,39 @@ Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits U
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Unsetup_SpiceSharp_Circuit_">Entity.Unsetup(Circuit)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.html">SpiceSharp.Components</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Mosfet2_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Mosfet2 : Component</code></pre>
+    <pre><code class="lang-csharp hljs">[Pin(0, &quot;Drain&quot;)]
+[Pin(1, &quot;Gate&quot;)]
+[Pin(2, &quot;Source&quot;)]
+[Pin(3, &quot;Bulk&quot;)]
+[Connected(0, 2)]
+[Connected(0, 3)]
+public class Mosfet2 : Component</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -1149,7 +1187,9 @@ Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits U
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const int Mosfet2PinCount = null</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pincount&quot;)]
+[ParameterInfo(&quot;Number of pins&quot;)]
+public const int Mosfet2PinCount = 4</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1181,7 +1221,9 @@ Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits U
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int BulkNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;bnode&quot;)]
+[ParameterInfo(&quot;Number of bulk node&quot;)]
+public int BulkNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1212,7 +1254,9 @@ Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits U
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int DrainNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;dnode&quot;)]
+[ParameterInfo(&quot;Number of drain node&quot;)]
+public int DrainNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1242,7 +1286,9 @@ Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits U
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int GateNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gnode&quot;)]
+[ParameterInfo(&quot;Number of gate node&quot;)]
+public int GateNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1272,7 +1318,9 @@ Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits U
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int SourceNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;snode&quot;)]
+[ParameterInfo(&quot;Number of source node&quot;)]
+public int SourceNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

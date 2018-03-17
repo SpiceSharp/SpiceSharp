@@ -31,13 +31,13 @@ references:
   commentId: M:SpiceSharp.Algebra.ComplexSolver.#ctor(System.Int32)
   fullName: SpiceSharp.Algebra.ComplexSolver.ComplexSolver(System.Int32)
   nameWithType: ComplexSolver.ComplexSolver(Int32)
-- uid: SpiceSharp.Algebra.ComplexSolver.#ctor(System.Int32,SpiceSharp.Algebra.Solve.PivotStrategy{Complex})
+- uid: SpiceSharp.Algebra.ComplexSolver.#ctor(System.Int32,SpiceSharp.Algebra.Solve.PivotStrategy{System.Numerics.Complex})
   name: ComplexSolver(Int32, PivotStrategy<Complex>)
-  href: api/SpiceSharp.Algebra.ComplexSolver.html#SpiceSharp_Algebra_ComplexSolver__ctor_System_Int32_SpiceSharp_Algebra_Solve_PivotStrategy_Complex__
-  commentId: M:SpiceSharp.Algebra.ComplexSolver.#ctor(System.Int32,SpiceSharp.Algebra.Solve.PivotStrategy{Complex})
+  href: api/SpiceSharp.Algebra.ComplexSolver.html#SpiceSharp_Algebra_ComplexSolver__ctor_System_Int32_SpiceSharp_Algebra_Solve_PivotStrategy_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.ComplexSolver.#ctor(System.Int32,SpiceSharp.Algebra.Solve.PivotStrategy{System.Numerics.Complex})
   name.vb: ComplexSolver(Int32, PivotStrategy(Of Complex))
-  fullName: SpiceSharp.Algebra.ComplexSolver.ComplexSolver(System.Int32, SpiceSharp.Algebra.Solve.PivotStrategy<Complex>)
-  fullName.vb: SpiceSharp.Algebra.ComplexSolver.ComplexSolver(System.Int32, SpiceSharp.Algebra.Solve.PivotStrategy(Of Complex))
+  fullName: SpiceSharp.Algebra.ComplexSolver.ComplexSolver(System.Int32, SpiceSharp.Algebra.Solve.PivotStrategy<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.ComplexSolver.ComplexSolver(System.Int32, SpiceSharp.Algebra.Solve.PivotStrategy(Of System.Numerics.Complex))
   nameWithType: ComplexSolver.ComplexSolver(Int32, PivotStrategy<Complex>)
   nameWithType.vb: ComplexSolver.ComplexSolver(Int32, PivotStrategy(Of Complex))
 - uid: SpiceSharp.Algebra.ComplexSolver.#ctor*
@@ -82,13 +82,13 @@ references:
   commentId: Overload:SpiceSharp.Algebra.ComplexSolver.OrderAndFactor
   fullName: SpiceSharp.Algebra.ComplexSolver.OrderAndFactor
   nameWithType: ComplexSolver.OrderAndFactor
-- uid: SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector{Complex})
+- uid: SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector{System.Numerics.Complex})
   name: Solve(Vector<Complex>)
-  href: api/SpiceSharp.Algebra.ComplexSolver.html#SpiceSharp_Algebra_ComplexSolver_Solve_SpiceSharp_Algebra_Vector_Complex__
-  commentId: M:SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector{Complex})
+  href: api/SpiceSharp.Algebra.ComplexSolver.html#SpiceSharp_Algebra_ComplexSolver_Solve_SpiceSharp_Algebra_Vector_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector{System.Numerics.Complex})
   name.vb: Solve(Vector(Of Complex))
-  fullName: SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector<Complex>)
-  fullName.vb: SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector(Of Complex))
+  fullName: SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.ComplexSolver.Solve(SpiceSharp.Algebra.Vector(Of System.Numerics.Complex))
   nameWithType: ComplexSolver.Solve(Vector<Complex>)
   nameWithType.vb: ComplexSolver.Solve(Vector(Of Complex))
 - uid: SpiceSharp.Algebra.ComplexSolver.Solve*
@@ -97,13 +97,13 @@ references:
   commentId: Overload:SpiceSharp.Algebra.ComplexSolver.Solve
   fullName: SpiceSharp.Algebra.ComplexSolver.Solve
   nameWithType: ComplexSolver.Solve
-- uid: SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector{Complex})
+- uid: SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector{System.Numerics.Complex})
   name: SolveTransposed(Vector<Complex>)
-  href: api/SpiceSharp.Algebra.ComplexSolver.html#SpiceSharp_Algebra_ComplexSolver_SolveTransposed_SpiceSharp_Algebra_Vector_Complex__
-  commentId: M:SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector{Complex})
+  href: api/SpiceSharp.Algebra.ComplexSolver.html#SpiceSharp_Algebra_ComplexSolver_SolveTransposed_SpiceSharp_Algebra_Vector_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector{System.Numerics.Complex})
   name.vb: SolveTransposed(Vector(Of Complex))
-  fullName: SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector<Complex>)
-  fullName.vb: SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector(Of Complex))
+  fullName: SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.ComplexSolver.SolveTransposed(SpiceSharp.Algebra.Vector(Of System.Numerics.Complex))
   nameWithType: ComplexSolver.SolveTransposed(Vector<Complex>)
   nameWithType.vb: ComplexSolver.SolveTransposed(Vector(Of Complex))
 - uid: SpiceSharp.Algebra.ComplexSolver.SolveTransposed*
@@ -217,12 +217,12 @@ references:
   fullName.vb: SpiceSharp.Algebra.DenseVector(Of T).ToString()
   nameWithType: DenseVector<T>.ToString()
   nameWithType.vb: DenseVector(Of T).ToString()
-- uid: SpiceSharp.Algebra.DenseVector`1.ToString(System.String,IFormatProvider)
+- uid: SpiceSharp.Algebra.DenseVector`1.ToString(System.String,System.IFormatProvider)
   name: ToString(String, IFormatProvider)
-  href: api/SpiceSharp.Algebra.DenseVector-1.html#SpiceSharp_Algebra_DenseVector_1_ToString_System_String_IFormatProvider_
-  commentId: M:SpiceSharp.Algebra.DenseVector`1.ToString(System.String,IFormatProvider)
-  fullName: SpiceSharp.Algebra.DenseVector<T>.ToString(System.String, IFormatProvider)
-  fullName.vb: SpiceSharp.Algebra.DenseVector(Of T).ToString(System.String, IFormatProvider)
+  href: api/SpiceSharp.Algebra.DenseVector-1.html#SpiceSharp_Algebra_DenseVector_1_ToString_System_String_System_IFormatProvider_
+  commentId: M:SpiceSharp.Algebra.DenseVector`1.ToString(System.String,System.IFormatProvider)
+  fullName: SpiceSharp.Algebra.DenseVector<T>.ToString(System.String, System.IFormatProvider)
+  fullName.vb: SpiceSharp.Algebra.DenseVector(Of T).ToString(System.String, System.IFormatProvider)
   nameWithType: DenseVector<T>.ToString(String, IFormatProvider)
   nameWithType.vb: DenseVector(Of T).ToString(String, IFormatProvider)
 - uid: SpiceSharp.Algebra.DenseVector`1.ToString*
@@ -582,12 +582,6 @@ references:
   commentId: M:SpiceSharp.Algebra.SingularException.#ctor
   fullName: SpiceSharp.Algebra.SingularException.SingularException()
   nameWithType: SingularException.SingularException()
-- uid: SpiceSharp.Algebra.SingularException.#ctor(SerializationInfo,StreamingContext)
-  name: SingularException(SerializationInfo, StreamingContext)
-  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_SerializationInfo_StreamingContext_
-  commentId: M:SpiceSharp.Algebra.SingularException.#ctor(SerializationInfo,StreamingContext)
-  fullName: SpiceSharp.Algebra.SingularException.SingularException(SerializationInfo, StreamingContext)
-  nameWithType: SingularException.SingularException(SerializationInfo, StreamingContext)
 - uid: SpiceSharp.Algebra.SingularException.#ctor(System.Int32)
   name: SingularException(Int32)
   href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_Int32_
@@ -600,23 +594,29 @@ references:
   commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String)
   fullName: SpiceSharp.Algebra.SingularException.SingularException(System.Int32, System.String)
   nameWithType: SingularException.SingularException(Int32, String)
-- uid: SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String,Exception)
+- uid: SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String,System.Exception)
   name: SingularException(Int32, String, Exception)
-  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_Int32_System_String_Exception_
-  commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String,Exception)
-  fullName: SpiceSharp.Algebra.SingularException.SingularException(System.Int32, System.String, Exception)
+  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_Int32_System_String_System_Exception_
+  commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String,System.Exception)
+  fullName: SpiceSharp.Algebra.SingularException.SingularException(System.Int32, System.String, System.Exception)
   nameWithType: SingularException.SingularException(Int32, String, Exception)
+- uid: SpiceSharp.Algebra.SingularException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name: SingularException(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.Algebra.SingularException.SingularException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  nameWithType: SingularException.SingularException(SerializationInfo, StreamingContext)
 - uid: SpiceSharp.Algebra.SingularException.#ctor(System.String)
   name: SingularException(String)
   href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_String_
   commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.String)
   fullName: SpiceSharp.Algebra.SingularException.SingularException(System.String)
   nameWithType: SingularException.SingularException(String)
-- uid: SpiceSharp.Algebra.SingularException.#ctor(System.String,Exception)
+- uid: SpiceSharp.Algebra.SingularException.#ctor(System.String,System.Exception)
   name: SingularException(String, Exception)
-  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_String_Exception_
-  commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.String,Exception)
-  fullName: SpiceSharp.Algebra.SingularException.SingularException(System.String, Exception)
+  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException__ctor_System_String_System_Exception_
+  commentId: M:SpiceSharp.Algebra.SingularException.#ctor(System.String,System.Exception)
+  fullName: SpiceSharp.Algebra.SingularException.SingularException(System.String, System.Exception)
   nameWithType: SingularException.SingularException(String, Exception)
 - uid: SpiceSharp.Algebra.SingularException.#ctor*
   name: SingularException
@@ -624,11 +624,11 @@ references:
   commentId: Overload:SpiceSharp.Algebra.SingularException.#ctor
   fullName: SpiceSharp.Algebra.SingularException.SingularException
   nameWithType: SingularException.SingularException
-- uid: SpiceSharp.Algebra.SingularException.GetObjectData(SerializationInfo,StreamingContext)
+- uid: SpiceSharp.Algebra.SingularException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   name: GetObjectData(SerializationInfo, StreamingContext)
-  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException_GetObjectData_SerializationInfo_StreamingContext_
-  commentId: M:SpiceSharp.Algebra.SingularException.GetObjectData(SerializationInfo,StreamingContext)
-  fullName: SpiceSharp.Algebra.SingularException.GetObjectData(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.Algebra.SingularException.html#SpiceSharp_Algebra_SingularException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.Algebra.SingularException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.Algebra.SingularException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
   nameWithType: SingularException.GetObjectData(SerializationInfo, StreamingContext)
 - uid: SpiceSharp.Algebra.SingularException.GetObjectData*
   name: GetObjectData
@@ -843,13 +843,13 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.Markowitz(Of T).RowCount
   nameWithType: Markowitz<T>.RowCount
   nameWithType.vb: Markowitz(Of T).RowCount
-- uid: SpiceSharp.Algebra.Solve.Markowitz`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,Func{`0,System.Double})
+- uid: SpiceSharp.Algebra.Solve.Markowitz`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,System.Func{`0,System.Double})
   name: Setup(SparseMatrix<T>, SparseVector<T>, Int32, Func<T, Double>)
-  href: api/SpiceSharp.Algebra.Solve.Markowitz-1.html#SpiceSharp_Algebra_Solve_Markowitz_1_Setup_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__System_Int32_Func__0_System_Double__
-  commentId: M:SpiceSharp.Algebra.Solve.Markowitz`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,Func{`0,System.Double})
+  href: api/SpiceSharp.Algebra.Solve.Markowitz-1.html#SpiceSharp_Algebra_Solve_Markowitz_1_Setup_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__System_Int32_System_Func__0_System_Double__
+  commentId: M:SpiceSharp.Algebra.Solve.Markowitz`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,System.Func{`0,System.Double})
   name.vb: Setup(SparseMatrix(Of T), SparseVector(Of T), Int32, Func(Of T, Double))
-  fullName: SpiceSharp.Algebra.Solve.Markowitz<T>.Setup(SpiceSharp.Algebra.SparseMatrix<T>, SpiceSharp.Algebra.SparseVector<T>, System.Int32, Func<T, System.Double>)
-  fullName.vb: SpiceSharp.Algebra.Solve.Markowitz(Of T).Setup(SpiceSharp.Algebra.SparseMatrix(Of T), SpiceSharp.Algebra.SparseVector(Of T), System.Int32, Func(Of T, System.Double))
+  fullName: SpiceSharp.Algebra.Solve.Markowitz<T>.Setup(SpiceSharp.Algebra.SparseMatrix<T>, SpiceSharp.Algebra.SparseVector<T>, System.Int32, System.Func<T, System.Double>)
+  fullName.vb: SpiceSharp.Algebra.Solve.Markowitz(Of T).Setup(SpiceSharp.Algebra.SparseMatrix(Of T), SpiceSharp.Algebra.SparseVector(Of T), System.Int32, System.Func(Of T, System.Double))
   nameWithType: Markowitz<T>.Setup(SparseMatrix<T>, SparseVector<T>, Int32, Func<T, Double>)
   nameWithType.vb: Markowitz(Of T).Setup(SparseMatrix(Of T), SparseVector(Of T), Int32, Func(Of T, Double))
 - uid: SpiceSharp.Algebra.Solve.Markowitz`1.Setup*
@@ -1099,13 +1099,13 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.PivotStrategy(Of T).MovePivot
   nameWithType: PivotStrategy<T>.MovePivot
   nameWithType.vb: PivotStrategy(Of T).MovePivot
-- uid: SpiceSharp.Algebra.Solve.PivotStrategy`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,Func{`0,System.Double})
+- uid: SpiceSharp.Algebra.Solve.PivotStrategy`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,System.Func{`0,System.Double})
   name: Setup(SparseMatrix<T>, SparseVector<T>, Int32, Func<T, Double>)
-  href: api/SpiceSharp.Algebra.Solve.PivotStrategy-1.html#SpiceSharp_Algebra_Solve_PivotStrategy_1_Setup_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__System_Int32_Func__0_System_Double__
-  commentId: M:SpiceSharp.Algebra.Solve.PivotStrategy`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,Func{`0,System.Double})
+  href: api/SpiceSharp.Algebra.Solve.PivotStrategy-1.html#SpiceSharp_Algebra_Solve_PivotStrategy_1_Setup_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__System_Int32_System_Func__0_System_Double__
+  commentId: M:SpiceSharp.Algebra.Solve.PivotStrategy`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,System.Func{`0,System.Double})
   name.vb: Setup(SparseMatrix(Of T), SparseVector(Of T), Int32, Func(Of T, Double))
-  fullName: SpiceSharp.Algebra.Solve.PivotStrategy<T>.Setup(SpiceSharp.Algebra.SparseMatrix<T>, SpiceSharp.Algebra.SparseVector<T>, System.Int32, Func<T, System.Double>)
-  fullName.vb: SpiceSharp.Algebra.Solve.PivotStrategy(Of T).Setup(SpiceSharp.Algebra.SparseMatrix(Of T), SpiceSharp.Algebra.SparseVector(Of T), System.Int32, Func(Of T, System.Double))
+  fullName: SpiceSharp.Algebra.Solve.PivotStrategy<T>.Setup(SpiceSharp.Algebra.SparseMatrix<T>, SpiceSharp.Algebra.SparseVector<T>, System.Int32, System.Func<T, System.Double>)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotStrategy(Of T).Setup(SpiceSharp.Algebra.SparseMatrix(Of T), SpiceSharp.Algebra.SparseVector(Of T), System.Int32, System.Func(Of T, System.Double))
   nameWithType: PivotStrategy<T>.Setup(SparseMatrix<T>, SparseVector<T>, Int32, Func<T, Double>)
   nameWithType.vb: PivotStrategy(Of T).Setup(SparseMatrix(Of T), SparseVector(Of T), Int32, Func(Of T, Double))
 - uid: SpiceSharp.Algebra.Solve.PivotStrategy`1.Setup*
@@ -1464,11 +1464,11 @@ references:
   commentId: M:SpiceSharp.Algebra.SparseException.#ctor
   fullName: SpiceSharp.Algebra.SparseException.SparseException()
   nameWithType: SparseException.SparseException()
-- uid: SpiceSharp.Algebra.SparseException.#ctor(SerializationInfo,StreamingContext)
+- uid: SpiceSharp.Algebra.SparseException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   name: SparseException(SerializationInfo, StreamingContext)
-  href: api/SpiceSharp.Algebra.SparseException.html#SpiceSharp_Algebra_SparseException__ctor_SerializationInfo_StreamingContext_
-  commentId: M:SpiceSharp.Algebra.SparseException.#ctor(SerializationInfo,StreamingContext)
-  fullName: SpiceSharp.Algebra.SparseException.SparseException(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.Algebra.SparseException.html#SpiceSharp_Algebra_SparseException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.Algebra.SparseException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.Algebra.SparseException.SparseException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
   nameWithType: SparseException.SparseException(SerializationInfo, StreamingContext)
 - uid: SpiceSharp.Algebra.SparseException.#ctor(System.String)
   name: SparseException(String)
@@ -1476,11 +1476,11 @@ references:
   commentId: M:SpiceSharp.Algebra.SparseException.#ctor(System.String)
   fullName: SpiceSharp.Algebra.SparseException.SparseException(System.String)
   nameWithType: SparseException.SparseException(String)
-- uid: SpiceSharp.Algebra.SparseException.#ctor(System.String,Exception)
+- uid: SpiceSharp.Algebra.SparseException.#ctor(System.String,System.Exception)
   name: SparseException(String, Exception)
-  href: api/SpiceSharp.Algebra.SparseException.html#SpiceSharp_Algebra_SparseException__ctor_System_String_Exception_
-  commentId: M:SpiceSharp.Algebra.SparseException.#ctor(System.String,Exception)
-  fullName: SpiceSharp.Algebra.SparseException.SparseException(System.String, Exception)
+  href: api/SpiceSharp.Algebra.SparseException.html#SpiceSharp_Algebra_SparseException__ctor_System_String_System_Exception_
+  commentId: M:SpiceSharp.Algebra.SparseException.#ctor(System.String,System.Exception)
+  fullName: SpiceSharp.Algebra.SparseException.SparseException(System.String, System.Exception)
   nameWithType: SparseException.SparseException(String, Exception)
 - uid: SpiceSharp.Algebra.SparseException.#ctor*
   name: SparseException
@@ -1553,13 +1553,13 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).Column
   nameWithType: SparseLinearSystem<T>.Column
   nameWithType.vb: SparseLinearSystem(Of T).Column
-- uid: SpiceSharp.Algebra.SparseLinearSystem`1.ExternalToInternal(Tuple{System.Int32,System.Int32})
+- uid: SpiceSharp.Algebra.SparseLinearSystem`1.ExternalToInternal(System.Tuple{System.Int32,System.Int32})
   name: ExternalToInternal(Tuple<Int32, Int32>)
-  href: api/SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ExternalToInternal_Tuple_System_Int32_System_Int32__
-  commentId: M:SpiceSharp.Algebra.SparseLinearSystem`1.ExternalToInternal(Tuple{System.Int32,System.Int32})
+  href: api/SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ExternalToInternal_System_Tuple_System_Int32_System_Int32__
+  commentId: M:SpiceSharp.Algebra.SparseLinearSystem`1.ExternalToInternal(System.Tuple{System.Int32,System.Int32})
   name.vb: ExternalToInternal(Tuple(Of Int32, Int32))
-  fullName: SpiceSharp.Algebra.SparseLinearSystem<T>.ExternalToInternal(Tuple<System.Int32, System.Int32>)
-  fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).ExternalToInternal(Tuple(Of System.Int32, System.Int32))
+  fullName: SpiceSharp.Algebra.SparseLinearSystem<T>.ExternalToInternal(System.Tuple<System.Int32, System.Int32>)
+  fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).ExternalToInternal(System.Tuple(Of System.Int32, System.Int32))
   nameWithType: SparseLinearSystem<T>.ExternalToInternal(Tuple<Int32, Int32>)
   nameWithType.vb: SparseLinearSystem(Of T).ExternalToInternal(Tuple(Of Int32, Int32))
 - uid: SpiceSharp.Algebra.SparseLinearSystem`1.ExternalToInternal*
@@ -1682,13 +1682,13 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).GetRhsElement
   nameWithType: SparseLinearSystem<T>.GetRhsElement
   nameWithType.vb: SparseLinearSystem(Of T).GetRhsElement
-- uid: SpiceSharp.Algebra.SparseLinearSystem`1.InternalToExternal(Tuple{System.Int32,System.Int32})
+- uid: SpiceSharp.Algebra.SparseLinearSystem`1.InternalToExternal(System.Tuple{System.Int32,System.Int32})
   name: InternalToExternal(Tuple<Int32, Int32>)
-  href: api/SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_InternalToExternal_Tuple_System_Int32_System_Int32__
-  commentId: M:SpiceSharp.Algebra.SparseLinearSystem`1.InternalToExternal(Tuple{System.Int32,System.Int32})
+  href: api/SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_InternalToExternal_System_Tuple_System_Int32_System_Int32__
+  commentId: M:SpiceSharp.Algebra.SparseLinearSystem`1.InternalToExternal(System.Tuple{System.Int32,System.Int32})
   name.vb: InternalToExternal(Tuple(Of Int32, Int32))
-  fullName: SpiceSharp.Algebra.SparseLinearSystem<T>.InternalToExternal(Tuple<System.Int32, System.Int32>)
-  fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).InternalToExternal(Tuple(Of System.Int32, System.Int32))
+  fullName: SpiceSharp.Algebra.SparseLinearSystem<T>.InternalToExternal(System.Tuple<System.Int32, System.Int32>)
+  fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).InternalToExternal(System.Tuple(Of System.Int32, System.Int32))
   nameWithType: SparseLinearSystem<T>.InternalToExternal(Tuple<Int32, Int32>)
   nameWithType.vb: SparseLinearSystem(Of T).InternalToExternal(Tuple(Of Int32, Int32))
 - uid: SpiceSharp.Algebra.SparseLinearSystem`1.InternalToExternal*
@@ -1835,12 +1835,12 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).ToString()
   nameWithType: SparseLinearSystem<T>.ToString()
   nameWithType.vb: SparseLinearSystem(Of T).ToString()
-- uid: SpiceSharp.Algebra.SparseLinearSystem`1.ToString(System.String,IFormatProvider)
+- uid: SpiceSharp.Algebra.SparseLinearSystem`1.ToString(System.String,System.IFormatProvider)
   name: ToString(String, IFormatProvider)
-  href: api/SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ToString_System_String_IFormatProvider_
-  commentId: M:SpiceSharp.Algebra.SparseLinearSystem`1.ToString(System.String,IFormatProvider)
-  fullName: SpiceSharp.Algebra.SparseLinearSystem<T>.ToString(System.String, IFormatProvider)
-  fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).ToString(System.String, IFormatProvider)
+  href: api/SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ToString_System_String_System_IFormatProvider_
+  commentId: M:SpiceSharp.Algebra.SparseLinearSystem`1.ToString(System.String,System.IFormatProvider)
+  fullName: SpiceSharp.Algebra.SparseLinearSystem<T>.ToString(System.String, System.IFormatProvider)
+  fullName.vb: SpiceSharp.Algebra.SparseLinearSystem(Of T).ToString(System.String, System.IFormatProvider)
   nameWithType: SparseLinearSystem<T>.ToString(String, IFormatProvider)
   nameWithType.vb: SparseLinearSystem(Of T).ToString(String, IFormatProvider)
 - uid: SpiceSharp.Algebra.SparseLinearSystem`1.ToString*
@@ -2084,12 +2084,12 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseMatrix(Of T).ToString()
   nameWithType: SparseMatrix<T>.ToString()
   nameWithType.vb: SparseMatrix(Of T).ToString()
-- uid: SpiceSharp.Algebra.SparseMatrix`1.ToString(System.String,IFormatProvider)
+- uid: SpiceSharp.Algebra.SparseMatrix`1.ToString(System.String,System.IFormatProvider)
   name: ToString(String, IFormatProvider)
-  href: api/SpiceSharp.Algebra.SparseMatrix-1.html#SpiceSharp_Algebra_SparseMatrix_1_ToString_System_String_IFormatProvider_
-  commentId: M:SpiceSharp.Algebra.SparseMatrix`1.ToString(System.String,IFormatProvider)
-  fullName: SpiceSharp.Algebra.SparseMatrix<T>.ToString(System.String, IFormatProvider)
-  fullName.vb: SpiceSharp.Algebra.SparseMatrix(Of T).ToString(System.String, IFormatProvider)
+  href: api/SpiceSharp.Algebra.SparseMatrix-1.html#SpiceSharp_Algebra_SparseMatrix_1_ToString_System_String_System_IFormatProvider_
+  commentId: M:SpiceSharp.Algebra.SparseMatrix`1.ToString(System.String,System.IFormatProvider)
+  fullName: SpiceSharp.Algebra.SparseMatrix<T>.ToString(System.String, System.IFormatProvider)
+  fullName.vb: SpiceSharp.Algebra.SparseMatrix(Of T).ToString(System.String, System.IFormatProvider)
   nameWithType: SparseMatrix<T>.ToString(String, IFormatProvider)
   nameWithType.vb: SparseMatrix(Of T).ToString(String, IFormatProvider)
 - uid: SpiceSharp.Algebra.SparseMatrix`1.ToString*
@@ -2238,12 +2238,12 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseVector(Of T).ToString()
   nameWithType: SparseVector<T>.ToString()
   nameWithType.vb: SparseVector(Of T).ToString()
-- uid: SpiceSharp.Algebra.SparseVector`1.ToString(System.String,IFormatProvider)
+- uid: SpiceSharp.Algebra.SparseVector`1.ToString(System.String,System.IFormatProvider)
   name: ToString(String, IFormatProvider)
-  href: api/SpiceSharp.Algebra.SparseVector-1.html#SpiceSharp_Algebra_SparseVector_1_ToString_System_String_IFormatProvider_
-  commentId: M:SpiceSharp.Algebra.SparseVector`1.ToString(System.String,IFormatProvider)
-  fullName: SpiceSharp.Algebra.SparseVector<T>.ToString(System.String, IFormatProvider)
-  fullName.vb: SpiceSharp.Algebra.SparseVector(Of T).ToString(System.String, IFormatProvider)
+  href: api/SpiceSharp.Algebra.SparseVector-1.html#SpiceSharp_Algebra_SparseVector_1_ToString_System_String_System_IFormatProvider_
+  commentId: M:SpiceSharp.Algebra.SparseVector`1.ToString(System.String,System.IFormatProvider)
+  fullName: SpiceSharp.Algebra.SparseVector<T>.ToString(System.String, System.IFormatProvider)
+  fullName.vb: SpiceSharp.Algebra.SparseVector(Of T).ToString(System.String, System.IFormatProvider)
   nameWithType: SparseVector<T>.ToString(String, IFormatProvider)
   nameWithType.vb: SparseVector(Of T).ToString(String, IFormatProvider)
 - uid: SpiceSharp.Algebra.SparseVector`1.ToString*
@@ -2658,11 +2658,11 @@ references:
   commentId: M:SpiceSharp.BadParameterException.#ctor
   fullName: SpiceSharp.BadParameterException.BadParameterException()
   nameWithType: BadParameterException.BadParameterException()
-- uid: SpiceSharp.BadParameterException.#ctor(SerializationInfo,StreamingContext)
+- uid: SpiceSharp.BadParameterException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   name: BadParameterException(SerializationInfo, StreamingContext)
-  href: api/SpiceSharp.BadParameterException.html#SpiceSharp_BadParameterException__ctor_SerializationInfo_StreamingContext_
-  commentId: M:SpiceSharp.BadParameterException.#ctor(SerializationInfo,StreamingContext)
-  fullName: SpiceSharp.BadParameterException.BadParameterException(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.BadParameterException.html#SpiceSharp_BadParameterException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.BadParameterException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.BadParameterException.BadParameterException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
   nameWithType: BadParameterException.BadParameterException(SerializationInfo, StreamingContext)
 - uid: SpiceSharp.BadParameterException.#ctor(System.String)
   name: BadParameterException(String)
@@ -2670,11 +2670,11 @@ references:
   commentId: M:SpiceSharp.BadParameterException.#ctor(System.String)
   fullName: SpiceSharp.BadParameterException.BadParameterException(System.String)
   nameWithType: BadParameterException.BadParameterException(String)
-- uid: SpiceSharp.BadParameterException.#ctor(System.String,Exception)
+- uid: SpiceSharp.BadParameterException.#ctor(System.String,System.Exception)
   name: BadParameterException(String, Exception)
-  href: api/SpiceSharp.BadParameterException.html#SpiceSharp_BadParameterException__ctor_System_String_Exception_
-  commentId: M:SpiceSharp.BadParameterException.#ctor(System.String,Exception)
-  fullName: SpiceSharp.BadParameterException.BadParameterException(System.String, Exception)
+  href: api/SpiceSharp.BadParameterException.html#SpiceSharp_BadParameterException__ctor_System_String_System_Exception_
+  commentId: M:SpiceSharp.BadParameterException.#ctor(System.String,System.Exception)
+  fullName: SpiceSharp.BadParameterException.BadParameterException(System.String, System.Exception)
   nameWithType: BadParameterException.BadParameterException(String, Exception)
 - uid: SpiceSharp.BadParameterException.#ctor*
   name: BadParameterException
@@ -2748,13 +2748,13 @@ references:
   commentId: Overload:SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport
   fullName: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport
   nameWithType: BaseFrequencyBehavior.CreateAcExport
-- uid: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: BaseFrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: BaseFrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers*
@@ -3303,15 +3303,6 @@ references:
   commentId: M:SpiceSharp.Circuit.#ctor
   fullName: SpiceSharp.Circuit.Circuit()
   nameWithType: Circuit.Circuit()
-- uid: SpiceSharp.Circuit.#ctor(IEnumerable{SpiceSharp.Circuits.Entity})
-  name: Circuit(IEnumerable<Entity>)
-  href: api/SpiceSharp.Circuit.html#SpiceSharp_Circuit__ctor_IEnumerable_SpiceSharp_Circuits_Entity__
-  commentId: M:SpiceSharp.Circuit.#ctor(IEnumerable{SpiceSharp.Circuits.Entity})
-  name.vb: Circuit(IEnumerable(Of Entity))
-  fullName: SpiceSharp.Circuit.Circuit(IEnumerable<SpiceSharp.Circuits.Entity>)
-  fullName.vb: SpiceSharp.Circuit.Circuit(IEnumerable(Of SpiceSharp.Circuits.Entity))
-  nameWithType: Circuit.Circuit(IEnumerable<Entity>)
-  nameWithType.vb: Circuit.Circuit(IEnumerable(Of Entity))
 - uid: SpiceSharp.Circuit.#ctor(SpiceSharp.Circuits.Entity[])
   name: Circuit(Entity[])
   href: api/SpiceSharp.Circuit.html#SpiceSharp_Circuit__ctor_SpiceSharp_Circuits_Entity___
@@ -3321,6 +3312,15 @@ references:
   fullName.vb: SpiceSharp.Circuit.Circuit(SpiceSharp.Circuits.Entity())
   nameWithType: Circuit.Circuit(Entity[])
   nameWithType.vb: Circuit.Circuit(Entity())
+- uid: SpiceSharp.Circuit.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Circuits.Entity})
+  name: Circuit(IEnumerable<Entity>)
+  href: api/SpiceSharp.Circuit.html#SpiceSharp_Circuit__ctor_System_Collections_Generic_IEnumerable_SpiceSharp_Circuits_Entity__
+  commentId: M:SpiceSharp.Circuit.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Circuits.Entity})
+  name.vb: Circuit(IEnumerable(Of Entity))
+  fullName: SpiceSharp.Circuit.Circuit(System.Collections.Generic.IEnumerable<SpiceSharp.Circuits.Entity>)
+  fullName.vb: SpiceSharp.Circuit.Circuit(System.Collections.Generic.IEnumerable(Of SpiceSharp.Circuits.Entity))
+  nameWithType: Circuit.Circuit(IEnumerable<Entity>)
+  nameWithType.vb: Circuit.Circuit(IEnumerable(Of Entity))
 - uid: SpiceSharp.Circuit.#ctor*
   name: Circuit
   href: api/SpiceSharp.Circuit.html#SpiceSharp_Circuit__ctor_
@@ -3429,11 +3429,11 @@ references:
   commentId: M:SpiceSharp.CircuitException.#ctor
   fullName: SpiceSharp.CircuitException.CircuitException()
   nameWithType: CircuitException.CircuitException()
-- uid: SpiceSharp.CircuitException.#ctor(SerializationInfo,StreamingContext)
+- uid: SpiceSharp.CircuitException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   name: CircuitException(SerializationInfo, StreamingContext)
-  href: api/SpiceSharp.CircuitException.html#SpiceSharp_CircuitException__ctor_SerializationInfo_StreamingContext_
-  commentId: M:SpiceSharp.CircuitException.#ctor(SerializationInfo,StreamingContext)
-  fullName: SpiceSharp.CircuitException.CircuitException(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.CircuitException.html#SpiceSharp_CircuitException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.CircuitException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.CircuitException.CircuitException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
   nameWithType: CircuitException.CircuitException(SerializationInfo, StreamingContext)
 - uid: SpiceSharp.CircuitException.#ctor(System.String)
   name: CircuitException(String)
@@ -3441,11 +3441,11 @@ references:
   commentId: M:SpiceSharp.CircuitException.#ctor(System.String)
   fullName: SpiceSharp.CircuitException.CircuitException(System.String)
   nameWithType: CircuitException.CircuitException(String)
-- uid: SpiceSharp.CircuitException.#ctor(System.String,Exception)
+- uid: SpiceSharp.CircuitException.#ctor(System.String,System.Exception)
   name: CircuitException(String, Exception)
-  href: api/SpiceSharp.CircuitException.html#SpiceSharp_CircuitException__ctor_System_String_Exception_
-  commentId: M:SpiceSharp.CircuitException.#ctor(System.String,Exception)
-  fullName: SpiceSharp.CircuitException.CircuitException(System.String, Exception)
+  href: api/SpiceSharp.CircuitException.html#SpiceSharp_CircuitException__ctor_System_String_System_Exception_
+  commentId: M:SpiceSharp.CircuitException.#ctor(System.String,System.Exception)
+  fullName: SpiceSharp.CircuitException.CircuitException(System.String, System.Exception)
   nameWithType: CircuitException.CircuitException(String, Exception)
 - uid: SpiceSharp.CircuitException.#ctor*
   name: CircuitException
@@ -3639,11 +3639,11 @@ references:
   commentId: Overload:SpiceSharp.Circuits.EntityCollection.BuildOrderedComponentList
   fullName: SpiceSharp.Circuits.EntityCollection.BuildOrderedComponentList
   nameWithType: EntityCollection.BuildOrderedComponentList
-- uid: SpiceSharp.Circuits.EntityCollection.ByType(Type)
+- uid: SpiceSharp.Circuits.EntityCollection.ByType(System.Type)
   name: ByType(Type)
-  href: api/SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_ByType_Type_
-  commentId: M:SpiceSharp.Circuits.EntityCollection.ByType(Type)
-  fullName: SpiceSharp.Circuits.EntityCollection.ByType(Type)
+  href: api/SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_ByType_System_Type_
+  commentId: M:SpiceSharp.Circuits.EntityCollection.ByType(System.Type)
+  fullName: SpiceSharp.Circuits.EntityCollection.ByType(System.Type)
   nameWithType: EntityCollection.ByType(Type)
 - uid: SpiceSharp.Circuits.EntityCollection.ByType*
   name: ByType
@@ -3729,6 +3729,22 @@ references:
   commentId: Overload:SpiceSharp.Circuits.EntityCollection.Remove
   fullName: SpiceSharp.Circuits.EntityCollection.Remove
   nameWithType: EntityCollection.Remove
+- uid: SpiceSharp.Circuits.EntityCollection.System#Collections#IEnumerable#GetEnumerator
+  name: IEnumerable.GetEnumerator()
+  href: api/SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_System_Collections_IEnumerable_GetEnumerator
+  commentId: M:SpiceSharp.Circuits.EntityCollection.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator()
+  fullName: SpiceSharp.Circuits.EntityCollection.System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: EntityCollection.IEnumerable.GetEnumerator()
+  nameWithType.vb: EntityCollection.System.Collections.IEnumerable.GetEnumerator()
+- uid: SpiceSharp.Circuits.EntityCollection.System#Collections#IEnumerable#GetEnumerator*
+  name: IEnumerable.GetEnumerator
+  href: api/SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_System_Collections_IEnumerable_GetEnumerator_
+  commentId: Overload:SpiceSharp.Circuits.EntityCollection.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator
+  fullName: SpiceSharp.Circuits.EntityCollection.System.Collections.IEnumerable.GetEnumerator
+  nameWithType: EntityCollection.IEnumerable.GetEnumerator
+  nameWithType.vb: EntityCollection.System.Collections.IEnumerable.GetEnumerator
 - uid: SpiceSharp.Circuits.EntityCollection.TryGetEntity(SpiceSharp.Identifier,SpiceSharp.Circuits.Entity@)
   name: TryGetEntity(Identifier, out Entity)
   href: api/SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_TryGetEntity_SpiceSharp_Identifier_SpiceSharp_Circuits_Entity__
@@ -4623,13 +4639,13 @@ references:
   commentId: Overload:SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.EmitterPrimeEmitterPtr
   fullName: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.EmitterPrimeEmitterPtr
   nameWithType: FrequencyBehavior.EmitterPrimeEmitterPtr
-- uid: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.html#SpiceSharp_Components_BipolarBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.html#SpiceSharp_Components_BipolarBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -7452,13 +7468,13 @@ references:
   commentId: Overload:SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CapacitorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CapacitorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -8043,15 +8059,6 @@ references:
   commentId: T:SpiceSharp.Components.ComponentNoise
   fullName: SpiceSharp.Components.ComponentNoise
   nameWithType: ComponentNoise
-- uid: SpiceSharp.Components.ComponentNoise.#ctor(IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
-  name: ComponentNoise(IEnumerable<NoiseGenerator>)
-  href: api/SpiceSharp.Components.ComponentNoise.html#SpiceSharp_Components_ComponentNoise__ctor_IEnumerable_SpiceSharp_Components_NoiseSources_NoiseGenerator__
-  commentId: M:SpiceSharp.Components.ComponentNoise.#ctor(IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
-  name.vb: ComponentNoise(IEnumerable(Of NoiseGenerator))
-  fullName: SpiceSharp.Components.ComponentNoise.ComponentNoise(IEnumerable<SpiceSharp.Components.NoiseSources.NoiseGenerator>)
-  fullName.vb: SpiceSharp.Components.ComponentNoise.ComponentNoise(IEnumerable(Of SpiceSharp.Components.NoiseSources.NoiseGenerator))
-  nameWithType: ComponentNoise.ComponentNoise(IEnumerable<NoiseGenerator>)
-  nameWithType.vb: ComponentNoise.ComponentNoise(IEnumerable(Of NoiseGenerator))
 - uid: SpiceSharp.Components.ComponentNoise.#ctor(SpiceSharp.Components.NoiseSources.NoiseGenerator[])
   name: ComponentNoise(NoiseGenerator[])
   href: api/SpiceSharp.Components.ComponentNoise.html#SpiceSharp_Components_ComponentNoise__ctor_SpiceSharp_Components_NoiseSources_NoiseGenerator___
@@ -8061,6 +8068,15 @@ references:
   fullName.vb: SpiceSharp.Components.ComponentNoise.ComponentNoise(SpiceSharp.Components.NoiseSources.NoiseGenerator())
   nameWithType: ComponentNoise.ComponentNoise(NoiseGenerator[])
   nameWithType.vb: ComponentNoise.ComponentNoise(NoiseGenerator())
+- uid: SpiceSharp.Components.ComponentNoise.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
+  name: ComponentNoise(IEnumerable<NoiseGenerator>)
+  href: api/SpiceSharp.Components.ComponentNoise.html#SpiceSharp_Components_ComponentNoise__ctor_System_Collections_Generic_IEnumerable_SpiceSharp_Components_NoiseSources_NoiseGenerator__
+  commentId: M:SpiceSharp.Components.ComponentNoise.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
+  name.vb: ComponentNoise(IEnumerable(Of NoiseGenerator))
+  fullName: SpiceSharp.Components.ComponentNoise.ComponentNoise(System.Collections.Generic.IEnumerable<SpiceSharp.Components.NoiseSources.NoiseGenerator>)
+  fullName.vb: SpiceSharp.Components.ComponentNoise.ComponentNoise(System.Collections.Generic.IEnumerable(Of SpiceSharp.Components.NoiseSources.NoiseGenerator))
+  nameWithType: ComponentNoise.ComponentNoise(IEnumerable<NoiseGenerator>)
+  nameWithType.vb: ComponentNoise.ComponentNoise(IEnumerable(Of NoiseGenerator))
 - uid: SpiceSharp.Components.ComponentNoise.#ctor*
   name: ComponentNoise
   href: api/SpiceSharp.Components.ComponentNoise.html#SpiceSharp_Components_ComponentNoise__ctor_
@@ -8343,13 +8359,13 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentControlledCurrentSourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentControlledCurrentSourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -8823,13 +8839,13 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentControlledVoltagesourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentControlledVoltagesourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -9345,13 +9361,13 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.CreateAcExport
   fullName: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.CreateAcExport
   nameWithType: FrequencyBehavior.CreateAcExport
-- uid: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentsourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentsourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.CurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -9852,13 +9868,13 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.Connect
   fullName: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.Connect
   nameWithType: FrequencyBehavior.Connect
-- uid: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -10557,13 +10573,13 @@ references:
   commentId: Overload:SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetDiodeVoltage
   fullName: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetDiodeVoltage
   nameWithType: FrequencyBehavior.GetDiodeVoltage
-- uid: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.html#SpiceSharp_Components_DiodeBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.html#SpiceSharp_Components_DiodeBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -12009,13 +12025,13 @@ references:
   commentId: Overload:SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Connect
   fullName: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Connect
   nameWithType: FrequencyBehavior.Connect
-- uid: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.html#SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.html#SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -13317,13 +13333,13 @@ references:
   commentId: Overload:SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GateSourcePrimePtr
   fullName: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GateSourcePrimePtr
   nameWithType: FrequencyBehavior.GateSourcePrimePtr
-- uid: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.GetEquationPointers*
@@ -16161,13 +16177,13 @@ references:
   commentId: Overload:SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GateSourcePrimePtr
   fullName: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GateSourcePrimePtr
   nameWithType: FrequencyBehavior.GateSourcePrimePtr
-- uid: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level2_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level2_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.MosfetBehaviors.Level2.FrequencyBehavior.GetEquationPointers*
@@ -19101,13 +19117,13 @@ references:
   commentId: Overload:SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateSourcePrimePtr
   fullName: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateSourcePrimePtr
   nameWithType: FrequencyBehavior.GateSourcePrimePtr
-- uid: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers*
@@ -21837,13 +21853,13 @@ references:
   commentId: Overload:SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.Factor
   fullName: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.Factor
   nameWithType: FrequencyBehavior.Factor
-- uid: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_MutualInductanceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_MutualInductanceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -22017,13 +22033,13 @@ references:
   commentId: T:SpiceSharp.Components.NoiseSources.NodeCollection
   fullName: SpiceSharp.Components.NoiseSources.NodeCollection
   nameWithType: NodeCollection
-- uid: SpiceSharp.Components.NoiseSources.NodeCollection.#ctor(IEnumerable{System.Int32})
+- uid: SpiceSharp.Components.NoiseSources.NodeCollection.#ctor(System.Collections.Generic.IEnumerable{System.Int32})
   name: NodeCollection(IEnumerable<Int32>)
-  href: api/SpiceSharp.Components.NoiseSources.NodeCollection.html#SpiceSharp_Components_NoiseSources_NodeCollection__ctor_IEnumerable_System_Int32__
-  commentId: M:SpiceSharp.Components.NoiseSources.NodeCollection.#ctor(IEnumerable{System.Int32})
+  href: api/SpiceSharp.Components.NoiseSources.NodeCollection.html#SpiceSharp_Components_NoiseSources_NodeCollection__ctor_System_Collections_Generic_IEnumerable_System_Int32__
+  commentId: M:SpiceSharp.Components.NoiseSources.NodeCollection.#ctor(System.Collections.Generic.IEnumerable{System.Int32})
   name.vb: NodeCollection(IEnumerable(Of Int32))
-  fullName: SpiceSharp.Components.NoiseSources.NodeCollection.NodeCollection(IEnumerable<System.Int32>)
-  fullName.vb: SpiceSharp.Components.NoiseSources.NodeCollection.NodeCollection(IEnumerable(Of System.Int32))
+  fullName: SpiceSharp.Components.NoiseSources.NodeCollection.NodeCollection(System.Collections.Generic.IEnumerable<System.Int32>)
+  fullName.vb: SpiceSharp.Components.NoiseSources.NodeCollection.NodeCollection(System.Collections.Generic.IEnumerable(Of System.Int32))
   nameWithType: NodeCollection.NodeCollection(IEnumerable<Int32>)
   nameWithType.vb: NodeCollection.NodeCollection(IEnumerable(Of Int32))
 - uid: SpiceSharp.Components.NoiseSources.NodeCollection.#ctor*
@@ -22071,6 +22087,22 @@ references:
   commentId: Overload:SpiceSharp.Components.NoiseSources.NodeCollection.Item
   fullName: SpiceSharp.Components.NoiseSources.NodeCollection.Item
   nameWithType: NodeCollection.Item
+- uid: SpiceSharp.Components.NoiseSources.NodeCollection.System#Collections#IEnumerable#GetEnumerator
+  name: IEnumerable.GetEnumerator()
+  href: api/SpiceSharp.Components.NoiseSources.NodeCollection.html#SpiceSharp_Components_NoiseSources_NodeCollection_System_Collections_IEnumerable_GetEnumerator
+  commentId: M:SpiceSharp.Components.NoiseSources.NodeCollection.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator()
+  fullName: SpiceSharp.Components.NoiseSources.NodeCollection.System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: NodeCollection.IEnumerable.GetEnumerator()
+  nameWithType.vb: NodeCollection.System.Collections.IEnumerable.GetEnumerator()
+- uid: SpiceSharp.Components.NoiseSources.NodeCollection.System#Collections#IEnumerable#GetEnumerator*
+  name: IEnumerable.GetEnumerator
+  href: api/SpiceSharp.Components.NoiseSources.NodeCollection.html#SpiceSharp_Components_NoiseSources_NodeCollection_System_Collections_IEnumerable_GetEnumerator_
+  commentId: Overload:SpiceSharp.Components.NoiseSources.NodeCollection.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator
+  fullName: SpiceSharp.Components.NoiseSources.NodeCollection.System.Collections.IEnumerable.GetEnumerator
+  nameWithType: NodeCollection.IEnumerable.GetEnumerator
+  nameWithType.vb: NodeCollection.System.Collections.IEnumerable.GetEnumerator
 - uid: SpiceSharp.Components.NoiseSources.NoiseGain
   name: NoiseGain
   href: api/SpiceSharp.Components.NoiseSources.NoiseGain.html
@@ -22293,13 +22325,13 @@ references:
   commentId: T:SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection
   fullName: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection
   nameWithType: NoiseGeneratorCollection
-- uid: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.#ctor(IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
+- uid: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
   name: NoiseGeneratorCollection(IEnumerable<NoiseGenerator>)
-  href: api/SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.html#SpiceSharp_Components_NoiseSources_NoiseGeneratorCollection__ctor_IEnumerable_SpiceSharp_Components_NoiseSources_NoiseGenerator__
-  commentId: M:SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.#ctor(IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
+  href: api/SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.html#SpiceSharp_Components_NoiseSources_NoiseGeneratorCollection__ctor_System_Collections_Generic_IEnumerable_SpiceSharp_Components_NoiseSources_NoiseGenerator__
+  commentId: M:SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Components.NoiseSources.NoiseGenerator})
   name.vb: NoiseGeneratorCollection(IEnumerable(Of NoiseGenerator))
-  fullName: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.NoiseGeneratorCollection(IEnumerable<SpiceSharp.Components.NoiseSources.NoiseGenerator>)
-  fullName.vb: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.NoiseGeneratorCollection(IEnumerable(Of SpiceSharp.Components.NoiseSources.NoiseGenerator))
+  fullName: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.NoiseGeneratorCollection(System.Collections.Generic.IEnumerable<SpiceSharp.Components.NoiseSources.NoiseGenerator>)
+  fullName.vb: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.NoiseGeneratorCollection(System.Collections.Generic.IEnumerable(Of SpiceSharp.Components.NoiseSources.NoiseGenerator))
   nameWithType: NoiseGeneratorCollection.NoiseGeneratorCollection(IEnumerable<NoiseGenerator>)
   nameWithType.vb: NoiseGeneratorCollection.NoiseGeneratorCollection(IEnumerable(Of NoiseGenerator))
 - uid: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.#ctor*
@@ -22347,6 +22379,22 @@ references:
   commentId: Overload:SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.Item
   fullName: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.Item
   nameWithType: NoiseGeneratorCollection.Item
+- uid: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.System#Collections#IEnumerable#GetEnumerator
+  name: IEnumerable.GetEnumerator()
+  href: api/SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.html#SpiceSharp_Components_NoiseSources_NoiseGeneratorCollection_System_Collections_IEnumerable_GetEnumerator
+  commentId: M:SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator()
+  fullName: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: NoiseGeneratorCollection.IEnumerable.GetEnumerator()
+  nameWithType.vb: NoiseGeneratorCollection.System.Collections.IEnumerable.GetEnumerator()
+- uid: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.System#Collections#IEnumerable#GetEnumerator*
+  name: IEnumerable.GetEnumerator
+  href: api/SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.html#SpiceSharp_Components_NoiseSources_NoiseGeneratorCollection_System_Collections_IEnumerable_GetEnumerator_
+  commentId: Overload:SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator
+  fullName: SpiceSharp.Components.NoiseSources.NoiseGeneratorCollection.System.Collections.IEnumerable.GetEnumerator
+  nameWithType: NoiseGeneratorCollection.IEnumerable.GetEnumerator
+  nameWithType.vb: NoiseGeneratorCollection.System.Collections.IEnumerable.GetEnumerator
 - uid: SpiceSharp.Components.NoiseSources.NoiseShot
   name: NoiseShot
   href: api/SpiceSharp.Components.NoiseSources.NoiseShot.html
@@ -22830,13 +22878,13 @@ references:
   commentId: Overload:SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.html#SpiceSharp_Components_ResistorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.html#SpiceSharp_Components_ResistorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -23706,13 +23754,13 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltageControlledCurrentsourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltageControlledCurrentsourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -24234,13 +24282,13 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltageControlledVoltagesourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltageControlledVoltagesourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -24816,13 +24864,13 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetCurrent
   fullName: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetCurrent
   nameWithType: FrequencyBehavior.GetCurrent
-- uid: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltagesourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltagesourceBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.VoltagesourceBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -25389,13 +25437,13 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.Connect
   fullName: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.Connect
   nameWithType: FrequencyBehavior.Connect
-- uid: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+- uid: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name: GetEquationPointers(Solver<Complex>)
-  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_Complex__
-  commentId: M:SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{Complex})
+  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})
   name.vb: GetEquationPointers(Solver(Of Complex))
-  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<Complex>)
-  fullName.vb: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of Complex))
+  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver(Of System.Numerics.Complex))
   nameWithType: FrequencyBehavior.GetEquationPointers(Solver<Complex>)
   nameWithType.vb: FrequencyBehavior.GetEquationPointers(Solver(Of Complex))
 - uid: SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.GetEquationPointers*
@@ -26158,13 +26206,13 @@ references:
   fullName.vb: SpiceSharp.IntegrationMethods.ArrayHistory(Of T).ArrayHistory(System.Int32, T)
   nameWithType: ArrayHistory<T>.ArrayHistory(Int32, T)
   nameWithType.vb: ArrayHistory(Of T).ArrayHistory(Int32, T)
-- uid: SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor(System.Int32,Func{System.Int32,`0})
+- uid: SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor(System.Int32,System.Func{System.Int32,`0})
   name: ArrayHistory(Int32, Func<Int32, T>)
-  href: api/SpiceSharp.IntegrationMethods.ArrayHistory-1.html#SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_System_Int32_Func_System_Int32__0__
-  commentId: M:SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor(System.Int32,Func{System.Int32,`0})
+  href: api/SpiceSharp.IntegrationMethods.ArrayHistory-1.html#SpiceSharp_IntegrationMethods_ArrayHistory_1__ctor_System_Int32_System_Func_System_Int32__0__
+  commentId: M:SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor(System.Int32,System.Func{System.Int32,`0})
   name.vb: ArrayHistory(Int32, Func(Of Int32, T))
-  fullName: SpiceSharp.IntegrationMethods.ArrayHistory<T>.ArrayHistory(System.Int32, Func<System.Int32, T>)
-  fullName.vb: SpiceSharp.IntegrationMethods.ArrayHistory(Of T).ArrayHistory(System.Int32, Func(Of System.Int32, T))
+  fullName: SpiceSharp.IntegrationMethods.ArrayHistory<T>.ArrayHistory(System.Int32, System.Func<System.Int32, T>)
+  fullName.vb: SpiceSharp.IntegrationMethods.ArrayHistory(Of T).ArrayHistory(System.Int32, System.Func(Of System.Int32, T))
   nameWithType: ArrayHistory<T>.ArrayHistory(Int32, Func<Int32, T>)
   nameWithType.vb: ArrayHistory(Of T).ArrayHistory(Int32, Func(Of Int32, T))
 - uid: SpiceSharp.IntegrationMethods.ArrayHistory`1.#ctor*
@@ -26183,13 +26231,13 @@ references:
   fullName.vb: SpiceSharp.IntegrationMethods.ArrayHistory(Of T).Clear(T)
   nameWithType: ArrayHistory<T>.Clear(T)
   nameWithType.vb: ArrayHistory(Of T).Clear(T)
-- uid: SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear(Func{System.Int32,`0})
+- uid: SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear(System.Func{System.Int32,`0})
   name: Clear(Func<Int32, T>)
-  href: api/SpiceSharp.IntegrationMethods.ArrayHistory-1.html#SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_Func_System_Int32__0__
-  commentId: M:SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear(Func{System.Int32,`0})
+  href: api/SpiceSharp.IntegrationMethods.ArrayHistory-1.html#SpiceSharp_IntegrationMethods_ArrayHistory_1_Clear_System_Func_System_Int32__0__
+  commentId: M:SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear(System.Func{System.Int32,`0})
   name.vb: Clear(Func(Of Int32, T))
-  fullName: SpiceSharp.IntegrationMethods.ArrayHistory<T>.Clear(Func<System.Int32, T>)
-  fullName.vb: SpiceSharp.IntegrationMethods.ArrayHistory(Of T).Clear(Func(Of System.Int32, T))
+  fullName: SpiceSharp.IntegrationMethods.ArrayHistory<T>.Clear(System.Func<System.Int32, T>)
+  fullName.vb: SpiceSharp.IntegrationMethods.ArrayHistory(Of T).Clear(System.Func(Of System.Int32, T))
   nameWithType: ArrayHistory<T>.Clear(Func<Int32, T>)
   nameWithType.vb: ArrayHistory(Of T).Clear(Func(Of Int32, T))
 - uid: SpiceSharp.IntegrationMethods.ArrayHistory`1.Clear*
@@ -26392,13 +26440,13 @@ references:
   fullName.vb: SpiceSharp.IntegrationMethods.History(Of T).Clear(T)
   nameWithType: History<T>.Clear(T)
   nameWithType.vb: History(Of T).Clear(T)
-- uid: SpiceSharp.IntegrationMethods.History`1.Clear(Func{System.Int32,`0})
+- uid: SpiceSharp.IntegrationMethods.History`1.Clear(System.Func{System.Int32,`0})
   name: Clear(Func<Int32, T>)
-  href: api/SpiceSharp.IntegrationMethods.History-1.html#SpiceSharp_IntegrationMethods_History_1_Clear_Func_System_Int32__0__
-  commentId: M:SpiceSharp.IntegrationMethods.History`1.Clear(Func{System.Int32,`0})
+  href: api/SpiceSharp.IntegrationMethods.History-1.html#SpiceSharp_IntegrationMethods_History_1_Clear_System_Func_System_Int32__0__
+  commentId: M:SpiceSharp.IntegrationMethods.History`1.Clear(System.Func{System.Int32,`0})
   name.vb: Clear(Func(Of Int32, T))
-  fullName: SpiceSharp.IntegrationMethods.History<T>.Clear(Func<System.Int32, T>)
-  fullName.vb: SpiceSharp.IntegrationMethods.History(Of T).Clear(Func(Of System.Int32, T))
+  fullName: SpiceSharp.IntegrationMethods.History<T>.Clear(System.Func<System.Int32, T>)
+  fullName.vb: SpiceSharp.IntegrationMethods.History(Of T).Clear(System.Func(Of System.Int32, T))
   nameWithType: History<T>.Clear(Func<Int32, T>)
   nameWithType.vb: History(Of T).Clear(Func(Of Int32, T))
 - uid: SpiceSharp.IntegrationMethods.History`1.Clear*
@@ -26522,6 +26570,24 @@ references:
   fullName.vb: SpiceSharp.IntegrationMethods.History(Of T).Store
   nameWithType: History<T>.Store
   nameWithType.vb: History(Of T).Store
+- uid: SpiceSharp.IntegrationMethods.History`1.System#Collections#IEnumerable#GetEnumerator
+  name: IEnumerable.GetEnumerator()
+  href: api/SpiceSharp.IntegrationMethods.History-1.html#SpiceSharp_IntegrationMethods_History_1_System_Collections_IEnumerable_GetEnumerator
+  commentId: M:SpiceSharp.IntegrationMethods.History`1.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator()
+  fullName: SpiceSharp.IntegrationMethods.History<T>.System.Collections.IEnumerable.GetEnumerator()
+  fullName.vb: SpiceSharp.IntegrationMethods.History(Of T).System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: History<T>.IEnumerable.GetEnumerator()
+  nameWithType.vb: History(Of T).System.Collections.IEnumerable.GetEnumerator()
+- uid: SpiceSharp.IntegrationMethods.History`1.System#Collections#IEnumerable#GetEnumerator*
+  name: IEnumerable.GetEnumerator
+  href: api/SpiceSharp.IntegrationMethods.History-1.html#SpiceSharp_IntegrationMethods_History_1_System_Collections_IEnumerable_GetEnumerator_
+  commentId: Overload:SpiceSharp.IntegrationMethods.History`1.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator
+  fullName: SpiceSharp.IntegrationMethods.History<T>.System.Collections.IEnumerable.GetEnumerator
+  fullName.vb: SpiceSharp.IntegrationMethods.History(Of T).System.Collections.IEnumerable.GetEnumerator
+  nameWithType: History<T>.IEnumerable.GetEnumerator
+  nameWithType.vb: History(Of T).System.Collections.IEnumerable.GetEnumerator
 - uid: SpiceSharp.IntegrationMethods.IntegrationMethod
   name: IntegrationMethod
   href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html
@@ -26642,13 +26708,13 @@ references:
   commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
   fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
   nameWithType: IntegrationMethod.DeltaOld
-- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(System.Collections.ObjectModel.Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
   name: Initialize(Collection<BaseTransientBehavior>)
-  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__
-  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_System_Collections_ObjectModel_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(System.Collections.ObjectModel.Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
   name.vb: Initialize(Collection(Of BaseTransientBehavior))
-  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(Collection<SpiceSharp.Behaviors.BaseTransientBehavior>)
-  fullName.vb: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(Collection(Of SpiceSharp.Behaviors.BaseTransientBehavior))
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(System.Collections.ObjectModel.Collection<SpiceSharp.Behaviors.BaseTransientBehavior>)
+  fullName.vb: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(System.Collections.ObjectModel.Collection(Of SpiceSharp.Behaviors.BaseTransientBehavior))
   nameWithType: IntegrationMethod.Initialize(Collection<BaseTransientBehavior>)
   nameWithType.vb: IntegrationMethod.Initialize(Collection(Of BaseTransientBehavior))
 - uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize*
@@ -27033,13 +27099,13 @@ references:
   fullName.vb: SpiceSharp.IntegrationMethods.NodeHistory(Of T).NodeHistory(System.Int32, T)
   nameWithType: NodeHistory<T>.NodeHistory(Int32, T)
   nameWithType.vb: NodeHistory(Of T).NodeHistory(Int32, T)
-- uid: SpiceSharp.IntegrationMethods.NodeHistory`1.#ctor(System.Int32,Func{System.Int32,`0})
+- uid: SpiceSharp.IntegrationMethods.NodeHistory`1.#ctor(System.Int32,System.Func{System.Int32,`0})
   name: NodeHistory(Int32, Func<Int32, T>)
-  href: api/SpiceSharp.IntegrationMethods.NodeHistory-1.html#SpiceSharp_IntegrationMethods_NodeHistory_1__ctor_System_Int32_Func_System_Int32__0__
-  commentId: M:SpiceSharp.IntegrationMethods.NodeHistory`1.#ctor(System.Int32,Func{System.Int32,`0})
+  href: api/SpiceSharp.IntegrationMethods.NodeHistory-1.html#SpiceSharp_IntegrationMethods_NodeHistory_1__ctor_System_Int32_System_Func_System_Int32__0__
+  commentId: M:SpiceSharp.IntegrationMethods.NodeHistory`1.#ctor(System.Int32,System.Func{System.Int32,`0})
   name.vb: NodeHistory(Int32, Func(Of Int32, T))
-  fullName: SpiceSharp.IntegrationMethods.NodeHistory<T>.NodeHistory(System.Int32, Func<System.Int32, T>)
-  fullName.vb: SpiceSharp.IntegrationMethods.NodeHistory(Of T).NodeHistory(System.Int32, Func(Of System.Int32, T))
+  fullName: SpiceSharp.IntegrationMethods.NodeHistory<T>.NodeHistory(System.Int32, System.Func<System.Int32, T>)
+  fullName.vb: SpiceSharp.IntegrationMethods.NodeHistory(Of T).NodeHistory(System.Int32, System.Func(Of System.Int32, T))
   nameWithType: NodeHistory<T>.NodeHistory(Int32, Func<Int32, T>)
   nameWithType.vb: NodeHistory(Of T).NodeHistory(Int32, Func(Of Int32, T))
 - uid: SpiceSharp.IntegrationMethods.NodeHistory`1.#ctor*
@@ -27058,13 +27124,13 @@ references:
   fullName.vb: SpiceSharp.IntegrationMethods.NodeHistory(Of T).Clear(T)
   nameWithType: NodeHistory<T>.Clear(T)
   nameWithType.vb: NodeHistory(Of T).Clear(T)
-- uid: SpiceSharp.IntegrationMethods.NodeHistory`1.Clear(Func{System.Int32,`0})
+- uid: SpiceSharp.IntegrationMethods.NodeHistory`1.Clear(System.Func{System.Int32,`0})
   name: Clear(Func<Int32, T>)
-  href: api/SpiceSharp.IntegrationMethods.NodeHistory-1.html#SpiceSharp_IntegrationMethods_NodeHistory_1_Clear_Func_System_Int32__0__
-  commentId: M:SpiceSharp.IntegrationMethods.NodeHistory`1.Clear(Func{System.Int32,`0})
+  href: api/SpiceSharp.IntegrationMethods.NodeHistory-1.html#SpiceSharp_IntegrationMethods_NodeHistory_1_Clear_System_Func_System_Int32__0__
+  commentId: M:SpiceSharp.IntegrationMethods.NodeHistory`1.Clear(System.Func{System.Int32,`0})
   name.vb: Clear(Func(Of Int32, T))
-  fullName: SpiceSharp.IntegrationMethods.NodeHistory<T>.Clear(Func<System.Int32, T>)
-  fullName.vb: SpiceSharp.IntegrationMethods.NodeHistory(Of T).Clear(Func(Of System.Int32, T))
+  fullName: SpiceSharp.IntegrationMethods.NodeHistory<T>.Clear(System.Func<System.Int32, T>)
+  fullName.vb: SpiceSharp.IntegrationMethods.NodeHistory(Of T).Clear(System.Func(Of System.Int32, T))
   nameWithType: NodeHistory<T>.Clear(Func<Int32, T>)
   nameWithType.vb: NodeHistory(Of T).Clear(Func(Of Int32, T))
 - uid: SpiceSharp.IntegrationMethods.NodeHistory`1.Clear*
@@ -27627,13 +27693,13 @@ references:
   commentId: Overload:SpiceSharp.IntegrationMethods.Trapezoidal.ComputeCoefficients
   fullName: SpiceSharp.IntegrationMethods.Trapezoidal.ComputeCoefficients
   nameWithType: Trapezoidal.ComputeCoefficients
-- uid: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
+- uid: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(System.Collections.ObjectModel.Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
   name: Initialize(Collection<BaseTransientBehavior>)
-  href: api/SpiceSharp.IntegrationMethods.Trapezoidal.html#SpiceSharp_IntegrationMethods_Trapezoidal_Initialize_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__
-  commentId: M:SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
+  href: api/SpiceSharp.IntegrationMethods.Trapezoidal.html#SpiceSharp_IntegrationMethods_Trapezoidal_Initialize_System_Collections_ObjectModel_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__
+  commentId: M:SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(System.Collections.ObjectModel.Collection{SpiceSharp.Behaviors.BaseTransientBehavior})
   name.vb: Initialize(Collection(Of BaseTransientBehavior))
-  fullName: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(Collection<SpiceSharp.Behaviors.BaseTransientBehavior>)
-  fullName.vb: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(Collection(Of SpiceSharp.Behaviors.BaseTransientBehavior))
+  fullName: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(System.Collections.ObjectModel.Collection<SpiceSharp.Behaviors.BaseTransientBehavior>)
+  fullName.vb: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize(System.Collections.ObjectModel.Collection(Of SpiceSharp.Behaviors.BaseTransientBehavior))
   nameWithType: Trapezoidal.Initialize(Collection<BaseTransientBehavior>)
   nameWithType.vb: Trapezoidal.Initialize(Collection(Of BaseTransientBehavior))
 - uid: SpiceSharp.IntegrationMethods.Trapezoidal.Initialize*
@@ -28410,11 +28476,11 @@ references:
   commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.EntityName
   fullName: SpiceSharp.Simulations.ComplexPropertyExport.EntityName
   nameWithType: ComplexPropertyExport.EntityName
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object, System.EventArgs)
   nameWithType: ComplexPropertyExport.Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.Initialize*
   name: Initialize
@@ -28620,11 +28686,11 @@ references:
   commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.Decibels
   fullName: SpiceSharp.Simulations.ComplexVoltageExport.Decibels
   nameWithType: ComplexVoltageExport.Decibels
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object, System.EventArgs)
   nameWithType: ComplexVoltageExport.Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.ComplexVoltageExport.Initialize*
   name: Initialize
@@ -28680,21 +28746,21 @@ references:
   commentId: M:SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier)
   fullName: SpiceSharp.Simulations.DC.DC(SpiceSharp.Identifier)
   nameWithType: DC.DC(Identifier)
-- uid: SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier,IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
-  name: DC(Identifier, IEnumerable<SweepConfiguration>)
-  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC__ctor_SpiceSharp_Identifier_IEnumerable_SpiceSharp_Simulations_SweepConfiguration__
-  commentId: M:SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier,IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
-  name.vb: DC(Identifier, IEnumerable(Of SweepConfiguration))
-  fullName: SpiceSharp.Simulations.DC.DC(SpiceSharp.Identifier, IEnumerable<SpiceSharp.Simulations.SweepConfiguration>)
-  fullName.vb: SpiceSharp.Simulations.DC.DC(SpiceSharp.Identifier, IEnumerable(Of SpiceSharp.Simulations.SweepConfiguration))
-  nameWithType: DC.DC(Identifier, IEnumerable<SweepConfiguration>)
-  nameWithType.vb: DC.DC(Identifier, IEnumerable(Of SweepConfiguration))
 - uid: SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier,SpiceSharp.Identifier,System.Double,System.Double,System.Double)
   name: DC(Identifier, Identifier, Double, Double, Double)
   href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC__ctor_SpiceSharp_Identifier_SpiceSharp_Identifier_System_Double_System_Double_System_Double_
   commentId: M:SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier,SpiceSharp.Identifier,System.Double,System.Double,System.Double)
   fullName: SpiceSharp.Simulations.DC.DC(SpiceSharp.Identifier, SpiceSharp.Identifier, System.Double, System.Double, System.Double)
   nameWithType: DC.DC(Identifier, Identifier, Double, Double, Double)
+- uid: SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier,System.Collections.Generic.IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
+  name: DC(Identifier, IEnumerable<SweepConfiguration>)
+  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC__ctor_SpiceSharp_Identifier_System_Collections_Generic_IEnumerable_SpiceSharp_Simulations_SweepConfiguration__
+  commentId: M:SpiceSharp.Simulations.DC.#ctor(SpiceSharp.Identifier,System.Collections.Generic.IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
+  name.vb: DC(Identifier, IEnumerable(Of SweepConfiguration))
+  fullName: SpiceSharp.Simulations.DC.DC(SpiceSharp.Identifier, System.Collections.Generic.IEnumerable<SpiceSharp.Simulations.SweepConfiguration>)
+  fullName.vb: SpiceSharp.Simulations.DC.DC(SpiceSharp.Identifier, System.Collections.Generic.IEnumerable(Of SpiceSharp.Simulations.SweepConfiguration))
+  nameWithType: DC.DC(Identifier, IEnumerable<SweepConfiguration>)
+  nameWithType.vb: DC.DC(Identifier, IEnumerable(Of SweepConfiguration))
 - uid: SpiceSharp.Simulations.DC.#ctor*
   name: DC
   href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC__ctor_
@@ -28940,12 +29006,12 @@ references:
   fullName.vb: SpiceSharp.Simulations.Export(Of T).Extractor
   nameWithType: Export<T>.Extractor
   nameWithType.vb: Export(Of T).Extractor
-- uid: SpiceSharp.Simulations.Export`1.Finalize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.Export`1.Finalize(System.Object,System.EventArgs)
   name: Finalize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Finalize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Export`1.Finalize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.Export<T>.Finalize(System.Object, EventArgs)
-  fullName.vb: SpiceSharp.Simulations.Export(Of T).Finalize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Finalize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.Export`1.Finalize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.Export<T>.Finalize(System.Object, System.EventArgs)
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).Finalize(System.Object, System.EventArgs)
   nameWithType: Export<T>.Finalize(Object, EventArgs)
   nameWithType.vb: Export(Of T).Finalize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.Export`1.Finalize*
@@ -28956,12 +29022,12 @@ references:
   fullName.vb: SpiceSharp.Simulations.Export(Of T).Finalize
   nameWithType: Export<T>.Finalize
   nameWithType.vb: Export(Of T).Finalize
-- uid: SpiceSharp.Simulations.Export`1.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.Export`1.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Export`1.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.Export<T>.Initialize(System.Object, EventArgs)
-  fullName.vb: SpiceSharp.Simulations.Export(Of T).Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.Export`1.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.Export<T>.Initialize(System.Object, System.EventArgs)
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).Initialize(System.Object, System.EventArgs)
   nameWithType: Export<T>.Initialize(Object, EventArgs)
   nameWithType.vb: Export(Of T).Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.Export`1.Initialize*
@@ -29305,13 +29371,13 @@ references:
   fullName.vb: SpiceSharp.Simulations.GenericExport(Of T)
   nameWithType: GenericExport<T>
   nameWithType.vb: GenericExport(Of T)
-- uid: SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.Simulation,Func{`0})
+- uid: SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.Simulation,System.Func{`0})
   name: GenericExport(Simulation, Func<T>)
-  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1__ctor_SpiceSharp_Simulations_Simulation_Func__0__
-  commentId: M:SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.Simulation,Func{`0})
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1__ctor_SpiceSharp_Simulations_Simulation_System_Func__0__
+  commentId: M:SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.Simulation,System.Func{`0})
   name.vb: GenericExport(Simulation, Func(Of T))
-  fullName: SpiceSharp.Simulations.GenericExport<T>.GenericExport(SpiceSharp.Simulations.Simulation, Func<T>)
-  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).GenericExport(SpiceSharp.Simulations.Simulation, Func(Of T))
+  fullName: SpiceSharp.Simulations.GenericExport<T>.GenericExport(SpiceSharp.Simulations.Simulation, System.Func<T>)
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).GenericExport(SpiceSharp.Simulations.Simulation, System.Func(Of T))
   nameWithType: GenericExport<T>.GenericExport(Simulation, Func<T>)
   nameWithType.vb: GenericExport(Of T).GenericExport(Simulation, Func(Of T))
 - uid: SpiceSharp.Simulations.GenericExport`1.#ctor*
@@ -29322,12 +29388,12 @@ references:
   fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).GenericExport
   nameWithType: GenericExport<T>.GenericExport
   nameWithType.vb: GenericExport(Of T).GenericExport
-- uid: SpiceSharp.Simulations.GenericExport`1.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.GenericExport`1.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.GenericExport`1.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.GenericExport<T>.Initialize(System.Object, EventArgs)
-  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.GenericExport`1.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.GenericExport<T>.Initialize(System.Object, System.EventArgs)
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).Initialize(System.Object, System.EventArgs)
   nameWithType: GenericExport<T>.Initialize(Object, EventArgs)
   nameWithType.vb: GenericExport(Of T).Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.GenericExport`1.Initialize*
@@ -29356,11 +29422,11 @@ references:
   commentId: Overload:SpiceSharp.Simulations.InputNoiseDensityExport.#ctor
   fullName: SpiceSharp.Simulations.InputNoiseDensityExport.InputNoiseDensityExport
   nameWithType: InputNoiseDensityExport.InputNoiseDensityExport
-- uid: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object, System.EventArgs)
   nameWithType: InputNoiseDensityExport.Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize*
   name: Initialize
@@ -29461,13 +29527,13 @@ references:
   commentId: Overload:SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis
   fullName: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis
   nameWithType: ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis
-- uid: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis``1(SpiceSharp.Algebra.Solver{``0},Func{``0,System.Double})
+- uid: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis``1(SpiceSharp.Algebra.Solver{``0},System.Func{``0,System.Double})
   name: PreorderModifiedNodalAnalysis<T>(Solver<T>, Func<T, Double>)
-  href: api/SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.html#SpiceSharp_Simulations_ModifiedNodalAnalysisHelper_PreorderModifiedNodalAnalysis__1_SpiceSharp_Algebra_Solver___0__Func___0_System_Double__
-  commentId: M:SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis``1(SpiceSharp.Algebra.Solver{``0},Func{``0,System.Double})
+  href: api/SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.html#SpiceSharp_Simulations_ModifiedNodalAnalysisHelper_PreorderModifiedNodalAnalysis__1_SpiceSharp_Algebra_Solver___0__System_Func___0_System_Double__
+  commentId: M:SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis``1(SpiceSharp.Algebra.Solver{``0},System.Func{``0,System.Double})
   name.vb: PreorderModifiedNodalAnalysis(Of T)(Solver(Of T), Func(Of T, Double))
-  fullName: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis<T>(SpiceSharp.Algebra.Solver<T>, Func<T, System.Double>)
-  fullName.vb: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis(Of T)(SpiceSharp.Algebra.Solver(Of T), Func(Of T, System.Double))
+  fullName: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis<T>(SpiceSharp.Algebra.Solver<T>, System.Func<T, System.Double>)
+  fullName.vb: SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis(Of T)(SpiceSharp.Algebra.Solver(Of T), System.Func(Of T, System.Double))
   nameWithType: ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis<T>(Solver<T>, Func<T, Double>)
   nameWithType.vb: ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis(Of T)(Solver(Of T), Func(Of T, Double))
 - uid: SpiceSharp.Simulations.NestedSweeps
@@ -29476,13 +29542,13 @@ references:
   commentId: T:SpiceSharp.Simulations.NestedSweeps
   fullName: SpiceSharp.Simulations.NestedSweeps
   nameWithType: NestedSweeps
-- uid: SpiceSharp.Simulations.NestedSweeps.#ctor(IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
+- uid: SpiceSharp.Simulations.NestedSweeps.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
   name: NestedSweeps(IEnumerable<SweepConfiguration>)
-  href: api/SpiceSharp.Simulations.NestedSweeps.html#SpiceSharp_Simulations_NestedSweeps__ctor_IEnumerable_SpiceSharp_Simulations_SweepConfiguration__
-  commentId: M:SpiceSharp.Simulations.NestedSweeps.#ctor(IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
+  href: api/SpiceSharp.Simulations.NestedSweeps.html#SpiceSharp_Simulations_NestedSweeps__ctor_System_Collections_Generic_IEnumerable_SpiceSharp_Simulations_SweepConfiguration__
+  commentId: M:SpiceSharp.Simulations.NestedSweeps.#ctor(System.Collections.Generic.IEnumerable{SpiceSharp.Simulations.SweepConfiguration})
   name.vb: NestedSweeps(IEnumerable(Of SweepConfiguration))
-  fullName: SpiceSharp.Simulations.NestedSweeps.NestedSweeps(IEnumerable<SpiceSharp.Simulations.SweepConfiguration>)
-  fullName.vb: SpiceSharp.Simulations.NestedSweeps.NestedSweeps(IEnumerable(Of SpiceSharp.Simulations.SweepConfiguration))
+  fullName: SpiceSharp.Simulations.NestedSweeps.NestedSweeps(System.Collections.Generic.IEnumerable<SpiceSharp.Simulations.SweepConfiguration>)
+  fullName.vb: SpiceSharp.Simulations.NestedSweeps.NestedSweeps(System.Collections.Generic.IEnumerable(Of SpiceSharp.Simulations.SweepConfiguration))
   nameWithType: NestedSweeps.NestedSweeps(IEnumerable<SweepConfiguration>)
   nameWithType.vb: NestedSweeps.NestedSweeps(IEnumerable(Of SweepConfiguration))
 - uid: SpiceSharp.Simulations.NestedSweeps.#ctor*
@@ -29902,11 +29968,11 @@ references:
   commentId: Overload:SpiceSharp.Simulations.OutputNoiseDensityExport.#ctor
   fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.OutputNoiseDensityExport
   nameWithType: OutputNoiseDensityExport.OutputNoiseDensityExport
-- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object, System.EventArgs)
   nameWithType: OutputNoiseDensityExport.Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize*
   name: Initialize
@@ -29944,11 +30010,11 @@ references:
   commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.EntityName
   fullName: SpiceSharp.Simulations.RealPropertyExport.EntityName
   nameWithType: RealPropertyExport.EntityName
-- uid: SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object, System.EventArgs)
   nameWithType: RealPropertyExport.Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.RealPropertyExport.Initialize*
   name: Initialize
@@ -30304,11 +30370,11 @@ references:
   commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.#ctor
   fullName: SpiceSharp.Simulations.RealVoltageExport.RealVoltageExport
   nameWithType: RealVoltageExport.RealVoltageExport
-- uid: SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object,EventArgs)
+- uid: SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(Object, EventArgs)
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Initialize_System_Object_EventArgs_
-  commentId: M:SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object,EventArgs)
-  fullName: SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object, EventArgs)
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Initialize_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object,System.EventArgs)
+  fullName: SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object, System.EventArgs)
   nameWithType: RealVoltageExport.Initialize(Object, EventArgs)
 - uid: SpiceSharp.Simulations.RealVoltageExport.Initialize*
   name: Initialize
@@ -31515,12 +31581,12 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T)
   nameWithType: TypeDictionary<T>
   nameWithType.vb: TypeDictionary(Of T)
-- uid: SpiceSharp.TypeDictionary`1.#ctor(Type)
+- uid: SpiceSharp.TypeDictionary`1.#ctor(System.Type)
   name: TypeDictionary(Type)
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1__ctor_Type_
-  commentId: M:SpiceSharp.TypeDictionary`1.#ctor(Type)
-  fullName: SpiceSharp.TypeDictionary<T>.TypeDictionary(Type)
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).TypeDictionary(Type)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1__ctor_System_Type_
+  commentId: M:SpiceSharp.TypeDictionary`1.#ctor(System.Type)
+  fullName: SpiceSharp.TypeDictionary<T>.TypeDictionary(System.Type)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).TypeDictionary(System.Type)
   nameWithType: TypeDictionary<T>.TypeDictionary(Type)
   nameWithType.vb: TypeDictionary(Of T).TypeDictionary(Type)
 - uid: SpiceSharp.TypeDictionary`1.#ctor*
@@ -31531,21 +31597,21 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T).TypeDictionary
   nameWithType: TypeDictionary<T>.TypeDictionary
   nameWithType.vb: TypeDictionary(Of T).TypeDictionary
-- uid: SpiceSharp.TypeDictionary`1.Add(KeyValuePair{Type,`0})
+- uid: SpiceSharp.TypeDictionary`1.Add(System.Collections.Generic.KeyValuePair{System.Type,`0})
   name: Add(KeyValuePair<Type, T>)
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Add_KeyValuePair_Type__0__
-  commentId: M:SpiceSharp.TypeDictionary`1.Add(KeyValuePair{Type,`0})
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Add_System_Collections_Generic_KeyValuePair_System_Type__0__
+  commentId: M:SpiceSharp.TypeDictionary`1.Add(System.Collections.Generic.KeyValuePair{System.Type,`0})
   name.vb: Add(KeyValuePair(Of Type, T))
-  fullName: SpiceSharp.TypeDictionary<T>.Add(KeyValuePair<Type, T>)
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).Add(KeyValuePair(Of Type, T))
+  fullName: SpiceSharp.TypeDictionary<T>.Add(System.Collections.Generic.KeyValuePair<System.Type, T>)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).Add(System.Collections.Generic.KeyValuePair(Of System.Type, T))
   nameWithType: TypeDictionary<T>.Add(KeyValuePair<Type, T>)
   nameWithType.vb: TypeDictionary(Of T).Add(KeyValuePair(Of Type, T))
-- uid: SpiceSharp.TypeDictionary`1.Add(Type,`0)
+- uid: SpiceSharp.TypeDictionary`1.Add(System.Type,`0)
   name: Add(Type, T)
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Add_Type__0_
-  commentId: M:SpiceSharp.TypeDictionary`1.Add(Type,`0)
-  fullName: SpiceSharp.TypeDictionary<T>.Add(Type, T)
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).Add(Type, T)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Add_System_Type__0_
+  commentId: M:SpiceSharp.TypeDictionary`1.Add(System.Type,`0)
+  fullName: SpiceSharp.TypeDictionary<T>.Add(System.Type, T)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).Add(System.Type, T)
   nameWithType: TypeDictionary<T>.Add(Type, T)
   nameWithType.vb: TypeDictionary(Of T).Add(Type, T)
 - uid: SpiceSharp.TypeDictionary`1.Add*
@@ -31588,12 +31654,12 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T).Clear
   nameWithType: TypeDictionary<T>.Clear
   nameWithType.vb: TypeDictionary(Of T).Clear
-- uid: SpiceSharp.TypeDictionary`1.ContainsKey(Type)
+- uid: SpiceSharp.TypeDictionary`1.ContainsKey(System.Type)
   name: ContainsKey(Type)
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_ContainsKey_Type_
-  commentId: M:SpiceSharp.TypeDictionary`1.ContainsKey(Type)
-  fullName: SpiceSharp.TypeDictionary<T>.ContainsKey(Type)
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).ContainsKey(Type)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_ContainsKey_System_Type_
+  commentId: M:SpiceSharp.TypeDictionary`1.ContainsKey(System.Type)
+  fullName: SpiceSharp.TypeDictionary<T>.ContainsKey(System.Type)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).ContainsKey(System.Type)
   nameWithType: TypeDictionary<T>.ContainsKey(Type)
   nameWithType.vb: TypeDictionary(Of T).ContainsKey(Type)
 - uid: SpiceSharp.TypeDictionary`1.ContainsKey*
@@ -31685,13 +31751,13 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T).IsReadOnly
   nameWithType: TypeDictionary<T>.IsReadOnly
   nameWithType.vb: TypeDictionary(Of T).IsReadOnly
-- uid: SpiceSharp.TypeDictionary`1.Item(Type)
+- uid: SpiceSharp.TypeDictionary`1.Item(System.Type)
   name: Item[Type]
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Item_Type_
-  commentId: P:SpiceSharp.TypeDictionary`1.Item(Type)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Item_System_Type_
+  commentId: P:SpiceSharp.TypeDictionary`1.Item(System.Type)
   name.vb: Item(Type)
-  fullName: SpiceSharp.TypeDictionary<T>.Item[Type]
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).Item(Type)
+  fullName: SpiceSharp.TypeDictionary<T>.Item[System.Type]
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).Item(System.Type)
   nameWithType: TypeDictionary<T>.Item[Type]
   nameWithType.vb: TypeDictionary(Of T).Item(Type)
 - uid: SpiceSharp.TypeDictionary`1.Item*
@@ -31718,12 +31784,12 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T).Keys
   nameWithType: TypeDictionary<T>.Keys
   nameWithType.vb: TypeDictionary(Of T).Keys
-- uid: SpiceSharp.TypeDictionary`1.Remove(Type)
+- uid: SpiceSharp.TypeDictionary`1.Remove(System.Type)
   name: Remove(Type)
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Remove_Type_
-  commentId: M:SpiceSharp.TypeDictionary`1.Remove(Type)
-  fullName: SpiceSharp.TypeDictionary<T>.Remove(Type)
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).Remove(Type)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_Remove_System_Type_
+  commentId: M:SpiceSharp.TypeDictionary`1.Remove(System.Type)
+  fullName: SpiceSharp.TypeDictionary<T>.Remove(System.Type)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).Remove(System.Type)
   nameWithType: TypeDictionary<T>.Remove(Type)
   nameWithType.vb: TypeDictionary(Of T).Remove(Type)
 - uid: SpiceSharp.TypeDictionary`1.Remove*
@@ -31734,6 +31800,78 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T).Remove
   nameWithType: TypeDictionary<T>.Remove
   nameWithType.vb: TypeDictionary(Of T).Remove
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Contains(System.Collections.Generic.KeyValuePair{System.Type,`0})
+  name: ICollection<KeyValuePair<Type, T>>.Contains(KeyValuePair<Type, T>)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Contains_System_Collections_Generic_KeyValuePair_System_Type__0__
+  commentId: M:SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Contains(System.Collections.Generic.KeyValuePair{System.Type,`0})
+  name.vb: System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Contains(KeyValuePair(Of Type, T))
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type, T>>.Contains(System.Collections.Generic.KeyValuePair<System.Type, T>)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Contains(System.Collections.Generic.KeyValuePair(Of System.Type, T))
+  nameWithType: TypeDictionary<T>.ICollection<KeyValuePair<Type, T>>.Contains(KeyValuePair<Type, T>)
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Contains(KeyValuePair(Of Type, T))
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Contains*
+  name: ICollection<KeyValuePair<Type, T>>.Contains
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Contains_
+  commentId: Overload:SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Contains
+  name.vb: System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Contains
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type, T>>.Contains
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Contains
+  nameWithType: TypeDictionary<T>.ICollection<KeyValuePair<Type, T>>.Contains
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Contains
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#CopyTo(System.Collections.Generic.KeyValuePair{System.Type,`0}[],System.Int32)
+  name: ICollection<KeyValuePair<Type, T>>.CopyTo(KeyValuePair<Type, T>[], Int32)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___CopyTo_System_Collections_Generic_KeyValuePair_System_Type__0____System_Int32_
+  commentId: M:SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#CopyTo(System.Collections.Generic.KeyValuePair{System.Type,`0}[],System.Int32)
+  name.vb: System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.CopyTo(KeyValuePair(Of Type, T)(), Int32)
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type, T>>.CopyTo(System.Collections.Generic.KeyValuePair<System.Type, T>[], System.Int32)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.CopyTo(System.Collections.Generic.KeyValuePair(Of System.Type, T)(), System.Int32)
+  nameWithType: TypeDictionary<T>.ICollection<KeyValuePair<Type, T>>.CopyTo(KeyValuePair<Type, T>[], Int32)
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.CopyTo(KeyValuePair(Of Type, T)(), Int32)
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#CopyTo*
+  name: ICollection<KeyValuePair<Type, T>>.CopyTo
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___CopyTo_
+  commentId: Overload:SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#CopyTo
+  name.vb: System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.CopyTo
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type, T>>.CopyTo
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.CopyTo
+  nameWithType: TypeDictionary<T>.ICollection<KeyValuePair<Type, T>>.CopyTo
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.CopyTo
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Remove(System.Collections.Generic.KeyValuePair{System.Type,`0})
+  name: ICollection<KeyValuePair<Type, T>>.Remove(KeyValuePair<Type, T>)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Remove_System_Collections_Generic_KeyValuePair_System_Type__0__
+  commentId: M:SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Remove(System.Collections.Generic.KeyValuePair{System.Type,`0})
+  name.vb: System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Remove(KeyValuePair(Of Type, T))
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type, T>>.Remove(System.Collections.Generic.KeyValuePair<System.Type, T>)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Remove(System.Collections.Generic.KeyValuePair(Of System.Type, T))
+  nameWithType: TypeDictionary<T>.ICollection<KeyValuePair<Type, T>>.Remove(KeyValuePair<Type, T>)
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Remove(KeyValuePair(Of Type, T))
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Remove*
+  name: ICollection<KeyValuePair<Type, T>>.Remove
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Remove_
+  commentId: Overload:SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Remove
+  name.vb: System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Remove
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type, T>>.Remove
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Remove
+  nameWithType: TypeDictionary<T>.ICollection<KeyValuePair<Type, T>>.Remove
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<System.Type,T>>.Remove
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#IEnumerable#GetEnumerator
+  name: IEnumerable.GetEnumerator()
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_IEnumerable_GetEnumerator
+  commentId: M:SpiceSharp.TypeDictionary`1.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator()
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.IEnumerable.GetEnumerator()
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: TypeDictionary<T>.IEnumerable.GetEnumerator()
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.IEnumerable.GetEnumerator()
+- uid: SpiceSharp.TypeDictionary`1.System#Collections#IEnumerable#GetEnumerator*
+  name: IEnumerable.GetEnumerator
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_System_Collections_IEnumerable_GetEnumerator_
+  commentId: Overload:SpiceSharp.TypeDictionary`1.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator
+  fullName: SpiceSharp.TypeDictionary<T>.System.Collections.IEnumerable.GetEnumerator
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).System.Collections.IEnumerable.GetEnumerator
+  nameWithType: TypeDictionary<T>.IEnumerable.GetEnumerator
+  nameWithType.vb: TypeDictionary(Of T).System.Collections.IEnumerable.GetEnumerator
 - uid: SpiceSharp.TypeDictionary`1.TryGet*
   name: TryGet
   href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_TryGet_
@@ -31751,13 +31889,13 @@ references:
   fullName.vb: SpiceSharp.TypeDictionary(Of T).TryGet(Of TResult)(ByRef TResult)
   nameWithType: TypeDictionary<T>.TryGet<TResult>(out TResult)
   nameWithType.vb: TypeDictionary(Of T).TryGet(Of TResult)(ByRef TResult)
-- uid: SpiceSharp.TypeDictionary`1.TryGetValue(Type,`0@)
+- uid: SpiceSharp.TypeDictionary`1.TryGetValue(System.Type,`0@)
   name: TryGetValue(Type, out T)
-  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_TryGetValue_Type__0__
-  commentId: M:SpiceSharp.TypeDictionary`1.TryGetValue(Type,`0@)
+  href: api/SpiceSharp.TypeDictionary-1.html#SpiceSharp_TypeDictionary_1_TryGetValue_System_Type__0__
+  commentId: M:SpiceSharp.TypeDictionary`1.TryGetValue(System.Type,`0@)
   name.vb: TryGetValue(Type, ByRef T)
-  fullName: SpiceSharp.TypeDictionary<T>.TryGetValue(Type, out T)
-  fullName.vb: SpiceSharp.TypeDictionary(Of T).TryGetValue(Type, ByRef T)
+  fullName: SpiceSharp.TypeDictionary<T>.TryGetValue(System.Type, out T)
+  fullName.vb: SpiceSharp.TypeDictionary(Of T).TryGetValue(System.Type, ByRef T)
   nameWithType: TypeDictionary<T>.TryGetValue(Type, out T)
   nameWithType.vb: TypeDictionary(Of T).TryGetValue(Type, ByRef T)
 - uid: SpiceSharp.TypeDictionary`1.TryGetValue*

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1046,11 +1057,42 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
       <div class="level2"><a class="xref" href="SpiceSharp.ParameterSetDictionary.html">ParameterSetDictionary</a></div>
       <div class="level2"><a class="xref" href="SpiceSharp.Simulations.StateDictionary.html">StateDictionary</a></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.Type</span>, T&gt;</div>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.html">SpiceSharp</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_TypeDictionary_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class TypeDictionary&lt;T&gt; : IDictionary&lt;Type, T&gt; where T : class</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class TypeDictionary&lt;T&gt; : IDictionary&lt;Type, T&gt;, ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable where T : class</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1072,13 +1114,13 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1__ctor_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.%23ctor(Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1__ctor_System_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.%23ctor(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L69">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1__ctor_" data-uid="SpiceSharp.TypeDictionary`1.#ctor*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1__ctor_Type_" data-uid="SpiceSharp.TypeDictionary`1.#ctor(Type)">TypeDictionary(Type)</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1__ctor_System_Type_" data-uid="SpiceSharp.TypeDictionary`1.#ctor(System.Type)">TypeDictionary(Type)</h4>
   <div class="markdown level1 summary"><p>Constructor</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1097,7 +1139,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">baseClass</span></td>
         <td><p>The base class that does not need to be taken into account</p>
 </td>
@@ -1132,7 +1174,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -1194,7 +1236,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Dictionary</span>&lt;<span class="xref">Type</span>, T&gt;</td>
+        <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.Type</span>, T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1232,13 +1274,13 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Item_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Item(Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Item_System_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Item(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L50">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1_Item_" data-uid="SpiceSharp.TypeDictionary`1.Item*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1_Item_Type_" data-uid="SpiceSharp.TypeDictionary`1.Item(Type)">Item[Type]</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1_Item_System_Type_" data-uid="SpiceSharp.TypeDictionary`1.Item(System.Type)">Item[Type]</h4>
   <div class="markdown level1 summary"><p>Gets or sets an element</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1257,7 +1299,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">key</span></td>
         <td><p>Key</p>
 </td>
@@ -1305,7 +1347,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">ICollection</span>&lt;<span class="xref">Type</span>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.Type</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1336,7 +1378,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">ICollection</span>&lt;T&gt;</td>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1345,13 +1387,13 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Add_KeyValuePair_Type__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Add(KeyValuePair%7BType%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Add_System_Collections_Generic_KeyValuePair_System_Type__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Add(System.Collections.Generic.KeyValuePair%7BSystem.Type%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L146">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1_Add_" data-uid="SpiceSharp.TypeDictionary`1.Add*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1_Add_KeyValuePair_Type__0__" data-uid="SpiceSharp.TypeDictionary`1.Add(KeyValuePair{Type,`0})">Add(KeyValuePair&lt;Type, T&gt;)</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1_Add_System_Collections_Generic_KeyValuePair_System_Type__0__" data-uid="SpiceSharp.TypeDictionary`1.Add(System.Collections.Generic.KeyValuePair{System.Type,`0})">Add(KeyValuePair&lt;Type, T&gt;)</h4>
   <div class="markdown level1 summary"><p>Add a key-value pair</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1370,7 +1412,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">KeyValuePair</span>&lt;<span class="xref">Type</span>, T&gt;</td>
+        <td><span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;</td>
         <td><span class="parametername">item</span></td>
         <td></td>
       </tr>
@@ -1378,13 +1420,13 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Add_Type__0_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Add(Type%2C%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Add_System_Type__0_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Add(System.Type%2C%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L80">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1_Add_" data-uid="SpiceSharp.TypeDictionary`1.Add*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1_Add_Type__0_" data-uid="SpiceSharp.TypeDictionary`1.Add(Type,`0)">Add(Type, T)</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1_Add_System_Type__0_" data-uid="SpiceSharp.TypeDictionary`1.Add(System.Type,`0)">Add(Type, T)</h4>
   <div class="markdown level1 summary"><p>Add a value</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1403,7 +1445,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">key</span></td>
         <td><p>Key type</p>
 </td>
@@ -1434,13 +1476,13 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_ContainsKey_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.ContainsKey(Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_ContainsKey_System_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.ContainsKey(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L125">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1_ContainsKey_" data-uid="SpiceSharp.TypeDictionary`1.ContainsKey*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1_ContainsKey_Type_" data-uid="SpiceSharp.TypeDictionary`1.ContainsKey(Type)">ContainsKey(Type)</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1_ContainsKey_System_Type_" data-uid="SpiceSharp.TypeDictionary`1.ContainsKey(System.Type)">ContainsKey(Type)</h4>
   <div class="markdown level1 summary"><p>Contains key</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1459,7 +1501,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">key</span></td>
         <td><p>Key</p>
 </td>
@@ -1554,20 +1596,20 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">IEnumerator</span>&lt;<span class="xref">KeyValuePair</span>&lt;<span class="xref">Type</span>, T&gt;&gt;</td>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Remove_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Remove(Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_Remove_System_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.Remove(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L132">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1_Remove_" data-uid="SpiceSharp.TypeDictionary`1.Remove*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1_Remove_Type_" data-uid="SpiceSharp.TypeDictionary`1.Remove(Type)">Remove(Type)</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1_Remove_System_Type_" data-uid="SpiceSharp.TypeDictionary`1.Remove(System.Type)">Remove(Type)</h4>
   <div class="markdown level1 summary"><p>Remove a specific key</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1586,7 +1628,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">key</span></td>
         <td><p>Key</p>
 </td>
@@ -1676,13 +1718,13 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_TryGetValue_Type__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.TryGetValue(Type%2C%600%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_TryGetValue_System_Type__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.TryGetValue(System.Type%2C%600%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L140">View Source</a>
   </span>
   <a id="SpiceSharp_TypeDictionary_1_TryGetValue_" data-uid="SpiceSharp.TypeDictionary`1.TryGetValue*"></a>
-  <h4 id="SpiceSharp_TypeDictionary_1_TryGetValue_Type__0__" data-uid="SpiceSharp.TypeDictionary`1.TryGetValue(Type,`0@)">TryGetValue(Type, out T)</h4>
+  <h4 id="SpiceSharp_TypeDictionary_1_TryGetValue_System_Type__0__" data-uid="SpiceSharp.TypeDictionary`1.TryGetValue(System.Type,`0@)">TryGetValue(Type, out T)</h4>
   <div class="markdown level1 summary"><p>Try getting a value by key</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1701,7 +1743,7 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Type</span></td>
+        <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">key</span></td>
         <td><p>Key</p>
 </td>
@@ -1729,6 +1771,189 @@ It also trackes inheritance, so you can retrieve classes by their base class</p>
       </tr>
     </tbody>
   </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Contains_System_Collections_Generic_KeyValuePair_System_Type__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.System%23Collections%23Generic%23ICollection%7BSystem%23Collections%23Generic%23KeyValuePair%7BSystem%23Type%2CT%7D%7D%23Contains(System.Collections.Generic.KeyValuePair%7BSystem.Type%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L170">View Source</a>
+  </span>
+  <a id="SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Contains_" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Contains*"></a>
+  <h4 id="SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Contains_System_Collections_Generic_KeyValuePair_System_Type__0__" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Contains(System.Collections.Generic.KeyValuePair{System.Type,`0})">ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;.Contains(KeyValuePair&lt;Type, T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Check if the dictionary contains a key-value pair</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;.Contains(KeyValuePair&lt;Type, T&gt; item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;</td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___CopyTo_System_Collections_Generic_KeyValuePair_System_Type__0____System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.System%23Collections%23Generic%23ICollection%7BSystem%23Collections%23Generic%23KeyValuePair%7BSystem%23Type%2CT%7D%7D%23CopyTo(System.Collections.Generic.KeyValuePair%7BSystem.Type%2C%600%7D%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L177">View Source</a>
+  </span>
+  <a id="SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___CopyTo_" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#CopyTo*"></a>
+  <h4 id="SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___CopyTo_System_Collections_Generic_KeyValuePair_System_Type__0____System_Int32_" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#CopyTo(System.Collections.Generic.KeyValuePair{System.Type,`0}[],System.Int32)">ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;.CopyTo(KeyValuePair&lt;Type, T&gt;[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Copy the contents to an array</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;.CopyTo(KeyValuePair&lt;Type, T&gt;[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;[]</td>
+        <td><span class="parametername">array</span></td>
+        <td><p>Array</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td><p>Array index</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Remove_System_Collections_Generic_KeyValuePair_System_Type__0__.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.System%23Collections%23Generic%23ICollection%7BSystem%23Collections%23Generic%23KeyValuePair%7BSystem%23Type%2CT%7D%7D%23Remove(System.Collections.Generic.KeyValuePair%7BSystem.Type%2C%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L184">View Source</a>
+  </span>
+  <a id="SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Remove_" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Remove*"></a>
+  <h4 id="SpiceSharp_TypeDictionary_1_System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_System_Type_T___Remove_System_Collections_Generic_KeyValuePair_System_Type__0__" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{System#Type,T}}#Remove(System.Collections.Generic.KeyValuePair{System.Type,`0})">ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;.Remove(KeyValuePair&lt;Type, T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Remove a key-value pair</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;.Remove(KeyValuePair&lt;Type, T&gt; item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;</td>
+        <td><span class="parametername">item</span></td>
+        <td><p>Item</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_TypeDictionary_1_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20SpiceSharp.TypeDictionary%601.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/TypeDictionary.cs/#L163">View Source</a>
+  </span>
+  <a id="SpiceSharp_TypeDictionary_1_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="SpiceSharp_TypeDictionary_1_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.TypeDictionary`1.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Gets enumerator</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IDictionary&lt;TKey, TValue&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
 </article>
           </div>
           

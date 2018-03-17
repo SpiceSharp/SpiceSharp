@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1068,6 +1079,27 @@
     <div>
       <a class="xref" href="SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_System_Object_">ParameterSet.SetParameter(String, Object)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.html">SpiceSharp.Components.MosfetBehaviors.Level1</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
@@ -1090,7 +1122,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter BulkCapFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cj&quot;)]
+[ParameterInfo(&quot;Bottom junction cap per area&quot;)]
+public GivenParameter BulkCapFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1120,7 +1154,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter BulkJunctionBotGradingCoefficient { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;mj&quot;)]
+[ParameterInfo(&quot;Bottom grading coefficient&quot;)]
+public GivenParameter BulkJunctionBotGradingCoefficient { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1150,7 +1186,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter BulkJunctionPotential { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pb&quot;)]
+[ParameterInfo(&quot;Bulk junction potential&quot;)]
+public GivenParameter BulkJunctionPotential { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1180,7 +1218,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter BulkJunctionSideGradingCoefficient { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;mjsw&quot;)]
+[ParameterInfo(&quot;Side grading coefficient&quot;)]
+public GivenParameter BulkJunctionSideGradingCoefficient { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1210,7 +1250,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter CapBd { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cbd&quot;)]
+[ParameterInfo(&quot;B-D junction capacitance&quot;)]
+public GivenParameter CapBd { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1240,7 +1282,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter CapBs { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cbs&quot;)]
+[ParameterInfo(&quot;B-S junction capacitance&quot;)]
+public GivenParameter CapBs { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1270,7 +1314,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter DrainResistance { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;rd&quot;)]
+[ParameterInfo(&quot;Drain ohmic resistance&quot;)]
+public GivenParameter DrainResistance { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1300,7 +1346,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter ForwardCapDepletionCoefficient { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;fc&quot;)]
+[ParameterInfo(&quot;Forward bias jct. fit parm.&quot;)]
+public GivenParameter ForwardCapDepletionCoefficient { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1330,7 +1378,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Gamma { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gamma&quot;)]
+[ParameterInfo(&quot;Bulk threshold parameter&quot;)]
+public GivenParameter Gamma { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1360,7 +1410,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter GateBulkOverlapCapFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cgbo&quot;)]
+[ParameterInfo(&quot;Gate-bulk overlap cap.&quot;)]
+public GivenParameter GateBulkOverlapCapFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1390,7 +1442,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter GateDrainOverlapCapFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cgdo&quot;)]
+[ParameterInfo(&quot;Gate-drain overlap cap.&quot;)]
+public GivenParameter GateDrainOverlapCapFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1420,7 +1474,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter GateSourceOverlapCapFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cgso&quot;)]
+[ParameterInfo(&quot;Gate-source overlap cap.&quot;)]
+public GivenParameter GateSourceOverlapCapFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1450,7 +1506,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter GateType { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;tpg&quot;)]
+[ParameterInfo(&quot;Gate type&quot;)]
+public GivenParameter GateType { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1480,7 +1538,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter JunctionSatCur { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;is&quot;)]
+[ParameterInfo(&quot;Bulk junction sat. current&quot;)]
+public GivenParameter JunctionSatCur { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1510,7 +1570,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter JunctionSatCurDensity { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;js&quot;)]
+[ParameterInfo(&quot;Bulk jct. sat. current density&quot;)]
+public GivenParameter JunctionSatCurDensity { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1540,7 +1602,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Lambda { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;lambda&quot;)]
+[ParameterInfo(&quot;Channel length modulation&quot;)]
+public GivenParameter Lambda { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1570,7 +1634,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter LateralDiffusion { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ld&quot;)]
+[ParameterInfo(&quot;Lateral diffusion&quot;)]
+public GivenParameter LateralDiffusion { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1661,7 +1727,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double NominalTemperatureCelsius { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;tnom&quot;)]
+[ParameterInfo(&quot;Parameter measurement temperature&quot;)]
+public double NominalTemperatureCelsius { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1691,7 +1759,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter OxideThickness { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;tox&quot;)]
+[ParameterInfo(&quot;Oxide thickness&quot;)]
+public GivenParameter OxideThickness { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1721,7 +1791,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Phi { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;phi&quot;)]
+[ParameterInfo(&quot;Surface potential&quot;)]
+public GivenParameter Phi { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1751,7 +1823,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter SheetResistance { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;rsh&quot;)]
+[ParameterInfo(&quot;Sheet resistance&quot;)]
+public GivenParameter SheetResistance { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1781,7 +1855,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter SidewallCapFactor { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cjsw&quot;)]
+[ParameterInfo(&quot;Side junction cap per area&quot;)]
+public GivenParameter SidewallCapFactor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1811,7 +1887,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter SourceResistance { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;rs&quot;)]
+[ParameterInfo(&quot;Source ohmic resistance&quot;)]
+public GivenParameter SourceResistance { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1841,7 +1919,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter SubstrateDoping { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;nsub&quot;)]
+[ParameterInfo(&quot;Substrate doping&quot;)]
+public GivenParameter SubstrateDoping { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1871,7 +1951,10 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter SurfaceMobility { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;u0&quot;)]
+[ParameterName(&quot;uo&quot;)]
+[ParameterInfo(&quot;Surface mobility&quot;)]
+public GivenParameter SurfaceMobility { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1901,7 +1984,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter SurfaceStateDensity { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;nss&quot;)]
+[ParameterInfo(&quot;Surface state density&quot;)]
+public GivenParameter SurfaceStateDensity { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1931,7 +2016,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Transconductance { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;kp&quot;)]
+[ParameterInfo(&quot;Transconductance parameter&quot;)]
+public GivenParameter Transconductance { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1961,7 +2048,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string TypeName { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;type&quot;)]
+[ParameterInfo(&quot;N-channel or P-channel mosfet&quot;)]
+public string TypeName { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1991,7 +2080,10 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public GivenParameter Vt0 { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vto&quot;)]
+[ParameterName(&quot;vt0&quot;)]
+[ParameterInfo(&quot;Threshold voltage&quot;)]
+public GivenParameter Vt0 { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -2024,7 +2116,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetNmos(bool value)</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;nmos&quot;)]
+[ParameterInfo(&quot;N type mosfet model&quot;)]
+public void SetNmos(bool value)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -2056,7 +2150,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetPmos(bool value)</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pmos&quot;)]
+[ParameterInfo(&quot;P type mosfet model&quot;)]
+public void SetPmos(bool value)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">

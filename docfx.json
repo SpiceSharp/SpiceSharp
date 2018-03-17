@@ -3,34 +3,35 @@
     {
       "src": [
         {
-          "files": [ "*.csproj" ],
-          "src": ".",
-          "exclude": [ "**/obj/**", "**/bin/**" ]
+          "files": [ "**.csproj" ],
+          "src": "SpiceSharp",
+          "exclude": [ "obj/**", "bin/**" ]
         }
       ],
       "force": false,
-      "dest": "obj/api"
+      "dest": "SpiceSharp/obj/api"
     }
   ],
   "build": {
     "content": [
       {
         "files": [ "api/*.yml" ],
-        "src": "obj"
+        "src": "SpiceSharp/obj"
       },
       {
         "files": [ "*.md", "*.yml", "api/*.md", "articles/*.md", "articles/*.yml" ],
-        "exclude": [ "obj/**" ]
+        "exclude": [ "appveyor.yml", ".travis.yml", "docs/**", "SpiceSharp/**" ]
       }
     ],
     "resource": [
       {
         "files": [ "api/images/**", "articles/images/**" ],
-        "exclude": [ "obj/**" ]
+        "exclude": [ "docs/**" ]
       }
     ],
-    "dest": "../docs",
+    "dest": "docs",
     "maxParallelism": 4,
-    "template": [ "statictoc" ]
+    "template": [ "statictoc" ],
+	"force": true
   }
 }

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1090,12 +1101,39 @@
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Unsetup_SpiceSharp_Circuit_">Entity.Unsetup(Circuit)</a>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.html">SpiceSharp.Components</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_VoltageControlledVoltageSource_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class VoltageControlledVoltageSource : Component</code></pre>
+    <pre><code class="lang-csharp hljs">[Pin(0, &quot;V+&quot;)]
+[Pin(1, &quot;V-&quot;)]
+[Pin(2, &quot;VC+&quot;)]
+[Pin(3, &quot;VC-&quot;)]
+[VoltageDriver(0, 1)]
+[Connected(0, 1)]
+public class VoltageControlledVoltageSource : Component</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -1212,7 +1250,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const int VoltageControlledVoltageSourcePinCount = null</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pincount&quot;)]
+[ParameterInfo(&quot;Number of pins&quot;)]
+public const int VoltageControlledVoltageSourcePinCount = 4</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1244,7 +1284,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int ControlNegNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cont_n_node&quot;)]
+[ParameterInfo(&quot;Negative controlling node of the source&quot;)]
+public int ControlNegNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1274,7 +1316,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int ControlPosNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cont_p_node&quot;)]
+[ParameterInfo(&quot;Positive controlling node of the source&quot;)]
+public int ControlPosNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1304,7 +1348,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int NegNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;neg_node&quot;)]
+[ParameterInfo(&quot;Negative node of the source&quot;)]
+public int NegNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1335,7 +1381,9 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int PosNode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pos_node&quot;)]
+[ParameterInfo(&quot;Positive node of the source&quot;)]
+public int PosNode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">

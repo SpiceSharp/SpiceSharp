@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1043,6 +1054,10 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Algebra.Solver-1.html">Solver</a>&lt;<span class="xref">System.Double</span>&gt;</div>
     <div class="level3"><span class="xref">RealSolver</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IFormattable</span></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -1106,10 +1121,10 @@
       <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_FirstInReorderedRhs">SparseLinearSystem&lt;Double&gt;.FirstInReorderedRhs()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ExternalToInternal_Tuple_System_Int32_System_Int32__">SparseLinearSystem&lt;Double&gt;.ExternalToInternal(Tuple&lt;Int32, Int32&gt;)</a>
+      <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ExternalToInternal_System_Tuple_System_Int32_System_Int32__">SparseLinearSystem&lt;Double&gt;.ExternalToInternal(Tuple&lt;Int32, Int32&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_InternalToExternal_Tuple_System_Int32_System_Int32__">SparseLinearSystem&lt;Double&gt;.InternalToExternal(Tuple&lt;Int32, Int32&gt;)</a>
+      <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_InternalToExternal_System_Tuple_System_Int32_System_Int32__">SparseLinearSystem&lt;Double&gt;.InternalToExternal(Tuple&lt;Int32, Int32&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_SwapRows_System_Int32_System_Int32_">SparseLinearSystem&lt;Double&gt;.SwapRows(Int32, Int32)</a>
@@ -1121,14 +1136,32 @@
       <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ToString">SparseLinearSystem&lt;Double&gt;.ToString()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ToString_System_String_IFormatProvider_">SparseLinearSystem&lt;Double&gt;.ToString(String, IFormatProvider)</a>
+      <a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html#SpiceSharp_Algebra_SparseLinearSystem_1_ToString_System_String_System_IFormatProvider_">SparseLinearSystem&lt;Double&gt;.ToString(String, IFormatProvider)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Algebra.html">SpiceSharp.Algebra</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_RealSolver_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class RealSolver : Solver&lt;double&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class RealSolver : Solver&lt;double&gt;, IFormattable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -1384,7 +1417,14 @@ Assumes that pivoting has been done</p>
   </div>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">SpiceSharp.Algebra.SparseLinearSystem&lt;System.Double&gt;.UnfixEquations()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IFormattable</span>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.html#SpiceSharp_Simulations_ModifiedNodalAnalysisHelper_PreorderModifiedNodalAnalysis__1_SpiceSharp_Algebra_Solver___0__System_Func___0_System_Double__">ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis&lt;T&gt;(Solver&lt;T&gt;, Func&lt;T, Double&gt;)</a>
+  </div>
   <div>
       <a class="xref" href="SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.html#SpiceSharp_Simulations_ModifiedNodalAnalysisHelper_ApplyDiagonalGmin_SpiceSharp_Algebra_SparseLinearSystem_System_Double__System_Double_">ModifiedNodalAnalysisHelper.ApplyDiagonalGmin(SparseLinearSystem&lt;Double&gt;, Double)</a>
   </div>

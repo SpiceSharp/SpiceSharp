@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="">
+    <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -46,6 +46,17 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -1042,11 +1053,35 @@
     <div class="level1"><span class="xref">IntegrationMethod</span></div>
       <div class="level2"><a class="xref" href="SpiceSharp.IntegrationMethods.Trapezoidal.html">Trapezoidal</a></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.IntegrationMethods.html">SpiceSharp.IntegrationMethods</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_IntegrationMethods_IntegrationMethod_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class IntegrationMethod : object</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class IntegrationMethod</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -1677,13 +1712,13 @@ dependent on the timestep</p>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(Collection%7BSpiceSharp.Behaviors.BaseTransientBehavior%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/development/apiSpec/new?filename=SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_System_Collections_ObjectModel_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__.md&amp;value=---%0Auid%3A%20SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(System.Collections.ObjectModel.Collection%7BSpiceSharp.Behaviors.BaseTransientBehavior%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/SpiceSharp/Simulations/IntegrationMethods/IntegrationMethod.cs/#L176">View Source</a>
   </span>
   <a id="SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize*"></a>
-  <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(Collection{SpiceSharp.Behaviors.BaseTransientBehavior})">Initialize(Collection&lt;BaseTransientBehavior&gt;)</h4>
+  <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_System_Collections_ObjectModel_Collection_SpiceSharp_Behaviors_BaseTransientBehavior__" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize(System.Collections.ObjectModel.Collection{SpiceSharp.Behaviors.BaseTransientBehavior})">Initialize(Collection&lt;BaseTransientBehavior&gt;)</h4>
   <div class="markdown level1 summary"><p>Initialize/reset the integration method</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1702,7 +1737,7 @@ dependent on the timestep</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Collection</span>&lt;<a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html">BaseTransientBehavior</a>&gt;</td>
+        <td><span class="xref">System.Collections.ObjectModel.Collection</span>&lt;<a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html">BaseTransientBehavior</a>&gt;</td>
         <td><span class="parametername">behaviors</span></td>
         <td><p>Truncation behaviors</p>
 </td>
@@ -2132,7 +2167,7 @@ Will cut the order and cut the timestep</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="SpiceSharp.IntegrationMethods.TruncationEventArgs.html">TruncationEventArgs</a>&gt;</td>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.IntegrationMethods.TruncationEventArgs.html">TruncationEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
