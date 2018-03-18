@@ -27948,6 +27948,12 @@ references:
   commentId: M:SpiceSharp.ParameterSet.SetParameter(System.Double)
   fullName: SpiceSharp.ParameterSet.SetParameter(System.Double)
   nameWithType: ParameterSet.SetParameter(Double)
+- uid: SpiceSharp.ParameterSet.SetParameter(System.String)
+  name: SetParameter(String)
+  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_
+  commentId: M:SpiceSharp.ParameterSet.SetParameter(System.String)
+  fullName: SpiceSharp.ParameterSet.SetParameter(System.String)
+  nameWithType: ParameterSet.SetParameter(String)
 - uid: SpiceSharp.ParameterSet.SetParameter(System.String,System.Double)
   name: SetParameter(String, Double)
   href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_System_Double_
@@ -28038,6 +28044,12 @@ references:
   commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter(System.Double)
   fullName: SpiceSharp.ParameterSetDictionary.SetParameter(System.Double)
   nameWithType: ParameterSetDictionary.SetParameter(Double)
+- uid: SpiceSharp.ParameterSetDictionary.SetParameter(System.String)
+  name: SetParameter(String)
+  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_System_String_
+  commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter(System.String)
+  fullName: SpiceSharp.ParameterSetDictionary.SetParameter(System.String)
+  nameWithType: ParameterSetDictionary.SetParameter(String)
 - uid: SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Double)
   name: SetParameter(String, Double)
   href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Double_

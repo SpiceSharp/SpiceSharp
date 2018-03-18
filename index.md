@@ -1,4 +1,7 @@
 # Home
+
+<p align="center"><img src="api/images/logo_full.svg" alt="SpiceSharp" /></p>
+
 SpiceSharp is a circuit simulator originally based on Spice 3f5 by Berkeley University. This was also the ancestor for a lot of commercially available spice-based simulators (PSpice, HSpice, SmartSpice, etc.). An open source project to improve and maintain Spice was also started called ngSpice. Spice-based simulators still remain the industry standard for circuit simulation today. 
 
 These simulators have typically been continued in C++. In the case of ngSpice, many of the original bugs of Spice 3f5 still exist and it is not object-oriented.

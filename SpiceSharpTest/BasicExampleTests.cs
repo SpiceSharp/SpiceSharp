@@ -23,14 +23,14 @@ namespace SpiceSharpTest
 
             // <example01_simulate>
             // Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
-            DC dc = new DC("DC 1", "V1", -1.0, 1.0, 0.1);
+            DC dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Catch exported data
             dc.OnExportSimulationData += (sender, args) =>
             {
                 double input = args.GetVoltage("in");
                 double output = args.GetVoltage("out");
-                Console.WriteLine($@"{input:G3}V : {output:G3} V");
+                Console.WriteLine($@"{input:G3} V : {output:G3} V");
             };
             dc.Run(ckt);
             // </example01_simulate>
@@ -48,16 +48,17 @@ namespace SpiceSharpTest
 
             // <example01_simulate2>
             // Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
-            DC dc = new DC("DC 1", "V1", -1.0, 1.0, 0.1);
+            DC dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Create exports
             Export<double> inputExport = new RealVoltageExport(dc, "in");
             Export<double> outputExport = new RealVoltageExport(dc, "out");
+            Export<double> currentExport = new RealPropertyExport(dc, "V1", "i");
 
             // Catch exported data
             dc.OnExportSimulationData += (sender, args) =>
             {
-                Console.WriteLine($@"{inputExport.Value:G3}V : {outputExport.Value:G3} V");
+                Console.WriteLine($@"{inputExport.Value:G3}V : {outputExport.Value:G3} V, {currentExport.Value:G3} A");
             };
             dc.Run(ckt);
             // </example01_simulate2>

@@ -53,5 +53,21 @@ namespace SpiceSharpTest.Models
             };
             AnalyzeDC(dc, ckt, exports, references);
         }
+
+        [Test]
+        public void When_VSWBooleanParameter_Expect_DirectAccess()
+        {
+            // Create voltage source
+            CurrentSwitch s = new CurrentSwitch("SW 1");
+            var p = s.ParameterSets.Get<SpiceSharp.Components.CurrentSwitchBehaviors.BaseParameters>();
+
+            // Check on
+            s.ParameterSets.SetParameter("on");
+            Assert.AreEqual(true, p.ZeroState);
+
+            // Check off
+            s.ParameterSets.SetParameter("off");
+            Assert.AreEqual(false, p.ZeroState);
+        }
     }
 }

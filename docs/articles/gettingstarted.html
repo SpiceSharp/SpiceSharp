@@ -103,25 +103,54 @@
 <p>Let&#39;s start with a very simple circuit called a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
 <p align="center"><img src="images/example01.svg"></p>
 
-<p>Creating this circuit is done using the <code>Circuit</code>-class. This is a container of multiple entities, such as voltage sources and resistors. The <code>Circuit</code>-class is defined in the namespace <code>SpiceSharp</code>, while all default components are in the namespace <code>SpiceSharp.Components</code>.</p>
+<p>The output voltage of this circuit is 2/3 times the input voltage.</p>
+<p>Creating this circuit is done using the <a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a>-class. This is a container of multiple entities, such as voltage sources and resistors. The <a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a>-class is defined in the namespace <a class="xref" href="../api/SpiceSharp.html">SpiceSharp</a>, while all default components are in the namespace <a class="xref" href="../api/SpiceSharp.Components.html">SpiceSharp.Components</a>.</p>
 <pre><code class="lang-csharp" name="Circuit">// Build the circuit
 Circuit ckt = new Circuit(
     new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 1.0),
     new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e4),
     new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e4)
     );
-</code></pre><h2 id="running-a-dc-simulation">Running a DC simulation</h2>
-<p>A DC simulation will (by default) sweep a voltage or current source value. the result is a DC transfer curve in function of the swept parameter.</p>
-<p>We will sweep the input voltage source from -1V to 1V in steps of 100mV.</p>
+</code></pre><h2 id="running-a-dc-analysis">Running a DC analysis</h2>
+<p>A <a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a> simulation will (by default) sweep a voltage or current source value. the result is a DC transfer curve in function of the swept parameter.</p>
+<p>We will sweep the input voltage source from -1V to 1V in steps of 200mV.</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
-DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.1);
+DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
 
 // Catch exported data
 dc.OnExportSimulationData += (sender, args) =&gt;
 {
     double input = args.GetVoltage(&quot;in&quot;);
     double output = args.GetVoltage(&quot;out&quot;);
-    Console.WriteLine($@&quot;{input:G3}V : {output:G3} V&quot;);
+    Console.WriteLine($@&quot;{input:G3} V : {output:G3} V&quot;);
+};
+dc.Run(ckt);
+</code></pre><p>The output will yield as expected:</p>
+<pre><code>-1 V : -0.667 V
+-0.8 V : -0.533 V
+-0.6 V : -0.4 V
+-0.4 V : -0.267 V
+-0.2 V : -0.133 V
+0 V : 0 V
+0.2 V : 0.133 V
+0.4 V : 0.267 V
+0.6 V : 0.4 V
+0.8 V : 0.533 V
+1 V : 0.667 V
+</code></pre><h2 id="using-exports">Using exports</h2>
+<p>Using <a class="xref" href="../api/SpiceSharp.Simulations.Export-1.html">Exports</a> gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:</p>
+<pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
+DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
+
+// Create exports
+Export&lt;double&gt; inputExport = new RealVoltageExport(dc, &quot;in&quot;);
+Export&lt;double&gt; outputExport = new RealVoltageExport(dc, &quot;out&quot;);
+Export&lt;double&gt; currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
+
+// Catch exported data
+dc.OnExportSimulationData += (sender, args) =&gt;
+{
+    Console.WriteLine($@&quot;{inputExport.Value:G3}V : {outputExport.Value:G3} V, {currentExport.Value:G3} A&quot;);
 };
 dc.Run(ckt);
 </code></pre></article>
