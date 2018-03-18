@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001"),
-                new CurrentSource("I1", "in", "0", 0.0),
+                new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 1e3)

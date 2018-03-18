@@ -158,8 +158,10 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 value = _bp.DcValue * state.SourceFactor;
             }
 
-            _posPtr.Value += value;
-            _negPtr.Value -= value;
+            // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
+            // I solved it by inverting the current when loading the rhs vector
+            _posPtr.Value -= value;
+            _negPtr.Value += value;
             Current = value;
         }
     }

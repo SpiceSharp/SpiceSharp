@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
@@ -58,10 +59,48 @@ namespace SpiceSharpTest
             // Catch exported data
             dc.OnExportSimulationData += (sender, args) =>
             {
-                Console.WriteLine($@"{inputExport.Value:G3}V : {outputExport.Value:G3} V, {currentExport.Value:G3} A");
+                Console.WriteLine($@"{inputExport.Value:G3} V : {outputExport.Value:G3} V, {currentExport.Value:G3} A");
             };
             dc.Run(ckt);
             // </example01_simulate2>
+        }
+
+        [Test]
+        public void When_BJTIVCharacteristic_Expect_NoException()
+        {
+            // Make the bipolar junction transistor
+            var bjt = new BipolarJunctionTransistor("Q1");
+            bjt.Connect("c", "b", "0", "0");
+            var bjtmodel = new BipolarJunctionTransistorModel("example");
+            bjtmodel.SetParameter("bf", 150.0);
+            bjtmodel.SetParameter("is", 1.5e-14);
+            bjtmodel.SetParameter("vaf", 30);
+            bjt.SetModel(bjtmodel);
+
+            // Build the circuit
+            var ckt = new Circuit(
+                new CurrentSource("I1", "0", "b", 1e-3),
+                new VoltageSource("V1", "c", "0", 0.0),
+                bjt
+                );
+
+            // Sweep the base current and vce voltage
+            DC dc = new DC("DC 1", new[]
+            {
+                new SweepConfiguration("I1", 0, 1e-3, 1e-4),
+                new SweepConfiguration("V1", 0, 2, 0.1),                
+            });
+            
+            // Export the collector current
+            Export<double> currentExport = new RealPropertyExport(dc, "Q1", "cc");
+
+            // Run the simulation
+            dc.OnExportSimulationData += (sender, args) =>
+            {
+                Console.Write(currentExport.Value.ToString(CultureInfo.InvariantCulture));
+                Console.Write(@", ");
+            };
+            dc.Run(ckt);
         }
     }
 }

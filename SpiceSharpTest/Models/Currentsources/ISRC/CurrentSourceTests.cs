@@ -17,7 +17,7 @@ namespace SpiceSharpTest.Models
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new CurrentSource("I1", "IN", "0", current),
+                new CurrentSource("I1", "0", "IN", current),
                 new Resistor("R1", "IN", "0", resistance));
             return ckt;
         }
@@ -40,7 +40,7 @@ namespace SpiceSharpTest.Models
             exports[1] = new RealPropertyExport(op, "R1", "i");
             double[] references =
             {
-                10.0e3,
+                -10.0e3,
                 10
             };
 
@@ -95,8 +95,8 @@ namespace SpiceSharpTest.Models
             // Add references
             List<double> references = new List<double>();
             for (int i = 1; i <= resistorCount; i++)
-                references.Add(100);
-            references.Add(currentInAmp * resistanceInOhms * resistorCount);
+                references.Add(-100);
+            references.Add(-currentInAmp * resistanceInOhms * resistorCount);
             
             // Run test
             AnalyzeOp(op, ckt, exports, references);

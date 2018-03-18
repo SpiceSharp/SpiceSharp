@@ -20,7 +20,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects.Add(
                 new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0.0),
-                new CurrentControlledVoltageSource("F1", "0", "out", "V1", transimpedance)
+                new CurrentControlledVoltageSource("F1", "out", "0", "V1", transimpedance)
                 );
 
             // Build simulation, exports and references
@@ -41,7 +41,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects.Add(
                 new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0.0),
-                new CurrentControlledVoltageSource("F1", "0", "out", "V1", transimpedance)
+                new CurrentControlledVoltageSource("F1", "out", "0", "V1", transimpedance)
                 );
             ckt.Objects["I1"].SetParameter("acmag", magnitude);
 

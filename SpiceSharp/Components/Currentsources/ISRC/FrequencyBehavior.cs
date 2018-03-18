@@ -120,8 +120,10 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosPtr.Value += _ac;
-            NegPtr.Value -= _ac;
+            // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
+            // I solved it by inverting the current when loading the rhs vector
+            PosPtr.Value -= _ac;
+            NegPtr.Value += _ac;
         }
     }
 }

@@ -45,3 +45,19 @@ The output will yield as expected:
 Using [Exports](xref:SpiceSharp.Simulations.Export`1) gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:
 
 [!code-csharp[Simulation](../SpiceSharpTest/BasicExampleTests.cs#example01_simulate2)]
+
+Yielding the output:
+
+```
+-1 V : -0.667 V. 3.33E-05 A
+-0.8 V : -0.533 V. 2.67E-05 A
+-0.6 V : -0.4 V. 2E-05 A
+-0.4 V : -0.267 V. 1.33E-05 A
+-0.2 V : -0.133 V. 6.67E-06 A
+0 V : 0 V. 0 A
+0.2 V : 0.133 V. -6.67E-06 A
+0.4 V : 0.267 V. -1.33E-05 A
+0.6 V : 0.4 V. -2E-05 A
+0.8 V : 0.533 V. -2.67E-05 A
+1 V : 0.667 V. -3.33E-05 A
+```

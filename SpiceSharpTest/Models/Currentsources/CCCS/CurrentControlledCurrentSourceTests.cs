@@ -19,7 +19,7 @@ namespace SpiceSharpTest.Models
             // Build the circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new CurrentSource("I1", "in", "0", 0.0),
+                new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0.0),
                 new CurrentControlledCurrentSource("F1", "0", "out", "V1", gain),
                 new Resistor("R1", "out", "0", resistance)
@@ -42,7 +42,7 @@ namespace SpiceSharpTest.Models
             // Build the circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new CurrentSource("I1", "in", "0", 0.0),
+                new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0.0),
                 new CurrentControlledCurrentSource("F1", "0", "out", "V1", gain),
                 new Resistor("R1", "out", "0", resistance)
