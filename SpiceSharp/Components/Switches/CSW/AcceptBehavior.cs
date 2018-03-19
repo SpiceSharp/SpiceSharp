@@ -15,6 +15,11 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         private LoadBehavior _load;
 
         /// <summary>
+        /// Gets the previous state
+        /// </summary>
+        public bool PreviousState { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
@@ -43,7 +48,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             _load.UseOldState = true;
 
             // Store the last state
-            _load.OldState = _load.CurrentState;
+            PreviousState = _load.CurrentState;
+            _load.PreviousState = PreviousState;
         }
     }
 }

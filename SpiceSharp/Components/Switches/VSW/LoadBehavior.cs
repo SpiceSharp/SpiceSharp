@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Gets or sets the previous state
         /// </summary>
-        public bool PreviousState { get; set; } = false;
+        public bool PreviousState { get; set; }
 
         /// <summary>
         /// Flag for using the previous state or not
@@ -65,6 +65,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>("entity");
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+
+            // TODO: This should be part of the parameter...
             _mbp.Hysteresis.RawValue = Math.Abs(_mbp.Hysteresis.RawValue);
 
             // Get behaviors

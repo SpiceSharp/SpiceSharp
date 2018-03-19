@@ -52,12 +52,12 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Gets or sets the old state of the switch
         /// </summary>
-        public bool OldState { get; set; }
+        public bool PreviousState { get; set; }
 
         /// <summary>
         /// Flag for using the old state or not
         /// </summary>
-        public bool UseOldState { get; set; } = false;
+        public bool UseOldState { get; set; }
 
         /// <summary>
         /// Gets the current state of the switch
@@ -97,6 +97,9 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>("entity");
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+
+            // TODO: This should be part of the parameter
+            _mbp.Hysteresis.RawValue = Math.Abs(_mbp.Hysteresis.RawValue);
 
             // Get behaviors
             _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
@@ -179,16 +182,43 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             else
             {
                 // Get the previous state
-                var previousState = UseOldState ? OldState : CurrentState;
+                var previousState = UseOldState ? PreviousState : CurrentState;
                 var iCtrl = state.Solution[ControllingBranch];
-
-                // Calculate the current state
-                if (iCtrl > _mbp.Threshold + _mbp.Hysteresis)
-                    currentState = true;
-                else if (iCtrl < _mbp.Threshold - _mbp.Hysteresis)
-                    currentState = false;
+                if (UseOldState)
+                {
+                    // Calculate the current state
+                    if (iCtrl > _mbp.Threshold + _mbp.Hysteresis)
+                        currentState = true;
+                    else if (iCtrl < _mbp.Threshold - _mbp.Hysteresis)
+                        currentState = false;
+                    else
+                        currentState = previousState;
+                    CurrentState = currentState;
+                    UseOldState = false;
+                }
                 else
-                    currentState = previousState;
+                {
+                    PreviousState = CurrentState;
+
+                    // Calculate the current state
+                    if (iCtrl > _mbp.Threshold + _mbp.Hysteresis)
+                    {
+                        CurrentState = true;
+                        currentState = true;
+                    }
+                    else if (iCtrl < _mbp.Threshold - _mbp.Hysteresis)
+                    {
+                        CurrentState = false;
+                        currentState = false;
+                    }
+                    else
+                        currentState = PreviousState;
+
+                    // Ensure one more iteration
+                    if (currentState != PreviousState)
+                        state.IsConvergent = false;
+                }
+
 
                 // Store the current state
                 CurrentState = currentState;
