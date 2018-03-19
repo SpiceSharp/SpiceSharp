@@ -97,8 +97,13 @@ namespace SpiceSharpTest
             // Run the simulation
             dc.OnExportSimulationData += (sender, args) =>
             {
+                double baseCurrent = dc.Sweeps[0].CurrentValue;
+                double collectorVoltage = dc.Sweeps[1].CurrentValue;
+                if (collectorVoltage == 0)
+                    Console.Write(@"; ");
+                else
+                    Console.Write(@", ");
                 Console.Write(currentExport.Value.ToString(CultureInfo.InvariantCulture));
-                Console.Write(@", ");
             };
             dc.Run(ckt);
         }

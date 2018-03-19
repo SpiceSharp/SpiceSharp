@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Gets or sets the previous state
         /// </summary>
-        public bool OldState { get; set; } = false;
+        public bool PreviousState { get; set; } = false;
 
         /// <summary>
         /// Flag for using the previous state or not
@@ -65,6 +65,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>("entity");
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _mbp.Hysteresis.RawValue = Math.Abs(_mbp.Hysteresis.RawValue);
 
             // Get behaviors
             _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
@@ -142,23 +143,43 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             }
             else
             {
-                var previousState = UseOldState ? OldState : CurrentState;
+                // First iteration after a new timepoint!
                 var vCtrl = state.Solution[_contPosourceNode] - state.Solution[_contNegateNode];
-
-                // Calculate the current state
-                if (vCtrl > _mbp.Threshold + _mbp.Hysteresis)
-                    currentState = true;
-                else if (vCtrl < _mbp.Threshold - _mbp.Hysteresis)
-                    currentState = false;
+                if (UseOldState)
+                {
+                    // Calculate the current state
+                    if (vCtrl > _mbp.Threshold + _mbp.Hysteresis)
+                        currentState = true;
+                    else if (vCtrl < _mbp.Threshold - _mbp.Hysteresis)
+                        currentState = false;
+                    else
+                        currentState = PreviousState;
+                    CurrentState = currentState;
+                    UseOldState = false;
+                }
                 else
-                    currentState = previousState;
+                {
+                    // Continue from last iteration
+                    PreviousState = CurrentState;
 
-                // Store the current state
-                CurrentState = currentState;
+                    // Calculate the current state
+                    if (vCtrl > _mbp.Threshold + _mbp.Hysteresis)
+                    {
+                        CurrentState = true;
+                        currentState = true;
+                    }
+                    else if (vCtrl < _mbp.Threshold - _mbp.Hysteresis)
+                    {
+                        CurrentState = false;
+                        currentState = false;
+                    }
+                    else
+                        currentState = PreviousState;
 
-                // If the state changed, ensure one more iteration
-                if (currentState != previousState)
-                    state.IsConvergent = false;
+                    // Ensure one more iteration
+                    if (currentState != PreviousState)
+                        state.IsConvergent = false;
+                }
             }
 
             var gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;

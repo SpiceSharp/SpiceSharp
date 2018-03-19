@@ -15,6 +15,11 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         private LoadBehavior _load;
 
         /// <summary>
+        /// Gets the previous state (last time point)
+        /// </summary>
+        public bool PreviousState { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
@@ -43,7 +48,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             _load.UseOldState = true;
 
             // Copy the current state to the old state
-            _load.OldState = _load.CurrentState;
+            PreviousState = _load.CurrentState;
+            _load.PreviousState = PreviousState;
         }
     }
 }
