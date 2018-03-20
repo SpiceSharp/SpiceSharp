@@ -9781,6 +9781,18 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.Accept
   fullName: SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.Accept
   nameWithType: AcceptBehavior.Accept
+- uid: SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.PreviousState
+  name: PreviousState
+  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_AcceptBehavior_PreviousState
+  commentId: P:SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.PreviousState
+  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.PreviousState
+  nameWithType: AcceptBehavior.PreviousState
+- uid: SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.PreviousState*
+  name: PreviousState
+  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_AcceptBehavior_PreviousState_
+  commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.PreviousState
+  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.PreviousState
+  nameWithType: AcceptBehavior.PreviousState
 - uid: SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.Setup(SpiceSharp.Behaviors.SetupDataProvider)
   name: Setup(SetupDataProvider)
   href: api/SpiceSharp.Components.CurrentSwitchBehaviors.AcceptBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_AcceptBehavior_Setup_SpiceSharp_Behaviors_SetupDataProvider_
@@ -10123,18 +10135,6 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.NegPosPtr
   fullName: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.NegPosPtr
   nameWithType: LoadBehavior.NegPosPtr
-- uid: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.OldState
-  name: OldState
-  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_LoadBehavior_OldState
-  commentId: P:SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.OldState
-  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.OldState
-  nameWithType: LoadBehavior.OldState
-- uid: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.OldState*
-  name: OldState
-  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_LoadBehavior_OldState_
-  commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.OldState
-  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.OldState
-  nameWithType: LoadBehavior.OldState
 - uid: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PosNegPtr
   name: PosNegPtr
   href: api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_LoadBehavior_PosNegPtr
@@ -10159,6 +10159,18 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PosPosPtr
   fullName: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PosPosPtr
   nameWithType: LoadBehavior.PosPosPtr
+- uid: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PreviousState
+  name: PreviousState
+  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_LoadBehavior_PreviousState
+  commentId: P:SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PreviousState
+  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PreviousState
+  nameWithType: LoadBehavior.PreviousState
+- uid: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PreviousState*
+  name: PreviousState
+  href: api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_LoadBehavior_PreviousState_
+  commentId: Overload:SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PreviousState
+  fullName: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.PreviousState
+  nameWithType: LoadBehavior.PreviousState
 - uid: SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.Setup(SpiceSharp.Behaviors.SetupDataProvider)
   name: Setup(SetupDataProvider)
   href: api/SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSwitchBehaviors_LoadBehavior_Setup_SpiceSharp_Behaviors_SetupDataProvider_
@@ -25350,6 +25362,18 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.Accept
   fullName: SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.Accept
   nameWithType: AcceptBehavior.Accept
+- uid: SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.PreviousState
+  name: PreviousState
+  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_AcceptBehavior_PreviousState
+  commentId: P:SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.PreviousState
+  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.PreviousState
+  nameWithType: AcceptBehavior.PreviousState
+- uid: SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.PreviousState*
+  name: PreviousState
+  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_AcceptBehavior_PreviousState_
+  commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.PreviousState
+  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.PreviousState
+  nameWithType: AcceptBehavior.PreviousState
 - uid: SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.Setup(SpiceSharp.Behaviors.SetupDataProvider)
   name: Setup(SetupDataProvider)
   href: api/SpiceSharp.Components.VoltageSwitchBehaviors.AcceptBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_AcceptBehavior_Setup_SpiceSharp_Behaviors_SetupDataProvider_
@@ -25644,18 +25668,6 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.NegPosPtr
   fullName: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.NegPosPtr
   nameWithType: LoadBehavior.NegPosPtr
-- uid: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.OldState
-  name: OldState
-  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_LoadBehavior_OldState
-  commentId: P:SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.OldState
-  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.OldState
-  nameWithType: LoadBehavior.OldState
-- uid: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.OldState*
-  name: OldState
-  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_LoadBehavior_OldState_
-  commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.OldState
-  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.OldState
-  nameWithType: LoadBehavior.OldState
 - uid: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PosNegPtr
   name: PosNegPtr
   href: api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_LoadBehavior_PosNegPtr
@@ -25680,6 +25692,18 @@ references:
   commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PosPosPtr
   fullName: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PosPosPtr
   nameWithType: LoadBehavior.PosPosPtr
+- uid: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PreviousState
+  name: PreviousState
+  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_LoadBehavior_PreviousState
+  commentId: P:SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PreviousState
+  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PreviousState
+  nameWithType: LoadBehavior.PreviousState
+- uid: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PreviousState*
+  name: PreviousState
+  href: api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_LoadBehavior_PreviousState_
+  commentId: Overload:SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PreviousState
+  fullName: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.PreviousState
+  nameWithType: LoadBehavior.PreviousState
 - uid: SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.Setup(SpiceSharp.Behaviors.SetupDataProvider)
   name: Setup(SetupDataProvider)
   href: api/SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSwitchBehaviors_LoadBehavior_Setup_SpiceSharp_Behaviors_SetupDataProvider_

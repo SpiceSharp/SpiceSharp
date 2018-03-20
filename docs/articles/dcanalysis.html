@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Custom models </title>
+    <title>DC analysis </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Custom models ">
+    <meta name="title" content="DC analysis ">
     <meta name="generator" content="docfx 2.32.1.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
@@ -90,8 +90,8 @@
                       <a href="analysis.html" title="Analysis" class="">Analysis</a>
                         
                         <ul class="nav level2">
-                          <li class="">
-                            <a href="dcanalysis.html" title="DC analysis" class="">DC analysis</a>
+                          <li class="active">
+                            <a href="dcanalysis.html" title="DC analysis" class="active">DC analysis</a>
                           </li>
                           <li class="">
                             <a href="acanalysis.html" title="AC analysis" class="">AC analysis</a>
@@ -100,8 +100,8 @@
                             <a href="transientanalysis.html" title="Transient analysis" class="">Transient analysis</a>
                           </li>
                         </ul>  </li>
-                    <li class="active">
-                      <a href="custommodels.html" title="Custom models" class="active">Custom models</a>
+                    <li class="">
+                      <a href="custommodels.html" title="Custom models" class="">Custom models</a>
                     </li>
                   </ul>        </div>
               </div>
@@ -111,10 +111,53 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="custom-models">Custom models</h1>
+<h1 id="dc-analysis">DC analysis</h1>
 
-<p>This section will discuss how custom models can be created.</p>
-</article>
+<p>It is possible to sweep over multiple sources for a DC analysis. It is possible to construct DC transfer curves using this type of analysis. This type of simulation is run by the <strong><a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a></strong> class. Consider the following circuit:</p>
+<p align="center"><img src="images/example_DC.svg"></p>
+
+<p>We wish to find the I-V curve for multiple Vgs voltages. This can be achieved by passing multiple <strong><a class="xref" href="../api/SpiceSharp.Simulations.SweepConfiguration.html">SweepConfiguration</a></strong>-objects to the <strong><a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a></strong> constructor.</p>
+<p>The code looks as follows:</p>
+<pre><code class="lang-csharp" name="Circuit">// Make the bipolar junction transistor
+var nmos = new Mosfet1(&quot;M1&quot;);
+nmos.Connect(&quot;d&quot;, &quot;g&quot;, &quot;0&quot;, &quot;0&quot;);
+var nmosmodel = new Mosfet1Model(&quot;example&quot;);
+nmosmodel.SetParameter(&quot;kp&quot;, 150.0e-3);
+nmos.SetModel(nmosmodel);
+
+// Build the circuit
+var ckt = new Circuit(
+    new VoltageSource(&quot;Vgs&quot;, &quot;g&quot;, &quot;0&quot;, 0),
+    new VoltageSource(&quot;Vds&quot;, &quot;d&quot;, &quot;0&quot;, 0.0),
+    nmos
+    );
+
+// Sweep the base current and vce voltage
+var dc = new DC(&quot;DC 1&quot;, new[]
+{
+    new SweepConfiguration(&quot;Vgs&quot;, 0, 3, 0.2),
+    new SweepConfiguration(&quot;Vds&quot;, 0, 5, 0.1),                
+});
+
+// Export the collector current
+var currentExport = new RealPropertyExport(dc, &quot;M1&quot;, &quot;id&quot;);
+
+// Run the simulation
+dc.OnExportSimulationData += (sender, args) =&gt;
+{
+    double vgsVoltage = dc.Sweeps[0].CurrentValue;
+    double vdsVoltage = dc.Sweeps[1].CurrentValue;
+    double current = currentExport.Value;
+};
+dc.Run(ckt);
+</code></pre><p>First we build an NMOS transistor. For this we need a <strong><a class="xref" href="../api/SpiceSharp.Components.Component.html">Component</a></strong>, which we can connect to nodes in the circuit. Most components also need a <strong><a class="xref" href="../api/SpiceSharp.Components.Model.html">Model</a></strong> in order to work. Models typically describe common environmental properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).</p>
+<p>In our case, the component is a  <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which needs a <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong> to work.
+Every component or model can have parameters, which can be set by using the method <em><a class="xref" href="../api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Double_">SetParameter</a></em>. The parameter names for MOS level 1 transistors are defined in the model specification and are all lower case.</p>
+<p>After running and plotting the data we get:</p>
+<p align="center"><img src="images/example_DCgraph.svg"></p>
+
+<p><div class="pull-left"><a href="analysis.html">Previous: Analysis</a></div> <div class="pull-right"><a href="acanalysis.html">Next: AC analysis</a><p>
+</div></article>
           </div>
           
           <div class="hidden-sm col-md-2" role="complementary">
@@ -122,7 +165,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/articles/custommodels.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/articles/dcanalysis.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

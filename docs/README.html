@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>SpiceSharp  </title>
+    <title>Spice#  </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="SpiceSharp  ">
+    <meta name="title" content="Spice#  ">
     <meta name="generator" content="docfx 2.32.1.0">
     
     <link rel="shortcut icon" href="favicon.ico">
@@ -71,66 +71,22 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="spicesharp-img-srchttpsgithubcomsvenboulangerspicesharpblobmasterspiceneticonpngrawtrue-width45px-">SpiceSharp <img src="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true" width="45px"></h1>
+<h1 id="spice-img-srchttpsgithubcomsvenboulangerspicesharpblobmasterspiceneticonpngrawtrue-width45px-">Spice# <img src="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true" width="45px"></h1>
 
-<p>SpiceSharp is a Spice circuit simulator written in C#. It uses Math.NET to solve matrix equations. The simulator currently includes AC, DC and transient simulations. The framework is made to resemble the original Berkeley Spice version, but some parts have been altered/improved to fit into the .NET framework.</p>
-<p>I try to verify with the original Spice 3f5 using unit tests. There are still small differences possible: Math.NET is slightly more accurate than Spice 3f5 with respect to numerical errors. Spice 3f5 was compiled using the preprocessor directives <code>PREDICTOR</code>. The main differences with SpiceSharp are:</p>
+<p>Spice# is a Spice circuit simulator written in C#. The framework is made to resemble the original Berkeley Spice version, but some parts have been altered/improved to fit into the .NET framework.</p>
+<p>Unit tests to compare Spice# to Spice 3f5 are used to verify the models. Nevertheless, some small numerical errors may be present as a direct consequence of bug fixes and structural differences.</p>
+<p>The main differences between Spice 3f5 and Spice# are:</p>
 <ul>
-<li>Spice 3f5 is not object oriented, SpiceSharp is.</li>
-<li>Spice 3f5 has a bugged NEWTRUNC feature, SpiceSharp&#39;s method will work. Set the integration method&#39;s configuration <code>TruncationMethod</code> to <code>PerNode</code>. The default is <code>PerDevice</code> where each device can truncate the timestep.</li>
+<li>Spice 3f5 is not object oriented, Spice# is.</li>
+<li>Spice 3f5 has a bugged NEWTRUNC feature, Spice#&#39;s method will work. Set the integration method&#39;s configuration <code>TruncationMethod</code> to <code>PerNode</code>. The default is <code>PerDevice</code> where each device can truncate the timestep.</li>
 </ul>
 <p>Please note that this project is by no means meant to compete with existing commercial Spice simulators, although its performance may be similar. I wanted to know more about the Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)</p>
-<p>SpiceSharp is available as a <strong>NuGet Package</strong>.</p>
-<p><a href="https://www.nuget.org/packages/SpiceSharp/"><img src="https://buildstats.info/nuget/spicesharp" alt="NuGet Badge"></a> SpiceSharp <br>
-<a href="https://www.nuget.org/packages/SpiceSharpParser/"><img src="https://buildstats.info/nuget/spicesharpparser" alt="NuGet Badge"></a> SpiceSharp Parser</p>
+<p>Spice# is available as a <strong>NuGet Package</strong>.</p>
+<p><a href="https://www.nuget.org/packages/SpiceSharp/"><img src="https://buildstats.info/nuget/spicesharp" alt="NuGet Badge"></a> SpiceSharp <br></p>
 <p><a href="https://ci.appveyor.com/project/svenboulanger/spicesharp"><img src="https://ci.appveyor.com/api/projects/status/hhg89ejd795ykmvh?svg=true" alt="Build status"></a>
 <a href="https://travis-ci.org/SpiceSharp/SpiceSharp"><img src="https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development" alt="Build Status"></a></p>
 <p>You can find the API documentation here:<br>
-SpiceSharp: <a href="https://svenboulanger.github.io/SpiceSharp/coreapi/api/index.html">https://svenboulanger.github.io/SpiceSharp/coreapi/api/index.html</a><br>
-SpiceSharp.Parser: <a href="https://svenboulanger.github.io/SpiceSharp/parserapi/api/index.html">https://svenboulanger.github.io/SpiceSharp/parserapi/api/index.html</a></p>
-<h2 id="spicesharp">SpiceSharp</h2>
-<p>The basic usage is pretty easy. A <code>Circuit</code> object will hold all circuit objects, and can run a simulation. For example, doing a transient analysis of a simple RC-filter will look like this:</p>
-<pre><code class="lang-C#">// Build the circuit
-Circuit ckt = new Circuit();
-ckt.Objects.Add(
-    new Voltagesource(&quot;V1&quot;, &quot;IN&quot;, &quot;GND&quot;, new Pulse(0, 5, 1e-3, 1e-5, 1e-5, 1e-3, 2e-3)),
-    new Resistor(&quot;R1&quot;, &quot;IN&quot;, &quot;OUT&quot;, 1e3),
-    new Capacitor(&quot;C1&quot;, &quot;OUT&quot;, &quot;GND&quot;, 1e-6)
-    );
-
-// Simulation
-Transient tran = new Transient(&quot;Tran 1&quot;, 1e-6, 20e-3);
-tran.OnExportSimulationData += (object sender, SimulationData data) =&gt;
-    {
-        double time = data.GetTime();
-        double output = data.GetVoltage(&quot;OUT&quot;);
-    };
-ckt.Simulate(tran);
-</code></pre><h2 id="spicesharpparser">SpiceSharp.Parser</h2>
-<p>An additional project has been published on NuGet that facilitates parsing Spice netlists. Parsing netlists is done using the <code>NetlistReader</code> class. For example:</p>
-<pre><code class="lang-C#">string netlist = string.Join(Environment.NewLine,
-    &quot;.MODEL diomod D is=1e-14&quot;,
-    &quot;Vinput IN GND 0.0&quot;,
-    &quot;Rseries IN OUT {1k * 10}&quot;,
-    &quot;Dload OUT GND diomod&quot;,
-    &quot;.SAVE v(OUT)&quot;,
-    &quot;.DC Vinput -5 5 50m&quot;
-    );
-NetlistReader nr = new NetlistReader();
-MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
-nr.Parse(ms);
-nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =&gt;
-{
-    double inp = data.GetVoltage(&quot;in&quot;);
-    double outp = nr.Netlist.Exports[0].Extract(data);
-};
-nr.Netlist.Simulate();
-</code></pre><p>The parser features:</p>
-<ul>
-<li>A light-weight but fast expression parser. Put expressions between &quot;{&quot; and &quot;}&quot;</li>
-<li>An expandable library of readers for circuit components (R, C, L, D, ...) and control statements (.SAVE, .TRAN, ...)</li>
-<li>Subcircuits with parameters</li>
-</ul>
+SpiceSharp: <a href="https://svenboulanger.github.io/SpiceSharp/index.html">https://svenboulanger.github.io/SpiceSharp/index.html</a><br></p>
 </article>
           </div>
           

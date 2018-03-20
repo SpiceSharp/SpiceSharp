@@ -86,6 +86,21 @@
                       <a href="gettingstarted.html" title="Getting started" class="active">Getting started</a>
                     </li>
                     <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="analysis.html" title="Analysis" class="">Analysis</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="dcanalysis.html" title="DC analysis" class="">DC analysis</a>
+                          </li>
+                          <li class="">
+                            <a href="acanalysis.html" title="AC analysis" class="">AC analysis</a>
+                          </li>
+                          <li class="">
+                            <a href="transientanalysis.html" title="Transient analysis" class="">Transient analysis</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
                       <a href="custommodels.html" title="Custom models" class="">Custom models</a>
                     </li>
                   </ul>        </div>
@@ -99,6 +114,8 @@
 <h1 id="getting-started">Getting started</h1>
 
 <p>In this section we will quickly go over everything needed to create a simple circuit and simulate it.</p>
+<h2 id="installation">Installation</h2>
+<p>Installing can be done by using NuGet.</p>
 <h2 id="building-the-circuit">Building the circuit</h2>
 <p>Let&#39;s start with a very simple circuit called a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
 <p align="center"><img src="images/example01.svg"></p>
@@ -112,7 +129,7 @@ Circuit ckt = new Circuit(
     new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e4)
     );
 </code></pre><h2 id="running-a-dc-analysis">Running a DC analysis</h2>
-<p>A <a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a> simulation will (by default) sweep a voltage or current source value. the result is a DC transfer curve in function of the swept parameter.</p>
+<p>A <a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a> simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.</p>
 <p>We will sweep the input voltage source from -1V to 1V in steps of 200mV.</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
 DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
@@ -150,10 +167,23 @@ Export&lt;double&gt; currentExport = new RealPropertyExport(dc, &quot;V1&quot;, 
 // Catch exported data
 dc.OnExportSimulationData += (sender, args) =&gt;
 {
-    Console.WriteLine($@&quot;{inputExport.Value:G3}V : {outputExport.Value:G3} V, {currentExport.Value:G3} A&quot;);
+    Console.WriteLine($@&quot;{inputExport.Value:G3} V : {outputExport.Value:G3} V, {currentExport.Value:G3} A&quot;);
 };
 dc.Run(ckt);
-</code></pre></article>
+</code></pre><p>Yielding the output:</p>
+<pre><code>-1 V : -0.667 V. 3.33E-05 A
+-0.8 V : -0.533 V. 2.67E-05 A
+-0.6 V : -0.4 V. 2E-05 A
+-0.4 V : -0.267 V. 1.33E-05 A
+-0.2 V : -0.133 V. 6.67E-06 A
+0 V : 0 V. 0 A
+0.2 V : 0.133 V. -6.67E-06 A
+0.4 V : 0.267 V. -1.33E-05 A
+0.6 V : 0.4 V. -2E-05 A
+0.8 V : 0.533 V. -2.67E-05 A
+1 V : 0.667 V. -3.33E-05 A
+</code></pre><p><div class="pull-right"><a href="analysis.html">Next: Analysis</a><p>
+</div></article>
           </div>
           
           <div class="hidden-sm col-md-2" role="complementary">

@@ -66,46 +66,98 @@ namespace SpiceSharpTest
         }
 
         [Test]
-        public void When_BJTIVCharacteristic_Expect_NoException()
+        public void When_NMOSIVCharacteristic_Expect_NoException()
         {
+            // <example_DC>
             // Make the bipolar junction transistor
-            var bjt = new BipolarJunctionTransistor("Q1");
-            bjt.Connect("c", "b", "0", "0");
-            var bjtmodel = new BipolarJunctionTransistorModel("example");
-            bjtmodel.SetParameter("bf", 150.0);
-            bjtmodel.SetParameter("is", 1.5e-14);
-            bjtmodel.SetParameter("vaf", 30);
-            bjt.SetModel(bjtmodel);
+            var nmos = new Mosfet1("M1");
+            nmos.Connect("d", "g", "0", "0");
+            var nmosmodel = new Mosfet1Model("example");
+            nmosmodel.SetParameter("kp", 150.0e-3);
+            nmos.SetModel(nmosmodel);
 
             // Build the circuit
             var ckt = new Circuit(
-                new CurrentSource("I1", "0", "b", 1e-3),
-                new VoltageSource("V1", "c", "0", 0.0),
-                bjt
+                new VoltageSource("Vgs", "g", "0", 0),
+                new VoltageSource("Vds", "d", "0", 0.0),
+                nmos
                 );
 
             // Sweep the base current and vce voltage
-            DC dc = new DC("DC 1", new[]
+            var dc = new DC("DC 1", new[]
             {
-                new SweepConfiguration("I1", 0, 1e-3, 1e-4),
-                new SweepConfiguration("V1", 0, 2, 0.1),                
+                new SweepConfiguration("Vgs", 0, 3, 0.2),
+                new SweepConfiguration("Vds", 0, 5, 0.1),                
             });
             
             // Export the collector current
-            Export<double> currentExport = new RealPropertyExport(dc, "Q1", "cc");
+            var currentExport = new RealPropertyExport(dc, "M1", "id");
 
             // Run the simulation
             dc.OnExportSimulationData += (sender, args) =>
             {
-                double baseCurrent = dc.Sweeps[0].CurrentValue;
-                double collectorVoltage = dc.Sweeps[1].CurrentValue;
-                if (collectorVoltage == 0)
-                    Console.Write(@"; ");
-                else
-                    Console.Write(@", ");
-                Console.Write(currentExport.Value.ToString(CultureInfo.InvariantCulture));
+                double vgsVoltage = dc.Sweeps[0].CurrentValue;
+                double vdsVoltage = dc.Sweeps[1].CurrentValue;
+                double current = currentExport.Value;
             };
             dc.Run(ckt);
+            // </example_DC>
+        }
+
+        [Test]
+        public void When_RCFilterAC_Expect_NoException()
+        {
+            // <example_AC>
+            // Build the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0),
+                new Resistor("R1", "in", "out", 10.0e3),
+                new Capacitor("C1", "out", "0", 1e-6)
+                );
+            ckt.Objects["V1"].SetParameter("acmag", 1.0);
+
+            // Create the simulation
+            var ac = new AC("AC 1", new DecadeSweep(1e-2, 1.0e3, 5));
+
+            // Make the export
+            var exportVoltage = new ComplexVoltageExport(ac, "out");
+
+            // Simulate
+            ac.OnExportSimulationData += (sender, args) =>
+            {
+                var output = exportVoltage.Value;
+                double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
+            };
+            ac.Run(ckt);
+            // </example_AC>
+        }
+
+        [Test]
+        public void When_RCFilterTransient_Expect_NoException()
+        {
+            // <example_Transient>
+            // Build the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0.0, 5.0, 0.01, 1e-3, 1e-3, 0.02, 0.04)),
+                new Resistor("R1", "in", "out", 10.0e3),
+                new Capacitor("C1", "out", "0", 1e-6)
+            );
+
+            // Create the simulation
+            var tran = new Transient("Tran 1", 1e-3, 0.1);
+
+            // Make the exports
+            var inputExport = new RealVoltageExport(tran, "in");
+            var outputExport = new RealVoltageExport(tran, "out");
+
+            // Simulate
+            tran.OnExportSimulationData += (sender, args) =>
+            {
+                var input = inputExport.Value;
+                var output = outputExport.Value;
+            };
+            tran.Run(ckt);
+            // </example_Transient>
         }
     }
 }
