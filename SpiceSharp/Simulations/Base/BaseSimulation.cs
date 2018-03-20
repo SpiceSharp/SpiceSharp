@@ -138,6 +138,9 @@ namespace SpiceSharp.Simulations
             // Unsetup all objects
             foreach (var o in Circuit.Objects)
                 o.Unsetup(Circuit);
+
+            // Clear nodes
+            Circuit.Nodes.Clear();
         }
 
         /// <summary>

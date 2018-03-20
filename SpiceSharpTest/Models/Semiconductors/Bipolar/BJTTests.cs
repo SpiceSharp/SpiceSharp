@@ -165,6 +165,28 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
         }
 
+        [Test]
+        public void When_BJTCircuit_Expect_NoException()
+        {
+            // Build the circuit
+            var ckt = new Circuit(
+                new VoltageSource("vin", "1", "0", 0),
+                new Resistor("rs", "1", "2", 1),
+                new Capacitor("C1", "2", "3", 100e-6),
+                new Resistor("rb", "5", "3", 465e3),
+                new Resistor("rc", "5", "4", 3e3),
+                new VoltageSource("vcc", "5", "0", 10.0),
+                CreateBJT("q1", "4", "3", "0", "0", "npn-trans", "is=2e-15 bf=100 vaf=200")
+                );
+
+            // Create the simulation
+            var op = new OP("OP 1");
+            var ac = new AC("AC 1", new DecadeSweep(100, 10e3, 10));
+
+            op.Run(ckt);
+            ac.Run(ckt);
+        }
+
         /*
         [Test]
         public void Emitter_Follower_DC()
