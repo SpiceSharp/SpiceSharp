@@ -49,19 +49,5 @@ namespace SpiceSharpTest.Models
                 time += 0.1;
             }
         }
-
-        [Test]
-        public void When_SineWaveformZeroTheta_Expect_CircuitException()
-        {
-            var sine = new Sine(0.0, 1.0, 1.0, 1.0, 0.0);
-            Assert.Throws<CircuitException>(() => sine.Setup());
-        }
-
-        [Test]
-        public void When_SineWaveformNegativeTheta_Expect_CircuitException()
-        {
-            var sine = new Sine(0.0, 1.0, 1.0, 1.0, -1.0);
-            Assert.Throws<CircuitException>(() => sine.Setup());
-        }
     }
 }
