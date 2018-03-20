@@ -24,9 +24,9 @@ namespace SpiceSharp.Components
         [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
         public GivenParameter FallTime { get; } = new GivenParameter();
         [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
-        public GivenParameter PulseWidth { get; } = new GivenParameter();
+        public GivenParameter PulseWidth { get; } = new GivenParameter(double.PositiveInfinity);
         [ParameterName("per"), ParameterInfo("The period in seconds")]
-        public GivenParameter Period { get; } = new GivenParameter();
+        public GivenParameter Period { get; } = new GivenParameter(double.PositiveInfinity);
 
         /// <summary>
         /// Private variables

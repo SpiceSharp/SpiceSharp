@@ -80,8 +80,6 @@ namespace SpiceSharp.Components
             // Some checks
             if (_freq < 0)
                 throw new CircuitException("Invalid frequency {0}".FormatString(Frequency.Value));
-            if (Theta.Given && _theta <= 0.0)
-                throw new CircuitException("Invalid damping factor {0}".FormatString(_theta));
         }
 
         /// <summary>
@@ -102,7 +100,7 @@ namespace SpiceSharp.Components
 
             // Modify with theta
             if (Theta.Given)
-                result *= Math.Exp(-(time - _td) / _theta);
+                result *= Math.Exp(-time * _theta);
 
             // Return result (with offset)
             return _vo + result;
