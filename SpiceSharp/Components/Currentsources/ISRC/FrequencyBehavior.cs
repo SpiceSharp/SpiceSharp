@@ -5,7 +5,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.CurrentsourceBehaviors
+namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
     /// <summary>
     /// Behavior of a currentsource in AC analysis

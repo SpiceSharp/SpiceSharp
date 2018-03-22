@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Necessary parameters and behaviors
         /// </summary>
         private BaseParameters _bp;
-        private VoltagesourceBehaviors.LoadBehavior _vsrcload;
+        private VoltageSourceBehaviors.LoadBehavior _vsrcload;
 
         /// <summary>
         /// Device methods and properties 
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Get behaviors
-            _vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
+            _vsrcload = provider.GetBehavior<VoltageSourceBehaviors.LoadBehavior>("control");
         }
 
         /// <summary>

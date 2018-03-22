@@ -2,7 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.VoltagesourceBehaviors
+namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
     /// <summary>
     /// Accept behavior for a <see cref="VoltageSource"/>

@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components.CurrentsourceBehaviors;
-using SpiceSharp.Simulations;
+using SpiceSharp.Components.CurrentSourceBehaviors;
 
 namespace SpiceSharp.Components
 {

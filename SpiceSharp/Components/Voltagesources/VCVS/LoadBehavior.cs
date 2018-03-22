@@ -4,7 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
+namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
 {
     /// <summary>
     /// General behavior for a <see cref="VoltageControlledVoltageSource"/>

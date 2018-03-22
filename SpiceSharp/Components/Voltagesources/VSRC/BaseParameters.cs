@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.VoltagesourceBehaviors
+namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
     /// <summary>
     /// Parameters for a <see cref="VoltageSource"/>

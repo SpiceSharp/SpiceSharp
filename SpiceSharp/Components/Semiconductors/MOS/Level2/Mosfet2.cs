@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.MosfetBehaviors.Level2;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {

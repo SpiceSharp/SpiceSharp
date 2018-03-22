@@ -2,7 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.CurrentsourceBehaviors
+namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
     /// <summary>
     /// Accept behavior for a <see cref="CurrentSource"/>

@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         private BaseParameters _bp;
         private ModelLoadBehavior _modelload;
-        private VoltagesourceBehaviors.LoadBehavior _vsrcload;
+        private VoltageSourceBehaviors.LoadBehavior _vsrcload;
         private ModelBaseParameters _mbp;
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 
             // Get behaviors
             _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
-            _vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
+            _vsrcload = provider.GetBehavior<VoltageSourceBehaviors.LoadBehavior>("control");
         }
 
         /// <summary>

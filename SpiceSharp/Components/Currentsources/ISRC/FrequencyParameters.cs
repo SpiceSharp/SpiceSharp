@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CurrentsourceBehaviors
+namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
     /// <summary>
     /// AC parameters for a <see cref="CurrentSource"/>

@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.CapacitorBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
