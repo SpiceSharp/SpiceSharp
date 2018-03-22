@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.BipolarBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -53,10 +54,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the device
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             CollectorNode = nodes[0].Index;
             BaseNode = nodes[1].Index;
             EmitterNode = nodes[2].Index;

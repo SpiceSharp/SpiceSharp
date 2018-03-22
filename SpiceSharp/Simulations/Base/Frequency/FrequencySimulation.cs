@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Initialize the state
-            ComplexState.Initialize(Circuit.Nodes);
+            ComplexState.Initialize(Nodes);
             ComplexState.Sparse |= ComplexState.SparseStates.AcShouldReorder;
         }
 

@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MutualInductanceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -69,15 +70,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the mutual inductance
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             // Get the inductors for the mutual inductance
-            Inductor1 = circuit.Objects[InductorName1] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName1));
-            Inductor2 = circuit.Objects[InductorName2] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName2));
+            Inductor1 = simulation.Circuit.Objects[InductorName1] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName1));
+            Inductor2 = simulation.Circuit.Objects[InductorName2] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName2));
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.CapacitorBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -65,14 +66,14 @@ namespace SpiceSharp.Components
             // Connect
             Connect(pos, neg);
         }
-        
+
         /// <summary>
         /// Setup the capacitor
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
         }

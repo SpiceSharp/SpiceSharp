@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -80,18 +81,18 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the current controlled current source
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            if (circuit.Objects[ControllingName] is VoltageSource vsrc)
+            if (simulation.Circuit.Objects[ControllingName] is VoltageSource vsrc)
                 ControllingSource = vsrc;
             else
                 throw new CircuitException("{0}: Could not find voltage source '{1}'".FormatString(Name, ControllingName));

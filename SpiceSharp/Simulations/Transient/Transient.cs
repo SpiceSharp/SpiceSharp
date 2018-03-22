@@ -231,7 +231,7 @@ namespace SpiceSharp.Simulations
         protected void LoadInitialConditions(object sender, LoadStateEventArgs e)
         {
             var state = RealState;
-            var nodes = Circuit.Nodes;
+            var nodes = Nodes;
             var solver = state.Solver;
 
             for (int i = 0; i < nodes.Count; i++)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Contains and manages circuit nodes.

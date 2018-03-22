@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -131,18 +132,18 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Helper function for binding nodes to the circuit
         /// </summary>
-        /// <param name="circuit"></param>
+        /// <param name="simulation">Simulation</param>
         /// <returns></returns>
-        protected Node[] BindNodes(Circuit circuit)
+        protected Node[] BindNodes(Simulation simulation)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             // Map connected nodes
             Node[] nodes = new Node[_connections.Length];
             for (int i = 0; i < _connections.Length; i++)
             {
-                nodes[i] = circuit.Nodes.Map(_connections[i]);
+                nodes[i] = simulation.Nodes.Map(_connections[i]);
                 _indices[i] = nodes[i].Index;
             }
 

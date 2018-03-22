@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -22,8 +23,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the model
         /// </summary>
-        /// <param name="circuit">Circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
             // Models do not have any nodes to setup
         }

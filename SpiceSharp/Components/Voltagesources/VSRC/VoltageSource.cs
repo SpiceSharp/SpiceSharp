@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.VoltagesourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -88,11 +89,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the voltage source
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
             // Bind the nodes
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
         }

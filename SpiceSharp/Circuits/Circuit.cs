@@ -20,11 +20,6 @@ namespace SpiceSharp
         public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>
-        /// Gets the nodes in the circuit
-        /// </summary>
-        public NodeMap Nodes { get; } = new NodeMap();
-
-        /// <summary>
         /// Gets a collection of all circuit objects
         /// </summary>
         public EntityCollection Objects { get; } = new EntityCollection();
@@ -65,7 +60,6 @@ namespace SpiceSharp
         public void Clear()
         {
             // Clear all values
-            Nodes.Clear();
             Objects.Clear();
         }
 

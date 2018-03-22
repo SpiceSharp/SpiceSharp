@@ -82,7 +82,6 @@ namespace SpiceSharpTest.Models
                 new Inductor("L1", "OUT", "0", inductance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
-            ckt.Nodes.InitialConditions["OUT"] = 0.0;
             ckt.Objects["L1"].SetParameter("ic", initialCurrent);
 
             /*
@@ -94,6 +93,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation
             Transient tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
+            tran.Nodes.InitialConditions["OUT"] = 0.0;
 
             // Create exports
             Export<double>[] exports = new Export<double>[1];

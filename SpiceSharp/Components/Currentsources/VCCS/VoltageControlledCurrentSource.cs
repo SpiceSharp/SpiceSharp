@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -68,10 +69,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the voltage-controlled current source
         /// </summary>
-        /// <param name="circuit">Circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
             ControlPosNode = nodes[2].Index;

@@ -72,9 +72,9 @@ namespace SpiceSharp.Simulations
             Circuit.Objects.BuildOrderedComponentList();
             foreach (var o in Circuit.Objects)
             {
-                o.Setup(Circuit);
+                o.Setup(this);
             }
-            if (Circuit.Nodes.Count < 1)
+            if (Nodes.Count < 1)
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Setup behaviors, configurations and states
@@ -87,8 +87,8 @@ namespace SpiceSharp.Simulations
             RealState = States.Get<RealState>();
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
             foreach (var behavior in LoadBehaviors)
-                behavior.GetEquationPointers(Circuit.Nodes, RealState.Solver);
-            RealState.Initialize(Circuit.Nodes);
+                behavior.GetEquationPointers(Nodes, RealState.Solver);
+            RealState.Initialize(Nodes);
 
             // Allow nodesets to help convergence
             OnLoad += LoadNodeSets;
@@ -140,7 +140,7 @@ namespace SpiceSharp.Simulations
                 o.Unsetup(Circuit);
 
             // Clear nodes
-            Circuit.Nodes.Clear();
+            Nodes.Clear();
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace SpiceSharp.Simulations
         {
             var circuit = Circuit;
             var state = RealState;
-            var nodes = circuit.Nodes;
+            var nodes = Nodes;
             var solver = state.Solver;
 
             // Clear the current solution
@@ -438,7 +438,7 @@ namespace SpiceSharp.Simulations
         protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
             var state = RealState;
-            var nodes = Circuit.Nodes;
+            var nodes = Nodes;
 
             // Consider doing nodeset & ic assignments
             if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) != 0)
@@ -508,9 +508,9 @@ namespace SpiceSharp.Simulations
             var config = BaseConfiguration;
 
             // Check convergence for each node
-            for (int i = 0; i < circuit.Nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                var node = circuit.Nodes[i];
+                var node = Nodes[i];
                 double n = rstate.Solution[node.Index];
                 double o = rstate.OldSolution[node.Index];
 

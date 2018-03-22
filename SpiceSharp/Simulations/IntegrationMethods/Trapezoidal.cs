@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
@@ -134,7 +133,7 @@ namespace SpiceSharp.IntegrationMethods
             var state = simulation.RealState;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
-            var nodes = simulation.Circuit.Nodes;
+            var nodes = simulation.Nodes;
             int index;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...

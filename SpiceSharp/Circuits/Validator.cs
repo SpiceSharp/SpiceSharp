@@ -4,6 +4,7 @@ using System.Linq;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Circuits
 {
@@ -20,6 +21,7 @@ namespace SpiceSharp.Circuits
         private readonly List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
         private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
+        private OP _op = new OP("temp");
         
         /// <summary>
         /// Validate a circuit
@@ -33,7 +35,7 @@ namespace SpiceSharp.Circuits
             // Connect all objects in the circuit, we need this information to find connectivity issues
             circuit.Objects.BuildOrderedComponentList();
             foreach (var o in circuit.Objects)
-                o.Setup(circuit);
+                o.Setup(_op);
 
             // Initialize
             _hasSource = false;
@@ -64,11 +66,11 @@ namespace SpiceSharp.Circuits
             if (unconnected.Count > 0)
             {
                 List<Identifier> un = new List<Identifier>();
-                for (int i = 0; i < circuit.Nodes.Count; i++)
+                for (int i = 0; i < _op.Nodes.Count; i++)
                 {
-                    int index = circuit.Nodes[i].Index;
+                    int index = _op.Nodes[i].Index;
                     if (unconnected.Contains(index))
-                        un.Add(circuit.Nodes[i].Name);
+                        un.Add(_op.Nodes[i].Name);
                 }
                 throw new CircuitException("{0}: Floating nodes found".FormatString(string.Join(",", un)));
             }

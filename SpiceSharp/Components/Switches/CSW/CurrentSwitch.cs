@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSwitchBehaviors;
+using SpiceSharp.Simulations;
 using FrequencyBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior;
 using LoadBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior;
 
@@ -82,15 +83,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the current-controlled switch
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (circuit.Objects[ControllingName] is VoltageSource vsrc)
+            if (simulation.Circuit.Objects[ControllingName] is VoltageSource vsrc)
                 ControllingSource = vsrc;
         }
 

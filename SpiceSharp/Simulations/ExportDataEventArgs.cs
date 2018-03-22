@@ -103,14 +103,14 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Simulation does not support real voltages");
 
             // Get the voltage of the positive node
-            int index = _simulation.Circuit.Nodes[positive]?.Index ?? 
+            int index = _simulation.Nodes[positive]?.Index ?? 
                         throw new CircuitException("Could not find node {0}".FormatString(positive));
             double voltage = state.Solution[index];
 
             // Subtract negative node if necessary
             if (negative != null)
             {
-                index = _simulation.Circuit.Nodes[negative]?.Index ??
+                index = _simulation.Nodes[negative]?.Index ??
                         throw new CircuitException("Could not find node {0}".FormatString(negative));
                 voltage -= state.Solution[index];
             }
@@ -141,14 +141,14 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Simulation does not support real voltages");
 
             // Get the voltage of the positive node
-            int index = _simulation.Circuit.Nodes[positive]?.Index ??
+            int index = _simulation.Nodes[positive]?.Index ??
                         throw new CircuitException("Could not find node {0}".FormatString(positive));
             Complex voltage = state.Solution[index];
 
             // Subtract negative node if necessary
             if (negative != null)
             {
-                index = _simulation.Circuit.Nodes[negative]?.Index ??
+                index = _simulation.Nodes[negative]?.Index ??
                         throw new CircuitException("Could not find node {0}".FormatString(negative));
                 voltage -= state.Solution[index];
             }

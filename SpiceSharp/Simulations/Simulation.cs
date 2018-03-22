@@ -25,6 +25,11 @@ namespace SpiceSharp.Simulations
         public Circuit Circuit { get; protected set; }
 
         /// <summary>
+        /// Gets the node map for this simulation
+        /// </summary>
+        public NodeMap Nodes { get; } = new NodeMap();
+
+        /// <summary>
         /// Event that is called for initializing simulation data exports
         /// </summary>
         public event EventHandler<EventArgs> InitializeSimulationExport;

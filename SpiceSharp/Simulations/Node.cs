@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Describes a node in an electronic circuit.

@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Circuits
 {
@@ -95,8 +96,8 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Setup the component
         /// </summary>
-        /// <param name="circuit">Circuit</param>
-        public abstract void Setup(Circuit circuit);
+        /// <param name="simulation">Simulation</param>
+        public abstract void Setup(Simulation simulation);
 
         /// <summary>
         /// Unsetup/destroy the component

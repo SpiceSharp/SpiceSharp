@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -71,15 +72,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the current-controlled voltage source
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (circuit.Objects[ControllingName] is VoltageSource vsrc)
+            if (simulation.Circuit.Objects[ControllingName] is VoltageSource vsrc)
                 ControllingSource = vsrc;
             else
                 throw new CircuitException("{0}: Could not find voltage source '{1}'".FormatString(Name, ControllingName));

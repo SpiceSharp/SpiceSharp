@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.MosfetBehaviors.Level3;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -53,11 +54,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the device
         /// </summary>
-        /// <param name="circuit">The circuit</param>
-        public override void Setup(Circuit circuit)
+        /// <param name="simulation">Simulation</param>
+        public override void Setup(Simulation simulation)
         {
             // Allocate nodes
-            var nodes = BindNodes(circuit);
+            var nodes = BindNodes(simulation);
             DrainNode = nodes[0].Index;
             GateNode = nodes[1].Index;
             SourceNode = nodes[2].Index;
