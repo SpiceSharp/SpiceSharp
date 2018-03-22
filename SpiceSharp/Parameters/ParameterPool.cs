@@ -8,6 +8,9 @@ namespace SpiceSharp.Parameters
     /// </summary>
     public class ParameterPool
     {
+        /// <summary>
+        /// Parameters indexed by the entity identifier
+        /// </summary>
         private readonly Dictionary<Identifier, ParameterSetDictionary> _entityParameters = new Dictionary<Identifier, ParameterSetDictionary>();
 
         /// <summary>

@@ -64,18 +64,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Setup()
         {
-            // No use simulating an empty circuit
-            if (Circuit.Objects.Count == 0)
-                throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
-
-            // Setup all objects
-            Circuit.Objects.BuildOrderedComponentList();
-            foreach (var o in Circuit.Objects)
-            {
-                o.Setup(this);
-            }
-            if (Nodes.Count < 1)
-                throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
+            base.Setup();
 
             // Setup behaviors, configurations and states
             BaseConfiguration = ParameterSets.Get<BaseConfiguration>();

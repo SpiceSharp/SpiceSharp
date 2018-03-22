@@ -112,7 +112,24 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        protected abstract void Setup();
+        protected virtual void Setup()
+        {
+            // No use simulating an empty circuit
+            if (Circuit.Objects.Count == 0)
+                throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
+
+            // Setup all objects
+            Circuit.Objects.BuildOrderedComponentList();
+            foreach (var o in Circuit.Objects)
+            {
+                o.Setup(this);
+            }
+            if (Nodes.Count < 1)
+                throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
+
+            // Get all parameters
+            SetupParameters();
+        }
 
         /// <summary>
         /// Unsetup the simulation
@@ -133,7 +150,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Collect behaviors of all circuit objects while also setting them up
+        /// Collect behaviors of all circuit entities while also setting them up
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
         /// <returns></returns>
@@ -147,6 +164,19 @@ namespace SpiceSharp.Simulations
                     Behaviors.Add(o.Name, behavior);
             }
             return Behaviors.GetBehaviorList<T>();
+        }
+
+        /// <summary>
+        /// Collect parameter sets of all circuit entities
+        /// </summary>
+        protected void SetupParameters()
+        {
+            // Register all parameters
+            foreach (var o in Circuit.Objects)
+            {
+                foreach (var p in o.ParameterSets.Values)
+                    EntityParameters.Add(o.Name, p);
+            }
         }
     }
 }
