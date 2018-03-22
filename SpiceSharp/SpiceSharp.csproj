@@ -121,6 +121,7 @@
     <Compile Include="Algebra\Vector\Vector.cs" />
     <Compile Include="Algebra\Vector\VectorElement.cs" />
     <Compile Include="Parameters\Parameter.cs" />
+    <Compile Include="Parameters\ParameterPool.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

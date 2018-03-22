@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
@@ -50,9 +51,14 @@ namespace SpiceSharp.Simulations
         public Identifier Name { get; }
 
         /// <summary>
-        /// Pool of all behaviors active in the simulation
+        /// Gets a pool of all behaviors active in the simulation
         /// </summary>
         public BehaviorPool Behaviors { get; } = new BehaviorPool();
+
+        /// <summary>
+        /// Gets a pool of all parameters active in the simulation
+        /// </summary>
+        public ParameterPool EntityParameters { get; } = new ParameterPool();
 
         /// <summary>
         /// Constructor

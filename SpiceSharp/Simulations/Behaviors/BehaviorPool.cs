@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Collection for behaviors
-    /// This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection
+    /// This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.
     /// </summary>
     public class BehaviorPool
     {
@@ -57,7 +57,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the entity behaviors for a specific name
+        /// Gets the entity behaviors for a specific identifier
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
