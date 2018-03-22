@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.ResistorBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -15,12 +14,6 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="model"></param>
         public void SetModel(ResistorModel model) => Model = model;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        public int PosNode { get; private set; }
-        public int NegNode { get; private set; }
         
         /// <summary>
         /// Constants
@@ -66,17 +59,6 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg);
-        }
-
-        /// <summary>
-        /// Setup the resistor
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
     }
 }

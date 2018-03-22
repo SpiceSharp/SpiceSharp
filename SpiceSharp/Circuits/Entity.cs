@@ -50,24 +50,26 @@ namespace SpiceSharp.Circuits
         public bool SetParameter(string name, object value) => ParameterSets.SetParameter(name, value);
 
         /// <summary>
-        /// Gets a behavior from the entity
+        /// Create a behavior for a simulation
         /// </summary>
         /// <typeparam name="T">Behavior base type</typeparam>
-        /// <param name="parameters"></param>
-        /// <param name="behaviors">Pool of all behaviors</param>
+        /// <param name="simulation"></param>
         /// <returns></returns>
-        public virtual T CreateBehavior<T>(ParameterPool parameters, BehaviorPool behaviors) where T : Behavior
+        public virtual T CreateBehavior<T>(Simulation simulation) where T : Behavior
         {
+            // Try to extract the right behavior from our behavior factories
             if (Behaviors.TryGetValue(typeof(T), out var factory))
             {
                 // Create the behavior
                 Behavior behavior = factory();
 
                 // Setup the behavior
-                SetupDataProvider provider = BuildSetupDataProvider(parameters, behaviors);
+                SetupDataProvider provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
                 behavior.Setup(provider);
                 return (T)behavior;
             }
+
+            // None found
             return null;
         }
 
@@ -94,11 +96,5 @@ namespace SpiceSharp.Circuits
         /// Gets the priority of this object
         /// </summary>
         public int Priority { get; protected set; } = 0;
-
-        /// <summary>
-        /// Setup the component
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public abstract void Setup(Simulation simulation);
     }
 }

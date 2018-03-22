@@ -2,7 +2,6 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -13,12 +12,8 @@ namespace SpiceSharp.Components
     public class CurrentControlledVoltageSource : Component
     {
         /// <summary>
-        /// Nodes
+        /// Controlling source name
         /// </summary>
-        [ParameterName("pos_node"), ParameterInfo("Positive node of the source")]
-        public int PosNode { get; internal set; }
-        [ParameterName("neg_node"), ParameterInfo("Negative node of the source")]
-        public int NegNode { get; internal set; }
         [ParameterName("control"), ParameterInfo("Controlling voltage source")]
         public Identifier ControllingName { get; set; }
 
@@ -63,17 +58,6 @@ namespace SpiceSharp.Components
 
             Connect(pos, neg);
             ControllingName = controllingSource;
-        }
-
-        /// <summary>
-        /// Setup the current-controlled voltage source
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
 
         /// <summary>

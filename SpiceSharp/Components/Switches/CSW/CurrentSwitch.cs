@@ -2,7 +2,6 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSwitchBehaviors;
-using SpiceSharp.Simulations;
 using FrequencyBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior;
 using LoadBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior;
 
@@ -20,12 +19,8 @@ namespace SpiceSharp.Components
         public void SetModel(CurrentSwitchModel model) => Model = model;
         
         /// <summary>
-        /// Nodes
+        /// Controlling source name
         /// </summary>
-        [ParameterName("pos_node"), ParameterInfo("Positive node of the switch")]
-        public int PosNode { get; internal set; }
-        [ParameterName("neg_node"), ParameterInfo("Negative node of the switch")]
-        public int NegNode { get; internal set; }
         [ParameterName("control"), ParameterInfo("Name of the controlling source")]
         public Identifier ControllingName { get; set; }
 
@@ -74,17 +69,6 @@ namespace SpiceSharp.Components
 
             Connect(pos, neg);
             ControllingName = controllingSource;
-        }
-
-        /// <summary>
-        /// Setup the current-controlled switch
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
 
         /// <summary>

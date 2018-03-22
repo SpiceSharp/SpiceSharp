@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -10,18 +9,6 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected(0, 1)]
     public class VoltageControlledCurrentSource : Component
     {
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("pos_node"), ParameterInfo("Positive node of the source")]
-        public int PosNode { get; private set; }
-        [ParameterName("neg_node"), ParameterInfo("Negative node of the source")]
-        public int NegNode { get; private set; }
-        [ParameterName("cont_p_node"), ParameterInfo("Positive node of the controlling source voltage")]
-        public int ControlPosNode { get; private set; }
-        [ParameterName("cont_n_node"), ParameterInfo("Negative node of the controlling source voltage")]
-        public int ControlNegNode { get; private set; }
-
         /// <summary>
         /// Private constants
         /// </summary>
@@ -64,19 +51,6 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg, controlPos, controlNeg);
-        }
-
-        /// <summary>
-        /// Setup the voltage-controlled current source
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
-            ControlPosNode = nodes[2].Index;
-            ControlNegNode = nodes[3].Index;
         }
     }
 }

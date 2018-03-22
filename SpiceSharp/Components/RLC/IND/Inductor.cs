@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.InductorBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -10,12 +9,6 @@ namespace SpiceSharp.Components
     [Pin(0, "L+"), Pin(1, "L-")]
     public class Inductor : Component
     {
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        public int PosNode { get; internal set; }
-        public int NegNode { get; internal set; }
-
         /// <summary>
         /// Constants
         /// </summary>
@@ -58,17 +51,6 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg);
-        }
-
-        /// <summary>
-        /// Setup the inductor
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
     }
 }

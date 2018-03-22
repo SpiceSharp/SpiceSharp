@@ -17,18 +17,6 @@ namespace SpiceSharp.Components
         public void SetModel(Model model) => Model = model;
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("dnode"), ParameterInfo("Number of drain node")]
-        public int DrainNode { get; internal set; }
-        [ParameterName("gnode"), ParameterInfo("Number of gate node")]
-        public int GateNode { get; internal set; }
-        [ParameterName("snode"), ParameterInfo("Number of source node")]
-        public int SourceNode { get; internal set; }
-        [ParameterName("bnode"), ParameterInfo("Number of bulk node")]
-        public int BulkNode { get; internal set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -49,19 +37,6 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-        }
-
-        /// <summary>
-        /// Setup the device
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            DrainNode = nodes[0].Index;
-            GateNode = nodes[1].Index;
-            SourceNode = nodes[2].Index;
-            BulkNode = nodes[3].Index;
         }
     }
 }

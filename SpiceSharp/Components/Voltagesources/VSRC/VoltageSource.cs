@@ -11,14 +11,6 @@ namespace SpiceSharp.Components
     public class VoltageSource : Component
     {
         /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("pos_node")]
-        public int PosNode { get; private set; }
-        [ParameterName("neg_node")]
-        public int NegNode { get; private set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -84,18 +76,6 @@ namespace SpiceSharp.Components
 
             // Connect the device
             Connect(pos, neg);
-        }
-
-        /// <summary>
-        /// Setup the voltage source
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            // Bind the nodes
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
     }
 }

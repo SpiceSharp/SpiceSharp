@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.DiodeBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -14,12 +13,6 @@ namespace SpiceSharp.Components
         /// Set the model for the diode
         /// </summary>
         public void SetModel(DiodeModel model) => Model = model;
-
-        /// <summary>
-        /// Extra variables
-        /// </summary>
-        public int PosNode { get; private set; }
-        public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
@@ -42,17 +35,6 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-        }
-
-        /// <summary>
-        /// Setup the device
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
     }
 }

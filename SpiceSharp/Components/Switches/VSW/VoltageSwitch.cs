@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.VoltageSwitchBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -14,18 +13,6 @@ namespace SpiceSharp.Components
         /// Set the model for the voltage-controlled switch
         /// </summary>
         public void SetModel(VoltageSwitchModel model) => Model = model;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("pos_node"), ParameterInfo("Positive node of the switch")]
-        public int PosNode { get; internal set; }
-        [ParameterName("neg_node"), ParameterInfo("Negative node of the switch")]
-        public int NegNode { get; internal set; }
-        [ParameterName("cont_p_node"), ParameterInfo("Positive controlling node of the switch")]
-        public int ControlPosNode { get; internal set; }
-        [ParameterName("cont_n_node"), ParameterInfo("Negative controlling node of the switch")]
-        public int ControlNegNode { get; internal set; }
 
         /// <summary>
         /// Constants
@@ -69,19 +56,6 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             Connect(pos, neg, controlPos, controlNeg);
-        }
-
-        /// <summary>
-        /// Setup the voltage-controlled switch
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
-            ControlPosNode = nodes[2].Index;
-            ControlNegNode = nodes[3].Index;
         }
     }
 }

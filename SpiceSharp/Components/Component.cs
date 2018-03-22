@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
@@ -16,6 +17,7 @@ namespace SpiceSharp.Components
         /// </summary>
         private readonly Identifier[] _connections;
         private readonly int[] _indices;
+        private bool _validNodeIndices;
 
         /// <summary>
         /// Gets the number of nodes
@@ -64,22 +66,26 @@ namespace SpiceSharp.Components
                     throw new ArgumentNullException("node " + (i + 1));
                 _connections[i] = nodes[i];
             }
+
+            _validNodeIndices = false;
         }
 
         /// <summary>
         /// Gets a behavior
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="behaviors">Behaviors</param>
+        /// <param name="simulation"></param>
         /// <returns></returns>
-        public override T CreateBehavior<T>(ParameterPool parameters, BehaviorPool behaviors)
+        public override T CreateBehavior<T>(Simulation simulation)
         {
-            T behavior = base.CreateBehavior<T>(parameters, behaviors);
+            T behavior = base.CreateBehavior<T>(simulation);
 
             // Extra functionality for behaviors that can be connected
             if (behavior is IConnectedBehavior cb)
             {
+                // Connect the behavior
+                if (_connections != null && !_validNodeIndices)
+                    ApplyConnection(simulation.Nodes);
                 cb.Connect(_indices);
             }
             return behavior;
@@ -116,37 +122,37 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the node index of the component
+        /// Update the indices for the component
         /// </summary>
-        /// <param name="index">The index</param>
+        /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        public virtual int GetNodeIndex(int index)
+        public void ApplyConnection(NodeMap nodes)
         {
-            if (index < 0 || index >= _connections.Length)
-                throw new CircuitException("Invalid node {0}".FormatString(index));
-            return _indices[index];
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+
+            // Map connected nodes
+            for (int i = 0; i < _connections.Length; i++)
+                _indices[i] = nodes.Map(_connections[i]).Index;
+            _validNodeIndices = true;
         }
 
         /// <summary>
-        /// Helper function for binding nodes to the circuit
+        /// Get the node indices in order
         /// </summary>
-        /// <param name="simulation">Simulation</param>
+        /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        protected Node[] BindNodes(Simulation simulation)
+        public IEnumerable<int> GetNodeIndices(NodeMap nodes)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
 
             // Map connected nodes
-            Node[] nodes = new Node[_connections.Length];
             for (int i = 0; i < _connections.Length; i++)
             {
-                nodes[i] = simulation.Nodes.Map(_connections[i]);
-                _indices[i] = nodes[i].Index;
+                _indices[i] = nodes.Map(_connections[i]).Index;
+                yield return _indices[i];
             }
-
-            // Return all nodes
-            return nodes;
         }
     }
 }

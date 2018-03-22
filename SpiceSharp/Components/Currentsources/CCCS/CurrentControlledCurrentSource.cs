@@ -19,14 +19,6 @@ namespace SpiceSharp.Components
         public Identifier ControllingName { get; set; }
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("pos_node"), ParameterInfo("Positive node of the source")]
-        public int PosNode { get; private set; }
-        [ParameterName("neg_node"), ParameterInfo("Negative node of the source")]
-        public int NegNode { get; private set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
 		[ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -74,20 +66,6 @@ namespace SpiceSharp.Components
             // Connect
             Connect(pos, neg);
             ControllingName = voltageSource;
-        }
-
-        /// <summary>
-        /// Setup the current controlled current source
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
-
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
 
         /// <summary>

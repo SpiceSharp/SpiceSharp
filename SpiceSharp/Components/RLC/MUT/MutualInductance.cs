@@ -62,14 +62,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Setup the mutual inductance
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-        }
-
-        /// <summary>
         /// Add inductances to the data provider for setting up behaviors
         /// </summary>
         /// <returns></returns>

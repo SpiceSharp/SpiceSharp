@@ -11,18 +11,6 @@ namespace SpiceSharp.Components
     public class VoltageControlledVoltageSource : Component
     {
         /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("pos_node"), ParameterInfo("Positive node of the source")]
-        public int PosNode { get; internal set; }
-        [ParameterName("neg_node"), ParameterInfo("Negative node of the source")]
-        public int NegNode { get; internal set; }
-        [ParameterName("cont_p_node"), ParameterInfo("Positive controlling node of the source")]
-        public int ControlPosNode { get; internal set; }
-        [ParameterName("cont_n_node"), ParameterInfo("Negative controlling node of the source")]
-        public int ControlNegNode { get; internal set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -63,19 +51,6 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg, controlPos, controlNeg);
-        }
-
-        /// <summary>
-        /// Setup the voltage-controlled voltage source
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
-            ControlPosNode = nodes[2].Index;
-            ControlNegNode = nodes[3].Index;
         }
     }
 }

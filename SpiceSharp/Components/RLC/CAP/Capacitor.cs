@@ -17,14 +17,6 @@ namespace SpiceSharp.Components
         public void SetModel(CapacitorModel model) => Model = model;
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("pos"), ParameterInfo("Positive terminal of the capacitor")]
-        public int PosNode { get; private set; }
-        [ParameterName("neg"), ParameterInfo("Negative terminal of the capacitor")]
-        public int NegNode { get; private set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -65,17 +57,6 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg);
-        }
-
-        /// <summary>
-        /// Setup the capacitor
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
     }
 }

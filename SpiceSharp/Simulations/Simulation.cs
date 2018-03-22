@@ -84,6 +84,10 @@ namespace SpiceSharp.Simulations
             Setup(circuit);
             InitializeSimulationExport?.Invoke(this, EventArgs.Empty);
 
+            // Check that at least something is simulated
+            if (Nodes.Count < 1)
+                throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
+
             // Execute the simulation
             if (controller != null)
             {
@@ -118,12 +122,6 @@ namespace SpiceSharp.Simulations
 
             // Setup all objects
             circuit.Objects.BuildOrderedComponentList();
-            foreach (var o in circuit.Objects)
-            {
-                o.Setup(this);
-            }
-            if (Nodes.Count < 1)
-                throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Get all parameters
             SetupParameters(circuit.Objects);
@@ -160,7 +158,7 @@ namespace SpiceSharp.Simulations
             // Register all behaviors
             foreach (var o in entities)
             {
-                T behavior = o.CreateBehavior<T>(EntityParameters, EntityBehaviors);
+                T behavior = o.CreateBehavior<T>(this);
                 if (behavior != null)
                     EntityBehaviors.Add(o.Name, behavior);
             }

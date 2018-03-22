@@ -21,7 +21,7 @@ namespace SpiceSharp.Circuits
         private readonly List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
         private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
-        private readonly OP _op = new OP("temp");
+        private readonly NodeMap _nodes = new NodeMap();
         
         /// <summary>
         /// Validate a circuit
@@ -34,8 +34,6 @@ namespace SpiceSharp.Circuits
 
             // Connect all objects in the circuit, we need this information to find connectivity issues
             circuit.Objects.BuildOrderedComponentList();
-            foreach (var o in circuit.Objects)
-                o.Setup(_op);
 
             // Initialize
             _hasSource = false;
@@ -43,6 +41,7 @@ namespace SpiceSharp.Circuits
             _connectedGroups.Clear();
             _connectedGroups.Add(0, 0);
             _cgroup = 1;
+            _nodes.Clear();
 
             // Check all objects
             foreach (var c in circuit.Objects)
@@ -66,11 +65,11 @@ namespace SpiceSharp.Circuits
             if (unconnected.Count > 0)
             {
                 List<Identifier> un = new List<Identifier>();
-                for (int i = 0; i < _op.Nodes.Count; i++)
+                for (int i = 0; i < _nodes.Count; i++)
                 {
-                    int index = _op.Nodes[i].Index;
+                    int index = _nodes[i].Index;
                     if (unconnected.Contains(index))
-                        un.Add(_op.Nodes[i].Name);
+                        un.Add(_nodes[i].Name);
                 }
                 throw new CircuitException("{0}: Floating nodes found".FormatString(string.Join(",", un)));
             }
@@ -89,10 +88,9 @@ namespace SpiceSharp.Circuits
                 int n = -1;
                 bool isShortcircuit = false;
                 int[] nodes = new int[icc.PinCount];
-                for (int i = 0; i < icc.PinCount; i++)
+                int i = 0;
+                foreach (var index in icc.GetNodeIndices(_nodes))
                 {
-                    var index = icc.GetNodeIndex(i);
-
                     // Check for a connection to ground
                     if (index == 0)
                         _hasGround = true;
@@ -111,7 +109,7 @@ namespace SpiceSharp.Circuits
                     }
 
                     // Group indices
-                    nodes[i] = index;
+                    nodes[i++] = index;
                     if (!_connectedGroups.ContainsKey(index))
                         _connectedGroups.Add(index, _cgroup++);
                 }

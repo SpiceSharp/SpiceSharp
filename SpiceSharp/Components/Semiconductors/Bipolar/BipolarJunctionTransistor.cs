@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.BipolarBehaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -14,18 +13,6 @@ namespace SpiceSharp.Components
         /// Set the model for the BJT
         /// </summary>
         public void SetModel(BipolarJunctionTransistorModel model) => Model = model;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        [ParameterName("colnode"), ParameterInfo("Number of collector node")]
-        public int CollectorNode { get; private set; }
-        [ParameterName("basenode"), ParameterInfo("Number of base node")]
-        public int BaseNode { get; private set; }
-        [ParameterName("emitnode"), ParameterInfo("Number of emitter node")]
-        public int EmitterNode { get; private set; }
-        [ParameterName("substnode"), ParameterInfo("Number of substrate node")]
-        public int SubstrateNode { get; private set; }
 
         /// <summary>
         /// Constants
@@ -49,19 +36,6 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-        }
-
-        /// <summary>
-        /// Setup the device
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            CollectorNode = nodes[0].Index;
-            BaseNode = nodes[1].Index;
-            EmitterNode = nodes[2].Index;
-            SubstrateNode = nodes[3].Index;
         }
     }
 }

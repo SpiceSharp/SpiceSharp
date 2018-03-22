@@ -11,12 +11,6 @@ namespace SpiceSharp.Components
     public class CurrentSource : Component
     {
         /// <summary>
-        /// Nodes
-        /// </summary>
-        public int PosNode { get; private set; }
-        public int NegNode { get; private set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -83,17 +77,6 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg);
-        }
-
-        /// <summary>
-        /// Setup the current source
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Setup(Simulation simulation)
-        {
-            var nodes = BindNodes(simulation);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
         }
     }
 }
