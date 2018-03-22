@@ -74,9 +74,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup simulation
         /// </summary>
-        protected override void Setup()
+        /// <param name="circuit">Circuit</param>
+        protected override void Setup(Circuit circuit)
         {
-            base.Setup();
+            base.Setup(circuit);
 
             // Get DC configuration
             DcConfiguration = ParameterSets.Get<DcConfiguration>();
@@ -131,15 +132,16 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    if (!Circuit.Objects.Contains(sweep.Parameter))
+                    // Get entity parameters
+                    if (!EntityBehaviors.ContainsKey(sweep.Parameter))
                         throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
-                    var component = Circuit.Objects[sweep.Parameter];
+                    var eb = EntityParameters.GetEntityParameters(sweep.Parameter);
 
-                    // Get the parameter and save it for restoring later
-                    if (component is VoltageSource vsrc)
-                        swept[i] = vsrc.ParameterSets.Get<Components.VoltagesourceBehaviors.BaseParameters>().DcValue;
-                    else if (component is CurrentSource isrc)
-                        swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DcValue;
+                    // Check for a Voltage source or Current source parameters
+                    if (eb.TryGet<Components.VoltagesourceBehaviors.BaseParameters>(out var pvsrc))
+                        swept[i] = pvsrc.DcValue;
+                    else if (eb.TryGet<Components.CurrentsourceBehaviors.BaseParameters>(out var pisrc))
+                        swept[i] = pisrc.DcValue;
                     else
                         throw new CircuitException("Invalid sweep object");
                 }

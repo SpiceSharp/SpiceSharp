@@ -100,14 +100,5 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="simulation">Simulation</param>
         public abstract void Setup(Simulation simulation);
-
-        /// <summary>
-        /// Unsetup/destroy the component
-        /// </summary>
-        /// <param name="circuit">Circuit</param>
-        public virtual void Unsetup(Circuit circuit)
-        {
-            // Do nothing
-        }
     }
 }

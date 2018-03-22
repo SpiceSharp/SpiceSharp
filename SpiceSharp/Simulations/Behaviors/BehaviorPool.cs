@@ -67,5 +67,12 @@ namespace SpiceSharp.Behaviors
                 return result;
             return null;
         }
+
+        /// <summary>
+        /// Determines whether the pool contains the specified key
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <returns></returns>
+        public bool ContainsKey(Identifier name) => _entityBehaviors.ContainsKey(name);
     }
 }

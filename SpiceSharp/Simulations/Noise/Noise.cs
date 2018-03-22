@@ -65,13 +65,14 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        protected override void Setup()
+        /// <param name="circuit">Circuit</param>
+        protected override void Setup(Circuit circuit)
         {
-            base.Setup();
+            base.Setup(circuit);
 
             // Get behaviors, parameters and states
             NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
-            NoiseBehaviors = SetupBehaviors<NoiseBehavior>();
+            NoiseBehaviors = SetupBehaviors<NoiseBehavior>(circuit.Objects);
             NoiseState = States.Get<NoiseState>();
             NoiseState.Initialize(Nodes);
         }

@@ -67,16 +67,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        protected override void Setup()
+        /// <param name="circuit">Circuit</param>
+        protected override void Setup(Circuit circuit)
         {
             // Get base behaviors
-            base.Setup();
+            base.Setup(circuit);
 
             // Get behaviors and configurations
             var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             TimeConfiguration = config;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            TransientBehaviors = SetupBehaviors<BaseTransientBehavior>();
+            TransientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Objects);
 
             // Setup the state pool and register states
             StatePool = new StatePool(Method);

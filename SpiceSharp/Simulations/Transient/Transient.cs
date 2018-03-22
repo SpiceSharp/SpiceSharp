@@ -51,12 +51,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        protected override void Setup()
+        /// <param name="circuit">Circuit</param>
+        protected override void Setup(Circuit circuit)
         {
-            base.Setup();
+            base.Setup(circuit);
 
             // Get behaviors and configurations
-            AcceptBehaviors = SetupBehaviors<BaseAcceptBehavior>();
+            AcceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Objects);
         }
 
         /// <summary>

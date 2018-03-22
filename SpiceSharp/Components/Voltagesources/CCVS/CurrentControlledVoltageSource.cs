@@ -22,11 +22,6 @@ namespace SpiceSharp.Components
         public Identifier ControllingName { get; set; }
 
         /// <summary>
-        /// Gets the controlling voltage source
-        /// </summary>
-        public VoltageSource ControllingSource { get; protected set; }
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -78,12 +73,6 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
-
-            // Find the voltage source
-            if (simulation.Circuit.Objects[ControllingName] is VoltageSource vsrc)
-                ControllingSource = vsrc;
-            else
-                throw new CircuitException("{0}: Could not find voltage source '{1}'".FormatString(Name, ControllingName));
         }
 
         /// <summary>

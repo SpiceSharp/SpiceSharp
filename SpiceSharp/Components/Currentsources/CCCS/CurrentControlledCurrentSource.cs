@@ -25,8 +25,6 @@ namespace SpiceSharp.Components
         public int PosNode { get; private set; }
         [ParameterName("neg_node"), ParameterInfo("Negative node of the source")]
         public int NegNode { get; private set; }
-        [ParameterName("vctrl"), ParameterInfo("Controlling voltage source")]
-        public VoltageSource ControllingSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -90,12 +88,6 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(simulation);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;
-
-            // Find the voltage source for which the current is being measured
-            if (simulation.Circuit.Objects[ControllingName] is VoltageSource vsrc)
-                ControllingSource = vsrc;
-            else
-                throw new CircuitException("{0}: Could not find voltage source '{1}'".FormatString(Name, ControllingName));
         }
 
         /// <summary>

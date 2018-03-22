@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -18,11 +20,6 @@ namespace SpiceSharp.Simulations
         /// States of the simulation
         /// </summary>
         public StateDictionary States { get; } = new StateDictionary();
-
-        /// <summary>
-        /// The circuit
-        /// </summary>
-        public Circuit Circuit { get; protected set; }
 
         /// <summary>
         /// Gets the node map for this simulation
@@ -80,11 +77,11 @@ namespace SpiceSharp.Simulations
         /// <param name="controller">Simulation flow controller</param>
         public virtual void Run(Circuit circuit, SimulationFlowController controller)
         {
-            // Store the circuit
-            Circuit = circuit ?? throw new ArgumentNullException(nameof(circuit));
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
 
             // Setup the simulation
-            Setup();
+            Setup(circuit);
             InitializeSimulationExport?.Invoke(this, EventArgs.Empty);
 
             // Execute the simulation
@@ -95,31 +92,30 @@ namespace SpiceSharp.Simulations
                 {
                     Execute();
                 } while (controller.ContinueExecution(this));
+
                 controller.Finalize(this);
             }
             else
-               Execute();
+                Execute();
 
             // Finalize the simulation
             FinalizeSimulationExport?.Invoke(this, EventArgs.Empty);
             Unsetup();
-
-            // Clear the circuit
-            Circuit = null;
         }
 
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        protected virtual void Setup()
+        /// <param name="circuit"></param>
+        protected virtual void Setup(Circuit circuit)
         {
             // No use simulating an empty circuit
-            if (Circuit.Objects.Count == 0)
+            if (circuit.Objects.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
             // Setup all objects
-            Circuit.Objects.BuildOrderedComponentList();
-            foreach (var o in Circuit.Objects)
+            circuit.Objects.BuildOrderedComponentList();
+            foreach (var o in circuit.Objects)
             {
                 o.Setup(this);
             }
@@ -127,7 +123,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Get all parameters
-            SetupParameters();
+            SetupParameters(circuit.Objects);
         }
 
         /// <summary>
@@ -153,10 +149,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
         /// <returns></returns>
-        protected Collection<T> SetupBehaviors<T>() where T : Behavior
+        protected Collection<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
         {
             // Register all behaviors
-            foreach (var o in Circuit.Objects)
+            foreach (var o in entities)
             {
                 T behavior = o.CreateBehavior<T>(EntityParameters, EntityBehaviors);
                 if (behavior != null)
@@ -168,10 +164,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Collect parameter sets of all circuit entities
         /// </summary>
-        protected void SetupParameters()
+        protected void SetupParameters(IEnumerable<Entity> entities)
         {
             // Register all parameters
-            foreach (var o in Circuit.Objects)
+            foreach (var o in entities)
             {
                 foreach (var p in o.ParameterSets.Values)
                     EntityParameters.Add(o.Name, p);

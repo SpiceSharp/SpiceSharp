@@ -62,15 +62,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        protected override void Setup()
+        /// <param name="circuit">Circuit</param>
+        protected override void Setup(Circuit circuit)
         {
-            base.Setup();
+            base.Setup(circuit);
 
             // Setup behaviors, configurations and states
             BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
-            TemperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>();
-            LoadBehaviors = SetupBehaviors<BaseLoadBehavior>();
-            InitialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>();
+            TemperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Objects);
+            LoadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Objects);
+            InitialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Objects);
 
             // Setup the load behaviors
             RealState = States.Get<RealState>();
@@ -123,10 +124,6 @@ namespace SpiceSharp.Simulations
             InitialConditionBehaviors.Clear();
             InitialConditionBehaviors = null;
             BaseConfiguration = null;
-
-            // Unsetup all objects
-            foreach (var o in Circuit.Objects)
-                o.Unsetup(Circuit);
 
             // Clear nodes
             Nodes.Clear();
@@ -375,7 +372,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitialConditions()
         {
-            var circuit = Circuit;
             var state = RealState;
             var nodes = Nodes;
             var solver = state.Solver;
@@ -415,7 +411,7 @@ namespace SpiceSharp.Simulations
             if (state.UseIc)
             {
                 foreach (var behavior in InitialConditionBehaviors)
-                    behavior.SetInitialCondition(circuit);
+                    behavior.SetInitialCondition(this);
             }
         }
 
@@ -492,7 +488,6 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected bool IsConvergent()
         {
-            var circuit = Circuit;
             var rstate = RealState;
             var config = BaseConfiguration;
 

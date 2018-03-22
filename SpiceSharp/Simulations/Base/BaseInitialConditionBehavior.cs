@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Behavior for setting initial conditions
@@ -14,7 +16,7 @@
         /// <summary>
         /// Set the initial conditions
         /// </summary>
-        /// <param name="circuit">Circuit</param>
-        public abstract void SetInitialCondition(Circuit circuit);
+        /// <param name="simulation"></param>
+        public abstract void SetInitialCondition(Simulation simulation);
     }
 }

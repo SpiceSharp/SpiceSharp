@@ -20,12 +20,6 @@ namespace SpiceSharp.Components
         public Identifier InductorName2 { get; set; }
 
         /// <summary>
-        /// Private variables
-        /// </summary>
-        public Inductor Inductor1 { get; private set; }
-        public Inductor Inductor2 { get; private set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
@@ -73,12 +67,6 @@ namespace SpiceSharp.Components
         /// <param name="simulation">Simulation</param>
         public override void Setup(Simulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
-
-            // Get the inductors for the mutual inductance
-            Inductor1 = simulation.Circuit.Objects[InductorName1] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName1));
-            Inductor2 = simulation.Circuit.Objects[InductorName2] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName2));
         }
 
         /// <summary>
