@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSwitchBehaviors;
 using SpiceSharp.Simulations;
@@ -92,6 +93,11 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
+            if (parameters == null)
+                throw new ArgumentNullException(nameof(parameters));
+            if (behaviors == null)
+                throw new ArgumentNullException(nameof(behaviors));
+
             var provider = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Add controlling voltage source data

@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -65,6 +64,8 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">Circuit</param>
         protected override void Setup(Circuit circuit)
         {
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
             // Setup behaviors, configurations and states

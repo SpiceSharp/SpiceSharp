@@ -54,6 +54,8 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">Circuit</param>
         protected override void Setup(Circuit circuit)
         {
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
             // Get behaviors and configurations

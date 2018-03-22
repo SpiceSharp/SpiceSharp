@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -59,12 +60,16 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">Circuit</param>
         protected override void Setup(Circuit circuit)
         {
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
             // Get behaviors, configurations and states
             ComplexState = States.Get<ComplexState>() ?? throw new CircuitException("No complex state found");
-            FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ?? throw new CircuitException("No frequency configuration found");
-            FrequencySweep = FrequencyConfiguration.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
+            FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ??
+                                     throw new CircuitException("No frequency configuration found");
+            FrequencySweep = FrequencyConfiguration.FrequencySweep ??
+                             throw new CircuitException("No frequency sweep found");
 
             FrequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Objects);
             var solver = ComplexState.Solver;

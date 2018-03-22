@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {

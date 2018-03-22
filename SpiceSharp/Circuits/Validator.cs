@@ -21,7 +21,7 @@ namespace SpiceSharp.Circuits
         private readonly List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
         private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
-        private OP _op = new OP("temp");
+        private readonly OP _op = new OP("temp");
         
         /// <summary>
         /// Validate a circuit

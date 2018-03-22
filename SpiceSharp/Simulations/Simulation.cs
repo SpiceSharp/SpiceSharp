@@ -109,6 +109,9 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit"></param>
         protected virtual void Setup(Circuit circuit)
         {
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
+
             // No use simulating an empty circuit
             if (circuit.Objects.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
@@ -151,6 +154,9 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected Collection<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
         {
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+
             // Register all behaviors
             foreach (var o in entities)
             {
@@ -166,6 +172,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void SetupParameters(IEnumerable<Entity> entities)
         {
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+
             // Register all parameters
             foreach (var o in entities)
             {

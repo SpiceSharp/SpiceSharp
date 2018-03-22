@@ -70,12 +70,12 @@ namespace SpiceSharp.Components
         /// Gets a behavior
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
-        /// <param name="parameters"></param>
-        /// <param name="pool">Pool of all behaviors</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="behaviors">Behaviors</param>
         /// <returns></returns>
-        public override T CreateBehavior<T>(ParameterPool parameters, BehaviorPool pool)
+        public override T CreateBehavior<T>(ParameterPool parameters, BehaviorPool behaviors)
         {
-            T behavior = base.CreateBehavior<T>(parameters, pool);
+            T behavior = base.CreateBehavior<T>(parameters, behaviors);
 
             // Extra functionality for behaviors that can be connected
             if (behavior is IConnectedBehavior cb)
