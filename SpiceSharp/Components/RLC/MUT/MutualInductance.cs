@@ -84,24 +84,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Add inductances to the data provider for setting up behaviors
         /// </summary>
-        /// <param name="pool">Behaviors</param>
         /// <returns></returns>
-        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
             // Base execution (will add entity behaviors and parameters for this mutual inductance)
-            var data = base.BuildSetupDataProvider(pool);
+            var data = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Register inductor 1
-            var eb = pool.GetEntityBehaviors(InductorName1) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName1));
-            data.Add("inductor1", eb);
-            var parameters = Inductor1.ParameterSets;
-            data.Add("inductor1", parameters);
+            data.Add("inductor1", parameters.GetEntityParameters(InductorName1));
+            data.Add("inductor1", behaviors.GetEntityBehaviors(InductorName1));
 
             // Register inductor 2
-            eb = pool.GetEntityBehaviors(InductorName2) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName2));
-            data.Add("inductor2", eb);
-            parameters = Inductor2.ParameterSets;
-            data.Add("inductor2", parameters);
+            data.Add("inductor2", parameters.GetEntityParameters(InductorName2));
+            data.Add("inductor2", behaviors.GetEntityBehaviors(InductorName2));
 
             return data;
         }

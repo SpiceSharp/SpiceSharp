@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
@@ -53,7 +52,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all behaviors active in the simulation
         /// </summary>
-        public BehaviorPool Behaviors { get; } = new BehaviorPool();
+        public BehaviorPool EntityBehaviors { get; } = new BehaviorPool();
 
         /// <summary>
         /// Gets a pool of all parameters active in the simulation
@@ -159,11 +158,11 @@ namespace SpiceSharp.Simulations
             // Register all behaviors
             foreach (var o in Circuit.Objects)
             {
-                T behavior = o.GetBehavior<T>(Behaviors);
+                T behavior = o.CreateBehavior<T>(EntityParameters, EntityBehaviors);
                 if (behavior != null)
-                    Behaviors.Add(o.Name, behavior);
+                    EntityBehaviors.Add(o.Name, behavior);
             }
-            return Behaviors.GetBehaviorList<T>();
+            return EntityBehaviors.GetBehaviorList<T>();
         }
 
         /// <summary>

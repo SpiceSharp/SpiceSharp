@@ -53,9 +53,10 @@ namespace SpiceSharp.Circuits
         /// Gets a behavior from the entity
         /// </summary>
         /// <typeparam name="T">Behavior base type</typeparam>
-        /// <param name="pool">Pool of all behaviors</param>
+        /// <param name="parameters"></param>
+        /// <param name="behaviors">Pool of all behaviors</param>
         /// <returns></returns>
-        public virtual T GetBehavior<T>(BehaviorPool pool) where T : Behavior
+        public virtual T CreateBehavior<T>(ParameterPool parameters, BehaviorPool behaviors) where T : Behavior
         {
             if (Behaviors.TryGetValue(typeof(T), out var factory))
             {
@@ -63,28 +64,29 @@ namespace SpiceSharp.Circuits
                 Behavior behavior = factory();
 
                 // Setup the behavior
-                SetupDataProvider provider = BuildSetupDataProvider(pool);
+                SetupDataProvider provider = BuildSetupDataProvider(parameters, behaviors);
                 behavior.Setup(provider);
                 return (T)behavior;
             }
             return null;
         }
-        
+
         /// <summary>
         /// Build the data provider for setting up a behavior for the entity
         /// The entity can control which parameters and behaviors are visible to behaviors in this way
         /// </summary>
-        /// <param name="pool">All behaviors</param>
         /// <returns></returns>
-        protected virtual SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        protected virtual SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            if (pool == null)
-                throw new ArgumentNullException(nameof(pool));
+            if (parameters == null)
+                throw new ArgumentNullException(nameof(parameters));
+            if (behaviors == null)
+                throw new ArgumentNullException(nameof(behaviors));
 
             // By default, we include the parameters of this entity
             SetupDataProvider result = new SetupDataProvider();
-            result.Add("entity", ParameterSets);
-            result.Add("entity", pool.GetEntityBehaviors(Name));
+            result.Add("entity", parameters.GetEntityParameters(Name));
+            result.Add("entity", behaviors.GetEntityBehaviors(Name));
             return result;
         }
 

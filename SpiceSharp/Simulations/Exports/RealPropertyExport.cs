@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
             var simulation = (Simulation) sender;
-            var eb = simulation.Behaviors.GetEntityBehaviors(EntityName);
+            var eb = simulation.EntityBehaviors.GetEntityBehaviors(EntityName);
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis

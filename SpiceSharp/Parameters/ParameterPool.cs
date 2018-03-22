@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp
 {
     /// <summary>
     /// Collection for parameters

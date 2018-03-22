@@ -89,15 +89,14 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup data provider
         /// </summary>
-        /// <param name="pool">Pool</param>
         /// <returns></returns>
-        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            var provider = base.BuildSetupDataProvider(pool);
+            var provider = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Add the controlling source
-            provider.Add("control", pool.GetEntityBehaviors(ControllingName));
-            provider.Add("control", ControllingSource.ParameterSets);
+            provider.Add("control", behaviors.GetEntityBehaviors(ControllingName));
+            provider.Add("control", parameters.GetEntityParameters(ControllingName));
 
             return provider;
         }

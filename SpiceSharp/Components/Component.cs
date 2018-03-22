@@ -70,11 +70,12 @@ namespace SpiceSharp.Components
         /// Gets a behavior
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
+        /// <param name="parameters"></param>
         /// <param name="pool">Pool of all behaviors</param>
         /// <returns></returns>
-        public override T GetBehavior<T>(BehaviorPool pool)
+        public override T CreateBehavior<T>(ParameterPool parameters, BehaviorPool pool)
         {
-            T behavior = base.GetBehavior<T>(pool);
+            T behavior = base.CreateBehavior<T>(parameters, pool);
 
             // Extra functionality for behaviors that can be connected
             if (behavior is IConnectedBehavior cb)
@@ -87,19 +88,16 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Build the data provider for setting up behaviors
         /// </summary>
-        /// <param name="pool">All behaviors</param>
         /// <returns></returns>
-        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            if (pool == null)
-                throw new ArgumentNullException(nameof(pool));
-            var provider = base.BuildSetupDataProvider(pool);
+            var provider = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Add our model parameters and behaviors
             if (Model != null)
             {
-                provider.Add("model", Model.ParameterSets);
-                provider.Add("model", pool.GetEntityBehaviors(Model.Name));
+                provider.Add("model", parameters.GetEntityParameters(Model.Name));
+                provider.Add("model", behaviors.GetEntityBehaviors(Model.Name));
             }
 
             return provider;
