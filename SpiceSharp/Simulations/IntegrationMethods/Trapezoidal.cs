@@ -142,7 +142,7 @@ namespace SpiceSharp.IntegrationMethods
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
-                        if (node.UnknownType != UnknownType.Voltage)
+                        if (node.UnknownType != VariableType.Voltage)
                             continue;
                         index = node.Index;
 
@@ -163,7 +163,7 @@ namespace SpiceSharp.IntegrationMethods
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
-                        if (node.UnknownType != UnknownType.Voltage)
+                        if (node.UnknownType != VariableType.Voltage)
                             continue;
                         index = node.Index;
 

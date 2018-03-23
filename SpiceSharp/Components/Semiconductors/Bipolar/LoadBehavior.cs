@@ -134,23 +134,23 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
+        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            if (variables == null)
+                throw new ArgumentNullException(nameof(variables));
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
             // Add a series collector node if necessary
-            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? nodes.Create(new SubIdentifier(Name, "col")).Index : _collectorNode;
+            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? variables.Create(new SubIdentifier(Name, "col")).Index : _collectorNode;
 
             // Add a series base node if necessary
-            BasePrimeNode = _mbp.BaseResist.Value > 0 ? nodes.Create(new SubIdentifier(Name, "base")).Index : _baseNode;
+            BasePrimeNode = _mbp.BaseResist.Value > 0 ? variables.Create(new SubIdentifier(Name, "base")).Index : _baseNode;
 
             // Add a series emitter node if necessary
-            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? nodes.Create(new SubIdentifier(Name, "emit")).Index : _emitterNode;
+            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? variables.Create(new SubIdentifier(Name, "emit")).Index : _emitterNode;
 
             // Get solver pointers
             CollectorCollectorPrimePtr = solver.GetMatrixElement(_collectorNode, CollectorPrimeNode);

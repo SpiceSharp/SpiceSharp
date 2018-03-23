@@ -55,7 +55,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Clear all objects, nodes, etc. in the circuit
+        /// Clear all objects in the circuit
         /// </summary>
         public void Clear()
         {

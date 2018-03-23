@@ -77,12 +77,12 @@ namespace SpiceSharp.Simulations
         {
             // Create our extractor!
             var state = Simulation.States.Get<ComplexState>();
-            if (Simulation.Nodes.TryGetNode(PosNode, out Unknown posNode))
+            if (Simulation.Nodes.TryGetNode(PosNode, out Variable posNode))
             {
                 int posNodeIndex = posNode.Index;
                 if (NegNode == null)
                     Extractor = () => state.Solution[posNodeIndex];
-                else if (Simulation.Nodes.TryGetNode(NegNode, out Unknown negNode))
+                else if (Simulation.Nodes.TryGetNode(NegNode, out Variable negNode))
                 {
                     int negNodeIndex = negNode.Index;
                     Extractor = () => state.Solution[posNodeIndex] - state.Solution[negNodeIndex];

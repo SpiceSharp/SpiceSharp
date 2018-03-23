@@ -78,6 +78,9 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public override T CreateBehavior<T>(Simulation simulation)
         {
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
             T behavior = base.CreateBehavior<T>(simulation);
 
             // Extra functionality for behaviors that can be connected
@@ -126,7 +129,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        public void ApplyConnection(UnknownCollection nodes)
+        public void ApplyConnection(VariableSet nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
@@ -142,7 +145,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        public IEnumerable<int> GetNodeIndices(UnknownCollection nodes)
+        public IEnumerable<int> GetNodeIndexes(VariableSet nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

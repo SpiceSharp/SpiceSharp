@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 
@@ -111,8 +110,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            int posOutNode = noiseconfig.Output != null ? Nodes[noiseconfig.Output].Index : 0;
-            int negOutNode = noiseconfig.OutputRef != null ? Nodes[noiseconfig.OutputRef].Index : 0;
+            int posOutNode = noiseconfig.Output != null ? Nodes.GetNode(noiseconfig.Output).Index : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? Nodes.GetNode(noiseconfig.OutputRef).Index : 0;
 
             // Initialize
             nstate.Reset(FrequencySweep.Initial);

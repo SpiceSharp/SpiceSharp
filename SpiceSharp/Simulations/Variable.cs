@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Describes a node in an electronic circuit.
     /// </summary>
-    public class Unknown : ICloneable
+    public class Variable : ICloneable
     {
         /// <summary>
         /// Gets or sets the name of the node
@@ -27,28 +27,28 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the node type
         /// </summary>
-        public UnknownType UnknownType { get; }
+        public VariableType UnknownType { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="index">Row index</param>
-        public Unknown(Identifier name, int index)
+        public Variable(Identifier name, int index)
         {
             Name = name;
-            UnknownType = UnknownType.Voltage;
+            UnknownType = VariableType.Voltage;
             Index = index;
         }
 
         /// <summary>
         /// Constructor
-        /// Used by <see cref="UnknownCollection"/>
+        /// Used by <see cref="VariableSet"/>
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="type">Unknown type</param>
         /// <param name="index">Row index</param>
-        public Unknown(Identifier name, UnknownType type, int index)
+        public Variable(Identifier name, VariableType type, int index)
         {
             Name = name;
             UnknownType = type;
@@ -68,7 +68,7 @@ namespace SpiceSharp.Simulations
         /// Clone the node
         /// </summary>
         /// <returns></returns>
-        public Unknown Clone() => new Unknown(Name.Clone(), UnknownType, Index);
+        public Variable Clone() => new Variable(Name.Clone(), UnknownType, Index);
 
         /// <summary>
         /// Clone the node

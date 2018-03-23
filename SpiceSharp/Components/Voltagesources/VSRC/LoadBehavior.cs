@@ -121,16 +121,16 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
+        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            if (variables == null)
+                throw new ArgumentNullException(nameof(variables));
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), UnknownType.Current).Index;
+            BranchEq = variables.Create(new SubIdentifier(Name, "branch"), VariableType.Current).Index;
 
             // Get matrix elements
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);

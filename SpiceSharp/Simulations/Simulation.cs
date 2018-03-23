@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
@@ -24,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the node map for this simulation
         /// </summary>
-        public UnknownCollection Nodes { get; } = new UnknownCollection();
+        public VariableSet Nodes { get; } = new VariableSet();
 
         /// <summary>
         /// Event that is called for initializing simulation data exports

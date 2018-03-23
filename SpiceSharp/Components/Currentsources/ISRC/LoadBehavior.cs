@@ -116,9 +116,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Get the matrix elements
         /// </summary>
-        /// <param name="nodes"></param>
-        /// <param name="solver"></param>
-        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
+        /// <param name="variables">Variables</param>
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

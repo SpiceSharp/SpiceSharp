@@ -3,7 +3,7 @@
     /// <summary>
     /// Enumeration of unknown types
     /// </summary>
-    public enum UnknownType
+    public enum VariableType
     {
         /// <summary>
         /// The unknown associated with this node does not fall into a category

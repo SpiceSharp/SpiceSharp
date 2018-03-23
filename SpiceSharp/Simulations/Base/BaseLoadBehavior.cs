@@ -17,9 +17,9 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Setup the behavior for usage with a solver
         /// </summary>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="variables">Nodes</param>
         /// <param name="solver">Solver</param>
-        public abstract void GetEquationPointers(UnknownCollection nodes, Solver<double> solver);
+        public abstract void GetEquationPointers(VariableSet variables, Solver<double> solver);
 
         /// <summary>
         /// Load the Y-matrix and Rhs-vector

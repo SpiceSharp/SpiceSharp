@@ -57,6 +57,9 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public virtual T CreateBehavior<T>(Simulation simulation) where T : Behavior
         {
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
             // Try to extract the right behavior from our behavior factories
             if (Behaviors.TryGetValue(typeof(T), out var factory))
             {

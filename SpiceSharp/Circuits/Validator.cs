@@ -21,7 +21,7 @@ namespace SpiceSharp.Circuits
         private readonly List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
         private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
-        private readonly UnknownCollection _nodes = new UnknownCollection();
+        private readonly VariableSet _nodes = new VariableSet();
         
         /// <summary>
         /// Validate a circuit
@@ -89,7 +89,7 @@ namespace SpiceSharp.Circuits
                 bool isShortcircuit = false;
                 int[] nodes = new int[icc.PinCount];
                 int i = 0;
-                foreach (var index in icc.GetNodeIndices(_nodes))
+                foreach (var index in icc.GetNodeIndexes(_nodes))
                 {
                     // Check for a connection to ground
                     if (index == 0)

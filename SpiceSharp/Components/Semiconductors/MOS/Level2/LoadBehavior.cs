@@ -139,24 +139,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
+        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            if (variables == null)
+                throw new ArgumentNullException(nameof(variables));
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
             // Add a series drain node if necessary
             if (_mbp.DrainResistance > 0 || _bp.DrainSquares > 0 && _mbp.SheetResistance > 0)
-                DrainNodePrime = nodes.Create(new SubIdentifier(Name, "drain")).Index;
+                DrainNodePrime = variables.Create(new SubIdentifier(Name, "drain")).Index;
             else
                 DrainNodePrime = _drainNode;
 
             // Add a series source node if necessary
             if (_mbp.SourceResistance > 0 || _bp.SourceSquares > 0 && _mbp.SheetResistance > 0)
-                SourceNodePrime = nodes.Create(new SubIdentifier(Name, "source")).Index;
+                SourceNodePrime = variables.Create(new SubIdentifier(Name, "source")).Index;
             else
                 SourceNodePrime = _sourceNode;
 

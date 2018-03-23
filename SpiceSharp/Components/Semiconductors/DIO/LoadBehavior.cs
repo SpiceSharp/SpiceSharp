@@ -100,17 +100,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Get equation pointers
         /// </summary>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
+        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            if (variables == null)
+                throw new ArgumentNullException(nameof(variables));
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
             // Create
-            PosPrimeNode = _mbp.Resistance > 0 ? nodes.Create(new SubIdentifier(Name, "pos")).Index : _posNode;
+            PosPrimeNode = _mbp.Resistance > 0 ? variables.Create(new SubIdentifier(Name, "pos")).Index : _posNode;
 
             // Get matrix elements
             PosPosPrimePtr = solver.GetMatrixElement(_posNode, PosPrimeNode);

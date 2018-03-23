@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace SpiceSharp.Simulations
@@ -9,13 +8,13 @@ namespace SpiceSharp.Simulations
     /// Contains and manages circuit nodes.
     /// </summary>
     [Serializable]
-    public class UnknownCollection
+    public class VariableSet
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly List<Unknown> _unknowns = new List<Unknown>();
-        private readonly Dictionary<Identifier, Unknown> _map = new Dictionary<Identifier, Unknown>();
+        private readonly List<Variable> _unknowns = new List<Variable>();
+        private readonly Dictionary<Identifier, Variable> _map = new Dictionary<Identifier, Variable>();
         private bool _locked;
 
         /// <summary>
@@ -33,15 +32,15 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the ground node
         /// </summary>
-        public Unknown Ground { get; }
+        public Variable Ground { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UnknownCollection()
+        public VariableSet()
         {
             // Setup the ground node
-            Ground = new Unknown("0", 0);
+            Ground = new Variable("0", 0);
             _map.Add(Ground.Name, Ground);
             _map.Add("GND", Ground);
 
@@ -50,18 +49,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets a node by identifier
-        /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <returns></returns>
-        public Unknown this[Identifier id] => _map[id];
-
-        /// <summary>
         /// Find a node by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Unknown this[int index] => _unknowns[index];
+        public Variable this[int index] => _unknowns[index];
 
         /// <summary>
         /// Gets the node count
@@ -69,13 +61,13 @@ namespace SpiceSharp.Simulations
         public int Count => _unknowns.Count;
 
         /// <summary>
-        /// Map a node in the circuit
-        /// If the node already exists, then that node is returned
+        /// Map the voltage of a node
+        /// If the variable already exists, then that variable is returned
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
         /// <returns></returns>
-        public Unknown MapNode(Identifier id, UnknownType type)
+        public Variable MapNode(Identifier id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
@@ -84,7 +76,7 @@ namespace SpiceSharp.Simulations
             if (_map.ContainsKey(id))
                 return _map[id];
 
-            var node = new Unknown(id, type, _unknowns.Count + 1);
+            var node = new Variable(id, type, _unknowns.Count + 1);
             _unknowns.Add(node);
             _map.Add(id, node);
             return node;
@@ -95,10 +87,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public Unknown MapNode(Identifier id) => MapNode(id, UnknownType.Voltage);
+        public Variable MapNode(Identifier id) => MapNode(id, VariableType.Voltage);
 
         /// <summary>
-        /// Make an alias for a node
+        /// Make an alias for the voltage at a node
         /// </summary>
         /// <param name="original">Original name</param>
         /// <param name="alias">The alias that will be turned into this alias</param>
@@ -109,16 +101,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create a new unknown
+        /// Create a new variable
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
         /// <returns></returns>
-        public Unknown Create(Identifier id, UnknownType type)
+        public Variable Create(Identifier id, VariableType type)
         {
             // Create the node
             int index = _unknowns.Count + 1;
-            var node = new Unknown(id, type, index);
+            var node = new Variable(id, type, index);
             _unknowns.Add(node);
             return node;
         }
@@ -128,10 +120,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public Unknown Create(Identifier id) => Create(id, UnknownType.Voltage);
+        public Variable Create(Identifier id) => Create(id, VariableType.Voltage);
 
         /// <summary>
-        /// Check if a node exists
+        /// Check if a node voltage exists
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
@@ -142,7 +134,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool ContainsUnknown(Identifier id) => _unknowns.Exists(node => node.Name.Equals(id));
+        public bool Contains(Identifier id) => _unknowns.Exists(node => node.Name.Equals(id));
 
         /// <summary>
         /// Try to get a node
@@ -150,14 +142,29 @@ namespace SpiceSharp.Simulations
         /// <param name="id">Identifier</param>
         /// <param name="node">Node</param>
         /// <returns></returns>
-        public bool TryGetNode(Identifier id, out Unknown node) => _map.TryGetValue(id, out node);
+        public bool TryGetNode(Identifier id, out Variable node) => _map.TryGetValue(id, out node);
+
+        /// <summary>
+        /// Get a node voltage variable
+        /// If the node voltage does not exist, an exception will be thrown
+        /// </summary>
+        /// <param name="id">Identifier</param>
+        /// <returns></returns>
+        public Variable GetNode(Identifier id)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+            if (_map.TryGetValue(id, out var result))
+                return result;
+            throw new CircuitException("Could not find node {0}".FormatString(id));
+        }
 
         /// <summary>
         /// Get an unknown
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>Returns null if no unknown was found</returns>
-        public Unknown GetUnknown(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
+        public Variable GetVariable(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
 
         /// <summary>
         /// Avoid changing to the internal structure by locking the node list

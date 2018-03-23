@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The node that gives problems
         /// </summary>
-        public Unknown ProblemNode { get; protected set; }
+        public Variable ProblemVariable { get; protected set; }
 
         /// <summary>
         /// Event called when the state is loaded
@@ -455,24 +455,24 @@ namespace SpiceSharp.Simulations
         /// Reset the row to 0.0 and return true if the row is a current equation
         /// </summary>
         /// <param name="solver">Solver</param>
-        /// <param name="nodes">List of nodes</param>
+        /// <param name="variables">List of unknowns/variables</param>
         /// <param name="rowIndex">Row number</param>
         /// <returns></returns>
-        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, UnknownCollection nodes, int rowIndex)
+        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, VariableSet variables, int rowIndex)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            if (variables == null)
+                throw new ArgumentNullException(nameof(variables));
 
             bool currents = false;
-            for (int n = 0; n < nodes.Count; n++)
+            for (int n = 0; n < variables.Count; n++)
             {
-                var node = nodes[n];
+                var node = variables[n];
                 MatrixElement<double> x = solver.FindMatrixElement(rowIndex, node.Index);
                 if (x != null && !x.Value.Equals(0.0))
                 {
-                    if (node.UnknownType == UnknownType.Current)
+                    if (node.UnknownType == VariableType.Current)
                         currents = true;
                     else
                         x.Value = 0.0;
@@ -500,12 +500,12 @@ namespace SpiceSharp.Simulations
                 if (double.IsNaN(n))
                     throw new CircuitException("Non-convergence, node {0} is not a number.".FormatString(node));
 
-                if (node.UnknownType == UnknownType.Voltage)
+                if (node.UnknownType == VariableType.Voltage)
                 {
                     double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
-                        ProblemNode = node;
+                        ProblemVariable = node;
                         return false;
                     }
                 }
@@ -514,7 +514,7 @@ namespace SpiceSharp.Simulations
                     double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
-                        ProblemNode = node;
+                        ProblemVariable = node;
                         return false;
                     }
                 }
