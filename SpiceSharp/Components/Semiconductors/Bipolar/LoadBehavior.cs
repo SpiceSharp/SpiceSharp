@@ -144,13 +144,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Add a series collector node if necessary
-            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? nodes.Create(Name.Grow("#col")).Index : _collectorNode;
+            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? nodes.Create(new SubIdentifier(Name, "col")).Index : _collectorNode;
 
             // Add a series base node if necessary
-            BasePrimeNode = _mbp.BaseResist.Value > 0 ? nodes.Create(Name.Grow("#base")).Index : _baseNode;
+            BasePrimeNode = _mbp.BaseResist.Value > 0 ? nodes.Create(new SubIdentifier(Name, "base")).Index : _baseNode;
 
             // Add a series emitter node if necessary
-            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? nodes.Create(Name.Grow("#emit")).Index : _emitterNode;
+            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? nodes.Create(new SubIdentifier(Name, "emit")).Index : _emitterNode;
 
             // Get solver pointers
             CollectorCollectorPrimePtr = solver.GetMatrixElement(_collectorNode, CollectorPrimeNode);

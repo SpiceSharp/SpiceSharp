@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create
-            PosPrimeNode = _mbp.Resistance > 0 ? nodes.Create(Name.Grow("#pos")).Index : _posNode;
+            PosPrimeNode = _mbp.Resistance > 0 ? nodes.Create(new SubIdentifier(Name, "pos")).Index : _posNode;
 
             // Get matrix elements
             PosPosPrimePtr = solver.GetMatrixElement(_posNode, PosPrimeNode);

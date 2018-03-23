@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        public AC(string name) : base(name)
+        public AC(Identifier name) : base(name)
         {
         }
 

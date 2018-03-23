@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class NodeMap : ICloneable
+    [Serializable]
+    public class NodeMap
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly List<Node> _nodes = new List<Node>();
+        private readonly List<Node> _unknowns = new List<Node>();
         private readonly Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
         private bool _locked;
 
@@ -39,9 +41,9 @@ namespace SpiceSharp.Simulations
         public NodeMap()
         {
             // Setup the ground node
-            Ground = new Node(new Identifier("0"), 0);
+            Ground = new Node("0", 0);
             _map.Add(Ground.Name, Ground);
-            _map.Add(new Identifier("GND"), Ground);
+            _map.Add("GND", Ground);
 
             // Unlock
             _locked = false;
@@ -60,15 +62,16 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Node this[int index] => _nodes[index];
+        public Node this[int index] => _unknowns[index];
 
         /// <summary>
         /// Gets the node count
         /// </summary>
-        public int Count => _nodes.Count;
+        public int Count => _unknowns.Count;
 
         /// <summary>
         /// Map a node in the circuit
+        /// If the node already exists, then that node is returned
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
@@ -82,8 +85,8 @@ namespace SpiceSharp.Simulations
             if (_map.ContainsKey(id))
                 return _map[id];
 
-            var node = new Node(id, type, _nodes.Count + 1);
-            _nodes.Add(node);
+            var node = new Node(id, type, _unknowns.Count + 1);
+            _unknowns.Add(node);
             _map.Add(id, node);
             return node;
         }
@@ -96,16 +99,29 @@ namespace SpiceSharp.Simulations
         public Node Map(Identifier id) => Map(id, Node.NodeType.Voltage);
 
         /// <summary>
-        /// Create a new node without reference
+        /// Make an alias for a node
+        /// </summary>
+        /// <param name="original">Original name</param>
+        /// <param name="alias">The alias that will be turned into this alias</param>
+        public void AliasNode(Identifier original, Identifier alias)
+        {
+            var originalNode = _map[original];
+            _map.Add(alias, originalNode);
+        }
+
+        /// <summary>
+        /// Create a new unknown
+        /// The unknown must have a unique identifier
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
         /// <returns></returns>
         public Node Create(Identifier id, Node.NodeType type)
         {
-            int index = _nodes.Count + 1;
+            // Create the node
+            int index = _unknowns.Count + 1;
             var node = new Node(id, type, index);
-            _nodes.Add(node);
+            _unknowns.Add(node);
             return node;
         }
 
@@ -121,7 +137,14 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public bool Contains(Identifier id) => _map.ContainsKey(id);
+        public bool ContainsNode(Identifier id) => _map.ContainsKey(id);
+
+        /// <summary>
+        /// Check if an unknown exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool ContainsUnknown(Identifier id) => _unknowns.Exists(node => node.Name.Equals(id));
 
         /// <summary>
         /// Try to get a node
@@ -132,53 +155,31 @@ namespace SpiceSharp.Simulations
         public bool TryGetNode(Identifier id, out Node node) => _map.TryGetValue(id, out node);
 
         /// <summary>
+        /// Get an unknown
+        /// </summary>
+        /// <param name="id">Identifier</param>
+        /// <returns>Returns null if no unknown was found</returns>
+        public Node GetUnknown(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
+
+        /// <summary>
         /// Avoid changing to the internal structure by locking the node list
         /// </summary>
-        public void Lock()
-        {
-            _locked = true;
-        }
+        public void Lock() => _locked = true;
 
         /// <summary>
         /// Clear all nodes
         /// </summary>
         public void Clear()
         {
-            _nodes.Clear();
+            _unknowns.Clear();
 
             // Setup ground node
             _map.Clear();
             _map.Add(Ground.Name, Ground);
-            _map.Add(new Identifier("GND"), Ground);
+            _map.Add("GND", Ground);
 
             // Unlock
             _locked = false;
-        }
-
-        /// <summary>
-        /// Clone the nodes
-        /// </summary>
-        /// <returns></returns>
-        public object Clone()
-        {
-            // Create a new object
-            var cloned = new NodeMap();
-
-            // Copy node list and map
-            foreach (var node in _nodes)
-            {
-                var clonedNode = (Node)node.Clone();
-                cloned._nodes.Add(clonedNode);
-                cloned._map.Add(clonedNode.Name, clonedNode);
-            }
-
-            // Clone initial conditions and nodesets
-            foreach (var ic in InitialConditions)
-                cloned.InitialConditions.Add(ic.Key, ic.Value);
-            foreach (var ns in NodeSets)
-                cloned.NodeSets.Add(ns.Key, ns.Value);
-
-            return cloned;
         }
     }
 }

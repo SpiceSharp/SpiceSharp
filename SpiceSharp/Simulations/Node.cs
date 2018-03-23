@@ -89,10 +89,12 @@ namespace SpiceSharp.Simulations
         /// Clone the node
         /// </summary>
         /// <returns></returns>
-        public object Clone()
-        {
-            var node = new Node(Name, UnknownType, Index);
-            return node;
-        }
+        public Node Clone() => new Node(Name.Clone(), UnknownType, Index);
+
+        /// <summary>
+        /// Clone the node
+        /// </summary>
+        /// <returns></returns>
+        object ICloneable.Clone() => Clone();
     }
 }

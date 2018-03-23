@@ -89,7 +89,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create current equation
-            BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
+            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);

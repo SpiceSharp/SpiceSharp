@@ -121,6 +121,7 @@
     <Compile Include="Algebra\Vector\SparseVectorElement.cs" />
     <Compile Include="Algebra\Vector\Vector.cs" />
     <Compile Include="Algebra\Vector\VectorElement.cs" />
+    <Compile Include="SubIdentifier.cs" />
     <Compile Include="Parameters\Parameter.cs" />
     <Compile Include="Parameters\ParameterPool.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -308,6 +309,7 @@
     <Compile Include="Simulations\Transient\TimeStepCutEventArgs.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />
     <Compile Include="Simulations\Base\Time\BaseTransientBehavior.cs" />
+    <Compile Include="StringIdentifier.cs" />
     <Compile Include="TypeDictionary.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>

@@ -138,13 +138,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             // Add series drain node if necessary
             if (_mbp.DrainResistance > 0 || _mbp.SheetResistance > 0 && _bp.DrainSquares > 0)
-                DrainNodePrime = nodes.Create(Name.Grow("#drain")).Index;
+                DrainNodePrime = nodes.Create(new SubIdentifier(Name, "drain")).Index;
             else
                 DrainNodePrime = _drainNode;
 
             // Add series source node if necessary
             if (_mbp.SourceResistance > 0 || _mbp.SheetResistance > 0 && _bp.SourceSquares > 0)
-                SourceNodePrime = nodes.Create(Name.Grow("#source")).Index;
+                SourceNodePrime = nodes.Create(new SubIdentifier(Name, "source")).Index;
             else
                 SourceNodePrime = _sourceNode;
 

@@ -25,7 +25,7 @@ namespace SpiceSharpTest.Simulations
             config.Sweeps.Add(new SweepConfiguration("V1", 0, 5, 0.1)); // Sweep V1 from 0V to 5V per 100mV
             dc.OnParameterSearch += (sender, args) =>
             {
-                if (args.Name.Equals(new Identifier("R2")))
+                if (args.Name.Equals(new StringIdentifier("R2")))
                 {
                     args.Result = ckt.Objects["R2"].ParameterSets.GetParameter("resistance");
                     args.TemperatureNeeded = true;

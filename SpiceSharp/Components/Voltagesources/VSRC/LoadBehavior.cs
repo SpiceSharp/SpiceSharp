@@ -130,7 +130,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            BranchEq = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
+            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), Node.NodeType.Current).Index;
 
             // Get matrix elements
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
