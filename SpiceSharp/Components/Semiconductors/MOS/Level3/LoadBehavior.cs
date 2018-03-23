@@ -136,7 +136,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(NodeMap nodes, Solver<double> solver)
+        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

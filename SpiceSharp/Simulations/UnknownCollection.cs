@@ -9,13 +9,13 @@ namespace SpiceSharp.Simulations
     /// Contains and manages circuit nodes.
     /// </summary>
     [Serializable]
-    public class NodeMap
+    public class UnknownCollection
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly List<Node> _unknowns = new List<Node>();
-        private readonly Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
+        private readonly List<Unknown> _unknowns = new List<Unknown>();
+        private readonly Dictionary<Identifier, Unknown> _map = new Dictionary<Identifier, Unknown>();
         private bool _locked;
 
         /// <summary>
@@ -33,15 +33,15 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the ground node
         /// </summary>
-        public Node Ground { get; }
+        public Unknown Ground { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public NodeMap()
+        public UnknownCollection()
         {
             // Setup the ground node
-            Ground = new Node("0", 0);
+            Ground = new Unknown("0", 0);
             _map.Add(Ground.Name, Ground);
             _map.Add("GND", Ground);
 
@@ -54,15 +54,14 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        public Node this[Identifier id] => _map[id];
+        public Unknown this[Identifier id] => _map[id];
 
         /// <summary>
         /// Find a node by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Node this[int index] => _unknowns[index];
+        public Unknown this[int index] => _unknowns[index];
 
         /// <summary>
         /// Gets the node count
@@ -76,7 +75,7 @@ namespace SpiceSharp.Simulations
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
         /// <returns></returns>
-        public Node Map(Identifier id, Node.NodeType type)
+        public Unknown MapNode(Identifier id, UnknownType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
@@ -85,7 +84,7 @@ namespace SpiceSharp.Simulations
             if (_map.ContainsKey(id))
                 return _map[id];
 
-            var node = new Node(id, type, _unknowns.Count + 1);
+            var node = new Unknown(id, type, _unknowns.Count + 1);
             _unknowns.Add(node);
             _map.Add(id, node);
             return node;
@@ -96,7 +95,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public Node Map(Identifier id) => Map(id, Node.NodeType.Voltage);
+        public Unknown MapNode(Identifier id) => MapNode(id, UnknownType.Voltage);
 
         /// <summary>
         /// Make an alias for a node
@@ -111,16 +110,15 @@ namespace SpiceSharp.Simulations
 
         /// <summary>
         /// Create a new unknown
-        /// The unknown must have a unique identifier
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
         /// <returns></returns>
-        public Node Create(Identifier id, Node.NodeType type)
+        public Unknown Create(Identifier id, UnknownType type)
         {
             // Create the node
             int index = _unknowns.Count + 1;
-            var node = new Node(id, type, index);
+            var node = new Unknown(id, type, index);
             _unknowns.Add(node);
             return node;
         }
@@ -130,7 +128,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public Node Create(Identifier id) => Create(id, Node.NodeType.Voltage);
+        public Unknown Create(Identifier id) => Create(id, UnknownType.Voltage);
 
         /// <summary>
         /// Check if a node exists
@@ -152,14 +150,14 @@ namespace SpiceSharp.Simulations
         /// <param name="id">Identifier</param>
         /// <param name="node">Node</param>
         /// <returns></returns>
-        public bool TryGetNode(Identifier id, out Node node) => _map.TryGetValue(id, out node);
+        public bool TryGetNode(Identifier id, out Unknown node) => _map.TryGetValue(id, out node);
 
         /// <summary>
         /// Get an unknown
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>Returns null if no unknown was found</returns>
-        public Node GetUnknown(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
+        public Unknown GetUnknown(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
 
         /// <summary>
         /// Avoid changing to the internal structure by locking the node list

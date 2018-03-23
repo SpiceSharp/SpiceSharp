@@ -14,7 +14,7 @@
         /// Initialize
         /// </summary>
         /// <param name="nodes">The circuit</param>
-        public virtual void Initialize(NodeMap nodes)
+        public virtual void Initialize(UnknownCollection nodes)
         {
             Initialized = true;
         }

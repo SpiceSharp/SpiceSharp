@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(NodeMap nodes, Solver<double> solver)
+        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
@@ -130,7 +130,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 
             // Create/get nodes
             _contBranchEq = _vsrcload.BranchEq;
-            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), Node.NodeType.Current).Index;
+            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), UnknownType.Current).Index;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);

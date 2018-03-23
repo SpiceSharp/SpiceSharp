@@ -120,14 +120,14 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(NodeMap nodes, Solver<double> solver)
+        public override void GetEquationPointers(UnknownCollection nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), Node.NodeType.Current).Index;
+            BranchEq = nodes.Create(new SubIdentifier(Name, "branch"), UnknownType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);

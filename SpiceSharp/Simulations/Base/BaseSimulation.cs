@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The node that gives problems
         /// </summary>
-        public Node ProblemNode { get; protected set; }
+        public Unknown ProblemNode { get; protected set; }
 
         /// <summary>
         /// Event called when the state is loaded
@@ -458,7 +458,7 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">List of nodes</param>
         /// <param name="rowIndex">Row number</param>
         /// <returns></returns>
-        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, NodeMap nodes, int rowIndex)
+        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, UnknownCollection nodes, int rowIndex)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
@@ -472,7 +472,7 @@ namespace SpiceSharp.Simulations
                 MatrixElement<double> x = solver.FindMatrixElement(rowIndex, node.Index);
                 if (x != null && !x.Value.Equals(0.0))
                 {
-                    if (node.UnknownType == Node.NodeType.Current)
+                    if (node.UnknownType == UnknownType.Current)
                         currents = true;
                     else
                         x.Value = 0.0;
@@ -500,7 +500,7 @@ namespace SpiceSharp.Simulations
                 if (double.IsNaN(n))
                     throw new CircuitException("Non-convergence, node {0} is not a number.".FormatString(node));
 
-                if (node.UnknownType == Node.NodeType.Voltage)
+                if (node.UnknownType == UnknownType.Voltage)
                 {
                     double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
                     if (Math.Abs(n - o) > tol)

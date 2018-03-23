@@ -126,14 +126,14 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        public void ApplyConnection(NodeMap nodes)
+        public void ApplyConnection(UnknownCollection nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
 
             // Map connected nodes
             for (int i = 0; i < _connections.Length; i++)
-                _indices[i] = nodes.Map(_connections[i]).Index;
+                _indices[i] = nodes.MapNode(_connections[i]).Index;
             _validNodeIndices = true;
         }
 
@@ -142,7 +142,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        public IEnumerable<int> GetNodeIndices(NodeMap nodes)
+        public IEnumerable<int> GetNodeIndices(UnknownCollection nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
@@ -150,7 +150,7 @@ namespace SpiceSharp.Components
             // Map connected nodes
             for (int i = 0; i < _connections.Length; i++)
             {
-                _indices[i] = nodes.Map(_connections[i]).Index;
+                _indices[i] = nodes.MapNode(_connections[i]).Index;
                 yield return _indices[i];
             }
         }

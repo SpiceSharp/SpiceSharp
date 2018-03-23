@@ -121,6 +121,7 @@
     <Compile Include="Algebra\Vector\SparseVectorElement.cs" />
     <Compile Include="Algebra\Vector\Vector.cs" />
     <Compile Include="Algebra\Vector\VectorElement.cs" />
+    <Compile Include="Simulations\UnknownType.cs" />
     <Compile Include="SubIdentifier.cs" />
     <Compile Include="Parameters\Parameter.cs" />
     <Compile Include="Parameters\ParameterPool.cs" />
@@ -277,14 +278,14 @@
     <Compile Include="Attributes\ParameterNameAttribute.cs" />
     <Compile Include="Circuits\EntityCollection.cs" />
     <Compile Include="Circuits\Circuit.cs" />
-    <Compile Include="Simulations\Node.cs" />
+    <Compile Include="Simulations\Unknown.cs" />
     <Compile Include="Simulations\Base\RealState.cs" />
     <Compile Include="Simulations\Noise\NoiseState.cs" />
     <Compile Include="Simulations\SimulationFlowController.cs" />
     <Compile Include="Simulations\State.cs" />
     <Compile Include="Simulations\StateDictionary.cs" />
     <Compile Include="Simulations\Statistics.cs" />
-    <Compile Include="Simulations\NodeMap.cs" />
+    <Compile Include="Simulations\UnknownCollection.cs" />
     <Compile Include="Components\RLC\CAP\Capacitor.cs" />
     <Compile Include="Components\RLC\CAP\CapacitorModel.cs" />
     <Compile Include="Components\RLC\RES\Resistor.cs" />

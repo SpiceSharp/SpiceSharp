@@ -6,29 +6,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Describes a node in an electronic circuit.
     /// </summary>
-    public class Node : ICloneable
+    public class Unknown : ICloneable
     {
-        /// <summary>
-        /// Enumeration of unknown types
-        /// </summary>
-        public enum NodeType
-        {
-            /// <summary>
-            /// The unknown associated with this node does not fall into a category
-            /// </summary>
-            None = 0x00,
-
-            /// <summary>
-            /// The unknown associated with this node is a voltage
-            /// </summary>
-            Voltage = 0x03,
-
-            /// <summary>
-            /// The unknown associated with this node is a current
-            /// </summary>
-            Current = 0x04
-        }
-
         /// <summary>
         /// Gets or sets the name of the node
         /// </summary>
@@ -48,28 +27,28 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the node type
         /// </summary>
-        public NodeType UnknownType { get; }
+        public UnknownType UnknownType { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="index">Row index</param>
-        public Node(Identifier name, int index)
+        public Unknown(Identifier name, int index)
         {
             Name = name;
-            UnknownType = NodeType.Voltage;
+            UnknownType = UnknownType.Voltage;
             Index = index;
         }
 
         /// <summary>
         /// Constructor
-        /// Used by <see cref="NodeMap"/>
+        /// Used by <see cref="UnknownCollection"/>
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="type">Unknown type</param>
         /// <param name="index">Row index</param>
-        public Node(Identifier name, NodeType type, int index)
+        public Unknown(Identifier name, UnknownType type, int index)
         {
             Name = name;
             UnknownType = type;
@@ -82,14 +61,14 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override string ToString()
         {
-            return "Node {0}".FormatString(Name);
+            return "Node {0} ({1})".FormatString(Name, UnknownType);
         }
 
         /// <summary>
         /// Clone the node
         /// </summary>
         /// <returns></returns>
-        public Node Clone() => new Node(Name.Clone(), UnknownType, Index);
+        public Unknown Clone() => new Unknown(Name.Clone(), UnknownType, Index);
 
         /// <summary>
         /// Clone the node

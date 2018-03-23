@@ -24,7 +24,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the node map for this simulation
         /// </summary>
-        public NodeMap Nodes { get; } = new NodeMap();
+        public UnknownCollection Nodes { get; } = new UnknownCollection();
 
         /// <summary>
         /// Event that is called for initializing simulation data exports
