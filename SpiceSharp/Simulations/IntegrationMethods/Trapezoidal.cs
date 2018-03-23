@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -36,7 +35,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initialize the trapezoidal integration method
         /// </summary>
         /// <param name="behaviors">Truncation behaviors</param>
-        public override void Initialize(Collection<BaseTransientBehavior> behaviors)
+        public override void Initialize(BehaviorList<BaseTransientBehavior> behaviors)
         {
             base.Initialize(behaviors);
 

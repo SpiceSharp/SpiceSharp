@@ -45,10 +45,10 @@ namespace SpiceSharp.Simulations
             Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
-            foreach (var behavior in LoadBehaviors)
-                behavior.Load(this);
-            foreach (var behavior in FrequencyBehaviors)
-                behavior.InitializeParameters(this);
+            for (int i = 0; i < LoadBehaviors.Count; i++)
+                LoadBehaviors[i].Load(this);
+            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+                FrequencyBehaviors[i].InitializeParameters(this);
 
             // Export operating point if requested
             var exportargs = new ExportDataEventArgs(this);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 
@@ -13,9 +12,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Necessary behaviors and configurations
         /// </summary>
-        protected Collection<BaseLoadBehavior> LoadBehaviors { get; private set; }
-        protected Collection<BaseTemperatureBehavior> TemperatureBehaviors { get; private set; }
-        protected Collection<BaseInitialConditionBehavior> InitialConditionBehaviors { get; private set; }
+        protected BehaviorList<BaseLoadBehavior> LoadBehaviors { get; private set; }
+        protected BehaviorList<BaseTemperatureBehavior> TemperatureBehaviors { get; private set; }
+        protected BehaviorList<BaseInitialConditionBehavior> InitialConditionBehaviors { get; private set; }
 
         /// <summary>
         /// Gets the currently active configuration
@@ -77,8 +76,8 @@ namespace SpiceSharp.Simulations
             // Setup the load behaviors
             RealState = States.Get<RealState>();
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
-            foreach (var behavior in LoadBehaviors)
-                behavior.GetEquationPointers(Nodes, RealState.Solver);
+            for (int i = 0; i < LoadBehaviors.Count; i++)
+                LoadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
             RealState.Initialize(Nodes);
 
             // Allow nodesets to help convergence
@@ -91,8 +90,8 @@ namespace SpiceSharp.Simulations
         protected override void Execute()
         {
             // Do temperature-dependent calculations
-            foreach (var behavior in TemperatureBehaviors)
-                behavior.Temperature(this);
+            for (int i = 0; i < TemperatureBehaviors.Count; i++)
+                TemperatureBehaviors[i].Temperature(this);
 
             // Do initial conditions
             InitialConditions();
@@ -107,12 +106,12 @@ namespace SpiceSharp.Simulations
             OnLoad -= LoadNodeSets;
 
             // Unsetup all behaviors
-            foreach (var behavior in InitialConditionBehaviors)
-                behavior.Unsetup();
-            foreach (var behavior in LoadBehaviors)
-                behavior.Unsetup();
-            foreach (var behavior in TemperatureBehaviors)
-                behavior.Unsetup();
+            for (int i = 0; i < InitialConditionBehaviors.Count; i++)
+                InitialConditionBehaviors[i].Unsetup();
+            for (int i = 0; i < LoadBehaviors.Count; i++)
+                LoadBehaviors[i].Unsetup();
+            for (int i = 0; i < TemperatureBehaviors.Count; i++)
+                TemperatureBehaviors[i].Unsetup();
 
             // Clear the state
             RealState.Destroy();
@@ -120,10 +119,9 @@ namespace SpiceSharp.Simulations
             _realStateLoadArgs = null;
 
             // Remove behavior and configuration references
-            LoadBehaviors.Clear();
             LoadBehaviors = null;
-            InitialConditionBehaviors.Clear();
             InitialConditionBehaviors = null;
+            TemperatureBehaviors = null;
             BaseConfiguration = null;
 
             // Clear nodes
@@ -358,8 +356,8 @@ namespace SpiceSharp.Simulations
             state.Solver.Clear();
 
             // Load all devices
-            foreach (var behavior in LoadBehaviors)
-                behavior.Load(this);
+            for (int i = 0; i < LoadBehaviors.Count; i++)
+                LoadBehaviors[i].Load(this);
 
             // Call events
             OnLoad?.Invoke(this, _realStateLoadArgs);
@@ -411,8 +409,8 @@ namespace SpiceSharp.Simulations
             // Use initial conditions
             if (state.UseIc)
             {
-                foreach (var behavior in InitialConditionBehaviors)
-                    behavior.SetInitialCondition(this);
+                for (int i = 0; i < InitialConditionBehaviors.Count; i++)
+                    InitialConditionBehaviors[i].SetInitialCondition(this);
             }
         }
 
@@ -523,9 +521,9 @@ namespace SpiceSharp.Simulations
             }
 
             // Device-level convergence tests
-            foreach (var behavior in LoadBehaviors)
+            for (int i = 0; i < LoadBehaviors.Count; i++)
             {
-                if (!behavior.IsConvergent(this))
+                if (!LoadBehaviors[i].IsConvergent(this))
                 {
                     // I believe this should be false, but Spice 3f5 doesn't...
 

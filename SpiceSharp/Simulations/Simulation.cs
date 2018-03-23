@@ -7,7 +7,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A class that can perform a simulation using a <see cref="SpiceSharp.Circuit"/>.
+    /// A class that can perform a simulation
     /// </summary>
     public abstract class Simulation
     {
@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Setup the simulation
         /// </summary>
-        /// <param name="circuit"></param>
+        /// <param name="circuit">Circuit</param>
         protected virtual void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -150,7 +150,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
         /// <returns></returns>
-        protected Collection<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
+        protected BehaviorList<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));

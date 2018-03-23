@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -17,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        protected Collection<BaseFrequencyBehavior> FrequencyBehaviors { get; private set; }
+        protected BehaviorList<BaseFrequencyBehavior> FrequencyBehaviors { get; private set; }
 
         /// <summary>
         /// Gets the complex state
@@ -73,8 +72,8 @@ namespace SpiceSharp.Simulations
 
             FrequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Objects);
             var solver = ComplexState.Solver;
-            foreach (var behavior in FrequencyBehaviors)
-                behavior.GetEquationPointers(solver);
+            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+                FrequencyBehaviors[i].GetEquationPointers(solver);
         }
 
         /// <summary>
@@ -95,9 +94,8 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in FrequencyBehaviors)
-                behavior.Unsetup();
-            FrequencyBehaviors.Clear();
+            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+                FrequencyBehaviors[i].Unsetup();
             FrequencyBehaviors = null;
 
             // Remove the state
@@ -124,8 +122,8 @@ namespace SpiceSharp.Simulations
 
             // Load AC
             cstate.Solver.Clear();
-            foreach (var behavior in FrequencyBehaviors)
-                behavior.Load(this);
+            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+                FrequencyBehaviors[i].Load(this);
 
             if (cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
             {

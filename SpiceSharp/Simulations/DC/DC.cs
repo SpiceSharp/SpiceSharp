@@ -152,8 +152,8 @@ namespace SpiceSharp.Simulations
             // Execute temperature behaviors if necessary the first time
             if (levelNeedsTemperature >= 0)
             {
-                foreach (var behavior in TemperatureBehaviors)
-                    behavior.Temperature(this);
+                for (int i = 0; i < TemperatureBehaviors.Count; i++)
+                    TemperatureBehaviors[i].Temperature(this);
             }
 
             // Execute the sweeps
@@ -192,8 +192,8 @@ namespace SpiceSharp.Simulations
                     // If temperature behavior is needed for this level or higher, run behaviors
                     if (levelNeedsTemperature >= level)
                     {
-                        foreach (var behavior in TemperatureBehaviors)
-                            behavior.Temperature(this);
+                        for (int i = 0; i < TemperatureBehaviors.Count; i++)
+                            TemperatureBehaviors[i].Temperature(this);
                     }
                 }
             }

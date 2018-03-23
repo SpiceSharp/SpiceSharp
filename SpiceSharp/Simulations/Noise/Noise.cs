@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Noise behaviors
         /// </summary>
-        protected Collection<NoiseBehavior> NoiseBehaviors { get; private set; }
+        protected BehaviorList<NoiseBehavior> NoiseBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -87,9 +87,8 @@ namespace SpiceSharp.Simulations
             // Remove references
             NoiseState.Destroy();
             NoiseState = null;
-            foreach (var behavior in NoiseBehaviors)
-                behavior.Unsetup();
-            NoiseBehaviors.Clear();
+            for (int i = 0; i < NoiseBehaviors.Count; i++)
+                NoiseBehaviors[i].Unsetup();
             NoiseBehaviors = null;
             NoiseConfiguration = null;
 
@@ -125,8 +124,8 @@ namespace SpiceSharp.Simulations
             state.Sparse |= RealState.SparseStates.AcShouldReorder;
 
             // Connect noise sources
-            foreach (var behavior in NoiseBehaviors)
-                behavior.ConnectNoise();
+            for (int i = 0; i < NoiseBehaviors.Count; i++)
+                NoiseBehaviors[i].ConnectNoise();
 
             // Loop through noise figures
             foreach (double freq in FrequencySweep.Points)
@@ -144,8 +143,8 @@ namespace SpiceSharp.Simulations
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 nstate.OutputNoiseDensity = 0.0;
-                foreach (var behavior in NoiseBehaviors)
-                    behavior.Noise(this);
+                for (int i = 0; i < NoiseBehaviors.Count; i++)
+                    NoiseBehaviors[i].Noise(this);
 
                 // Export the data
                 Export(exportargs);

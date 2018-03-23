@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -96,7 +95,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         private double _savetime = double.NaN;
-        private Collection<BaseTransientBehavior> _transientBehaviors;
+        private BehaviorList<BaseTransientBehavior> _transientBehaviors;
 
         /// <summary>
         /// Event called when the timestep needs to be truncated
@@ -173,7 +172,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initialize/reset the integration method
         /// </summary>
         /// <param name="behaviors">Truncation behaviors</param>
-        public virtual void Initialize(Collection<BaseTransientBehavior> behaviors)
+        public virtual void Initialize(BehaviorList<BaseTransientBehavior> behaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -358,8 +357,8 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(args));
 
             double timetmp = double.PositiveInfinity;
-            foreach (var behavior in _transientBehaviors)
-                timetmp = Math.Min(timetmp, behavior.Truncate());
+            for (int i = 0; i < _transientBehaviors.Count; i++)
+                timetmp = Math.Min(timetmp, _transientBehaviors[i].Truncate());
             args.Delta = timetmp;
         }
 

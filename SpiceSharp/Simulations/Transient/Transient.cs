@@ -17,7 +17,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Behaviors for accepting a timepoint
         /// </summary>
-        protected Collection<BaseAcceptBehavior> AcceptBehaviors { get; private set; }
+        protected BehaviorList<BaseAcceptBehavior> AcceptBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -68,9 +68,8 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in AcceptBehaviors)
-                behavior.Unsetup();
-            AcceptBehaviors.Clear();
+            for (int i = 0; i < AcceptBehaviors.Count; i++)
+                AcceptBehaviors[i].Unsetup();
             AcceptBehaviors = null;
 
             base.Unsetup();
@@ -110,8 +109,8 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIc = false;
             state.UseDc = false;
-            foreach (var behavior in TransientBehaviors)
-                behavior.GetDcState(this);
+            for (int i = 0; i < TransientBehaviors.Count; i++)
+                TransientBehaviors[i].GetDcState(this);
             StatePool.ClearDc();
             OnLoad -= LoadInitialConditions;
 
@@ -127,8 +126,8 @@ namespace SpiceSharp.Simulations
                     // nextTime:
 
                     // Accept the current timepoint (CKTaccept())
-                    foreach (var behavior in AcceptBehaviors)
-                        behavior.Accept(this);
+                    for (int i = 0; i < AcceptBehaviors.Count; i++)
+                        AcceptBehaviors[i].Accept(this);
                     Method.SaveSolution(state.Solution);
                     // end of CKTaccept()
 
