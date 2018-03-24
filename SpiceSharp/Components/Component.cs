@@ -16,8 +16,6 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private readonly Identifier[] _connections;
-        private readonly int[] _indices;
-        private bool _validNodeIndices;
 
         /// <summary>
         /// Gets the number of nodes
@@ -33,16 +31,7 @@ namespace SpiceSharp.Components
             : base(name)
         {
             // Initialize
-            if (nodeCount > 0)
-            {
-                _connections = new Identifier[nodeCount];
-                _indices = new int[nodeCount];
-            }
-            else
-            {
-                _connections = null;
-                _indices = null;
-            }
+            _connections = nodeCount > 0 ? new Identifier[nodeCount] : null;
         }
 
         /// <summary>
@@ -66,8 +55,6 @@ namespace SpiceSharp.Components
                     throw new ArgumentNullException("node " + (i + 1));
                 _connections[i] = nodes[i];
             }
-
-            _validNodeIndices = false;
         }
 
         /// <summary>
@@ -87,9 +74,8 @@ namespace SpiceSharp.Components
             if (behavior is IConnectedBehavior cb)
             {
                 // Connect the behavior
-                if (_connections != null && !_validNodeIndices)
-                    ApplyConnection(simulation.Nodes);
-                cb.Connect(_indices);
+                var indexes = ApplyConnections(simulation.Nodes);
+                cb.Connect(indexes);
             }
             return behavior;
         }
@@ -129,15 +115,16 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <returns></returns>
-        public void ApplyConnection(VariableSet nodes)
+        protected int[] ApplyConnections(VariableSet nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
 
             // Map connected nodes
+            int[] indexes = new int[_connections.Length];
             for (int i = 0; i < _connections.Length; i++)
-                _indices[i] = nodes.MapNode(_connections[i]).Index;
-            _validNodeIndices = true;
+                indexes[i] = nodes.MapNode(_connections[i]).Index;
+            return indexes;
         }
 
         /// <summary>
@@ -151,10 +138,10 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(nodes));
 
             // Map connected nodes
-            for (int i = 0; i < _connections.Length; i++)
+            foreach (var node in _connections)
             {
-                _indices[i] = nodes.MapNode(_connections[i]).Index;
-                yield return _indices[i];
+                var index = nodes.MapNode(node).Index;
+                yield return index;
             }
         }
     }
