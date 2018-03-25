@@ -72,6 +72,15 @@ namespace SpiceSharp.Algebra.Solve
                     // The last element in the row is the singleton element
                     chosen = matrix.GetLastInRow(index);
 
+                    // When the matrix has an empty row, and an RHS element, it is possible
+                    // that the singleton is not a singleton
+                    if (chosen == null || chosen.Column < eliminationStep)
+                    {
+                        // The last element is not valid, singleton failed!
+                        singletons--;
+                        continue;
+                    }
+
                     // First find the biggest magnitude in the column, not counting the pivot candidate
                     MatrixElement<T> element = chosen.Above;
                     double largest = 0.0;

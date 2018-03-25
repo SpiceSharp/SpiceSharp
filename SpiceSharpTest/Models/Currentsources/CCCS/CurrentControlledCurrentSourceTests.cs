@@ -2,6 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -54,6 +55,20 @@ namespace SpiceSharpTest.Models
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
             AnalyzeAC(ac, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_CCCSFloatingOutput_Expect_Exception()
+        {
+            var ckt = new Circuit(
+                new CurrentSource("I1", "0", "in", 0),
+                new VoltageSource("V1", "in", "0", 0),
+                new CurrentControlledCurrentSource("F1", "out", "0", "V1", 12.0)
+                );
+
+            // Make the simulation and run it
+            var dc = new DC("DC 1", "I1", -10.0, 10.0, 1e-3);
+            Assert.Throws<SingularException>(() => dc.Run(ckt));
         }
     }
 }
