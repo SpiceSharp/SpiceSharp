@@ -100,5 +100,16 @@ namespace SpiceSharpTest.Validation
                 );
             Assert.Throws<CircuitException>(() => ckt.Validate());
         }
+
+        [Test]
+        public void When_CCCSFloatingNodeValidator_Expect_CircuitException()
+        {
+            var ckt = new Circuit(
+                new CurrentSource("I1", "0", "in", 0),
+                new VoltageSource("V1", "in", "0", 0),
+                new CurrentControlledCurrentSource("F1", "out", "0", "V1", 12.0)
+            );
+            Assert.Throws<CircuitException>(() => ckt.Validate());
+        }
     }
 }
