@@ -15,5 +15,5 @@ AppVeyor CI (Windows): [![Build status](https://ci.appveyor.com/api/projects/sta
 
 Travis CI (Linux/Mono): [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development)](https://travis-ci.org/SpiceSharp/SpiceSharp)
 
-## API
-You can find the API documentation [here](https://spicesharp.github.io/SpiceSharp/)
+## Documentation
+You can find documentation [here](https://spicesharp.github.io/SpiceSharp/). It includes a small tutorial and the API documentation.
