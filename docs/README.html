@@ -71,22 +71,18 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="spice-img-srchttpsgithubcomsvenboulangerspicesharpblobmasterspiceneticonpngrawtrue-width45px-">Spice# <img src="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true" width="45px"></h1>
+<h1 id="spice-img-srchttpsspicesharpgithubiospicesharpapiimageslogofullsvg-width45px-">Spice# <img src="https://spicesharp.github.io/SpiceSharp/api/images/logo_full.svg" width="45px"></h1>
 
 <p>Spice# is a Spice circuit simulator written in C#. The framework is made to resemble the original Berkeley Spice version, but some parts have been altered/improved to fit into the .NET framework.</p>
 <p>Unit tests to compare Spice# to Spice 3f5 are used to verify the models. Nevertheless, some small numerical errors may be present as a direct consequence of bug fixes and structural differences.</p>
-<p>The main differences between Spice 3f5 and Spice# are:</p>
-<ul>
-<li>Spice 3f5 is not object oriented, Spice# is.</li>
-<li>Spice 3f5 has a bugged NEWTRUNC feature, Spice#&#39;s method will work. Set the integration method&#39;s configuration <code>TruncationMethod</code> to <code>PerNode</code>. The default is <code>PerDevice</code> where each device can truncate the timestep.</li>
-</ul>
-<p>Please note that this project is by no means meant to compete with existing commercial Spice simulators, although its performance may be similar. I wanted to know more about the Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)</p>
+<p>Please note that this project is by no means meant to compete with existing commercial Spice simulators. The project started out as a means to learn and understand electronic circuit simulators.</p>
 <p>Spice# is available as a <strong>NuGet Package</strong>.</p>
 <p><a href="https://www.nuget.org/packages/SpiceSharp/"><img src="https://buildstats.info/nuget/spicesharp" alt="NuGet Badge"></a> SpiceSharp <br></p>
-<p><a href="https://ci.appveyor.com/project/svenboulanger/spicesharp"><img src="https://ci.appveyor.com/api/projects/status/hhg89ejd795ykmvh?svg=true" alt="Build status"></a>
-<a href="https://travis-ci.org/SpiceSharp/SpiceSharp"><img src="https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development" alt="Build Status"></a></p>
-<p>You can find the API documentation here:<br>
-SpiceSharp: <a href="https://svenboulanger.github.io/SpiceSharp/index.html">https://svenboulanger.github.io/SpiceSharp/index.html</a><br></p>
+<h2 id="build-status">Build status</h2>
+<p>AppVeyor CI (Windows): <a href="https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master"><img src="https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true" alt="Build status"></a></p>
+<p>Travis CI (Linux/Mono): <a href="https://travis-ci.org/SpiceSharp/SpiceSharp"><img src="https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development" alt="Build Status"></a></p>
+<h2 id="documentation">Documentation</h2>
+<p>You can find documentation <a href="https://spicesharp.github.io/SpiceSharp/">here</a>. It includes a small tutorial and the API documentation.</p>
 </article>
           </div>
           
@@ -95,7 +91,7 @@ SpiceSharp: <a href="https://svenboulanger.github.io/SpiceSharp/index.html">http
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/README.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/README.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
