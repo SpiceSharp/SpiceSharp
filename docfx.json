@@ -10,7 +10,7 @@
       ],
       "force": false,
       "dest": "SpiceSharp/obj/api"
-    }
+	}
   ],
   "build": {
     "content": [
@@ -29,6 +29,11 @@
         "exclude": [ "docs/**" ]
       }
     ],
+	"globalMetadata" : {
+      "_appFaviconPath": "api/images/favicon.ico",
+      "_appLogoPath": "api/images/favicon.svg",
+      "_disableContribution": "true"
+	},
     "dest": "docs",
     "maxParallelism": 4,
     "template": [ "statictoc" ],
