@@ -1,10 +1,24 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
+using System.Collections.Generic;
+using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM2Model : CircuitModel<BSIM2Model>
+    /// <summary>
+    /// The BSIM2 Model
+    /// </summary>
+    public class BSIM2Model : Model
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static BSIM2Model()
+        {
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2Model), typeof(ComponentBehaviors.BSIM2ModelTemperatureBehavior));
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -286,44 +300,24 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double B2type { get; private set; } = 1;
-        public double B2Cox { get; private set; }
-        public double B2vdd2 { get; private set; }
-        public double B2vgg2 { get; private set; }
-        public double B2vbb2 { get; private set; }
-        public double B2Vtm { get; private set; }
+        public double B2type { get; internal set; } = 1;
+        public double B2Cox { get; internal set; }
+        public double B2vdd2 { get; internal set; }
+        public double B2vgg2 { get; internal set; }
+        public double B2vbb2 { get; internal set; }
+        public double B2Vtm { get; internal set; }
+
+        /// <summary>
+        /// A cache of sizes
+        /// </summary>
+        internal Dictionary<Tuple<double, double>, BSIM2SizeDependParam> Sizes { get; } = new Dictionary<Tuple<double, double>, BSIM2SizeDependParam>();
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM2Model(CircuitIdentifier name) : base(name)
+        public BSIM2Model(Identifier name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-
-            /* Default value Processing for B2 MOSFET Models */
-            /* Some Limiting for Model Parameters */
-            if (B2bulkJctPotential < 0.1)
-            {
-                B2bulkJctPotential.Value = 0.1;
-            }
-            if (B2sidewallJctPotential < 0.1)
-            {
-                B2sidewallJctPotential.Value = 0.1;
-            }
-
-            B2Cox = 3.453e-13 / (B2tox * 1.0e-4); /* in F / cm *  * 2 */
-            B2vdd2 = 2.0 * B2vdd;
-            B2vgg2 = 2.0 * B2vgg;
-            B2vbb2 = 2.0 * B2vbb;
-            B2Vtm = 8.625e-5 * (B2temp + 273.0);
         }
     }
 }

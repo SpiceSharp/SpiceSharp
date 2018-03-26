@@ -3,8 +3,19 @@ using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM1Model : CircuitModel<BSIM1Model>
+    /// <summary>
+    /// The BSIM1 Model
+    /// </summary>
+    public class BSIM1Model : Model
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static BSIM1Model()
+        {
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM1Model), typeof(ComponentBehaviors.BSIM1ModelTemperatureBehavior));
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -179,42 +190,20 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double Cox { get; private set; }
+        internal double Cox;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public int B1type { get; private set; } = 1;
-        public double B1Cox { get; private set; }
+        public int B1type { get; internal set; } = 1;
+        public double B1Cox { get; internal set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM1Model(CircuitIdentifier name) : base(name)
+        public BSIM1Model(Identifier name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-
-            /* Default value Processing for B1 MOSFET Models */
-            /* Some Limiting for Model Parameters */
-            if (B1bulkJctPotential < 0.1)
-            {
-                B1bulkJctPotential.Value = 0.1;
-            }
-            if (B1sidewallJctPotential < 0.1)
-            {
-                B1sidewallJctPotential.Value = 0.1;
-            }
-
-            Cox = 3.453e-13 / (B1oxideThickness * 1.0e-4); /* in F / cm *  * 2 */
-            B1Cox = Cox; /* unit:  F / cm *  * 2 */
         }
     }
 }

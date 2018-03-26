@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.3.20.0\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -44,21 +41,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BSIM3\BSIM3v24.cs" />
-    <Compile Include="BSIM4\BSIM4v80_helper.cs" />
-    <Compile Include="BSIM4\BSIM4v80_Load.cs" />
+    <Compile Include="BSIM2\BSIM2AcBehavior.cs" />
+    <Compile Include="BSIM2\BSIM2Helpers.cs" />
+    <Compile Include="BSIM2\BSIM2LoadBehavior.cs" />
+    <Compile Include="BSIM2\BSIM2ModelTemperatureBehavior.cs" />
+    <Compile Include="BSIM2\BSIM2TemperatureBehavior.cs" />
+    <Compile Include="BSIM2\BSIM2TruncateBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24AcBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24Helpers.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24LoadBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24ModelTemperatureBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24NoiseBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24TemperatureBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24TruncateBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30AcBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30Helpers.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30LoadBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30ModelTemperatureBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30NoiseBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30TemperatureBehavior.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30TruncateBehavior.cs" />
+    <Compile Include="BSIM4\BSIM4v80AcBehavior.cs" />
+    <Compile Include="BSIM4\BSIM4v80Helpers.cs" />
+    <Compile Include="BSIM4\BSIM4v80LoadBehavior.cs" />
+    <Compile Include="BSIM4\BSIM4v80ModelTemperatureBehavior.cs" />
+    <Compile Include="BSIM4\BSIM4v80NoiseBehavior.cs" />
+    <Compile Include="BSIM4\BSIM4v80TemperatureBehavior.cs" />
+    <Compile Include="BSIM4\BSIM4v80TruncateBehavior.cs" />
+    <Compile Include="BSIM4\NoiseThermal2.cs" />
     <Compile Include="BSIM\BSIM1.cs" />
+    <Compile Include="BSIM\BSIM1AcBehavior.cs" />
+    <Compile Include="BSIM\BSIM1Helpers.cs" />
+    <Compile Include="BSIM\BSIM1LoadBehavior.cs" />
     <Compile Include="BSIM\BSIM1Model.cs" />
     <Compile Include="BSIM2\BSIM2.cs" />
     <Compile Include="BSIM2\BSIM2Model.cs" />
     <Compile Include="BSIM2\BSIM2SizeDependParam.cs" />
-    <Compile Include="BSIM3\BSIM3v30.cs" />
-    <Compile Include="BSIM3\BSIM3v30Model.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30.cs" />
+    <Compile Include="BSIM3\BSIM3v30\BSIM3v30Model.cs" />
     <Compile Include="BSIM3\BSIM3SizeDependParam.cs" />
-    <Compile Include="BSIM3\BSIM3v24Model.cs" />
+    <Compile Include="BSIM3\BSIM3v24\BSIM3v24Model.cs" />
     <Compile Include="BSIM4\BSIM4v80.cs" />
     <Compile Include="BSIM4\BSIM4v80Model.cs" />
     <Compile Include="BSIM4\BSIM4SizeDependParam.cs" />
+    <Compile Include="BSIM\BSIM1ModelTemperatureBehavior.cs" />
+    <Compile Include="BSIM\BSIM1TemperatureBehavior.cs" />
+    <Compile Include="BSIM\BSIM1TruncateBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Readers\BSIMParser.cs" />
   </ItemGroup>
@@ -67,9 +96,6 @@
       <Project>{080d88db-051e-499b-a02b-eaa36de52853}</Project>
       <Name>SpiceSharp</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

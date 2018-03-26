@@ -1,83 +1,91 @@
 ﻿using System;
-using SpiceSharp.Parameters;
-using SpiceSharp.Diagnostics;
+using SpiceSharp.Attributes;
 using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A pulse waveform
     /// </summary>
-    public class Pulse : Waveform<Pulse>
+    public class Pulse : Waveform
     {
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("v1"), SpiceInfo("The initial value")]
-        public Parameter V1 { get; } = new Parameter();
-        [SpiceName("v2"), SpiceInfo("The peak value")]
-        public Parameter V2 { get; } = new Parameter();
-        [SpiceName("td"), SpiceInfo("The initial delay time in seconds")]
-        public Parameter Delay { get; } = new Parameter();
-        [SpiceName("tr"), SpiceInfo("The rise time in seconds")]
-        public Parameter RiseTime { get; } = new Parameter();
-        [SpiceName("tf"), SpiceInfo("The fall time in seconds")]
-        public Parameter FallTime { get; } = new Parameter();
-        [SpiceName("pw"), SpiceInfo("The pulse width in seconds")]
-        public Parameter PulseWidth { get; } = new Parameter();
-        [SpiceName("per"), SpiceInfo("The period in seconds")]
-        public Parameter Period { get; } = new Parameter();
+        [ParameterName("v1"), ParameterInfo("The initial value")]
+        public GivenParameter InitialValue { get; } = new GivenParameter();
+        [ParameterName("v2"), ParameterInfo("The peak value")]
+        public GivenParameter PulsedValue { get; } = new GivenParameter();
+        [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
+        public GivenParameter Delay { get; } = new GivenParameter();
+        [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
+        public GivenParameter RiseTime { get; } = new GivenParameter();
+        [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
+        public GivenParameter FallTime { get; } = new GivenParameter();
+        [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
+        public GivenParameter PulseWidth { get; } = new GivenParameter(double.PositiveInfinity);
+        [ParameterName("per"), ParameterInfo("The period in seconds")]
+        public GivenParameter Period { get; } = new GivenParameter(double.PositiveInfinity);
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private double v1, v2, td, tr, tf, pw, per;
+        private double _v1, _v2, _td, _tr, _tf, _pw, _per;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Pulse() : base()
+        public Pulse()
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="v1">The initial value</param>
-        /// <param name="v2">The peak value</param>
-        /// <param name="td">The initial delay time in seconds</param>
-        /// <param name="tr">The rise time in seconds</param>
-        /// <param name="tf">The fall time in seconds</param>
-        /// <param name="pw">The pulse width in seconds</param>
-        /// <param name="per">The period in seconds</param>
-        public Pulse(double v1, double v2, double td, double tr, double tf, double pw, double per) : base()
+        /// <param name="initialValue">The initial value</param>
+        /// <param name="pulsedValue">The peak value</param>
+        /// <param name="delay">The initial delay time in seconds</param>
+        /// <param name="riseTime">The rise time in seconds</param>
+        /// <param name="fallTime">The fall time in seconds</param>
+        /// <param name="pulseWidth">The pulse width in seconds</param>
+        /// <param name="period">The period in seconds</param>
+        public Pulse(double initialValue, double pulsedValue, double delay, double riseTime, double fallTime, double pulseWidth, double period)
         {
-            V1.Set(v1);
-            V2.Set(v2);
-            Delay.Set(td);
-            RiseTime.Set(tr);
-            FallTime.Set(tf);
-            PulseWidth.Set(pw);
-            Period.Set(per);
+            InitialValue.Value = initialValue;
+            PulsedValue.Value = pulsedValue;
+            Delay.Value = delay;
+            RiseTime.Value = riseTime;
+            FallTime.Value = fallTime;
+            PulseWidth.Value = pulseWidth;
+            Period.Value = period;
         }
 
         /// <summary>
         /// Setup the pulsed waveform
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        public override void Setup()
         {
-            v1 = V1;
-            v2 = V2;
-            td = Delay;
-            tr = RiseTime;
-            tf = FallTime;
-            pw = PulseWidth;
-            per = Period;
+            // Cache parameter values
+            _v1 = InitialValue;
+            _v2 = PulsedValue;
+            _td = Delay;
+            _tr = RiseTime;
+            _tf = FallTime;
+            _pw = PulseWidth;
+            _per = Period;
 
             // Some checks
-            if (per <= tr + pw + tf)
-                throw new CircuitException($"Invalid pulse specification: Period {per} is too small");
+            if (_tr < 0.0)
+                throw new CircuitException("Invalid rise time {0}".FormatString(_tr));
+            if (_tf < 0.0)
+                throw new CircuitException("Invalid fall time {0}".FormatString(_tf));
+            if (_pw < 0.0)
+                throw new CircuitException("Invalid pulse width {0}".FormatString(_pw));
+            if (_per < 0.0)
+                throw new CircuitException("Invalid period {0}".FormatString(_per));
+            if (_per < _tr + _pw + _tf)
+                throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(_per));
         }
 
         /// <summary>
@@ -87,84 +95,84 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public override double At(double time)
         {
-            double basetime = 0.0;
-
             // Get a relative time variable
-            time -= td;
-            if (time > per)
+            time -= _td;
+            if (time > _per)
             {
-                basetime = per * Math.Floor(time / per);
+                var basetime = _per * Math.Floor(time / _per);
                 time -= basetime;
             }
 
-            if (time <= 0.0 || time >= tr + pw + tf)
-                return v1;
-            else if (time >= tr && time <= tr + pw)
-                return v2;
-            else if (time > 0 && time < tr)
-                return v1 + (v2 - v1) * time / tr;
-            else
-                return v2 + (v1 - v2) * (time - tr - pw) / tf;
+            if (time <= 0.0 || time >= _tr + _pw + _tf)
+                return _v1;
+            if (time >= _tr && time <= _tr + _pw)
+                return _v2;
+            if (time > 0 && time < _tr)
+                return _v1 + (_v2 - _v1) * time / _tr;
+            return _v2 + (_v1 - _v2) * (time - _tr - _pw) / _tf;
         }
 
         /// <summary>
         /// Accept the current time point
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Accept(Circuit ckt)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Accept(TimeSimulation simulation)
         {
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
             // Should not be here
-            if (ckt.Method == null)
+            if (simulation.Method == null)
                 return;
 
             // Are we at a breakpoint?
-            IntegrationMethod method = ckt.Method;
+            IntegrationMethod method = simulation.Method;
             var breaks = method.Breaks;
             if (!method.Break)
                 return;
 
             // Find the time relative to the first period
-            double time = method.Time - td;
+            double time = method.Time - _td;
             double basetime = 0.0;
-            if (time >= per)
+            if (time >= _per)
             {
-                basetime = per * Math.Floor(time / per);
+                basetime = _per * Math.Floor(time / _per);
                 time -= basetime;
             }
-            double tol = 1e-7 * pw;
+            double tol = 1e-7 * _pw;
 
             // Are we at the start of a breakpoint?
-            if (time <= 0 || time >= tr + pw + tf)
+            if (time <= 0 || time >= _tr + _pw + _tf)
             {
                 if (Math.Abs(time - 0) <= tol)
-                    breaks.SetBreakpoint(basetime + tr + td);
-                else if (Math.Abs(tr + pw + tf - time) <= tol)
-                    breaks.SetBreakpoint(basetime + per + td);
-                else if ((time == -td))
-                    breaks.SetBreakpoint(basetime + td);
-                else if (Math.Abs(per - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + per);
+                    breaks.SetBreakpoint(basetime + _tr + _td);
+                else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _per + _td);
+                else if (time <= -_td)
+                    breaks.SetBreakpoint(basetime + _td);
+                else if (Math.Abs(_per - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _per);
             }
-            else if (time >= tr && time <= tr + pw)
+            else if (time >= _tr && time <= _tr + _pw)
             {
-                if (Math.Abs(time - tr) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw);
-                else if (Math.Abs(tr + pw - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
+                if (Math.Abs(time - _tr) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw);
+                else if (Math.Abs(_tr + _pw - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
             }
-            else if (time > 0 && time < tr)
+            else if (time > 0 && time < _tr)
             {
                 if (Math.Abs(time - 0) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr);
-                else if (Math.Abs(time - tr) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw);
+                    breaks.SetBreakpoint(basetime + _td + _tr);
+                else if (Math.Abs(time - _tr) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw);
             }
             else
             {
-                if (Math.Abs(tr + pw - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
-                else if (Math.Abs(tr + pw + tf - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + per);
+                if (Math.Abs(_tr + _pw - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
+                else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _per);
             }
         }
     }

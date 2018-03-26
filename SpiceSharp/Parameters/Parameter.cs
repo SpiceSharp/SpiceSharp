@@ -1,105 +1,49 @@
 ﻿using System;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp
 {
     /// <summary>
-    /// This class describes a parameter that is optional. Whether or not it was specified can be
-    /// found using the Given variable.
+    /// Base class for parameters
+    /// Parameters are objects that contain a double value, and that have some basic manipulations. They
+    /// also make it easier to be referenced by simulations, sweeps and other features.
     /// </summary>
-    public class Parameter : ICloneable
+    public abstract class Parameter : ICloneable
     {
         /// <summary>
-        /// Gets or sets the raw value of the parameter without changing the Given parameter
+        /// Gets or sets the value of the parameter
         /// </summary>
-        public double Value { get; set; }
-
-        /// <summary>
-        /// Gets whether or not the parameter was specified
-        /// </summary>
-        public bool Given { get; private set; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="defvalue">The default value</param>
-        public Parameter(double defvalue = 0.0)
-        {
-            Value = defvalue;
-            Given = false;
-        }
+        public abstract double Value { get; set; }
 
         /// <summary>
         /// Clone the parameter
         /// </summary>
         /// <returns></returns>
-        public object Clone()
-        {
-            var clone = new Parameter()
-            {
-                Given = Given,
-                Value = Value
-            };
-            return clone;
-        }
+        public abstract object Clone();
 
         /// <summary>
-        /// Copy the parameter from another parameter
+        /// Copy the parameter to this parameter
         /// </summary>
-        /// <param name="source"></param>
-        public void CopyFrom(Parameter source)
+        /// <param name="source">Source parameter</param>
+        public virtual void CopyFrom(Parameter source)
         {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
             Value = source.Value;
-            Given = source.Given;
         }
 
         /// <summary>
-        /// Copy the parameter to another parameter
+        /// Implicit conversion for a parameter to a double
         /// </summary>
-        /// <param name="target"></param>
-        public void CopyTo(Parameter target)
-        {
-            target.Value = Value;
-            target.Given = Given;
-        }
+        /// <param name="parameter">Parameter</param>
+        public static implicit operator double(Parameter parameter) => parameter?.Value ?? double.NaN;
 
         /// <summary>
-        /// Specify the parameter
-        /// </summary>
-        /// <param name="value"></param>
-        public void Set(double value)
-        {
-            Value = value;
-            Given = true;
-        }
-
-        /// <summary>
-        /// Parameters can be implicitly converted to their base type
-        /// </summary>
-        /// <param name="p"></param>
-        public static implicit operator double(Parameter p)
-        {
-            return p.Value;
-        }
-
-        /// <summary>
-        /// Assignment
-        /// Warning: This is the same as calling Set on the parameter!
-        /// </summary>
-        /// <param name="p">The double representation</param>
-        public static implicit operator Parameter(double p)
-        {
-            return new Parameter(p) { Given = true };
-        }
-
-        /// <summary>
-        /// Convert to string
+        /// Convert to a string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Given)
-                return Value.ToString() + " (set)";
-            return Value.ToString();
+            return "Parameter {0}".FormatString(Value);
         }
     }
 }

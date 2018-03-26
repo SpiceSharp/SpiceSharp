@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <Words>
+    <Recognized>
+      
+      <!-- Common words -->
+      <Word>Transconductance</Word>
+      <Word>Transresistance</Word>
+      <Word>Unsetup</Word>
+
+      <!-- Numerical method words -->
+      <Word>Fillin</Word>
+      <Word>Fillins</Word>
+      <Word>Jacobian</Word>
+      <Word>Timestep</Word>
+      <Word>Timesteps</Word>
+
+      <!-- Abbreviations to be treated as words -->
+      <Word>Rhs</Word> <!-- Right-Hand Side -->
+      <Word>Mosfet</Word>
+      <Word>Fet</Word>
+      <Word>Nmos</Word>
+      <Word>Pmos</Word>
+      <Word>Cond</Word> <!-- Conduction or Conductance -->
+      <Word>Cap</Word> <!-- Capacitance -->
+      <Word>Res</Word> <!-- Resistance -->
+      <Word>Exp</Word> <!-- Exponent -->
+      <Word>Pos</Word> <!-- Positive -->
+      <Word>Neg</Word> <!-- Negative -->
+      <Word>Eq</Word> <!-- Equation -->
+      <Word>Gmin</Word> <!-- Minimum conductance -->
+      <Word>Mu</Word> <!-- Greek letter -->
+      <Word>Lte</Word> <!-- Local Truncation Error -->
+      <Word>Vt</Word> <!-- Thermal voltage -->
+
+      <!-- Mosfet -->
+      <Word>Vgs</Word>
+      <Word>Vgd</Word>
+      <Word>Vdsat</Word>
+    </Recognized>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>NPN</Acronym>
+      <Acronym>PNP</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

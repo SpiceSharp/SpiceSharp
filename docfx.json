@@ -1,0 +1,37 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**.csproj" ],
+          "src": "SpiceSharp",
+          "exclude": [ "obj/**", "bin/**" ]
+        }
+      ],
+      "force": false,
+      "dest": "SpiceSharp/obj/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "api/*.yml" ],
+        "src": "SpiceSharp/obj"
+      },
+      {
+        "files": [ "*.md", "*.yml", "api/*.md", "articles/*.md", "articles/*.yml" ],
+        "exclude": [ "appveyor.yml", ".travis.yml", "docs/**", "SpiceSharp/**" ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [ "api/images/**", "articles/images/**" ],
+        "exclude": [ "docs/**" ]
+      }
+    ],
+    "dest": "docs",
+    "maxParallelism": 4,
+    "template": [ "statictoc" ],
+	"force": true
+  }
+}

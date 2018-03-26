@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.IntegrationMethods;
-using SpiceSharp.Simulations;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -11,151 +8,68 @@ namespace SpiceSharp
     /// </summary>
     public class Circuit
     {
-        #region Constants
-        // Constants that can be used in Spice models
-        public const double CHARGE = 1.6021918e-19;
-        public const double CONSTCtoK = 273.15;
-        public const double CONSTBoltz = 1.3806226e-23;
-        public const double CONSTRefTemp = 300.15; // 27degC
-        public static double CONSTroot2 = Math.Sqrt(2); // 1.4142135623730951;
-        public const double CONSTvt0 = CONSTBoltz * (27.0 + CONSTCtoK) / CHARGE;
-        public const double CONSTKoverQ = CONSTBoltz / CHARGE;
-        public static double CONSTE = Math.Exp(1.0);
-        public const double CONSTPI = Math.PI;
-        #endregion
-
         /// <summary>
-        /// Gets or sets the integration method used in transient simulations
-        /// It should be set by the simulation
+        /// Common constants
         /// </summary>
-        public IntegrationMethod Method { get; set; }
-
-        /// <summary>
-        /// Get all nodes in the circuit
-        /// Using nodes is only valid after calling <see cref="Setup"/>
-        /// </summary>
-        public CircuitNodes Nodes { get; } = new CircuitNodes();
-
-        /// <summary>
-        /// Gets the current simulation that is being run by the circuit
-        /// </summary>
-        public ISimulation Simulation { get; private set; } = null;
-
-        /// <summary>
-        /// Gets the current state of the circuit
-        /// </summary>
-        public CircuitState State { get; } = new CircuitState();
-
-        /// <summary>
-        /// Gets statistics
-        /// </summary>
-        public CircuitStatistics Statistics { get; } = new CircuitStatistics();
+        public const double Charge = 1.6021918e-19;
+        public const double CelsiusKelvin = 273.15;
+        public const double Boltzmann = 1.3806226e-23;
+        public const double ReferenceTemperature = 300.15; // 27degC
+        public const double Root2 = 1.4142135623730951;
+        public const double Vt0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
+        public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>
         /// Gets a collection of all circuit objects
         /// </summary>
-        public CircuitObjects Objects { get; } = new CircuitObjects();
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private bool IsSetup = false;
+        public EntityCollection Objects { get; } = new EntityCollection();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Circuit() { }
-
-        /// <summary>
-        /// Simulate the circuit
-        /// </summary>
-        /// <param name="sim">The simulation that needs to be executed</param>
-        public void Simulate(ISimulation sim)
+        public Circuit()
         {
-            // Setup the circuit
-            Setup();
-            Simulation = sim;
-
-            if (Objects.Count <= 0)
-                throw new CircuitException("Circuit contains no objects");
-            if (Nodes.Count <= 1)
-                throw new CircuitException("Circuit contains no nodes");
-
-            // Do temperature-dependent calculations
-            foreach (var c in Objects)
-                c.Temperature(this);
-
-            // Execute the simulation
-            sim.Execute(this);
         }
 
         /// <summary>
-        /// Setup the circuit
+        /// Constructor
         /// </summary>
-        public void Setup()
+        /// <param name="entities">Entities</param>
+        public Circuit(IEnumerable<Entity> entities)
         {
-            if (IsSetup)
+            if (entities == null)
                 return;
-            IsSetup = true;
-
-            // Rebuild the list of circuit components
-            Objects.BuildOrderedComponentList();
-
-            // Setup all devices
-            foreach (var c in Objects)
-                c.Setup(this);
-
-            // Initialize the state
-            State.Initialize(this);
-
-            // Lock our nodes
-            Nodes.Lock();
+            foreach (var entity in entities)
+            {
+                Objects.Add(entity);
+            }
         }
 
         /// <summary>
-        /// Unsetup/destroy the circuit
+        /// Constructor
         /// </summary>
-        public void Unsetup()
+        /// <param name="entities">Entities</param>
+        public Circuit(params Entity[] entities)
         {
-            if (!IsSetup)
-                return;
-            IsSetup = false;
-
-            // Remove all nodes
-            Nodes.Clear();
-
-            // Destroy state
-            State.Destroy();
-
-            // Unsetup devices
-            foreach (var c in Objects)
-                c.Unsetup(this);
+            Objects.Add(entities);
         }
 
         /// <summary>
-        /// Clear all objects, nodes, etc. in the circuit
+        /// Clear all objects in the circuit
         /// </summary>
         public void Clear()
         {
-            // Unsetup if necessary
-            Unsetup();
-
             // Clear all values
-            Method = null;
-            Nodes.Clear();
-            Simulation = null;
-            State.Destroy();
-            Statistics.Clear();
             Objects.Clear();
         }
 
         /// <summary>
         /// Check the circuit for floating nodes, voltage loops and more
         /// </summary>
-        public void Check()
+        public void Validate()
         {
-            CircuitCheck checker = new CircuitCheck();
-            checker.Check(this);
+            Validator validator = new Validator();
+            validator.Validate(this);
         }
     }
 }

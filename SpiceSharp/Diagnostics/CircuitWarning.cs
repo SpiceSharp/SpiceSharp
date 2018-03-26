@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-namespace SpiceSharp.Diagnostics
+namespace SpiceSharp
 {
     /// <summary>
     /// Provides static methods for tracking warnings.
@@ -9,23 +10,29 @@ namespace SpiceSharp.Diagnostics
     public static class CircuitWarning
     {
         /// <summary>
-        /// Get a list of all warnings
+        /// Gets a list of all warnings
         /// </summary>
-        public static List<string> Warnings { get; } = new List<string>();
+        public static ReadOnlyCollection<string> Warnings => WarningList.AsReadOnly();
+
+        /// <summary>
+        /// All warnings
+        /// </summary>
+        private static readonly List<string> WarningList = new List<string>();
 
         /// <summary>
         /// The event called when a warning is added
         /// </summary>
-        public static event WarningEventHandler WarningGenerated;
+        public static event EventHandler<WarningEventArgs> WarningGenerated;
 
         /// <summary>
         /// Add a warning
         /// </summary>
-        /// <param name="msg"></param>
-        public static void Warning(object sender, string msg)
+        /// <param name="sender">Sender</param>
+        /// <param name="message">Message</param>
+        public static void Warning(object sender, string message)
         {
-            WarningArgs arg = new WarningArgs(msg);
-            Warnings.Add(msg);
+            WarningEventArgs arg = new WarningEventArgs(message);
+            WarningList.Add(message);
             WarningGenerated?.Invoke(sender, arg);
         }
     }
@@ -33,28 +40,20 @@ namespace SpiceSharp.Diagnostics
     /// <summary>
     /// Warning arguments
     /// </summary>
-    public class WarningArgs : EventArgs
+    public class WarningEventArgs : EventArgs
     {
         /// <summary>
-        /// Get the message
+        /// Gets the message
         /// </summary>
         public string Message { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="msg"></param>
-        public WarningArgs(string msg)
-            : base()
+        /// <param name="message"></param>
+        public WarningEventArgs(string message)
         {
-            Message = msg;
+            Message = message;
         }
     }
-
-    /// <summary>
-    /// A delegate for generating a warning
-    /// </summary>
-    /// <param name="sender">The object invoking the warning</param>
-    /// <param name="message">The warning message</param>
-    public delegate void WarningEventHandler(object sender, WarningArgs e);
 }

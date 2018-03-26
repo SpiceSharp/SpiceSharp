@@ -12,33 +12,33 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Mosfet generators for BSIM transistors
         /// </summary>
-        public static Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>>()
+        public static Dictionary<Type, Func<Identifier, Entity, Component>> Mosfets { get; } = new Dictionary<Type, Func<Identifier, Entity, Component>>()
         {
-            {  typeof(BSIM1Model), (CircuitIdentifier name, ICircuitObject model) =>
+            {  typeof(BSIM1Model), (Identifier name, Entity model) =>
             {
                 BSIM1 m = new BSIM1(name);
                 m.SetModel((BSIM1Model)model);
                 return m;
             } },
-            { typeof(BSIM2Model), (CircuitIdentifier name, ICircuitObject model) =>
+            { typeof(BSIM2Model), (Identifier name, Entity model) =>
             {
                 BSIM2 m = new BSIM2(name);
                 m.SetModel((BSIM2Model)model);
                 return m;
             } },
-            { typeof(BSIM3v24Model), (CircuitIdentifier name, ICircuitObject model) =>
+            { typeof(BSIM3v24Model), (Identifier name, Entity model) =>
             {
                 BSIM3v24 m = new BSIM3v24(name);
                 m.SetModel((BSIM3v24Model)model);
                 return m;
             } },
-            { typeof(BSIM3v30Model), (CircuitIdentifier name, ICircuitObject model) =>
+            { typeof(BSIM3v30Model), (Identifier name, Entity model) =>
             {
                 BSIM3v30 m = new BSIM3v30(name);
                 m.SetModel((BSIM3v30Model)model);
                 return m;
             } },
-            { typeof(BSIM4v80Model), (CircuitIdentifier name, ICircuitObject model) =>
+            { typeof(BSIM4v80Model), (Identifier name, Entity model) =>
             {
                 BSIM4v80 m = new BSIM4v80(name);
                 m.SetModel((BSIM4v80Model)model);
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Mosfet model generators
         /// </summary>
-        public static Dictionary<int, Func<CircuitIdentifier, string, string, ICircuitObject>> Levels { get; } = new Dictionary<int, Func<CircuitIdentifier, string, string, ICircuitObject>>()
+        public static Dictionary<int, Func<Identifier, string, string, Entity>> Levels { get; } = new Dictionary<int, Func<Identifier, string, string, Entity>>()
         {
             { 4, GenerateBSIM1Model },
             { 5, GenerateBSIM2Model },
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components
         /// Add mofset generators
         /// </summary>
         /// <param name="mosfets">The list of mosfet generators</param>
-        public static void AddMosfetGenerators(Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>> mosfets)
+        public static void AddMosfetGenerators(Dictionary<Type, Func<Identifier, Entity, Component>> mosfets)
         {
             foreach (var m in Mosfets)
                 mosfets.Add(m.Key, m.Value);
@@ -71,7 +71,7 @@ namespace SpiceSharp.Components
         /// Add mosfet model levels
         /// </summary>
         /// <param name="levels">The list of levels</param>
-        public static void AddMosfetModelGenerators(Dictionary<int, Func<CircuitIdentifier, string, string, ICircuitObject>> levels)
+        public static void AddMosfetModelGenerators(Dictionary<int, Func<Identifier, string, string, Entity>> levels)
         {
             foreach (var m in Levels)
                 levels.Add(m.Key, m.Value);
@@ -85,7 +85,7 @@ namespace SpiceSharp.Components
         /// <param name="type">nmos or pmos</param>
         /// <param name="version">Version</param>
         /// <returns></returns>
-        public static ICircuitObject GenerateBSIM1Model(CircuitIdentifier name, string type, string version)
+        public static Entity GenerateBSIM1Model(Identifier name, string type, string version)
         {
             BSIM1Model model = new BSIM1Model(name);
             switch (type)
@@ -106,7 +106,7 @@ namespace SpiceSharp.Components
         /// <param name="type">nmos or pmos</param>
         /// <param name="version">Version</param>
         /// <returns></returns>
-        public static ICircuitObject GenerateBSIM2Model(CircuitIdentifier name, string type, string version)
+        public static Entity GenerateBSIM2Model(Identifier name, string type, string version)
         {
             BSIM2Model model = new BSIM2Model(name);
             switch (type)
@@ -126,7 +126,7 @@ namespace SpiceSharp.Components
         /// <param name="type">Type of the parameter</param>
         /// <param name="version">Version of the parameter</param>
         /// <returns></returns>
-        public static ICircuitObject GenerateBSIM3Model(CircuitIdentifier name, string type, string version)
+        public static Entity GenerateBSIM3Model(Identifier name, string type, string version)
         {
             double v = 3.3;
             switch (version)
@@ -173,7 +173,7 @@ namespace SpiceSharp.Components
         /// <param name="type">nmos or pmos</param>
         /// <param name="version">Version</param>
         /// <returns></returns>
-        public static ICircuitObject GenerateBSIM4Model(CircuitIdentifier name, string type, string version)
+        public static Entity GenerateBSIM4Model(Identifier name, string type, string version)
         {
             double v = 4.8;
             switch (version)

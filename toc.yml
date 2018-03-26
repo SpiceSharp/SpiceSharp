@@ -1,0 +1,7 @@
+- name: Home
+  href: index.md
+- name: Tutorial
+  href: articles/
+  homepage: articles/gettingstarted.md
+- name: API
+  uid: SpiceSharp

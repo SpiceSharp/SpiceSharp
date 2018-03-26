@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Getting started </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Getting started ">
+    <meta name="generator" content="docfx 2.32.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../index.html" title="Home" class="">Home</a>
+                  </li>
+                  <li class="active">
+                    <a href="../articles/gettingstarted.html" title="Tutorial" class="active">Tutorial</a>
+                  </li>
+                  <li class="">
+                    <a href="../api/SpiceSharp.html" title="API" class="">API</a>
+                  </li>
+                </ul>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="active">
+                      <a href="gettingstarted.html" title="Getting started" class="active">Getting started</a>
+                    </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="analysis.html" title="Analysis" class="">Analysis</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="dcanalysis.html" title="DC analysis" class="">DC analysis</a>
+                          </li>
+                          <li class="">
+                            <a href="acanalysis.html" title="AC analysis" class="">AC analysis</a>
+                          </li>
+                          <li class="">
+                            <a href="transientanalysis.html" title="Transient analysis" class="">Transient analysis</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <a href="custommodels.html" title="Custom models" class="">Custom models</a>
+                    </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="getting-started">Getting started</h1>
+
+<p>In this section we will quickly go over everything needed to create a simple circuit and simulate it.</p>
+<h2 id="installation">Installation</h2>
+<p>Installing can be done by using NuGet.</p>
+<h2 id="building-the-circuit">Building the circuit</h2>
+<p>Let&#39;s start with a very simple circuit called a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
+<p align="center"><img src="images/example01.svg"></p>
+
+<p>The output voltage of this circuit is 2/3 times the input voltage.</p>
+<p>Creating this circuit is done using the <a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a>-class. This is a container of multiple entities, such as voltage sources and resistors. The <a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a>-class is defined in the namespace <a class="xref" href="../api/SpiceSharp.html">SpiceSharp</a>, while all default components are in the namespace <a class="xref" href="../api/SpiceSharp.Components.html">SpiceSharp.Components</a>.</p>
+<pre><code class="lang-csharp" name="Circuit">// Build the circuit
+Circuit ckt = new Circuit(
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 1.0),
+    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e4),
+    new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e4)
+    );
+</code></pre><h2 id="running-a-dc-analysis">Running a DC analysis</h2>
+<p>A <a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a> simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.</p>
+<p>We will sweep the input voltage source from -1V to 1V in steps of 200mV.</p>
+<pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
+DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
+
+// Catch exported data
+dc.OnExportSimulationData += (sender, args) =&gt;
+{
+    double input = args.GetVoltage(&quot;in&quot;);
+    double output = args.GetVoltage(&quot;out&quot;);
+    Console.WriteLine($@&quot;{input:G3} V : {output:G3} V&quot;);
+};
+dc.Run(ckt);
+</code></pre><p>The output will yield as expected:</p>
+<pre><code>-1 V : -0.667 V
+-0.8 V : -0.533 V
+-0.6 V : -0.4 V
+-0.4 V : -0.267 V
+-0.2 V : -0.133 V
+0 V : 0 V
+0.2 V : 0.133 V
+0.4 V : 0.267 V
+0.6 V : 0.4 V
+0.8 V : 0.533 V
+1 V : 0.667 V
+</code></pre><h2 id="using-exports">Using exports</h2>
+<p>Using <a class="xref" href="../api/SpiceSharp.Simulations.Export-1.html">Exports</a> gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:</p>
+<pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
+DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
+
+// Create exports
+Export&lt;double&gt; inputExport = new RealVoltageExport(dc, &quot;in&quot;);
+Export&lt;double&gt; outputExport = new RealVoltageExport(dc, &quot;out&quot;);
+Export&lt;double&gt; currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
+
+// Catch exported data
+dc.OnExportSimulationData += (sender, args) =&gt;
+{
+    Console.WriteLine($@&quot;{inputExport.Value:G3} V : {outputExport.Value:G3} V, {currentExport.Value:G3} A&quot;);
+};
+dc.Run(ckt);
+</code></pre><p>Yielding the output:</p>
+<pre><code>-1 V : -0.667 V. 3.33E-05 A
+-0.8 V : -0.533 V. 2.67E-05 A
+-0.6 V : -0.4 V. 2E-05 A
+-0.4 V : -0.267 V. 1.33E-05 A
+-0.2 V : -0.133 V. 6.67E-06 A
+0 V : 0 V. 0 A
+0.2 V : 0.133 V. -6.67E-06 A
+0.4 V : 0.267 V. -1.33E-05 A
+0.6 V : 0.4 V. -2E-05 A
+0.8 V : 0.533 V. -2.67E-05 A
+1 V : 0.667 V. -3.33E-05 A
+</code></pre><p><div class="pull-right"><a href="analysis.html">Next: Analysis</a><p>
+</div></article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/development/articles/gettingstarted.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2017 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
