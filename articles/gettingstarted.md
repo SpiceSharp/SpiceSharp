@@ -3,7 +3,15 @@ In this section we will quickly go over everything needed to create a simple cir
 
 ## Installation
 
-Installing can be done by using NuGet.
+The easiest way to install the NuGet package here:
+
+[![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/)
+
+You can also clone the repository directly. However, while you get the latest features and bug fixes, the documentation might not be up to date!
+
+AppVeyor CI (Windows) build status: [![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master)
+
+Travis CI (Linux/Mono) build status: [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development)](https://travis-ci.org/SpiceSharp/SpiceSharp)
 
 ## Building the circuit
 Let's start with a very simple circuit called a *resistive voltage divider*. The schematic looks as follows.
@@ -12,13 +20,13 @@ Let's start with a very simple circuit called a *resistive voltage divider*. The
 
 The output voltage of this circuit is 2/3 times the input voltage.
 
-Creating this circuit is done using the [Circuit](xref:SpiceSharp.Circuit)-class. This is a container of multiple entities, such as voltage sources and resistors. The [Circuit](xref:SpiceSharp.Circuit)-class is defined in the namespace @SpiceSharp, while all default components are in the namespace @SpiceSharp.Components.
+Creating this circuit is done using the **[Circuit](xref:SpiceSharp.Circuit)**-class. This is a container of multiple entities, such as voltage sources and resistors. The **[Circuit](xref:SpiceSharp.Circuit)**-class is defined in the namespace *@SpiceSharp*, while all default components are in the namespace *@SpiceSharp.Components*.
 
 [!code-csharp[Circuit](../SpiceSharpTest/BasicExampleTests.cs#example01_build)]
 
 ## Running a DC analysis
 
-A [DC](xref:SpiceSharp.Simulations.DC) simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.
+A **[DC](xref:SpiceSharp.Simulations.DC)** simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.
 
 We will sweep the input voltage source from -1V to 1V in steps of 200mV.
 
@@ -42,7 +50,7 @@ The output will yield as expected:
 
 ## Using exports
 
-Using [Exports](xref:SpiceSharp.Simulations.Export`1) gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:
+Using **[Export<T>](xref:SpiceSharp.Simulations.Export`1)** gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:
 
 [!code-csharp[Simulation](../SpiceSharpTest/BasicExampleTests.cs#example01_simulate2)]
 
