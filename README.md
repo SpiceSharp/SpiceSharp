@@ -7,13 +7,13 @@ Please note that this project is by no means meant to compete with existing comm
 
 Spice# is available as a **NuGet Package**.
 
-[![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/) SpiceSharp <br />
+[![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/) SpiceSharp
 
 ## Build status
 
 AppVeyor CI (Windows): [![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master)
 
-Travis CI (Linux/Mono): [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development)](https://travis-ci.org/SpiceSharp/SpiceSharp)
+Travis CI (Linux/Mono): [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp)
 
 ## Documentation
 You can find documentation [here](https://spicesharp.github.io/SpiceSharp/). It includes a small tutorial and the API documentation.
