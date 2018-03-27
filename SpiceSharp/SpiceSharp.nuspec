@@ -6,17 +6,13 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/svenboulanger/SpiceSharp/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/svenboulanger/SpiceSharp</projectUrl>
-    <iconUrl>https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true</iconUrl>
+    <licenseUrl>https://github.com/SpiceSharp/SpiceSharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/SpiceSharp/SpiceSharp</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/SpiceSharp/SpiceSharp/master/api/images/logo_full.svg?sanitize=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Update</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>circuit electronics netlist parser spice simulator simulation ode solver</tags>
-	
-	<dependencies>
-		<dependency id="MathNet.Numerics" version="3.20.0.0" />
-	</dependencies>
   </metadata>
 </package>
