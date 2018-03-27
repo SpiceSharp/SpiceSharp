@@ -30675,6 +30675,18 @@ references:
   commentId: Overload:SpiceSharp.Simulations.VariableSet.GetVariable
   fullName: SpiceSharp.Simulations.VariableSet.GetVariable
   nameWithType: VariableSet.GetVariable
+- uid: SpiceSharp.Simulations.VariableSet.GetVariables
+  name: GetVariables()
+  href: api/SpiceSharp.Simulations.VariableSet.html#SpiceSharp_Simulations_VariableSet_GetVariables
+  commentId: M:SpiceSharp.Simulations.VariableSet.GetVariables
+  fullName: SpiceSharp.Simulations.VariableSet.GetVariables()
+  nameWithType: VariableSet.GetVariables()
+- uid: SpiceSharp.Simulations.VariableSet.GetVariables*
+  name: GetVariables
+  href: api/SpiceSharp.Simulations.VariableSet.html#SpiceSharp_Simulations_VariableSet_GetVariables_
+  commentId: Overload:SpiceSharp.Simulations.VariableSet.GetVariables
+  fullName: SpiceSharp.Simulations.VariableSet.GetVariables
+  nameWithType: VariableSet.GetVariables
 - uid: SpiceSharp.Simulations.VariableSet.Ground
   name: Ground
   href: api/SpiceSharp.Simulations.VariableSet.html#SpiceSharp_Simulations_VariableSet_Ground

@@ -115,13 +115,17 @@
 
 <p>In this section we will quickly go over everything needed to create a simple circuit and simulate it.</p>
 <h2 id="installation">Installation</h2>
-<p>Installing can be done by using NuGet.</p>
+<p>The easiest way to install the NuGet package here:</p>
+<p><a href="https://www.nuget.org/packages/SpiceSharp/"><img src="https://buildstats.info/nuget/spicesharp" alt="NuGet Badge"></a></p>
+<p>You can also clone the repository directly. However, while you get the latest features and bug fixes, the documentation might not be up to date!</p>
+<p>AppVeyor CI (Windows) build status: <a href="https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master"><img src="https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true" alt="Build status"></a></p>
+<p>Travis CI (Linux/Mono) build status: <a href="https://travis-ci.org/SpiceSharp/SpiceSharp"><img src="https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development" alt="Build Status"></a></p>
 <h2 id="building-the-circuit">Building the circuit</h2>
 <p>Let&#39;s start with a very simple circuit called a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
 <p align="center"><img src="images/example01.svg"></p>
 
 <p>The output voltage of this circuit is 2/3 times the input voltage.</p>
-<p>Creating this circuit is done using the <a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a>-class. This is a container of multiple entities, such as voltage sources and resistors. The <a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a>-class is defined in the namespace <a class="xref" href="../api/SpiceSharp.html">SpiceSharp</a>, while all default components are in the namespace <a class="xref" href="../api/SpiceSharp.Components.html">SpiceSharp.Components</a>.</p>
+<p>Creating this circuit is done using the <strong><a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a></strong>-class. This is a container of multiple entities, such as voltage sources and resistors. The <strong><a class="xref" href="../api/SpiceSharp.Circuit.html">Circuit</a></strong>-class is defined in the namespace <em><a class="xref" href="../api/SpiceSharp.html">SpiceSharp</a></em>, while all default components are in the namespace <em><a class="xref" href="../api/SpiceSharp.Components.html">SpiceSharp.Components</a></em>.</p>
 <pre><code class="lang-csharp" name="Circuit">// Build the circuit
 Circuit ckt = new Circuit(
     new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 1.0),
@@ -129,7 +133,7 @@ Circuit ckt = new Circuit(
     new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e4)
     );
 </code></pre><h2 id="running-a-dc-analysis">Running a DC analysis</h2>
-<p>A <a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a> simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.</p>
+<p>A <strong><a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a></strong> simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.</p>
 <p>We will sweep the input voltage source from -1V to 1V in steps of 200mV.</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
 DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
@@ -155,7 +159,7 @@ dc.Run(ckt);
 0.8 V : 0.533 V
 1 V : 0.667 V
 </code></pre><h2 id="using-exports">Using exports</h2>
-<p>Using <a class="xref" href="../api/SpiceSharp.Simulations.Export-1.html">Exports</a> gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:</p>
+<p>Using <strong><a class="xref" href="../api/SpiceSharp.Simulations.Export-1.html">Export<t></t></a></strong> gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
 DC dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
 
