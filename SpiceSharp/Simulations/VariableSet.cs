@@ -167,6 +167,11 @@ namespace SpiceSharp.Simulations
         public Variable GetVariable(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
 
         /// <summary>
+        /// Get unknowns
+        /// </summary>
+        public IEnumerable<Variable> GetVariables() => _unknowns;
+
+        /// <summary>
         /// Avoid changing to the internal structure by locking the node list
         /// </summary>
         public void Lock() => _locked = true;
