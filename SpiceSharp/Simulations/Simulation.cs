@@ -129,7 +129,18 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Unsetup the simulation
         /// </summary>
-        protected abstract void Unsetup();
+        protected virtual void Unsetup()
+        {
+            // Clear all parameters
+            EntityBehaviors.Clear();
+            EntityParameters.Clear();
+
+            // Clear all nodes
+            Nodes.Clear();
+
+            // Clear all states
+            States.Clear();
+        }
 
         /// <summary>
         /// Execute the simulation

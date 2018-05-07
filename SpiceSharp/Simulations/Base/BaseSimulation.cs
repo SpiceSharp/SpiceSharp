@@ -54,7 +54,6 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             ParameterSets.Add(new BaseConfiguration());
-            States.Add(new RealState());
         }
 
         /// <summary>
@@ -73,10 +72,13 @@ namespace SpiceSharp.Simulations
             LoadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Objects);
             InitialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Objects);
 
+            // Add a state for real numbers
+            RealState = new RealState();
+            States.Add(RealState);
+
             // Setup the load behaviors
-            RealState = States.Get<RealState>();
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
-            for (int i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < LoadBehaviors.Count; i++)
                 LoadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
             RealState.Initialize(Nodes);
 
@@ -90,7 +92,7 @@ namespace SpiceSharp.Simulations
         protected override void Execute()
         {
             // Do temperature-dependent calculations
-            for (int i = 0; i < TemperatureBehaviors.Count; i++)
+            for (var i = 0; i < TemperatureBehaviors.Count; i++)
                 TemperatureBehaviors[i].Temperature(this);
 
             // Do initial conditions
@@ -102,15 +104,17 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Unsetup()
         {
+            base.Unsetup();
+
             // Remove nodeset
             OnLoad -= LoadNodeSets;
 
             // Unsetup all behaviors
-            for (int i = 0; i < InitialConditionBehaviors.Count; i++)
+            for (var i = 0; i < InitialConditionBehaviors.Count; i++)
                 InitialConditionBehaviors[i].Unsetup();
-            for (int i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < LoadBehaviors.Count; i++)
                 LoadBehaviors[i].Unsetup();
-            for (int i = 0; i < TemperatureBehaviors.Count; i++)
+            for (var i = 0; i < TemperatureBehaviors.Count; i++)
                 TemperatureBehaviors[i].Unsetup();
 
             // Clear the state
@@ -123,9 +127,6 @@ namespace SpiceSharp.Simulations
             InitialConditionBehaviors = null;
             TemperatureBehaviors = null;
             BaseConfiguration = null;
-
-            // Clear nodes
-            Nodes.Clear();
         }
 
         /// <summary>

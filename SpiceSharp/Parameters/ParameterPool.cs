@@ -39,5 +39,17 @@ namespace SpiceSharp
                 return result;
             return null;
         }
+
+        /// <summary>
+        /// Check if base parameters are available vor a specific identifier
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <returns></returns>
+        public bool Contains(Identifier name) => _entityParameters.ContainsKey(name);
+
+        /// <summary>
+        /// Clear all parameter sets in the pool
+        /// </summary>
+        public void Clear() => _entityParameters.Clear();
     }
 }

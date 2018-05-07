@@ -1,13 +1,34 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharpTest.Models;
 
 namespace SpiceSharpTest.Simulations
 {
     [TestFixture]
-    public class DCTests
+    public class DCTests : Framework
     {
+        /// <summary>
+        /// Create a diode with a model
+        /// </summary>
+        /// <param name="name">Diode name</param>
+        /// <param name="anode">Anode</param>
+        /// <param name="cathode">Cathode</param>
+        /// <param name="model">Model</param>
+        /// <param name="modelparams">Model parameters</param>
+        /// <returns></returns>
+        Diode CreateDiode(Identifier name, Identifier anode, Identifier cathode, Identifier model, string modelparams)
+        {
+            Diode d = new Diode(name);
+            DiodeModel dm = new DiodeModel(model);
+            ApplyParameters(dm, modelparams);
+            d.SetModel(dm);
+            d.Connect(anode, cathode);
+            return d;
+        }
+
         [Test]
         public void When_DCSweepResistorParameter_Expect_Reference()
         {
@@ -40,6 +61,38 @@ namespace SpiceSharpTest.Simulations
                 var expected = voltage * resistance / (resistance + 1.0e4);
                 Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
             };
+            dc.Run(ckt);
+        }
+
+        [Test]
+        public void When_DiodeDC_Expect_NoException()
+        {
+            /*
+             * Bug found by Marcin Golebiowski
+             * Running simulations twice will give rise to errors. We are using a diode model here
+             * in order to make sure to use states, extra equations, etc.
+             */
+
+            var ckt = new Circuit();
+            ckt.Objects.Add(
+                CreateDiode("D1", "OUT", "0", "1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
+                new VoltageSource("V1", "OUT", "0", 0.0)
+            );
+
+            // Create simulations
+            var dc = new DC("DC 1", "V1", -1, 1, 10e-3);
+            var op = new OP("OP 1");
+
+            // Create exports
+            var dcExportV1 = new RealPropertyExport(dc, "V1", "i");
+            var dcExportV12 = new RealPropertyExport(dc, "V1", "i");
+            dc.OnExportSimulationData += (sender, args) =>
+                Console.WriteLine(dcExportV1.Value + @" vs " + dcExportV12.Value);
+            var opExportV1 = new RealPropertyExport(op, "V1", "i");
+            op.OnExportSimulationData += (sender, args) => Console.WriteLine(opExportV1.Value);
+
+            // Run DC and op
+            dc.Run(ckt);
             dc.Run(ckt);
         }
     }

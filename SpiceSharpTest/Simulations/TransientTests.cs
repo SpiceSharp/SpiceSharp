@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
@@ -12,7 +13,7 @@ namespace SpiceSharpTest.Simulations
         public void When_RCFilterConstantTransient_Expect_Reference()
         {
             // Create the circuit
-            Circuit ckt = new Circuit(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 10.0),
                 new Resistor("R1", "in", "out", 10),
                 new Capacitor("C1", "out", "0", 20)
@@ -26,6 +27,16 @@ namespace SpiceSharpTest.Simulations
                 Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
             };
             tran.Run(ckt);
+
+            // Let's run the simulation twice to check if it is consistent
+            try
+            {
+                tran.Run(ckt);
+            }
+            catch (Exception)
+            {
+                throw new Exception(@"Cannot run transient analysis twice");
+            }
         }
 
         [Test]

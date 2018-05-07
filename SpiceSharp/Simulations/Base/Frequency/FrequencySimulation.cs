@@ -30,9 +30,6 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(Identifier name) : base(name)
         {
             ParameterSets.Add(new FrequencyConfiguration());
-
-            // Create a complex state with shared matrix
-            States.Add(new ComplexState());
         }
 
         /// <summary>
@@ -48,9 +45,6 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(Identifier name, Sweep<double> frequencySweep) : base(name)
         {
             ParameterSets.Add(new FrequencyConfiguration(frequencySweep));
-
-            // Create a complex state with shared matrix
-            States.Add(new ComplexState());
         }
 
         /// <summary>
@@ -63,8 +57,11 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
+            // Create the state for complex numbers
+            ComplexState = new ComplexState();
+            States.Add(ComplexState);
+
             // Get behaviors, configurations and states
-            ComplexState = States.Get<ComplexState>() ?? throw new CircuitException("No complex state found");
             FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ??
                                      throw new CircuitException("No frequency configuration found");
             FrequencySweep = FrequencyConfiguration.FrequencySweep ??

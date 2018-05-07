@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using System.Runtime.Remoting.Channels;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;

@@ -73,5 +73,14 @@ namespace SpiceSharp.Behaviors
         /// <param name="name">Name</param>
         /// <returns></returns>
         public bool ContainsKey(Identifier name) => _entityBehaviors.ContainsKey(name);
+
+        /// <summary>
+        /// Clear all behaviors in the pool
+        /// </summary>
+        public void Clear()
+        {
+            _behaviors.Clear();
+            _entityBehaviors.Clear();
+        }
     }
 }
