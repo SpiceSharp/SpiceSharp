@@ -5,7 +5,6 @@ namespace SpiceSharp
     /// <summary>
     /// An identifier for a circuit object
     /// </summary>
-    [Serializable]
     public abstract class Identifier : IEquatable<Identifier>
     {
         /// <summary>

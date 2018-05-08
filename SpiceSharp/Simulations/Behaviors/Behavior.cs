@@ -63,7 +63,7 @@ namespace SpiceSharp.Behaviors
         protected Func<TResult> CreateExport<TResult>(Simulation simulation, string property)
         {
             // Find methods to create the export
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             Func<TResult> result = null;
             foreach (var member in members)
             {
@@ -118,7 +118,7 @@ namespace SpiceSharp.Behaviors
 
                 // Method: TResult Method(State)
                 // Works for any child class of State
-                if (parameters[0].ParameterType.IsSubclassOf(typeof(State)))
+                if (parameters[0].ParameterType.GetTypeInfo().IsSubclassOf(typeof(State)))
                 {
                     // Get the state from the simulation that this method needs
                     if (!simulation.States.TryGetValue(parameters[0].ParameterType, out var state))

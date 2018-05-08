@@ -5,7 +5,6 @@ namespace SpiceSharp
     /// <summary>
     /// Class for modified identifiers
     /// </summary>
-    [Serializable]
     public class SubIdentifier : Identifier
     {
         /// <summary>

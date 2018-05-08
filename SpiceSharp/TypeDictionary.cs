@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SpiceSharp
 {
@@ -85,7 +86,7 @@ namespace SpiceSharp
             while (currentType != null && currentType != BaseClass)
             {
                 Dictionary.Add(currentType, value);
-                currentType = currentType.BaseType;
+                currentType = currentType.GetTypeInfo().BaseType;
                 if (currentType == typeof(object))
                     throw new CircuitException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
             }

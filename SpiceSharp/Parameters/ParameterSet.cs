@@ -20,7 +20,7 @@ namespace SpiceSharp
             var result = new Dictionary<string, Action<double>>();
 
             // Get all properties with the SpiceName attribute
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
                 // Skip properties without a SpiceName attribute
@@ -56,7 +56,8 @@ namespace SpiceSharp
         public Parameter GetParameter(string name)
         {
             // Get the property by name
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var myTypeInfo = GetType().GetTypeInfo();
+            var members = myTypeInfo.GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
                 // Check for valid naming
@@ -66,14 +67,14 @@ namespace SpiceSharp
                 // Check for methods
                 if (member is MethodInfo mi)
                 {
-                    if ((mi.ReturnType == typeof(Parameter) || mi.ReturnType.IsSubclassOf(typeof(Parameter))) && mi.GetParameters().Length == 0)
+                    if ((mi.ReturnType == typeof(Parameter) || mi.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Parameter))) && mi.GetParameters().Length == 0)
                         return (Parameter) mi.Invoke(this, null);
                 }
 
                 // Check for properties
                 if (member is PropertyInfo pi)
                 {
-                    if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.IsSubclassOf(typeof(Parameter))) && pi.CanRead)
+                    if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter))) && pi.CanRead)
                         return (Parameter) pi.GetValue(this);
                 }
             }
@@ -89,7 +90,8 @@ namespace SpiceSharp
         public Parameter GetParameter()
         {
             // Get the property by name
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var myTypeInfo = GetType().GetTypeInfo();
+            var members = myTypeInfo.GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
                 // Check for valid naming
@@ -99,14 +101,14 @@ namespace SpiceSharp
                 // Check for methods
                 if (member is MethodInfo mi)
                 {
-                    if ((mi.ReturnType == typeof(Parameter) || mi.ReturnType.IsSubclassOf(typeof(Parameter))) && mi.GetParameters().Length == 0)
+                    if ((mi.ReturnType == typeof(Parameter) || mi.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Parameter))) && mi.GetParameters().Length == 0)
                         return (Parameter)mi.Invoke(this, null);
                 }
 
                 // Check for properties
                 if (member is PropertyInfo pi)
                 {
-                    if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.IsSubclassOf(typeof(Parameter))) && pi.CanRead)
+                    if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter))) && pi.CanRead)
                         return (Parameter)pi.GetValue(this);
                 }
             }
@@ -122,7 +124,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public Action<double> GetSetter(string name)
         {
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
                 // Skip members we're not interested in
@@ -153,7 +155,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public Action<double> GetSetter()
         {
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
                 // Skip members we're not interested in
@@ -188,7 +190,7 @@ namespace SpiceSharp
         public bool SetParameter(string name, double value)
         {
             // Get the property by name
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Set the property if any
             bool isset = false;
@@ -214,7 +216,7 @@ namespace SpiceSharp
         public bool SetParameter(double value)
         {
             // Get the property by name
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Find the principal value and set it
             foreach (var member in members)
@@ -239,7 +241,7 @@ namespace SpiceSharp
         public bool SetParameter(string name)
         {
             // Get the property by name
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Set the property if any
             bool isset = false;
@@ -273,7 +275,7 @@ namespace SpiceSharp
         public bool SetParameter(string name, object value)
         {
             // Get the property by name
-            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Set the property if any
             bool isset = false;
@@ -350,7 +352,7 @@ namespace SpiceSharp
             if (member is PropertyInfo pi)
             {
                 // Properties
-                if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.IsSubclassOf(typeof(Parameter))) && pi.CanRead)
+                if ((pi.PropertyType == typeof(Parameter) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter))) && pi.CanRead)
                 {
                     ((Parameter) pi.GetValue(this)).Value = value;
                     return true;
@@ -406,7 +408,7 @@ namespace SpiceSharp
         private Action<double> CreateSetterForProperty(PropertyInfo property)
         {
             // Parameter objects are supported
-            if (property.PropertyType == typeof(Parameter) || property.PropertyType.IsSubclassOf(typeof(Parameter)))
+            if (property.PropertyType == typeof(Parameter) || property.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
             {
                 // We can use the setter of the parameter!
                 var p = (Parameter) property.GetValue(this);

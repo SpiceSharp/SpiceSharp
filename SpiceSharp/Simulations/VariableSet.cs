@@ -7,7 +7,6 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    [Serializable]
     public class VariableSet
     {
         /// <summary>

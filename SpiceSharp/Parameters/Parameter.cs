@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// Parameters are objects that contain a double value, and that have some basic manipulations. They
     /// also make it easier to be referenced by simulations, sweeps and other features.
     /// </summary>
-    public abstract class Parameter : ICloneable
+    public abstract class Parameter
     {
         /// <summary>
         /// Gets or sets the value of the parameter
@@ -18,7 +18,7 @@ namespace SpiceSharp
         /// Clone the parameter
         /// </summary>
         /// <returns></returns>
-        public abstract object Clone();
+        public abstract Parameter Clone();
 
         /// <summary>
         /// Copy the parameter to this parameter

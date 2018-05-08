@@ -7,7 +7,6 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Sparse vector
     /// </summary>
-    [Serializable]
     public class SparseVector<T> : Vector<T>, IFormattable where T : IFormattable, IEquatable<T>
     {
         /// <summary>

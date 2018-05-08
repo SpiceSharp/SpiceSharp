@@ -52,7 +52,7 @@
         /// Clone the parameter
         /// </summary>
         /// <returns></returns>
-        public override object Clone()
+        public override Parameter Clone()
         {
             var clone = new GivenParameter
             {

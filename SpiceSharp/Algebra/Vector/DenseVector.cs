@@ -7,7 +7,6 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// A vector with real values
     /// </summary>
-    [Serializable]
     public class DenseVector<T> : Vector<T>, IFormattable where T : IFormattable
     {
         /// <summary>

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Sparse-related
     /// </summary>
-    [Serializable]
     public class SparseException : Exception
     {
         /// <summary>
@@ -32,16 +30,6 @@ namespace SpiceSharp.Algebra
         /// <param name="innerException">Inner exception</param>
         public SparseException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="info">Info</param>
-        /// <param name="context">Context</param>
-        protected SparseException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

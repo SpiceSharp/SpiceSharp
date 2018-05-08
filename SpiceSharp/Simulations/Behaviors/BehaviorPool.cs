@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace SpiceSharp.Behaviors
 {
@@ -34,7 +36,7 @@ namespace SpiceSharp.Behaviors
             eb.Register(behavior);
 
             // Store in the behavior list
-            Type basetype = behavior.GetType().BaseType ?? throw new CircuitException("Invalid behavior");
+            Type basetype = behavior.GetType().GetTypeInfo().BaseType ?? throw new CircuitException("Invalid behavior");
             if (!_behaviors.TryGetValue(basetype, out var list))
             {
                 list = new List<Behavior>();
@@ -51,7 +53,8 @@ namespace SpiceSharp.Behaviors
         public BehaviorList<T> GetBehaviorList<T>() where T : Behavior
         {
             if (_behaviors.TryGetValue(typeof(T), out List<Behavior> list))
-                return new BehaviorList<T>(list.ConvertAll(b => (T)b));
+                return new BehaviorList<T>(list.Cast<T>());
+
             return new BehaviorList<T>(new T[0]);
         }
 

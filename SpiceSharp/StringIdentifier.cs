@@ -39,7 +39,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public override Identifier Clone()
         {
-            return new StringIdentifier((string)_id.Clone());
+            return new StringIdentifier(_id);
         }
 
         /// <summary>

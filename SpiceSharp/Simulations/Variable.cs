@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Describes a node in an electronic circuit.
     /// </summary>
-    public class Variable : ICloneable
+    public class Variable
     {
         /// <summary>
         /// Gets or sets the name of the node
@@ -69,11 +69,5 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <returns></returns>
         public Variable Clone() => new Variable(Name.Clone(), UnknownType, Index);
-
-        /// <summary>
-        /// Clone the node
-        /// </summary>
-        /// <returns></returns>
-        object ICloneable.Clone() => Clone();
     }
 }

@@ -3,7 +3,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.Voltagesources.VSRC
+namespace SpiceSharpTest.Models
 {
     [TestFixture]
     public class VoltageSourceTests : Framework

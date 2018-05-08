@@ -5,6 +5,7 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Reflection;
 
 namespace SpiceSharp.Circuits
 {
@@ -117,7 +118,7 @@ namespace SpiceSharp.Circuits
                     throw new CircuitException("{0}: All pins are short-circuited".FormatString(icc.Name));
                 
                 // Use attributes for checking properties
-                var attributes = c.GetType().GetCustomAttributes(false);
+                var attributes = c.GetType().GetTypeInfo().GetCustomAttributes(false);
                 bool hasconnections = false;
                 foreach (var attr in attributes)
                 {

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Exception thrown when a matrix is singular
     /// </summary>
-    [Serializable]
     public class SingularException : SparseException
     {
         /// <summary>
@@ -75,34 +72,6 @@ namespace SpiceSharp.Algebra
             : base(message, innerException)
         {
             Index = index;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="info">Info</param>
-        /// <param name="context">Context</param>
-        protected SingularException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            if (info == null)
-                throw new ArgumentNullException(nameof(info));
-            Index = info.GetInt32("Index");
-        }
-
-        /// <summary>
-        /// Get object data
-        /// </summary>
-        /// <param name="info">Info</param>
-        /// <param name="context">Context</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            if (info == null)
-                throw new ArgumentNullException(nameof(info));
-            info.AddValue("Index", Index);
         }
     }
 }
