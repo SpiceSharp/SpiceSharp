@@ -8,10 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Reflection;
-
 namespace SpiceSharp.Properties {
     using System;
+    using System.Reflection;
     
     
     /// <summary>
