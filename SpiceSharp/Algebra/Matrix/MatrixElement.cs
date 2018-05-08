@@ -29,7 +29,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         protected MatrixElement()
         {
-            Value = default;
+            Value = default(T);
         }
 
         /// <summary>

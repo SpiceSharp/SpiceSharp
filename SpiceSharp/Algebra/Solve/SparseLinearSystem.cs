@@ -207,13 +207,13 @@ namespace SpiceSharp.Algebra
         public virtual void Clear()
         {
             // Clear all matrix elements
-            Matrix.FindElement(0, 0).Value = default;
+            Matrix.FindElement(0, 0).Value = default(T);
             for (int r = 1; r <= Matrix.Size; r++)
             {
                 var element = Matrix.GetFirstInRow(r);
                 while (element != null)
                 {
-                    element.Value = default;
+                    element.Value = default(T);
                     element = element.Right;
                 }
             }
@@ -222,7 +222,7 @@ namespace SpiceSharp.Algebra
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
-                rhsElement.Value = default;
+                rhsElement.Value = default(T);
                 rhsElement = rhsElement.Below;
             }
         }

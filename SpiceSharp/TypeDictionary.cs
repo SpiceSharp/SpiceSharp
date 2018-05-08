@@ -112,7 +112,7 @@ namespace SpiceSharp
                 return true;
             }
 
-            value = default;
+            value = default(TResult);
             return false;
         }
 

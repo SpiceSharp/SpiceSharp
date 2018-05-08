@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
             get
             {
                 if (Extractor == null)
-                    return default;
+                    return default(T);
                 return Extractor();
             }
         }

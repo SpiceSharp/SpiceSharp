@@ -54,7 +54,7 @@ namespace SpiceSharp.Algebra.Matrix
         /// <param name="column">Column index</param>
         public SparseMatrixElement(int row, int column)
         {
-            Value = default;
+            Value = default(T);
             Row = row;
             Column = column;
         }

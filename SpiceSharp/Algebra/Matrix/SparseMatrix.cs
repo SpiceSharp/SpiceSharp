@@ -85,7 +85,7 @@ namespace SpiceSharp.Algebra
         {
             var element = FindElement(row, column);
             if (element == null)
-                return default;
+                return default(T);
             return element.Value;
         }
 
@@ -98,12 +98,12 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override void SetValue(int row, int column, T value)
         {
-            if (value.Equals(default))
+            if (value.Equals(default(T)))
             {
                 // We don't need to create a new element unnecessarily
                 var element = FindElement(row, column);
                 if (element != null)
-                    element.Value = default;
+                    element.Value = default(T);
             }
             else
             {
