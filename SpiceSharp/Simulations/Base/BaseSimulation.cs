@@ -42,6 +42,11 @@ namespace SpiceSharp.Simulations
         public event EventHandler<LoadStateEventArgs> OnLoad;
 
         /// <summary>
+        /// Event called before temperature calculations.
+        /// </summary>
+        public event EventHandler<LoadStateEventArgs> OnBeforeTemperatureCalculations;
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
@@ -92,6 +97,8 @@ namespace SpiceSharp.Simulations
         protected override void Execute()
         {
             // Do temperature-dependent calculations
+            OnBeforeTemperatureCalculations?.Invoke(this, _realStateLoadArgs);
+
             for (var i = 0; i < TemperatureBehaviors.Count; i++)
                 TemperatureBehaviors[i].Temperature(this);
 
