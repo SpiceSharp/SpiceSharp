@@ -1,9 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
-    <Version>2.0.2</Version>
-    <Authors>SpiceSharp</Authors>
+    <TargetFrameworks>netstandard1.5;netstandard2.0;net45</TargetFrameworks>
+    <Version>2.1.1</Version>
+    <Authors>Sven Boulanger</Authors>
+    <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
+    <PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/SpiceSharp/SpiceSharp/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
+    <PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/SpiceSharp/SpiceSharp/master/api/images/logo_full.svg?sanitize=true</PackageIconUrl>
+    <AssemblyVersion>2.1.1.0</AssemblyVersion>
+    <PackageReleaseNotes>Targetting multiple platforms</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company />
+    <NeutralLanguage>en-001</NeutralLanguage>
+    <FileVersion>2.1.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
