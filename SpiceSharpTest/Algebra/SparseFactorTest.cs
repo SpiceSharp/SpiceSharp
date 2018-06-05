@@ -1,5 +1,9 @@
-﻿using NUnit.Framework;
+﻿// using System;
+
+using System;
+using NUnit.Framework;
 using SpiceSharp.Algebra;
+// using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Sparse
 {
@@ -68,6 +72,52 @@ namespace SpiceSharpTest.Sparse
             Assert.AreEqual(solver.GetMatrixElement(3, 4).Value, 0.0001);
             Assert.AreEqual(solver.GetMatrixElement(4, 4).Value, 1.0);
             Assert.AreEqual(solver.GetMatrixElement(5, 5).Value, 1.0);
+        }
+
+        [Test]
+        public void When_Preorder_Expect_Reference()
+        {
+            var solver = new RealSolver(5);
+            solver.GetMatrixElement(1, 1).Value = 1e-4;
+            solver.GetMatrixElement(1, 2).Value = 0.0;
+            solver.GetMatrixElement(1, 3).Value = -1e-4;
+            solver.GetMatrixElement(2, 1).Value = 0.0;
+            solver.GetMatrixElement(2, 2).Value = 0.0;
+            solver.GetMatrixElement(2, 5).Value = 1.0;
+            solver.GetMatrixElement(3, 1).Value = -1e-4;
+            solver.GetMatrixElement(3, 3).Value = 1e-4;
+            solver.GetMatrixElement(3, 4).Value = 1.0;
+            solver.GetMatrixElement(4, 3).Value = 1.0;
+            solver.GetMatrixElement(5, 2).Value = 1.0;
+
+            SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis(solver, Math.Abs);
+
+            AssertInternal(solver, 1, 1, 1e-4);
+            AssertInternal(solver, 1, 4, -1e-4);
+            AssertInternal(solver, 1, 5, 0.0);
+            AssertInternal(solver, 2, 1, 0.0);
+            AssertInternal(solver, 2, 2, 1.0);
+            AssertInternal(solver, 2, 5, 0.0);
+            AssertInternal(solver, 3, 1, -1e-4);
+            AssertInternal(solver, 3, 3, 1.0);
+            AssertInternal(solver, 3, 4, 1e-4);
+            AssertInternal(solver, 4, 4, 1.0);
+            AssertInternal(solver, 5, 5, 1.0);
+        }
+
+        /// <summary>
+        /// Assert internal element
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="expected"></param>
+        void AssertInternal(Solver<double> solver, int row, int col, double expected)
+        {
+            var indices = solver.InternalToExternal(new Tuple<int, int>(row, col));
+            var elt = solver.FindMatrixElement(indices.Item1, indices.Item2);
+            Assert.AreNotEqual(null, elt);
+            Assert.AreEqual(expected, elt.Value);
         }
     }
 }
