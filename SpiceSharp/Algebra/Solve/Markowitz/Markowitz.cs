@@ -224,12 +224,13 @@ namespace SpiceSharp.Algebra.Solve
                 return;
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
+            int oldProduct;
 
             int row = pivot.Row;
             int column = pivot.Column;
 
-            // Decrease singletons if we are using one as a pivot!
-            if (_markowitzRow[row] == 0 || _markowitzColumn[column] == 0)
+            // If the pivot is a singleton, then we just consumed it
+            if (_markowitzProduct[pivot.Row] == 0 || _markowitzProduct[pivot.Column] == 0)
                 Singletons--;
 
             // Exchange rows
@@ -241,7 +242,7 @@ namespace SpiceSharp.Algebra.Solve
                 _markowitzRow[eliminationStep] = tmp;
 
                 // Update the Markowitz product
-                int oldProduct = _markowitzProduct[row];
+                oldProduct = _markowitzProduct[row];
                 _markowitzProduct[row] = _markowitzRow[row] * _markowitzColumn[row];
                 if (oldProduct == 0)
                 {
@@ -264,7 +265,7 @@ namespace SpiceSharp.Algebra.Solve
                 _markowitzColumn[eliminationStep] = tmp;
 
                 // Update the Markowitz product
-                int oldProduct = _markowitzProduct[column];
+                oldProduct = _markowitzProduct[column];
                 _markowitzProduct[column] = _markowitzRow[column] * _markowitzColumn[column];
                 if (oldProduct == 0)
                 {
@@ -276,6 +277,20 @@ namespace SpiceSharp.Algebra.Solve
                     if (_markowitzProduct[column] == 0)
                         Singletons++;
                 }
+            }
+
+            // Also update the moved pivot
+            oldProduct = _markowitzProduct[eliminationStep];
+            _markowitzProduct[eliminationStep] = _markowitzRow[eliminationStep] * _markowitzColumn[eliminationStep];
+            if (oldProduct == 0)
+            {
+                if (_markowitzProduct[eliminationStep] != 0)
+                    Singletons--;
+            }
+            else
+            {
+                if (_markowitzProduct[eliminationStep] == 0)
+                    Singletons++;
             }
         }
 

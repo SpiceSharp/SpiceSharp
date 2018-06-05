@@ -32,8 +32,13 @@ namespace SpiceSharp.Algebra.Solve
 
             // Find the first valid singleton we can use
             int singletons = 0, index;
-            for (index = eliminationStep; index <= matrix.Size; index++)
+            for (var i = matrix.Size + 1; i >= eliminationStep; i--)
             {
+                // First check the current pivot, else
+                // search from last to first as it tends to push the higher markowitz
+                // products downwards.
+                index = i > matrix.Size ? eliminationStep : i;
+
                 // Not a singleton, let's skip this one...
                 if (markowitz.Product(index) != 0)
                     continue;

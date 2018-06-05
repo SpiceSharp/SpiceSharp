@@ -36,5 +36,38 @@ namespace SpiceSharpTest.Sparse
                 for (int c = 0; c < matrixElements[r].Length; c++)
                     Assert.AreEqual(expected[r][c], solver.GetMatrixElement(r + 1, c + 1).Value, 1e-12);
         }
+
+        [Test]
+        public void When_OrderAndFactoring_Expect_Reference()
+        {
+            var solver = new RealSolver();
+            solver.GetMatrixElement(1, 1).Value = 0.0001;
+            solver.GetMatrixElement(1, 4).Value = -0.0001;
+            solver.GetMatrixElement(1, 5).Value = 0.0;
+            solver.GetMatrixElement(2, 1).Value = 0.0;
+            solver.GetMatrixElement(2, 2).Value = 1.0;
+            solver.GetMatrixElement(2, 5).Value = 0.0;
+            solver.GetMatrixElement(3, 1).Value = -0.0001;
+            solver.GetMatrixElement(3, 3).Value = 1.0;
+            solver.GetMatrixElement(3, 4).Value = 0.0001;
+            solver.GetMatrixElement(4, 4).Value = 1.0;
+            solver.GetMatrixElement(5, 5).Value = 1.0;
+            
+            // Order and factor
+            solver.OrderAndFactor();
+
+            // Compare
+            Assert.AreEqual(solver.GetMatrixElement(1, 1).Value, 1.0e4);
+            Assert.AreEqual(solver.GetMatrixElement(1, 4).Value, -0.0001);
+            Assert.AreEqual(solver.GetMatrixElement(1, 5).Value, 0.0);
+            Assert.AreEqual(solver.GetMatrixElement(2, 1).Value, 0.0);
+            Assert.AreEqual(solver.GetMatrixElement(2, 2).Value, 1.0);
+            Assert.AreEqual(solver.GetMatrixElement(2, 5).Value, 0.0);
+            Assert.AreEqual(solver.GetMatrixElement(3, 1).Value, -0.0001);
+            Assert.AreEqual(solver.GetMatrixElement(3, 3).Value, 1.0);
+            Assert.AreEqual(solver.GetMatrixElement(3, 4).Value, 0.0001);
+            Assert.AreEqual(solver.GetMatrixElement(4, 4).Value, 1.0);
+            Assert.AreEqual(solver.GetMatrixElement(5, 5).Value, 1.0);
+        }
     }
 }
