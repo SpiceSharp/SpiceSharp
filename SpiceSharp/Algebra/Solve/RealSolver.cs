@@ -301,6 +301,7 @@ namespace SpiceSharp.Algebra
 
             // Flag the solver a sfactored
             IsFactored = true;
+            NeedsReordering = false;
         }
 
         /// <summary>

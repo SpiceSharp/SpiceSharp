@@ -188,9 +188,11 @@ namespace SpiceSharp.IntegrationMethods
 
             // Register default truncation methods
             _transientBehaviors = behaviors;
-            if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
+            // if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
+            if ((BaseParameters.TruncationMethod & IntegrationParameters.TruncationMethods.PerDevice) != 0)
                 Truncate += TruncateDevices;
-            if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))
+            // if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))
+            if ((BaseParameters.TruncationMethod & IntegrationParameters.TruncationMethods.PerNode) != 0)
                 Truncate += TruncateNodes;
 
             // Last point was START so the current point is the point after a breakpoint (start)

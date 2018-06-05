@@ -122,7 +122,7 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < FrequencyBehaviors.Count; i++)
                 FrequencyBehaviors[i].Load(this);
 
-            if (cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
+            if ((cstate.Sparse & ComplexState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
             {
                 solver.OrderAndFactor();
                 cstate.Sparse &= ~ComplexState.SparseStates.AcShouldReorder;

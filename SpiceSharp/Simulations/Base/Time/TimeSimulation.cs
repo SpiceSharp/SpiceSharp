@@ -163,7 +163,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(RealState.SparseStates.DidPreorder))
+                if ((state.Sparse & RealState.SparseStates.DidPreorder) == 0) // !state.Sparse.HasFlag(RealState.SparseStates.DidPreorder)
                 {
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= RealState.SparseStates.DidPreorder;
@@ -174,7 +174,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
+                if ((state.Sparse & RealState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     solver.ApplyDiagonalGmin(state.DiagonalGmin);
