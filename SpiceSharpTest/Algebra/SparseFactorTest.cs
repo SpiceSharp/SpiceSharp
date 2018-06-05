@@ -75,6 +75,38 @@ namespace SpiceSharpTest.Sparse
         }
 
         [Test]
+        public void When_OrderAndFactoring2_Expect_Reference()
+        {
+            var solver = new RealSolver(5);
+
+            solver.GetMatrixElement(1, 1).Value = 1.0;
+            solver.GetMatrixElement(2, 1).Value = 0.0;
+            solver.GetMatrixElement(2, 2).Value = 1.0;
+            solver.GetMatrixElement(2, 5).Value = 0.0;
+            solver.GetMatrixElement(3, 3).Value = 1.0;
+            solver.GetMatrixElement(3, 4).Value = 1e-4;
+            solver.GetMatrixElement(3, 5).Value = -1e-4;
+            solver.GetMatrixElement(4, 4).Value = 1.0;
+            solver.GetMatrixElement(5, 1).Value = 5.38e-23;
+            solver.GetMatrixElement(5, 4).Value = -1e-4;
+            solver.GetMatrixElement(5, 5).Value = 1e-4;
+
+            solver.OrderAndFactor();
+
+            AssertInternal(solver, 1, 1, 1.0);
+            AssertInternal(solver, 2, 1, 0.0);
+            AssertInternal(solver, 2, 2, 1.0);
+            AssertInternal(solver, 2, 5, 0.0);
+            AssertInternal(solver, 3, 3, 1.0);
+            AssertInternal(solver, 3, 4, 1e-4);
+            AssertInternal(solver, 3, 5, -1e-4);
+            AssertInternal(solver, 4, 4, 1.0);
+            AssertInternal(solver, 5, 1, 5.38e-23);
+            AssertInternal(solver, 5, 4, -1e-4);
+            AssertInternal(solver, 5, 5, 10000);
+        }
+
+        [Test]
         public void When_Preorder_Expect_Reference()
         {
             var solver = new RealSolver(5);
