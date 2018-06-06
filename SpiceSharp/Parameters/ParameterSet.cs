@@ -150,6 +150,38 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Get a getter for a property
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <returns></returns>
+        public Func<double> GetGetter(string name)
+        {
+            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var member in members)
+            {
+                // Skip members we're not interested in
+                if (!HasName(member, name))
+                    continue;
+
+                // Create a getter
+                Func<double> getter = null;
+                if (member is PropertyInfo pi)
+                    getter = CreateGetterForProperty(pi);
+                else if (member is MethodInfo mi)
+                    getter = CreateGetterForMethod(mi);
+                else if (member is FieldInfo fi)
+                    getter = CreateGetterForField(fi);
+
+                // Return the created getter if successful
+                if (getter != null)
+                    return getter;
+            }
+
+            // Could not create getter
+            return null;
+        }
+
+        /// <summary>
         /// Get a setter for a parameter
         /// </summary>
         /// <returns></returns>
@@ -384,7 +416,6 @@ namespace SpiceSharp
         /// <summary>
         /// Create a setter delegate for methods
         /// </summary>
-        /// <param name="method">Method information</param>
         private Action<double> CreateSetterForMethod(MethodInfo method)
         {
             // Match the return type
@@ -398,6 +429,24 @@ namespace SpiceSharp
 
             // Could not turn it into a setter
             return null;
+        }
+
+        /// <summary>
+        /// Create a getter delegate for methods
+        /// </summary>
+        private Func<double> CreateGetterForMethod(MethodInfo method)
+        {
+            // Match the return type
+            if (method.ReturnType != typeof(double))
+                return null;
+
+            // Get parameters
+            var parameters = method.GetParameters();
+            if (parameters.Length > 0)
+                return null;
+
+            // Turn it into a getter
+            return (Func<double>) method.CreateDelegate(typeof(Func<double>), this);
         }
 
         /// <summary>
@@ -426,10 +475,30 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Create a getter for a property
+        /// </summary>
+        private Func<double> CreateGetterForProperty(PropertyInfo property)
+        {
+            // Parameter objects are supported
+            if (property.PropertyType == typeof(Parameter) ||
+                property.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
+            {
+                // We can use the getter of the parameter!
+                var p = (Parameter) property.GetValue(this);
+                return () => p.Value;
+            }
+
+            // Double properties are supported
+            if (property.PropertyType == typeof(double))
+                return (Func<double>) property.GetGetMethod()?.CreateDelegate(typeof(Func<double>), this);
+
+            // Could not turn it into a getter
+            return null;
+        }
+
+        /// <summary>
         /// Create a setter delegate for fields
         /// </summary>
-        /// <param name="field">Field information</param>
-        /// <returns></returns>
         private Action<double> CreateSetterForField(FieldInfo field)
         {
             if (field.FieldType == typeof(double))
@@ -442,6 +511,23 @@ namespace SpiceSharp
             }
 
             // Could not turn this into a setter
+            return null;
+        }
+
+        /// <summary>
+        /// Create a getter for fields
+        /// </summary>
+        private Func<double> CreateGetterForField(FieldInfo field)
+        {
+            if (field.FieldType == typeof(double))
+            {
+                var constThis = Expression.Constant(this);
+                var constField = Expression.Field(constThis, field);
+                var returnLabel = Expression.Label(typeof(double));
+                return Expression.Lambda<Func<double>>(Expression.Label(returnLabel, constField)).Compile();
+            }
+
+            // Could not turn this into a getter
             return null;
         }
     }

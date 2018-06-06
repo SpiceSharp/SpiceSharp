@@ -61,6 +61,19 @@ namespace SpiceSharp.Simulations
                 if (eb.TryGetValue(typeof(BaseTemperatureBehavior), out behavior))
                     Extractor = behavior.CreateExport(Simulation, PropertyName);
             }
+
+            // 4) Check parameter sets
+            if (Extractor == null)
+            {
+                // Get all parameter sets associated with the entity
+                var ps = simulation.EntityParameters.GetEntityParameters(EntityName);
+                foreach (var p in ps.Values)
+                {
+                    Extractor = p.GetGetter(PropertyName);
+                    if (Extractor != null)
+                        break;
+                }
+            }
         }
     }
 }

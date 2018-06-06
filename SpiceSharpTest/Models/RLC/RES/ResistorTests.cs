@@ -142,5 +142,26 @@ namespace SpiceSharpTest.Models
             // Run
             AnalyzeOp(op, ckt, exports, references);
         }
+
+        [Test]
+        public void When_ResistorParameterAsked_Expect_Reference()
+        {
+            var ckt = new Circuit(
+                new Resistor("R1", "out", "0", 1.0e3),
+                new Resistor("R2", "in", "0", 10e3),
+                new VoltageSource("V1", "in", "0", 1.0));
+
+            // Create simulation exports and references
+            var op = new OP("op");
+            Export<double>[] exports =
+            {
+                new RealPropertyExport(op, "R1", "resistance"),
+                new RealPropertyExport(op, "V1", "dc"),
+            };
+            double[] references = { 1.0e3, 1.0 };
+
+            // Run
+            AnalyzeOp(op, ckt, exports, references);
+        }
     }
 }
