@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Circuits
@@ -16,6 +17,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         private readonly Dictionary<Identifier, Entity> _objects = new Dictionary<Identifier, Entity>();
         private readonly List<Entity> _ordered = new List<Entity>();
+        private readonly ReaderWriterLockSlim _lock;
 
         /// <summary>
         /// Gets whether or not the list is already ordered
@@ -27,6 +29,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public EntityCollection()
         {
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
             _isOrdered = false;
         }
 
@@ -36,21 +39,57 @@ namespace SpiceSharp.Circuits
         /// <param name="id">ID</param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        public Entity this[Identifier id] => _objects[id];
+        public Entity this[Identifier id]
+        {
+            get
+            {
+                try
+                {
+                    _lock.EnterReadLock();
+                    return _objects[id];
+                }
+                finally
+                {
+                    _lock.ExitReadLock();
+                }
+            }
+        }
         
         /// <summary>
         /// The amount of circuit objects
         /// </summary>
-        public int Count => _objects.Count;
+        public int Count
+        {
+            get
+            {
+                try
+                {
+                    _lock.EnterReadLock();
+                    return _objects.Count;
+                }
+                finally
+                {
+                    _lock.ExitReadLock();
+                }
+            }
+        }
 
         /// <summary>
         /// Clear all circuit objects
         /// </summary>
         public void Clear()
         {
-            _objects.Clear();
-            _ordered.Clear();
-            _isOrdered = false;
+            try
+            {
+                _lock.EnterWriteLock();
+                _objects.Clear();
+                _ordered.Clear();
+                _isOrdered = false;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -59,16 +98,25 @@ namespace SpiceSharp.Circuits
         /// <param name="cs">The objects that need to be added</param>
         public void Add(params Entity[] cs)
         {
-            if (cs == null)
-                return;
-            foreach (var c in cs)
+            try
             {
-                if (c == null)
-                    throw new CircuitException("No entity specified");
-                if (_objects.ContainsKey(c.Name))
-                    throw new CircuitException("A component with the id {0} already exists".FormatString(c.Name));
-                _objects.Add(c.Name, c);
-                _isOrdered = false;
+                _lock.EnterWriteLock();
+
+                if (cs == null)
+                    return;
+                foreach (var c in cs)
+                {
+                    if (c == null)
+                        throw new CircuitException("No entity specified");
+                    if (_objects.ContainsKey(c.Name))
+                        throw new CircuitException("A component with the id {0} already exists".FormatString(c.Name));
+                    _objects.Add(c.Name, c);
+                    _isOrdered = false;
+                }
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
             }
         }
 
@@ -78,15 +126,24 @@ namespace SpiceSharp.Circuits
         /// <param name="ids">Names of the objects that need to be deleted</param>
         public void Remove(params Identifier[] ids)
         {
-            if (ids == null)
-                return;
-            foreach (var id in ids)
+            try
             {
-                if (id == null)
-                    throw new CircuitException("No identifier specified");
-                _objects.Remove(id);
+                _lock.EnterWriteLock();
 
-                // Note: Removing objects does not interfere with the order!
+                if (ids == null)
+                    return;
+                foreach (var id in ids)
+                {
+                    if (id == null)
+                        throw new CircuitException("No identifier specified");
+                    _objects.Remove(id);
+
+                    // Note: Removing objects does not interfere with the order!
+                }
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
             }
         }
 
@@ -96,7 +153,18 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="id">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
         /// <returns></returns>
-        public bool Contains(Identifier id) => _objects.ContainsKey(id);
+        public bool Contains(Identifier id)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return _objects.ContainsKey(id);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Gets a circuit object
@@ -104,7 +172,18 @@ namespace SpiceSharp.Circuits
         /// <param name="id">Identifier</param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public bool TryGetEntity(Identifier id, out Entity obj) => _objects.TryGetValue(id, out obj);
+        public bool TryGetEntity(Identifier id, out Entity obj)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return _objects.TryGetValue(id, out obj);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Gets all objects of a specific type
@@ -113,13 +192,21 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public Entity[] ByType(Type type)
         {
-            List<Entity> result = new List<Entity>();
-            foreach (var c in _objects.Values)
+            try
             {
-                if (c.GetType() == type)
-                    result.Add(c);
+                _lock.EnterReadLock();
+                List<Entity> result = new List<Entity>();
+                foreach (var c in _objects.Values)
+                {
+                    if (c.GetType() == type)
+                        result.Add(c);
+                }
+                return result.ToArray();
             }
-            return result.ToArray();
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -128,47 +215,72 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void BuildOrderedComponentList()
         {
-            if (_isOrdered)
-                return;
-
-            // Initialize
-            _ordered.Clear();
-            HashSet<Entity> added = new HashSet<Entity>();
-
-            // Build our list
-            foreach (var c in _objects.Values)
+            try
             {
-                // Add the object to the ordered list
-                _ordered.Add(c);
-                added.Add(c);
+                _lock.EnterWriteLock();
 
-                // Automatically add models to the ordered list
-                if (c is Component component)
+                if (_isOrdered)
+                    return;
+
+                // Initialize
+                _ordered.Clear();
+                HashSet<Entity> added = new HashSet<Entity>();
+
+                // Build our list
+                foreach (var c in _objects.Values)
                 {
-                    var model = component.Model;
-                    if (model != null && !added.Contains(model))
+                    // Add the object to the ordered list
+                    _ordered.Add(c);
+                    added.Add(c);
+
+                    // Automatically add models to the ordered list
+                    if (c is Component component)
                     {
-                        added.Add(model);
-                        _ordered.Add(model);
+                        var model = component.Model;
+                        if (model != null && !added.Contains(model))
+                        {
+                            added.Add(model);
+                            _ordered.Add(model);
+                        }
                     }
                 }
-            }
 
-            // Sort the list based on priority
-            _ordered.Sort((a, b) => b.Priority.CompareTo(a.Priority));
-            _isOrdered = true;
+                // Sort the list based on priority
+                _ordered.Sort((a, b) => b.Priority.CompareTo(a.Priority));
+                _isOrdered = true;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
         /// Gets enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Entity> GetEnumerator() => _ordered.GetEnumerator();
+        public IEnumerator<Entity> GetEnumerator()
+        {
+            try
+            {
+                _lock.EnterReadLock();
+
+                for (int i = 0; i < _ordered.Count; i++)
+                    yield return _ordered[i];
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Gets enumerator
         /// </summary>
         /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() => _ordered.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }
