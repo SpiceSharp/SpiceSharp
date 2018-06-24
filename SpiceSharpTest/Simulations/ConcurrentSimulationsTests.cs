@@ -11,26 +11,7 @@ namespace SpiceSharpTest.Simulations
 {
     [TestFixture]
     public class ConcurrentSimulationsTests : Framework
-    {
-        /// <summary>
-        /// Create a diode with a model
-        /// </summary>
-        /// <param name="name">Diode name</param>
-        /// <param name="anode">Anode</param>
-        /// <param name="cathode">Cathode</param>
-        /// <param name="model">Model</param>
-        /// <param name="modelparams">Model parameters</param>
-        /// <returns></returns>
-        Diode CreateDiode(Identifier name, Identifier anode, Identifier cathode, Identifier model, string modelparams)
-        {
-            Diode d = new Diode(name);
-            DiodeModel dm = new DiodeModel(model);
-            ApplyParameters(dm, modelparams);
-            d.SetModel(dm);
-            d.Connect(anode, cathode);
-            return d;
-        }
-
+    {        
         [Test]
         public void When_DCSweepResistorParameter_Expect_Reference()
         {
