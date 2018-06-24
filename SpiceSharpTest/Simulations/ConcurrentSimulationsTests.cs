@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Simulations
                 new Resistor("R1", "in", "out", 10.0)
             );
 
-            var transientSimulation = new List<Transient>();
+            var transientSimulations = new List<Transient>();
             int n = 10000;
 
             for (var i = 0; i < n; i++)
@@ -79,12 +79,12 @@ namespace SpiceSharpTest.Simulations
                     Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
                 };
 
-                transientSimulation.Add(tran);
+                transientSimulations.Add(tran);
             }
 
             int maxConcurrentSimulations = 8;
             Parallel.ForEach(
-                transientSimulation,
+                transientSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
                 (simulation) => simulation.Run(ckt));
         }
