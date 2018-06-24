@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter(300.15);
+        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("w"), ParameterInfo("Width", Interesting = false)]
         public GivenParameter Width { get; } = new GivenParameter();
         [ParameterName("l"), ParameterInfo("Length", Interesting = false)]

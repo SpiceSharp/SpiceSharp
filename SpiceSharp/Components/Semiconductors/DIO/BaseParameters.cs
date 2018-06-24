@@ -24,6 +24,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter();
+        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
     }
 }

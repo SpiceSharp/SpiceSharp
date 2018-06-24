@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter();
+        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("w"), ParameterInfo("Width")]
         public GivenParameter Width { get; } = new GivenParameter(1e-4);
         [ParameterName("l"), ParameterInfo("Length")]

@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter NominalTemperature { get; } = new GivenParameter();
+        public GivenParameter NominalTemperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("rs"), ParameterInfo("Ohmic resistance")]
         public GivenParameter Resistance { get; } = new GivenParameter();
         [ParameterName("n"), ParameterInfo("Emission Coefficient")]
