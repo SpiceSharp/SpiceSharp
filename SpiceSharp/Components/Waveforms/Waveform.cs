@@ -34,13 +34,13 @@ namespace SpiceSharp.Components
         /// <returns>
         /// A clone of the object.
         /// </returns>
-        public Waveform DeepClone()
+        public virtual Waveform DeepClone()
         {
             //1. Make new object
             var destinationObject = (Waveform)Activator.CreateInstance(this.GetType());
 
             //2. Copy properties of the current object
-            Utility.CopyProperties(this, destinationObject);
+            Utility.CopyPropertiesAndFields(this, destinationObject);
 
             return destinationObject;
         }

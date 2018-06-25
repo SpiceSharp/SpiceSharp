@@ -351,13 +351,13 @@ namespace SpiceSharp
         /// <returns>
         /// A deep clone of the parameter set.
         /// </returns>
-        public ParameterSet DeepClone()
+        public virtual ParameterSet DeepClone()
         {
             //1. Make new object
             var destinationObject = (ParameterSet)Activator.CreateInstance(this.GetType());
 
             //2. Copy properties of the current object
-            Utility.CopyProperties(this, destinationObject);
+            Utility.CopyPropertiesAndFields(this, destinationObject);
 
             return destinationObject;
         }

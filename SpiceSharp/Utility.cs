@@ -1,7 +1,5 @@
 ﻿using SpiceSharp.Components;
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace SpiceSharp
@@ -27,13 +25,14 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="source">A source object.</param>
         /// <param name="destination">A destination object</param>
-        public static void CopyProperties(object source, object destination)
+        public static void CopyPropertiesAndFields(object source, object destination)
         {
             var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
                 if (member is PropertyInfo pi)
                 {
+                    // property has Parameter or subclass of Parameter type
                     if (pi.PropertyType == typeof(Parameter) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
                     {
                         var parameter = (Parameter)pi.GetValue(source);
@@ -68,8 +67,8 @@ namespace SpiceSharp
                                 pi.SetValue(destination, propertyValue);
                             }
                         }
-
-                        if (pi.PropertyType == typeof(Waveform))
+                        // property has Waveform or subclass of Waveform type
+                        if (pi.PropertyType == typeof(Waveform) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Waveform)))
                         {
                             if (pi.CanWrite)
                             {
@@ -82,30 +81,29 @@ namespace SpiceSharp
                         }
                     }
                 }
-                else if (member is MethodInfo mi)
+                else if (member is FieldInfo fi)
                 {
-                    // for properties with only getter and default value there is a method instead of property
-                    if (mi.Name.StartsWith("get_", StringComparison.Ordinal))
+                    // field has Parameter or subclass of Parameter type
+                    if (fi.FieldType == typeof(Parameter) || fi.FieldType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
                     {
-                        if (mi.ReturnType == typeof(GivenParameter) && mi.GetParameters().Length == 0)
+                        var parameter = (Parameter)fi.GetValue(source);
+                        var clonedParameter = parameter.Clone();
+                        fi.SetValue(destination, clonedParameter);
+                    }
+                    else
+                    {
+                        if (fi.FieldType == typeof(double))
                         {
-                            var parameter = ((GivenParameter)mi.Invoke(source, new object[0]));
-                            if (parameter.Given == false)
-                            {
-                                continue;
-                            }
-
-                            var destinationParameter = (GivenParameter)mi.Invoke(destination, new object[0]);
-                            destinationParameter.Value = parameter.Value;
+                            var fieldValue = (double)fi.GetValue(source);
+                            fi.SetValue(destination, fieldValue);
                         }
-
-                        if (mi.ReturnType == typeof(double) && mi.GetParameters().Length == 0)
+                        // field has Waveform or subclass of Waveform type
+                        if (fi.FieldType == typeof(Waveform) || fi.FieldType.GetTypeInfo().IsSubclassOf(typeof(Waveform)))
                         {
-                            var value = (double)mi.Invoke(source, new object[0]);
-                            var setter = (MethodInfo)members.SingleOrDefault(member2 => member2 is MethodInfo mi2 && mi2.Name == "set_" + (mi.Name.Replace("get_", "")));
-                            if (setter != null)
+                            var parameter = (Waveform)fi.GetValue(source);
+                            if (parameter != null)
                             {
-                                setter.Invoke(destination, new object[] { value });
+                                fi.SetValue(destination, parameter.DeepClone());
                             }
                         }
                     }
