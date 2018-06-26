@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter(300.15);
+        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("area"), ParameterInfo("Area factor")]
         public GivenParameter Area { get; } = new GivenParameter(1);
         [ParameterName("off"), ParameterInfo("Device initially off")]

@@ -1,4 +1,7 @@
 ﻿using SpiceSharp.Simulations;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace SpiceSharp.Components
 {
@@ -24,5 +27,22 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
         public abstract void Accept(TimeSimulation simulation);
+
+        /// <summary>
+        /// Clones the object.
+        /// </summary>
+        /// <returns>
+        /// A clone of the object.
+        /// </returns>
+        public virtual Waveform DeepClone()
+        {
+            //1. Make new object
+            var destinationObject = (Waveform)Activator.CreateInstance(this.GetType());
+
+            //2. Copy properties of the current object
+            Utility.CopyPropertiesAndFields(this, destinationObject);
+
+            return destinationObject;
+        }
     }
 }

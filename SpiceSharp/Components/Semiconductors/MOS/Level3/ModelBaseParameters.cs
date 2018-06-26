@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter NominalTemperature { get; } = new GivenParameter();
+        public GivenParameter NominalTemperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
 
         /// <summary>
         /// Methods

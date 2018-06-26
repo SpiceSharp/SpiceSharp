@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter NominalTemperature { get; } = new GivenParameter(300.15);
+        public GivenParameter NominalTemperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
         public GivenParameter TemperatureCoefficient1 { get; } = new GivenParameter();
         [ParameterName("tc2"), ParameterInfo("Second order temperature oefficient")]

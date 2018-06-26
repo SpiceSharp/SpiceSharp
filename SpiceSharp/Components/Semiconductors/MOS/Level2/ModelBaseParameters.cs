@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter NominalTemperature { get; } = new GivenParameter();
+        public GivenParameter NominalTemperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("vto"), ParameterName("vt0"), ParameterInfo("Threshold voltage")]
         public GivenParameter Vt0 { get; } = new GivenParameter();
         [ParameterName("kp"), ParameterInfo("Transconductance parameter")]

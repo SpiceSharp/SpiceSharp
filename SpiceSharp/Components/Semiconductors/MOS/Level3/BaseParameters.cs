@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter();
+        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
 
         [ParameterName("off"), ParameterInfo("Device initially off")]
         public bool Off { get; set; }

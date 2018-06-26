@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter NominalTemperature { get; } = new GivenParameter();
+        public GivenParameter NominalTemperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
         [ParameterName("is"), ParameterInfo("Saturation Current")]
         public GivenParameter SatCur { get; } = new GivenParameter(1e-16);
         [ParameterName("bf"), ParameterInfo("Ideal forward beta")]

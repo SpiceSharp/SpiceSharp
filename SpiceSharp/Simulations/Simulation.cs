@@ -166,11 +166,11 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(entities));
 
             // Register all behaviors
-            foreach (var o in entities)
+            foreach (Entity entity in entities)
             {
-                T behavior = o.CreateBehavior<T>(this);
+                T behavior = entity.CreateBehavior<T>(this);
                 if (behavior != null)
-                    EntityBehaviors.Add(o.Name, behavior);
+                    EntityBehaviors.Add(entity.Name, behavior);
             }
             return EntityBehaviors.GetBehaviorList<T>();
         }
@@ -184,10 +184,10 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(entities));
 
             // Register all parameters
-            foreach (var o in entities)
+            foreach (Entity entity in entities)
             {
-                foreach (var p in o.ParameterSets.Values)
-                    EntityParameters.Add(o.Name, p);
+                foreach (ParameterSet p in entity.ParameterSets.Values)
+                    EntityParameters.Add(entity.Name, p.DeepClone());
             }
         }
     }

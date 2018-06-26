@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
+using SpiceSharp.Components;
 
 namespace SpiceSharp
 {
@@ -344,6 +346,23 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Creates a deep clone of the parameter set.
+        /// </summary>
+        /// <returns>
+        /// A deep clone of the parameter set.
+        /// </returns>
+        public virtual ParameterSet DeepClone()
+        {
+            //1. Make new object
+            var destinationObject = (ParameterSet)Activator.CreateInstance(this.GetType());
+
+            //2. Copy properties of the current object
+            Utility.CopyPropertiesAndFields(this, destinationObject);
+
+            return destinationObject;
+        }
+
+        /// <summary>
         /// Find out if the member is our named property
         /// </summary>
         /// <param name="member">Member</param>
@@ -380,7 +399,7 @@ namespace SpiceSharp
         /// <param name="value">Value</param>
         /// <returns>True if set succesfully</returns>
         private bool SetMember(MemberInfo member, double value)
-        {
+        { 
             if (member is PropertyInfo pi)
             {
                 // Properties
