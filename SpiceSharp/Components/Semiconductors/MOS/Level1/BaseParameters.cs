@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public GivenParameter InitialVoltageDs { get; } = new GivenParameter();
         [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage")]
         public GivenParameter InitialVoltageGs { get; } = new GivenParameter();
-        [ParameterName("temp"), ParameterInfo("Instance temperature")]
+        [ParameterName("temp"), ComputedProperty(), ParameterInfo("Instance temperature")]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;

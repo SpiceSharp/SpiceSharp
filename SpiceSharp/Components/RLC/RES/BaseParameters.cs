@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         [ParameterName("resistance"), ParameterInfo("Resistance", IsPrincipal = true)]
         public GivenParameter Resistance { get; } = new GivenParameter();
-        [ParameterName("temp"), ParameterInfo("Instance operating temperature", Interesting = false)]
+        [ParameterName("temp"), ComputedProperty(), ParameterInfo("Instance operating temperature", Interesting = false)]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
