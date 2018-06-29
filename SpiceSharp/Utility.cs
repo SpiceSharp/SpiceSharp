@@ -33,8 +33,9 @@ namespace SpiceSharp
             {
                 if (member is PropertyInfo pi)
                 {
-                    if (pi.GetCustomAttribute(typeof(ComputedPropertyAttribute)) != null)
+                    if (pi.GetCustomAttribute(typeof(DerivedPropertyAttribute)) != null)
                     {
+                        // skip properties with DerivedPropertyAttribute because their value will be set elsewhere
                         continue;
                     }
 

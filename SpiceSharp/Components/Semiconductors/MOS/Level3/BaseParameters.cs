@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public GivenParameter SourceSquares { get; } = new GivenParameter(1);
         [ParameterName("nrd"), ParameterInfo("Drain squares")]
         public GivenParameter DrainSquares { get; } = new GivenParameter(1);
-        [ParameterName("temp"), ComputedProperty(), ParameterInfo("Instance operating temperature")]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature")]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;

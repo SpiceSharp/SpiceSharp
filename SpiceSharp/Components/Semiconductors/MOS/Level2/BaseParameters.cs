@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("temp"), ComputedProperty(), ParameterInfo("Instance operating temperature")]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature")]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
