@@ -19,21 +19,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Shared parameters
         /// </summary>
         [ParameterName("invearlyvoltf"), ParameterInfo("Inverse early voltage:forward")]
-        public double InverseEarlyVoltForward { get; internal set; }
+        public double InverseEarlyVoltForward { get; protected set; }
         [ParameterName("invearlyvoltr"), ParameterInfo("Inverse early voltage:reverse")]
-        public double InverseEarlyVoltReverse { get; internal set; }
+        public double InverseEarlyVoltReverse { get; protected set; }
         [ParameterName("invrollofff"), ParameterInfo("Inverse roll off - forward")]
-        public double InverseRollOffForward { get; internal set; }
+        public double InverseRollOffForward { get; protected set; }
         [ParameterName("invrolloffr"), ParameterInfo("Inverse roll off - reverse")]
-        public double InverseRollOffReverse { get; internal set; }
+        public double InverseRollOffReverse { get; protected set; }
         [ParameterName("collectorconduct"), ParameterInfo("Collector conductance")]
-        public double CollectorConduct { get; internal set; }
+        public double CollectorConduct { get; protected set; }
         [ParameterName("emitterconduct"), ParameterInfo("Emitter conductance")]
-        public double EmitterConduct { get; internal set; }
+        public double EmitterConduct { get; protected set; }
         [ParameterName("transtimevbcfact"), ParameterInfo("Transit time VBC factor")]
-        public double TransitTimeVoltageBcFactor { get; internal set; }
+        public double TransitTimeVoltageBcFactor { get; protected set; }
         [ParameterName("excessphasefactor"), ParameterInfo("Excess phase fact.")]
-        public double ExcessPhaseFactor { get; internal set; }
+        public double ExcessPhaseFactor { get; protected set; }
         
         public double Factor1 { get; protected set; }
         public double Xfc { get; protected set; }

@@ -76,13 +76,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [ParameterName("cexbc"), ParameterInfo("Total capacitance in B-X junction")]
         public double CurrentExBc => StateExcessPhaseCurrentBc.Current;
         [ParameterName("cpi"), ParameterInfo("Internal base to emitter capactance")]
-        public double CapBe { get; internal set; }
+        public double CapBe { get; protected set; }
         [ParameterName("cmu"), ParameterInfo("Internal base to collector capactiance")]
-        public double CapBc { get; internal set; }
+        public double CapBc { get; protected set; }
         [ParameterName("cbx"), ParameterInfo("Base to collector capacitance")]
-        public double CapBx { get; internal set; }
+        public double CapBx { get; protected set; }
         [ParameterName("ccs"), ParameterInfo("Collector to substrate capacitance")]
-        public double CapCs { get; internal set; }
+        public double CapCs { get; protected set; }
 
         /// <summary>
         /// States

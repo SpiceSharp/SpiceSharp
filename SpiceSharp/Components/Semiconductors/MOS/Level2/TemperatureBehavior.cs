@@ -21,21 +21,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Extra variables
         /// </summary>
         [ParameterName("sourceconductance"), ParameterInfo("Source conductance")]
-        public double SourceConductance { get; internal set; }
+        public double SourceConductance { get; protected set; }
         [ParameterName("drainconductance"), ParameterInfo("Drain conductance")]
-        public double DrainConductance { get; internal set; }
+        public double DrainConductance { get; protected set; }
         [ParameterName("sourcevcrit"), ParameterInfo("Critical source voltage")]
-        public double SourceVCritical { get; internal set; }
+        public double SourceVCritical { get; protected set; }
         [ParameterName("drainvcrit"), ParameterInfo("Critical drain voltage")]
-        public double DrainVCritical { get; internal set; }
+        public double DrainVCritical { get; protected set; }
         [ParameterName("cbd0"), ParameterInfo("Zero-Bias B-D junction capacitance")]
-        public double CapBd { get; internal set; }
+        public double CapBd { get; protected set; }
         [ParameterName("cbdsw0"), ParameterInfo(" ")]
-        public double CapBdSidewall { get; internal set; }
+        public double CapBdSidewall { get; protected set; }
         [ParameterName("cbs0"), ParameterInfo("Zero-Bias B-S junction capacitance")]
-        public double CapBs { get; internal set; }
+        public double CapBs { get; protected set; }
         [ParameterName("cbssw0"), ParameterInfo(" ")]
-        public double CapBsSidewall { get; internal set; }
+        public double CapBsSidewall { get; protected set; }
         [ParameterName("rs"), ParameterInfo("Source resistance")]
         public double SourceResistance
         {

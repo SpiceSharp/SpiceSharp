@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [ParameterName("input_delta"), ParameterInfo("")]
         public double Delta { get; protected set; }
         public double NarrowFactor { get; set; }
-        public double MosfetType { get; internal set; } = 1.0;
+        public double MosfetType { get; protected set; } = 1.0;
         public double OxideCapFactor { get; private set; }
 
         /// <summary>

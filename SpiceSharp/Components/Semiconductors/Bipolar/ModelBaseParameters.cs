@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 return "pnp";
             }
         }
-        public double BipolarType { get; internal set; } = Npn;
+        public double BipolarType { get; protected set; } = Npn;
         [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
