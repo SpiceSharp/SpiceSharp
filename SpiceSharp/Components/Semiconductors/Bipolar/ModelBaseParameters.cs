@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
         }
         public double BipolarType { get; internal set; } = Npn;
-        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;

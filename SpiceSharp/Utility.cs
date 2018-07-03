@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Components;
 using System.Globalization;
 using System.Reflection;
 
@@ -32,6 +33,12 @@ namespace SpiceSharp
             {
                 if (member is PropertyInfo pi)
                 {
+                    if (pi.GetCustomAttribute(typeof(DerivedPropertyAttribute)) != null)
+                    {
+                        // skip properties with DerivedPropertyAttribute because their value will be set elsewhere
+                        continue;
+                    }
+
                     // property has Parameter or subclass of Parameter type
                     if (pi.PropertyType == typeof(Parameter) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
                     {
