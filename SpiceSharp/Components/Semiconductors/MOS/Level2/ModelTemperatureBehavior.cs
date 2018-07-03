@@ -21,7 +21,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public double VtNominal { get; protected set; }
         public double EgFet1 { get; protected set; }
         public double PbFactor1 { get; protected set; }
-        public double OxideCapFactor { get; protected set; }
         public double Xd { get; protected set; }
 
         /// <summary>
@@ -83,13 +82,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     var wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
                     if (!_mbp.Gamma.Given)
                     {
-                        _mbp.Gamma.RawValue = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * _mbp.SubstrateDoping * 1e6) / OxideCapFactor;
+                        _mbp.Gamma.RawValue = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * _mbp.SubstrateDoping * 1e6) / _mbp.OxideCapFactor;
                     }
                     if (!_mbp.Vt0.Given)
                     {
                         if (!_mbp.SurfaceStateDensity.Given)
                             _mbp.SurfaceStateDensity.RawValue = 0;
-                        var vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
+                        var vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / _mbp.OxideCapFactor;
                         _mbp.Vt0.RawValue = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
                     }
 

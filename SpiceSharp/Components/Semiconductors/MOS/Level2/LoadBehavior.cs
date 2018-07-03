@@ -254,7 +254,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
 
             var beta = _temp.TempTransconductance * _bp.Width / effectiveLength;
-            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
             if (state.Init == RealState.InitializationStates.InitFloat || state.Init == RealState.InitializationStates.InitTransient ||
                 state.Init == RealState.InitializationStates.InitFix && !_bp.Off)
@@ -563,7 +563,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 line400:
                 if (oxideCap <= 0.0) goto line410;
                 var udenom = vgst;
-                tmp = _mbp.CriticalField * 100 /* cm / m */  * Transistor.EpsilonSilicon / _modeltemp.OxideCapFactor;
+                tmp = _mbp.CriticalField * 100 /* cm / m */  * Transistor.EpsilonSilicon / _mbp.OxideCapFactor;
                 if (udenom <= tmp) goto line410;
                 ufact = Math.Exp(_mbp.CriticalFieldExp * Math.Log(tmp / udenom));
                 ueff = _mbp.SurfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */  * ufact;

@@ -236,7 +236,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
             var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
             var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -408,7 +408,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
             var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
             var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
