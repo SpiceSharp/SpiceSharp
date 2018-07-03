@@ -257,7 +257,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             }
 
             var beta = _temp.TempTransconductance * _bp.Width / effectiveLength;
-            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* DETAILPROF */
 
@@ -456,7 +456,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				*/
                 vdsat = 0.0;
                 var oneoverxl = 1.0 / effectiveLength;
-                var eta = _mbp.Eta * 8.15e-22 / (_modeltemp.OxideCapFactor * effectiveLength * effectiveLength * effectiveLength);
+                var eta = _mbp.Eta * 8.15e-22 / (_mbp.OxideCapFactor * effectiveLength * effectiveLength * effectiveLength);
                 /* 
 				* .....square root term
 				*/

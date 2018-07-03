@@ -185,7 +185,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
             var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source

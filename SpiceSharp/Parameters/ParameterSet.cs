@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
-using SpiceSharp.Components;
 
 namespace SpiceSharp
 {
@@ -343,6 +341,18 @@ namespace SpiceSharp
                 }
             }
             return isset;
+        }
+
+        /// <summary>
+        /// Calculate default parameter values that depend on other parameters
+        /// </summary>
+        /// <remarks>
+        /// These calculations should not depend on temperature! Temperature-dependent calculations are
+        /// part of the <see cref="SpiceSharp.Behaviors.BaseTemperatureBehavior"/>.
+        /// </remarks>
+        public virtual void CalculateDefaults()
+        {
+            // By default, there are no parameter values that depend on others
         }
 
         /// <summary>

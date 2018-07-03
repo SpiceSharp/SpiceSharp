@@ -62,18 +62,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
             PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Factor1) + Circuit.Charge * arg1);
 
-            if (!_mbp.OxideThickness.Given)
-            {
-                _mbp.OxideThickness.RawValue = 1e-7;
-            }
-            OxideCapFactor = 3.9 * 8.854214871e-12 / _mbp.OxideThickness;
-
-            if (!_mbp.SurfaceMobility.Given)
-                _mbp.SurfaceMobility.RawValue = 600;
-            if (!_mbp.Transconductance.Given)
-            {
-                _mbp.Transconductance.RawValue = _mbp.SurfaceMobility * 1e-4 * OxideCapFactor;
-            }
             if (_mbp.SubstrateDoping.Given)
             {
                 if (_mbp.SubstrateDoping * 1e6 > 1.45e16)

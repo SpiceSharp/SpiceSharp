@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
@@ -53,7 +54,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [ParameterName("ld"), ParameterInfo("Lateral diffusion")]
         public GivenParameter LateralDiffusion { get; } = new GivenParameter();
         [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility")]
-        public GivenParameter SurfaceMobility { get; } = new GivenParameter();
+        public GivenParameter SurfaceMobility { get; } = new GivenParameter(600);
         [ParameterName("fc"), ParameterInfo("Forward bias jct. fit parm.")]
         public GivenParameter ForwardCapDepletionCoefficient { get; } = new GivenParameter(.5);
         [ParameterName("nsub"), ParameterInfo("Substrate doping")]
@@ -91,13 +92,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             get => NarrowFactor;
             set => Delta = value;
         }
-        [ParameterName("nmos"), ParameterInfo("N type MOSfet model")]
+        [ParameterName("nmos"), ParameterInfo("N type Mosfet model")]
         public void SetNmos(bool value)
         {
             if (value)
                 MosfetType = 1.0;
         }
-        [ParameterName("pmos"), ParameterInfo("P type MOSfet model")]
+        [ParameterName("pmos"), ParameterInfo("P type Mosfet model")]
         public void SetPmos(bool value)
         {
             if (value)
@@ -118,6 +119,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public double Delta { get; protected set; }
         public double NarrowFactor { get; set; }
         public double MosfetType { get; internal set; } = 1.0;
+        public double OxideCapFactor { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -136,6 +138,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 MosfetType = 1.0;
             else
                 MosfetType = -1.0;
+        }
+
+        /// <summary>
+        /// Calculate dependent parameters
+        /// </summary>
+        public override void CalculateDefaults()
+        {
+            OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
+            if (!Transconductance.Given)
+                Transconductance.RawValue = SurfaceMobility * OxideCapFactor * 1e-4;
+
+            // now model parameter preprocessing
+            NarrowFactor = Delta * 0.5 * Math.PI * Transistor.EpsilonSilicon / OxideCapFactor;
         }
     }
 }

@@ -56,13 +56,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [ParameterName("js"), ParameterInfo("Bulk jct. sat. current density")]
         public GivenParameter JunctionSatCurDensity { get; } = new GivenParameter();
         [ParameterName("tox"), ParameterInfo("Oxide thickness")]
-        public GivenParameter OxideThickness { get; } = new GivenParameter();
+        public GivenParameter OxideThickness { get; } = new GivenParameter(1e-7);
         [ParameterName("ld"), ParameterInfo("Lateral diffusion")]
         public GivenParameter LateralDiffusion { get; } = new GivenParameter();
         [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
         public GivenParameter SheetResistance { get; } = new GivenParameter();
         [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility")]
-        public GivenParameter SurfaceMobility { get; } = new GivenParameter();
+        public GivenParameter SurfaceMobility { get; } = new GivenParameter(600);
         [ParameterName("fc"), ParameterInfo("Forward bias jct. fit parm.")]
         public GivenParameter ForwardCapDepletionCoefficient { get; } = new GivenParameter(.5);
         [ParameterName("nsub"), ParameterInfo("Substrate doping")]
@@ -111,7 +111,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 return "pmos";
             }
         }
-        public double MosfetType { get; internal set; } = 1.0;
+        public double MosfetType { get; private set; } = 1.0;
+        public double OxideCapFactor { get; private set; }
 
+        /// <summary>
+        /// Calculate default parameters
+        /// </summary>
+        public override void CalculateDefaults()
+        {
+            OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
+            if (!Transconductance.Given)
+                Transconductance.RawValue = SurfaceMobility * 1e-4 * OxideCapFactor;
+        }
     }
 }

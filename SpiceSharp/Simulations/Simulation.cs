@@ -184,10 +184,13 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(entities));
 
             // Register all parameters
-            foreach (Entity entity in entities)
+            foreach (var entity in entities)
             {
-                foreach (ParameterSet p in entity.ParameterSets.Values)
+                foreach (var p in entity.ParameterSets.Values)
+                {
+                    p.CalculateDefaults();
                     EntityParameters.Add(entity.Name, p.DeepClone());
+                }
             }
         }
     }
