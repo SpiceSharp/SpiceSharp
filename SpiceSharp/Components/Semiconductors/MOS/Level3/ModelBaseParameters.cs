@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public GivenParameter Kappa { get; } = new GivenParameter(.2);
         [ParameterName("xj"), ParameterInfo("Junction depth")]
         public GivenParameter JunctionDepth { get; } = new GivenParameter();
-        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
