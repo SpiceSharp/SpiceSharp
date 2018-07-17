@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         [ParameterName("is"), ParameterInfo("Saturation current")]
         public GivenParameter SaturationCurrent { get; } = new GivenParameter(1e-14);
-        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;

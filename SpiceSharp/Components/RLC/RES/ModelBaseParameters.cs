@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Interesting = false)]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Interesting = false)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
