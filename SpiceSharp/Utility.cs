@@ -39,80 +39,59 @@ namespace SpiceSharp
                         continue;
                     }
 
-                    // property has Parameter or subclass of Parameter type
-                    if (pi.PropertyType == typeof(Parameter) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
+                    if (pi.CanWrite)
                     {
-                        var parameter = (Parameter)pi.GetValue(source);
-
-                        if (pi.CanWrite)
+                        if (pi.PropertyType == typeof(double))
+                            pi.SetValue(destination, (double) pi.GetValue(source));
+                        else if (pi.PropertyType == typeof(int))
+                            pi.SetValue(destination, (int) pi.GetValue(source));
+                        else if (pi.PropertyType == typeof(string))
+                            pi.SetValue(destination, (string) pi.GetValue(source));
+                        else if (pi.PropertyType == typeof(bool))
+                            pi.SetValue(destination, (bool) pi.GetValue(source));
+                        else if (pi.PropertyType == typeof(BaseParameter) ||
+                                 pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(BaseParameter)))
                         {
-                            // property has a setter
-                            var clonedParameter = parameter.Clone();
-                            pi.SetValue(destination, clonedParameter);
-                        }
-                        else
-                        {
-                            // if parameter is not given, don't deal with it
-                            if (parameter is GivenParameter gp && gp.Given == false)
-                            {
-                                continue;
-                            }
-
-                            // property doesn't have a setter
-                            var destinationParameter = (Parameter)pi.GetValue(destination);
-                            destinationParameter.Value = parameter.Value;
+                            var target = (BaseParameter) pi.GetValue(destination);
+                            var from = (BaseParameter) pi.GetValue(source);
+                            if (target != null && from != null)
+                                target.CopyFrom(from);
+                            else
+                                pi.SetValue(destination, from?.Clone());
                         }
                     }
                     else
                     {
-                        if (pi.PropertyType == typeof(double))
+                        // We can't write ourself, but maybe we can just copy
+                        if (pi.PropertyType == typeof(BaseParameter) ||
+                            pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(BaseParameter)))
                         {
-                            if (pi.CanWrite)
-                            {
-                                // double property has a setter, so it can be set
-                                var propertyValue = (double)pi.GetValue(source);
-                                pi.SetValue(destination, propertyValue);
-                            }
-                        }
-                        // property has Waveform or subclass of Waveform type
-                        if (pi.PropertyType == typeof(Waveform) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Waveform)))
-                        {
-                            if (pi.CanWrite)
-                            {
-                                var parameter = (Waveform)pi.GetValue(source);
-                                if (parameter != null)
-                                {
-                                    pi.SetValue(destination, parameter.DeepClone());
-                                }
-                            }
+                            var target = (BaseParameter) pi.GetValue(destination);
+                            var from = (BaseParameter) pi.GetValue(source);
+                            if (target != null && from != null)
+                                target.CopyFrom(from);
                         }
                     }
                 }
                 else if (member is FieldInfo fi)
                 {
-                    // field has Parameter or subclass of Parameter type
-                    if (fi.FieldType == typeof(Parameter) || fi.FieldType.GetTypeInfo().IsSubclassOf(typeof(Parameter)))
+                    if (fi.FieldType == typeof(double))
+                        fi.SetValue(destination, (double) fi.GetValue(source));
+                    else if (fi.FieldType == typeof(int))
+                        fi.SetValue(destination, (int) fi.GetValue(source));
+                    else if (fi.FieldType == typeof(string))
+                        fi.SetValue(destination, (string) fi.GetValue(source));
+                    else if (fi.FieldType == typeof(bool))
+                        fi.SetValue(destination, (bool) fi.GetValue(source));
+                    else if (fi.FieldType == typeof(BaseParameter) ||
+                             fi.FieldType.GetTypeInfo().IsSubclassOf(typeof(BaseParameter)))
                     {
-                        var parameter = (Parameter)fi.GetValue(source);
-                        var clonedParameter = parameter.Clone();
-                        fi.SetValue(destination, clonedParameter);
-                    }
-                    else
-                    {
-                        if (fi.FieldType == typeof(double))
-                        {
-                            var fieldValue = (double)fi.GetValue(source);
-                            fi.SetValue(destination, fieldValue);
-                        }
-                        // field has Waveform or subclass of Waveform type
-                        if (fi.FieldType == typeof(Waveform) || fi.FieldType.GetTypeInfo().IsSubclassOf(typeof(Waveform)))
-                        {
-                            var parameter = (Waveform)fi.GetValue(source);
-                            if (parameter != null)
-                            {
-                                fi.SetValue(destination, parameter.DeepClone());
-                            }
-                        }
+                        var target = (BaseParameter) fi.GetValue(destination);
+                        var from = (BaseParameter) fi.GetValue(source);
+                        if (target != null && from != null)
+                            target.CopyFrom(from);
+                        else
+                            fi.SetValue(destination, from?.Clone());
                     }
                 }
             }

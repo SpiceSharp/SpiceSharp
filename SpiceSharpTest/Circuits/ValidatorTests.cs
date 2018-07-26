@@ -111,5 +111,14 @@ namespace SpiceSharpTest.Validation
             );
             Assert.Throws<CircuitException>(() => ckt.Validate());
         }
+
+        [Test]
+        public void When_CurrentSourceSeriesValidator_Expect_CircuitException()
+        {
+            var ckt = new Circuit(
+                new CurrentSource("I1", "in", "0", 1.0),
+                new CurrentSource("I2", "0", "in", 2.0));
+            Assert.Throws<CircuitException>(() => ckt.Validate());
+        }
     }
 }

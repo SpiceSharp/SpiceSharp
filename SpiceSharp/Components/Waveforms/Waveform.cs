@@ -1,14 +1,12 @@
 ﻿using SpiceSharp.Simulations;
 using System;
-using System.Linq;
-using System.Reflection;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// Provides values in function of time. This is an abstract class.
     /// </summary>
-    public abstract class Waveform
+    public abstract class Waveform : BaseParameter
     {
         /// <summary>
         /// Setup the waveform
@@ -34,15 +32,23 @@ namespace SpiceSharp.Components
         /// <returns>
         /// A clone of the object.
         /// </returns>
-        public virtual Waveform DeepClone()
+        public override BaseParameter Clone()
         {
-            //1. Make new object
+            // 1. Make new object
             var destinationObject = (Waveform)Activator.CreateInstance(this.GetType());
 
-            //2. Copy properties of the current object
+            // 2. Copy properties of the current object
             Utility.CopyPropertiesAndFields(this, destinationObject);
-
             return destinationObject;
+        }
+
+        /// <summary>
+        /// Copy from another object
+        /// </summary>
+        /// <param name="source">Source</param>
+        public override void CopyFrom(BaseParameter source)
+        {
+            Utility.CopyPropertiesAndFields(source, this);
         }
     }
 }

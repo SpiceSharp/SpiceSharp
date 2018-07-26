@@ -52,7 +52,7 @@
         /// Clone the parameter
         /// </summary>
         /// <returns></returns>
-        public override Parameter Clone()
+        public override BaseParameter Clone()
         {
             var clone = new GivenParameter
             {
@@ -66,7 +66,7 @@
         /// Copy the parameter from another parameter
         /// </summary>
         /// <param name="source">Copy from other parameters</param>
-        public override void CopyFrom(Parameter source)
+        public override void CopyFrom(BaseParameter source)
         {
             if (source is GivenParameter gp)
             {
@@ -74,9 +74,7 @@
                 Given = gp.Given;
             }
             else
-            {
                 base.CopyFrom(source);
-            }
         }
         
         /// <summary>

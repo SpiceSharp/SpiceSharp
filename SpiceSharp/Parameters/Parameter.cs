@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// Parameters are objects that contain a double value, and that have some basic manipulations. They
     /// also make it easier to be referenced by simulations, sweeps and other features.
     /// </summary>
-    public abstract class Parameter
+    public abstract class Parameter : BaseParameter
     {
         /// <summary>
         /// Gets or sets the value of the parameter
@@ -15,20 +15,17 @@ namespace SpiceSharp
         public abstract double Value { get; set; }
 
         /// <summary>
-        /// Clone the parameter
+        /// Copy from another parameter
         /// </summary>
-        /// <returns></returns>
-        public abstract Parameter Clone();
-
-        /// <summary>
-        /// Copy the parameter to this parameter
-        /// </summary>
-        /// <param name="source">Source parameter</param>
-        public virtual void CopyFrom(Parameter source)
+        /// <param name="source">Source</param>
+        public override void CopyFrom(BaseParameter source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            Value = source.Value;
+            if (source is Parameter p)
+                Value = p.Value;
+            else
+                throw new CircuitException("Cannot copy: source is not a Parameter");
         }
 
         /// <summary>
