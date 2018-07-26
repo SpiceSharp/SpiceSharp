@@ -407,15 +407,15 @@ namespace SpiceSharp.Algebra
         public string ToString(string format, IFormatProvider formatProvider)
         {
             // Show the contents of the matrix
-            string[][] displayData = new string[Size][];
-            int[] columnWidths = new int[Size];
-            for (int r = 1; r <= Size; r++)
+            var displayData = new string[Size][];
+            var columnWidths = new int[Size];
+            for (var r = 1; r <= Size; r++)
             {
                 // Initialize
                 displayData[r - 1] = new string[Size];
 
                 var element = _rows[r].FirstInRow;
-                for (int c = 1; c <= Size; c++)
+                for (var c = 1; c <= Size; c++)
                 {
                     // Go to the next element if necessary
                     if (element != null && element.Column < c)
@@ -431,10 +431,10 @@ namespace SpiceSharp.Algebra
             }
 
             // Build the string
-            StringBuilder sb = new StringBuilder();
-            for (int r = 0; r < Size; r++)
+            var sb = new StringBuilder();
+            for (var r = 0; r < Size; r++)
             {
-                for (int c = 0; c < Size; c++)
+                for (var c = 0; c < Size; c++)
                 {
                     var displayElement = displayData[r][c];
                     sb.Append(new string(' ', columnWidths[c] - displayElement.Length + 2));

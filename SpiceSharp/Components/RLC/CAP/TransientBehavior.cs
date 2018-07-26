@@ -158,8 +158,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             // Integrate
             QCap.Current = _bp.Capacitance * vcap;
             QCap.Integrate();
-            double geq = QCap.Jacobian(_bp.Capacitance);
-            double ceq = QCap.RhsCurrent();
+            var geq = QCap.Jacobian(_bp.Capacitance);
+            var ceq = QCap.RhsCurrent();
 
             // Load matrix
             PosPosPtr.Value += geq;

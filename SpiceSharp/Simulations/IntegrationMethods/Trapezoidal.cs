@@ -54,7 +54,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
-            int derivativeIndex = index + 1;
+            var derivativeIndex = index + 1;
             if (index < 0 || derivativeIndex > history.Current.Length)
                 throw new CircuitException("Invalid state index {0}".FormatString(index));
 
