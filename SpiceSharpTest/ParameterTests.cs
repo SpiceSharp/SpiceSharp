@@ -18,11 +18,14 @@ namespace SpiceSharpTest.Parameters
             [ParameterName("field1")]
             public double Field1;
 
+            [ParameterName("field2")]
+            public int Field2;
+
             [ParameterName("property1")]
             public double Property1 { get; private set; }
 
             [ParameterName("property2")]
-            public double Property2 { get; set; }
+            public int Property2 { get; set; }
 
             [ParameterName("method1")]
             public void SetMethod1(double value) => Property1 = value;
@@ -31,23 +34,25 @@ namespace SpiceSharpTest.Parameters
             public double GetMethod() => 1.0;
 
             [ParameterName("parameter1")]
-            public GivenParameter Parameter1 { get; } = new GivenParameter();
+            public GivenParameter<double> Parameter1 { get; } = new GivenParameter<double>();
 
             [ParameterName("parameter2")]
-            public GivenParameter Parameter2 { get; set; } = new GivenParameter();
+            public GivenParameter<int> Parameter2 { get; set; } = new GivenParameter<int>();
 
             [ParameterName("principal"), ParameterInfo("Principal parameter", IsPrincipal = true)]
-            public Parameter Principal { get; } = new GivenParameter(0.8);
+            public Parameter<double> Principal { get; } = new GivenParameter<double>(0.8);
         }
 
         [Test]
         public void When_CopyPropertiesAndFields_CopiesField()
         {
             var source = new ParameterExample();
-            source.Field1 = 1;
+            source.Field1 = 1.0;
+            source.Field2 = 2;
             var destination = new ParameterExample();
             Utility.CopyPropertiesAndFields(source, destination);
-            Assert.AreEqual(1, destination.Field1);
+            Assert.AreEqual(1.0, destination.Field1, 1e-12);
+            Assert.AreEqual(2, destination.Field2);
 
             destination.Field1 = 2;
 
@@ -139,7 +144,7 @@ namespace SpiceSharpTest.Parameters
         public void When_SetterForField_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var setter = p.GetSetter("field1");
+            var setter = p.GetSetter<double>("field1");
             setter(1.0);
             Assert.AreEqual(1.0, p.Field1, 1e-12);
             setter(10.0);
@@ -150,25 +155,25 @@ namespace SpiceSharpTest.Parameters
         public void When_SetterForGetOnlyProperty_Expect_Null()
         {
             var p = new ParameterExample();
-            Assert.AreEqual(null, p.GetSetter("property1"));
+            Assert.AreEqual(null, p.GetSetter<double>("property1"));
         }
 
         [Test]
         public void When_SetterForProperty_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var setter = p.GetSetter("property2");
-            setter(1.0);
-            Assert.AreEqual(1.0, p.Property2, 1e-12);
-            setter(10.0);
-            Assert.AreEqual(10.0, p.Property2, 1e-12);
+            var setter = p.GetSetter<int>("property2");
+            setter(1);
+            Assert.AreEqual(1, p.Property2);
+            setter(10);
+            Assert.AreEqual(10, p.Property2);
         }
 
         [Test]
         public void When_SetterForMethod_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var setter = p.GetSetter("method1");
+            var setter = p.GetSetter<double>("method1");
             setter(1.0);
             Assert.AreEqual(1.0, p.Property1, 1e-12);
             setter(10.0);
@@ -179,7 +184,7 @@ namespace SpiceSharpTest.Parameters
         public void When_SetterForParameterProperty_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var setter = p.GetSetter("parameter1");
+            var setter = p.GetSetter<double>("parameter1");
             Assert.AreEqual(false, p.Parameter1.Given);
             setter(1.0);
             Assert.AreEqual(1.0, p.Parameter1.Value, 1e-12);
@@ -190,7 +195,7 @@ namespace SpiceSharpTest.Parameters
         public void When_GetParameter_Expect_Parameter()
         {
             var p = new ParameterExample();
-            var param = p.GetParameter("parameter1");
+            var param = p.GetParameter<double>("parameter1");
             Assert.AreEqual(p.Parameter1, param);
         }
 
@@ -198,7 +203,7 @@ namespace SpiceSharpTest.Parameters
         public void When_PrincipalParameter_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var param = p.GetParameter();
+            var param = p.GetParameter<double>();
             Assert.AreEqual(param, p.Principal);
         }
 
@@ -206,7 +211,7 @@ namespace SpiceSharpTest.Parameters
         public void When_PrincipalSetter_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var setter = p.GetSetter();
+            var setter = p.GetSetter<double>();
             setter(1.0);
             Assert.AreEqual(1.0, p.Principal.Value, 1e-12);
             setter(10.0);

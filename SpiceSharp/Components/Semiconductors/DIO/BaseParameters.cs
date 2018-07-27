@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("area"), ParameterInfo("Area factor")]
-        public GivenParameter Area { get; } = new GivenParameter(1);
+        public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
         [ParameterName("off"), ParameterInfo("Initially off")]
         public bool Off { get; set; }
         [ParameterName("ic"), ParameterInfo("Initial device voltage")]
@@ -24,6 +24,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
     }
 }

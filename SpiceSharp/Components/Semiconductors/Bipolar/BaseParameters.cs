@@ -17,15 +17,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
         [ParameterName("area"), ParameterInfo("Area factor")]
-        public GivenParameter Area { get; } = new GivenParameter(1);
+        public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
         [ParameterName("off"), ParameterInfo("Device initially off")]
         public bool Off { get; set; }
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage")]
-        public GivenParameter InitialVoltageBe { get; } = new GivenParameter();
+        public GivenParameter<double> InitialVoltageBe { get; } = new GivenParameter<double>();
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage")]
-        public GivenParameter InitialVoltageCe { get; } = new GivenParameter();
+        public GivenParameter<double> InitialVoltageCe { get; } = new GivenParameter<double>();
         [ParameterName("sens_area"), ParameterInfo("flag to request sensitivity WRT area")]
         public bool Sensitivity { get; set; }
 

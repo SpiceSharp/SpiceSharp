@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the found parameter
         /// </summary>
-        public Parameter Result { get; set; }
+        public Parameter<double> Result { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not Temperature behaviors need to be run for every sweep point

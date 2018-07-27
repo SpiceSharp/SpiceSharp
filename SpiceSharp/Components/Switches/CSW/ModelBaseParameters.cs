@@ -11,12 +11,12 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("ron"), ParameterInfo("Closed resistance")]
-        public GivenParameter OnResistance { get; } = new GivenParameter(1.0);
+        public GivenParameter<double> OnResistance { get; } = new GivenParameter<double>(1.0);
         [ParameterName("roff"), ParameterInfo("Open resistance")]
-        public GivenParameter OffResistance { get; } = new GivenParameter(1.0e12);
+        public GivenParameter<double> OffResistance { get; } = new GivenParameter<double>(1.0e12);
         [ParameterName("it"), ParameterInfo("Threshold current")]
-        public GivenParameter Threshold { get; } = new GivenParameter();
+        public GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
         [ParameterName("ih"), ParameterInfo("Hysteresis current")]
-        public GivenParameter Hysteresis { get; } = new GivenParameter();
+        public GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
     }
 }

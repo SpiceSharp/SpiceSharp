@@ -69,7 +69,7 @@ namespace SpiceSharp.Simulations
                 var ps = simulation.EntityParameters.GetEntityParameters(EntityName);
                 foreach (var p in ps.Values)
                 {
-                    Extractor = p.GetGetter(PropertyName);
+                    Extractor = p.GetGetter<double>(PropertyName);
                     if (Extractor != null)
                         break;
                 }

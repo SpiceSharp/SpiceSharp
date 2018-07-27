@@ -14,19 +14,19 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("v1"), ParameterInfo("The initial value")]
-        public GivenParameter InitialValue { get; } = new GivenParameter();
+        public GivenParameter<double> InitialValue { get; } = new GivenParameter<double>();
         [ParameterName("v2"), ParameterInfo("The peak value")]
-        public GivenParameter PulsedValue { get; } = new GivenParameter();
+        public GivenParameter<double> PulsedValue { get; } = new GivenParameter<double>();
         [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
-        public GivenParameter Delay { get; } = new GivenParameter();
+        public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
         [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
-        public GivenParameter RiseTime { get; } = new GivenParameter();
+        public GivenParameter<double> RiseTime { get; } = new GivenParameter<double>();
         [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
-        public GivenParameter FallTime { get; } = new GivenParameter();
+        public GivenParameter<double> FallTime { get; } = new GivenParameter<double>();
         [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
-        public GivenParameter PulseWidth { get; } = new GivenParameter(double.PositiveInfinity);
+        public GivenParameter<double> PulseWidth { get; } = new GivenParameter<double>(double.PositiveInfinity);
         [ParameterName("per"), ParameterInfo("The period in seconds")]
-        public GivenParameter Period { get; } = new GivenParameter(double.PositiveInfinity);
+        public GivenParameter<double> Period { get; } = new GivenParameter<double>(double.PositiveInfinity);
 
         /// <summary>
         /// Private variables

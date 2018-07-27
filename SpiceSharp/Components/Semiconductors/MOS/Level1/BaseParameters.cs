@@ -14,34 +14,34 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [ParameterName("off"), ParameterInfo("Device initially off")]
         public bool Off { get; set; }
         [ParameterName("icvbs"), ParameterInfo("Initial B-S voltage")]
-        public GivenParameter InitialVoltageBs { get; } = new GivenParameter();
+        public GivenParameter<double> InitialVoltageBs { get; } = new GivenParameter<double>();
         [ParameterName("icvds"), ParameterInfo("Initial D-S voltage")]
-        public GivenParameter InitialVoltageDs { get; } = new GivenParameter();
+        public GivenParameter<double> InitialVoltageDs { get; } = new GivenParameter<double>();
         [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage")]
-        public GivenParameter InitialVoltageGs { get; } = new GivenParameter();
+        public GivenParameter<double> InitialVoltageGs { get; } = new GivenParameter<double>();
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature")]
         public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
-        public GivenParameter Temperature { get; } = new GivenParameter(Circuit.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
         [ParameterName("w"), ParameterInfo("Width")]
-        public GivenParameter Width { get; } = new GivenParameter(1e-4);
+        public GivenParameter<double> Width { get; } = new GivenParameter<double>(1e-4);
         [ParameterName("l"), ParameterInfo("Length")]
-        public GivenParameter Length { get; } = new GivenParameter(1e-4);
+        public GivenParameter<double> Length { get; } = new GivenParameter<double>(1e-4);
         [ParameterName("as"), ParameterInfo("Source area")]
-        public GivenParameter SourceArea { get; } = new GivenParameter();
+        public GivenParameter<double> SourceArea { get; } = new GivenParameter<double>();
         [ParameterName("ad"), ParameterInfo("Drain area")]
-        public GivenParameter DrainArea { get; } = new GivenParameter();
+        public GivenParameter<double> DrainArea { get; } = new GivenParameter<double>();
         [ParameterName("ps"), ParameterInfo("Source perimeter")]
-        public GivenParameter SourcePerimeter { get; } = new GivenParameter();
+        public GivenParameter<double> SourcePerimeter { get; } = new GivenParameter<double>();
         [ParameterName("pd"), ParameterInfo("Drain perimeter")]
-        public GivenParameter DrainPerimeter { get; } = new GivenParameter();
+        public GivenParameter<double> DrainPerimeter { get; } = new GivenParameter<double>();
         [ParameterName("nrs"), ParameterInfo("Source squares")]
-        public GivenParameter SourceSquares { get; } = new GivenParameter(1);
+        public GivenParameter<double> SourceSquares { get; } = new GivenParameter<double>(1);
         [ParameterName("nrd"), ParameterInfo("Drain squares")]
-        public GivenParameter DrainSquares { get; } = new GivenParameter(1);
+        public GivenParameter<double> DrainSquares { get; } = new GivenParameter<double>(1);
 
         /// <summary>
         /// Methods

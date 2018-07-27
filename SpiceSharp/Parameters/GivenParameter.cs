@@ -4,12 +4,12 @@
     /// This class describes a parameter that is optional. Whether or not it was specified can be
     /// found using the Given variable.
     /// </summary>
-    public class GivenParameter : Parameter
+    public class GivenParameter<T> : Parameter<T> where T : struct
     {
         /// <summary>
         /// Gets or sets the value of the parameter
         /// </summary>
-        public override double Value
+        public override T Value
         {
             get => RawValue;
             set
@@ -22,7 +22,7 @@
         /// <summary>
         /// Gets or sets the raw value of the parameter without changing <see cref="Given"/>
         /// </summary>
-        public double RawValue { get; set; }
+        public T RawValue { get; set; }
 
         /// <summary>
         /// Gets whether or not the parameter was specified
@@ -34,7 +34,7 @@
         /// </summary>
         public GivenParameter()
         {
-            RawValue = 0.0;
+            RawValue = default(T);
             Given = false;
         }
 
@@ -42,7 +42,7 @@
         /// Constructor
         /// </summary>
         /// <param name="defaultValue">The default value</param>
-        public GivenParameter(double defaultValue)
+        public GivenParameter(T defaultValue)
         {
             RawValue = defaultValue;
             Given = false;
@@ -54,7 +54,7 @@
         /// <returns></returns>
         public override BaseParameter Clone()
         {
-            var clone = new GivenParameter
+            var clone = new GivenParameter<T>
             {
                 Given = Given,
                 RawValue = RawValue
@@ -68,7 +68,7 @@
         /// <param name="source">Copy from other parameters</param>
         public override void CopyFrom(BaseParameter source)
         {
-            if (source is GivenParameter gp)
+            if (source is GivenParameter<T> gp)
             {
                 RawValue = gp.RawValue;
                 Given = gp.Given;

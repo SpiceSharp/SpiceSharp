@@ -107,8 +107,8 @@ namespace SpiceSharp.Simulations
 
             // Initialize
             Sweeps = new NestedSweeps(dcconfig.Sweeps);
-            Parameter[] swept = new Parameter[Sweeps.Count];
-            Parameter[] original = new Parameter[Sweeps.Count];
+            Parameter<double>[] swept = new Parameter<double>[Sweeps.Count];
+            Parameter<double>[] original = new Parameter<double>[Sweeps.Count];
             int levelNeedsTemperature = -1;
 
             // Initialize first time
@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Invalid sweep object");
                 }
 
-                original[i] = (Parameter)swept[i].Clone();
+                original[i] = (Parameter<double>) swept[i].Clone();
                 swept[i].Value = sweep.Initial;
             }
 

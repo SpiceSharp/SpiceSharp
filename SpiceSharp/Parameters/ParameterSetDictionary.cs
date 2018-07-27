@@ -34,11 +34,11 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
-        public Parameter GetParameter(string name)
+        public Parameter<T> GetParameter<T>(string name) where T : struct
         {
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter(name);
+                var p = ps.GetParameter<T>(name);
                 if (p != null)
                     return p;
             }
@@ -51,11 +51,11 @@ namespace SpiceSharp
         /// Returns null if no matching parameter was found
         /// </summary>
         /// <returns></returns>
-        public Parameter GetParameter()
+        public Parameter<T> GetParameter<T>() where T : struct
         {
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter();
+                var p = ps.GetParameter<T>();
                 if (p != null)
                     return p;
             }
@@ -69,11 +69,11 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
-        public Action<double> GetSetter(string name)
+        public Action<T> GetSetter<T>(string name) where T : struct
         {
             foreach (var ps in Values)
             {
-                var s = ps.GetSetter(name);
+                var s = ps.GetSetter<T>(name);
                 if (s != null)
                     return s;
             }
@@ -86,11 +86,11 @@ namespace SpiceSharp
         /// Returns null if no matching parameter was found
         /// </summary>
         /// <returns></returns>
-        public Action<double> GetSetter()
+        public Action<T> GetSetter<T>() where T : struct
         {
             foreach (var ps in Values)
             {
-                var s = ps.GetSetter();
+                var s = ps.GetSetter<T>();
                 if (s != null)
                     return s;
             }
@@ -105,7 +105,7 @@ namespace SpiceSharp
         /// <param name="name">Property name</param>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool SetParameter(string name, double value)
+        public bool SetParameter<T>(string name, T value) where T : struct
         {
             bool isset = false;
             foreach (var ps in Values)
@@ -123,7 +123,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool SetParameter(double value)
+        public bool SetParameter<T>(T value) where T : struct
         {
             foreach (var ps in Values)
             {
@@ -136,7 +136,6 @@ namespace SpiceSharp
 
         /// <summary>
         /// Calls a parameter method
-        /// Only 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>

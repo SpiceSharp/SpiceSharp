@@ -11,8 +11,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("kf"), ParameterInfo("flicker noise coefficient")]
-        public GivenParameter FlickerNoiseCoefficient { get; } = new GivenParameter();
+        public GivenParameter<double> FlickerNoiseCoefficient { get; } = new GivenParameter<double>();
         [ParameterName("af"), ParameterInfo("flicker noise exponent")]
-        public GivenParameter FlickerNoiseExponent { get; } = new GivenParameter(1.0);
+        public GivenParameter<double> FlickerNoiseExponent { get; } = new GivenParameter<double>(1.0);
     }
 }

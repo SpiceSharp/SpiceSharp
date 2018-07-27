@@ -11,12 +11,12 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("ron"), ParameterInfo("Resistance when closed")]
-        public GivenParameter OnResistance { get; } = new GivenParameter(1.0);
+        public GivenParameter<double> OnResistance { get; } = new GivenParameter<double>(1.0);
         [ParameterName("roff"), ParameterInfo("Resistance when off")]
-        public GivenParameter OffResistance { get; } = new GivenParameter(1.0e12);
+        public GivenParameter<double> OffResistance { get; } = new GivenParameter<double>(1.0e12);
         [ParameterName("vt"), ParameterInfo("Threshold voltage")]
-        public GivenParameter Threshold { get; } = new GivenParameter();
+        public GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
         [ParameterName("vh"), ParameterInfo("Hysteresis voltage")]
-        public GivenParameter Hysteresis { get; } = new GivenParameter();
+        public GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
     }
 }

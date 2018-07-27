@@ -13,15 +13,15 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("vo"), ParameterInfo("The offset of the sine wave")]
-        public GivenParameter Offset { get; } = new GivenParameter();
+        public GivenParameter<double> Offset { get; } = new GivenParameter<double>();
         [ParameterName("va"), ParameterInfo("The amplitude of the sine wave")]
-        public GivenParameter Amplitude { get; } = new GivenParameter();
+        public GivenParameter<double> Amplitude { get; } = new GivenParameter<double>();
         [ParameterName("freq"), ParameterInfo("The frequency in Hz")]
-        public GivenParameter Frequency { get; } = new GivenParameter();
+        public GivenParameter<double> Frequency { get; } = new GivenParameter<double>();
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
-        public GivenParameter Delay { get; } = new GivenParameter();
+        public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
         [ParameterName("theta"), ParameterInfo("The damping factor")]
-        public GivenParameter Theta { get; } = new GivenParameter();
+        public GivenParameter<double> Theta { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Private variables
