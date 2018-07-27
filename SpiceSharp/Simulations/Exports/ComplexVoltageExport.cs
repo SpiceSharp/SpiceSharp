@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                Complex result = Value;
+                var result = Value;
                 return 10.0 * Math.Log10(result.Real * result.Real + result.Imaginary * result.Imaginary);
             }
         }
@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                Complex result = Value;
+                var result = Value;
                 return Math.Atan2(result.Imaginary, result.Real);
             }
         }
@@ -77,14 +77,14 @@ namespace SpiceSharp.Simulations
         {
             // Create our extractor!
             var state = Simulation.States.Get<ComplexState>();
-            if (Simulation.Nodes.TryGetNode(PosNode, out Variable posNode))
+            if (Simulation.Nodes.TryGetNode(PosNode, out var posNode))
             {
-                int posNodeIndex = posNode.Index;
+                var posNodeIndex = posNode.Index;
                 if (NegNode == null)
                     Extractor = () => state.Solution[posNodeIndex];
-                else if (Simulation.Nodes.TryGetNode(NegNode, out Variable negNode))
+                else if (Simulation.Nodes.TryGetNode(NegNode, out var negNode))
                 {
-                    int negNodeIndex = negNode.Index;
+                    var negNodeIndex = negNode.Index;
                     Extractor = () => state.Solution[posNodeIndex] - state.Solution[negNodeIndex];
                 }
             }

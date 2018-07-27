@@ -242,14 +242,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double arg;
             double sarg, f1, f2, f3;
 
-            double cbe = _load.CurrentBe;
-            double cbc = _load.CurrentBc;
-            double qb = _load.BaseCharge;
+            var cbe = _load.CurrentBe;
+            var cbc = _load.CurrentBc;
+            var qb = _load.BaseCharge;
 
-            double vbe = _load.VoltageBe;
-            double vbc = _load.VoltageBc;
-            double vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
-            double vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
+            var vbe = _load.VoltageBe;
+            var vbc = _load.VoltageBc;
+            var vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
+            var vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
 
             StateExcessPhaseCurrentBc.Current = _load.CurrentBe / _load.BaseCharge;
 
@@ -364,22 +364,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double arg;
             double sarg, f1, f2, f3;
 
-            double cbe = _load.CurrentBe;
-            double cbc = _load.CurrentBc;
-            double gbe = _load.CondBe;
-            double gbc = _load.CondBc;
-            double qb = _load.BaseCharge;
+            var cbe = _load.CurrentBe;
+            var cbc = _load.CurrentBc;
+            var gbe = _load.CondBe;
+            var gbc = _load.CondBc;
+            var qb = _load.BaseCharge;
             double geqcb = 0;
 
-            double gpi = 0.0;
-            double gmu = 0.0;
-            double cb = 0.0;
-            double cc = 0.0;
+            var gpi = 0.0;
+            var gmu = 0.0;
+            var cb = 0.0;
+            var cc = 0.0;
 
-            double vbe = _load.VoltageBe;
-            double vbc = _load.VoltageBc;
-            double vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
-            double vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
+            var vbe = _load.VoltageBe;
+            var vbc = _load.VoltageBc;
+            var vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
+            var vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
 
             // Charge storage elements
             double tf = _mbp.TransitTimeForward;
@@ -497,15 +497,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Charge storage for c-s and b-x junctions
             StateChargeCs.Integrate();
-            double gccs = StateChargeCs.Jacobian(CapCs);
+            var gccs = StateChargeCs.Jacobian(CapCs);
             StateChargeBx.Integrate();
-            double geqbx = StateChargeBx.Jacobian(CapBx);
+            var geqbx = StateChargeBx.Jacobian(CapBx);
 
             // Load current excitation vector
-            double ceqcs = _mbp.BipolarType * (StateChargeCs.Derivative - vcs * gccs);
-            double ceqbx = _mbp.BipolarType * (StateChargeBx.Derivative - vbx * geqbx);
-            double ceqbe = _mbp.BipolarType * (cc + cb - vbe * gpi + vbc * -geqcb);
-            double ceqbc = _mbp.BipolarType * (-cc + - vbc * gmu);
+            var ceqcs = _mbp.BipolarType * (StateChargeCs.Derivative - vcs * gccs);
+            var ceqbx = _mbp.BipolarType * (StateChargeBx.Derivative - vbx * geqbx);
+            var ceqbe = _mbp.BipolarType * (cc + cb - vbe * gpi + vbc * -geqcb);
+            var ceqbc = _mbp.BipolarType * (-cc + - vbc * gmu);
 
             // Load Rhs-vector
             BasePtr.Value += -ceqbx;
@@ -537,7 +537,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <returns>The timestep that satisfies the LTE</returns>
         public override double Truncate()
         {
-            double timetmp = StateChargeBe.LocalTruncationError();
+            var timetmp = StateChargeBe.LocalTruncationError();
             timetmp = Math.Min(timetmp, StateChargeBc.LocalTruncationError());
             timetmp = Math.Min(timetmp, StateChargeCs.LocalTruncationError());
             return timetmp;
@@ -553,7 +553,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
 
-            double td = _modeltemp.ExcessPhaseFactor;
+            var td = _modeltemp.ExcessPhaseFactor;
             if (td.Equals(0))
             {
                 StateExcessPhaseCurrentBc.Current = args.ExcessPhaseCurrent;
@@ -564,11 +564,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
              * weil's approx. for excess phase applied with backward - 
              * euler integration
              */
-            double cbe = args.ExcessPhaseCurrent;
-            double gbe = args.ExcessPhaseConduct;
+            var cbe = args.ExcessPhaseCurrent;
+            var gbe = args.ExcessPhaseConduct;
 
-            double delta = StateExcessPhaseCurrentBc.Timesteps[0];
-            double prevdelta = StateExcessPhaseCurrentBc.Timesteps[1];
+            var delta = StateExcessPhaseCurrentBc.Timesteps[0];
+            var prevdelta = StateExcessPhaseCurrentBc.Timesteps[1];
             var arg1 = delta / td;
             var arg2 = 3 * arg1;
             arg1 = arg2 * arg1;

@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">Event arguments</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            Noise noise = (Noise)Simulation;
+            var noise = (Noise)Simulation;
             Extractor = () => noise.NoiseState.OutputNoiseDensity * noise.NoiseState.GainInverseSquared;
         }
     }

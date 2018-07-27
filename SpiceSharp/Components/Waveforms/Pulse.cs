@@ -126,20 +126,20 @@ namespace SpiceSharp.Components
                 return;
 
             // Are we at a breakpoint?
-            IntegrationMethod method = simulation.Method;
+            var method = simulation.Method;
             var breaks = method.Breaks;
             if (!method.Break)
                 return;
 
             // Find the time relative to the first period
-            double time = method.Time - _td;
-            double basetime = 0.0;
+            var time = method.Time - _td;
+            var basetime = 0.0;
             if (time >= _per)
             {
                 basetime = _per * Math.Floor(time / _per);
                 time -= basetime;
             }
-            double tol = 1e-7 * _pw;
+            var tol = 1e-7 * _pw;
 
             // Are we at the start of a breakpoint?
             if (time <= 0 || time >= _tr + _pw + _tf)

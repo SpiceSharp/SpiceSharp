@@ -161,9 +161,9 @@ namespace SpiceSharp.Simulations
                 state.Init = RealState.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
                 state.DiagonalGmin = config.Gmin;
-                for (int i = 0; i < config.GminSteps; i++)
+                for (var i = 0; i < config.GminSteps; i++)
                     state.DiagonalGmin *= 10.0;
-                for (int i = 0; i <= config.GminSteps; i++)
+                for (var i = 0; i <= config.GminSteps; i++)
                 {
                     state.IsConvergent = false;
                     if (!Iterate(maxIterations))
@@ -187,7 +187,7 @@ namespace SpiceSharp.Simulations
             {
                 state.Init = RealState.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
-                for (int i = 0; i <= config.SourceSteps; i++)
+                for (var i = 0; i <= config.SourceSteps; i++)
                 {
                     state.SourceFactor = i / (double)config.SourceSteps;
                     if (!Iterate(maxIterations))
@@ -214,8 +214,8 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var solver = state.Solver;
-            bool pass = false;
-            int iterno = 0;
+            var pass = false;
+            var iterno = 0;
 
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIc && state.Domain == RealState.DomainType.Time)
@@ -271,7 +271,7 @@ namespace SpiceSharp.Simulations
                     // Decompose
                     Statistics.DecompositionTime.Start();
                     solver.ApplyDiagonalGmin(state.DiagonalGmin);
-                    bool success = solver.Factor();
+                    var success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
 
                     if (!success)
@@ -364,7 +364,7 @@ namespace SpiceSharp.Simulations
             state.Solver.Clear();
 
             // Load all devices
-            for (int i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < LoadBehaviors.Count; i++)
                 LoadBehaviors[i].Load(this);
 
             // Call events
@@ -392,7 +392,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Go over all nodes
-            for (int i = 0; i < nodes.Count; i++)
+            for (var i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
                 if (nodes.NodeSets.ContainsKey(node.Name))
@@ -417,7 +417,7 @@ namespace SpiceSharp.Simulations
             // Use initial conditions
             if (state.UseIc)
             {
-                for (int i = 0; i < InitialConditionBehaviors.Count; i++)
+                for (var i = 0; i < InitialConditionBehaviors.Count; i++)
                     InitialConditionBehaviors[i].SetInitialCondition(this);
             }
         }
@@ -436,12 +436,12 @@ namespace SpiceSharp.Simulations
             if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) != 0)
             {
                 // Do nodesets
-                for (int i = 0; i < nodes.Count; i++)
+                for (var i = 0; i < nodes.Count; i++)
                 {
                     var node = nodes[i];
                     if (nodes.NodeSets.ContainsKey(node.Name))
                     {
-                        double ns = nodes.NodeSets[node.Name];
+                        var ns = nodes.NodeSets[node.Name];
                         if (ZeroNoncurrentRow(state.Solver, nodes, node.Index))
                         {
                             if (!ns.Equals(0.0))
@@ -473,11 +473,11 @@ namespace SpiceSharp.Simulations
             if (variables == null)
                 throw new ArgumentNullException(nameof(variables));
 
-            bool currents = false;
-            for (int n = 0; n < variables.Count; n++)
+            var currents = false;
+            for (var n = 0; n < variables.Count; n++)
             {
                 var node = variables[n];
-                MatrixElement<double> x = solver.FindMatrixElement(rowIndex, node.Index);
+                var x = solver.FindMatrixElement(rowIndex, node.Index);
                 if (x != null && !x.Value.Equals(0.0))
                 {
                     if (node.UnknownType == VariableType.Current)
@@ -499,18 +499,18 @@ namespace SpiceSharp.Simulations
             var config = BaseConfiguration;
 
             // Check convergence for each node
-            for (int i = 0; i < Nodes.Count; i++)
+            for (var i = 0; i < Nodes.Count; i++)
             {
                 var node = Nodes[i];
-                double n = rstate.Solution[node.Index];
-                double o = rstate.OldSolution[node.Index];
+                var n = rstate.Solution[node.Index];
+                var o = rstate.OldSolution[node.Index];
 
                 if (double.IsNaN(n))
                     throw new CircuitException("Non-convergence, node {0} is not a number.".FormatString(node));
 
                 if (node.UnknownType == VariableType.Voltage)
                 {
-                    double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
+                    var tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
@@ -519,7 +519,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsoluteTolerance;
+                    var tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
@@ -529,7 +529,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Device-level convergence tests
-            for (int i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < LoadBehaviors.Count; i++)
             {
                 if (!LoadBehaviors[i].IsConvergent(this))
                 {

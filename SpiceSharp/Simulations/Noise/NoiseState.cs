@@ -101,10 +101,10 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public double Integrate(double noiseDensity, double logNoiseDensity, double lastLogNoiseDensity)
         {
-            double exponent = (logNoiseDensity - lastLogNoiseDensity) / _deltaLogFrequency;
+            var exponent = (logNoiseDensity - lastLogNoiseDensity) / _deltaLogFrequency;
             if (Math.Abs(exponent) < 1e-10)
                 return noiseDensity * _deltaFrequency;
-            double a = Math.Exp(logNoiseDensity - exponent * _logFrequency);
+            var a = Math.Exp(logNoiseDensity - exponent * _logFrequency);
             exponent += 1.0;
             if (Math.Abs(exponent) < 1e-10)
                 return a * (_logFrequency - _logLastFrequency);

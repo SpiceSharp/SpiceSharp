@@ -108,7 +108,7 @@ namespace SpiceSharp.Simulations
         public Variable Create(Identifier id, VariableType type)
         {
             // Create the node
-            int index = _unknowns.Count + 1;
+            var index = _unknowns.Count + 1;
             var node = new Variable(id, type, index);
             _unknowns.Add(node);
             return node;

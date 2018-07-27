@@ -189,18 +189,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Get voltages
             var state = simulation.RealState;
-            double vbe = _load.VoltageBe;
-            double vbc = _load.VoltageBc;
-            double vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
-            double vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
+            var vbe = _load.VoltageBe;
+            var vbc = _load.VoltageBc;
+            var vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
+            var vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
 
             // Get shared parameters
-            double cbe = _load.CurrentBe;
-            double gbe = _load.CondBe;
-            double gbc = _load.CondBc;
-            double qb = _load.BaseCharge;
-            double dqbdve = _load.Dqbdve;
-            double dqbdvc = _load.Dqbdvc;
+            var cbe = _load.CurrentBe;
+            var gbe = _load.CondBe;
+            var gbc = _load.CondBc;
+            var qb = _load.BaseCharge;
+            var dqbdve = _load.Dqbdve;
+            var dqbdvc = _load.Dqbdvc;
 
             // Charge storage elements
             double tf = _mbp.TransitTimeForward;
@@ -316,7 +316,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var td = _modeltemp.ExcessPhaseFactor;
             if (!td.Equals(0)) // Avoid computations
             {
-                Complex arg = td * cstate.Laplace;
+                var arg = td * cstate.Laplace;
 
                 gm = gm + go;
                 gm = gm * Complex.Exp(-arg);

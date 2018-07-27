@@ -570,7 +570,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
              *  check convergence
              */
             // NOTE: relative and absolute tolerances need to be gotten from the configuration, temporarely set to constants here
-            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
+            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsConvergent = false;

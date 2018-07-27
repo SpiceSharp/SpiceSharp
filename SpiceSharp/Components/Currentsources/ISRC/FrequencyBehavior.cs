@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[_posNode] - state.Solution[_negNode];
+            var v = state.Solution[_posNode] - state.Solution[_negNode];
             return -v * Complex.Conjugate(_ac);
         }
 
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             _ap = provider.GetParameterSet<FrequencyParameters>("entity");
 
             // Calculate the AC vector
-            double radians = _ap.AcPhase * Math.PI / 180.0;
+            var radians = _ap.AcPhase * Math.PI / 180.0;
             _ac = new Complex(_ap.AcMagnitude * Math.Cos(radians), _ap.AcMagnitude * Math.Sin(radians));
         }
         

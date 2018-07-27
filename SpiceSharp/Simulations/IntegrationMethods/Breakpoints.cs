@@ -36,7 +36,7 @@ namespace SpiceSharp.IntegrationMethods
         public void SetBreakpoint(double timePoint)
         {
             // Insert
-            for (int i = 0; i < _bps.Count; i++)
+            for (var i = 0; i < _bps.Count; i++)
             {
                 // Same breakpoint, return without setting it
                 if (Math.Abs(_bps[i] - timePoint) <= MinBreak)

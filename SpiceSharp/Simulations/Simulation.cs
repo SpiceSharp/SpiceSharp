@@ -166,9 +166,9 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(entities));
 
             // Register all behaviors
-            foreach (Entity entity in entities)
+            foreach (var entity in entities)
             {
-                T behavior = entity.CreateBehavior<T>(this);
+                var behavior = entity.CreateBehavior<T>(this);
                 if (behavior != null)
                     EntityBehaviors.Add(entity.Name, behavior);
             }

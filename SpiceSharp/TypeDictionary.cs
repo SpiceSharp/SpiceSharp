@@ -52,7 +52,7 @@ namespace SpiceSharp
             get => Dictionary[key];
             set
             {
-                Type currentType = key;
+                var currentType = key;
                 while (currentType != BaseClass)
                 {
                     Dictionary[currentType] = value;
@@ -82,7 +82,7 @@ namespace SpiceSharp
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
 
-            Type currentType = key;
+            var currentType = key;
             while (currentType != null && currentType != BaseClass)
             {
                 Dictionary.Add(currentType, value);

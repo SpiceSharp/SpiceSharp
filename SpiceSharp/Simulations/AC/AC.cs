@@ -45,9 +45,9 @@ namespace SpiceSharp.Simulations
             Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
-            for (int i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < LoadBehaviors.Count; i++)
                 LoadBehaviors[i].Load(this);
-            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+            for (var i = 0; i < FrequencyBehaviors.Count; i++)
                 FrequencyBehaviors[i].InitializeParameters(this);
 
             // Export operating point if requested
@@ -56,7 +56,7 @@ namespace SpiceSharp.Simulations
                 Export(exportargs);
 
             // Sweep the frequency
-            foreach (double freq in FrequencySweep.Points)
+            foreach (var freq in FrequencySweep.Points)
             {
                 // Calculate the current frequency
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);

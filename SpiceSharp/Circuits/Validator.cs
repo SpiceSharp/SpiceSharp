@@ -65,10 +65,10 @@ namespace SpiceSharp.Circuits
             var unconnected = FindFloatingNodes();
             if (unconnected.Count > 0)
             {
-                List<Identifier> un = new List<Identifier>();
-                for (int i = 0; i < _nodes.Count; i++)
+                var un = new List<Identifier>();
+                for (var i = 0; i < _nodes.Count; i++)
                 {
-                    int index = _nodes[i].Index;
+                    var index = _nodes[i].Index;
                     if (unconnected.Contains(index))
                         un.Add(_nodes[i].Name);
                 }
@@ -86,10 +86,10 @@ namespace SpiceSharp.Circuits
             if (c is Component icc)
             {
                 // Check for ground node and for short-circuited components
-                int n = -1;
-                bool isShortcircuit = false;
-                int[] nodes = new int[icc.PinCount];
-                int i = 0;
+                var n = -1;
+                var isShortcircuit = false;
+                var nodes = new int[icc.PinCount];
+                var i = 0;
                 foreach (var index in icc.GetNodeIndexes(_nodes))
                 {
                     // Check for a connection to ground
@@ -119,7 +119,7 @@ namespace SpiceSharp.Circuits
                 
                 // Use attributes for checking properties
                 var attributes = c.GetType().GetTypeInfo().GetCustomAttributes(false);
-                bool hasconnections = false;
+                var hasconnections = false;
                 foreach (var attr in attributes)
                 {
                     // Voltage driven nodes are checked for voltage loops
@@ -151,8 +151,8 @@ namespace SpiceSharp.Circuits
         private Component FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
-            int index = 1;
-            Dictionary<int, int> map = new Dictionary<int, int> {{0, 0}};
+            var index = 1;
+            var map = new Dictionary<int, int> {{0, 0}};
             foreach (var vd in _voltageDriven)
             {
                 if (vd.Item2 != 0)
@@ -168,8 +168,8 @@ namespace SpiceSharp.Circuits
             }
 
             // Determine the rank of the matrix
-            RealSolver solver = new RealSolver(Math.Max(_voltageDriven.Count, map.Count));
-            for (int i = 0; i < _voltageDriven.Count; i++)
+            var solver = new RealSolver(Math.Max(_voltageDriven.Count, map.Count));
+            for (var i = 0; i < _voltageDriven.Count; i++)
             {
                 var pins = _voltageDriven[i];
                 solver.GetMatrixElement(i + 1, map[pins.Item2]).Value += 1.0;
@@ -206,9 +206,9 @@ namespace SpiceSharp.Circuits
                 return;
 
             // All connections
-            for (int i = 0; i < nodes.Length; i++)
+            for (var i = 0; i < nodes.Length; i++)
             {
-                for (int j = i + 1; j < nodes.Length; j++)
+                for (var j = i + 1; j < nodes.Length; j++)
                     AddConnection(nodes[i], nodes[j]);
             }
         }
@@ -223,15 +223,15 @@ namespace SpiceSharp.Circuits
             if (a == b)
                 return;
 
-            bool hasa = _connectedGroups.TryGetValue(a, out var groupa);
-            bool hasb = _connectedGroups.TryGetValue(b, out var groupb);
+            var hasa = _connectedGroups.TryGetValue(a, out var groupa);
+            var hasb = _connectedGroups.TryGetValue(b, out var groupb);
 
             if (hasa && hasb)
             {
                 // Connect the two groups to that of the minimum group
-                int newgroup = Math.Min(groupa, groupb);
-                int oldgroup = Math.Max(groupa, groupb);
-                int[] keys = _connectedGroups.Keys.ToArray();
+                var newgroup = Math.Min(groupa, groupb);
+                var oldgroup = Math.Max(groupa, groupb);
+                var keys = _connectedGroups.Keys.ToArray();
                 foreach (var key in keys)
                 {
                     if (_connectedGroups[key] == oldgroup)
@@ -250,7 +250,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         private HashSet<int> FindFloatingNodes()
         {
-            HashSet<int> unconnected = new HashSet<int>();
+            var unconnected = new HashSet<int>();
 
             foreach (var key in _connectedGroups.Keys)
             {

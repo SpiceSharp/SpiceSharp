@@ -388,8 +388,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 double sarg;
                 double[] a4 = new double[4], b4 = new double[4], x4 = new double[8], poly4 = new double[8];
                 double dsrgdb, d2Sdb2;
-                double sphi = 0.0; /* square root of phi */
-                double sphi3 = 0.0; /* square root of phi cubed */
+                var sphi = 0.0; /* square root of phi */
+                var sphi3 = 0.0; /* square root of phi cubed */
                 double barg, d2Bdb2,
                     dbrgdb,
                     argd = 0.0, args = 0.0;
@@ -407,10 +407,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 /* 'local' variables - these switch d & s around appropriately
 				 * so that we don't have to worry about vds < 0
 				 */
-                double lvbs = Mode  > 0 ? vbs : vbd;
-                double lvds = Mode * vds;
-                double lvgs = Mode > 0 ? vgs : vgd;
-                double phiMinVbs = _temp.TempPhi - lvbs;
+                var lvbs = Mode  > 0 ? vbs : vbd;
+                var lvds = Mode * vds;
+                var lvgs = Mode > 0 ? vgs : vgd;
+                var phiMinVbs = _temp.TempPhi - lvbs;
                 double tmp; /* a temporary variable, not used for more than */
                             /* about 10 lines at a time */
 
@@ -659,7 +659,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     var iknt = 0;
                     var a3 = Math.Sqrt(a1 * a1 / 4.0 - b1 + y3);
                     var b3 = Math.Sqrt(y3 * y3 / 4.0 - d1);
-                    for (int i = 1; i <= 4; i++)
+                    for (var i = 1; i <= 4; i++)
                     {
                         a4[i - 1] = a1 / 2.0 + Sig1[i - 1] * a3;
                         b4[i - 1] = y3 / 2.0 + Sig2[i - 1] * b3;
@@ -673,7 +673,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                         x4[iknt - 1] = -a4[i - 1] / 2.0 - tmp;
                     }
                     var jknt = 0;
-                    for (int j = 1; j <= iknt; j++)
+                    for (var j = 1; j <= iknt; j++)
                     {
                         if (x4[j - 1] <= 0) continue;
                         /* XXX implement this sanely */
@@ -1001,7 +1001,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /*
              *  check convergence
              */
-            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
+            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsConvergent = false;

@@ -68,7 +68,7 @@ namespace SpiceSharp
         /// </summary>
         public void Validate()
         {
-            Validator validator = new Validator();
+            var validator = new Validator();
             validator.Validate(this);
         }
     }

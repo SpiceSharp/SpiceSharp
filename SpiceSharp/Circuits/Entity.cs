@@ -64,10 +64,10 @@ namespace SpiceSharp.Circuits
             if (Behaviors.TryGetValue(typeof(T), out var factory))
             {
                 // Create the behavior
-                Behavior behavior = factory();
+                var behavior = factory();
 
                 // Setup the behavior
-                SetupDataProvider provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
+                var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
                 behavior.Setup(provider);
                 return (T)behavior;
             }
@@ -89,7 +89,7 @@ namespace SpiceSharp.Circuits
                 throw new ArgumentNullException(nameof(behaviors));
 
             // By default, we include the parameters of this entity
-            SetupDataProvider result = new SetupDataProvider();
+            var result = new SetupDataProvider();
             result.Add("entity", parameters.GetEntityParameters(Name));
             result.Add("entity", behaviors.GetEntityBehaviors(Name));
             return result;

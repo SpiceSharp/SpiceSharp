@@ -195,7 +195,7 @@ namespace SpiceSharp.Circuits
             try
             {
                 _lock.EnterReadLock();
-                List<Entity> result = new List<Entity>();
+                var result = new List<Entity>();
                 foreach (var c in _objects.Values)
                 {
                     if (c.GetType() == type)
@@ -224,7 +224,7 @@ namespace SpiceSharp.Circuits
 
                 // Initialize
                 _ordered.Clear();
-                HashSet<Entity> added = new HashSet<Entity>();
+                var added = new HashSet<Entity>();
 
                 // Build our list
                 foreach (var c in _objects.Values)
@@ -265,7 +265,7 @@ namespace SpiceSharp.Circuits
             {
                 _lock.EnterReadLock();
 
-                for (int i = 0; i < _ordered.Count; i++)
+                for (var i = 0; i < _ordered.Count; i++)
                     yield return _ordered[i];
             }
             finally

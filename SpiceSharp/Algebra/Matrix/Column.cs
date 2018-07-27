@@ -25,7 +25,7 @@ namespace SpiceSharp.Algebra.Matrix
         /// <param name="newElement">New element</param>
         public void Insert(SparseMatrixElement<T> newElement)
         {
-            int row = newElement.Row;
+            var row = newElement.Row;
             SparseMatrixElement<T> element = FirstInColumn, lastElement = null;
             while (element != null)
             {
@@ -100,7 +100,7 @@ namespace SpiceSharp.Algebra.Matrix
         /// <param name="row">Row</param>
         public SparseMatrixElement<T> Find(int row)
         {
-            SparseMatrixElement<T> element = FirstInColumn;
+            var element = FirstInColumn;
             while (element != null)
             {
                 if (element.Row == row)
@@ -151,7 +151,7 @@ namespace SpiceSharp.Algebra.Matrix
                 }
 
                 // Move the element back
-                SparseMatrixElement<T> element = second.PreviousInColumn;
+                var element = second.PreviousInColumn;
                 Remove(second);
                 while (element.PreviousInColumn != null && element.PreviousInColumn.Row > rowFirst)
                     element = element.PreviousInColumn;
@@ -176,7 +176,7 @@ namespace SpiceSharp.Algebra.Matrix
                 }
 
                 // Move the element forward
-                SparseMatrixElement<T> element = first.NextInColumn;
+                var element = first.NextInColumn;
                 Remove(first);
                 while (element.NextInColumn != null && element.NextInColumn.Row < rowSecond)
                     element = element.NextInColumn;
@@ -229,7 +229,7 @@ namespace SpiceSharp.Algebra.Matrix
                     second.PreviousInColumn.NextInColumn = first;
 
                     // Correct element links
-                    SparseMatrixElement<T> element = first.PreviousInColumn;
+                    var element = first.PreviousInColumn;
                     first.PreviousInColumn = second.PreviousInColumn;
                     second.PreviousInColumn = element;
                     element = first.NextInColumn;

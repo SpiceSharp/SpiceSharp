@@ -87,8 +87,8 @@ namespace SpiceSharp.Algebra
             Strategy.MovePivot(Matrix, Rhs, pivot, step);
 
             // Move the pivot in the matrix
-            int row = pivot.Row;
-            int column = pivot.Column;
+            var row = pivot.Row;
+            var column = pivot.Column;
             if (row != step)
                 SwapRows(row, step);
             if (column != step)

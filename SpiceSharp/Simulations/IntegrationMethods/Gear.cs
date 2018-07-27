@@ -42,7 +42,7 @@ namespace SpiceSharp.IntegrationMethods
             base.Initialize(behaviors);
 
             _ag = new double[MaxOrder];
-            for (int i = 0; i < MaxOrder; i++)
+            for (var i = 0; i < MaxOrder; i++)
                 _ag[i] = 0.0;
         }
 
@@ -277,11 +277,11 @@ namespace SpiceSharp.IntegrationMethods
             j = Order;
             while (true)
             {
-                for (int i = 0; i <= j; i++)
+                for (var i = 0; i <= j; i++)
                     diff[i] = (diff[i] - diff[i + 1]) / deltmp[i];
                 if (--j < 0)
                     break;
-                for (int i = 0; i <= j; i++)
+                for (var i = 0; i <= j; i++)
                     deltmp[i] = deltmp[i + 1] + DeltaOld[i];
             }
 
@@ -303,7 +303,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
                 default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
-            double del = BaseParameters.TruncationTolerance * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+            var del = BaseParameters.TruncationTolerance * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)
                 del = Math.Sqrt(del);
             else if (Order > 2)

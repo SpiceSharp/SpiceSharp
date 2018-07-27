@@ -35,7 +35,7 @@ namespace SpiceSharp.IntegrationMethods
         public StatePool(IntegrationMethod method)
         {
             Method = method ?? throw new ArgumentNullException(nameof(method));
-            int count = method.MaxOrder + 2;
+            var count = method.MaxOrder + 2;
             History = new ArrayHistory<Vector<double>>(count, (Vector<double>)null);
         }
 
@@ -45,7 +45,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns></returns>
         public StateDerivative CreateDerivative()
         {
-            StateDerivative result = new StateDerivative(this, Size + 1);
+            var result = new StateDerivative(this, Size + 1);
 
             // Increase amount of states
             States++;
@@ -61,7 +61,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns></returns>
         public StateHistory CreateHistory()
         {
-            StateHistory result = new StateHistory(this, Size);
+            var result = new StateHistory(this, Size);
             States++;
             Size++;
             return result;

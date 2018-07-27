@@ -212,7 +212,7 @@ namespace SpiceSharp.IntegrationMethods
                 Order = 1;
 
                 // Limit the next timestep if there is a breakpoint
-                double mt = Math.Min(SaveDelta, Breaks.Delta);
+                var mt = Math.Min(SaveDelta, Breaks.Delta);
                 Delta = Math.Min(Delta, 0.1 * mt);
 
                 // Spice will divide the delta by 10 in the first step
@@ -292,9 +292,9 @@ namespace SpiceSharp.IntegrationMethods
         public bool LteControl(TimeSimulation simulation)
         {
             // Invoke truncation event
-            TruncationEventArgs args = new TruncationEventArgs(simulation, Delta);
+            var args = new TruncationEventArgs(simulation, Delta);
             Truncate?.Invoke(this, args);
-            double newdelta = args.Delta;
+            var newdelta = args.Delta;
 
             if (newdelta > 0.9 * Delta)
             {
@@ -358,8 +358,8 @@ namespace SpiceSharp.IntegrationMethods
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
 
-            double timetmp = double.PositiveInfinity;
-            for (int i = 0; i < _transientBehaviors.Count; i++)
+            var timetmp = double.PositiveInfinity;
+            for (var i = 0; i < _transientBehaviors.Count; i++)
                 timetmp = Math.Min(timetmp, _transientBehaviors[i].Truncate());
             args.Delta = timetmp;
         }

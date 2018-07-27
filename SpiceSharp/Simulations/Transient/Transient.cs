@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (int i = 0; i < AcceptBehaviors.Count; i++)
+            for (var i = 0; i < AcceptBehaviors.Count; i++)
                 AcceptBehaviors[i].Unsetup();
             AcceptBehaviors = null;
 
@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             var baseConfig = BaseConfiguration;
             var timeConfig = TimeConfiguration;
 
-            double delta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
+            var delta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
 
             // Initialize before starting the simulation
             state.UseIc = timeConfig.UseIc;
@@ -108,14 +108,14 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIc = false;
             state.UseDc = false;
-            for (int i = 0; i < TransientBehaviors.Count; i++)
+            for (var i = 0; i < TransientBehaviors.Count; i++)
                 TransientBehaviors[i].GetDcState(this);
             StatePool.ClearDc();
             OnLoad -= LoadInitialConditions;
 
             // Start our statistics
             Statistics.TransientTime.Start();
-            int startIters = Statistics.Iterations;
+            var startIters = Statistics.Iterations;
             var startselapsed = Statistics.SolveTime.Elapsed;
 
             try
@@ -125,7 +125,7 @@ namespace SpiceSharp.Simulations
                     // nextTime:
 
                     // Accept the current timepoint (CKTaccept())
-                    for (int i = 0; i < AcceptBehaviors.Count; i++)
+                    for (var i = 0; i < AcceptBehaviors.Count; i++)
                         AcceptBehaviors[i].Accept(this);
                     Method.SaveSolution(state.Solution);
                     // end of CKTaccept()
@@ -172,7 +172,7 @@ namespace SpiceSharp.Simulations
                         // Try to solve the new point
                         if (Method.SavedTime.Equals(0.0))
                             state.Init = RealState.InitializationStates.InitTransient;
-                        bool converged = TimeIterate(timeConfig.TranMaxIterations);
+                        var converged = TimeIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not
@@ -235,12 +235,12 @@ namespace SpiceSharp.Simulations
             var nodes = Nodes;
             var solver = state.Solver;
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (var i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
                 if (nodes.InitialConditions.ContainsKey(node.Name))
                 {
-                    double ic = nodes.InitialConditions[node.Name];
+                    var ic = nodes.InitialConditions[node.Name];
                     if (ZeroNoncurrentRow(solver, nodes, node.Index))
                     {
                         // Avoid creating sparse elements if it is not necessary

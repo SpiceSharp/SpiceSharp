@@ -41,7 +41,7 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentNullException(nameof(target));
             if (target.Length != Length)
                 throw new ArgumentException("Vector lengths do not match");
-            for (int i = 1; i <= Length; i++)
+            for (var i = 1; i <= Length; i++)
                 target[i] = this[i];
         }
     }

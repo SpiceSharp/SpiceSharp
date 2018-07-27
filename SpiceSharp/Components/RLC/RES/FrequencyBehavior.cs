@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            double conductance = _temp.Conductance;
+            var conductance = _temp.Conductance;
             PosPosPtr.Value += conductance;
             NegNegPtr.Value += conductance;
             PosNegPtr.Value -= conductance;

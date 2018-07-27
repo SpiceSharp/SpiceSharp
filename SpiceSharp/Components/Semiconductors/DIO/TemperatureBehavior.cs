@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            double xcbv = 0.0;
+            var xcbv = 0.0;
 
             // loop through all the instances
             if (!_bp.Temperature.Given)

@@ -4,6 +4,9 @@ using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
+    /// <summary>
+    /// Export for complex properties
+    /// </summary>
     public class ComplexPropertyExport : Export<Complex>
     {
         /// <summary>

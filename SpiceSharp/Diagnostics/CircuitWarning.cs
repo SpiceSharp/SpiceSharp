@@ -31,7 +31,7 @@ namespace SpiceSharp
         /// <param name="message">Message</param>
         public static void Warning(object sender, string message)
         {
-            WarningEventArgs arg = new WarningEventArgs(message);
+            var arg = new WarningEventArgs(message);
             WarningList.Add(message);
             WarningGenerated?.Invoke(sender, arg);
         }

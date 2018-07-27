@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            Complex conductance = state.Laplace * _bp.Capacitance.Value;
+            var conductance = state.Laplace * _bp.Capacitance.Value;
             return (state.Solution[_posNode] - state.Solution[_negNode]) * conductance;
         }
         [ParameterName("p"), ParameterInfo("Capacitor power")]
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            Complex conductance = state.Laplace * _bp.Capacitance.Value;
-            Complex voltage = state.Solution[_posNode] - state.Solution[_negNode];
+            var conductance = state.Laplace * _bp.Capacitance.Value;
+            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
 

@@ -153,7 +153,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vcap = state.Solution[_posNode] - state.Solution[_negNode];
+            var vcap = state.Solution[_posNode] - state.Solution[_negNode];
 
             // Integrate
             QCap.Current = _bp.Capacitance * vcap;

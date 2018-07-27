@@ -252,14 +252,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
-            double vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
 
             var delvd = vd - InternalVoltage;
             var cdhat = Current + Conduct * delvd;
             var cd = Current;
 
             // check convergence
-            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsoluteTolerance;
+            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 state.IsConvergent = false;

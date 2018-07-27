@@ -32,7 +32,7 @@ namespace SpiceSharp.Algebra.Solve
         {
             _extToInt = new int[size + 1];
             _intToExt = new int[size + 1];
-            for (int i = 1; i <= size; i++)
+            for (var i = 1; i <= size; i++)
             {
                 _extToInt[i] = i;
                 _intToExt[i] = i;
@@ -119,7 +119,7 @@ namespace SpiceSharp.Algebra.Solve
             if (_allocated < source.Length || _allocated < target.Length)
                 ExpandTranslation(Math.Max(source.Length, target.Length));
 
-            for (int i = 1; i < _extToInt.Length; i++)
+            for (var i = 1; i < _extToInt.Length; i++)
                 target[_extToInt[i]] = source[i];
         }
 
@@ -143,7 +143,7 @@ namespace SpiceSharp.Algebra.Solve
             if (_allocated < source.Length || _allocated < target.Length)
                 ExpandTranslation(Math.Max(source.Length - 1, target.Length));
 
-            for (int i = 1; i < source.Length; i++)
+            for (var i = 1; i < source.Length; i++)
                 target[_intToExt[i]] = source[i];
         }
 
@@ -161,12 +161,12 @@ namespace SpiceSharp.Algebra.Solve
             }
 
             // Reallocate
-            int oldAllocated = _allocated;
+            var oldAllocated = _allocated;
             _allocated = Math.Max(newLength, (int)(_allocated * ExpansionFactor));
 
             Array.Resize(ref _extToInt, _allocated + 1);
             Array.Resize(ref _intToExt, _allocated + 1);
-            for (int i = oldAllocated + 1; i <= _allocated; i++)
+            for (var i = oldAllocated + 1; i <= _allocated; i++)
             {
                 _extToInt[i] = i;
                 _intToExt[i] = i;

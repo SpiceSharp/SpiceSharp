@@ -225,18 +225,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double arg, sarg, sargsw;
 
             // Get voltages
-            double vbd = _load.VoltageBd;
-            double vbs = _load.VoltageBs;
-            double vgs = _load.VoltageGs;
-            double vds = _load.VoltageDs;
-            double vgd = vgs - vds;
-            double vgb = vgs - vbs;
+            var vbd = _load.VoltageBd;
+            var vbs = _load.VoltageBs;
+            var vgs = _load.VoltageGs;
+            var vds = _load.VoltageDs;
+            var vgd = vgs - vds;
+            var vgb = vgs - vbs;
 
-            double effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            double gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
-            double gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
-            double gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            double oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
             
             if (vbs < _temp.TempDepletionCap)
             {
@@ -333,23 +333,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double arg, sarg, sargsw;
 
             // Get voltages
-            double vbd = _load.VoltageBd;
-            double vbs = _load.VoltageBs;
-            double vgs = _load.VoltageGs;
-            double vds = _load.VoltageDs;
-            double vgd = vgs - vds;
-            double vgb = vgs - vbs;
+            var vbd = _load.VoltageBd;
+            var vbs = _load.VoltageBs;
+            var vgs = _load.VoltageGs;
+            var vds = _load.VoltageDs;
+            var vgd = vgs - vds;
+            var vgb = vgs - vbs;
 
-            double effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            double gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
-            double gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
-            double gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            double oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
-            double gbd = 0.0;
-            double cbd = 0.0;
-            double gbs = 0.0;
-            double cbs = 0.0;
+            var gbd = 0.0;
+            var cbd = 0.0;
+            var gbs = 0.0;
+            var cbs = 0.0;
 
             // Store these voltages
             VoltageGs.Current = vgs;
@@ -545,18 +545,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             */
 
             ChargeGs.Integrate();
-            double gcgs = ChargeGs.Jacobian(capgs);
-            double ceqgs = ChargeGs.RhsCurrent(gcgs, vgs);
+            var gcgs = ChargeGs.Jacobian(capgs);
+            var ceqgs = ChargeGs.RhsCurrent(gcgs, vgs);
             ChargeGd.Integrate();
-            double gcgd = ChargeGd.Jacobian(capgd);
-            double ceqgd = ChargeGd.RhsCurrent(gcgd, vgd);
+            var gcgd = ChargeGd.Jacobian(capgd);
+            var ceqgd = ChargeGd.RhsCurrent(gcgd, vgd);
             ChargeGb.Integrate();
-            double gcgb = ChargeGb.Jacobian(capgb);
-            double ceqgb = ChargeGb.RhsCurrent(gcgb, vgb);
+            var gcgb = ChargeGb.Jacobian(capgb);
+            var ceqgb = ChargeGb.RhsCurrent(gcgb, vgb);
 
             // Load current vector
-            double ceqbs = _mbp.MosfetType * (cbs - gbs * vbs);
-            double ceqbd = _mbp.MosfetType * (cbd - gbd * vbd);
+            var ceqbs = _mbp.MosfetType * (cbs - gbs * vbs);
+            var ceqbd = _mbp.MosfetType * (cbd - gbd * vbd);
             GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
             BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
             DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;
@@ -585,7 +585,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <returns>The timestep that satisfies the LTE</returns>
         public override double Truncate()
         {
-            double timetmp = ChargeGs.LocalTruncationError();
+            var timetmp = ChargeGs.LocalTruncationError();
             timetmp = Math.Min(timetmp, ChargeGd.LocalTruncationError());
             timetmp = Math.Min(timetmp, ChargeGb.LocalTruncationError());
             return timetmp;

@@ -25,7 +25,7 @@ namespace SpiceSharp.Algebra.Matrix
         /// <param name="newElement">New element</param>
         public void Insert(SparseMatrixElement<T> newElement)
         {
-            int column = newElement.Column;
+            var column = newElement.Column;
             SparseMatrixElement<T> element = FirstInRow, lastElement = null;
             while (element != null)
             {
@@ -102,7 +102,7 @@ namespace SpiceSharp.Algebra.Matrix
         /// <param name="column">Column</param>
         public SparseMatrixElement<T> Find(int column)
         {
-            SparseMatrixElement<T> element = FirstInRow;
+            var element = FirstInRow;
             while (element != null)
             {
                 if (element.Column == column)
@@ -153,7 +153,7 @@ namespace SpiceSharp.Algebra.Matrix
                 }
 
                 // Move the element back
-                SparseMatrixElement<T> element = second.PreviousInRow;
+                var element = second.PreviousInRow;
                 Remove(second);
                 while (element.PreviousInRow != null && element.PreviousInRow.Column > columnFirst)
                     element = element.PreviousInRow;
@@ -178,7 +178,7 @@ namespace SpiceSharp.Algebra.Matrix
                 }
 
                 // Move the element forward
-                SparseMatrixElement<T> element = first.NextInRow;
+                var element = first.NextInRow;
                 Remove(first);
                 while (element.NextInRow != null && element.NextInRow.Column < columnSecond)
                     element = element.NextInRow;
@@ -231,7 +231,7 @@ namespace SpiceSharp.Algebra.Matrix
                     second.PreviousInRow.NextInRow = first;
 
                     // Swap element links
-                    SparseMatrixElement<T> element = first.PreviousInRow;
+                    var element = first.PreviousInRow;
                     first.PreviousInRow = second.PreviousInRow;
                     second.PreviousInRow = element;
 

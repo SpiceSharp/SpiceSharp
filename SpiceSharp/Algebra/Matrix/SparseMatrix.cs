@@ -38,12 +38,12 @@ namespace SpiceSharp.Algebra
 
             // Allocate rows
             _rows = new Row<T>[InitialSize + 1];
-            for (int i = 1; i <= InitialSize; i++)
+            for (var i = 1; i <= InitialSize; i++)
                 _rows[i] = new Row<T>();
 
             // Allocate columns
             _columns = new Column<T>[InitialSize + 1];
-            for (int i = 1; i <= InitialSize; i++)
+            for (var i = 1; i <= InitialSize; i++)
                 _columns[i] = new Column<T>();
 
             // Other
@@ -62,12 +62,12 @@ namespace SpiceSharp.Algebra
 
             // Allocate rows
             _rows = new Row<T>[_allocatedSize + 1];
-            for (int i = 1; i <= _allocatedSize; i++)
+            for (var i = 1; i <= _allocatedSize; i++)
                 _rows[i] = new Row<T>();
 
             // Allocate columns
             _columns = new Column<T>[_allocatedSize + 1];
-            for (int i = 1; i <= _allocatedSize; i++)
+            for (var i = 1; i <= _allocatedSize; i++)
                 _columns[i] = new Column<T>();
 
             // Other
@@ -220,8 +220,8 @@ namespace SpiceSharp.Algebra
             }
 
             // Get the two elements
-            SparseMatrixElement<T> row1Element = _rows[row1].FirstInRow;
-            SparseMatrixElement<T> row2Element = _rows[row2].FirstInRow;
+            var row1Element = _rows[row1].FirstInRow;
+            var row2Element = _rows[row2].FirstInRow;
 
             // Swap the two rows
             var tmpRow = _rows[row1];
@@ -298,8 +298,8 @@ namespace SpiceSharp.Algebra
             }
 
             // Get the two elements
-            SparseMatrixElement<T> column1Element = _columns[column1].FirstInColumn;
-            SparseMatrixElement<T> column2Element = _columns[column2].FirstInColumn;
+            var column1Element = _columns[column1].FirstInColumn;
+            var column2Element = _columns[column2].FirstInColumn;
 
             // Swap the two rows
             var tmpColumn = _columns[column1];
@@ -369,19 +369,19 @@ namespace SpiceSharp.Algebra
             // No need to allocate new vectors
             if (newSize <= _allocatedSize)
                 return;
-            int oldAllocatedSize = _allocatedSize;
+            var oldAllocatedSize = _allocatedSize;
 
             // Allocate some extra space if necessary
             newSize = Math.Max(newSize, (int)(_allocatedSize * ExpansionFactor));
 
             // Resize rows
             Array.Resize(ref _rows, newSize + 1);
-            for (int i = oldAllocatedSize + 1; i <= newSize; i++)
+            for (var i = oldAllocatedSize + 1; i <= newSize; i++)
                 _rows[i] = new Row<T>();
 
             // Resize columns
             Array.Resize(ref _columns, newSize + 1);
-            for (int i = oldAllocatedSize + 1; i <= newSize; i++)
+            for (var i = oldAllocatedSize + 1; i <= newSize; i++)
                 _columns[i] = new Column<T>();
 
             // Other

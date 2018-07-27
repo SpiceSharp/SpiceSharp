@@ -150,10 +150,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = simulation.RealState;
             double capd;
-            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // charge storage elements
-            double czero = _temp.TempJunctionCap * _bp.Area;
+            var czero = _temp.TempJunctionCap * _bp.Area;
             if (vd < _temp.TempDepletionCap)
             {
                 var arg = 1 - vd / _mbp.JunctionPotential;
@@ -164,7 +164,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
             else
             {
-                double czof2 = czero / _modeltemp.F2;
+                var czof2 = czero / _modeltemp.F2;
                 CapCharge.Current = _mbp.TransitTime * _load.Current + czero * _temp.TempFactor1 + czof2 * (_modeltemp.F3 * (vd -
                     _temp.TempDepletionCap) + _mbp.GradingCoefficient / (_mbp.JunctionPotential + _mbp.JunctionPotential) * (vd * vd - _temp.TempDepletionCap * _temp.TempDepletionCap));
                 capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
@@ -182,15 +182,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // This is the same calculation
             GetDcState(simulation);
 
             // Integrate
             CapCharge.Integrate();
-            double geq = CapCharge.Jacobian(Capacitance);
-            double ceq = CapCharge.RhsCurrent(geq, vd);
+            var geq = CapCharge.Jacobian(Capacitance);
+            var ceq = CapCharge.RhsCurrent(geq, vd);
 
             // Store the current
             Current = _load.Current + CapCharge.Derivative;

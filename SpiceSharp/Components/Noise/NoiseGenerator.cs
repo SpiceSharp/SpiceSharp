@@ -65,8 +65,8 @@ namespace SpiceSharp.Components.NoiseSources
                 throw new ArgumentNullException(nameof(nodes));
 
             // Get the nodes
-            int[] mapped = new int[nodes.Length];
-            for (int i = 0; i < _pins.Length; i++)
+            var mapped = new int[nodes.Length];
+            for (var i = 0; i < _pins.Length; i++)
             {
                 if (_pins[i] >= nodes.Length)
                     throw new CircuitException("Not enough pins to find node {0}".FormatString(_pins[i]));
@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.NoiseSources
 
             // Calculate the noise
             Noise = CalculateNoise(simulation);
-            double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
+            var lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
             if (noise.DeltaFrequency.Equals(0.0))
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.NoiseSources
             else
             {
                 // Integrate the output noise
-                double tempOnoise = noise.Integrate(Noise, lnNdens, LogNoise);
-                double tempInoise = noise.Integrate(Noise * noise.GainInverseSquared, lnNdens + noise.LogInverseGain, LogNoise + noise.LogInverseGain);
+                var tempOnoise = noise.Integrate(Noise, lnNdens, LogNoise);
+                var tempInoise = noise.Integrate(Noise * noise.GainInverseSquared, lnNdens + noise.LogInverseGain, LogNoise + noise.LogInverseGain);
                 LogNoise = lnNdens;
 
                 // Add integrated quantity

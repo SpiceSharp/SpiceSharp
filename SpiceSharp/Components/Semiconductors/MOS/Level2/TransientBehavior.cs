@@ -399,10 +399,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             VoltageBs.Current = vbs;
             VoltageGs.Current = vgs;
 
-            double gbd = 0.0;
-            double cbd = 0.0;
-            double gbs = 0.0;
-            double cbs = 0.0;
+            var gbd = 0.0;
+            var cbd = 0.0;
+            var gbs = 0.0;
+            var cbs = 0.0;
 
             var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
             var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
@@ -622,7 +622,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <returns>The timestep that satisfies the LTE</returns>
         public override double Truncate()
         {
-            double timetmp = ChargeGs.LocalTruncationError();
+            var timetmp = ChargeGs.LocalTruncationError();
             timetmp = Math.Min(timetmp, ChargeGd.LocalTruncationError());
             timetmp = Math.Min(timetmp, ChargeGb.LocalTruncationError());
             return timetmp;

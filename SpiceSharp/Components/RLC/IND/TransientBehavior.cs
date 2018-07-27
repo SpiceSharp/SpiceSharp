@@ -146,7 +146,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                UpdateFluxEventArgs args = new UpdateFluxEventArgs(_bp.Inductance, state.Solution[_branchEq], _flux, state);
+                var args = new UpdateFluxEventArgs(_bp.Inductance, state.Solution[_branchEq], _flux, state);
                 UpdateFlux.Invoke(this, args);
             }
 

@@ -334,10 +334,10 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("[");
             var element = First;
-            for (int i = 1; i <= Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
                     element = element.Below;
@@ -355,10 +355,10 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("[");
             var element = First;
-            for (int i = 1; i <= Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
                     element = element.Below;

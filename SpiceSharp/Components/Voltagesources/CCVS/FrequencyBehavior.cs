@@ -51,8 +51,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[_posNode] - state.Solution[_negNode];
-            Complex i = state.Solution[_branchEq];
+            var v = state.Solution[_posNode] - state.Solution[_negNode];
+            var i = state.Solution[_branchEq];
             return -v * Complex.Conjugate(i);
         }
 

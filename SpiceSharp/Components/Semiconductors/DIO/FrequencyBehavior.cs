@@ -58,8 +58,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            Complex geq = Capacitance * state.Laplace + _load.Conduct;
-            Complex voltage = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var geq = Capacitance * state.Laplace + _load.Conduct;
+            var voltage = state.Solution[_posPrimeNode] - state.Solution[_negNode];
             return voltage * geq;
         }
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
@@ -68,9 +68,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            Complex geq = Capacitance * state.Laplace + _load.Conduct;
-            Complex current = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) * geq;
-            Complex voltage = state.Solution[_posNode] - state.Solution[_negNode];
+            var geq = Capacitance * state.Laplace + _load.Conduct;
+            var current = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) * geq;
+            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
             return voltage * -Complex.Conjugate(current);
         }
 
@@ -160,7 +160,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = simulation.RealState;
             double capd;
-            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // charge storage elements
             var czero = _temp.TempJunctionCap * _bp.Area;

@@ -56,7 +56,7 @@ namespace SpiceSharp.IntegrationMethods
             : base(length)
         {
             _history = new T[length];
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
                 _history[i] = defaultValue;
         }
 
@@ -71,7 +71,7 @@ namespace SpiceSharp.IntegrationMethods
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
                 _history[i] = generator(i);
         }
 
@@ -80,8 +80,8 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public override void Cycle()
         {
-            T tmp = _history[Length - 1];
-            for (int i = Length - 1; i > 0; i--)
+            var tmp = _history[Length - 1];
+            for (var i = Length - 1; i > 0; i--)
                 _history[i] = _history[i - 1];
             _history[0] = tmp;
         }
@@ -93,7 +93,7 @@ namespace SpiceSharp.IntegrationMethods
         public override void Store(T newValue)
         {
             // Shift the history
-            for (int i = Length - 1; i > 0; i--)
+            for (var i = Length - 1; i > 0; i--)
                 _history[i] = _history[i - 1];
             _history[0] = newValue;
         }
@@ -104,7 +104,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="value">Value</param>
         public override void Clear(T value)
         {
-            for (int i = 0; i < Length; i++)
+            for (var i = 0; i < Length; i++)
                 _history[i] = value;
         }
 
@@ -117,7 +117,7 @@ namespace SpiceSharp.IntegrationMethods
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
 
-            for (int i = 0; i < Length; i++)
+            for (var i = 0; i < Length; i++)
                 _history[i] = generator(i);
         }
 

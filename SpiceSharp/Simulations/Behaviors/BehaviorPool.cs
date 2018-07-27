@@ -36,7 +36,7 @@ namespace SpiceSharp.Behaviors
             eb.Register(behavior);
 
             // Store in the behavior list
-            Type basetype = behavior.GetType().GetTypeInfo().BaseType ?? throw new CircuitException("Invalid behavior");
+            var basetype = behavior.GetType().GetTypeInfo().BaseType ?? throw new CircuitException("Invalid behavior");
             if (!_behaviors.TryGetValue(basetype, out var list))
             {
                 list = new List<Behavior>();
@@ -52,7 +52,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public BehaviorList<T> GetBehaviorList<T>() where T : Behavior
         {
-            if (_behaviors.TryGetValue(typeof(T), out List<Behavior> list))
+            if (_behaviors.TryGetValue(typeof(T), out var list))
                 return new BehaviorList<T>(list.Cast<T>());
 
             return new BehaviorList<T>(new T[0]);
@@ -65,7 +65,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public EntityBehaviorDictionary GetEntityBehaviors(Identifier name)
         {
-            if (_entityBehaviors.TryGetValue(name, out EntityBehaviorDictionary result))
+            if (_entityBehaviors.TryGetValue(name, out var result))
                 return result;
             return null;
         }

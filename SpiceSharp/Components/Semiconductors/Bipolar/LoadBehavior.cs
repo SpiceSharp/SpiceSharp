@@ -271,7 +271,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 vbc = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
 
                 // Limit nonlinear branch voltages
-                bool limited = false;
+                var limited = false;
                 vbe = Semiconductor.LimitJunction(vbe, VoltageBe, vt, _temp.TempVCritical, ref limited);
                 vbc = Semiconductor.LimitJunction(vbc, VoltageBc, vt, _temp.TempVCritical, ref limited);
                 if (limited)
@@ -352,7 +352,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
 
             // Excess phase calculation
-            ExcessPhaseEventArgs ep = new ExcessPhaseEventArgs
+            var ep = new ExcessPhaseEventArgs
             {
                 CollectorCurrent = 0.0,
                 ExcessPhaseCurrent = CurrentBe,
@@ -443,7 +443,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var cb = BaseCurrent;
 
             // Check convergence
-            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;
+            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;
             if (Math.Abs(cchat - cc) > tol)
             {
                 state.IsConvergent = false;

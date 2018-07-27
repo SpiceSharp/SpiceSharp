@@ -163,7 +163,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double time = 0.0;
+            var time = 0.0;
             double value;
 
             PosBranchPtr.Value += 1;

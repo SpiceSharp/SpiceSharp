@@ -225,7 +225,7 @@ namespace SpiceSharp
             var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Set the property if any
-            bool isset = false;
+            var isset = false;
             foreach (var member in members)
             {
                 // Skip members that are not interesting to use
@@ -276,7 +276,7 @@ namespace SpiceSharp
             var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Set the property if any
-            bool isset = false;
+            var isset = false;
             foreach (var member in members)
             {
                 // Skip members that are not interesting to use
@@ -310,7 +310,7 @@ namespace SpiceSharp
             var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             // Set the property if any
-            bool isset = false;
+            var isset = false;
             foreach (var member in members)
             {
                 // Skip members that are not interesting to us

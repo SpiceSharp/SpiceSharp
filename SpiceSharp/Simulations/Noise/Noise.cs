@@ -86,7 +86,7 @@ namespace SpiceSharp.Simulations
             // Remove references
             NoiseState.Destroy();
             NoiseState = null;
-            for (int i = 0; i < NoiseBehaviors.Count; i++)
+            for (var i = 0; i < NoiseBehaviors.Count; i++)
                 NoiseBehaviors[i].Unsetup();
             NoiseBehaviors = null;
             NoiseConfiguration = null;
@@ -110,8 +110,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            int posOutNode = noiseconfig.Output != null ? Nodes.GetNode(noiseconfig.Output).Index : 0;
-            int negOutNode = noiseconfig.OutputRef != null ? Nodes.GetNode(noiseconfig.OutputRef).Index : 0;
+            var posOutNode = noiseconfig.Output != null ? Nodes.GetNode(noiseconfig.Output).Index : 0;
+            var negOutNode = noiseconfig.OutputRef != null ? Nodes.GetNode(noiseconfig.OutputRef).Index : 0;
 
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
@@ -123,17 +123,17 @@ namespace SpiceSharp.Simulations
             state.Sparse |= RealState.SparseStates.AcShouldReorder;
 
             // Connect noise sources
-            for (int i = 0; i < NoiseBehaviors.Count; i++)
+            for (var i = 0; i < NoiseBehaviors.Count; i++)
                 NoiseBehaviors[i].ConnectNoise();
 
             // Loop through noise figures
-            foreach (double freq in FrequencySweep.Points)
+            foreach (var freq in FrequencySweep.Points)
             {
                 nstate.Frequency = freq;
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
                 AcIterate();
 
-                Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
+                var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                 nstate.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
@@ -142,7 +142,7 @@ namespace SpiceSharp.Simulations
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 nstate.OutputNoiseDensity = 0.0;
-                for (int i = 0; i < NoiseBehaviors.Count; i++)
+                for (var i = 0; i < NoiseBehaviors.Count; i++)
                     NoiseBehaviors[i].Noise(this);
 
                 // Export the data

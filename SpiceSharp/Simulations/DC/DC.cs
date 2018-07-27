@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
             var config = new DcConfiguration();
-            SweepConfiguration s = new SweepConfiguration(source, start, stop, step);
+            var s = new SweepConfiguration(source, start, stop, step);
             config.Sweeps.Add(s);
             ParameterSets.Add(config);
         }
@@ -107,12 +107,12 @@ namespace SpiceSharp.Simulations
 
             // Initialize
             Sweeps = new NestedSweeps(dcconfig.Sweeps);
-            Parameter<double>[] swept = new Parameter<double>[Sweeps.Count];
-            Parameter<double>[] original = new Parameter<double>[Sweeps.Count];
-            int levelNeedsTemperature = -1;
+            var swept = new Parameter<double>[Sweeps.Count];
+            var original = new Parameter<double>[Sweeps.Count];
+            var levelNeedsTemperature = -1;
 
             // Initialize first time
-            for (int i = 0; i < dcconfig.Sweeps.Count; i++)
+            for (var i = 0; i < dcconfig.Sweeps.Count; i++)
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
@@ -152,12 +152,12 @@ namespace SpiceSharp.Simulations
             // Execute temperature behaviors if necessary the first time
             if (levelNeedsTemperature >= 0)
             {
-                for (int i = 0; i < TemperatureBehaviors.Count; i++)
+                for (var i = 0; i < TemperatureBehaviors.Count; i++)
                     TemperatureBehaviors[i].Temperature(this);
             }
 
             // Execute the sweeps
-            int level = Sweeps.Count - 1;
+            var level = Sweeps.Count - 1;
             while (level >= 0)
             {
                 // Fill the values with start values
@@ -192,14 +192,14 @@ namespace SpiceSharp.Simulations
                     // If temperature behavior is needed for this level or higher, run behaviors
                     if (levelNeedsTemperature >= level)
                     {
-                        for (int i = 0; i < TemperatureBehaviors.Count; i++)
+                        for (var i = 0; i < TemperatureBehaviors.Count; i++)
                             TemperatureBehaviors[i].Temperature(this);
                     }
                 }
             }
 
             // Restore all the parameters of the swept components
-            for (int i = 0; i < Sweeps.Count; i++)
+            for (var i = 0; i < Sweeps.Count; i++)
                 swept[i].CopyFrom(original[i]);
         }
 

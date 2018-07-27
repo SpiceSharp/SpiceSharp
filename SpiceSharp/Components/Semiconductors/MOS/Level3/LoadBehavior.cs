@@ -427,9 +427,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
                 /* equivalence (xlamda, alpha), (vbp, theta), (uexp, eta), (utra, xkappa) */
 
-                double coeff0 = 0.0631353e0;
-                double coeff1 = 0.8013292e0;
-                double coeff2 = -0.01110777e0;
+                var coeff0 = 0.0631353e0;
+                var coeff1 = 0.8013292e0;
+                var coeff2 = -0.01110777e0;
                 double phibs; /* phi - vbs */
                 double sqphbs; /* square root of phibs */
                 double dsqdvb; /*  */
@@ -437,8 +437,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 double dfsdvb;
                 double dxndvb = 0.0, dvodvb = 0.0, dvodvd = 0.0,
                     dvsdvg, dvsdvb, dvsdvd, xn = 0.0;
-                double onvdsc = 0.0;
-                double fdrain = 0.0;
+                var onvdsc = 0.0;
+                var fdrain = 0.0;
                 double dfddvg = 0.0, dfddvb = 0.0,
                     dfddvd = 0.0,
                     delxl, dldvd,
@@ -860,7 +860,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /*
              *  check convergence
              */
-            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
+            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsConvergent = false;

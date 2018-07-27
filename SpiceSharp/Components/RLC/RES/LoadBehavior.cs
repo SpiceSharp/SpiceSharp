@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            double v = state.Solution[_posNode] - state.Solution[_negNode];
+            var v = state.Solution[_posNode] - state.Solution[_negNode];
             return v * v * _temp.Conductance;
         }
 
@@ -143,7 +143,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            double conductance = _temp.Conductance;
+            var conductance = _temp.Conductance;
             PosPosPtr.Value += conductance;
             NegNegPtr.Value += conductance;
             PosNegPtr.Value -= conductance;

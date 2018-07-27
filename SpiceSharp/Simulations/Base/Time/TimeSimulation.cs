@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state pool and register states
             StatePool = new StatePool(Method);
-            for (int i = 0; i < TransientBehaviors.Count; i++)
+            for (var i = 0; i < TransientBehaviors.Count; i++)
             {
                 TransientBehaviors[i].GetEquationPointers(RealState.Solver);
                 TransientBehaviors[i].CreateStates(StatePool);
@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (int i = 0; i < TransientBehaviors.Count; i++)
+            for (var i = 0; i < TransientBehaviors.Count; i++)
                 TransientBehaviors[i].Unsetup();
             TransientBehaviors = null;
             Method = null;
@@ -129,8 +129,8 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var solver = state.Solver;
-            bool pass = false;
-            int iterno = 0;
+            var pass = false;
+            var iterno = 0;
 
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIc && state.Domain == RealState.DomainType.Time)
@@ -187,7 +187,7 @@ namespace SpiceSharp.Simulations
                     // Decompose
                     Statistics.DecompositionTime.Start();
                     solver.ApplyDiagonalGmin(state.DiagonalGmin);
-                    bool success = solver.Factor();
+                    var success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
 
                     if (!success)
@@ -279,9 +279,9 @@ namespace SpiceSharp.Simulations
             state.Solver.Clear();
 
             // Load all devices
-            for (int i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < LoadBehaviors.Count; i++)
                 LoadBehaviors[i].Load(this);
-            for (int i = 0; i < TransientBehaviors.Count; i++)
+            for (var i = 0; i < TransientBehaviors.Count; i++)
                 TransientBehaviors[i].Transient(this);
 
             // Keep statistics

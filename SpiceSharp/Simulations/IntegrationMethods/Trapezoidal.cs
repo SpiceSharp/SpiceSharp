@@ -40,7 +40,7 @@ namespace SpiceSharp.IntegrationMethods
             base.Initialize(behaviors);
 
             _ag = new double[MaxOrder];
-            for (int i = 0; i < MaxOrder; i++)
+            for (var i = 0; i < MaxOrder; i++)
                 _ag[i] = 0.0;
         }
 
@@ -90,9 +90,9 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case 1:
                     // Divided difference approach
-                    for (int i = 1; i <= Solutions[0].Length; i++)
+                    for (var i = 1; i <= Solutions[0].Length; i++)
                     {
-                        double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
+                        var dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
                         Prediction[i] = Solutions[0][i] + DeltaOld[0] * dd0;
                     }
                     break;
@@ -101,10 +101,10 @@ namespace SpiceSharp.IntegrationMethods
                     // Adams-Bashforth method (second order for variable timesteps)
                     var b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
                     var a = 1 - b;
-                    for (int i = 1; i <= Solutions[0].Length; i++)
+                    for (var i = 1; i <= Solutions[0].Length; i++)
                     {
-                        double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
-                        double dd1 = (Solutions[1][i] - Solutions[2][i]) / DeltaOld[2];
+                        var dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
+                        var dd1 = (Solutions[1][i] - Solutions[2][i]) / DeltaOld[2];
                         Prediction[i] = Solutions[0][i] + (b * dd1 + a * dd0) * DeltaOld[0];
                     }
                     break;
@@ -131,7 +131,7 @@ namespace SpiceSharp.IntegrationMethods
             var simulation = args.Simulation;
             var state = simulation.RealState;
             double tol, diff, tmp;
-            double timetemp = Double.PositiveInfinity;
+            var timetemp = Double.PositiveInfinity;
             var nodes = simulation.Nodes;
             int index;
 
@@ -139,7 +139,7 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    for (int i = 0; i < nodes.Count; i++)
+                    for (var i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
                         if (node.UnknownType != VariableType.Voltage)
@@ -160,7 +160,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 case 2:
-                    for (int i = 0; i < nodes.Count; i++)
+                    for (var i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
                         if (node.UnknownType != VariableType.Voltage)
@@ -169,7 +169,7 @@ namespace SpiceSharp.IntegrationMethods
 
                         // Milne's estimate for the third-order derivative using an Adams-Bashforth predictor and Trapezoidal corrector
                         diff = state.Solution[index] - Prediction[index];
-                        double deriv = DeltaOld[1] / DeltaOld[0];
+                        var deriv = DeltaOld[1] / DeltaOld[0];
                         deriv = diff * 4.0 / (1 + deriv * deriv);
 
                         // Avoid division by zero
@@ -227,36 +227,36 @@ namespace SpiceSharp.IntegrationMethods
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
-            int derivativeIndex = index + 1;
+            var derivativeIndex = index + 1;
             if (index < 0 || derivativeIndex > history.Current.Length)
                 throw new CircuitException("Invalid state index {0}".FormatString(index));
             var current = history.Current;
             var previous = history[1];
 
-            double[] diff = new double[MaxOrder + 2];
-            double[] deltmp = new double[DeltaOld.Length];
+            var diff = new double[MaxOrder + 2];
+            var deltmp = new double[DeltaOld.Length];
 
             // Calculate the tolerance
             // Note: These need to be available in the integration method configuration, defaults are used for now to avoid too much changes
-            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
-            double chargetol = Math.Max(Math.Abs(current[index]), Math.Abs(previous[index]));
+            var volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
+            var chargetol = Math.Max(Math.Abs(current[index]), Math.Abs(previous[index]));
             chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / Delta;
-            double tol = Math.Max(volttol, chargetol);
+            var tol = Math.Max(volttol, chargetol);
 
             // Now divided differences
-            int j = 0;
+            var j = 0;
             foreach (var states in history)
                 diff[j++] = states[index];
-            for (int i = 0; i < deltmp.Length; i++)
+            for (var i = 0; i < deltmp.Length; i++)
                 deltmp[i] = DeltaOld[i];
             j = Order;
             while (true)
             {
-                for (int i = 0; i <= j; i++)
+                for (var i = 0; i <= j; i++)
                     diff[i] = (diff[i] - diff[i + 1]) / deltmp[i];
                 if (--j < 0)
                     break;
-                for (int i = 0; i <= j; i++)
+                for (var i = 0; i <= j; i++)
                     deltmp[i] = deltmp[i + 1] + DeltaOld[i];
             }
 
@@ -268,7 +268,7 @@ namespace SpiceSharp.IntegrationMethods
                 case 2: factor = 0.0833333333; break;
                 default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
-            double del = BaseParameters.TruncationTolerance * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+            var del = BaseParameters.TruncationTolerance * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)
                 del = Math.Sqrt(del);
             else if (Order > 2)

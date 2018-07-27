@@ -67,8 +67,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
-            int inDbrEq1 = _load1.BranchEq;
-            int inDbrEq2 = _load2.BranchEq;
+            var inDbrEq1 = _load1.BranchEq;
+            var inDbrEq2 = _load2.BranchEq;
 
             // Get matrix equations
             Branch1Branch2Ptr = solver.GetMatrixElement(inDbrEq1, inDbrEq2);
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            Complex value = state.Laplace * Factor;
+            var value = state.Laplace * Factor;
 
             // Load Y-matrix
             Branch1Branch2Ptr.Value -= value;

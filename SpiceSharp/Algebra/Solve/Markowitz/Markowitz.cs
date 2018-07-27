@@ -85,11 +85,11 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentNullException(nameof(pivot));
 
             // Get the magnitude of the current pivot
-            double magnitude = Magnitude(pivot.Value);
+            var magnitude = Magnitude(pivot.Value);
 
             // Search for the largest element below the pivot
             var element = pivot.Below;
-            double largest = 0.0;
+            var largest = 0.0;
             while (element != null)
             {
                 largest = Math.Max(largest, Magnitude(element.Value));
@@ -131,10 +131,10 @@ namespace SpiceSharp.Algebra.Solve
             var rhsElement = rhs.First;
 
             // Generate Markowitz row count
-            for (int i = matrix.Size; i >= step; i--)
+            for (var i = matrix.Size; i >= step; i--)
             {
                 // Set count to -1 initially to remove count due to pivot element
-                int count = -1;
+                var count = -1;
                 element = matrix.GetFirstInRow(i);
                 while (element != null && element.Column < step)
                     element = element.Right;
@@ -154,10 +154,10 @@ namespace SpiceSharp.Algebra.Solve
             }
             
             // Generate Markowitz column count
-            for (int i = step; i <= matrix.Size; i++)
+            for (var i = step; i <= matrix.Size; i++)
             {
                 // Set count to -1 initially to remove count due to pivot element
-                int count = -1;
+                var count = -1;
                 element = matrix.GetFirstInColumn(i);
                 while (element != null && element.Row < step)
                     element = element.Below;
@@ -179,7 +179,7 @@ namespace SpiceSharp.Algebra.Solve
         {
             Singletons = 0;
             var size = matrix.Size;
-            for (int i = step; i <= size; i++)
+            for (var i = step; i <= size; i++)
             {
                 // UpdateMarkowitzProduct(i);
                 _markowitzProduct[i] = _markowitzRow[i] * _markowitzColumn[i];
@@ -226,8 +226,8 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentNullException(nameof(pivot));
             int oldProduct;
 
-            int row = pivot.Row;
-            int column = pivot.Column;
+            var row = pivot.Row;
+            var column = pivot.Column;
 
             // If the pivot is a singleton, then we just consumed it
             if (_markowitzProduct[pivot.Row] == 0 || _markowitzProduct[pivot.Column] == 0)
@@ -237,7 +237,7 @@ namespace SpiceSharp.Algebra.Solve
             if (pivot.Row != eliminationStep)
             {
                 // Swap row Markowitz numbers
-                int tmp = _markowitzRow[row];
+                var tmp = _markowitzRow[row];
                 _markowitzRow[row] = _markowitzRow[eliminationStep];
                 _markowitzRow[eliminationStep] = tmp;
 
@@ -260,7 +260,7 @@ namespace SpiceSharp.Algebra.Solve
             if (column != eliminationStep)
             {
                 // Swap column Markowitz numbers
-                int tmp = _markowitzColumn[column];
+                var tmp = _markowitzColumn[column];
                 _markowitzColumn[column] = _markowitzColumn[eliminationStep];
                 _markowitzColumn[eliminationStep] = tmp;
 
@@ -309,9 +309,9 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentNullException(nameof(pivot));
 
             // Go through all elements below the pivot. If they exist, then we can subtract 1 from the Markowitz row vector!
-            for (MatrixElement<T> column = pivot.Below; column != null; column = column.Below)
+            for (var column = pivot.Below; column != null; column = column.Below)
             {
-                int row = column.Row;
+                var row = column.Row;
                 
                 // Update the Markowitz product
                 _markowitzProduct[row] -= _markowitzColumn[row];
@@ -323,9 +323,9 @@ namespace SpiceSharp.Algebra.Solve
             }
 
             // go through all elements right of the pivot. For every element, we can subtract 1 from the Markowitz column vector!
-            for (MatrixElement<T> row = pivot.Right; row != null; row = row.Right)
+            for (var row = pivot.Right; row != null; row = row.Right)
             {
-                int column = row.Column;
+                var column = row.Column;
                 
                 // Update the Markowitz product
                 _markowitzProduct[column] -= _markowitzRow[column];
@@ -348,7 +348,7 @@ namespace SpiceSharp.Algebra.Solve
         {
             foreach (var strategy in Strategies)
             {
-                MatrixElement<T> chosen = strategy.FindPivot(this, matrix, eliminationStep);
+                var chosen = strategy.FindPivot(this, matrix, eliminationStep);
                 if (chosen != null)
                     return chosen;
             }

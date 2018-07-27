@@ -69,7 +69,7 @@ namespace SpiceSharp.Simulations
 
             FrequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Objects);
             var solver = ComplexState.Solver;
-            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+            for (var i = 0; i < FrequencyBehaviors.Count; i++)
                 FrequencyBehaviors[i].GetEquationPointers(solver);
         }
 
@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+            for (var i = 0; i < FrequencyBehaviors.Count; i++)
                 FrequencyBehaviors[i].Unsetup();
             FrequencyBehaviors = null;
 
@@ -119,7 +119,7 @@ namespace SpiceSharp.Simulations
 
             // Load AC
             cstate.Solver.Clear();
-            for (int i = 0; i < FrequencyBehaviors.Count; i++)
+            for (var i = 0; i < FrequencyBehaviors.Count; i++)
                 FrequencyBehaviors[i].Load(this);
 
             if ((cstate.Sparse & ComplexState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))

@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
                 Current = Initial;
 
                 // Go through the points
-                for (int i = 0; i < Count; i++)
+                for (var i = 0; i < Count; i++)
                 {
                     yield return Current;
 

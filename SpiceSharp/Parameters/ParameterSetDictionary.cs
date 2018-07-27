@@ -107,7 +107,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public bool SetParameter<T>(string name, T value) where T : struct
         {
-            bool isset = false;
+            var isset = false;
             foreach (var ps in Values)
             {
                 if (ps.SetParameter(name, value))
@@ -141,7 +141,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public bool SetParameter(string name)
         {
-            bool isset = false;
+            var isset = false;
             foreach (var ps in Values)
             {
                 if (ps.SetParameter(name))

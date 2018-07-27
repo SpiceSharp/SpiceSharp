@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
              * care of first.
              */
             MatrixElement<T> twin1 = null, twin2 = null;
-            int start = 1;
+            var start = 1;
             bool anotherPassNeeded;
 
             do
@@ -50,11 +50,11 @@ namespace SpiceSharp.Simulations
                 anotherPassNeeded = swapped = false;
 
                 // Search for zero diagonals with lone twins. 
-                for (int j = start; j <= solver.Order; j++)
+                for (var j = start; j <= solver.Order; j++)
                 {
                     if (solver.ReorderedDiagonal(j) == null)
                     {
-                        int twins = CountTwins(solver, j, ref twin1, ref twin2, magnitude);
+                        var twins = CountTwins(solver, j, ref twin1, ref twin2, magnitude);
                         if (twins == 1)
                         {
                             // Lone twins found, swap
@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
                 // All lone twins are gone, look for zero diagonals with multiple twins. 
                 if (anotherPassNeeded)
                 {
-                    for (int j = start; !swapped && j <= solver.Order; j++)
+                    for (var j = start; !swapped && j <= solver.Order; j++)
                     {
                         if (solver.ReorderedDiagonal(j) == null)
                         {
@@ -101,7 +101,7 @@ namespace SpiceSharp.Simulations
                 return;
 
             // Add to the diagonal
-            for (int i = 1; i <= solver.Order; i++)
+            for (var i = 1; i <= solver.Order; i++)
             {
                 var diagonal = solver.ReorderedDiagonal(i);
                 if (diagonal != null)
@@ -120,7 +120,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         private static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
-            int twins = 0;
+            var twins = 0;
 
             // Begin `CountTwins'. 
 

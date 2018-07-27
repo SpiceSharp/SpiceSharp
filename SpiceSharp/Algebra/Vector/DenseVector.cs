@@ -70,7 +70,7 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
-            for (int i = 0; i < Length; i++)
+            for (var i = 0; i < Length; i++)
                 vector._values[i] = _values[i];
         }
 
@@ -84,7 +84,7 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
-            for (int i = 0; i < Length; i++)
+            for (var i = 0; i < Length; i++)
                 _values[i] = vector._values[i];
         }
 
@@ -94,9 +94,9 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("[");
-            for (int i = 1; i <= Length; i++)
+            for (var i = 1; i <= Length; i++)
                 sb.AppendLine(_values[i].ToString());
             sb.AppendLine("]");
             return sb.ToString();
@@ -110,9 +110,9 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("[");
-            for (int i = 1; i <= Length; i++)
+            for (var i = 1; i <= Length; i++)
                 sb.AppendLine(_values[i].ToString(format, formatProvider));
             sb.AppendLine("]");
             return sb.ToString();

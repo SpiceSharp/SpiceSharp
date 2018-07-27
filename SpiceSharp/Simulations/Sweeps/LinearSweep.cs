@@ -19,7 +19,7 @@ namespace SpiceSharp.Simulations
                 Current = Initial;
 
                 // Go through the list
-                for (int i = 0; i < Count; i++)
+                for (var i = 0; i < Count; i++)
                 {
                     Current = Initial + (Final - Initial) * i / Count;
                     yield return Current;

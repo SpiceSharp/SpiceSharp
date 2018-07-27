@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(nodes));
             if (nodes.Length != _connections.Length)
                 throw new CircuitException("{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length));
-            for (int i = 0; i < nodes.Length; i++)
+            for (var i = 0; i < nodes.Length; i++)
             {
                 if (nodes[i] == null)
                     throw new ArgumentNullException("node " + (i + 1));
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            T behavior = base.CreateBehavior<T>(simulation);
+            var behavior = base.CreateBehavior<T>(simulation);
 
             // Extra functionality for behaviors that can be connected
             if (behavior is IConnectedBehavior cb)
@@ -121,8 +121,8 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(nodes));
 
             // Map connected nodes
-            int[] indexes = new int[_connections.Length];
-            for (int i = 0; i < _connections.Length; i++)
+            var indexes = new int[_connections.Length];
+            for (var i = 0; i < _connections.Length; i++)
                 indexes[i] = nodes.MapNode(_connections[i]).Index;
             return indexes;
         }

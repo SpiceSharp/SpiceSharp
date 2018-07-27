@@ -158,8 +158,8 @@ namespace SpiceSharp.Algebra
             if (externalIndexes == null)
                 throw new ArgumentNullException(nameof(externalIndexes));
 
-            int row = Row[externalIndexes.Item1];
-            int column = Column[externalIndexes.Item2];
+            var row = Row[externalIndexes.Item1];
+            var column = Column[externalIndexes.Item2];
             return new Tuple<int, int>(row, column);
         }
 
@@ -173,8 +173,8 @@ namespace SpiceSharp.Algebra
             if (internalIndexes == null)
                 throw new ArgumentNullException(nameof(internalIndexes));
 
-            int row = Row.Reverse(internalIndexes.Item1);
-            int column = Column.Reverse(internalIndexes.Item2);
+            var row = Row.Reverse(internalIndexes.Item1);
+            var column = Column.Reverse(internalIndexes.Item2);
             return new Tuple<int, int>(row, column);
         }
 
@@ -208,7 +208,7 @@ namespace SpiceSharp.Algebra
         {
             // Clear all matrix elements
             Matrix.FindElement(0, 0).Value = default(T);
-            for (int r = 1; r <= Matrix.Size; r++)
+            for (var r = 1; r <= Matrix.Size; r++)
             {
                 var element = Matrix.GetFirstInRow(r);
                 while (element != null)
@@ -245,22 +245,22 @@ namespace SpiceSharp.Algebra
         public string ToString(string format, IFormatProvider formatProvider)
         {
             // Build a matrix of strings for each element of the matrix
-            string[][] displayData = new string[Matrix.Size][];
-            int[] columnWidths = new int[Matrix.Size + 1];
+            var displayData = new string[Matrix.Size][];
+            var columnWidths = new int[Matrix.Size + 1];
 
             var rhsElement = Rhs.First;
-            for (int r = 1; r <= Matrix.Size; r++)
+            for (var r = 1; r <= Matrix.Size; r++)
             {
                 var element = Matrix.GetFirstInRow(r);
 
                 // Get the matching external row index
-                int extRow = Row.Reverse(r) - 1;
+                var extRow = Row.Reverse(r) - 1;
                 displayData[extRow] = new string[Matrix.Size + 1];
 
-                for (int c = 1; c <= Matrix.Size; c++)
+                for (var c = 1; c <= Matrix.Size; c++)
                 {
                     // Get the matching external column index
-                    int extColumn = Column.Reverse(c) - 1;
+                    var extColumn = Column.Reverse(c) - 1;
 
                     // go to the next element if necessary
                     if (element != null && element.Column < c)
@@ -286,10 +286,10 @@ namespace SpiceSharp.Algebra
             }
 
             // Build the string
-            StringBuilder sb = new StringBuilder();
-            for (int r = 0; r < Matrix.Size; r++)
+            var sb = new StringBuilder();
+            for (var r = 0; r < Matrix.Size; r++)
             {
-                for (int c = 0; c <= Matrix.Size; c++)
+                for (var c = 0; c <= Matrix.Size; c++)
                 {
                     if (c == Matrix.Size)
                         sb.Append(" : ");

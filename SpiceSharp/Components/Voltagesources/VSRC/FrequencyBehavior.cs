@@ -49,8 +49,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[_posNode] - state.Solution[_negNode];
-            Complex i = state.Solution[_branchEq];
+            var v = state.Solution[_posNode] - state.Solution[_negNode];
+            var i = state.Solution[_branchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var ap = provider.GetParameterSet<FrequencyParameters>("entity");
 
             // Calculate AC vector
-            double radians = ap.AcPhase * Math.PI / 180.0;
+            var radians = ap.AcPhase * Math.PI / 180.0;
             Ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
 
             // Get behaviors

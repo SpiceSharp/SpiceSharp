@@ -80,7 +80,7 @@ namespace SpiceSharp.Algebra
             element.Value = 1.0 / element.Value;
 
             // Start factorization
-            for (int step = 2; step <= Matrix.Size; step++)
+            for (var step = 2; step <= Matrix.Size; step++)
             {
                 // Scatter
                 element = Matrix.GetFirstInColumn(step);
@@ -134,7 +134,7 @@ namespace SpiceSharp.Algebra
 
             // Scramble
             var rhsElement = Rhs.First;
-            int index = 0;
+            var index = 0;
             while (rhsElement != null)
             {
                 while (index < rhsElement.Index)
@@ -146,9 +146,9 @@ namespace SpiceSharp.Algebra
                 _intermediate[index++] = 0.0;
 
             // Forward substitution
-            for (int i = 1; i <= Matrix.Size; i++)
+            for (var i = 1; i <= Matrix.Size; i++)
             {
-                double temp = _intermediate[i];
+                var temp = _intermediate[i];
 
                 // This step of the substitution is skipped if temp == 0.0
                 if (!temp.Equals(0.0))
@@ -169,9 +169,9 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (int i = Matrix.Size; i > 0; i--)
+            for (var i = Matrix.Size; i > 0; i--)
             {
-                double temp = _intermediate[i];
+                var temp = _intermediate[i];
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Right;
 
@@ -201,19 +201,19 @@ namespace SpiceSharp.Algebra
 
             // Scramble
             var rhsElement = Rhs.First;
-            for (int i = 0; i <= Order; i++)
+            for (var i = 0; i <= Order; i++)
                 _intermediate[i] = 0.0;
             while (rhsElement != null)
             {
-                int newIndex = Column[Row.Reverse(rhsElement.Index)];
+                var newIndex = Column[Row.Reverse(rhsElement.Index)];
                 _intermediate[newIndex] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
 
             // Forward elimination
-            for (int i = 1; i <= Matrix.Size; i++)
+            for (var i = 1; i <= Matrix.Size; i++)
             {
-                double temp = _intermediate[i];
+                var temp = _intermediate[i];
 
                 // This step of the elimination is skipped if temp equals 0
                 if (!temp.Equals(0.0))
@@ -229,9 +229,9 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (int i = Matrix.Size; i > 0; i--)
+            for (var i = Matrix.Size; i > 0; i--)
             {
-                double temp = _intermediate[i];
+                var temp = _intermediate[i];
 
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Below;
@@ -258,7 +258,7 @@ namespace SpiceSharp.Algebra
             if (!IsFixed)
                 FixEquations();
 
-            int step = 1;
+            var step = 1;
             if (!NeedsReordering)
             {
                 // Matrix has been factored before and reordering is not required
@@ -326,7 +326,7 @@ namespace SpiceSharp.Algebra
                 var lower = pivot.Below;
                 while (lower != null)
                 {
-                    int row = lower.Row;
+                    var row = lower.Row;
 
                     // Find element in row that lines up with the current lower triangular element
                     while (sub != null && sub.Row < row)

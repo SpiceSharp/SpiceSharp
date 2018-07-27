@@ -32,16 +32,16 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentException("Invalid elimination step");
 
             MatrixElement<T> chosen = null;
-            long minMarkowitzProduct = long.MaxValue;
+            var minMarkowitzProduct = long.MaxValue;
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
             MatrixElement<T> largestElement = null;
-            int ties = 0;
+            var ties = 0;
 
             // Start search of matrix on column by column basis
-            for (int i = eliminationStep; i <= matrix.Size; i++)
+            for (var i = eliminationStep; i <= matrix.Size; i++)
             {
                 // Find the biggest magnitude in the column for checking valid pivots later
-                double largest = 0.0;
+                var largest = 0.0;
                 var element = matrix.GetLastInColumn(i);
                 while (element != null && element.Row >= eliminationStep)
                 {
@@ -56,8 +56,8 @@ namespace SpiceSharp.Algebra.Solve
                 while (element != null && element.Row >= eliminationStep)
                 {
                     // Find the magnitude and Markowitz product
-                    double magnitude = markowitz.Magnitude(element.Value);
-                    int product = markowitz.RowCount(element.Row) * markowitz.ColumnCount(element.Column);
+                    var magnitude = markowitz.Magnitude(element.Value);
+                    var product = markowitz.RowCount(element.Row) * markowitz.ColumnCount(element.Column);
 
                     // In the case no valid pivot is available, at least return the largest element
                     if (magnitude > largestMagnitude)
@@ -86,7 +86,7 @@ namespace SpiceSharp.Algebra.Solve
                         {
                             // This case handles Markowitz ties
                             ties++;
-                            double ratio = largest / magnitude;
+                            var ratio = largest / magnitude;
                             if (ratio < acceptedRatio)
                             {
                                 chosen = element;

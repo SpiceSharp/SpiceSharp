@@ -174,14 +174,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double arg, sarg, sargsw;
 
             // Get voltages
-            double vbd = _load.VoltageBd;
-            double vbs = _load.VoltageBs;
-            double vgs = _load.VoltageGs;
-            double vds = _load.VoltageDs;
-            double vgd = vgs - vds;
+            var vbd = _load.VoltageBd;
+            var vbs = _load.VoltageBs;
+            var vgs = _load.VoltageGs;
+            var vds = _load.VoltageDs;
+            var vgd = vgs - vds;
 
-            double effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            double oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
              * now we do the hard part of the bulk - drain and bulk - source
