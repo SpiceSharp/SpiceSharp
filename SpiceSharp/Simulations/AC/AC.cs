@@ -40,11 +40,12 @@ namespace SpiceSharp.Simulations
             
             // Calculate the operating point
             cstate.Laplace = 0.0;
-            state.Domain = RealState.DomainType.Frequency;
+            state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
+            state.Domain = RealState.DomainType.Frequency;
             for (var i = 0; i < LoadBehaviors.Count; i++)
                 LoadBehaviors[i].Load(this);
             for (var i = 0; i < FrequencyBehaviors.Count; i++)
