@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// <summary>
     /// Noise behavior for <see cref="Mosfet3"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
+    public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

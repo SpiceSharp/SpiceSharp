@@ -5,13 +5,13 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Behavior for noise analysis
     /// </summary>
-    public abstract class NoiseBehavior : Behavior
+    public abstract class BaseNoiseBehavior : Behavior
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        protected NoiseBehavior(Identifier name) : base(name) { }
+        protected BaseNoiseBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Connect noise sources

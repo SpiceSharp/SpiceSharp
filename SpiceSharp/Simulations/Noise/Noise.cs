@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Noise behaviors
         /// </summary>
-        protected BehaviorList<NoiseBehavior> NoiseBehaviors { get; private set; }
+        protected BehaviorList<BaseNoiseBehavior> NoiseBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, parameters and states
             NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
-            NoiseBehaviors = SetupBehaviors<NoiseBehavior>(circuit.Objects);
+            NoiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Objects);
             NoiseState = States.Get<NoiseState>();
             NoiseState.Initialize(Nodes);
         }

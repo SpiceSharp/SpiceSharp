@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Noise behavior for <see cref="Diode"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
+    public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
