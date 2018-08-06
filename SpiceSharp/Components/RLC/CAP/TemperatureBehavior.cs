@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
             if (!_bp.Capacitance.Given)
                 _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }

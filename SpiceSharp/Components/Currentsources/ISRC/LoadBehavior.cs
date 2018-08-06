@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
 
             // Give some warnings if no value is given
             if (!_bp.DcValue.Given)

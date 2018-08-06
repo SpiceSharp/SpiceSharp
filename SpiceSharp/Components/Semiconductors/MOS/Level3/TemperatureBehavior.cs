@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors

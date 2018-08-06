@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
 
             // Setup the waveform
             _bp.Waveform?.Setup();

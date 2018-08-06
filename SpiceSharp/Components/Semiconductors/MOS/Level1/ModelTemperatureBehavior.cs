@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>();
         }
 
         /// <summary>

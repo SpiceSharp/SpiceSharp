@@ -43,7 +43,7 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The type of Parameters</typeparam>
         /// <param name="name">Name of the parameter set</param>
         /// <returns></returns>
-        public T GetParameterSet<T>(string name) where T : ParameterSet => _parameterSets[name].Get<T>();
+        public T GetParameterSet<T>(string name = "entity") where T : ParameterSet => _parameterSets[name].Get<T>();
 
         /// <summary>
         /// Gets the behaviors for a certain name
@@ -51,6 +51,6 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The type of Behavior</typeparam>
         /// <param name="name">Name of the behavior collection</param>
         /// <returns></returns>
-        public T GetBehavior<T>(string name) where T : Behavior => _entityBehaviors[name].Get<T>();
+        public T GetBehavior<T>(string name = "entity") where T : Behavior => _entityBehaviors[name].Get<T>();
     }
 }

@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
             var bp1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
             var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
 

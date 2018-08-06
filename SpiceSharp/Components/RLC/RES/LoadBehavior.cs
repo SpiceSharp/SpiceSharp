@@ -91,7 +91,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _temp = provider.GetBehavior<TemperatureBehavior>();
         }
 
         /// <summary>

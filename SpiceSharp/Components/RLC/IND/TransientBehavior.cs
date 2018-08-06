@@ -63,10 +63,10 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>();
 
             // Clear all events
             if (UpdateFlux != null)

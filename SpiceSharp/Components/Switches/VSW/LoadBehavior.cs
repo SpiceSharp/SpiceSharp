@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // TODO: This should be part of the parameter...

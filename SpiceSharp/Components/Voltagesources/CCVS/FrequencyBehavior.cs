@@ -72,10 +72,10 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>();
             _vsrcload = provider.GetBehavior<VoltageSourceBehaviors.LoadBehavior>("control");
         }
 

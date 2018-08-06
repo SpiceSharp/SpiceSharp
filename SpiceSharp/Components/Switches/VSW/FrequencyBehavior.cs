@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>();
             _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
         }
 
