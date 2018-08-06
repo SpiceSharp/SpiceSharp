@@ -14,12 +14,11 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_CCCSDC_Expect_Reference()
         {
-            double gain = 0.85;
-            double resistance = 1e4;
+            var gain = 0.85;
+            var resistance = 1e4;
 
             // Build the circuit
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0.0),
                 new CurrentControlledCurrentSource("F1", "0", "out", "V1", gain),
@@ -27,7 +26,7 @@ namespace SpiceSharpTest.Models
                 );
 
             // Make the simulation, exports and references
-            DC dc = new DC("DC", "I1", -10.0, 10.0, 1e-3);
+            var dc = new DC("DC", "I1", -10.0, 10.0, 1e-3);
             Export<double>[] exports = { new RealVoltageExport(dc, "out"), new RealPropertyExport(dc, "R1", "i") };
             Func<double, double>[] references = { sweep => sweep * gain * resistance, sweep => sweep * gain };
             AnalyzeDC(dc, ckt, exports, references);
@@ -36,13 +35,12 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_CCCSSmallSignal_Expect_Reference()
         {
-            double magnitude = 0.6;
-            double gain = 0.85;
-            double resistance = 1e4;
+            var magnitude = 0.6;
+            var gain = 0.85;
+            var resistance = 1e4;
 
             // Build the circuit
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0.0),
                 new CurrentControlledCurrentSource("F1", "0", "out", "V1", gain),
@@ -51,7 +49,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["I1"].SetParameter("acmag", magnitude);
 
             // Make the simulation, exports and references
-            AC ac = new AC("AC", new DecadeSweep(1, 1e4, 3));
+            var ac = new AC("AC", new DecadeSweep(1, 1e4, 3));
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
             AnalyzeAC(ac, ckt, exports, references);

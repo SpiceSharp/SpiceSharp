@@ -70,13 +70,13 @@ namespace SpiceSharpTest.Simulations
         public void When_FloatingRTransient_Expect_Reference()
         {
             // Create the circuit
-            Circuit ckt = new Circuit(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 10.0),
                 new Resistor("R1", "in", "out", 10.0)
             );
 
             // Create the transient analysis
-            Transient tran = new Transient("Tran 1", 1e-6, 10.0);
+            var tran = new Transient("Tran 1", 1e-6, 10.0);
             tran.OnExportSimulationData += (sender, args) =>
             {
                 Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);

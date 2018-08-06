@@ -36,15 +36,15 @@ namespace SpiceSharpTest.Models
         public void When_SineWaveform_Expect_Reference()
         {
             double vo = 0.5, va = 1.8;
-            double freq = 10.0;
+            var freq = 10.0;
             var sine = new Sine(vo, va, freq);
             sine.Setup();
 
             // Simulate a few points of interest
-            double time = 0.0;
+            var time = 0.0;
             while (time < 20.0)
             {
-                double expected = vo + va * Math.Sin(freq * 2.0 * Math.PI * time);
+                var expected = vo + va * Math.Sin(freq * 2.0 * Math.PI * time);
                 Assert.AreEqual(expected, sine.At(time), 1e-12);
                 time += 0.1;
             }

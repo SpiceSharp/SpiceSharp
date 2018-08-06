@@ -15,8 +15,7 @@ namespace SpiceSharpTest.Models
         /// </summary>
         static Circuit CreateResistorCircuit(double current, double resistance)
         {
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new CurrentSource("I1", "0", "IN", current),
                 new Resistor("R1", "IN", "0", resistance));
             return ckt;
@@ -34,8 +33,8 @@ namespace SpiceSharpTest.Models
             var ckt = CreateResistorCircuit(10, 1.0e3);
 
             // Create simulation, exports and references
-            OP op = new OP("op");
-            Export<double>[] exports = new Export<double>[2];
+            var op = new OP("op");
+            var exports = new Export<double>[2];
             exports[0] = new RealPropertyExport(op, "I1", "v");
             exports[1] = new RealPropertyExport(op, "R1", "i");
             double[] references =
@@ -58,8 +57,7 @@ namespace SpiceSharpTest.Models
         static Circuit CreateResistorsInSeriesCircuit(int count, double current, double resistance)
         {
             Assert.IsTrue(count > 1);
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new CurrentSource("I1", "IN", "0", current),
                 new Resistor("R1", "IN", "B1", resistance),
                 new Resistor($"R{count}", $"B{count - 1}", "0", resistance)
@@ -80,21 +78,21 @@ namespace SpiceSharpTest.Models
              * 1) a current through each resistor is 100A
              * 2) a voltage across the current source is 500000V (currentInAmp * resistanceInOhms * resistorCount)
              */
-            int currentInAmp = 100;
-            int resistanceInOhms = 10;
-            int resistorCount = 500;
+            var currentInAmp = 100;
+            var resistanceInOhms = 10;
+            var resistorCount = 500;
             var ckt = CreateResistorsInSeriesCircuit(resistorCount, currentInAmp, resistanceInOhms);
-            OP op = new OP("op");
+            var op = new OP("op");
 
             // Create exports
-            List<Export<double>> exports = new List<Export<double>>();
-            for (int i = 1; i <= resistorCount; i++)
+            var exports = new List<Export<double>>();
+            for (var i = 1; i <= resistorCount; i++)
                 exports.Add(new RealPropertyExport(op, $"R{i}", "i"));
             exports.Add(new RealPropertyExport(op, "I1", "v"));
             
             // Add references
-            List<double> references = new List<double>();
-            for (int i = 1; i <= resistorCount; i++)
+            var references = new List<double>();
+            for (var i = 1; i <= resistorCount; i++)
                 references.Add(-100);
             references.Add(-currentInAmp * resistanceInOhms * resistorCount);
             

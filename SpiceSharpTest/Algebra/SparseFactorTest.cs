@@ -28,16 +28,16 @@ namespace SpiceSharpTest.Sparse
 
             // Create matrix
             var solver = new RealSolver();
-            for (int r = 0; r < matrixElements.Length; r++)
-                for (int c = 0; c < matrixElements[r].Length; c++)
+            for (var r = 0; r < matrixElements.Length; r++)
+                for (var c = 0; c < matrixElements[r].Length; c++)
                     solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
 
             // Factor
             solver.Factor();
 
             // compare
-            for (int r = 0; r < matrixElements.Length; r++)
-                for (int c = 0; c < matrixElements[r].Length; c++)
+            for (var r = 0; r < matrixElements.Length; r++)
+                for (var c = 0; c < matrixElements[r].Length; c++)
                     Assert.AreEqual(expected[r][c], solver.GetMatrixElement(r + 1, c + 1).Value, 1e-12);
         }
 

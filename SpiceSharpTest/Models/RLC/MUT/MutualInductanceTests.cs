@@ -19,13 +19,12 @@ namespace SpiceSharpTest.Models
              * time points).
              */
             // Create circuit
-            double r1 = 100.0;
-            double r2 = 500.0;
-            double l1 = 10e-3;
-            double l2 = 2e-3;
-            double k = 0.693;
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var r1 = 100.0;
+            var r2 = 500.0;
+            var l1 = 10e-3;
+            var l2 = 2e-3;
+            var k = 0.693;
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
@@ -36,22 +35,22 @@ namespace SpiceSharpTest.Models
             ckt.Objects["L1"].SetParameter("ic", 0);
 
             // Create simulation
-            Transient tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
+            var tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
             tran.Nodes.InitialConditions["1"] = 0;
 
             // Create exports
-            Export<double>[] exports = new Export<double>[1];
+            var exports = new Export<double>[1];
             exports[0] = new RealVoltageExport(tran, "OUT");
 
             // Create references
-            double mut = k * Math.Sqrt(l1 * l2);
-            double a = l1 * l2 - mut * mut;
-            double b = r1 * l2 + r2 * l1;
-            double c = r1 * r2;
-            double discriminant = Math.Sqrt(b * b - 4 * a * c);
-            double invtau1 = (-b + discriminant) / (2.0 * a);
-            double invtau2 = (-b - discriminant) / (2.0 * a);
-            double factor = mut * r2 / a / (invtau1 - invtau2);
+            var mut = k * Math.Sqrt(l1 * l2);
+            var a = l1 * l2 - mut * mut;
+            var b = r1 * l2 + r2 * l1;
+            var c = r1 * r2;
+            var discriminant = Math.Sqrt(b * b - 4 * a * c);
+            var invtau1 = (-b + discriminant) / (2.0 * a);
+            var invtau2 = (-b - discriminant) / (2.0 * a);
+            var factor = mut * r2 / a / (invtau1 - invtau2);
             Func<double, double>[] references = {  t => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
 
             // Increase the allowed threshold
@@ -66,13 +65,12 @@ namespace SpiceSharpTest.Models
         public void When_MutualInductanceSmallSignal_Expect_Reference()
         {
             // Create circuit
-            double r1 = 100.0;
-            double r2 = 500.0;
-            double l1 = 10e-3;
-            double l2 = 2e-3;
-            double k = 0.693;
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var r1 = 100.0;
+            var r2 = 500.0;
+            var l1 = 10e-3;
+            var l2 = 2e-3;
+            var k = 0.693;
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
@@ -83,23 +81,23 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new DecadeSweep(1, 1e8, 10));
+            var ac = new AC("ac", new DecadeSweep(1, 1e8, 10));
 
             // Create exports
-            Export<Complex>[] exports = new Export<Complex>[1];
+            var exports = new Export<Complex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
-            double mut = k * Math.Sqrt(l1 * l2);
-            double a = l1 * l2 - mut * mut;
-            double b = r1 * l2 + r2 * l1;
-            double c = r1 * r2;
-            double num = mut * r2;
+            var mut = k * Math.Sqrt(l1 * l2);
+            var a = l1 * l2 - mut * mut;
+            var b = r1 * l2 + r2 * l1;
+            var c = r1 * r2;
+            var num = mut * r2;
             Func<double, Complex>[] references = {
                 f =>
                 {
-                    Complex s = new Complex(0.0, 2.0 * Math.PI * f);
-                    Complex denom = (a * s + b) * s + c;
+                    var s = new Complex(0.0, 2.0 * Math.PI * f);
+                    var denom = (a * s + b) * s + c;
                     return num * s / denom;
                 }
             };

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SpiceSharp;
@@ -25,7 +24,7 @@ namespace SpiceSharpTest.Simulations
             // Do a DC sweep where one of the sweeps is a parameter
 
             var dcSimulations = new List<DC>();
-            int n = 20000;
+            var n = 20000;
             for (var i = 0; i < n; i++)
             {
                 var dc = new DC("DC " + i);
@@ -50,7 +49,7 @@ namespace SpiceSharpTest.Simulations
 
                 dcSimulations.Add(dc);
             }
-            int maxConcurrentSimulations = 8;
+            var maxConcurrentSimulations = 8;
 
             Parallel.ForEach(
                 dcSimulations,
@@ -62,18 +61,18 @@ namespace SpiceSharpTest.Simulations
         public void When_FloatingRTransient_Expect_Reference()
         {
             // Create the circuit
-            Circuit ckt = new Circuit(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 10.0),
                 new Resistor("R1", "in", "out", 10.0)
             );
 
             var transientSimulations = new List<Transient>();
-            int n = 10000;
+            var n = 10000;
 
             for (var i = 0; i < n; i++)
             {
                 // Create the transient analysis
-                Transient tran = new Transient("Tran 1", 1e-6, 10.0);
+                var tran = new Transient("Tran 1", 1e-6, 10.0);
                 tran.OnExportSimulationData += (sender, args) =>
                 {
                     Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
@@ -82,7 +81,7 @@ namespace SpiceSharpTest.Simulations
                 transientSimulations.Add(tran);
             }
 
-            int maxConcurrentSimulations = 8;
+            var maxConcurrentSimulations = 8;
             Parallel.ForEach(
                 transientSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },

@@ -39,8 +39,7 @@ namespace SpiceSharpTest.Validation
         /// <returns></returns>
         static Circuit CreateCircuit(string groundNodeName)
         {
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", groundNodeName, 1.0),
                 new Resistor("R1", "IN", groundNodeName, 1.0e3));
             return ckt;
@@ -49,8 +48,7 @@ namespace SpiceSharpTest.Validation
         [Test]
         public void When_VoltageLoop_Expect_CircuitException()
         {
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "A", "0", 1.0),
                 new VoltageSource("V2", "B", "A", 1.0),
                 new VoltageSource("V3", "B", "A", 1.0)
@@ -61,8 +59,7 @@ namespace SpiceSharpTest.Validation
         [Test]
         public void When_VoltageLoop2_Expect_CircuitException()
         {
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "A", "0", 1.0),
                 new VoltageSource("V2", "A", "B", 1.0),
                 new VoltageSource("V3", "B", "C", 1.0),
@@ -80,8 +77,7 @@ namespace SpiceSharpTest.Validation
         [Test]
         public void When_FloatingNode_Expect_CircuitException()
         {
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "gnd", 1.0),
                 new Capacitor("C1", "in", "out", 1e-12),
                 new Capacitor("C2", "out", "gnd", 1e-12)
@@ -92,8 +88,7 @@ namespace SpiceSharpTest.Validation
         [Test]
         public void When_FloatingNode2_Expect_CircuitException()
         {
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "input", "gnd", 1.0),
                 new VoltageControlledVoltageSource("E1", "out", "gnd", "in", "gnd", 2.0),
                 new VoltageControlledVoltageSource("E2", "out2", "gnd", "out", "gnd", 1.0)

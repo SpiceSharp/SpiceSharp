@@ -39,9 +39,9 @@ namespace SpiceSharpTest.Sparse
                 new double[] { 1, 0, 0, 0 }
             };
             double[] rhs = { 0, 1, 0, 0};
-            for (int r = 0; r < matrix.Length; r++)
+            for (var r = 0; r < matrix.Length; r++)
             {
-                for (int c = 0; c < matrix[r].Length; c++)
+                for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
@@ -72,9 +72,9 @@ namespace SpiceSharpTest.Sparse
                 new[] {    0,      0,  -0.01,   3 }
             };
             double[] rhs = { 0, 0, 0, 0 };
-            for (int r = 0; r < matrix.Length; r++)
+            for (var r = 0; r < matrix.Length; r++)
             {
-                for (int c = 0; c < matrix[r].Length; c++)
+                for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
@@ -105,9 +105,9 @@ namespace SpiceSharpTest.Sparse
                 new[] {    0,      0,  -0.01,   3 }
             };
             double[] rhs = { 1, 0, 0, 0 };
-            for (int r = 0; r < matrix.Length; r++)
+            for (var r = 0; r < matrix.Length; r++)
             {
-                for (int c = 0; c < matrix[r].Length; c++)
+                for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
@@ -138,9 +138,9 @@ namespace SpiceSharpTest.Sparse
                 new[] {    4,    1.8,  -0.01,  8 }
             };
             double[] rhs = { 1, 2, 3, 4 };
-            for (int r = 0; r < matrix.Length; r++)
+            for (var r = 0; r < matrix.Length; r++)
             {
-                for (int c = 0; c < matrix[r].Length; c++)
+                for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
@@ -182,10 +182,10 @@ namespace SpiceSharpTest.Sparse
             };
 
             // build the matrix
-            ComplexSolver solver = new ComplexSolver();
-            for (int r = 0; r < matrix.Length; r++)
+            var solver = new ComplexSolver();
+            for (var r = 0; r < matrix.Length; r++)
             {
-                for (int c = 0; c < matrix[r].Length; c++)
+                for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(Complex.Zero))
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
@@ -197,7 +197,7 @@ namespace SpiceSharpTest.Sparse
             solver.GetRhsElement(5);
 
             // Build the Rhs vector
-            for (int r = 0; r < rhs.Length; r++)
+            for (var r = 0; r < rhs.Length; r++)
             {
                 if (!rhs[r].Equals(Complex.Zero))
                     solver.GetRhsElement(r + 1).Value = rhs[r];
@@ -209,7 +209,7 @@ namespace SpiceSharpTest.Sparse
             solver.Solve(solution);
 
             // Check!
-            for (int r = 0; r < reference.Length; r++)
+            for (var r = 0; r < reference.Length; r++)
             {
                 Assert.AreEqual(reference[r].Real, solution[r + 1].Real, 1e-12);
                 Assert.AreEqual(reference[r].Imaginary, solution[r + 1].Imaginary, 1e-12);

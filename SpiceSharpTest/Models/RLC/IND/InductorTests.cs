@@ -17,17 +17,16 @@ namespace SpiceSharpTest.Models
              * Lowpass RL circuit
              * The inductor should act like an short circuit
              */
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 1.0),
                 new Inductor("L1", "IN", "OUT", 1e-3),
                 new Resistor("R1", "OUT", "0", 1.0e3));
 
             // Create simulation
-            OP op = new OP("op");
+            var op = new OP("op");
 
             // Create exports
-            Export<double>[] exports = new Export<double>[1];
+            var exports = new Export<double>[1];
             exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
@@ -45,19 +44,18 @@ namespace SpiceSharpTest.Models
              */
             // Create circuit
             double resistance = 1;
-            double inductance = 1e-3;
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var inductance = 1e-3;
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0),
                 new Inductor("L1", "IN", "OUT", inductance),
                 new Resistor("R1", "OUT", "0", resistance));
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
+            var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
 
             // Create exports
-            Export<Complex>[] exports = new Export<Complex>[1];
+            var exports = new Export<Complex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
@@ -74,11 +72,10 @@ namespace SpiceSharpTest.Models
              * Test for LC tank circuit, an inductor parallel with a capacitor will resonate at a frequency of 1/(2*pi*sqrt(LC))
              */
             // Build circuit
-            double capacitance = 1e-3;
-            double inductance = 1e-6;
-            double initialCurrent = 1e-3;
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var capacitance = 1e-3;
+            var inductance = 1e-6;
+            var initialCurrent = 1e-3;
+            var ckt = new Circuit(
                 new Inductor("L1", "OUT", "0", inductance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
@@ -92,16 +89,16 @@ namespace SpiceSharpTest.Models
             AbsTol = 1e-9;
 
             // Create simulation
-            Transient tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
+            var tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
             tran.Nodes.InitialConditions["OUT"] = 0.0;
 
             // Create exports
-            Export<double>[] exports = new Export<double>[1];
+            var exports = new Export<double>[1];
             exports[0] = new RealPropertyExport(tran, "C1", "v");
 
             // Create reference function
-            double amplitude = Math.Sqrt(inductance / capacitance) * initialCurrent;
-            double omega = 1.0 / Math.Sqrt(inductance * capacitance);
+            var amplitude = Math.Sqrt(inductance / capacitance) * initialCurrent;
+            var omega = 1.0 / Math.Sqrt(inductance * capacitance);
             Func<double, double>[] references = { t => -amplitude * Math.Sin(omega * t) };
 
             // Run test

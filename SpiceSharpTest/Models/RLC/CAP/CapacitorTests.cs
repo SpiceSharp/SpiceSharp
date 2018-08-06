@@ -18,17 +18,16 @@ namespace SpiceSharpTest.Models
              * Lowpass RC circuit
              * The capacitor should act like an open circuit
              */
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "OUT", 10e3),
                 new Capacitor("C1", "OUT", "0", 1e-6));
 
             // Create simulation
-            OP op = new OP("op");
+            var op = new OP("op");
 
             // Create exports
-            Export<double>[] exports = new Export<double>[1];
+            var exports = new Export<double>[1];
             exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
@@ -46,20 +45,19 @@ namespace SpiceSharpTest.Models
              * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
              */
             double dcVoltage = 10;
-            double resistorResistance = 10e3; // 10000;
-            double capacitance = 1e-6; // 0.000001;
-            double tau = resistorResistance * capacitance;
+            var resistorResistance = 10e3; // 10000;
+            var capacitance = 1e-6; // 0.000001;
+            var tau = resistorResistance * capacitance;
 
             // Build circuit
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var ckt = new Circuit(
                 new Capacitor("C1", "OUT", "0", capacitance),
                 new Resistor("R1", "IN", "OUT", resistorResistance),
                 new VoltageSource("V1", "IN", "0", dcVoltage)
                 );
 
             // Create simulation, exports and references
-            Transient tran = new Transient("tran", 1e-8, 10e-6);
+            var tran = new Transient("tran", 1e-8, 10e-6);
             tran.Nodes.InitialConditions["OUT"] = 0.0;
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
@@ -76,9 +74,9 @@ namespace SpiceSharpTest.Models
              * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
              */
             double dcVoltage = 10;
-            double resistorResistance = 10e3; // 10000;
-            double capacitance = 1e-6; // 0.000001;
-            double tau = resistorResistance * capacitance;
+            var resistorResistance = 10e3; // 10000;
+            var capacitance = 1e-6; // 0.000001;
+            var tau = resistorResistance * capacitance;
 
             // Build circuit
             var ckt = new Circuit(
@@ -105,10 +103,9 @@ namespace SpiceSharpTest.Models
              * Lowpass RC filter in the frequency domain should have a single pole at s=-2pi*R*C
              */
             // Create circuit
-            double resistance = 1e3;
-            double capacitance = 1e-6;
-            Circuit ckt = new Circuit();
-            ckt.Objects.Add(
+            var resistance = 1e3;
+            var capacitance = 1e-6;
+            var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0),
                 new Resistor("R1", "IN", "OUT", resistance),
                 new Capacitor("C1", "OUT", "0", capacitance)
@@ -116,7 +113,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new DecadeSweep(0.1, 1.0e6, 10));
+            var ac = new AC("ac", new DecadeSweep(0.1, 1.0e6, 10));
 
             // Create exports
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };

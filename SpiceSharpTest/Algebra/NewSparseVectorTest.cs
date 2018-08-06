@@ -11,12 +11,12 @@ namespace SpiceSharpTest.Sparse
         {
             // Test swapping of elements in all possible combinations
 
-            for (int i = 0; i < 32; i++)
+            for (var i = 0; i < 32; i++)
             {
                 // Setup
-                SparseVector<double> vector = new SparseVector<double>(5);
-                int fill = i;
-                for (int k = 1; k <= 5; k++)
+                var vector = new SparseVector<double>(5);
+                var fill = i;
+                for (var k = 1; k <= 5; k++)
                 {
                     if ((fill & 0x01) != 0)
                         vector[k] = k;
@@ -28,9 +28,9 @@ namespace SpiceSharpTest.Sparse
 
                 // Check
                 fill = i;
-                for (int k = 1; k <= 5; k++)
+                for (var k = 1; k <= 5; k++)
                 {
-                    int realk = k;
+                    var realk = k;
                     if (k == 2)
                         realk = 4;
                     else if (k == 4)

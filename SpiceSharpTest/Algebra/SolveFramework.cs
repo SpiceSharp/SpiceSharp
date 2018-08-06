@@ -16,15 +16,15 @@ namespace SpiceSharpTest.Sparse
         {
             Solver<double> result;
 
-            using (StreamReader sr = new StreamReader(filename))
+            using (var sr = new StreamReader(filename))
             {
                 // The first line is a comment
                 sr.ReadLine();
 
                 // The second line tells us the dimensions
-                string line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+                var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
                 var match = Regex.Match(line, @"^(?<rows>\d+)\s+(?<columns>\d+)\s+(\d+)");
-                int size = int.Parse(match.Groups["rows"].Value);
+                var size = int.Parse(match.Groups["rows"].Value);
                 if (int.Parse(match.Groups["columns"].Value) != size)
                     throw new Exception("Matrix is not square");
 
@@ -41,9 +41,9 @@ namespace SpiceSharpTest.Sparse
                     match = Regex.Match(line, @"^(?<row>\d+)\s+(?<column>\d+)\s+(?<value>.*)\s*$");
                     if (!match.Success)
                         throw new Exception("Could not recognize file");
-                    int row = int.Parse(match.Groups["row"].Value);
-                    int column = int.Parse(match.Groups["column"].Value);
-                    double value = double.Parse(match.Groups["value"].Value, System.Globalization.CultureInfo.InvariantCulture);
+                    var row = int.Parse(match.Groups["row"].Value);
+                    var column = int.Parse(match.Groups["column"].Value);
+                    var value = double.Parse(match.Groups["value"].Value, System.Globalization.CultureInfo.InvariantCulture);
 
                     // Set the value in the matrix
                     result.GetMatrixElement(row, column).Value = value;

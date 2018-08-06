@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
@@ -15,7 +14,7 @@ namespace SpiceSharpTest
         {
             // <example01_build>
             // Build the circuit
-            Circuit ckt = new Circuit(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
                 new Resistor("R1", "in", "out", 1.0e4),
                 new Resistor("R2", "out", "0", 2.0e4)
@@ -24,13 +23,13 @@ namespace SpiceSharpTest
 
             // <example01_simulate>
             // Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
-            DC dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
+            var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Catch exported data
             dc.OnExportSimulationData += (sender, args) =>
             {
-                double input = args.GetVoltage("in");
-                double output = args.GetVoltage("out");
+                var input = args.GetVoltage("in");
+                var output = args.GetVoltage("out");
                 Console.WriteLine($@"{input:G3} V : {output:G3} V");
             };
             dc.Run(ckt);
@@ -41,7 +40,7 @@ namespace SpiceSharpTest
         public void When_BasicCircuitExports_Expect_NoException()
         {
             // Build the circuit
-            Circuit ckt = new Circuit(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
                 new Resistor("R1", "in", "out", 1.0e4),
                 new Resistor("R2", "out", "0", 2.0e4)
@@ -49,7 +48,7 @@ namespace SpiceSharpTest
 
             // <example01_simulate2>
             // Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
-            DC dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
+            var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Create exports
             Export<double> inputExport = new RealVoltageExport(dc, "in");
@@ -96,9 +95,9 @@ namespace SpiceSharpTest
             // Run the simulation
             dc.OnExportSimulationData += (sender, args) =>
             {
-                double vgsVoltage = dc.Sweeps[0].CurrentValue;
-                double vdsVoltage = dc.Sweeps[1].CurrentValue;
-                double current = currentExport.Value;
+                var vgsVoltage = dc.Sweeps[0].CurrentValue;
+                var vdsVoltage = dc.Sweeps[1].CurrentValue;
+                var current = currentExport.Value;
             };
             dc.Run(ckt);
             // </example_DC>
@@ -126,7 +125,7 @@ namespace SpiceSharpTest
             ac.OnExportSimulationData += (sender, args) =>
             {
                 var output = exportVoltage.Value;
-                double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
+                var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
             };
             ac.Run(ckt);
             // </example_AC>

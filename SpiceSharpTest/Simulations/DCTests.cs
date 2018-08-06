@@ -21,8 +21,8 @@ namespace SpiceSharpTest.Simulations
         /// <returns></returns>
         Diode CreateDiode(Identifier name, Identifier anode, Identifier cathode, Identifier model, string modelparams)
         {
-            Diode d = new Diode(name);
-            DiodeModel dm = new DiodeModel(model);
+            var d = new Diode(name);
+            var dm = new DiodeModel(model);
             ApplyParameters(dm, modelparams);
             d.SetModel(dm);
             d.Connect(anode, cathode);
@@ -70,7 +70,7 @@ namespace SpiceSharpTest.Simulations
             /*
              * Bug found by Marcin Golebiowski
              * Running simulations twice will give rise to errors. We are using a diode model here
-             * in order to make sure to use states, extra equations, etc.
+             * in order to make sure we're use states, extra equations, etc.
              */
 
             var ckt = new Circuit();
