@@ -116,11 +116,19 @@ namespace SpiceSharp.Simulations
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
-            state.Domain = RealState.DomainType.Frequency;
+            state.Domain = RealState.DomainType.None;
             state.UseIc = false;
             state.UseDc = true;
+            state.Gmin = BaseConfiguration.Gmin;
             Op(baseconfig.DcMaxIterations);
             state.Sparse |= RealState.SparseStates.AcShouldReorder;
+
+            // Load all in order to calculate the AC info for all devices
+            state.Domain = RealState.DomainType.Frequency;
+            for (var i = 0; i < LoadBehaviors.Count; i++)
+                LoadBehaviors[i].Load(this);
+            for (var i = 0; i < FrequencyBehaviors.Count; i++)
+                FrequencyBehaviors[i].InitializeParameters(this);
 
             // Connect noise sources
             for (var i = 0; i < NoiseBehaviors.Count; i++)

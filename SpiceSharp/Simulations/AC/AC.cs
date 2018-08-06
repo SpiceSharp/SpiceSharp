@@ -40,6 +40,8 @@ namespace SpiceSharp.Simulations
             
             // Calculate the operating point
             cstate.Laplace = 0.0;
+            state.UseIc = false;
+            state.UseDc = true;
             state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DcMaxIterations);
