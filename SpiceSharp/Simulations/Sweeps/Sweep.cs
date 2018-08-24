@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
@@ -51,6 +52,9 @@ namespace SpiceSharp.Simulations
         /// <param name="count">Number of points</param>
         protected Sweep(T initial, T final, int count)
         {
+            if (count < 0)
+                throw new ArgumentException("Invalid count");
+
             Initial = initial;
             Final = final;
             Count = count;
