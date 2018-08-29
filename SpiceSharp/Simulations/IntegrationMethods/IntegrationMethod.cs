@@ -178,6 +178,9 @@ namespace SpiceSharp.IntegrationMethods
             Time = 0.0;
             _savetime = 0.0;
             Delta = 0.0;
+            SaveDelta = 0.0;
+            OldDelta = 0.0;
+            Slope = 0.0;
             Order = 1;
             Prediction = null;
             DeltaOld.Clear(0.0);

@@ -27,19 +27,9 @@ namespace SpiceSharp.Simulations
 
         #region Events
         /// <summary>
-        /// Event that is called for initializing simulation data exports
-        /// </summary>
-        public event EventHandler<EventArgs> InitializeSimulationExport;
-
-        /// <summary>
         /// Event that is called when new simulation data is available
         /// </summary>
         public event EventHandler<ExportDataEventArgs> ExportSimulationData;
-
-        /// <summary>
-        /// Event that is called for finalizing simulation data exports
-        /// </summary>
-        public event EventHandler<EventArgs> FinalizeSimulationExport;
 
         /// <summary>
         /// Event called before setting up the circuit
@@ -106,9 +96,6 @@ namespace SpiceSharp.Simulations
             Setup(circuit);
             OnAfterSetup(EventArgs.Empty);
 
-            // Initialize exports
-            InitializeSimulationExport?.Invoke(this, EventArgs.Empty);
-
             // Check that at least something is simulated
             if (Nodes.Count < 1)
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
@@ -127,9 +114,6 @@ namespace SpiceSharp.Simulations
             }
             else
                 Execute();
-
-            // Finalize the simulation
-            FinalizeSimulationExport?.Invoke(this, EventArgs.Empty);
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
@@ -202,7 +186,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Call event just after cleaning up the circuit
         /// </summary>
-        /// <param name="args"></param>
         protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);
         #endregion
 
@@ -229,7 +212,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Collect parameter sets of all circuit entities
         /// </summary>
-        protected void SetupParameters(IEnumerable<Entity> entities)
+        private void SetupParameters(IEnumerable<Entity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
