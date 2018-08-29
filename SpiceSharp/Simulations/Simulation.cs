@@ -42,6 +42,11 @@ namespace SpiceSharp.Simulations
         public event EventHandler<EventArgs> AfterSetup;
 
         /// <summary>
+        /// Event called after executing the simulation
+        /// </summary>
+        public event EventHandler<SimulationFlowEventArgs> AfterExecute; 
+
+        /// <summary>
         /// Event called before cleaning up the circuit
         /// </summary>
         public event EventHandler<EventArgs> BeforeUnsetup;
@@ -101,19 +106,12 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Execute the simulation
-            // TODO: Maybe it is not necessary to use a controller, and we can just use events!
-            if (controller != null)
+            var args = new SimulationFlowEventArgs();
+            while (args.Repeat)
             {
-                controller.Initialize(this);
-                do
-                {
-                    Execute();
-                } while (controller.ContinueExecution(this));
-
-                controller.Finalize(this);
-            }
-            else
                 Execute();
+                AfterExecute?.Invoke(this, args);
+            }
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
