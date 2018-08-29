@@ -42,8 +42,8 @@ namespace SpiceSharp.Simulations
         protected Export(Simulation simulation)
         {
             Simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
-            simulation.InitializeSimulationExport += Initialize;
-            simulation.FinalizeSimulationExport += Finalize;
+            simulation.AfterSetup += Initialize;
+            simulation.BeforeUnsetup += Finalize;
         }
 
         /// <summary>

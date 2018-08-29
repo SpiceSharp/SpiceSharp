@@ -81,17 +81,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Run the simulation
-        /// </summary>
-        /// <param name="circuit">Circuit</param>
-        public void Run(Circuit circuit) => Run(circuit, null);
-
-        /// <summary>
         /// Run the simulation using a circuit
         /// </summary>
         /// <param name="circuit">Circuit</param>
-        /// <param name="controller">Simulation flow controller</param>
-        public virtual void Run(Circuit circuit, SimulationFlowController controller)
+        public virtual void Run(Circuit circuit)
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
@@ -110,6 +103,8 @@ namespace SpiceSharp.Simulations
             while (args.Repeat)
             {
                 Execute();
+
+                args.Repeat = false;
                 AfterExecute?.Invoke(this, args);
             }
 
