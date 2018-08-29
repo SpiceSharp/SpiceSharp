@@ -284,9 +284,12 @@ namespace SpiceSharp.Simulations
         {
             base.LoadBehaviors();
 
-            // TODO: This part is executed in operating point calculations as well, checking for Time domain doesn't work because the original method checks for the domain for initial conditions
-            for (var i = 0; i < _transientBehaviors.Count; i++)
-                _transientBehaviors[i].Transient(this);
+            // Not calculating DC behavior
+            if (!RealState.UseDc)
+            {
+                for (var i = 0; i < _transientBehaviors.Count; i++)
+                    _transientBehaviors[i].Transient(this);
+            }
         }
     }
 }

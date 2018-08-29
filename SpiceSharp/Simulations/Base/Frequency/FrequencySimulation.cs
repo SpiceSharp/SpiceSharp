@@ -17,6 +17,17 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private BehaviorList<BaseFrequencyBehavior> _frequencyBehaviors;
+        private LoadStateEventArgs _loadStateEventArgs;
+
+        /// <summary>
+        /// Event called before loading the frequency behaviors
+        /// </summary>
+        public event EventHandler<LoadStateEventArgs> BeforeFrequencyLoad;
+
+        /// <summary>
+        /// Event called after loading the frequency behaviors
+        /// </summary>
+        public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad; 
 
         /// <summary>
         /// Gets the complex state
@@ -59,6 +70,7 @@ namespace SpiceSharp.Simulations
 
             // Create the state for complex numbers
             ComplexState = new ComplexState();
+            _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
             States.Add(ComplexState);
 
             // Get behaviors, configurations and states
@@ -118,7 +130,7 @@ namespace SpiceSharp.Simulations
             cstate.IsConvergent = true;
 
             // Load AC
-            AcLoad();
+            FrequencyLoad();
 
             if ((cstate.Sparse & ComplexState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
             {
@@ -142,6 +154,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Call event before loading frequency behaviors
+        /// </summary>
+        protected virtual void OnBeforeFrequencyLoad(LoadStateEventArgs args) => BeforeFrequencyLoad?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event after loading frequency behaviors
+        /// </summary>
+        protected virtual void OnAfterFrequencyLoad(LoadStateEventArgs args) => AfterFrequencyLoad?.Invoke(this, args);
+
+        /// <summary>
         /// Initialize all AC parameters
         /// </summary>
         protected void InitializeAcParameters()
@@ -158,11 +180,23 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Load AC behaviors
         /// </summary>
-        protected void AcLoad()
+        protected void FrequencyLoad()
         {
             var cstate = ComplexState;
 
+            OnBeforeFrequencyLoad(_loadStateEventArgs);
+
             cstate.Solver.Clear();
+            LoadFrequencyBehaviors();
+
+            OnAfterFrequencyLoad(_loadStateEventArgs);
+        }
+
+        /// <summary>
+        /// Load frequency behaviors
+        /// </summary>
+        protected virtual void LoadFrequencyBehaviors()
+        {
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].Load(this);
         }

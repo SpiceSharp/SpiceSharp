@@ -233,7 +233,7 @@ namespace SpiceSharp.Simulations
             var iterno = 0;
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIc && state.Domain == RealState.DomainType.Time)
+            if (state.UseIc)
             {
                 state.StoreSolution();
 

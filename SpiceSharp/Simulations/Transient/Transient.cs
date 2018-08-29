@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Behaviors for accepting a timepoint
         /// </summary>
-        protected BehaviorList<BaseAcceptBehavior> AcceptBehaviors { get; private set; }
+        private BehaviorList<BaseAcceptBehavior> _acceptBehaviors;
 
         /// <summary>
         /// Constructor
@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors and configurations
-            AcceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Objects);
+            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Objects);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (var i = 0; i < AcceptBehaviors.Count; i++)
-                AcceptBehaviors[i].Unsetup();
-            AcceptBehaviors = null;
+            for (var i = 0; i < _acceptBehaviors.Count; i++)
+                _acceptBehaviors[i].Unsetup();
+            _acceptBehaviors = null;
 
             base.Unsetup();
         }
@@ -123,8 +123,8 @@ namespace SpiceSharp.Simulations
                     // nextTime:
 
                     // Accept the current timepoint (CKTaccept())
-                    for (var i = 0; i < AcceptBehaviors.Count; i++)
-                        AcceptBehaviors[i].Accept(this);
+                    for (var i = 0; i < _acceptBehaviors.Count; i++)
+                        _acceptBehaviors[i].Accept(this);
                     Method.SaveSolution(state.Solution);
                     // end of CKTaccept()
 
