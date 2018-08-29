@@ -25,6 +25,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public VariableSet Nodes { get; } = new VariableSet();
 
+        #region Events
         /// <summary>
         /// Event that is called for initializing simulation data exports
         /// </summary>
@@ -33,12 +34,33 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called when new simulation data is available
         /// </summary>
-        public event EventHandler<ExportDataEventArgs> OnExportSimulationData;
+        public event EventHandler<ExportDataEventArgs> ExportSimulationData;
 
         /// <summary>
         /// Event that is called for finalizing simulation data exports
         /// </summary>
         public event EventHandler<EventArgs> FinalizeSimulationExport;
+
+        /// <summary>
+        /// Event called before setting up the circuit
+        /// </summary>
+        public event EventHandler<EventArgs> BeforeSetup;
+
+        /// <summary>
+        /// Event called after setting up the circuit
+        /// </summary>
+        public event EventHandler<EventArgs> AfterSetup;
+
+        /// <summary>
+        /// Event called before cleaning up the circuit
+        /// </summary>
+        public event EventHandler<EventArgs> BeforeUnsetup;
+
+        /// <summary>
+        /// Event called after cleaning up the circuit
+        /// </summary>
+        public event EventHandler<EventArgs> AfterUnsetup; 
+        #endregion
 
         /// <summary>
         /// Gets the name of the simulation
@@ -80,7 +102,11 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
 
             // Setup the simulation
+            OnBeforeSetup(EventArgs.Empty);
             Setup(circuit);
+            OnAfterSetup(EventArgs.Empty);
+
+            // Initialize exports
             InitializeSimulationExport?.Invoke(this, EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -88,6 +114,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Execute the simulation
+            // TODO: Maybe it is not necessary to use a controller, and we can just use events!
             if (controller != null)
             {
                 controller.Initialize(this);
@@ -103,7 +130,11 @@ namespace SpiceSharp.Simulations
 
             // Finalize the simulation
             FinalizeSimulationExport?.Invoke(this, EventArgs.Empty);
+
+            // Clean up the circuit
+            OnBeforeUnsetup(EventArgs.Empty);
             Unsetup();
+            OnAfterUnsetup(EventArgs.Empty);
         }
 
         /// <summary>
@@ -147,13 +178,33 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected abstract void Execute();
 
+        #region Methods for raising events
         /// <summary>
-        /// Export the data
+        /// Call event for exporting data
         /// </summary>
-        protected void Export(ExportDataEventArgs args)
-        {
-            OnExportSimulationData?.Invoke(this, args);
-        }
+        protected virtual void OnExport(ExportDataEventArgs args) => ExportSimulationData?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event to indicate we're about to set up the simulation
+        /// </summary>
+        protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event just after setting up the simulation
+        /// </summary>
+        protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event just before cleaning up the circuit
+        /// </summary>
+        protected virtual void OnBeforeUnsetup(EventArgs args) => BeforeUnsetup?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event just after cleaning up the circuit
+        /// </summary>
+        /// <param name="args"></param>
+        protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);
+        #endregion
 
         /// <summary>
         /// Collect behaviors of all circuit entities while also setting them up

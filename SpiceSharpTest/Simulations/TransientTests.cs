@@ -24,21 +24,21 @@ namespace SpiceSharpTest.Simulations
             var tran = new Transient("tran 1", 1.0, 10.0);
             tran.ParameterSets.Get<TimeConfiguration>().InitTime = 0.0;
             tran.ParameterSets.Get<TimeConfiguration>().Method = new Gear();
-            tran.OnExportSimulationData += (sender, args) =>
+            tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-12);
             };
             tran.Run(ckt);
 
             // Let's run the simulation twice to check if it is consistent
-            try
+            // try
             {
                 tran.Run(ckt);
             }
-            catch (Exception)
+            /* catch (Exception)
             {
                 throw new Exception(@"Cannot run transient analysis twice");
-            }
+            } */
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.OnExportSimulationData += (sender, args) => { Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12); };
+            tran.ExportSimulationData += (sender, args) => { Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12); };
             tran.Run(ckt);
 
             // Let's run the simulation twice to check if it is consistent
@@ -77,7 +77,7 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 10.0);
-            tran.OnExportSimulationData += (sender, args) =>
+            tran.ExportSimulationData += (sender, args) =>
             {
                 Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
             };

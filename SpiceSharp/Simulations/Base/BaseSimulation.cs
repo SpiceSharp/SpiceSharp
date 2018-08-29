@@ -10,13 +10,6 @@ namespace SpiceSharp.Simulations
     public abstract class BaseSimulation : Simulation
     {
         /// <summary>
-        /// Necessary behaviors and configurations
-        /// </summary>
-        protected BehaviorList<BaseLoadBehavior> LoadBehaviors { get; private set; }
-        protected BehaviorList<BaseTemperatureBehavior> TemperatureBehaviors { get; private set; }
-        protected BehaviorList<BaseInitialConditionBehavior> InitialConditionBehaviors { get; private set; }
-
-        /// <summary>
         /// Gets the currently active configuration
         /// </summary>
         public BaseConfiguration BaseConfiguration { get; protected set; }
@@ -36,20 +29,35 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public Variable ProblemVariable { get; protected set; }
 
+        #region Events
         /// <summary>
-        /// Event called when the state is loaded
+        /// Event called before the current state is loaded
         /// </summary>
-        public event EventHandler<LoadStateEventArgs> OnLoad;
+        public event EventHandler<LoadStateEventArgs> BeforeLoad;
 
         /// <summary>
-        /// Event called before temperature calculations.
+        /// Event called after the current state is loaded
         /// </summary>
-        public event EventHandler<LoadStateEventArgs> OnBeforeTemperatureCalculations;
+        public event EventHandler<LoadStateEventArgs> AfterLoad; 
+
+        /// <summary>
+        /// Event called before temperature calculations
+        /// </summary>
+        public event EventHandler<EventArgs> BeforeTemperature;
+
+        /// <summary>
+        /// Event called after temperature calculations
+        /// </summary>
+        public event EventHandler<EventArgs> AfterTemperature;
+        #endregion
 
         /// <summary>
         /// Private variables
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
+        private BehaviorList<BaseLoadBehavior> _loadBehaviors;
+        private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
+        private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
 
         /// <summary>
         /// Constructor
@@ -73,9 +81,9 @@ namespace SpiceSharp.Simulations
 
             // Setup behaviors, configurations and states
             BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
-            TemperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Objects);
-            LoadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Objects);
-            InitialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Objects);
+            _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Objects);
+            _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Objects);
+            _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Objects);
 
             // Add a state for real numbers
             RealState = new RealState();
@@ -83,12 +91,12 @@ namespace SpiceSharp.Simulations
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
-            for (var i = 0; i < LoadBehaviors.Count; i++)
-                LoadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
+            for (var i = 0; i < _loadBehaviors.Count; i++)
+                _loadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
             RealState.Initialize(Nodes);
 
             // Allow nodesets to help convergence
-            OnLoad += LoadNodeSets;
+            AfterLoad += LoadNodeSets;
         }
 
         /// <summary>
@@ -96,14 +104,21 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
-            // Do temperature-dependent calculations
-            OnBeforeTemperatureCalculations?.Invoke(this, _realStateLoadArgs);
-
-            for (var i = 0; i < TemperatureBehaviors.Count; i++)
-                TemperatureBehaviors[i].Temperature(this);
+            Temperature();
 
             // Do initial conditions
             InitialConditions();
+        }
+
+        /// <summary>
+        /// Do temperature-dependent calculations
+        /// </summary>
+        protected void Temperature()
+        {
+            OnBeforeTemperature(EventArgs.Empty);
+            for (var i = 0; i < _temperatureBehaviors.Count; i++)
+                _temperatureBehaviors[i].Temperature(this);
+            OnAfterTemperature(EventArgs.Empty);
         }
 
         /// <summary>
@@ -114,15 +129,15 @@ namespace SpiceSharp.Simulations
             base.Unsetup();
 
             // Remove nodeset
-            OnLoad -= LoadNodeSets;
+            AfterLoad -= LoadNodeSets;
 
             // Unsetup all behaviors
-            for (var i = 0; i < InitialConditionBehaviors.Count; i++)
-                InitialConditionBehaviors[i].Unsetup();
-            for (var i = 0; i < LoadBehaviors.Count; i++)
-                LoadBehaviors[i].Unsetup();
-            for (var i = 0; i < TemperatureBehaviors.Count; i++)
-                TemperatureBehaviors[i].Unsetup();
+            for (var i = 0; i < _initialConditionBehaviors.Count; i++)
+                _initialConditionBehaviors[i].Unsetup();
+            for (var i = 0; i < _loadBehaviors.Count; i++)
+                _loadBehaviors[i].Unsetup();
+            for (var i = 0; i < _temperatureBehaviors.Count; i++)
+                _temperatureBehaviors[i].Unsetup();
 
             // Clear the state
             RealState.Destroy();
@@ -130,9 +145,9 @@ namespace SpiceSharp.Simulations
             _realStateLoadArgs = null;
 
             // Remove behavior and configuration references
-            LoadBehaviors = null;
-            InitialConditionBehaviors = null;
-            TemperatureBehaviors = null;
+            _loadBehaviors = null;
+            _initialConditionBehaviors = null;
+            _temperatureBehaviors = null;
             BaseConfiguration = null;
         }
 
@@ -359,19 +374,24 @@ namespace SpiceSharp.Simulations
 
             // Start the stopwatch
             Statistics.LoadTime.Start();
+            OnBeforeLoad(_realStateLoadArgs);
 
             // Clear rhs and matrix
             state.Solver.Clear();
-
-            // Load all devices
-            for (var i = 0; i < LoadBehaviors.Count; i++)
-                LoadBehaviors[i].Load(this);
-
-            // Call events
-            OnLoad?.Invoke(this, _realStateLoadArgs);
+            LoadBehaviors();
 
             // Keep statistics
+            OnAfterLoad(_realStateLoadArgs);
             Statistics.LoadTime.Stop();
+        }
+
+        /// <summary>
+        /// Load all behaviors
+        /// </summary>
+        protected virtual void LoadBehaviors()
+        {
+            for (var i = 0; i < _loadBehaviors.Count; i++)
+                _loadBehaviors[i].Load(this);
         }
 
         /// <summary>
@@ -417,8 +437,8 @@ namespace SpiceSharp.Simulations
             // Use initial conditions
             if (state.UseIc)
             {
-                for (var i = 0; i < InitialConditionBehaviors.Count; i++)
-                    InitialConditionBehaviors[i].SetInitialCondition(this);
+                for (var i = 0; i < _initialConditionBehaviors.Count; i++)
+                    _initialConditionBehaviors[i].SetInitialCondition(this);
             }
         }
 
@@ -529,9 +549,9 @@ namespace SpiceSharp.Simulations
             }
 
             // Device-level convergence tests
-            for (var i = 0; i < LoadBehaviors.Count; i++)
+            for (var i = 0; i < _loadBehaviors.Count; i++)
             {
-                if (!LoadBehaviors[i].IsConvergent(this))
+                if (!_loadBehaviors[i].IsConvergent(this))
                 {
                     // I believe this should be false, but Spice 3f5 doesn't...
 
@@ -561,5 +581,28 @@ namespace SpiceSharp.Simulations
             // Convergence succeeded
             return true;
         }
+
+        #region Methods for calling events
+        /// <summary>
+        /// Call event just before loading
+        /// </summary>
+        protected virtual void OnBeforeLoad(LoadStateEventArgs args) => BeforeLoad?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event just after loading
+        /// </summary>
+        protected virtual void OnAfterLoad(LoadStateEventArgs args) => AfterLoad?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event just before temperature calculations
+        /// </summary>
+        protected virtual void OnBeforeTemperature(EventArgs args) => BeforeTemperature?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event just after temperature calculations
+        /// </summary>
+        protected virtual void OnAfterTemperature(EventArgs args) => AfterTemperature?.Invoke(this, args);
+
+        #endregion
     }
 }

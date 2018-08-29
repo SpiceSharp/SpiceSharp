@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        protected BehaviorList<BaseFrequencyBehavior> FrequencyBehaviors { get; private set; }
+        private BehaviorList<BaseFrequencyBehavior> _frequencyBehaviors;
 
         /// <summary>
         /// Gets the complex state
@@ -67,10 +67,10 @@ namespace SpiceSharp.Simulations
             FrequencySweep = FrequencyConfiguration.FrequencySweep ??
                              throw new CircuitException("No frequency sweep found");
 
-            FrequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Objects);
+            _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Objects);
             var solver = ComplexState.Solver;
-            for (var i = 0; i < FrequencyBehaviors.Count; i++)
-                FrequencyBehaviors[i].GetEquationPointers(solver);
+            for (var i = 0; i < _frequencyBehaviors.Count; i++)
+                _frequencyBehaviors[i].GetEquationPointers(solver);
         }
 
         /// <summary>
@@ -91,9 +91,9 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (var i = 0; i < FrequencyBehaviors.Count; i++)
-                FrequencyBehaviors[i].Unsetup();
-            FrequencyBehaviors = null;
+            for (var i = 0; i < _frequencyBehaviors.Count; i++)
+                _frequencyBehaviors[i].Unsetup();
+            _frequencyBehaviors = null;
 
             // Remove the state
             ComplexState.Destroy();
@@ -118,9 +118,7 @@ namespace SpiceSharp.Simulations
             cstate.IsConvergent = true;
 
             // Load AC
-            cstate.Solver.Clear();
-            for (var i = 0; i < FrequencyBehaviors.Count; i++)
-                FrequencyBehaviors[i].Load(this);
+            AcLoad();
 
             if ((cstate.Sparse & ComplexState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
             {
@@ -141,6 +139,32 @@ namespace SpiceSharp.Simulations
 
             // Reset values
             cstate.Solution[0] = 0.0;
+        }
+
+        /// <summary>
+        /// Initialize all AC parameters
+        /// </summary>
+        protected void InitializeAcParameters()
+        {
+            RealState.Domain = RealState.DomainType.Frequency;
+            Load();
+            for (var i = 0; i < _frequencyBehaviors.Count; i++)
+            {
+                _frequencyBehaviors[i].Load(this);
+                _frequencyBehaviors[i].InitializeParameters(this);
+            }
+        }
+
+        /// <summary>
+        /// Load AC behaviors
+        /// </summary>
+        protected void AcLoad()
+        {
+            var cstate = ComplexState;
+
+            cstate.Solver.Clear();
+            for (var i = 0; i < _frequencyBehaviors.Count; i++)
+                _frequencyBehaviors[i].Load(this);
         }
     }
 }

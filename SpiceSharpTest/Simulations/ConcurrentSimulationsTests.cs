@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Simulations
                         args.TemperatureNeeded = true;
                     }
                 };
-                dc.OnExportSimulationData += (sender, args) =>
+                dc.ExportSimulationData += (sender, args) =>
                 {
                     var resistance = dc.Sweeps[0].CurrentValue;
                     var voltage = dc.Sweeps[1].CurrentValue;
@@ -73,7 +73,7 @@ namespace SpiceSharpTest.Simulations
             {
                 // Create the transient analysis
                 var tran = new Transient("Tran 1", 1e-6, 10.0);
-                tran.OnExportSimulationData += (sender, args) =>
+                tran.ExportSimulationData += (sender, args) =>
                 {
                     Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
                 };

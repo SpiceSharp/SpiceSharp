@@ -63,7 +63,7 @@ namespace SpiceSharpTest.Models
             if (references == null)
                 throw new ArgumentNullException(nameof(references));
 
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -95,7 +95,7 @@ namespace SpiceSharpTest.Models
                 throw new ArgumentNullException(nameof(references));
 
             var index = 0;
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
         {
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -174,7 +174,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             var index = 0;
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -213,7 +213,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Complex[]> references)
         {
             var index = 0;
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -256,7 +256,7 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Func<double, Complex>> references)
         {
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -298,7 +298,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             var index = 0;
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -335,7 +335,7 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
         {
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
@@ -372,7 +372,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             var index = 0;
-            sim.OnExportSimulationData += (sender, data) =>
+            sim.ExportSimulationData += (sender, data) =>
             {
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())

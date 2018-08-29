@@ -151,10 +151,7 @@ namespace SpiceSharp.Simulations
 
             // Execute temperature behaviors if necessary the first time
             if (levelNeedsTemperature >= 0)
-            {
-                for (var i = 0; i < TemperatureBehaviors.Count; i++)
-                    TemperatureBehaviors[i].Temperature(this);
-            }
+                Temperature();
 
             // Execute the sweeps
             var level = Sweeps.Count - 1;
@@ -177,7 +174,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Export data
-                Export(exportargs);
+                OnExport(exportargs);
 
                 // Remove all values that are greater or equal to the maximum value
                 while (level >= 0 && Sweeps[level].CurrentStep >= Sweeps[level].Limit)
@@ -191,10 +188,7 @@ namespace SpiceSharp.Simulations
 
                     // If temperature behavior is needed for this level or higher, run behaviors
                     if (levelNeedsTemperature >= level)
-                    {
-                        for (var i = 0; i < TemperatureBehaviors.Count; i++)
-                            TemperatureBehaviors[i].Temperature(this);
-                    }
+                        Temperature();
                 }
             }
 

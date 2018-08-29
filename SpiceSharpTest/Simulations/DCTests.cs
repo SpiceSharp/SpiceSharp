@@ -54,7 +54,7 @@ namespace SpiceSharpTest.Simulations
             };
 
             // Run simulation
-            dc.OnExportSimulationData += (sender, args) =>
+            dc.ExportSimulationData += (sender, args) =>
             {
                 var resistance = dc.Sweeps[0].CurrentValue;
                 var voltage = dc.Sweeps[1].CurrentValue;
@@ -86,10 +86,10 @@ namespace SpiceSharpTest.Simulations
             // Create exports
             var dcExportV1 = new RealPropertyExport(dc, "V1", "i");
             var dcExportV12 = new RealPropertyExport(dc, "V1", "i");
-            dc.OnExportSimulationData += (sender, args) =>
+            dc.ExportSimulationData += (sender, args) =>
                 Console.WriteLine(dcExportV1.Value + @" vs " + dcExportV12.Value);
             var opExportV1 = new RealPropertyExport(op, "V1", "i");
-            op.OnExportSimulationData += (sender, args) => Console.WriteLine(opExportV1.Value);
+            op.ExportSimulationData += (sender, args) => Console.WriteLine(opExportV1.Value);
 
             // Run DC and op
             dc.Run(ckt);

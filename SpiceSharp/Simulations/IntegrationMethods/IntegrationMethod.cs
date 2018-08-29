@@ -181,7 +181,7 @@ namespace SpiceSharp.IntegrationMethods
             Order = 1;
             Prediction = null;
             DeltaOld.Clear(0.0);
-            Solutions.Clear((Vector<double>)null);
+            Solutions.Clear((Vector<double>) null);
 
             // Get parameters
             BaseParameters = Parameters.Get<IntegrationParameters>();
@@ -197,6 +197,31 @@ namespace SpiceSharp.IntegrationMethods
 
             // Last point was START so the current point is the point after a breakpoint (start)
             Break = true;
+        }
+
+        /// <summary>
+        /// Unsetup the integration method
+        /// </summary>
+        public virtual void Unsetup()
+        {
+            Break = false;
+            Breaks.Clear();
+
+            Time = 0.0;
+            _savetime = 0.0;
+            Delta = 0.0;
+            SaveDelta = 0.0;
+            Order = 0;
+            Prediction = null;
+            OldDelta = 0.0;
+            DeltaOld.Clear(0.0);
+            Solutions.Clear((Vector<double>) null);
+            _transientBehaviors = null;
+            Slope = 0.0;
+
+            // Remove any added events
+            Truncate -= TruncateDevices;
+            Truncate -= TruncateNodes;
         }
 
         /// <summary>

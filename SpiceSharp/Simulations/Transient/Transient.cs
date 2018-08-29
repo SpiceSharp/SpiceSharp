@@ -96,7 +96,7 @@ namespace SpiceSharp.Simulations
 
             // Use node initial conditions if device initial conditions are not used
             if (!timeConfig.UseIc)
-                OnLoad += LoadInitialConditions;
+                AfterLoad += LoadInitialConditions;
 
             // Calculate the operating point
             Op(baseConfig.DcMaxIterations);
@@ -108,10 +108,8 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIc = false;
             state.UseDc = false;
-            for (var i = 0; i < TransientBehaviors.Count; i++)
-                TransientBehaviors[i].GetDcState(this);
-            StatePool.ClearDc();
-            OnLoad -= LoadInitialConditions;
+            GetDcStates();
+            AfterLoad -= LoadInitialConditions;
 
             // Start our statistics
             Statistics.TransientTime.Start();
@@ -137,7 +135,7 @@ namespace SpiceSharp.Simulations
                     // Export the current timepoint
                     if (Method.Time >= timeConfig.InitTime)
                     {
-                        Export(exportargs);
+                        OnExport(exportargs);
                     }
 
                     // Detect the end of the simulation
@@ -149,7 +147,6 @@ namespace SpiceSharp.Simulations
                         Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
-                        OnLoad -= LoadInitialConditions;
                         return;
                     }
 

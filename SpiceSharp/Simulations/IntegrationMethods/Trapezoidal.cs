@@ -45,6 +45,16 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Unsetup the integration method
+        /// </summary>
+        public override void Unsetup()
+        {
+            base.Unsetup();
+            for (var i = 0; i < MaxOrder; i++)
+                _ag[i] = 0.0;
+        }
+
+        /// <summary>
         /// Integrate a variable at a specific index
         /// </summary>
         /// <param name="history">History</param>

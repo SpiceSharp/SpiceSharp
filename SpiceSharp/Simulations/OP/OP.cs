@@ -31,7 +31,7 @@
             Op(baseconfig.DcMaxIterations);
 
             var exportargs = new ExportDataEventArgs(this);
-            Export(exportargs);
+            OnExport(exportargs);
         }
     }
 }

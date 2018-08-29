@@ -47,16 +47,12 @@ namespace SpiceSharp.Simulations
             Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
-            state.Domain = RealState.DomainType.Frequency;
-            for (var i = 0; i < LoadBehaviors.Count; i++)
-                LoadBehaviors[i].Load(this);
-            for (var i = 0; i < FrequencyBehaviors.Count; i++)
-                FrequencyBehaviors[i].InitializeParameters(this);
+            InitializeAcParameters();
 
             // Export operating point if requested
             var exportargs = new ExportDataEventArgs(this);
             if (freqconfig.KeepOpInfo)
-                Export(exportargs);
+                OnExport(exportargs);
 
             // Sweep the frequency
             foreach (var freq in FrequencySweep.Points)
@@ -68,7 +64,7 @@ namespace SpiceSharp.Simulations
                 AcIterate();
 
                 // Export the timepoint
-                Export(exportargs);
+                OnExport(exportargs);
             }
         }
     }

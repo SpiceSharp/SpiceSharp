@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors
         /// </summary>
-        protected BehaviorList<BaseTransientBehavior> TransientBehaviors { get; private set; }
+        private BehaviorList<BaseTransientBehavior> _transientBehaviors;
 
         /// <summary>
         /// Constructor
@@ -79,14 +79,14 @@ namespace SpiceSharp.Simulations
             var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             TimeConfiguration = config;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            TransientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Objects);
+            _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Objects);
 
             // Setup the state pool and register states
             StatePool = new StatePool(Method);
-            for (var i = 0; i < TransientBehaviors.Count; i++)
+            for (var i = 0; i < _transientBehaviors.Count; i++)
             {
-                TransientBehaviors[i].GetEquationPointers(RealState.Solver);
-                TransientBehaviors[i].CreateStates(StatePool);
+                _transientBehaviors[i].GetEquationPointers(RealState.Solver);
+                _transientBehaviors[i].CreateStates(StatePool);
             }
             StatePool.BuildStates();
         }
@@ -100,7 +100,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Initialize the method
-            Method.Initialize(TransientBehaviors);
+            Method.Initialize(_transientBehaviors);
             Method.Breaks.Clear();
             Method.Breaks.SetBreakpoint(TimeConfiguration.InitTime);
             Method.Breaks.SetBreakpoint(TimeConfiguration.FinalTime);
@@ -113,9 +113,11 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (var i = 0; i < TransientBehaviors.Count; i++)
-                TransientBehaviors[i].Unsetup();
-            TransientBehaviors = null;
+            for (var i = 0; i < _transientBehaviors.Count; i++)
+                _transientBehaviors[i].Unsetup();
+            _transientBehaviors = null;
+
+            Method.Unsetup();
             Method = null;
 
             base.Unsetup();
@@ -152,7 +154,7 @@ namespace SpiceSharp.Simulations
                 try
                 {
                     // Load the Y-matrix and Rhs-vector for DC and transients
-                    TimeLoad();
+                    Load();
                     iterno++;
                 }
                 catch (CircuitException)
@@ -266,26 +268,25 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load the circuit with the load behaviors
+        /// Initialize all transient behaviors to assume that the current solution is the DC solution
         /// </summary>
-        protected void TimeLoad()
+        protected virtual void GetDcStates()
         {
-            var state = RealState;
+            for (var i = 0; i < _transientBehaviors.Count; i++)
+                _transientBehaviors[i].GetDcState(this);
+            StatePool.ClearDc();
+        }
 
-            // Start the stopwatch
-            Statistics.LoadTime.Start();
+        /// <summary>
+        /// Load all behaviors
+        /// </summary>
+        protected override void LoadBehaviors()
+        {
+            base.LoadBehaviors();
 
-            // Clear rhs and matrix
-            state.Solver.Clear();
-
-            // Load all devices
-            for (var i = 0; i < LoadBehaviors.Count; i++)
-                LoadBehaviors[i].Load(this);
-            for (var i = 0; i < TransientBehaviors.Count; i++)
-                TransientBehaviors[i].Transient(this);
-
-            // Keep statistics
-            Statistics.LoadTime.Stop();
+            // TODO: This part is executed in operating point calculations as well, checking for Time domain doesn't work because the original method checks for the domain for initial conditions
+            for (var i = 0; i < _transientBehaviors.Count; i++)
+                _transientBehaviors[i].Transient(this);
         }
     }
 }

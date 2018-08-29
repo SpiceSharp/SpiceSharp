@@ -26,7 +26,7 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Catch exported data
-            dc.OnExportSimulationData += (sender, args) =>
+            dc.ExportSimulationData += (sender, args) =>
             {
                 var input = args.GetVoltage("in");
                 var output = args.GetVoltage("out");
@@ -56,7 +56,7 @@ namespace SpiceSharpTest
             Export<double> currentExport = new RealPropertyExport(dc, "V1", "i");
 
             // Catch exported data
-            dc.OnExportSimulationData += (sender, args) =>
+            dc.ExportSimulationData += (sender, args) =>
             {
                 Console.WriteLine($@"{inputExport.Value:G3} V : {outputExport.Value:G3} V, {currentExport.Value:G3} A");
             };
@@ -93,7 +93,7 @@ namespace SpiceSharpTest
             var currentExport = new RealPropertyExport(dc, "M1", "id");
 
             // Run the simulation
-            dc.OnExportSimulationData += (sender, args) =>
+            dc.ExportSimulationData += (sender, args) =>
             {
                 var vgsVoltage = dc.Sweeps[0].CurrentValue;
                 var vdsVoltage = dc.Sweeps[1].CurrentValue;
@@ -122,7 +122,7 @@ namespace SpiceSharpTest
             var exportVoltage = new ComplexVoltageExport(ac, "out");
 
             // Simulate
-            ac.OnExportSimulationData += (sender, args) =>
+            ac.ExportSimulationData += (sender, args) =>
             {
                 var output = exportVoltage.Value;
                 var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
@@ -150,7 +150,7 @@ namespace SpiceSharpTest
             var outputExport = new RealVoltageExport(tran, "out");
 
             // Simulate
-            tran.OnExportSimulationData += (sender, args) =>
+            tran.ExportSimulationData += (sender, args) =>
             {
                 var input = inputExport.Value;
                 var output = outputExport.Value;
