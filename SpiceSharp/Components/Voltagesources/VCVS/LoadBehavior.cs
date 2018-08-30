@@ -136,11 +136,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             BranchControlPosPtr = solver.GetMatrixElement(BranchEq, _contPosourceNode);
             BranchControlNegPtr = solver.GetMatrixElement(BranchEq, _contNegateNode);
         }
-        
+
         /// <summary>
         /// Unsetup
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             // Remove references
             PosBranchPtr = null;

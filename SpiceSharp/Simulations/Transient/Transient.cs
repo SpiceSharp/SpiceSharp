@@ -68,7 +68,7 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Unsetup();
+                _acceptBehaviors[i].Unsetup(this);
             _acceptBehaviors = null;
 
             base.Unsetup();

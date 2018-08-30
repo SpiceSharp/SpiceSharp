@@ -114,7 +114,7 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             for (var i = 0; i < _transientBehaviors.Count; i++)
-                _transientBehaviors[i].Unsetup();
+                _transientBehaviors[i].Unsetup(this);
             _transientBehaviors = null;
 
             Method.Unsetup();

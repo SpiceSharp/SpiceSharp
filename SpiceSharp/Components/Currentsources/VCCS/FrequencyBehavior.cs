@@ -107,11 +107,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             NegControlPosPtr = solver.GetMatrixElement(_negNode, _contPosourceNode);
             NegControlNegPtr = solver.GetMatrixElement(_negNode, _contNegateNode);
         }
-        
+
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             // Remove references
             PosControlPosPtr = null;

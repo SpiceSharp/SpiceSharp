@@ -38,7 +38,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
-        public virtual void Unsetup()
+        /// <param name="simulation">Simulation</param>
+        public virtual void Unsetup(Simulation simulation)
         {
             // Do nothing
         }

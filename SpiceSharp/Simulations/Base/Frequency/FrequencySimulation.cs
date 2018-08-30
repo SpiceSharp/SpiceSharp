@@ -104,7 +104,7 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
-                _frequencyBehaviors[i].Unsetup();
+                _frequencyBehaviors[i].Unsetup(this);
             _frequencyBehaviors = null;
 
             // Remove the state

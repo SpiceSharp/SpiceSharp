@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             NoiseState.Destroy();
             NoiseState = null;
             for (var i = 0; i < _noiseBehaviors.Count; i++)
-                _noiseBehaviors[i].Unsetup();
+                _noiseBehaviors[i].Unsetup(this);
             _noiseBehaviors = null;
             NoiseConfiguration = null;
 

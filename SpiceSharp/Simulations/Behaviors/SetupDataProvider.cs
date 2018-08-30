@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace SpiceSharp.Behaviors
 {
@@ -46,11 +47,41 @@ namespace SpiceSharp.Behaviors
         public T GetParameterSet<T>(string name = "entity") where T : ParameterSet => _parameterSets[name].Get<T>();
 
         /// <summary>
+        /// Try getting a parameter set
+        /// </summary>
+        /// <typeparam name="T">The type of Parameter set</typeparam>
+        /// <param name="name">Name of parameter set</param>
+        /// <param name="value">The returned value</param>
+        /// <returns></returns>
+        public bool TryGetParameterSet<T>(string name, out T value) where T : ParameterSet
+        {
+            if (_parameterSets.TryGetValue(name, out var r))
+                return r.TryGet(out value);
+            value = default(T);
+            return false;
+        }
+
+        /// <summary>
         /// Gets the behaviors for a certain name
         /// </summary>
         /// <typeparam name="T">The type of Behavior</typeparam>
         /// <param name="name">Name of the behavior collection</param>
         /// <returns></returns>
         public T GetBehavior<T>(string name = "entity") where T : Behavior => _entityBehaviors[name].Get<T>();
+
+        /// <summary>
+        /// Try getting a behavior
+        /// </summary>
+        /// <typeparam name="T">The type of Behavior</typeparam>
+        /// <param name="name">Name of the behavior collection</param>
+        /// <param name="value">The returned value</param>
+        /// <returns></returns>
+        public bool TryGetBehavior<T>(string name, out T value) where T : Behavior
+        {
+            if (_entityBehaviors.TryGetValue(name, out var r))
+                return r.TryGet(out value);
+            value = default(T);
+            return false;
+        }
     }
 }

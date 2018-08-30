@@ -133,11 +133,11 @@ namespace SpiceSharp.Simulations
 
             // Unsetup all behaviors
             for (var i = 0; i < _initialConditionBehaviors.Count; i++)
-                _initialConditionBehaviors[i].Unsetup();
+                _initialConditionBehaviors[i].Unsetup(this);
             for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].Unsetup();
+                _loadBehaviors[i].Unsetup(this);
             for (var i = 0; i < _temperatureBehaviors.Count; i++)
-                _temperatureBehaviors[i].Unsetup();
+                _temperatureBehaviors[i].Unsetup(this);
 
             // Clear the state
             RealState.Destroy();

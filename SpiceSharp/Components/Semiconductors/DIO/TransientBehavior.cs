@@ -73,11 +73,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
-        
+
         /// <summary>
         /// Unsetup the device
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             PosPosPrimePtr = null;
             NegPosPrimePtr = null;

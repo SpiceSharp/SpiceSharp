@@ -79,7 +79,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Unsetup
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             Branch1Branch2Ptr = null;
             Branch2Branch1Ptr = null;

@@ -183,11 +183,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
             BasePrimePtr = solver.GetRhsElement(BasePrimeNode);
             EmitterPrimePtr = solver.GetRhsElement(EmitterPrimeNode);
         }
-        
+
         /// <summary>
         /// Unsetup
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             // Remove references
             CollectorCollectorPrimePtr = null;

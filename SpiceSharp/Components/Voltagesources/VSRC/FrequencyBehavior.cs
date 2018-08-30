@@ -118,7 +118,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             PosBranchPtr = null;
             BranchPosPtr = null;

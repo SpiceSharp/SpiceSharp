@@ -136,7 +136,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Unsetup
         /// </summary>
-        public override void Unsetup()
+        /// <param name="simulation"></param>
+        public override void Unsetup(Simulation simulation)
         {
             // Remove references
             DrainDrainPtr = null;
