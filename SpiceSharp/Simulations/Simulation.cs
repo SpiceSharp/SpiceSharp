@@ -32,14 +32,19 @@ namespace SpiceSharp.Simulations
         public event EventHandler<ExportDataEventArgs> ExportSimulationData;
 
         /// <summary>
-        /// Event called before setting up the circuit
+        /// Event called before setting up the simulation
         /// </summary>
         public event EventHandler<EventArgs> BeforeSetup;
 
         /// <summary>
-        /// Event called after setting up the circuit
+        /// Event called after setting up the simulation
         /// </summary>
         public event EventHandler<EventArgs> AfterSetup;
+
+        /// <summary>
+        /// Event called before executing the simulation
+        /// </summary>
+        public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
 
         /// <summary>
         /// Event called after executing the simulation
@@ -47,12 +52,12 @@ namespace SpiceSharp.Simulations
         public event EventHandler<SimulationFlowEventArgs> AfterExecute; 
 
         /// <summary>
-        /// Event called before cleaning up the circuit
+        /// Event called before cleaning up the simulation
         /// </summary>
         public event EventHandler<EventArgs> BeforeUnsetup;
 
         /// <summary>
-        /// Event called after cleaning up the circuit
+        /// Event called after cleaning up the simulation
         /// </summary>
         public event EventHandler<EventArgs> AfterUnsetup; 
         #endregion
@@ -99,14 +104,24 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Execute the simulation
-            var args = new SimulationFlowEventArgs();
-            while (args.Repeat)
+            var beforeArgs = new BeforeExecuteEventArgs(false);
+            var afterArgs = new SimulationFlowEventArgs();
+            do
             {
+                // Before execution
+                BeforeExecute?.Invoke(this, beforeArgs);
+
+                // Execute simulation
                 Execute();
 
-                args.Repeat = false;
-                AfterExecute?.Invoke(this, args);
-            }
+                // Reset
+                afterArgs.Repeat = false;
+                AfterExecute?.Invoke(this, afterArgs);
+
+                // We're going to repeat the simulation, change the event arguments
+                if (afterArgs.Repeat)
+                    beforeArgs = new BeforeExecuteEventArgs(true);
+            } while (afterArgs.Repeat);
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);

@@ -56,8 +56,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Setup behavior
         /// </summary>
-        /// <param name="provider">Provider</param>
-        public override void Setup(SetupDataProvider provider)
+        /// <param name="simulation">Simulation</param>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             // We don't need anything, acts like a short circuit
         }

@@ -32,10 +32,11 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         public ModelLoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// 
+        /// Setup behavior
         /// </summary>
-        /// <param name="provider"></param>
-        public override void Setup(SetupDataProvider provider)
+        /// <param name="simulation">Simulation</param>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));

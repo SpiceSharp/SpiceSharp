@@ -68,7 +68,7 @@ namespace SpiceSharp.Circuits
 
                 // Setup the behavior
                 var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
-                behavior.Setup(provider);
+                behavior.Setup(simulation, provider);
                 return (T)behavior;
             }
 

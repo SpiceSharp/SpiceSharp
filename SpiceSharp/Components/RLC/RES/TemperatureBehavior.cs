@@ -29,8 +29,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="provider"></param>
-        public override void Setup(SetupDataProvider provider)
+        /// <param name="simulation">The simulation</param>
+        /// <param name="provider">The setup data provider</param>
+        public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));

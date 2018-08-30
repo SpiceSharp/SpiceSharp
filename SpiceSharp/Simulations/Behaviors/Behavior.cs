@@ -28,8 +28,9 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Setup the behavior
         /// </summary>
+        /// <param name="simulation">The simulation that is setting up</param>
         /// <param name="provider">The data provider</param>
-        public virtual void Setup(SetupDataProvider provider)
+        public virtual void Setup(Simulation simulation, SetupDataProvider provider)
         {
             // Do nothing
         }

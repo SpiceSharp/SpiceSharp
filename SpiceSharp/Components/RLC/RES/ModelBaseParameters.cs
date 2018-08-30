@@ -27,5 +27,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public GivenParameter<double> DefaultWidth { get; } = new GivenParameter<double>(10.0e-6);
         [ParameterName("narrow"), ParameterInfo("Narrowing of resistor")]
         public GivenParameter<double> Narrow { get; } = new GivenParameter<double>();
+        [ParameterName("lot"), ParameterInfo("Tolerance on the value of the resistor in percents")]
+        public GivenParameter<double> Tolerance { get; } = new GivenParameter<double>();
     }
 }
