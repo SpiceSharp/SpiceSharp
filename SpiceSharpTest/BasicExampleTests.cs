@@ -158,5 +158,47 @@ namespace SpiceSharpTest
             tran.Run(ckt);
             // </example_Transient>
         }
+
+        [Test]
+        public void When_ResistorModified_Expect_NoException()
+        {
+            // <example_Stochastic>
+            // Build the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Resistor("R1", "in", "0", 1.0e3));
+            
+            // Create the simulation
+            var op = new OP("Op 1");
+            
+            // Attach events to apply stochastic variation
+            var rndGenerator = new Random();
+            var counter = 0;
+            op.BeforeExecute += (sender, args) =>
+            {
+                // Apply a random value of 1kOhm with 5% tolerance
+                var value = 950 + 100 * rndGenerator.NextDouble();
+                var sim = (Simulation) sender;
+                sim.EntityParameters["R1"].SetParameter("resistance", value);
+            };
+            op.AfterExecute += (sender, args) =>
+            {
+                // Run 10 times
+                counter++;
+                args.Repeat = counter < 10;
+            };
+
+            // Make the exports
+            var current = new RealPropertyExport(op, "R1", "i");
+            
+            // Simulate
+            op.ExportSimulationData += (sender, args) =>
+            {
+                // This will run 1o times
+                var result = current.Value;
+            };
+            op.Run(ckt);
+            // </example_Stochastic>
+        }
     }
 }
