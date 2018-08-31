@@ -46,33 +46,6 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorTolerance_Expect_Reference()
-        {
-            /*
-             * This circuit tests stochastic variation on resistor values
-             * by using the model parameter "Tolerance"
-             */
-            Resistor res;
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0),
-                res = new Resistor("R1", "in", "0", 1.0e3));
-            var model = new ResistorModel("MR");
-            model.ParameterSets.SetParameter("lot", 5.0); // 5% tolerance
-            res.SetModel(model);
-
-            // Make sure the unit test is consistent
-            SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.Generator = new Random(1);
-
-            var op = new OP("op");
-            var export = new RealPropertyExport(op, "R1", "i");
-            op.ExportSimulationData += (sender, args) =>
-            {
-                Assert.AreEqual(0.0010257811016625752, export.Value, 1e-12);
-            };
-            op.Run(ckt);
-        }
-
-        [Test]
         public void When_ResistorDividerSmallSignal_Expect_Reference()
         {
             /*

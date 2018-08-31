@@ -44,36 +44,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
-            if (provider.TryGetParameterSet("model", out _mbp))
-            {
-                // Add an event if a deviation is set
-                if (_mbp.Tolerance.Given)
-                {
-                    if (simulation is BaseSimulation bs)
-                    {
-                        bs.BeforeExecute += ApplyTolerance;
-                    }
-                }
-            }
+            provider.TryGetParameterSet("model", out _mbp);
         }
 
-        /// <summary>
-        /// Apply a random value based on the tolerance
-        /// </summary>
-        /// <param name="sender">Simulation sending the event</param>
-        /// <param name="args">Arguments</param>
-        private void ApplyTolerance(object sender, BeforeExecuteEventArgs args)
-        {
-            if (args.Repeated == false)
-                _original = _bp.Resistance.Value;
-            if (Generator == null)
-                return;
-
-            var minimum = _original * (1.0 - 0.01 * _mbp.Tolerance);
-            var maximum = _original * (1.0 + 0.01 * _mbp.Tolerance);
-            _bp.Resistance.RawValue = Generator.NextDouble() * (maximum - minimum) + minimum;
-        }
-        
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
@@ -89,10 +62,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
             // Clear references
             _bp = null;
             _mbp = null;
-
-            // Remove events
-            if (simulation is BaseSimulation bs)
-                bs.BeforeExecute -= ApplyTolerance;
         }
 
         /// <summary>

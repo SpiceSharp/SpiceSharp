@@ -43,12 +43,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event called before temperature calculations
         /// </summary>
-        public event EventHandler<EventArgs> BeforeTemperature;
+        public event EventHandler<LoadStateEventArgs> BeforeTemperature;
 
         /// <summary>
         /// Event called after temperature calculations
         /// </summary>
-        public event EventHandler<EventArgs> AfterTemperature;
+        public event EventHandler<LoadStateEventArgs> AfterTemperature;
         #endregion
 
         /// <summary>
@@ -115,10 +115,11 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Temperature()
         {
-            OnBeforeTemperature(EventArgs.Empty);
+            var args = new LoadStateEventArgs(RealState);
+            OnBeforeTemperature(args);
             for (var i = 0; i < _temperatureBehaviors.Count; i++)
                 _temperatureBehaviors[i].Temperature(this);
-            OnAfterTemperature(EventArgs.Empty);
+            OnAfterTemperature(args);
         }
 
         /// <summary>
@@ -596,12 +597,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Call event just before temperature calculations
         /// </summary>
-        protected virtual void OnBeforeTemperature(EventArgs args) => BeforeTemperature?.Invoke(this, args);
+        protected virtual void OnBeforeTemperature(LoadStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
 
         /// <summary>
         /// Call event just after temperature calculations
         /// </summary>
-        protected virtual void OnAfterTemperature(EventArgs args) => AfterTemperature?.Invoke(this, args);
+        protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
     }
