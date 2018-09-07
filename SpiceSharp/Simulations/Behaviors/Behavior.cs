@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Represents a behavior for a class
     /// </summary>
-    public abstract class Behavior
+    public abstract class Behavior : NamedParameterized
     {
         /// <summary>
         /// Gets the name of the behavior
@@ -50,36 +50,32 @@ namespace SpiceSharp.Behaviors
         /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Parameter</param>
         /// <returns>Returns null if there is no export method</returns>
-        public virtual Func<double> CreateExport(Simulation simulation, string propertyName)
+        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
-            return CreateExport<double>(simulation, propertyName);
+            return CreateGetter<double>(simulation, propertyName);
         }
 
         /// <summary>
         /// Create a method for exporting a property using reflection. Supported:
         /// </summary>
-        /// <typeparam name="TResult">Return type</typeparam>
+        /// <typeparam name="T">Base value type</typeparam>
         /// <param name="simulation">Simulation</param>
-        /// <param name="property">Property name</param>
+        /// <param name="name">Property name</param>
         /// <returns></returns>
-        protected Func<TResult> CreateExport<TResult>(Simulation simulation, string property)
+        protected Func<T> CreateGetter<T>(Simulation simulation, string name) where T : struct 
         {
             // Find methods to create the export
             var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
-            Func<TResult> result = null;
-            foreach (var member in members)
+            Func<T> result = null;
+            foreach (var member in Named(name))
             {
-                // Skip members that don't have the right name
-                if (!HasProperty(member, property))
-                    continue;
-
                 // Use methods
                 if (member is MethodInfo mi)
-                    result = CreateMethodExport<TResult>(simulation, mi);
+                    result = CreateMethodGetter<T>(simulation, mi);
 
                 // Use properties
                 if (member is PropertyInfo pi)
-                    result = CreatePropertyExport<TResult>(pi);
+                    result = CreateGetter<T>(pi);
                 
                 // Return
                 if (result != null)
@@ -93,28 +89,28 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Create an export method from a MethodInfo (reflection)
         /// </summary>
-        /// <typeparam name="TResult">Return type</typeparam>
+        /// <typeparam name="T">Return type</typeparam>
         /// <param name="simulation">Simulation</param>
         /// <param name="method">Method</param>
         /// <returns></returns>
-        private Func<TResult> CreateMethodExport<TResult>(Simulation simulation, MethodInfo method)
+        private Func<T> CreateMethodGetter<T>(Simulation simulation, MethodInfo method) where T : struct
         {
             // First make sure it is the right return type
-            if (method.ReturnType != typeof(TResult))
+            if (method.ReturnType != typeof(T))
                 return null;
             var parameters = method.GetParameters();
 
             // Method: TResult Method()
             if (parameters.Length == 0)
-                return (Func<TResult>) method.CreateDelegate(typeof(Func<TResult>), this);
+                return (Func<T>) method.CreateDelegate(typeof(Func<T>), this);
 
             // Methods with one parameter
             if (parameters.Length == 1)
             {
-                // Method: TResult Method(Simulation)
+                // Method: <T> <Method>(<Simulation>)
                 if (parameters[0].ParameterType == typeof(Simulation))
                 {
-                    var simMethod = (Func<Simulation, TResult>)method.CreateDelegate(typeof(Func<Simulation, TResult>), this);
+                    var simMethod = (Func<Simulation, T>)method.CreateDelegate(typeof(Func<Simulation, T>), this);
                     return () => simMethod(simulation);
                 }
 
@@ -128,44 +124,11 @@ namespace SpiceSharp.Behaviors
 
                     // Create the expression
                     var expression = Expression.Call(Expression.Constant(this), method, Expression.Constant(state));
-                    return Expression.Lambda<Func<TResult>>(expression).Compile();
+                    return Expression.Lambda<Func<T>>(expression).Compile();
                 }
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Create an export method from a PropertyInfo (reflection)
-        /// </summary>
-        /// <typeparam name="TResult">Return type</typeparam>
-        /// <param name="property">Property</param>
-        /// <returns></returns>
-        private Func<TResult> CreatePropertyExport<TResult>(PropertyInfo property)
-        {
-            // First make sure it is the correct return type
-            if (property.PropertyType != typeof(TResult))
-                return null;
-
-            // Return the getter method
-            return (Func<TResult>) property.GetGetMethod().CreateDelegate(typeof(Func<TResult>), this);
-        }
-
-        /// <summary>
-        /// Find out if the member is our named property
-        /// </summary>
-        /// <param name="member">Member</param>
-        /// <param name="property">Property name</param>
-        /// <returns></returns>
-        private static bool HasProperty(MemberInfo member, string property)
-        {
-            var names = (ParameterNameAttribute[]) member.GetCustomAttributes(typeof(ParameterNameAttribute), true);
-            foreach (var attribute in names)
-            {
-                if (attribute.Name == property)
-                    return true;
-            }
-            return false;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(Simulation simulation, string propertyName)
+        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));

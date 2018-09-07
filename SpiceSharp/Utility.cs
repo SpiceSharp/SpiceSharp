@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components;
 using System.Globalization;
 using System.Reflection;
 
@@ -96,6 +95,5 @@ namespace SpiceSharp
                 }
             }
         }
-
     }
 }

@@ -24,7 +24,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public virtual Func<Complex> CreateAcExport(Simulation simulation, string propertyName)
         {
-            return CreateExport<Complex>(simulation, propertyName);
+            return CreateGetter<Complex>(simulation, propertyName);
         }
 
         /// <summary>

@@ -73,7 +73,7 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                var s = ps.GetSetter<T>(name);
+                var s = ps.CreateSetter<T>(name);
                 if (s != null)
                     return s;
             }
@@ -90,7 +90,7 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                var s = ps.GetSetter<T>();
+                var s = ps.CreateSetter<T>();
                 if (s != null)
                     return s;
             }
