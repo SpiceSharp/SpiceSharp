@@ -90,8 +90,8 @@ namespace SpiceSharp.Circuits
 
             // By default, we include the parameters of this entity
             var result = new SetupDataProvider();
-            result.Add("entity", parameters.GetEntityParameters(Name));
-            result.Add("entity", behaviors.GetEntityBehaviors(Name));
+            result.Add("entity", parameters[Name]);
+            result.Add("entity", behaviors[Name]);
             return result;
         }
 

@@ -91,8 +91,8 @@ namespace SpiceSharp.Components
             // Add our model parameters and behaviors
             if (Model != null)
             {
-                provider.Add("model", parameters.GetEntityParameters(Model.Name));
-                provider.Add("model", behaviors.GetEntityBehaviors(Model.Name));
+                provider.Add("model", parameters[Model.Name]);
+                provider.Add("model", behaviors[Model.Name]);
             }
 
             return provider;

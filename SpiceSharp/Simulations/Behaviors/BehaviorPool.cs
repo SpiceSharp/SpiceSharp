@@ -22,6 +22,21 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
 
         /// <summary>
+        /// Get entity behaviors by identifier
+        /// </summary>
+        /// <param name="name">Identifier</param>
+        /// <returns></returns>
+        public EntityBehaviorDictionary this[Identifier name]
+        {
+            get
+            {
+                if (_entityBehaviors.TryGetValue(name, out var result))
+                    return result;
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Add a behavior to the collection
         /// </summary>
         /// <param name="creator">Name of the entity creating the behavior</param>
@@ -63,6 +78,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
+        [Obsolete]
         public EntityBehaviorDictionary GetEntityBehaviors(Identifier name)
         {
             if (_entityBehaviors.TryGetValue(name, out var result))

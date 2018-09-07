@@ -75,12 +75,12 @@ namespace SpiceSharp.Components
             var data = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Register inductor 1
-            data.Add("inductor1", parameters.GetEntityParameters(InductorName1));
-            data.Add("inductor1", behaviors.GetEntityBehaviors(InductorName1));
+            data.Add("inductor1", parameters[InductorName1]);
+            data.Add("inductor1", behaviors[InductorName1]);
 
             // Register inductor 2
-            data.Add("inductor2", parameters.GetEntityParameters(InductorName2));
-            data.Add("inductor2", behaviors.GetEntityBehaviors(InductorName2));
+            data.Add("inductor2", parameters[InductorName2]);
+            data.Add("inductor2", behaviors[InductorName2]);
 
             return data;
         }

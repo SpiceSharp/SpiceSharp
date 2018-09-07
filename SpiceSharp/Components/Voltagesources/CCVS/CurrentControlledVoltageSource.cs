@@ -73,8 +73,8 @@ namespace SpiceSharp.Components
             var provider = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Add the controlling source
-            provider.Add("control", behaviors.GetEntityBehaviors(ControllingName));
-            provider.Add("control", parameters.GetEntityParameters(ControllingName));
+            provider.Add("control", behaviors[ControllingName]);
+            provider.Add("control", parameters[ControllingName]);
 
             return provider;
         }
