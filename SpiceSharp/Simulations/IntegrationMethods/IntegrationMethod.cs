@@ -89,12 +89,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the last time point that was accepted
         /// </summary>
-        public double SavedTime => _savetime;
+        public double SavedTime { get; private set; } = double.NaN;
 
         /// <summary>
-        /// Private variables
+        /// Transient behaviors
         /// </summary>
-        private double _savetime = double.NaN;
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
 
         /// <summary>
@@ -176,7 +175,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Initialize variables
             Time = 0.0;
-            _savetime = 0.0;
+            SavedTime = 0.0;
             Delta = 0.0;
             SaveDelta = 0.0;
             OldDelta = 0.0;
@@ -211,7 +210,7 @@ namespace SpiceSharp.IntegrationMethods
             Breaks.Clear();
 
             Time = 0.0;
-            _savetime = 0.0;
+            SavedTime = 0.0;
             Delta = 0.0;
             SaveDelta = 0.0;
             Order = 0;
@@ -274,7 +273,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new CircuitException("Invalid time step");
 
             OldDelta = Delta;
-            _savetime = Time;
+            SavedTime = Time;
             Time += Delta;
             DeltaOld.Current = Delta;
         }
@@ -282,7 +281,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Roll back the time to the last advanced time and reset the order to 1
         /// </summary>
-        public void Rollback() => Time = _savetime;
+        public void Rollback() => Time = SavedTime;
 
         /// <summary>
         /// Go back to order 1
@@ -304,7 +303,7 @@ namespace SpiceSharp.IntegrationMethods
             // Update all the variables
             Delta = delta;
             DeltaOld.Current = delta;
-            Time = _savetime + delta;
+            Time = SavedTime + delta;
 
             // Cut the integration order
             Order = 1;
