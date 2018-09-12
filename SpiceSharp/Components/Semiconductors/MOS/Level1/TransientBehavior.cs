@@ -195,24 +195,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Create states
         /// </summary>
-        /// <param name="states">States</param>
-        public override void CreateStates(StatePool states)
+        /// <param name="method"></param>
+        public override void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
-            ChargeGs = states.CreateDerivative();
-            ChargeGd = states.CreateDerivative();
-            ChargeGb = states.CreateDerivative();
-            ChargeBd = states.CreateDerivative();
-            ChargeBs = states.CreateDerivative();
+            ChargeGs = method.CreateDerivative();
+            ChargeGd = method.CreateDerivative();
+            ChargeGb = method.CreateDerivative();
+            ChargeBd = method.CreateDerivative();
+            ChargeBs = method.CreateDerivative();
 
-            CapGs = states.CreateHistory();
-            CapGd = states.CreateHistory();
-            CapGb = states.CreateHistory();
-            VoltageGs = states.CreateHistory();
-            VoltageDs = states.CreateHistory();
-            VoltageBs = states.CreateHistory();
+            CapGs = method.CreateHistory();
+            CapGd = method.CreateHistory();
+            CapGb = method.CreateHistory();
+            VoltageGs = method.CreateHistory();
+            VoltageDs = method.CreateHistory();
+            VoltageBs = method.CreateHistory();
         }
 
         /// <summary>
@@ -585,12 +585,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Truncate timestep
         /// </summary>
         /// <returns>The timestep that satisfies the LTE</returns>
-        public override double Truncate()
+        /* public override double Truncate()
         {
             var timetmp = ChargeGs.LocalTruncationError();
             timetmp = Math.Min(timetmp, ChargeGd.LocalTruncationError());
             timetmp = Math.Min(timetmp, ChargeGb.LocalTruncationError());
             return timetmp;
-        }
+        } */
     }
 }

@@ -106,13 +106,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Create states
         /// </summary>
-        /// <param name="states">States</param>
-        public override void CreateStates(StatePool states)
+        /// <param name="method"></param>
+        public override void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
-            _flux = states.CreateDerivative();
+            _flux = method.CreateDerivative();
         }
 
         /// <summary>
@@ -162,6 +162,6 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Truncate timestep
         /// </summary>
         /// <returns>The timestep that satisfies the LTE</returns>
-        public override double Truncate() => _flux.LocalTruncationError();
+        // public override double Truncate() => _flux.LocalTruncationError();
     }
 }

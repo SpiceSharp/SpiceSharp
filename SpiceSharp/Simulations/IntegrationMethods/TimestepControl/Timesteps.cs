@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.IntegrationMethods;
 
-namespace SpiceSharp.Simulations.IntegrationMethods.Timesteps
+namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// Class capable of managing timesteps and time
@@ -27,17 +27,17 @@ namespace SpiceSharp.Simulations.IntegrationMethods.Timesteps
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public double this[int index] => DeltaOld[index];
+        public double this[int index] => OldDeltas[index];
 
         /// <summary>
         /// Gets the history of timesteps
         /// </summary>
-        protected ArrayHistory<double> DeltaOld { get; }
+        protected ArrayHistory<double> OldDeltas { get; }
 
         /// <summary>
-        /// Private variables
+        /// Gets the last accepted time point
         /// </summary>
-        protected double SaveTime { get; private set; }
+        public double SaveTime { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -45,8 +45,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods.Timesteps
         /// <param name="history">Number of points needed</param>
         public Timesteps(int history)
         {
-            DeltaOld = new ArrayHistory<double>(history);
-            DeltaHistory = new ReadOnlyHistory<double>(DeltaOld);
+            // We will allocate the required number of points + the current one
+            OldDeltas = new ArrayHistory<double>(history + 1);
+            DeltaHistory = new ReadOnlyHistory<double>(OldDeltas);
         }
 
         /// <summary>
@@ -56,8 +57,19 @@ namespace SpiceSharp.Simulations.IntegrationMethods.Timesteps
         /// <param name="delta">Initial timestep</param>
         public virtual void Initialize(double delta)
         {
-            DeltaOld.Clear(i => delta);
+            OldDeltas.Clear(i => delta);
             Delta = delta;
+            SaveTime = 0.0;
+            Time = 0.0;
+        }
+
+        /// <summary>
+        /// Clear the timesteps
+        /// </summary>
+        public virtual void Clear()
+        {
+            OldDeltas.Clear(0.0);
+            Delta = 0.0;
             SaveTime = 0.0;
             Time = 0.0;
         }
@@ -70,7 +82,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods.Timesteps
         {
             Delta = delta;
             Time = SaveTime + delta;
-            DeltaOld.Current = delta;
+            OldDeltas.Current = delta;
         }
 
         /// <summary>
@@ -81,7 +93,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods.Timesteps
         {
             // Flag the current timepoint as accepted
             SaveTime = Time;
-            DeltaOld.Store(Delta);
+            OldDeltas.Store(Delta);
         }
     }
 }

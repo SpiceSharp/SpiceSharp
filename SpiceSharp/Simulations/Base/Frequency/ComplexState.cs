@@ -79,12 +79,12 @@ namespace SpiceSharp.Simulations
         /// Initialize circuit
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        public override void Initialize(VariableSet nodes)
+        public override void Setup(VariableSet nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
             Solution = new DenseVector<Complex>(Solver.Order);
-            base.Initialize(nodes);
+            base.Setup(nodes);
         }
 
         /// <summary>

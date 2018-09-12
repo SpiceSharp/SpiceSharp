@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called when the timestep has been cut due to convergence problems
         /// </summary>
-        public event EventHandler<TimestepCutEventArgs> TimestepCut;
+        public event EventHandler<TimestepCutEventArgs> ConvergenceFailed;
 
         /// <summary>
         /// Behaviors for accepting a timepoint
@@ -87,8 +87,6 @@ namespace SpiceSharp.Simulations
             var baseConfig = BaseConfiguration;
             var timeConfig = TimeConfiguration;
 
-            var delta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
-
             // Initialize before starting the simulation
             state.UseIc = timeConfig.UseIc;
             state.Domain = RealState.DomainType.Time;
@@ -101,9 +99,6 @@ namespace SpiceSharp.Simulations
             // Calculate the operating point
             Op(baseConfig.DcMaxIterations);
             Statistics.TimePoints++;
-            Method.DeltaOld.Clear(timeConfig.MaxStep);
-            Method.Delta = delta;
-            Method.SaveDelta = timeConfig.FinalTime / 50.0;
 
             // Stop calculating a DC solution
             state.UseIc = false;
@@ -118,25 +113,16 @@ namespace SpiceSharp.Simulations
 
             try
             {
+                var newDelta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
                 while (true)
                 {
-                    // nextTime:
-
-                    // Accept the current timepoint (CKTaccept())
-                    for (var i = 0; i < _acceptBehaviors.Count; i++)
-                        _acceptBehaviors[i].Accept(this);
-                    Method.SaveSolution(state.Solution);
-                    // end of CKTaccept()
-
-                    // Check if current breakpoint is outdated; if so, clear
-                    Method.UpdateBreakpoints();
+                    // Accept the last evaluated time point
+                    Method.Accept();
                     Statistics.Accepted++;
 
                     // Export the current timepoint
                     if (Method.Time >= timeConfig.InitTime)
-                    {
                         OnExport(exportargs);
-                    }
 
                     // Detect the end of the simulation
                     if (Method.Time >= timeConfig.FinalTime)
@@ -150,64 +136,28 @@ namespace SpiceSharp.Simulations
                         return;
                     }
 
-                    // Pause test - pausing not supported
-
-                    // resume:
-                    Method.Delta = Math.Min(Method.Delta, timeConfig.MaxStep);
-                    Method.Resume();
-                    StatePool.History.Cycle();
-
-                    // Calculate a new solution
+                    // Find a valid time point
                     while (true)
                     {
-                        Method.TryDelta();
-
-                        // Compute coefficients and predict a solution and reset states to our previous solution
-                        Method.ComputeCoefficients(this);
-                        Method.Predict(this);
+                        // Probe the next time point
+                        Method.Probe(this, newDelta);
 
                         // Try to solve the new point
-                        if (Method.SavedTime.Equals(0.0))
+                        if (Method.BaseTime.Equals(0.0))
                             state.Init = RealState.InitializationStates.InitTransient;
                         var converged = TimeIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
-                        // Spice copies the states the first time, we're not
-                        // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
-                        // We don't treat it special (we just assume it started from a circuit in rest)
-
+                        // Did we fail to converge to a solution?
                         if (!converged)
                         {
-                            // Failed to converge, let's try again with a smaller timestep
-                            Method.Rollback();
-                            Statistics.Rejected++;
-                            Method.Delta /= 8.0;
-                            Method.CutOrder();
-
-                            var data = new TimestepCutEventArgs(Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
-                            TimestepCut?.Invoke(this, data);
-                        }
-                        else
-                        {
-                            // Do not check the first time point
-                            if (Method.SavedTime.Equals(0.0) || Method.LteControl(this))
-                            {
-                                // goto nextTime;
-                                break;
-                            }
-
-                            Statistics.Rejected++;
-                            var data = new TimestepCutEventArgs(Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
-                            TimestepCut?.Invoke(this, data);
+                            var args = new TimestepCutEventArgs(0.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
+                            OnConvergenceFailed(args);
                         }
 
-                        if (Method.Delta <= timeConfig.DeltaMin)
-                        {
-                            if (Method.OldDelta > timeConfig.DeltaMin)
-                                Method.Delta = timeConfig.DeltaMin;
-                            else
-                                throw new CircuitException("Timestep too small at t={0:e}: {1:e}".FormatString(Method.SavedTime, Method.Delta));
-                        }
+                        // If our integration method doesn't approve of our solution, retry probing a new timestep again
+                        if (Method.Evaluate(this, out newDelta))
+                            break;
                     }
                 }
             }
@@ -219,6 +169,15 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
             }
+        }
+
+        /// <summary>
+        /// Call the event for when convergence fails
+        /// </summary>
+        /// <param name="args">Argument</param>
+        protected void OnConvergenceFailed(TimestepCutEventArgs args)
+        {
+            ConvergenceFailed?.Invoke(this, args);
         }
 
         /// <summary>

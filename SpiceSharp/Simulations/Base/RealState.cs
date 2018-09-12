@@ -166,7 +166,7 @@ namespace SpiceSharp.Simulations
         /// Initialize the state
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        public override void Initialize(VariableSet nodes)
+        public override void Setup(VariableSet nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
@@ -183,7 +183,7 @@ namespace SpiceSharp.Simulations
             UseDc = true;
             UseIc = false;
 
-            base.Initialize(nodes);
+            base.Setup(nodes);
         }
 
         /// <summary>

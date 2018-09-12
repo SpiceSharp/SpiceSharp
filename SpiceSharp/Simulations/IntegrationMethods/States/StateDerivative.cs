@@ -3,29 +3,12 @@
     /// <summary>
     /// Proxy class for extracting the right state variables and values
     /// </summary>
-    public class StateDerivative : StateHistory
+    public abstract class StateDerivative : StateHistory
     {
         /// <summary>
         /// Gets the current derivative
         /// </summary>
-        public double Derivative => Source.History.Current[StateIndex + 1];
-
-        /// <summary>
-        /// Constructor
-        /// This constructor should not be used, except for in the <see cref="StatePool"/> class.
-        /// </summary>
-        /// <param name="source">Pool of states instantiating the variable</param>
-        /// <param name="index">The index/identifier of the state variable</param>
-        public StateDerivative(StatePool source, int index)
-            : base(source, index)
-        {
-        }
-
-        /// <summary>
-        /// Integrate the state variable
-        /// </summary>
-        /// <returns>The last order derivative</returns>
-        public void Integrate() => Source.Integrate(StateIndex);
+        public abstract double Derivative { get; }
 
         /// <summary>
         /// Calculate contribution to the jacobian matrix (or Y-matrix). 
@@ -35,10 +18,7 @@
         /// </summary>
         /// <param name="derivative">Derivative of the state variable w.r.t. the unknown variable</param>
         /// <returns></returns>
-        public double Jacobian(double derivative)
-        {
-            return derivative * Source.Method.Slope;
-        }
+        public abstract double Jacobian(double derivative);
 
         /// <summary>
         /// Calculate contribution to the rhs vector (right-hand side vector).
@@ -48,10 +28,8 @@
         /// <param name="jacobianValue">Jacobian matrix contribution</param>
         /// <param name="currentValue">The current value of the unknown variable</param>
         /// <returns></returns>
-        public double RhsCurrent(double jacobianValue, double currentValue)
-        {
-            return Source.History.Current[StateIndex + 1] - jacobianValue * currentValue;
-        }
+        public virtual double RhsCurrent(double jacobianValue, double currentValue) =>
+            Derivative - jacobianValue * currentValue;
 
         /// <summary>
         /// Calculate contribution to the rhs vector (right-hand side vector).
@@ -60,16 +38,11 @@
         /// variable.
         /// </summary>
         /// <returns></returns>
-        public double RhsCurrent()
-        {
-            var history = Source.History;
-            return history.Current[StateIndex + 1] - Source.Method.Slope * history.Current[StateIndex];
-        }
+        public abstract double RhsCurrent();
 
         /// <summary>
-        /// Truncate the timestep based on the LTE (Local Truncation Error)
+        /// Calculate the derivative
         /// </summary>
-        /// <returns>The timestep that satisfies the LTE</returns>
-        public double LocalTruncationError() => Source.LocalTruncationError(StateIndex);
+        public abstract void Integrate();
     }
 }

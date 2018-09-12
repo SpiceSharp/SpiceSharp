@@ -83,6 +83,8 @@ namespace SpiceSharp.Simulations
             var solver = ComplexState.Solver;
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
+
+            ComplexState.Setup(Nodes);
         }
 
         /// <summary>
@@ -93,7 +95,6 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Initialize the state
-            ComplexState.Initialize(Nodes);
             ComplexState.Sparse |= ComplexState.SparseStates.AcShouldReorder;
         }
 

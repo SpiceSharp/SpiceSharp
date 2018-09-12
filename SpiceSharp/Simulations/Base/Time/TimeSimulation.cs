@@ -20,11 +20,6 @@ namespace SpiceSharp.Simulations
         public IntegrationMethod Method { get; protected set; }
 
         /// <summary>
-        /// Gets the state pool
-        /// </summary>
-        public StatePool StatePool { get; private set; }
-
-        /// <summary>
         /// Time-domain behaviors
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
@@ -81,30 +76,13 @@ namespace SpiceSharp.Simulations
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Objects);
 
-            // Setup the state pool and register states
-            StatePool = new StatePool(Method);
+            // Allow all transient behaviors to allocate equation elements and create states
             for (var i = 0; i < _transientBehaviors.Count; i++)
             {
                 _transientBehaviors[i].GetEquationPointers(RealState.Solver);
-                _transientBehaviors[i].CreateStates(StatePool);
+                _transientBehaviors[i].CreateStates(Method);
             }
-            StatePool.BuildStates();
-        }
-
-        /// <summary>
-        /// Execute time simulation
-        /// </summary>
-        protected override void Execute()
-        {
-            // Base
-            base.Execute();
-
-            // Initialize the method
-            Method.Initialize(_transientBehaviors);
-            Method.Breaks.Clear();
-            Method.Breaks.SetBreakpoint(TimeConfiguration.InitTime);
-            Method.Breaks.SetBreakpoint(TimeConfiguration.FinalTime);
-            Method.Breaks.MinBreak = TimeConfiguration.MaxStep * 5e-5;
+            Method.Setup(this);
         }
 
         /// <summary>
@@ -274,7 +252,7 @@ namespace SpiceSharp.Simulations
         {
             for (var i = 0; i < _transientBehaviors.Count; i++)
                 _transientBehaviors[i].GetDcState(this);
-            StatePool.ClearDc();
+            Method.Initialize();
         }
 
         /// <summary>

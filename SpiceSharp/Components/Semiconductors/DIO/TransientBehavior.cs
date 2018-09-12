@@ -132,13 +132,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Create states
         /// </summary>
-        /// <param name="states">States</param>
-        public override void CreateStates(StatePool states)
+        /// <param name="method"></param>
+        public override void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
-            CapCharge = states.CreateDerivative();
+            CapCharge = method.CreateDerivative();
         }
 
         /// <summary>
@@ -212,6 +212,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Use local truncation error to cut timestep
         /// </summary>
         /// <returns>The timestep that satisfies the LTE</returns>
-        public override double Truncate() => CapCharge.LocalTruncationError();
+        // public override double Truncate() => CapCharge.LocalTruncationError();
     }
 }

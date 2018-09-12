@@ -87,13 +87,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Create states
         /// </summary>
-        /// <param name="states">States</param>
-        public override void CreateStates(StatePool states)
+        /// <param name="method"></param>
+        public override void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
-            QCap = states.CreateDerivative();
+            QCap = method.CreateDerivative();
         }
 
         /// <summary>
@@ -178,6 +178,6 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Truncate the timestep
         /// </summary>
         /// <returns>The timestep that satisfies the LTE</returns>
-        public override double Truncate() => QCap.LocalTruncationError();
+        // public override double Truncate() => QCap.LocalTruncationError();
     }
 }
