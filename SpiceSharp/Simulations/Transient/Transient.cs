@@ -113,8 +113,7 @@ namespace SpiceSharp.Simulations
 
             try
             {
-                // var newDelta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
-                var newDelta = 0.0001;
+                var newDelta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
                 while (true)
                 {
                     // Accept the last evaluated time point
@@ -159,6 +158,10 @@ namespace SpiceSharp.Simulations
                         // If our integration method doesn't approve of our solution, retry probing a new timestep again
                         if (Method.Evaluate(this, out newDelta))
                             break;
+
+                        // Make sure the time step does not exceed the maximum timestep
+                        if (newDelta > timeConfig.MaxStep)
+                            newDelta = timeConfig.MaxStep;
                     }
                 }
             }

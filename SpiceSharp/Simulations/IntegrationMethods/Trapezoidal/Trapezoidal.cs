@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -20,8 +21,13 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         protected double TrTol = 7.0;
         protected double RelTol = 1e-3;
-        protected double AbsTol = 1e-12;
+        protected double AbsTol = 1e-6;
         protected Vector<double> Prediction { get; private set; }
+
+        /// <summary>
+        /// Gets all states that can be derived
+        /// </summary>
+        protected List<TrapezoidalStateDerivative> DerivativeStates { get; } = new List<TrapezoidalStateDerivative>();
 
         /// <summary>
         /// Constructor
@@ -65,6 +71,9 @@ namespace SpiceSharp.IntegrationMethods
         {
             base.Probe(simulation, delta);
             ComputeCoefficients();
+
+            // If prediction is activated, predict a new solution
+            Predict(simulation);
         }
 
         /// <summary>
@@ -78,12 +87,15 @@ namespace SpiceSharp.IntegrationMethods
             var result = base.Evaluate(simulation, out newDelta);
 
             // Compute a new timestep if necessary
-            var truncDelta = TruncateNodes(simulation);
+            /* var truncDelta = TruncateNodes(simulation);
             if (truncDelta < 0.9 * IntegrationStates[0].Delta)
             {
                 newDelta = truncDelta;
                 return result;
-            }
+            } */
+
+            foreach (var state in DerivativeStates)
+                newDelta = Math.Min(newDelta, state.Truncate());
             
             return true;
         }
@@ -102,7 +114,12 @@ namespace SpiceSharp.IntegrationMethods
         /// Create a state that can be derived by the integration method
         /// </summary>
         /// <returns></returns>
-        public override StateDerivative CreateDerivative() => new TrapezoidalStateDerivative(this);
+        public override StateDerivative CreateDerivative()
+        {
+            var tsd = new TrapezoidalStateDerivative(this);
+            DerivativeStates.Add(tsd);
+            return tsd;
+        }
 
         /// <summary>
         /// Predict a new solution based on the previous ones

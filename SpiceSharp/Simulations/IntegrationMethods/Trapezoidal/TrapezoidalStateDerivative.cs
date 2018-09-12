@@ -14,9 +14,9 @@ namespace SpiceSharp.IntegrationMethods
         protected class TrapezoidalStateDerivative : StateDerivative
         {
             // Private variables
-            private int _index;
-            private Trapezoidal _method;
-            private History<IntegrationState> _states;
+            private readonly int _index;
+            private readonly Trapezoidal _method;
+            private readonly History<IntegrationState> _states;
 
             /// <summary>
             /// Gets or sets the current
@@ -55,7 +55,7 @@ namespace SpiceSharp.IntegrationMethods
             /// </summary>
             /// <param name="derivative">Derivative</param>
             /// <returns></returns>
-            public override double Jacobian(double derivative) => _states[0].State[_index + 1] * _method.Slope;
+            public override double Jacobian(double derivative) => derivative * _method.Slope;
 
             /// <summary>
             /// Calculate the RHS-vector contribution for linear components

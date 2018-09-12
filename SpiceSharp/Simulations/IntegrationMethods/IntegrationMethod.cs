@@ -127,7 +127,7 @@ namespace SpiceSharp.IntegrationMethods
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
 
             // Use the same delta as before
-            newDelta = IntegrationStates[0].Delta;
+            newDelta = IntegrationStates[0].Delta * 2.0;
             return true;
         }
 
