@@ -113,7 +113,8 @@ namespace SpiceSharp.Simulations
 
             try
             {
-                var newDelta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
+                // var newDelta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
+                var newDelta = 0.0001;
                 while (true)
                 {
                     // Accept the last evaluated time point
