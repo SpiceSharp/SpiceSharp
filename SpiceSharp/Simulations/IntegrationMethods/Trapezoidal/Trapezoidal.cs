@@ -86,6 +86,10 @@ namespace SpiceSharp.IntegrationMethods
             Coefficients = new double[MaxOrder];
             for (var i = 0; i < MaxOrder; i++)
                 Coefficients[i] = 0.0;
+
+            // Assume a circuit in reset for a number of MaxSteps
+            foreach (var state in IntegrationStates)
+                state.Delta = MaxStep;
         }
 
         /// <summary>
