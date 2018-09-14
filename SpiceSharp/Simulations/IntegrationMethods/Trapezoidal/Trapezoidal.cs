@@ -53,6 +53,7 @@ namespace SpiceSharp.IntegrationMethods
             MinStep = bp.DeltaMin;
             Breakpoints.SetBreakpoint(bp.InitTime);
             Breakpoints.SetBreakpoint(bp.FinalTime);
+            _saveDelta = bp.FinalTime / 50.0;
 
             // Turn on prediction
             Prediction = new DenseVector<double>(simulation.RealState.Solver.Order);
@@ -147,6 +148,10 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="args">Arguments</param>
         protected void TruncateStates(object sender, TruncateEvaluateEventArgs args)
         {
+            // Don't truncate the first step
+            if (BaseTime <= 0.0)
+                return;
+
             // Truncate!
             var newDelta = args.Delta;
             foreach (var d in DerivativeStates)
@@ -156,6 +161,7 @@ namespace SpiceSharp.IntegrationMethods
             {
                 if (Order == 1)
                 {
+                    Order = 2;
                     args.Order = 2;
 
                     // Try truncation again

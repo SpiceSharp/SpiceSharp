@@ -156,13 +156,18 @@ namespace SpiceSharp.Simulations
                         {
                             var args = new TimestepCutEventArgs(0.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
                             OnConvergenceFailed(args);
+                            Statistics.Rejected++;
+                        }
+                        else
+                        {
+                            // If our integration method doesn't approve of our solution, retry probing a new timestep again
+                            if (Method.BaseTime.Equals(0.0) || Method.Evaluate(this, out newDelta))
+                                break;
+                            Statistics.Rejected++;
                         }
 
-                        // If our integration method doesn't approve of our solution, retry probing a new timestep again
-                        if (Method.Evaluate(this, out newDelta))
-                            break;
-
                         // Make sure the time step does not exceed the maximum timestep
+                        
                         if (newDelta > timeConfig.MaxStep)
                             newDelta = timeConfig.MaxStep;
                     }
