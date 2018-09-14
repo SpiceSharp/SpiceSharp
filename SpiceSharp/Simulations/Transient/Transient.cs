@@ -136,6 +136,9 @@ namespace SpiceSharp.Simulations
                         return;
                     }
 
+                    // Continue integration
+                    Method.Continue(this, ref newDelta);
+
                     // Find a valid time point
                     while (true)
                     {

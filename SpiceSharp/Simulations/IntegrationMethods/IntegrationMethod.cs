@@ -46,6 +46,29 @@ namespace SpiceSharp.IntegrationMethods
         public double Slope { get; protected set; }
 
         /// <summary>
+        /// Event called when probing for a next time point
+        /// </summary>
+        public event EventHandler<TruncateTimestepEventArgs> TruncateProbe;
+
+        /// <summary>
+        /// Event called when evaluating the current solution
+        /// </summary>
+        public event EventHandler<TruncateEvaluateEventArgs> TruncateEvaluate;
+
+        /// <summary>
+        /// Event called when accepting the last evaluated solution
+        /// </summary>
+        public event EventHandler<EventArgs> AcceptSolution;
+
+        /// <summary>
+        /// Event called when continuing the integration
+        /// </summary>
+        public event EventHandler<ModifyTimestepEventArgs> ContinueTimestep;
+
+        public Breakpoints Breakpoints { get; } = new Breakpoints();
+        public bool Break { get; protected set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="maxOrder">Maximum integration order</param>
@@ -92,6 +115,7 @@ namespace SpiceSharp.IntegrationMethods
             // Initialize variables
             Slope = 0.0;
             Order = 1;
+            Break = true;
 
             // Copy the first state to all other states (assume DC situation)
             for (var i = 1; i < IntegrationStates.Length; i++)
@@ -103,21 +127,25 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Probe a new time point
+        /// Indicate that we'll probe around for a new solution from now on
         /// </summary>
         /// <param name="simulation">Time simulation</param>
         /// <param name="delta">The timestep to be probed</param>
         public virtual void Probe(TimeSimulation simulation, double delta)
         {
+            // Allow an additional truncation if necessary
+            var args = new TruncateTimestepEventArgs(simulation, delta);
+            OnTruncateProbe(args);
+
             // Advance the probing time
-            Time = BaseTime + delta;
-            IntegrationStates[0].Delta = delta;
+            Time = BaseTime + args.Delta;
+            IntegrationStates[0].Delta = args.Delta;
         }
 
         /// <summary>
-        /// Evaluate (usually the states of) the time simulation if the current solution can be accepted.
+        /// Evaluate whether or not the current solution can be accepted
         /// Returning false indicates that the solution is not acceptable, and that the time simulation
-        /// should try again probing a new time step
+        /// should try again probing a truncated timestep
         /// </summary>
         /// <param name="simulation">Time simulation</param>
         /// <param name="newDelta">The requested timestep</param>
@@ -126,19 +154,47 @@ namespace SpiceSharp.IntegrationMethods
             // Store the current solution
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
 
-            // Use the same delta as before
-            newDelta = IntegrationStates[0].Delta * 2.0;
-            return true;
+            // Call event
+            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder);
+            OnTruncateEvaluate(args);
+
+            // Update values
+            Order = args.Order;
+            newDelta = args.Delta;
+            return args.Accepted;
         }
 
         /// <summary>
-        /// Accept the last evaluated time point as valid
+        /// Accept the last evaluated time point as valid and continue
         /// </summary>
         public virtual void Accept()
         {
+            // Clear breakpoints
+            while (Time > Breakpoints.First)
+                Breakpoints.ClearBreakpoint();
+            Break = false;
+
+            // Allow modifying the timestep (eg. for breakpoint systems)
+            OnAcceptSolution();
+
             // Shift the solutions and overwrite index 0 with the current solution
             IntegrationStates.Cycle();
             BaseTime = Time;
+        }
+
+        /// <summary>
+        /// Continue the integration
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="delta">Timestep</param>
+        public virtual void Continue(TimeSimulation simulation, ref double delta)
+        {
+            // Allow registered methods to modify the timestep
+            var args = new ModifyTimestepEventArgs(simulation, delta);
+            OnContinue(args);
+
+            // Update the new timestep
+            IntegrationStates[0].Delta = args.Delta;
         }
 
         /// <summary>
@@ -159,5 +215,28 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="index">Points to go back in time</param>
         /// <returns></returns>
         public double GetTimestep(int index) => IntegrationStates[index].Delta;
+
+        /// <summary>
+        /// Call the Evaluate event
+        /// </summary>
+        /// <param name="args">Arguments</param>
+        protected void OnTruncateEvaluate(TruncateEvaluateEventArgs args) => TruncateEvaluate?.Invoke(this, args);
+
+        /// <summary>
+        /// Accept the last evaluated point
+        /// </summary>
+        protected void OnAcceptSolution() => AcceptSolution?.Invoke(this, EventArgs.Empty);
+
+        /// <summary>
+        /// Truncate the probing timestep
+        /// </summary>
+        /// <param name="args">Arguments</param>
+        protected virtual void OnTruncateProbe(TruncateTimestepEventArgs args) => TruncateProbe?.Invoke(this, args);
+
+        /// <summary>
+        /// Call event for continuing integration
+        /// </summary>
+        /// <param name="args">Arguments</param>
+        protected virtual void OnContinue(ModifyTimestepEventArgs args) => ContinueTimestep?.Invoke(this, args);
     }
 }

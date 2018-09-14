@@ -29,7 +29,6 @@ namespace SpiceSharp.Components.InductorBehaviors
         private int _branchEq;
         protected MatrixElement<double> BranchBranchPtr { get; private set; }
         protected VectorElement<double> BranchPtr { get; private set; }
-
         private StateDerivative _flux;
 
         /// <summary>
@@ -157,11 +156,5 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchPtr.Value += _flux.RhsCurrent();
             BranchBranchPtr.Value -= _flux.Jacobian(_bp.Inductance);
         }
-
-        /// <summary>
-        /// Truncate timestep
-        /// </summary>
-        /// <returns>The timestep that satisfies the LTE</returns>
-        // public override double Truncate() => _flux.LocalTruncationError();
     }
 }

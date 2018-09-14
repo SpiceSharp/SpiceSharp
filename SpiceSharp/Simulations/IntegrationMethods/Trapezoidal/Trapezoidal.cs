@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Algebra;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
@@ -22,7 +21,10 @@ namespace SpiceSharp.IntegrationMethods
         protected double TrTol = 7.0;
         protected double RelTol = 1e-3;
         protected double AbsTol = 1e-6;
+        protected double MaxStep = 1e-6;
+        protected double MinStep = 0.0;
         protected Vector<double> Prediction { get; private set; }
+        private double _saveDelta = 0.0;
 
         /// <summary>
         /// Gets all states that can be derived
@@ -45,8 +47,31 @@ namespace SpiceSharp.IntegrationMethods
         {
             base.Setup(simulation);
 
+            // Find our configurations
+            var bp = simulation.ParameterSets.Get<TimeConfiguration>();
+            MaxStep = bp.MaxStep;
+            MinStep = bp.DeltaMin;
+            Breakpoints.SetBreakpoint(bp.InitTime);
+            Breakpoints.SetBreakpoint(bp.FinalTime);
+
             // Turn on prediction
             Prediction = new DenseVector<double>(simulation.RealState.Solver.Order);
+
+            // Add events
+            TruncateEvaluate += TruncateStates;
+        }
+
+        /// <summary>
+        /// Probe for a solution
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="delta">Timestep to try</param>
+        public override void Probe(TimeSimulation simulation, double delta)
+        {
+            base.Probe(simulation, delta);
+
+            ComputeCoefficients();
+            Predict(simulation);
         }
 
         /// <summary>
@@ -63,41 +88,32 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Probe a new time point
+        /// Continue
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        /// <param name="delta">The timestep to advance</param>
-        public override void Probe(TimeSimulation simulation, double delta)
+        /// <param name="delta">Delta</param>
+        public override void Continue(TimeSimulation simulation, ref double delta)
         {
-            base.Probe(simulation, delta);
-            ComputeCoefficients();
+            // Let's first calculate our own continue
+            delta = Math.Min(delta, MaxStep);
 
-            // If prediction is activated, predict a new solution
-            Predict(simulation);
-        }
-
-        /// <summary>
-        /// Evaluate the current solution
-        /// </summary>
-        /// <param name="simulation">The time simulation</param>
-        /// <param name="newDelta">The maximum timestep as estimated by the integration method</param>
-        /// <returns></returns>
-        public override bool Evaluate(TimeSimulation simulation, out double newDelta)
-        {
-            var result = base.Evaluate(simulation, out newDelta);
-
-            // Compute a new timestep if necessary
-            /* var truncDelta = TruncateNodes(simulation);
-            if (truncDelta < 0.9 * IntegrationStates[0].Delta)
+            // Handle breakpoints
+            if (Math.Abs(Time - Breakpoints.First) < MinStep)
             {
-                newDelta = truncDelta;
-                return result;
-            } */
+                var mt = Math.Min(_saveDelta, Breakpoints.Delta);
+                delta = Math.Min(delta, mt / 10.0);
+                if (BaseTime.Equals(0.0))
+                    delta /= 10.0;
+                delta = Math.Max(delta, 2 * MinStep);
+            }
+            else if (Time + delta >= Breakpoints.First)
+            {
+                _saveDelta = delta;
+                delta = Breakpoints.First - Time;
+                Break = true;
+            }
 
-            foreach (var state in DerivativeStates)
-                newDelta = Math.Min(newDelta, state.Truncate());
-            
-            return true;
+            base.Continue(simulation, ref delta);
         }
 
         /// <summary>
@@ -108,6 +124,9 @@ namespace SpiceSharp.IntegrationMethods
             base.Unsetup();
             for (var i = 0; i < MaxOrder; i++)
                 Coefficients[i] = 0.0;
+
+            // Remove our event
+            TruncateEvaluate -= TruncateStates;
         }
 
         /// <summary>
@@ -122,10 +141,46 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Truncate the timestep using states
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
+        protected void TruncateStates(object sender, TruncateEvaluateEventArgs args)
+        {
+            // Truncate!
+            var newDelta = args.Delta;
+            foreach (var d in DerivativeStates)
+                newDelta = Math.Min(newDelta, d.Truncate());
+
+            if (newDelta > 0.9 * IntegrationStates[0].Delta)
+            {
+                if (Order == 1)
+                {
+                    args.Order = 2;
+
+                    // Try truncation again
+                    newDelta = args.Delta;
+                    foreach (var d in DerivativeStates)
+                        newDelta = Math.Min(newDelta, d.Truncate());
+
+                    if (newDelta <= 1.05 * IntegrationStates[0].Delta)
+                        args.Order = 1;
+                }
+            }
+            else
+            {
+                args.Accepted = false;
+                args.Order = 1;
+            }
+
+            args.Delta = newDelta;
+        }
+
+        /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public void Predict(TimeSimulation simulation)
+        protected void Predict(TimeSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
@@ -236,7 +291,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Compute the coefficients for Trapezoidal integration
         /// </summary>
-        private void ComputeCoefficients()
+        protected void ComputeCoefficients()
         {
             var delta = IntegrationStates[0].Delta;
 

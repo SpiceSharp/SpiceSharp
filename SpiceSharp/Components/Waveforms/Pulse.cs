@@ -125,10 +125,9 @@ namespace SpiceSharp.Components
             if (simulation.Method == null)
                 return;
 
-            /*
             // Are we at a breakpoint?
             var method = simulation.Method;
-            var breaks = method.Breaks;
+            var breaks = method.Breakpoints;
             if (!method.Break)
                 return;
 
@@ -175,7 +174,6 @@ namespace SpiceSharp.Components
                 else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
                     breaks.SetBreakpoint(basetime + _td + _per);
             }
-            */
         }
     }
 }
