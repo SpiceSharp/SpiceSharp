@@ -79,7 +79,7 @@ namespace SpiceSharp.IntegrationMethods
             MaxOrder = maxOrder;
 
             // Allocate history of timesteps and solutions
-            IntegrationStates = new ArrayHistory<IntegrationState>(maxOrder + 1);
+            IntegrationStates = new ArrayHistory<IntegrationState>(maxOrder + 2);
         }
 
         /// <summary>
@@ -189,12 +189,12 @@ namespace SpiceSharp.IntegrationMethods
             var args = new ModifyTimestepEventArgs(simulation, delta);
             OnContinue(args);
 
-            // Update the new timestep
-            IntegrationStates[0].Delta = args.Delta;
-
             // Shift the solutions and overwrite index 0 with the current solution
             IntegrationStates.Cycle();
             BaseTime = Time;
+
+            // Update the new timestep
+            IntegrationStates[0].Delta = args.Delta;
         }
 
         /// <summary>
