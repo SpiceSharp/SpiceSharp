@@ -176,10 +176,6 @@ namespace SpiceSharp.IntegrationMethods
 
             // Allow modifying the timestep (eg. for breakpoint systems)
             OnAcceptSolution();
-
-            // Shift the solutions and overwrite index 0 with the current solution
-            IntegrationStates.Cycle();
-            BaseTime = Time;
         }
 
         /// <summary>
@@ -195,6 +191,10 @@ namespace SpiceSharp.IntegrationMethods
 
             // Update the new timestep
             IntegrationStates[0].Delta = args.Delta;
+
+            // Shift the solutions and overwrite index 0 with the current solution
+            IntegrationStates.Cycle();
+            BaseTime = Time;
         }
 
         /// <summary>
