@@ -105,7 +105,7 @@ namespace SpiceSharp
         /// <param name="name">Property name</param>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool SetParameter<T>(string name, T value) where T : struct
+        public bool SetParameter<T>(string name, T value) 
         {
             var isset = false;
             foreach (var ps in Values)
@@ -123,7 +123,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool SetParameter<T>(T value) where T : struct
+        public bool SetParameter<T>(T value)
         {
             foreach (var ps in Values)
             {

@@ -73,7 +73,7 @@ namespace SpiceSharp
         /// <param name="name">Name</param>
         /// <param name="value">Value</param>
         /// <returns>True if the parameter was set</returns>
-        public bool SetParameter<T>(string name, T value) where T : struct
+        public bool SetParameter<T>(string name, T value)
         {
             // Set the property if any
             var isset = false;
@@ -118,7 +118,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool SetParameter<T>(T value) where T : struct
+        public bool SetParameter<T>(T value) 
         {
             var p = Principal;
             if (p != null)

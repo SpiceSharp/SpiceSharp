@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets if the export is currently valid
         /// </summary>
-        public bool IsValid => Extractor != null;
+        public bool IsValid => Simulation.State >= RunState.BeforeExecute || Extractor != null;
 
         /// <summary>
         /// The extractor used to 
@@ -29,6 +29,11 @@ namespace SpiceSharp.Simulations
         {
             get
             {
+                if (Simulation.State >= RunState.BeforeExecute && Extractor == null)
+                {
+                    Initialize(Simulation, new EventArgs());
+                }
+
                 if (Extractor == null)
                     return default(T);
                 return Extractor();
@@ -44,6 +49,7 @@ namespace SpiceSharp.Simulations
             Simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
             simulation.AfterSetup += Initialize;
             simulation.BeforeUnsetup += Finalize;
+
         }
 
         /// <summary>

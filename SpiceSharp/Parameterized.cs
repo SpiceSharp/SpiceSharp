@@ -76,7 +76,7 @@ namespace SpiceSharp
         /// <param name="member">Member information</param>
         /// <param name="value">Value</param>
         /// <returns>Returns true if the member was set</returns>
-        protected bool SetMember<T>(MemberInfo member, T value) where T : struct
+        protected bool SetMember<T>(MemberInfo member, T value) 
         { 
             if (member is PropertyInfo pi)
             {
