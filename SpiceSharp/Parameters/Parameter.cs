@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// Parameters are objects that contain a double value, and that have some basic manipulations. They
     /// also make it easier to be referenced by simulations, sweeps and other features.
     /// </summary>
-    public abstract class Parameter<T> : BaseParameter where T : struct
+    public abstract class Parameter<T> : BaseParameter
     {
         /// <summary>
         /// Gets or sets the value of the parameter
@@ -32,7 +32,7 @@ namespace SpiceSharp
         /// Implicit conversion for a parameter to a double
         /// </summary>
         /// <param name="parameter">Parameter</param>
-        public static implicit operator T(Parameter<T> parameter) => parameter?.Value ?? default(T);
+        public static implicit operator T(Parameter<T> parameter) => parameter != null ? parameter.Value : default(T);
 
         /// <summary>
         /// Convert to a string

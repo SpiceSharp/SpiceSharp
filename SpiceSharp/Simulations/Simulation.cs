@@ -5,6 +5,16 @@ using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
+    public enum RunState
+    {
+        NotStarted = 0,
+        BeforeSetup,
+        AfterSetup,
+        BeforeExecute,
+        AfterExecute,
+        BeforeUnsetup,
+        AfterUnsetup
+    }
     /// <summary>
     /// A class that can perform a simulation
     /// </summary>
@@ -49,7 +59,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event called after executing the simulation
         /// </summary>
-        public event EventHandler<SimulationFlowEventArgs> AfterExecute; 
+        public event EventHandler<SimulationFlowEventArgs> AfterExecute;
 
         /// <summary>
         /// Event called before cleaning up the simulation
@@ -59,7 +69,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event called after cleaning up the simulation
         /// </summary>
-        public event EventHandler<EventArgs> AfterUnsetup; 
+        public event EventHandler<EventArgs> AfterUnsetup;
         #endregion
 
         /// <summary>
@@ -76,6 +86,8 @@ namespace SpiceSharp.Simulations
         /// Gets a pool of all parameters active in the simulation
         /// </summary>
         public ParameterPool EntityParameters { get; } = new ParameterPool();
+
+        public RunState State { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -95,8 +107,12 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
 
             // Setup the simulation
+            this.State = RunState.BeforeSetup;
             OnBeforeSetup(EventArgs.Empty);
+            
             Setup(circuit);
+
+            this.State = RunState.AfterSetup;
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -109,6 +125,7 @@ namespace SpiceSharp.Simulations
             do
             {
                 // Before execution
+                this.State = RunState.BeforeExecute;
                 BeforeExecute?.Invoke(this, beforeArgs);
 
                 // Execute simulation
@@ -116,6 +133,7 @@ namespace SpiceSharp.Simulations
 
                 // Reset
                 afterArgs.Repeat = false;
+                this.State = RunState.AfterExecute;
                 AfterExecute?.Invoke(this, afterArgs);
 
                 // We're going to repeat the simulation, change the event arguments
@@ -124,8 +142,11 @@ namespace SpiceSharp.Simulations
             } while (afterArgs.Repeat);
 
             // Clean up the circuit
+            this.State = RunState.BeforeUnsetup;
             OnBeforeUnsetup(EventArgs.Empty);
             Unsetup();
+
+            this.State = RunState.AfterUnsetup;
             OnAfterUnsetup(EventArgs.Empty);
         }
 
@@ -180,7 +201,6 @@ namespace SpiceSharp.Simulations
         /// Call event to indicate we're about to set up the simulation
         /// </summary>
         protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
-
         /// <summary>
         /// Call event just after setting up the simulation
         /// </summary>

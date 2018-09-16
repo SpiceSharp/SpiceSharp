@@ -4,7 +4,7 @@
     /// This class describes a parameter that is optional. Whether or not it was specified can be
     /// found using the Given variable.
     /// </summary>
-    public class GivenParameter<T> : Parameter<T> where T : struct
+    public class GivenParameter<T> : Parameter<T> 
     {
         /// <summary>
         /// Gets or sets the value of the parameter
