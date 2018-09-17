@@ -155,7 +155,7 @@ namespace SpiceSharp.IntegrationMethods
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
 
             // Call event
-            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder, double.PositiveInfinity);
+            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder);
             OnTruncateEvaluate(args);
 
             // Update values

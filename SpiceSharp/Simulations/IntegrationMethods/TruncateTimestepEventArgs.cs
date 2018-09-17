@@ -37,6 +37,15 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         /// <param name="simulation">The simulation</param>
+        public TruncateTimestepEventArgs(TimeSimulation simulation)
+            : this(simulation, double.PositiveInfinity)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="simulation">The simulation</param>
         /// <param name="delta">The initial timestep</param>
         public TruncateTimestepEventArgs(TimeSimulation simulation, double delta)
         {
