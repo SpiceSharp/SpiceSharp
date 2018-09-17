@@ -22,6 +22,7 @@ namespace SpiceSharp.IntegrationMethods
         protected double RelTol = 1e-3;
         protected double AbsTol = 1e-6;
         protected double MaxStep = 1e-6;
+        protected double Expansion = 2.0;
         protected double MinStep = 0.0;
         protected Vector<double> Prediction { get; private set; }
         private double _saveDelta = 0.0;
@@ -122,6 +123,21 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Evaluate the timestep
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="newDelta">The new timestep</param>
+        /// <returns></returns>
+        public override bool Evaluate(TimeSimulation simulation, out double newDelta)
+        {
+            var result = base.Evaluate(simulation, out newDelta);
+
+            // Limit the expansion of the timestep
+            newDelta = Math.Min(Expansion * IntegrationStates[0].Delta, newDelta);
+            return result;
+        }
+
+        /// <summary>
         /// Unsetup the integration method
         /// </summary>
         public override void Unsetup()
@@ -175,6 +191,9 @@ namespace SpiceSharp.IntegrationMethods
 
                     if (newDelta <= 1.05 * IntegrationStates[0].Delta)
                         args.Order = 1;
+
+                    // Reset order for the other events
+                    Order = 1;
                 }
             }
             else
