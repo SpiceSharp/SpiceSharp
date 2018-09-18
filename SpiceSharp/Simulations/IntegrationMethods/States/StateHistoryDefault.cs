@@ -26,7 +26,7 @@
         /// </summary>
         /// <param name="index">The number of points to go back</param>
         /// <returns></returns>
-        public override double this[int index] => _source[0].State[_index];
+        public override double this[int index] => _source[index].State[_index];
 
         /// <summary>
         /// Constructor

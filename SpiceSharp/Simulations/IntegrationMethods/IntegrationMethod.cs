@@ -56,6 +56,11 @@ namespace SpiceSharp.IntegrationMethods
         public event EventHandler<TruncateEvaluateEventArgs> TruncateEvaluate;
 
         /// <summary>
+        /// Event called when the simulator could not reach convergence
+        /// </summary>
+        public event EventHandler<TruncateEvaluateEventArgs> TruncateNonConvergence; 
+
+        /// <summary>
         /// Event called when accepting the last evaluated solution
         /// </summary>
         public event EventHandler<EventArgs> AcceptSolution;
@@ -104,13 +109,27 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Create a state that can be derived
         /// </summary>
+        /// <remarks>
+        /// Tracked derivatives are used in more advanced features by the integration method if they
+        /// are implemented. For example, derived states can be used for finding a good time step
+        /// by approximating the local truncation error (ie. the error made by taking discrete
+        /// time steps). If you do not want the derivative to participate in these features, set
+        /// <see cref="track"/> to false.
+        /// </remarks>
+        /// <param name="track">If false, this derivative is treated as purely informative</param>
         /// <returns></returns>
-        public abstract StateDerivative CreateDerivative();
+        public abstract StateDerivative CreateDerivative(bool track);
+
+        /// <summary>
+        /// Create a state that can be derived
+        /// </summary>
+        /// <returns></returns>
+        public virtual StateDerivative CreateDerivative() => CreateDerivative(true);
         
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        public virtual void Initialize()
+        public virtual void Initialize(TimeSimulation simulation)
         {
             // Initialize variables
             Slope = 0.0;
@@ -118,10 +137,11 @@ namespace SpiceSharp.IntegrationMethods
             Break = true;
 
             // Copy the first state to all other states (assume DC situation)
+            simulation.RealState.Solution.CopyTo(IntegrationStates[0].Solution);
             for (var i = 1; i < IntegrationStates.Length; i++)
             {
                 IntegrationStates[i].Delta = IntegrationStates[0].Delta;
-                IntegrationStates[0].Solution.CopyTo(IntegrationStates[i].Solution);
+                // IntegrationStates[0].Solution.CopyTo(IntegrationStates[i].Solution);
                 IntegrationStates[0].State.CopyTo(IntegrationStates[i].State);
             }
         }
@@ -143,6 +163,21 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Called when the simulator cannot converge to a solution
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="newDelta">The next timestep</param>
+        public virtual void NonConvergence(TimeSimulation simulation, out double newDelta)
+        {
+            // Call event
+            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder);
+            OnTruncateNonConvergence(args);
+
+            // Set the new timestep
+            newDelta = args.Delta;
+        }
+
+        /// <summary>
         /// Evaluate whether or not the current solution can be accepted
         /// Returning false indicates that the solution is not acceptable, and that the time simulation
         /// should try again probing a truncated timestep
@@ -151,11 +186,18 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="newDelta">The requested timestep</param>
         public virtual bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
-            // Store the current solution
-            simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
+            // Spice 3f5 ignores the first timestep
+            if (BaseTime.Equals(0.0))
+            {
+                newDelta = IntegrationStates[0].Delta;
+                return true;
+            }
 
             // Call event
-            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder);
+            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder)
+            {
+                Order = Order
+            };
             OnTruncateEvaluate(args);
 
             // Update values
@@ -167,12 +209,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Accept the last evaluated time point as valid and continue
         /// </summary>
-        public virtual void Accept()
+        public virtual void Accept(TimeSimulation simulation)
         {
             // Clear breakpoints
             while (Time > Breakpoints.First)
                 Breakpoints.ClearBreakpoint();
             Break = false;
+
+            // Store the current solution
+            simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
 
             // Allow modifying the timestep (eg. for breakpoint systems)
             OnAcceptSolution();
@@ -215,6 +260,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="index">Points to go back in time</param>
         /// <returns></returns>
         public double GetTimestep(int index) => IntegrationStates[index].Delta;
+
+        /// <summary>
+        /// Call the event for non-convergent solutions
+        /// </summary>
+        /// <param name="args">Arguments</param>
+        protected void OnTruncateNonConvergence(TruncateEvaluateEventArgs args) =>
+            TruncateNonConvergence?.Invoke(this, args);
 
         /// <summary>
         /// Call the Evaluate event

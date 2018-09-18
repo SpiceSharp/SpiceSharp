@@ -231,7 +231,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             StateChargeBe = method.CreateDerivative();
             StateChargeBc = method.CreateDerivative();
             StateChargeCs = method.CreateDerivative();
-            StateChargeBx = method.CreateDerivative();
+
+            // Spice 3f5 does not include this state for LTE calculations
+            StateChargeBx = method.CreateDerivative(false);
+
             StateExcessPhaseCurrentBc = method.CreateHistory();
         }
 

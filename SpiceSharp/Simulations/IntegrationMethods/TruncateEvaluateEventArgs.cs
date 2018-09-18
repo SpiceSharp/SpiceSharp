@@ -54,6 +54,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">Time simulation</param>
         /// <param name="maxOrder">Maximum integration order</param>
+        /// <param name="delta">The maximum timestep</param>
         public TruncateEvaluateEventArgs(TimeSimulation simulation, int maxOrder, double delta)
             : base(simulation, delta)
         {

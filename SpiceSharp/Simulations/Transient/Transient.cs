@@ -117,7 +117,9 @@ namespace SpiceSharp.Simulations
                 while (true)
                 {
                     // Accept the last evaluated time point
-                    Method.Accept();
+                    for (var i = 0; i < _acceptBehaviors.Count; i++)
+                        _acceptBehaviors[i].Accept(this);
+                    Method.Accept(this);
                     Statistics.Accepted++;
 
                     // Export the current timepoint
@@ -154,14 +156,13 @@ namespace SpiceSharp.Simulations
                         // Did we fail to converge to a solution?
                         if (!converged)
                         {
-                            var args = new TimestepCutEventArgs(0.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
-                            OnConvergenceFailed(args);
+                            Method.NonConvergence(this, out newDelta);
                             Statistics.Rejected++;
                         }
                         else
                         {
                             // If our integration method doesn't approve of our solution, retry probing a new timestep again
-                            if (Method.BaseTime.Equals(0.0) || Method.Evaluate(this, out newDelta))
+                            if (Method.Evaluate(this, out newDelta))
                                 break;
                             Statistics.Rejected++;
                         }

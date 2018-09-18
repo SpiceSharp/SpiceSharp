@@ -214,6 +214,14 @@ namespace SpiceSharpTest.Models
                 4.999999991842977e+00, 4.999999998156865e+00, 4.999999991843213e+00, 4.999999998156719e+00
             };
 
+            var oldt = 0.0;
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                var t = args.Time;
+                var output = args.GetVoltage("out");
+                oldt = t;
+            };
+
             // Run test
             AnalyzeTransient(tran, ckt, exports, references);
         }

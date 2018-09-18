@@ -252,7 +252,7 @@ namespace SpiceSharp.Simulations
         {
             for (var i = 0; i < _transientBehaviors.Count; i++)
                 _transientBehaviors[i].GetDcState(this);
-            Method.Initialize();
+            Method.Initialize(this);
         }
 
         /// <summary>

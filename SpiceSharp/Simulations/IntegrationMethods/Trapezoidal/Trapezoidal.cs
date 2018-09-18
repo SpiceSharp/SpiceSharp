@@ -79,9 +79,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize the trapezoidal integration method
         /// </summary>
-        public override void Initialize()
+        public override void Initialize(TimeSimulation simulation)
         {
-            base.Initialize();
+            base.Initialize(simulation);
 
             // Reset all coefficients
             Coefficients = new double[MaxOrder];
@@ -104,12 +104,21 @@ namespace SpiceSharp.IntegrationMethods
             delta = Math.Min(delta, MaxStep);
 
             // Handle breakpoints
-            if (Math.Abs(Time - Breakpoints.First) < MinStep)
+            // if (Math.Abs(Time - Breakpoints.First) < MinStep)
+            if (Time.Equals(Breakpoints.First) || Breakpoints.First - Time <= 1e-12)
             {
+                // First timepoint after a breakpoint, cut integration order
+                Order = 1;
+
+                // Limit the next timestep
                 var mt = Math.Min(_saveDelta, Breakpoints.Delta);
-                delta = Math.Min(delta, mt / 10.0);
+                delta = Math.Min(delta, 0.1 * mt);
+
+                // Spice will divide the delta by 10 in the first step
                 if (BaseTime.Equals(0.0))
                     delta /= 10.0;
+
+                // We don't want to go below the minimum timestep for no reason
                 delta = Math.Max(delta, 2 * MinStep);
             }
             else if (Time + delta >= Breakpoints.First)
@@ -120,6 +129,18 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             base.Continue(simulation, ref delta);
+        }
+
+        /// <summary>
+        /// Non-convergence
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="newDelta">New timestep</param>
+        public override void NonConvergence(TimeSimulation simulation, out double newDelta)
+        {
+            base.NonConvergence(simulation, out newDelta);
+            newDelta = Math.Min(newDelta, IntegrationStates[0].Delta / 8.0);
+            Order = 1;
         }
 
         /// <summary>
@@ -151,13 +172,22 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Create a state that can be derived by the integration method
+        /// Create a state that can be derived
         /// </summary>
+        /// <remarks>
+        /// Tracked derivatives are used in more advanced features by the integration method if they
+        /// are implemented. For example, derived states can be used for finding a good time step
+        /// by approximating the local truncation error (ie. the error made by taking discrete
+        /// time steps). If you do not want the derivative to participate in these features, set
+        /// <see cref="track"/> to false.
+        /// </remarks>
+        /// <param name="track">If false, this derivative is treated as purely informative</param>
         /// <returns></returns>
-        public override StateDerivative CreateDerivative()
+        public override StateDerivative CreateDerivative(bool track)
         {
             var tsd = new TrapezoidalStateDerivative(this);
-            DerivativeStates.Add(tsd);
+            if (track)
+                DerivativeStates.Add(tsd);
             return tsd;
         }
 
@@ -199,7 +229,6 @@ namespace SpiceSharp.IntegrationMethods
             else
             {
                 args.Accepted = false;
-                args.Order = 1;
             }
 
             args.Delta = newDelta;
@@ -213,8 +242,11 @@ namespace SpiceSharp.IntegrationMethods
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
-            var current = IntegrationStates[0];
-            var previous = IntegrationStates[1];
+
+            // Use the two previous solutions to predict a new one (the one we're about to test)
+            var future = IntegrationStates[0];
+            var current = IntegrationStates[1];
+            var previous = IntegrationStates[2];
 
             // Predict a solution
             switch (Order)
@@ -223,21 +255,21 @@ namespace SpiceSharp.IntegrationMethods
                     // Divided difference approach
                     for (var i = 1; i <= current.Solution.Length; i++)
                     {
-                        var dd0 = (current.Solution[i] - previous.Solution[i]) / previous.Delta;
-                        Prediction[i] = current.Solution[i] + current.Delta * dd0;
+                        var dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
+                        Prediction[i] = current.Solution[i] + future.Delta * dd0;
                     }
                     break;
 
                 case 2:
                     // Adams-Bashforth method (second order for variable timesteps)
-                    var second = IntegrationStates[2];
-                    var b = -current.Delta / (2.0 * previous.Delta);
+                    var second = IntegrationStates[3];
+                    var b = -future.Delta / (2.0 * current.Delta);
                     var a = 1 - b;
                     for (var i = 1; i <= current.Solution.Length; i++)
                     {
-                        var dd0 = (current.Solution[i] - previous.Solution[i]) / previous.Delta;
-                        var dd1 = (previous.Solution[i] - second.Solution[i]) / second.Delta;
-                        Prediction[i] = current.Solution[i] + (b * dd1 + a * dd0) * current.Delta;
+                        var dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
+                        var dd1 = (previous.Solution[i] - second.Solution[i]) / previous.Delta;
+                        Prediction[i] = current.Solution[i] + (b * dd1 + a * dd0) * future.Delta;
                     }
                     break;
 
