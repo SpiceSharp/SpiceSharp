@@ -222,6 +222,13 @@ namespace SpiceSharp.IntegrationMethods
 
             // Clear prediction
             Prediction = null;
+
+            // Clear all truncatable states
+            TruncatableStates.Clear();
+
+            // Remove all breakpoints
+            Breakpoints.Clear();
+            Break = false;
         }
 
         /// <summary>

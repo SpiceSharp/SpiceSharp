@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Trapezoidal rule implementation.
+    /// Trapezoidal integration method
     /// </summary>
     public partial class Trapezoidal : SpiceIntegrationMethod
     {
@@ -24,6 +24,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize the trapezoidal integration method
         /// </summary>
+        /// <param name="simulation">The simulation</param>
         public override void Initialize(TimeSimulation simulation)
         {
             base.Initialize(simulation);

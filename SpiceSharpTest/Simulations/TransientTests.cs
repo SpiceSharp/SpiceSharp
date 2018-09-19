@@ -14,7 +14,7 @@ namespace SpiceSharpTest.Simulations
         public void When_RCFilterConstantTransient_Expect_Reference()
         {
             // Create the circuit
-            /* var ckt = new Circuit(
+            var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 10.0),
                 new Resistor("R1", "in", "out", 10),
                 new Capacitor("C1", "out", "0", 20)
@@ -26,7 +26,7 @@ namespace SpiceSharpTest.Simulations
             tran.ParameterSets.Get<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-12);
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-9);
             };
             tran.Run(ckt);
 
@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Simulations
             catch (Exception)
             {
                 throw new Exception(@"Cannot run transient analysis twice");
-            } */
+            }
         }
 
         [Test]

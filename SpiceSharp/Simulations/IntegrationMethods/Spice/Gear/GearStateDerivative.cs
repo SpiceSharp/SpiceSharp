@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Text;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
 {
-    /// <summary>
-    /// Part of the trapezoidal integration method
-    /// </summary>
-    public partial class Trapezoidal
+    public partial class Gear
     {
         /// <summary>
-        /// A state that can be derived by the trapezoidal rule
+        /// A state that can be derived by the Gear method 
         /// </summary>
-        protected class TrapezoidalStateDerivative : StateDerivative, ITruncatable
+        protected class GearStateDerivative : StateDerivative, ITruncatable
         {
             // Private variables
             private readonly int _index;
-            private readonly Trapezoidal _method;
+            private readonly Gear _method;
             private readonly History<IntegrationState> _states;
 
             /// <summary>
@@ -42,7 +43,7 @@ namespace SpiceSharp.IntegrationMethods
             /// Constructor
             /// </summary>
             /// <param name="method">Parent integration method</param>
-            public TrapezoidalStateDerivative(Trapezoidal method)
+            public GearStateDerivative(Gear method)
             {
                 _method = method;
                 _index = method.StateManager.AllocateState(1);
@@ -69,24 +70,12 @@ namespace SpiceSharp.IntegrationMethods
             public override void Integrate()
             {
                 var derivativeIndex = _index + 1;
-                var current = _states[0].State;
-                var previous = _states[1].State;
                 var ag = _method.Coefficients;
 
-                switch (_method.Order)
-                {
-                    case 1:
-                        current[derivativeIndex] = ag[0] * current[_index] + ag[1] * previous[_index];
-                        break;
-
-                    case 2:
-                        current[derivativeIndex] = -previous[derivativeIndex] * ag[1] +
-                                                   ag[0] * (current[_index] - previous[_index]);
-                        break;
-
-                    default:
-                        throw new CircuitException("Invalid order");
-                }
+                var current = _states[0].State;
+                current[derivativeIndex] = 0.0;
+                for (var i = 0; i <= _method.Order; i++)
+                    current[derivativeIndex] += ag[i] * _states[i].State[_index];
             }
 
             /// <summary>
@@ -135,13 +124,23 @@ namespace SpiceSharp.IntegrationMethods
                 {
                     case 1: factor = 0.5;
                         break;
-                    case 2: factor = 0.0833333333;
+                    case 2: factor = 0.2222222222;
+                        break;
+                    case 3: factor = 0.1363636364;
+                        break;
+                    case 4: factor = 0.096;
+                        break;
+                    case 5: factor = 0.07299270073;
+                        break;
+                    case 6: factor = 0.05830903790;
                         break;
                 }
 
                 var del = _method.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
                 if (_method.Order == 2)
                     del = Math.Sqrt(del);
+                else if (_method.Order > 2)
+                    del = Math.Exp(Math.Log(del) / _method.Order);
                 return del;
             }
         }
