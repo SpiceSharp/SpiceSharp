@@ -70,9 +70,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public event EventHandler<ModifyTimestepEventArgs> ContinueTimestep;
 
-        public Breakpoints Breakpoints { get; } = new Breakpoints();
-        public bool Break { get; protected set; }
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -134,7 +131,6 @@ namespace SpiceSharp.IntegrationMethods
             // Initialize variables
             Slope = 0.0;
             Order = 1;
-            Break = true;
 
             // Copy the first state to all other states (assume DC situation)
             simulation.RealState.Solution.CopyTo(IntegrationStates[0].Solution);
@@ -211,11 +207,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public virtual void Accept(TimeSimulation simulation)
         {
-            // Clear breakpoints
-            while (Time > Breakpoints.First)
-                Breakpoints.ClearBreakpoint();
-            Break = false;
-
             // Store the current solution
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
 
@@ -247,11 +238,16 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public virtual void Unsetup()
         {
+            StateManager.Unsetup();
+
             // Clear the timesteps and solutions
             IntegrationStates.Clear((IntegrationState) null);
-
+            
+            // Clear variables
             Order = 0;
             Slope = 0.0;
+            BaseTime = 0.0;
+            Time = 0.0;
         }
 
         /// <summary>

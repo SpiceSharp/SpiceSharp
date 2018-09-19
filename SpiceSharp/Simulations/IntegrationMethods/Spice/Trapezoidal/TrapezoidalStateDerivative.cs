@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -11,7 +10,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// A state that can be derived by the trapezoidal rule
         /// </summary>
-        protected class TrapezoidalStateDerivative : StateDerivative
+        protected class TrapezoidalStateDerivative : StateDerivative, ITruncatable
         {
             // Private variables
             private readonly int _index;

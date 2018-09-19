@@ -39,9 +39,15 @@ namespace SpiceSharp.IntegrationMethods
         /// Build a vector that can represent all requested states
         /// </summary>
         /// <returns></returns>
-        public Vector<double> Build()
+        public Vector<double> Build() => new DenseVector<double>(Size);
+
+        /// <summary>
+        /// Unsetup the state manager
+        /// </summary>
+        public void Unsetup()
         {
-            return new DenseVector<double>(Size);
+            States = 0;
+            Size = 0;
         }
     }
 }

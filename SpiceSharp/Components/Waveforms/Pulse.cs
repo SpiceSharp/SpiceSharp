@@ -126,7 +126,8 @@ namespace SpiceSharp.Components
                 return;
 
             // Are we at a breakpoint?
-            var method = simulation.Method;
+            if (!(simulation.Method is IBreakpoints method))
+                return;
             var breaks = method.Breakpoints;
             if (!method.Break)
                 return;
