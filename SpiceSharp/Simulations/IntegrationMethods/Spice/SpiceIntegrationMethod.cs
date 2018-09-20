@@ -65,6 +65,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         private double _saveDelta;
+        private double _oldDelta;
 
         /// <summary>
         /// Constructor
@@ -182,6 +183,9 @@ namespace SpiceSharp.IntegrationMethods
 
             ComputeCoefficients();
             Predict(simulation);
+
+            // Save the current timestep
+            _oldDelta = IntegrationStates[0].Delta;
         }
 
         /// <summary>
@@ -210,6 +214,20 @@ namespace SpiceSharp.IntegrationMethods
 
             // Limit the expansion of the timestep
             newDelta = Math.Min(Expansion * IntegrationStates[0].Delta, newDelta);
+
+            // Limit the maximum timestep
+            if (newDelta > MaxStep)
+                newDelta = MaxStep;
+
+            // If the timestep is consistently made smaller than the minimum timestep, throw an exception
+            if (newDelta <= MinStep)
+            {
+                // If we already tried
+                if (_oldDelta <= MinStep)
+                    throw new CircuitException("Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime));
+                newDelta = MinStep;
+            }
+
             return result;
         }
 

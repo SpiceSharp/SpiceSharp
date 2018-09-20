@@ -161,16 +161,11 @@ namespace SpiceSharp.Simulations
                         }
                         else
                         {
-                            // If our integration method doesn't approve of our solution, retry probing a new timestep again
+                            // If our integration method approves of our solution, continue to the next timepoint
                             if (Method.Evaluate(this, out newDelta))
                                 break;
                             Statistics.Rejected++;
                         }
-
-                        // Make sure the time step does not exceed the maximum timestep
-                        
-                        if (newDelta > timeConfig.MaxStep)
-                            newDelta = timeConfig.MaxStep;
                     }
                 }
             }
