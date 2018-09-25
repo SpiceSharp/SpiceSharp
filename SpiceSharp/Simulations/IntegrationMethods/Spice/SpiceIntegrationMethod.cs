@@ -110,8 +110,8 @@ namespace SpiceSharp.IntegrationMethods
             Breakpoints.SetBreakpoint(tc.FinalTime);
             MaxStep = tc.MaxStep;
             MinStep = tc.DeltaMin;
-            // Never used...
             // _saveDelta = tc.FinalTime / 50.0;
+            _saveDelta = double.PositiveInfinity;
 
             // Detect spice configuration
             if (simulation.ParameterSets.TryGet(out SpiceConfiguration sc))

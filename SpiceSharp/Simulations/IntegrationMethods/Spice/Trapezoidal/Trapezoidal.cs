@@ -121,7 +121,7 @@ namespace SpiceSharp.IntegrationMethods
                         // Avoid division by zero
                         if (!diff.Equals(0.0))
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * RelTol + AbsTol;
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * LteRelTol + LteAbsTol;
                             tmp = IntegrationStates[0].Delta * Math.Sqrt(Math.Abs(2.0 * TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
@@ -144,7 +144,7 @@ namespace SpiceSharp.IntegrationMethods
                         // Avoid division by zero
                         if (!deriv.Equals(0.0))
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * RelTol + AbsTol;
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * LteRelTol + LteAbsTol;
                             tmp = IntegrationStates[0].Delta * Math.Pow(Math.Abs(12.0 * TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
