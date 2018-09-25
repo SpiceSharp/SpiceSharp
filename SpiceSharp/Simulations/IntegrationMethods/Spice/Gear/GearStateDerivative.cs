@@ -93,9 +93,9 @@ namespace SpiceSharp.IntegrationMethods
 
                 // Calculate the tolerance
                 var volttol =
-                    1e-12 + 1e-3 * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
+                    _method.AbsTol + _method.RelTol * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
                 var chargetol = Math.Max(Math.Abs(current[_index]), Math.Abs(previous[_index]));
-                chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / _states[0].Delta;
+                chargetol = _method.RelTol * Math.Max(chargetol, _method.ChgTol) / _states[0].Delta;
                 var tol = Math.Max(volttol, chargetol);
 
                 // Now compute divided differences
@@ -136,7 +136,7 @@ namespace SpiceSharp.IntegrationMethods
                         break;
                 }
 
-                var del = _method.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+                var del = _method.TrTol * tol / Math.Max(_method.AbsTol, factor * Math.Abs(diff[0]));
                 if (_method.Order == 2)
                     del = Math.Sqrt(del);
                 else if (_method.Order > 2)

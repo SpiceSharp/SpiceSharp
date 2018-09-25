@@ -27,14 +27,29 @@ namespace SpiceSharp.IntegrationMethods
         protected double TrTol { get; private set; } = 7.0;
 
         /// <summary>
-        /// Allowed relative tolerance
+        /// Allowed relative tolerance for the local truncation error
         /// </summary>
-        protected double RelTol { get; private set; } = 1e-3;
+        protected double LteRelTol { get; private set; } = 1e-3;
+
+        /// <summary>
+        /// Allowed absolute tolerance for the local truncation error
+        /// </summary>
+        protected double LteAbsTol { get; private set; } = 1e-6;
+
+        /// <summary>
+        /// Allowed tolerance on charge
+        /// </summary>
+        protected double ChgTol { get; private set; } = 1e-14;
 
         /// <summary>
         /// Allowed absolute tolerance
         /// </summary>
-        protected double AbsTol { get; private set; } = 1e-6;
+        protected double AbsTol { get; private set; } = 1e-12;
+
+        /// <summary>
+        /// Allowed relative tolerance
+        /// </summary>
+        protected double RelTol { get; private set; } = 1e-3;
 
         /// <summary>
         /// Allowed maximum timestep
@@ -84,20 +99,27 @@ namespace SpiceSharp.IntegrationMethods
         {
             base.Setup(simulation);
 
+            // Base configuration
+            var bp = simulation.ParameterSets.Get<BaseConfiguration>();
+            AbsTol = bp.AbsoluteTolerance;
+            RelTol = bp.RelativeTolerance;
+
             // Basic time configuration
             var tc = simulation.ParameterSets.Get<TimeConfiguration>();
             Breakpoints.SetBreakpoint(tc.InitTime);
             Breakpoints.SetBreakpoint(tc.FinalTime);
             MaxStep = tc.MaxStep;
             MinStep = tc.DeltaMin;
-            _saveDelta = tc.FinalTime / 50.0;
+            // Never used...
+            // _saveDelta = tc.FinalTime / 50.0;
 
             // Detect spice configuration
             if (simulation.ParameterSets.TryGet(out SpiceConfiguration sc))
             {
                 TrTol = sc.TrTol;
-                RelTol = sc.RelTol;
-                AbsTol = sc.AbsTol;
+                LteRelTol = sc.LteRelTol;
+                LteAbsTol = sc.LteAbsTol;
+                ChgTol = sc.ChgTol;
                 Expansion = sc.Expansion;
             }
 

@@ -78,7 +78,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(simulation));
 
             // Use the previous solutions to predict a new one
-            for (var i = 0; i <= IntegrationStates[0].Solution.Length; i++)
+            for (var i = 0; i <= Prediction.Length; i++)
             {
                 Prediction[i] = 0.0;
                 for (var k = 0; k <= Order; k++)

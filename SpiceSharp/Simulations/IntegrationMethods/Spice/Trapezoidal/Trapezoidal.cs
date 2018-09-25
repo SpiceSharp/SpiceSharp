@@ -65,7 +65,7 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case 1:
                     // Divided difference approach
-                    for (var i = 1; i <= current.Solution.Length; i++)
+                    for (var i = 1; i <= Prediction.Length; i++)
                     {
                         var dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
                         Prediction[i] = current.Solution[i] + future.Delta * dd0;
@@ -77,7 +77,7 @@ namespace SpiceSharp.IntegrationMethods
                     var second = IntegrationStates[3];
                     var b = -future.Delta / (2.0 * current.Delta);
                     var a = 1 - b;
-                    for (var i = 1; i <= current.Solution.Length; i++)
+                    for (var i = 1; i <= Prediction.Length; i++)
                     {
                         var dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
                         var dd1 = (previous.Solution[i] - second.Solution[i]) / previous.Delta;

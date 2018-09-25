@@ -16,14 +16,20 @@ namespace SpiceSharp.Simulations.IntegrationMethods.Spice
         /// <summary>
         /// Gets or sets the truncation relative tolerance
         /// </summary>
-        [ParameterName("reltol"), ParameterInfo("The allowed relative tolerance for timestep truncation")]
-        public double RelTol { get; set; } = 1e-3;
+        [ParameterName("ltereltol"), ParameterInfo("The allowed relative tolerance for timestep truncation")]
+        public double LteRelTol { get; set; } = 1e-3;
 
         /// <summary>
         /// Gets or sets the truncation absolute tolerance
         /// </summary>
-        [ParameterName("abstol"), ParameterInfo("The allowed absolute tolerance for timestep truncation")]
-        public double AbsTol { get; set; } = 1e-6;
+        [ParameterName("lteabstol"), ParameterInfo("The allowed absolute tolerance for timestep truncation")]
+        public double LteAbsTol { get; set; } = 1e-6;
+
+        /// <summary>
+        /// Gets or sets the tolerance for charge
+        /// </summary>
+        [ParameterName("chgtol"), ParameterInfo("The allowed tolerance on charge")]
+        public double ChgTol { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets or sets the maximum timestep expansion factor

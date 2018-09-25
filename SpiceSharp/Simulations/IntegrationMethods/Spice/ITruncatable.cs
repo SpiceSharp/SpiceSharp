@@ -6,7 +6,7 @@
     public interface ITruncatable
     {
         /// <summary>
-        /// Calculate a timestep to manage the truncation error
+        /// Calculates a timestep to manage the truncation error
         /// </summary>
         /// <returns></returns>
         double Truncate();
