@@ -83,5 +83,29 @@ namespace SpiceSharpTest.Simulations
             };
             tran.Run(ckt);
         }
+
+        [Test]
+        public void When_LazyLoadExport_Expect_Reference()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10),
+                new Resistor("R1", "in", "0", 1e3));
+
+            // Create the transient analysis
+            var tran = new Transient("Tran 1", 1e-6, 10.0);
+            Export<double> export = null;
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                // If the time > 5.0 then start exporting our stuff
+                if (args.Time > 5.0)
+                {
+                    if (export == null)
+                        export = new RealPropertyExport((Simulation) sender, "R1", "i");
+                    Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
+                }
+            };
+            tran.Run(ckt);
+        }
     }
 }
