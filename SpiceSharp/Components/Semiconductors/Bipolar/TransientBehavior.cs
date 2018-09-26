@@ -20,6 +20,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private TemperatureBehavior _temp;
         private LoadBehavior _load;
         private ModelTemperatureBehavior _modeltemp;
+        private IntegrationMethod _method;
 
         /// <summary>
         /// Nodes
@@ -117,6 +118,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _load = provider.GetBehavior<LoadBehavior>();
             _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+
+            if (simulation is TimeSimulation ts)
+                _method = ts.Method;
         }
 
         /// <summary>
@@ -217,18 +221,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Create states
         /// </summary>
-        /// <param name="states">Pool of all states</param>
-        public override void CreateStates(StatePool states)
+        /// <param name="method"></param>
+        public override void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
             // We just need a history without integration here
-            StateChargeBe = states.CreateDerivative();
-            StateChargeBc = states.CreateDerivative();
-            StateChargeCs = states.CreateDerivative();
-            StateChargeBx = states.CreateDerivative();
-            StateExcessPhaseCurrentBc = states.CreateHistory();
+            StateChargeBe = method.CreateDerivative();
+            StateChargeBc = method.CreateDerivative();
+            StateChargeCs = method.CreateDerivative();
+
+            // Spice 3f5 does not include this state for LTE calculations
+            StateChargeBx = method.CreateDerivative(false);
+
+            StateExcessPhaseCurrentBc = method.CreateHistory();
         }
 
         /// <summary>
@@ -537,13 +544,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Truncate the timestep
         /// </summary>
         /// <returns>The timestep that satisfies the LTE</returns>
-        public override double Truncate()
+        /* public override double Truncate()
         {
             var timetmp = StateChargeBe.LocalTruncationError();
             timetmp = Math.Min(timetmp, StateChargeBc.LocalTruncationError());
             timetmp = Math.Min(timetmp, StateChargeCs.LocalTruncationError());
             return timetmp;
-        }
+        } */
 
         /// <summary>
         /// Calculate excess phase
@@ -569,8 +576,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var cbe = args.ExcessPhaseCurrent;
             var gbe = args.ExcessPhaseConduct;
 
-            var delta = StateExcessPhaseCurrentBc.Timesteps[0];
-            var prevdelta = StateExcessPhaseCurrentBc.Timesteps[1];
+            var delta = _method.GetTimestep(0);
+            var prevdelta = _method.GetTimestep(1);
             var arg1 = delta / td;
             var arg2 = 3 * arg1;
             arg1 = arg2 * arg1;

@@ -19,11 +19,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Register states
         /// </summary>
-        /// <param name="states">States</param>
-        public virtual void CreateStates(StatePool states)
+        /// <param name="method">The integration method</param>
+        public virtual void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
             // Do nothing (for now)
         }

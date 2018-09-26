@@ -11,6 +11,37 @@ namespace SpiceSharp.Simulations
     public abstract class Simulation
     {
         /// <summary>
+        /// Possible statuses for a simulation
+        /// </summary>
+        public enum Statuses
+        {
+            /// <summary>
+            /// Indicates that the simulation has not started
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// Indicates that the simulation is now in its setup phase
+            /// </summary>
+            Setup,
+
+            /// <summary>
+            /// Indicates that the simulation is running
+            /// </summary>
+            Running,
+
+            /// <summary>
+            /// Indicates that the simulation is cleaning up all its resources
+            /// </summary>
+            Unsetup
+        }
+
+        /// <summary>
+        /// Gets the current status of the simulation
+        /// </summary>
+        public Statuses Status { get; private set; } = Statuses.None;
+
+        /// <summary>
         /// Simulation configuration
         /// </summary>
         public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
@@ -93,9 +124,10 @@ namespace SpiceSharp.Simulations
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
-
+            
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
+            Status = Statuses.Setup;
             Setup(circuit);
             OnAfterSetup(EventArgs.Empty);
 
@@ -104,6 +136,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Execute the simulation
+            Status = Statuses.Running;
             var beforeArgs = new BeforeExecuteEventArgs(false);
             var afterArgs = new SimulationFlowEventArgs();
             do
@@ -125,8 +158,11 @@ namespace SpiceSharp.Simulations
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
+            Status = Statuses.Unsetup;
             Unsetup();
             OnAfterUnsetup(EventArgs.Empty);
+
+            Status = Statuses.None;
         }
 
         /// <summary>

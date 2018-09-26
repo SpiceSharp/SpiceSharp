@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
             NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
             _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Objects);
             NoiseState = States.Get<NoiseState>();
-            NoiseState.Initialize(Nodes);
+            NoiseState.Setup(Nodes);
         }
 
         /// <summary>

@@ -10,7 +10,15 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets if the export is currently valid
         /// </summary>
-        public bool IsValid => Extractor != null;
+        public bool IsValid
+        {
+            get
+            {
+                if (Extractor == null)
+                    LazyLoad();
+                return Extractor != null;
+            }
+        }
 
         /// <summary>
         /// The extractor used to 
@@ -30,7 +38,13 @@ namespace SpiceSharp.Simulations
             get
             {
                 if (Extractor == null)
-                    return default(T);
+                {
+                    // Try initializing (lazy loading)
+                    LazyLoad();
+                    if (Extractor == null)
+                        return default(T);
+                }
+
                 return Extractor();
             }
         }
@@ -44,6 +58,16 @@ namespace SpiceSharp.Simulations
             Simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
             simulation.AfterSetup += Initialize;
             simulation.BeforeUnsetup += Finalize;
+        }
+
+        /// <summary>
+        /// Load the export for the simulation after it has already set up
+        /// </summary>
+        protected void LazyLoad()
+        {
+            // If we're already too far, emulate a call from the simulation
+            if (Simulation.Status == Simulation.Statuses.Setup || Simulation.Status == Simulation.Statuses.Running)
+                Initialize(Simulation, EventArgs.Empty);
         }
 
         /// <summary>

@@ -93,7 +93,7 @@ namespace SpiceSharp.Simulations
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
             for (var i = 0; i < _loadBehaviors.Count; i++)
                 _loadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
-            RealState.Initialize(Nodes);
+            RealState.Setup(Nodes);
 
             // Allow nodesets to help convergence
             AfterLoad += LoadNodeSets;

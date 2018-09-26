@@ -8,15 +8,15 @@
         /// <summary>
         /// Initialize the state
         /// </summary>
-        public bool Initialized { get; private set; }
+        public bool IsSetup { get; private set; }
 
         /// <summary>
         /// Initialize
         /// </summary>
         /// <param name="nodes">The circuit</param>
-        public virtual void Initialize(VariableSet nodes)
+        public virtual void Setup(VariableSet nodes)
         {
-            Initialized = true;
+            IsSetup = true;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@
         /// </summary>
         public virtual void Destroy()
         {
-            Initialized = false;
+            IsSetup = false;
         }
     }
 }

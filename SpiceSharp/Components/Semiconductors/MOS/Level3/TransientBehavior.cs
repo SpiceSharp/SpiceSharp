@@ -195,23 +195,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Create states
         /// </summary>
-        /// <param name="states">States</param>
-        public override void CreateStates(StatePool states)
+        /// <param name="method"></param>
+        public override void CreateStates(IntegrationMethod method)
         {
-			if (states == null)
-				throw new ArgumentNullException(nameof(states));
+			if (method == null)
+				throw new ArgumentNullException(nameof(method));
 
-            _vgs = states.CreateHistory();
-            _vds = states.CreateHistory();
-            _vbs = states.CreateHistory();
-            _capgs = states.CreateHistory();
-            _capgd = states.CreateHistory();
-            _capgb = states.CreateHistory();
-            _qgs = states.CreateDerivative();
-            _qgd = states.CreateDerivative();
-            _qgb = states.CreateDerivative();
-            _qbd = states.CreateDerivative();
-            _qbs = states.CreateDerivative();
+            _vgs = method.CreateHistory();
+            _vds = method.CreateHistory();
+            _vbs = method.CreateHistory();
+            _capgs = method.CreateHistory();
+            _capgd = method.CreateHistory();
+            _capgb = method.CreateHistory();
+            _qgs = method.CreateDerivative();
+            _qgd = method.CreateDerivative();
+            _qgb = method.CreateDerivative();
+            _qbd = method.CreateDerivative();
+            _qbs = method.CreateDerivative();
         }
 
         /// <summary>
@@ -632,12 +632,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Truncate timestep
         /// </summary>
         /// <returns>The timestep that satisfies the LTE</returns>
-        public override double Truncate()
+        /* public override double Truncate()
         {
             var timetmp = _qgs.LocalTruncationError();
             timetmp = Math.Min(timetmp, _qgd.LocalTruncationError());
             timetmp = Math.Min(timetmp, _qgb.LocalTruncationError());
             return timetmp;
-        }
+        } */
     }
 }

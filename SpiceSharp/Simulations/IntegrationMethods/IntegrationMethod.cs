@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Algebra;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
@@ -10,26 +9,6 @@ namespace SpiceSharp.IntegrationMethods
     /// </summary>
     public abstract class IntegrationMethod
     {
-        /// <summary>
-        /// Gets the parameters for the integration method
-        /// </summary>
-        public ParameterSetDictionary Parameters { get; } = new ParameterSetDictionary();
-
-        /// <summary>
-        /// Gets the base parameters for the integration method
-        /// </summary>
-        protected IntegrationParameters BaseParameters { get; private set; }
-
-        /// <summary>
-        /// The breakpoints
-        /// </summary>
-        public Breakpoints Breaks { get; } = new Breakpoints();
-
-        /// <summary>
-        /// Gets whether a breakpoint was reached or not
-        /// </summary>
-        public bool Break { get; protected set; }
-
         /// <summary>
         /// Gets the maximum order for the integration method
         /// </summary>
@@ -41,87 +20,55 @@ namespace SpiceSharp.IntegrationMethods
         public int Order { get; protected set; }
 
         /// <summary>
-        /// Gets the current time
+        /// Gets the previously accepted integration states
         /// </summary>
-        public double Time { get; protected set; }
+        protected History<IntegrationState> IntegrationStates { get; }
 
         /// <summary>
-        /// Gets or sets the current timestep
+        /// Class for managing state indices
         /// </summary>
-        public double Delta { get; set; }
+        protected StateManager StateManager { get; } = new StateManager();
 
         /// <summary>
-        /// Gets or sets the saved timestep
+        /// Gets the time of the last accepted point
         /// </summary>
-        public double SaveDelta { get; set; }
+        public double BaseTime { get; private set; }
 
         /// <summary>
-        /// Gets or sets the old timestep
+        /// Gets the time of the currently probed point
         /// </summary>
-        public double OldDelta { get; set; }
-
-        /// <summary>
-        /// Gets or sets the minimum delta timestep
-        /// </summary>
-        public double DeltaMin { get; set; } = 1e-12;
-
-        /// <summary>
-        /// Gets the old time steps
-        /// </summary>
-        public History<double> DeltaOld { get; }
-
-        /// <summary>
-        /// Gets the old solutions
-        /// </summary>
-        public History<Vector<double>> Solutions { get; }
-
-        /// <summary>
-        /// Gets the prediction for the next timestep
-        /// </summary>
-        public Vector<double> Prediction { get; protected set; }
+        public double Time { get; private set; }
 
         /// <summary>
         /// The first order derivative of any variable that is
         /// dependent on the timestep
         /// </summary>
-        public double Slope { get; protected set; } = 0.0;
+        public double Slope { get; protected set; }
 
         /// <summary>
-        /// Gets the last time point that was accepted
+        /// Event called when probing for a next time point
         /// </summary>
-        public double SavedTime => _savetime;
+        public event EventHandler<TruncateTimestepEventArgs> TruncateProbe;
 
         /// <summary>
-        /// Private variables
+        /// Event called when evaluating the current solution
         /// </summary>
-        private double _savetime = double.NaN;
-        private BehaviorList<BaseTransientBehavior> _transientBehaviors;
+        public event EventHandler<TruncateEvaluateEventArgs> TruncateEvaluate;
 
         /// <summary>
-        /// Event called when the timestep needs to be truncated
+        /// Event called when the simulator could not reach convergence
         /// </summary>
-        public event EventHandler<TruncationEventArgs> Truncate;
+        public event EventHandler<TruncateEvaluateEventArgs> TruncateNonConvergence; 
 
         /// <summary>
-        /// Constructor
+        /// Event called when accepting the last evaluated solution
         /// </summary>
-        /// <param name="configuration">The configuration</param>
-        /// <param name="maxOrder">Maximum integration order</param>
-        protected IntegrationMethod(IntegrationParameters configuration, int maxOrder)
-        {
-            if (maxOrder < 1)
-                throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
-            MaxOrder = maxOrder;
+        public event EventHandler<EventArgs> AcceptSolution;
 
-            // Allocate history of timesteps
-            DeltaOld = new ArrayHistory<double>(maxOrder + 2);
-
-            // Allocate history of solutions
-            Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
-
-            // Create configuration if necessary
-            Parameters.Add(configuration ?? new IntegrationParameters());
-        }
+        /// <summary>
+        /// Event called when continuing the integration
+        /// </summary>
+        public event EventHandler<ModifyTimestepEventArgs> ContinueTimestep;
 
         /// <summary>
         /// Constructor
@@ -129,77 +76,161 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="maxOrder">Maximum integration order</param>
         protected IntegrationMethod(int maxOrder)
         {
-            if (maxOrder < 0)
+            if (maxOrder < 1)
                 throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
             MaxOrder = maxOrder;
 
-            // Allocate history of timesteps
-            DeltaOld = new ArrayHistory<double>(maxOrder + 2);
-
-            // Allocate history of solutions
-            Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
-
-            // Create configuration
-            Parameters.Add(new IntegrationParameters());
+            // Allocate history of timesteps and solutions
+            IntegrationStates = new ArrayHistory<IntegrationState>(maxOrder + 2);
         }
 
         /// <summary>
-        /// Save a solution for future integrations
+        /// Setup the integration method
         /// </summary>
-        /// <param name="solution">The solution</param>
-        public void SaveSolution(Vector<double> solution)
+        /// <param name="simulation">The simulation</param>
+        public virtual void Setup(TimeSimulation simulation)
         {
-            if (solution == null)
-                throw new ArgumentNullException(nameof(solution));
-
-            // Now, move the solution vectors around
-            if (Solutions[0] == null)
-            {
-                // No solutions yet, so allocate vectors
-                Solutions.Clear(index => new DenseVector<double>(solution.Length));
-                Prediction = new DenseVector<double>(solution.Length);
-                solution.CopyTo(Solutions[0]);
-            }
-            else
-            {
-                // Cycle through solutions
-                Solutions.Cycle();
-                solution.CopyTo(Solutions[0]);
-            }
+            var solver = simulation?.RealState?.Solver;
+            if (solver == null)
+                throw new CircuitException("Could not extract solver");
+            IntegrationStates.Clear(i => new IntegrationState(1.0, 
+                new DenseVector<double>(solver.Order), 
+                StateManager.Build()));
         }
 
+        /// <summary>
+        /// Create a history
+        /// </summary>
+        public virtual StateHistory CreateHistory() => new StateHistoryDefault(IntegrationStates, StateManager);
+
+        /// <summary>
+        /// Create a state that can be derived
+        /// </summary>
+        /// <remarks>
+        /// Tracked derivatives are used in more advanced features by the integration method if they
+        /// are implemented. For example, derived states can be used for finding a good time step
+        /// by approximating the local truncation error (ie. the error made by taking discrete
+        /// time steps). If you do not want the derivative to participate in these features, set
+        /// <see cref="track"/> to false.
+        /// </remarks>
+        /// <param name="track">If false, this derivative is treated as purely informative</param>
+        /// <returns></returns>
+        public abstract StateDerivative CreateDerivative(bool track);
+
+        /// <summary>
+        /// Create a state that can be derived
+        /// </summary>
+        /// <returns></returns>
+        public virtual StateDerivative CreateDerivative() => CreateDerivative(true);
+        
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        /// <param name="behaviors">Truncation behaviors</param>
-        public virtual void Initialize(BehaviorList<BaseTransientBehavior> behaviors)
+        public virtual void Initialize(TimeSimulation simulation)
         {
             // Initialize variables
-            Time = 0.0;
-            _savetime = 0.0;
-            Delta = 0.0;
-            SaveDelta = 0.0;
-            OldDelta = 0.0;
             Slope = 0.0;
             Order = 1;
-            Prediction = null;
-            DeltaOld.Clear(0.0);
-            Solutions.Clear((Vector<double>) null);
 
-            // Get parameters
-            BaseParameters = Parameters.Get<IntegrationParameters>();
+            // Copy the first state to all other states (assume DC situation)
+            simulation.RealState.Solution.CopyTo(IntegrationStates[0].Solution);
+            for (var i = 1; i < IntegrationStates.Length; i++)
+            {
+                IntegrationStates[i].Delta = IntegrationStates[0].Delta;
+                // IntegrationStates[0].Solution.CopyTo(IntegrationStates[i].Solution);
+                IntegrationStates[0].State.CopyTo(IntegrationStates[i].State);
+            }
+        }
 
-            // Register default truncation methods
-            _transientBehaviors = behaviors;
-            // if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
-            if ((BaseParameters.TruncationMethod & IntegrationParameters.TruncationMethods.PerDevice) != 0)
-                Truncate += TruncateDevices;
-            // if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))
-            if ((BaseParameters.TruncationMethod & IntegrationParameters.TruncationMethods.PerNode) != 0)
-                Truncate += TruncateNodes;
+        /// <summary>
+        /// Indicate that we'll probe around for a new solution from now on
+        /// </summary>
+        /// <param name="simulation">Time simulation</param>
+        /// <param name="delta">The timestep to be probed</param>
+        public virtual void Probe(TimeSimulation simulation, double delta)
+        {
+            // Allow an additional truncation if necessary
+            var args = new TruncateTimestepEventArgs(simulation, delta);
+            OnTruncateProbe(args);
 
-            // Last point was START so the current point is the point after a breakpoint (start)
-            Break = true;
+            // Advance the probing time
+            Time = BaseTime + args.Delta;
+            IntegrationStates[0].Delta = args.Delta;
+        }
+
+        /// <summary>
+        /// Called when the simulator cannot converge to a solution
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="newDelta">The next timestep</param>
+        public virtual void NonConvergence(TimeSimulation simulation, out double newDelta)
+        {
+            // Call event
+            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder);
+            OnTruncateNonConvergence(args);
+
+            // Set the new timestep
+            newDelta = args.Delta;
+        }
+
+        /// <summary>
+        /// Evaluate whether or not the current solution can be accepted
+        /// Returning false indicates that the solution is not acceptable, and that the time simulation
+        /// should try again probing a truncated timestep
+        /// </summary>
+        /// <param name="simulation">Time simulation</param>
+        /// <param name="newDelta">The requested timestep</param>
+        public virtual bool Evaluate(TimeSimulation simulation, out double newDelta)
+        {
+            // Spice 3f5 ignores the first timestep
+            if (BaseTime.Equals(0.0))
+            {
+                newDelta = IntegrationStates[0].Delta;
+                return true;
+            }
+
+            // Call event
+            var args = new TruncateEvaluateEventArgs(simulation, MaxOrder)
+            {
+                Order = Order
+            };
+            OnTruncateEvaluate(args);
+
+            // Update values
+            Order = args.Order;
+            newDelta = args.Delta;
+            return args.Accepted;
+        }
+
+        /// <summary>
+        /// Accept the last evaluated time point as valid and continue
+        /// </summary>
+        public virtual void Accept(TimeSimulation simulation)
+        {
+            // Store the current solution
+            simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
+
+            // Allow modifying the timestep (eg. for breakpoint systems)
+            OnAcceptSolution();
+        }
+
+        /// <summary>
+        /// Continue the integration
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="delta">Timestep</param>
+        public virtual void Continue(TimeSimulation simulation, ref double delta)
+        {
+            // Allow registered methods to modify the timestep
+            var args = new ModifyTimestepEventArgs(simulation, delta);
+            OnContinue(args);
+
+            // Shift the solutions and overwrite index 0 with the current solution
+            IntegrationStates.Cycle();
+            BaseTime = Time;
+
+            // Update the new timestep
+            IntegrationStates[0].Delta = args.Delta;
         }
 
         /// <summary>
@@ -207,209 +238,53 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public virtual void Unsetup()
         {
-            Break = false;
-            Breaks.Clear();
+            StateManager.Unsetup();
 
-            Time = 0.0;
-            _savetime = 0.0;
-            Delta = 0.0;
-            SaveDelta = 0.0;
+            // Clear the timesteps and solutions
+            IntegrationStates.Clear((IntegrationState) null);
+            
+            // Clear variables
             Order = 0;
-            Prediction = null;
-            OldDelta = 0.0;
-            DeltaOld.Clear(0.0);
-            Solutions.Clear((Vector<double>) null);
-            _transientBehaviors = null;
             Slope = 0.0;
-
-            // Remove any added events
-            Truncate -= TruncateDevices;
-            Truncate -= TruncateNodes;
+            BaseTime = 0.0;
+            Time = 0.0;
         }
 
         /// <summary>
-        /// Advance the time with the specified timestep for the first time
-        /// The actual timestep may be smaller due to breakpoints
+        /// Get a timestep
         /// </summary>
-        public void Resume()
-        {
-            // Are we at a breakpoint, or indistinguishably close?
-            if (Time.Equals(Breaks.First) || Breaks.First - Time <= DeltaMin)
-            {
-                // First timepoint after a breakpoint: cut integration order
-                Order = 1;
-
-                // Limit the next timestep if there is a breakpoint
-                var mt = Math.Min(SaveDelta, Breaks.Delta);
-                Delta = Math.Min(Delta, 0.1 * mt);
-
-                // Spice will divide the delta by 10 in the first step
-                if (SavedTime.Equals(0.0))
-                    Delta /= 10.0;
-
-                // But we don't want to go below delmin for no reason
-                Delta = Math.Max(Delta, DeltaMin * 2.0);
-            }
-            else if (Time + Delta >= Breaks.First)
-            {
-                // Breakpoint reached
-                SaveDelta = Delta;
-                Delta = Breaks.First - Time;
-
-                // We reached a breakpoint!
-                Break = true;
-            }
-
-            // Update old delta's with the current delta
-            DeltaOld.Store(Delta);
-        }
-
-        /// <summary>
-        /// Try advancing time
-        /// </summary>
-        public void TryDelta()
-        {
-            // Check for invalid timesteps
-            if (double.IsNaN(Delta))
-                throw new CircuitException("Invalid time step");
-
-            OldDelta = Delta;
-            _savetime = Time;
-            Time += Delta;
-            DeltaOld.Current = Delta;
-        }
-
-        /// <summary>
-        /// Roll back the time to the last advanced time and reset the order to 1
-        /// </summary>
-        public void Rollback() => Time = _savetime;
-
-        /// <summary>
-        /// Go back to order 1
-        /// </summary>
-        public void CutOrder() => Order = 1;
-
-        /// <summary>
-        /// Retry a new timestep after the current one failed
-        /// Will cut the order and cut the timestep
-        /// </summary>
-        /// <param name="delta">The new timestep</param>
-        public void Retry(double delta)
-        {
-            if (delta > Delta)
-                throw new CircuitException("The time step can only shrink when retrying a new timestep");
-            if (delta < DeltaMin)
-                delta = DeltaMin;
-
-            // Update all the variables
-            Delta = delta;
-            DeltaOld.Current = delta;
-            Time = _savetime + delta;
-
-            // Cut the integration order
-            Order = 1;
-        }
-
-        /// <summary>
-        /// Calculate a new step
-        /// The result is stored in Delta
-        /// Note: This method does not advance time!
-        /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        /// <returns>True if the timestep isn't cut</returns>
-        public bool LteControl(TimeSimulation simulation)
-        {
-            // Invoke truncation event
-            var args = new TruncationEventArgs(simulation, Delta);
-            Truncate?.Invoke(this, args);
-            var newdelta = args.Delta;
-
-            if (newdelta > 0.9 * Delta)
-            {
-                if (Order == 1)
-                {
-                    Order = 2;
-
-                    // Invoke truncation event
-                    args = new TruncationEventArgs(simulation, Delta);
-                    Truncate?.Invoke(this, args);
-                    newdelta = args.Delta;
-
-                    if (newdelta <= 1.05 * Delta)
-                        Order = 1;
-                }
-                Delta = newdelta;
-                return true;
-            }
-
-            // Truncation too strict, we'll have to recalculate the timepoint
-            Rollback();
-            Delta = newdelta;
-            return false;
-        }
-
-        /// <summary>
-        /// Remove breakpoints in the past
-        /// </summary>
-        public void UpdateBreakpoints()
-        {
-            while (Time > Breaks.First)
-                Breaks.ClearBreakpoint();
-
-            Break = false;
-        }
-
-        /// <summary>
-        /// Integrate a state variable at a specific index
-        /// </summary>
-        /// <param name="history">The history</param>
-        /// <param name="index">The index of the state to be used</param>
+        /// <param name="index">Points to go back in time</param>
         /// <returns></returns>
-        public abstract void Integrate(History<Vector<double>> history, int index);
+        public double GetTimestep(int index) => IntegrationStates[index].Delta;
 
         /// <summary>
-        /// Do truncation for all nodes
+        /// Call the event for non-convergent solutions
         /// </summary>
-        /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        /// <returns></returns>
-        protected abstract void TruncateNodes(object sender, TruncationEventArgs args);
+        protected void OnTruncateNonConvergence(TruncateEvaluateEventArgs args) =>
+            TruncateNonConvergence?.Invoke(this, args);
 
         /// <summary>
-        /// Do truncation for all devices
+        /// Call the Evaluate event
         /// </summary>
-        /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        /// <returns></returns>
-        protected void TruncateDevices(object sender, TruncationEventArgs args)
-        {
-            if (args == null)
-                throw new ArgumentNullException(nameof(args));
-
-            var timetmp = double.PositiveInfinity;
-            for (var i = 0; i < _transientBehaviors.Count; i++)
-                timetmp = Math.Min(timetmp, _transientBehaviors[i].Truncate());
-            args.Delta = timetmp;
-        }
+        protected void OnTruncateEvaluate(TruncateEvaluateEventArgs args) => TruncateEvaluate?.Invoke(this, args);
 
         /// <summary>
-        /// Calculate a prediction based on the current timestep
+        /// Accept the last evaluated point
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public abstract void Predict(TimeSimulation simulation);
+        protected void OnAcceptSolution() => AcceptSolution?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
-        /// Compute the coefficients needed for integration
+        /// Truncate the probing timestep
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public abstract void ComputeCoefficients(TimeSimulation simulation);
+        /// <param name="args">Arguments</param>
+        protected virtual void OnTruncateProbe(TruncateTimestepEventArgs args) => TruncateProbe?.Invoke(this, args);
 
         /// <summary>
-        /// Calculate the new timestep based on the LTE (local truncation error)
+        /// Call event for continuing integration
         /// </summary>
-        /// <param name="history">The history of states</param>
-        /// <param name="index">Index</param>
-        /// <returns>The timestep that satisfies the LTE</returns>
-        public abstract double LocalTruncateError(History<Vector<double>> history, int index);
+        /// <param name="args">Arguments</param>
+        protected virtual void OnContinue(ModifyTimestepEventArgs args) => ContinueTimestep?.Invoke(this, args);
     }
 }
