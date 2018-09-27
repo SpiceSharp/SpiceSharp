@@ -5,15 +5,23 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp
 {
     /// <summary>
-    /// Base class for parameters
+    /// A class that describes a set of parameters.
     /// </summary>
+    /// <remarks>
+    /// This class allows accessing parameters by their metadata. Metadata is specified by using 
+    /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
+    /// </remarks>
+    /// <seealso cref="NamedParameterized" />
     public abstract class ParameterSet : NamedParameterized
     {
         /// <summary>
-        /// Get a parameter object
+        /// Gets a parameter with a specified name.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// The parameter with the specified name.
+        /// </returns>
         public Parameter<T> GetParameter<T>(string name) where T : struct
         {
             // Get the property by name
@@ -39,9 +47,10 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get a parameter object
+        /// Get the principal parameter.
         /// </summary>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <returns>The principal parameter.</returns>
         public Parameter<T> GetParameter<T>() where T : struct
         {
             var member = Principal;
@@ -67,12 +76,14 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Set a parameter by name
-        /// If multiple parameters have the same name, they will all be set
+        /// Sets a parameter with a specified name.
+        /// If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="value">Value</param>
-        /// <returns>True if the parameter was set</returns>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter<T>(string name, T value) where T : struct
         {
             // Set the property if any
@@ -87,11 +98,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Calls a parameter method by name without arguments
-        /// If multiple parameters by this name exist, all of them will be called
+        /// Calls a method by name without arguments.
+        /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
-        /// <param name="name">Name of the method</param>
-        /// <returns></returns>
+        /// <param name="name">The name of the method.</param>
+        /// <returns>
+        ///   <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter(string name)
         {
             // Set the property if any
@@ -113,11 +126,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets the principal parameter of the set
-        /// Only the first principal parameter is changed
+        /// Sets the value of the principal parameter. Only the first principal parameter is changed.
         /// </summary>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter<T>(T value) where T : struct
         {
             var p = Principal;
@@ -127,12 +142,14 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Set a parameter by name
-        /// Use for any value
+        /// Sets a parameter with a specified name. The type of the parameter
+        /// can be anything but has to match the signature of the parameter.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="value">Value</param>
-        /// <returns>Returns true if the parameter was set</returns>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if one or more parameters are set; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter(string name, object value)
         {
             // Set the property if any
@@ -166,11 +183,10 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Calculate default parameter values that depend on other parameters
+        /// Method for calculating the default values of derived parameters.
         /// </summary>
         /// <remarks>
-        /// These calculations should not depend on temperature! Temperature-dependent calculations are
-        /// part of the <see cref="SpiceSharp.Behaviors.BaseTemperatureBehavior"/>.
+        /// These calculations should be run whenever a parameter has been changed.
         /// </remarks>
         public virtual void CalculateDefaults()
         {
@@ -185,10 +201,10 @@ namespace SpiceSharp
         /// </returns>
         public virtual ParameterSet DeepClone()
         {
-            //1. Make new object
+            // 1. Make new object
             var destinationObject = (ParameterSet)Activator.CreateInstance(GetType());
 
-            //2. Copy properties of the current object
+            // 2. Copy properties of the current object
             Utility.CopyPropertiesAndFields(this, destinationObject);
 
             return destinationObject;

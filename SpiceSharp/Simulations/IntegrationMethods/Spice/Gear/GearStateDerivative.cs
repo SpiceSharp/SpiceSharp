@@ -9,8 +9,10 @@ namespace SpiceSharp.IntegrationMethods
     public partial class Gear
     {
         /// <summary>
-        /// A state that can be derived by the Gear method 
+        /// A state that can be derived by the Gear integration method.
         /// </summary>
+        /// <seealso cref="StateDerivative" />
+        /// <seealso cref="ITruncatable" />
         protected class GearStateDerivative : StateDerivative, ITruncatable
         {
             // Private variables
@@ -19,8 +21,11 @@ namespace SpiceSharp.IntegrationMethods
             private readonly History<IntegrationState> _states;
 
             /// <summary>
-            /// Gets or sets the current value
+            /// Gets or sets the value of the state at the current timepoint.
             /// </summary>
+            /// <value>
+            /// The current value.
+            /// </value>
             public override double Current
             {
                 get => _states[0].State[_index];
@@ -28,21 +33,27 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             /// <summary>
-            /// Gets a previous state value
+            /// Gets the <see cref="System.Double"/> at the specified index.
             /// </summary>
-            /// <param name="index">Number of points to go back</param>
+            /// <value>
+            /// The <see cref="System.Double"/>.
+            /// </value>
+            /// <param name="index">The index.</param>
             /// <returns></returns>
             public override double this[int index] => _states[index].State[_index];
 
             /// <summary>
-            /// Gets the derivative of the state
+            /// Gets the current derivative.
             /// </summary>
+            /// <value>
+            /// The derivative value.
+            /// </value>
             public override double Derivative => _states[0].State[_index + 1];
 
             /// <summary>
-            /// Constructor
+            /// Initializes a new instance of the <see cref="GearStateDerivative"/> class.
             /// </summary>
-            /// <param name="method">Parent integration method</param>
+            /// <param name="method">The Gear integration method.</param>
             public GearStateDerivative(Gear method)
             {
                 _method = method;
@@ -51,21 +62,34 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             /// <summary>
-            /// Calculate the jacobian
+            /// Calculate contribution to the jacobian matrix (or Y-matrix).
             /// </summary>
-            /// <param name="derivative">Derivative</param>
-            /// <returns></returns>
+            /// <param name="derivative">Derivative of the state variable with respect to the unknown variable.</param>
+            /// <returns>
+            /// A value that can be added to the element in the Y-matrix.
+            /// </returns>
+            /// <remarks>
+            /// The value returned by this method means that the state variable depends on the derivative of an unknown variable (eg.
+            /// the voltage across a capacitor). <paramref name="derivative" /> is the derivative of the state variable w.r.t. the
+            /// unknown variable.
+            /// </remarks>
             public override double Jacobian(double derivative) => derivative * _method.Slope;
 
             /// <summary>
-            /// Calculate the RHS-vector contribution for linear components
+            /// Calculate contribution to the rhs vector (right-hand side vector).
             /// </summary>
-            /// <returns></returns>
+            /// <returns>
+            /// A value that can be added to the element in the right-hand side vector.
+            /// </returns>
+            /// <remarks>
+            /// The state variable is assumed to be linearly dependent of the unknown variables
+            /// it is derived of. Ie. Q = dqdv * v (v is the unknown).
+            /// </remarks>
             public override double RhsCurrent() =>
                 _states[0].State[_index + 1] - _method.Slope * _states[0].State[_index];
 
             /// <summary>
-            /// Calculate the derivative
+            /// Calculates the derivative.
             /// </summary>
             public override void Integrate()
             {
@@ -79,9 +103,11 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             /// <summary>
-            /// Truncate the time step
+            /// Truncates the current timestep.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>
+            /// The maximum timestep allowed by this state.
+            /// </returns>
             public double Truncate()
             {
                 var derivativeIndex = _index + 1;

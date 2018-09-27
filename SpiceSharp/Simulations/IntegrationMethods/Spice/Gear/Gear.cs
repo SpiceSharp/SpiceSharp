@@ -5,27 +5,37 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Gear integration method
+    /// A class that implements the Gear integration method.
     /// </summary>
+    /// <seealso cref="SpiceIntegrationMethod" />
     public partial class Gear : SpiceIntegrationMethod
     {
         /// <summary>
-        /// Integration coefficients
+        /// Gets the integration coefficients.
         /// </summary>
+        /// <value>
+        /// The integration coefficients.
+        /// </value>
         protected double[] Coefficients { get; } = new double[7];
 
         /// <summary>
-        /// Prediction coefficients
+        /// Gets the prediction coefficients.
         /// </summary>
+        /// <value>
+        /// The prediction coefficients.
+        /// </value>
         protected double[] PredictionCoefficients { get; } = new double[7];
 
         /// <summary>
-        /// Matrix used to solve coefficients
+        /// Matrix used to solve the integration coefficients.
         /// </summary>
+        /// <value>
+        /// The matrix.
+        /// </value>
         protected DenseMatrix<double> Matrix { get; } = new DenseMatrix<double>(8);
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Gear"/> class.
         /// </summary>
         public Gear()
             : base(6)
@@ -33,9 +43,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Initialize the Gear integration method
+        /// Initializes the integration method.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         public override void Initialize(TimeSimulation simulation)
         {
             base.Initialize(simulation);
@@ -54,7 +64,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Unsetup the integration method
+        /// Destroys the integration method.
         /// </summary>
         public override void Unsetup()
         {
@@ -69,9 +79,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Predict a new solution based on the previous ones
+        /// Predicts a solution
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         protected override void Predict(TimeSimulation simulation)
         {
             if (simulation == null)
@@ -89,10 +100,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Truncate the timestep using nodes
+        /// Truncates the timestep using nodes.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="args">Arguments</param>
+        /// <param name="sender">The sender (integration method).</param>
+        /// <param name="args">The <see cref="T:SpiceSharp.IntegrationMethods.TruncateEvaluateEventArgs" /> instance containing the event data.</param>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
             // Get the state
@@ -135,7 +146,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Compute the coefficients for Trapezoidal integration
+        /// Computes the integration coefficients.
         /// </summary>
         protected override void ComputeCoefficients()
         {
@@ -240,9 +251,11 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Produce a derivative for the Gear integration method
+        /// Produces a derivative.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> that can be used with this integration method.
+        /// </returns>
         protected override StateDerivative ProduceDerivative() => new GearStateDerivative(this);
     }
 }

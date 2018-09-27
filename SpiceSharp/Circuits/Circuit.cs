@@ -20,21 +20,21 @@ namespace SpiceSharp
         public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>
-        /// Gets a collection of all circuit objects
+        /// Gets a collection of all circuit objects.
         /// </summary>
         public EntityCollection Objects { get; } = new EntityCollection();
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         public Circuit()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
-        /// <param name="entities">Entities</param>
+        /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(IEnumerable<Entity> entities)
         {
             if (entities == null)
@@ -46,16 +46,16 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
-        /// <param name="entities">Entities</param>
+        /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(params Entity[] entities)
         {
             Objects.Add(entities);
         }
 
         /// <summary>
-        /// Clear all objects in the circuit
+        /// Clear all entities in the circuit.
         /// </summary>
         public void Clear()
         {
@@ -64,8 +64,9 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Check the circuit for floating nodes, voltage loops and more
+        /// Validates the circuit. Checks for voltage loops, floating nodes, etc.
         /// </summary>
+        /// <seealso cref="Validator"/>
         public void Validate()
         {
             var validator = new Validator();

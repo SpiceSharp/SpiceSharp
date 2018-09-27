@@ -3,19 +3,23 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Event arguments before simulation execution
+    /// Event arguments that are used before simulation execution.
     /// </summary>
+    /// <seealso cref="EventArgs" />
     public class BeforeExecuteEventArgs : EventArgs
     {
         /// <summary>
-        /// False if the simulation is executed for the first time
+        /// Gets a value indicating whether the simulation is repeated.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if repeated; otherwise, <c>false</c>.
+        /// </value>
         public bool Repeated { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BeforeExecuteEventArgs"/> class.
         /// </summary>
-        /// <param name="repeated">Has the simulation already been repeated?</param>
+        /// <param name="repeated">if set to <c>true</c>, the simulation was repeated.</param>
         public BeforeExecuteEventArgs(bool repeated)
         {
             Repeated = repeated;

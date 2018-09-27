@@ -7,8 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A class that represents a circuit component/device.
-    /// It can be connected in a circuit and it also has parameters.
+    /// A class that represents a (Spice) component/device.
     /// </summary>
     public abstract class Component : Entity
     {
@@ -18,15 +17,15 @@ namespace SpiceSharp.Components
         private readonly Identifier[] _connections;
 
         /// <summary>
-        /// Gets the number of nodes
+        /// Gets the number of nodes.
         /// </summary>
         public virtual int PinCount => _connections.Length;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Component" /> class.
         /// </summary>
-        /// <param name="name">The name of the component</param>
-        /// <param name="nodeCount">Node count</param>
+        /// <param name="name">The identifier of the entity.</param>
+        /// <param name="nodeCount">The node count.</param>
         protected Component(Identifier name, int nodeCount)
             : base(name)
         {
@@ -35,14 +34,20 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the model of the circuit component (if any)
+        /// Gets the model of the circuit component (if any).
         /// </summary>
         public Entity Model { get; protected set; } = null;
 
         /// <summary>
-        /// Connect the component in the circuit
+        /// Connects the component in the circuit.
         /// </summary>
-        /// <param name="nodes"></param>
+        /// <param name="nodes">The node indices.</param>
+        /// <exception cref="ArgumentNullException">
+        /// nodes
+        /// or
+        /// node " + (i + 1)
+        /// </exception>
+        /// <exception cref="CircuitException">{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length)</exception>
         public void Connect(params Identifier[] nodes)
         {
             if (nodes == null)
@@ -58,11 +63,14 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets a behavior
+        /// Create a behavior of a specific base type for a simulation.
         /// </summary>
-        /// <typeparam name="T">Base behavior</typeparam>
-        /// <param name="simulation"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The behavior base type.</typeparam>
+        /// <param name="simulation">The simulation that will use the behavior.</param>
+        /// <returns>
+        /// A behavior of the requested type, or null if it doesn't apply to this entity.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         public override T CreateBehavior<T>(Simulation simulation)
         {
             if (simulation == null)
@@ -81,9 +89,14 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Build the data provider for setting up behaviors
+        /// Build the data provider for setting up a behavior for the entity. The entity can control which parameters
+        /// and behaviors are visible to behaviors using this method.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="parameters">The parameters in the simulation.</param>
+        /// <param name="behaviors">The behaviors in the simulation.</param>
+        /// <returns>
+        /// A data provider for the behaviors.
+        /// </returns>
         protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
             var provider = base.BuildSetupDataProvider(parameters, behaviors);
@@ -99,10 +112,13 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the connection of the component
+        /// Gets the node index of a pin.
         /// </summary>
-        /// <param name="index">The index</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// This method will only return valid results after the component is set up using <see cref="ApplyConnections"/>.
+        /// </remarks>
+        /// <param name="index">The pin index.</param>
+        /// <returns>The node index.</returns>
         public virtual Identifier GetNode(int index)
         {
             if (index < 0 || index >= _connections.Length)
@@ -111,10 +127,10 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Update the indices for the component
+        /// Update the indices for the component.
         /// </summary>
-        /// <param name="nodes">Nodes</param>
-        /// <returns></returns>
+        /// <param name="nodes">The variable set.</param>
+        /// <returns>The node indices.</returns>
         protected int[] ApplyConnections(VariableSet nodes)
         {
             if (nodes == null)
@@ -128,10 +144,11 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the node indices in order
+        /// Gets the node indexes (in order).
         /// </summary>
-        /// <param name="nodes">Nodes</param>
-        /// <returns></returns>
+        /// <param name="nodes">The nodes.</param>
+        /// <returns>An enumerable for all nodes.</returns>
+        /// <exception cref="ArgumentNullException">nodes</exception>
         public IEnumerable<int> GetNodeIndexes(VariableSet nodes)
         {
             if (nodes == null)

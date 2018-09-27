@@ -5,75 +5,97 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Provides methods for differential equation integration in time-domain analysis. This is an abstract class.
+    /// A template for integration methods.
     /// </summary>
     public abstract class IntegrationMethod
     {
         /// <summary>
-        /// Gets the maximum order for the integration method
+        /// Gets the maximum integration order for the integration method.
         /// </summary>
+        /// <value>
+        /// The maximum order.
+        /// </value>
         public int MaxOrder { get; }
 
         /// <summary>
-        /// Gets the current order
+        /// Gets the current integration order.
         /// </summary>
+        /// <value>
+        /// The current order.
+        /// </value>
         public int Order { get; protected set; }
 
         /// <summary>
-        /// Gets the previously accepted integration states
+        /// Gets the previously accepted integration states.
         /// </summary>
+        /// <value>
+        /// The integration states.
+        /// </value>
         protected History<IntegrationState> IntegrationStates { get; }
 
         /// <summary>
-        /// Class for managing state indices
+        /// Class for managing integration states.
         /// </summary>
+        /// <value>
+        /// The state manager.
+        /// </value>
         protected StateManager StateManager { get; } = new StateManager();
 
         /// <summary>
-        /// Gets the time of the last accepted point
+        /// Gets the time of the last accepted timepoint.
         /// </summary>
+        /// <value>
+        /// The base time.
+        /// </value>
         public double BaseTime { get; private set; }
 
         /// <summary>
-        /// Gets the time of the currently probed point
+        /// Gets the time of the currently probed timepoint.
         /// </summary>
+        /// <value>
+        /// The current time.
+        /// </value>
         public double Time { get; private set; }
 
         /// <summary>
         /// The first order derivative of any variable that is
-        /// dependent on the timestep
+        /// dependent on the timestep.
         /// </summary>
+        /// <value>
+        /// The slope.
+        /// </value>
         public double Slope { get; protected set; }
 
         /// <summary>
-        /// Event called when probing for a next time point
+        /// Occurs when truncating the probed timestep.
         /// </summary>
         public event EventHandler<TruncateTimestepEventArgs> TruncateProbe;
 
         /// <summary>
-        /// Event called when evaluating the current solution
+        /// Occurs when evaluating the current timestep after solving.
         /// </summary>
         public event EventHandler<TruncateEvaluateEventArgs> TruncateEvaluate;
 
         /// <summary>
-        /// Event called when the simulator could not reach convergence
+        /// Occurs when the solution could not converge for the probed timepoint.
         /// </summary>
-        public event EventHandler<TruncateEvaluateEventArgs> TruncateNonConvergence; 
+        public event EventHandler<TruncateEvaluateEventArgs> TruncateNonConvergence;
 
         /// <summary>
-        /// Event called when accepting the last evaluated solution
+        /// Occurs when a timepoint is accepted.
         /// </summary>
         public event EventHandler<EventArgs> AcceptSolution;
 
         /// <summary>
-        /// Event called when continuing the integration
+        /// Occurs when the simulation decides on the next timestep to be probed.
         /// </summary>
         public event EventHandler<ModifyTimestepEventArgs> ContinueTimestep;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="IntegrationMethod"/> class.
         /// </summary>
-        /// <param name="maxOrder">Maximum integration order</param>
+        /// <param name="maxOrder">The maximum integration order.</param>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid order {0}".FormatString(maxOrder)</exception>
         protected IntegrationMethod(int maxOrder)
         {
             if (maxOrder < 1)
@@ -85,9 +107,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Setup the integration method
+        /// Sets up for the specified simulation.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <exception cref="SpiceSharp.CircuitException">Could not extract solver</exception>
         public virtual void Setup(TimeSimulation simulation)
         {
             var solver = simulation?.RealState?.Solver;
@@ -99,33 +122,40 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Create a history
+        /// Creates a state that keeps a history of values.
         /// </summary>
+        /// <returns>
+        /// A <see cref="StateHistory"/> object that is compatible with this integration method.
+        /// </returns>
         public virtual StateHistory CreateHistory() => new StateHistoryDefault(IntegrationStates, StateManager);
 
         /// <summary>
-        /// Create a state that can be derived
+        /// Creates a state for which a derivative with respect to time can be determined.
         /// </summary>
+        /// <param name="track">if set to <c>false</c>, the state is considered purely informative.</param>
+        /// <returns>
+        /// A <see cref="StateDerivative" /> object that is compatible with this integration method.
+        /// </returns>
         /// <remarks>
-        /// Tracked derivatives are used in more advanced features by the integration method if they
-        /// are implemented. For example, derived states can be used for finding a good time step
-        /// by approximating the local truncation error (ie. the error made by taking discrete
-        /// time steps). If you do not want the derivative to participate in these features, set
-        /// <see cref="track"/> to false.
+        /// Tracked derivatives are used in more advanced features implemented by the integration method.
+        /// For example, derived states can be used for finding a good time step by approximating the 
+        /// local truncation error (ie. the error made by taking discrete time steps). If you do not 
+        /// want the derivative to participate in these features, set <paramref name="track" /> to false.
         /// </remarks>
-        /// <param name="track">If false, this derivative is treated as purely informative</param>
-        /// <returns></returns>
         public abstract StateDerivative CreateDerivative(bool track);
 
         /// <summary>
-        /// Create a state that can be derived
+        /// Creates a state that can be derived and is tracked by the integration method.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="StateDerivative" /> object that is compatible with this integration method.
+        /// </returns>
         public virtual StateDerivative CreateDerivative() => CreateDerivative(true);
-        
+
         /// <summary>
-        /// Initialize/reset the integration method
+        /// Initializes the integration method.
         /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
         public virtual void Initialize(TimeSimulation simulation)
         {
             // Initialize variables
@@ -143,10 +173,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Indicate that we'll probe around for a new solution from now on
+        /// Starts probing a new timepoint.
         /// </summary>
-        /// <param name="simulation">Time simulation</param>
-        /// <param name="delta">The timestep to be probed</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="delta">The timestep to be probed.</param>
         public virtual void Probe(TimeSimulation simulation, double delta)
         {
             // Allow an additional truncation if necessary
@@ -159,10 +189,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Called when the simulator cannot converge to a solution
+        /// Updates the integration method in case the solution did not converge.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="newDelta">The next timestep</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="newDelta">The next timestep to be probed.</param>
         public virtual void NonConvergence(TimeSimulation simulation, out double newDelta)
         {
             // Call event
@@ -174,12 +204,13 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Evaluate whether or not the current solution can be accepted
-        /// Returning false indicates that the solution is not acceptable, and that the time simulation
-        /// should try again probing a truncated timestep
+        /// Evaluates whether or not the current solution can be accepted.
         /// </summary>
-        /// <param name="simulation">Time simulation</param>
-        /// <param name="newDelta">The requested timestep</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="newDelta">The next requested timestep in case the solution is not accepted.</param>
+        /// <returns>
+        ///   <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
+        /// </returns>
         public virtual bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
             // Spice 3f5 ignores the first timestep
@@ -203,22 +234,23 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Accept the last evaluated time point as valid and continue
+        /// Accepts the last evaluated time point.
         /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
         public virtual void Accept(TimeSimulation simulation)
         {
             // Store the current solution
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
 
             // Allow modifying the timestep (eg. for breakpoint systems)
-            OnAcceptSolution();
+            OnAcceptSolution(EventArgs.Empty);
         }
 
         /// <summary>
-        /// Continue the integration
+        /// Continues the simulation.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="delta">Timestep</param>
+        /// <param name="simulation">The time-based simulation</param>
+        /// <param name="delta">The initial probing timestep.</param>
         public virtual void Continue(TimeSimulation simulation, ref double delta)
         {
             // Allow registered methods to modify the timestep
@@ -234,7 +266,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Unsetup the integration method
+        /// Destroys the integration method.
         /// </summary>
         public virtual void Unsetup()
         {
@@ -251,40 +283,42 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Get a timestep
+        /// Gets a timestep in history.
         /// </summary>
-        /// <param name="index">Points to go back in time</param>
-        /// <returns></returns>
+        /// <param name="index">Points to go back in time. 0 is the current timestep.</param>
+        /// <returns>
+        /// The timestep.
+        /// </returns>
         public double GetTimestep(int index) => IntegrationStates[index].Delta;
 
         /// <summary>
-        /// Call the event for non-convergent solutions
+        /// Raises the <see cref="E:TruncateNonConvergence" /> event.
         /// </summary>
-        /// <param name="args">Arguments</param>
+        /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected void OnTruncateNonConvergence(TruncateEvaluateEventArgs args) =>
             TruncateNonConvergence?.Invoke(this, args);
 
         /// <summary>
-        /// Call the Evaluate event
+        /// Raises the <see cref="E:TruncateEvaluate" /> event.
         /// </summary>
-        /// <param name="args">Arguments</param>
+        /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected void OnTruncateEvaluate(TruncateEvaluateEventArgs args) => TruncateEvaluate?.Invoke(this, args);
 
         /// <summary>
-        /// Accept the last evaluated point
+        /// Raises the <see cref="E:AcceptSolution" /> event.
         /// </summary>
-        protected void OnAcceptSolution() => AcceptSolution?.Invoke(this, EventArgs.Empty);
+        protected void OnAcceptSolution(EventArgs args) => AcceptSolution?.Invoke(this, args);
 
         /// <summary>
-        /// Truncate the probing timestep
+        /// Raises the <see cref="E:TruncateProbe" /> event.
         /// </summary>
-        /// <param name="args">Arguments</param>
+        /// <param name="args">The <see cref="TruncateTimestepEventArgs"/> instance containing the event data.</param>
         protected virtual void OnTruncateProbe(TruncateTimestepEventArgs args) => TruncateProbe?.Invoke(this, args);
 
         /// <summary>
-        /// Call event for continuing integration
+        /// Raises the <see cref="E:Continue" /> event.
         /// </summary>
-        /// <param name="args">Arguments</param>
+        /// <param name="args">The <see cref="ModifyTimestepEventArgs"/> instance containing the event data.</param>
         protected virtual void OnContinue(ModifyTimestepEventArgs args) => ContinueTimestep?.Invoke(this, args);
     }
 }

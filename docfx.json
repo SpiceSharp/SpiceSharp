@@ -9,7 +9,11 @@
         }
       ],
       "force": false,
-      "dest": "SpiceSharp/obj/api"
+      "dest": "SpiceSharp/obj/api",
+      "properties":
+      {
+        "TargetFramework": "net45"  
+      }
 	}
   ],
   "build": {

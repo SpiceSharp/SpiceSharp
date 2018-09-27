@@ -3,24 +3,25 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Export for the output noise density
+    /// This class can export the output noise density.
     /// </summary>
+    /// <seealso cref="Export{T}" />
     public class OutputNoiseDensityExport : Export<double>
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OutputNoiseDensityExport"/> class.
         /// </summary>
-        /// <param name="noise">Noise analysis</param>
+        /// <param name="noise">The noise analysis.</param>
         public OutputNoiseDensityExport(Noise noise)
             : base(noise)
         {
         }
 
         /// <summary>
-        /// Initialize
+        /// Initializes the export.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Event arguments</param>
+        /// <param name="sender">The object (simulation) sending the event.</param>
+        /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             var noise = (Noise)Simulation;

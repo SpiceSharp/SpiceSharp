@@ -10,7 +10,7 @@ using System.Reflection;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// Provides methods for checking the integrity of a circuit.
+    /// A class that describes methods for validating a circuit.
     /// </summary>
     public class Validator
     {
@@ -25,9 +25,9 @@ namespace SpiceSharp.Circuits
         private readonly VariableSet _nodes = new VariableSet();
         
         /// <summary>
-        /// Validate a circuit
+        /// Validate a circuit.
         /// </summary>
-        /// <param name="circuit">The circuit</param>
+        /// <param name="circuit">The circuit to be validated.</param>
         public void Validate(Circuit circuit)
         {
             if (circuit == null)
@@ -77,9 +77,9 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Deal with a component
+        /// Perform checks on an entity.
         /// </summary>
-        /// <param name="c">The circuit object</param>
+        /// <param name="c">The entity to be checked.</param>
         private void CheckEntity(Entity c)
         {
             // Circuit components
@@ -146,8 +146,11 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Find a voltage driver that closes a voltage drive loop
+        /// Find a voltage driver that closes a voltage drive loop.
         /// </summary>
+        /// <returns>
+        /// The component that closes the loop.
+        /// </returns>
         private Component FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
@@ -197,9 +200,9 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Add connected nodes that will be used to find floating nodes
+        /// Add connected nodes that will be used to find floating nodes.
         /// </summary>
-        /// <param name="nodes"></param>
+        /// <param name="nodes">The nodes that are connected together.</param>
         private void AddConnections(int[] nodes)
         {
             if (nodes == null || nodes.Length == 0)
@@ -214,10 +217,10 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Add a connection for checking for floating nodes
+        /// Add a connection for checking for floating nodes.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The first node index.</param>
+        /// <param name="b">The second node index.</param>
         private void AddConnection(int a, int b)
         {
             if (a == b)
@@ -245,9 +248,9 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Find a node that has no path to ground anywhere (open-circuited)
+        /// Find a node that has no path to ground anywhere (open-circuited).
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A set of node indices that has no DC path to ground.</returns>
         private HashSet<int> FindFloatingNodes()
         {
             var unconnected = new HashSet<int>();

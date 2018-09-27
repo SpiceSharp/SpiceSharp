@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
-using SpiceSharp.Algebra.Matrix;
 
 // ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Matrix using a sparse representation
-    /// The matrix is always kept square!
+    /// A square matrix that uses a sparse storage method.
     /// </summary>
-    /// <typeparam name="T">Type for the element</typeparam>
-    public class SparseMatrix<T> : Matrix<T> where T : IFormattable, IEquatable<T>
+    /// <remarks>
+    /// The elements in row and column with index 0 are considered trashcan elements. They
+    /// should all map on the same element.
+    /// </remarks>
+    /// <typeparam name="T">The base value type.</typeparam>
+    public partial class SparseMatrix<T> : Matrix<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
         /// Constants
@@ -22,14 +24,14 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Private variables
         /// </summary>
-        private Row<T>[] _rows;
-        private Column<T>[] _columns;
-        private SparseMatrixElement<T>[] _diagonal;
-        private readonly SparseMatrixElement<T> _trashCan;
+        private Row[] _rows;
+        private Column[] _columns;
+        private SparseMatrixElement[] _diagonal;
+        private readonly SparseMatrixElement _trashCan;
         private int _allocatedSize;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseMatrix{T}"/> class.
         /// </summary>
         public SparseMatrix()
             : base(1)
@@ -37,50 +39,52 @@ namespace SpiceSharp.Algebra
             _allocatedSize = InitialSize;
 
             // Allocate rows
-            _rows = new Row<T>[InitialSize + 1];
+            _rows = new Row[InitialSize + 1];
             for (var i = 1; i <= InitialSize; i++)
-                _rows[i] = new Row<T>();
+                _rows[i] = new Row();
 
             // Allocate columns
-            _columns = new Column<T>[InitialSize + 1];
+            _columns = new Column[InitialSize + 1];
             for (var i = 1; i <= InitialSize; i++)
-                _columns[i] = new Column<T>();
+                _columns[i] = new Column();
 
             // Other
-            _diagonal = new SparseMatrixElement<T>[InitialSize + 1];
-            _trashCan = new SparseMatrixElement<T>(0, 0);
+            _diagonal = new SparseMatrixElement[InitialSize + 1];
+            _trashCan = new SparseMatrixElement(0, 0);
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseMatrix{T}"/> class.
         /// </summary>
-        /// <param name="size">Size</param>
+        /// <param name="size">The matrix size.</param>
         public SparseMatrix(int size)
             : base(size)
         {
             _allocatedSize = Math.Max(InitialSize, size);
 
             // Allocate rows
-            _rows = new Row<T>[_allocatedSize + 1];
+            _rows = new Row[_allocatedSize + 1];
             for (var i = 1; i <= _allocatedSize; i++)
-                _rows[i] = new Row<T>();
+                _rows[i] = new Row();
 
             // Allocate columns
-            _columns = new Column<T>[_allocatedSize + 1];
+            _columns = new Column[_allocatedSize + 1];
             for (var i = 1; i <= _allocatedSize; i++)
-                _columns[i] = new Column<T>();
+                _columns[i] = new Column();
 
             // Other
-            _diagonal = new SparseMatrixElement<T>[_allocatedSize + 1];
-            _trashCan = new SparseMatrixElement<T>(0, 0);
+            _diagonal = new SparseMatrixElement[_allocatedSize + 1];
+            _trashCan = new SparseMatrixElement(0, 0);
         }
 
         /// <summary>
-        /// Gets a value in the matrix at a specific row and column
+        /// Gets a value in the matrix at a specific row and column.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The value at the specified row and column.
+        /// </returns>
         public override T GetValue(int row, int column)
         {
             var element = FindElement(row, column);
@@ -90,12 +94,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Sets the value in the matrix at a specific row and column
+        /// Sets the value in the matrix at a specific row and column.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <param name="value">The value.</param>
         public override void SetValue(int row, int column, T value)
         {
             if (value.Equals(default(T)))
@@ -115,12 +118,11 @@ namespace SpiceSharp.Algebra
 
 
         /// <summary>
-        /// Get an element
-        /// Creates a new element if it doesn't exist
+        /// Get an element in the matrix. This method creates a new element if it doesn't exist.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>The matrix element at the specified row and column.</returns>
         public MatrixElement<T> GetElement(int row, int column)
         {
             if (row < 0 || column < 0)
@@ -147,19 +149,18 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Get a diagonal element
+        /// Get a diagonal element.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <param name="index">The row/column index.</param>
+        /// <returns>The matrix element at the specified diagonal index.</returns>
         public MatrixElement<T> GetDiagonalElement(int index) => _diagonal[index];
         
         /// <summary>
-        /// Find an element
-        /// Will not create a new element if it doesn't exist
+        /// Find an element. This method will not create a new element if it doesn't exist.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>The element at the specified row and column, or null if it doesn't exist.</returns>
         public MatrixElement<T> FindElement(int row, int column)
         {
             if (row < 0 || column < 0)
@@ -174,38 +175,38 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the first element in a row
+        /// Gets the first element in a row.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <returns>The first element in the row or null if there are none.</returns>
         public MatrixElement<T> GetFirstInRow(int row) => _rows[row].FirstInRow;
 
         /// <summary>
-        /// Gets the last element in a row
+        /// Gets the last element in a row.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <returns>The last element in the row of null if there are none.</returns>
         public MatrixElement<T> GetLastInRow(int row) => _rows[row].LastInRow;
 
         /// <summary>
-        /// Gets the first element in a column
+        /// Gets the first element in a column.
         /// </summary>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="column">The column index.</param>
+        /// <returns>The first element in the column or null if there are none.</returns>
         public MatrixElement<T> GetFirstInColumn(int column) => _columns[column].FirstInColumn;
 
         /// <summary>
-        /// Gets the last element in a column
+        /// Gets the last element in a column.
         /// </summary>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="column">The column index.</param>
+        /// <returns>The last element in the column or null if there are none.</returns>
         public MatrixElement<T> GetLastInColumn(int column) => _columns[column].LastInColumn;
 
         /// <summary>
-        /// Swap rows in the matrix
+        /// Swap two rows in the matrix.
         /// </summary>
-        /// <param name="row1">Row 1</param>
-        /// <param name="row2">Row 2</param>
+        /// <param name="row1">The first row index.</param>
+        /// <param name="row2">The second row index.</param>
         public void SwapRows(int row1, int row2)
         {
             if (row1 < 0 || row2 < 0)
@@ -280,10 +281,10 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Swap columns in the matrix
+        /// Swap two columns in the matrix.
         /// </summary>
-        /// <param name="column1">Column 1</param>
-        /// <param name="column2">Column 2</param>
+        /// <param name="column1">The first column index.</param>
+        /// <param name="column2">The second column index.</param>
         public void SwapColumns(int column1, int column2)
         {
             if (column1 < 0 || column2 < 0)
@@ -358,9 +359,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Expand matrix
+        /// Expand the matrix.
         /// </summary>
-        /// <param name="newSize">New supported matrix size</param>
+        /// <param name="newSize">The new matrix size.</param>
         private void ExpandMatrix(int newSize)
         {
             // Current size
@@ -377,33 +378,37 @@ namespace SpiceSharp.Algebra
             // Resize rows
             Array.Resize(ref _rows, newSize + 1);
             for (var i = oldAllocatedSize + 1; i <= newSize; i++)
-                _rows[i] = new Row<T>();
+                _rows[i] = new Row();
 
             // Resize columns
             Array.Resize(ref _columns, newSize + 1);
             for (var i = oldAllocatedSize + 1; i <= newSize; i++)
-                _columns[i] = new Column<T>();
+                _columns[i] = new Column();
 
             // Other
             Array.Resize(ref _diagonal, newSize + 1);
             _allocatedSize = newSize;
         }
-        
+
         /// <summary>
-        /// Convert to a string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return ToString(null, CultureInfo.CurrentCulture.NumberFormat);
         }
 
         /// <summary>
-        /// Convert to a string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <param name="format">Format</param>
-        /// <param name="formatProvider">Format provider</param>
-        /// <returns></returns>
+        /// <param name="format">The format.</param>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             // Show the contents of the matrix

@@ -2,13 +2,18 @@
 {
     /// <summary>
     /// This class describes a parameter that is optional. Whether or not it was specified can be
-    /// found using the Given variable.
+    /// found using the Given variable. It also has a default value when not specified.
     /// </summary>
+    /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="SpiceSharp.Parameter{T}" />
     public class GivenParameter<T> : Parameter<T> where T : struct
     {
         /// <summary>
-        /// Gets or sets the value of the parameter
+        /// Gets or sets the value of the parameter.
         /// </summary>
+        /// <value>
+        /// The value of the parameter.
+        /// </value>
         public override T Value
         {
             get => RawValue;
@@ -20,17 +25,23 @@
         }
 
         /// <summary>
-        /// Gets or sets the raw value of the parameter without changing <see cref="Given"/>
+        /// Gets or sets the raw value of the parameter without changing <see cref="Given" />.
         /// </summary>
+        /// <value>
+        /// The raw value.
+        /// </value>
         public T RawValue { get; set; }
 
         /// <summary>
-        /// Gets whether or not the parameter was specified
+        /// Gets whether or not the parameter was specified by the user.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if given; otherwise, <c>false</c>.
+        /// </value>
         public bool Given { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="GivenParameter{T}"/> class.
         /// </summary>
         public GivenParameter()
         {
@@ -39,9 +50,9 @@
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="GivenParameter{T}"/> class.
         /// </summary>
-        /// <param name="defaultValue">The default value</param>
+        /// <param name="defaultValue">The default value when the parameter is not specified.</param>
         public GivenParameter(T defaultValue)
         {
             RawValue = defaultValue;
@@ -49,9 +60,11 @@
         }
 
         /// <summary>
-        /// Clone the parameter
+        /// Clones the parameter.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The cloned parameter.
+        /// </returns>
         public override BaseParameter Clone()
         {
             var clone = new GivenParameter<T>
@@ -63,9 +76,9 @@
         }
 
         /// <summary>
-        /// Copy the parameter from another parameter
+        /// Copies the contents of a parameter to this parameter.
         /// </summary>
-        /// <param name="source">Copy from other parameters</param>
+        /// <param name="source">The source parameter.</param>
         public override void CopyFrom(BaseParameter source)
         {
             if (source is GivenParameter<T> gp)
@@ -76,11 +89,13 @@
             else
                 base.CopyFrom(source);
         }
-        
+
         /// <summary>
-        /// Convert to string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             if (Given)

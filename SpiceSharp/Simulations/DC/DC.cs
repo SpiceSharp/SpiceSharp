@@ -4,34 +4,41 @@ using System.Collections.Generic;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// DC sweep analysis
+    /// Class that implements a DC sweep analysis.
     /// </summary>
+    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
     public class DC : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active DC configuration
+        /// Gets the currently active DC configuration.
         /// </summary>
+        /// <value>
+        /// The dc configuration.
+        /// </value>
         public DcConfiguration DcConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets the currently active sweeps
+        /// Gets the currently active sweeps.
         /// </summary>
+        /// <value>
+        /// The sweeps.
+        /// </value>
         public NestedSweeps Sweeps { get; protected set; }
 
         /// <summary>
-        /// Event that is called when normal iteration failed
+        /// Occurs when iterating to a solution has failed.
         /// </summary>
         public event EventHandler<EventArgs> IterationFailed;
 
         /// <summary>
-        /// Event that is called when a parameter is searched for sweeping
+        /// Occurs when a parameter for sweeping is searched.
         /// </summary>
-        public event EventHandler<DCParameterSearchEventArgs> OnParameterSearch; 
+        public event EventHandler<DCParameterSearchEventArgs> OnParameterSearch;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The simulation name</param>
+        /// <param name="name">The identifier of the simulation.</param>
         public DC(Identifier name) : base(name)
         {
             var config = new DcConfiguration();
@@ -39,13 +46,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
-        /// <param name="source">The name of the swept source</param>
-        /// <param name="start">The starting value</param>
-        /// <param name="stop">The stopping value</param>
-        /// <param name="step">The step value</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="source">The source identifier.</param>
+        /// <param name="start">The starting value.</param>
+        /// <param name="stop">The stop value.</param>
+        /// <param name="step">The step value.</param>
         public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
             var config = new DcConfiguration();
@@ -55,10 +62,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="sweeps">Sweeps</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="sweeps">The sweeps.</param>
+        /// <exception cref="ArgumentNullException">sweeps</exception>
         public DC(Identifier name, IEnumerable<SweepConfiguration> sweeps) : base(name)
         {
             if (sweeps == null)
@@ -71,9 +79,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Setup simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
         protected override void Setup(Circuit circuit)
         {
             base.Setup(circuit);
@@ -86,8 +94,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Execute the DC analysis
+        /// Executes the simulation.
         /// </summary>
+        /// <exception cref="SpiceSharp.CircuitException">
+        /// Could not find source {0}".FormatString(sweep.Parameter)
+        /// or
+        /// Invalid sweep object
+        /// </exception>
         protected override void Execute()
         {
             // Base
@@ -198,7 +211,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup simulation
+        /// Destroys the simulation.
         /// </summary>
         protected override void Unsetup()
         {

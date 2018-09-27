@@ -3,25 +3,40 @@
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Class responsible for managing state variables
+    /// This class is responsible for managing states.
     /// </summary>
+    /// <seealso cref="StateHistory"/>
+    /// <seealso cref="StateDerivative"/>
     public class StateManager
     {
         /// <summary>
-        /// Number of states in the pool
+        /// Gets the number of states in the pool.
         /// </summary>
+        /// <value>
+        /// The number of states.
+        /// </value>
         public int States { get; private set; }
 
         /// <summary>
-        /// Number of states and derivatives in the pool
+        /// Gets the number of different values in the pool.
         /// </summary>
+        /// <value>
+        /// The size.
+        /// </value>
+        /// <remarks>
+        /// A state that also calculates a derivative, will need one more memory for
+        /// storing that derivative. This property will return the total size needed
+        /// to store all such values.
+        /// </remarks>
         public int Size { get; private set; }
 
         /// <summary>
-        /// Allocate a state in the pool
+        /// Allocates a state.
         /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>The index in an array</returns>
+        /// <param name="order">The order of the state.</param>
+        /// <returns>
+        /// The index of the newly allocated state.
+        /// </returns>
         public int AllocateState(int order = 0)
         {
             // Get the assigned index
@@ -36,13 +51,15 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Build a vector that can represent all requested states
+        /// Build a vector that can represent all requested states.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A vector that can hold all the state values.
+        /// </returns>
         public Vector<double> Build() => new DenseVector<double>(Size);
 
         /// <summary>
-        /// Unsetup the state manager
+        /// Destroys the state manager.
         /// </summary>
         public void Unsetup()
         {

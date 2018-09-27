@@ -5,14 +5,9 @@ namespace SpiceSharp.Attributes
     /// <summary>
     /// Indicates that a property is derived from other properties.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    /// <seealso cref="System.Attribute" />
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class DerivedPropertyAttribute : Attribute
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public DerivedPropertyAttribute()
-        {
-        }
     }
 }

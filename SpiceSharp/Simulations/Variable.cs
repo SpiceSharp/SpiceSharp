@@ -1,39 +1,43 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Describes a node in an electronic circuit.
+    /// A class that describes an unknown variable in a system of equations.
     /// </summary>
     public class Variable
     {
         /// <summary>
-        /// Gets or sets the name of the node
+        /// Gets the identifier of the variable.
         /// </summary>
         public Identifier Name { get; }
 
         /// <summary>
-        /// Gets the index of the node
-        /// This is also the row index in the state matrix
+        /// Gets the index of the node.
         /// </summary>
+        /// <remarks>
+        /// This index is typically used as the row index for the KCL law of this node voltage.
+        /// </remarks>
         public int Index { get; }
 
         /// <summary>
-        /// Gets or sets the diagonal matrix element associated with the node
+        /// Gets or sets the diagonal matrix element associated with the node.
         /// </summary>
+        /// <remarks>
+        /// This variable is used by simulations to aid convergence in specific situations.
+        /// </remarks>
         public MatrixElement<double> Diagonal { get; set; }
 
         /// <summary>
-        /// Gets the node type
+        /// Gets the node type.
         /// </summary>
         public VariableType UnknownType { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Variable"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="index">Row index</param>
+        /// <param name="name">The identifier of the variable.</param>
+        /// <param name="index">The index of the unknown variable.</param>
         public Variable(Identifier name, int index)
         {
             Name = name;
@@ -42,12 +46,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
-        /// Used by <see cref="VariableSet"/>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="type">Unknown type</param>
-        /// <param name="index">Row index</param>
+        /// <param name="name">The identifier of the variable.</param>
+        /// <param name="type">The type of variable.</param>
+        /// <param name="index">The index of the unknown variable.</param>
         public Variable(Identifier name, VariableType type, int index)
         {
             Name = name;
@@ -56,18 +59,20 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Nice format for nodes
+        /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "Node {0} ({1})".FormatString(Name, UnknownType);
         }
 
         /// <summary>
-        /// Clone the node
+        /// Clones this variable.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A clone of this variable.</returns>
         public Variable Clone() => new Variable(Name.Clone(), UnknownType, Index);
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Data for setting up a <see cref="Behavior"/>
+    /// Class that can be used for setting up a <see cref="Behavior" />.
     /// </summary>
     public class SetupDataProvider
     {
@@ -15,44 +14,64 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<string, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
 
         /// <summary>
-        /// Available number of parameter collections
+        /// Gets the parameter set dictionary count.
         /// </summary>
+        /// <value>
+        /// The parameter set dictionary count.
+        /// </value>
         public int ParametersCount => _parameterSets.Count;
 
         /// <summary>
-        /// Available number of entity behaviors
+        /// Gets the behavior dictionary count.
         /// </summary>
+        /// <value>
+        /// The behavior dictionary count.
+        /// </value>
         public int BehaviorsCount => _entityBehaviors.Count;
 
         /// <summary>
-        /// Add a collection of parameters
+        /// Adds a parameter set dictionary.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="pc">Parameter collection</param>
+        /// <param name="name">The parameter set identifier.</param>
+        /// <param name="pc">The parameter set dictionary.</param>
+        /// <remarks>
+        /// The <paramref name="name"/> parameter can be used by entities to give more information. For example, the entity parameter sets
+        /// its own parameter sets and behaviors using the name "entity". In the same way, models can be added
+        /// under "model", or other entities can be invoked where needed.
+        /// </remarks>
         public void Add(string name, ParameterSetDictionary pc) => _parameterSets.Add(name, pc);
 
         /// <summary>
-        /// Add entity behaviors
+        /// Adds an entity behavior dictionary.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="behaviors">Entity behaviors</param>
+        /// <param name="name">The behavior dictionary identifier.</param>
+        /// <param name="behaviors">The behavior dictionary.</param>
+        /// <remarks>
+        /// The <paramref name="name"/> parameter can be used by entities to give more information. For example, the entity parameter sets
+        /// its own parameter sets and behaviors using the name "entity". In the same way, models can be added
+        /// under "model", or other entities can be invoked where needed.
+        /// </remarks>
         public void Add(string name, EntityBehaviorDictionary behaviors) => _entityBehaviors.Add(name, behaviors);
-        
+
         /// <summary>
-        /// Gets a parameter set for a certain name
+        /// Gets a parameter set for a specified identifier.
         /// </summary>
-        /// <typeparam name="T">The type of Parameters</typeparam>
-        /// <param name="name">Name of the parameter set</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base type of the parameter set.</typeparam>
+        /// <param name="name">The identifier of the parameter set.</param>
+        /// <returns>
+        /// The requested object.
+        /// </returns>
         public T GetParameterSet<T>(string name = "entity") where T : ParameterSet => _parameterSets[name].Get<T>();
 
         /// <summary>
-        /// Try getting a parameter set
+        /// Tries getting a parameter set for a specified identifier.
         /// </summary>
-        /// <typeparam name="T">The type of Parameter set</typeparam>
-        /// <param name="name">Name of parameter set</param>
-        /// <param name="value">The returned value</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base type of the parameter set.</typeparam>
+        /// <param name="name">The identifier of the parameter set.</param>
+        /// <param name="value">The requested object.</param>
+        /// <returns>
+        ///   <c>true</c> if the object was found; otherwise, <c>false</c>.
+        /// </returns>
         public bool TryGetParameterSet<T>(string name, out T value) where T : ParameterSet
         {
             if (_parameterSets.TryGetValue(name, out var r))
@@ -62,20 +81,24 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the behaviors for a certain name
+        /// Gets the behavior for a specified identifier.
         /// </summary>
-        /// <typeparam name="T">The type of Behavior</typeparam>
-        /// <param name="name">Name of the behavior collection</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <param name="name">The identifier of the behavior.</param>
+        /// <returns>
+        /// The requested object.
+        /// </returns>
         public T GetBehavior<T>(string name = "entity") where T : Behavior => _entityBehaviors[name].Get<T>();
 
         /// <summary>
-        /// Try getting a behavior
+        /// Tries getting the behavior for a specified identifier.
         /// </summary>
-        /// <typeparam name="T">The type of Behavior</typeparam>
-        /// <param name="name">Name of the behavior collection</param>
-        /// <param name="value">The returned value</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <param name="name">The identifier of the behavior.</param>
+        /// <param name="value">The requested object.</param>
+        /// <returns>
+        ///   <c>true</c> if the object was found; otherwise, <c>false</c>.
+        /// </returns>
         public bool TryGetBehavior<T>(string name, out T value) where T : Behavior
         {
             if (_entityBehaviors.TryGetValue(name, out var r))

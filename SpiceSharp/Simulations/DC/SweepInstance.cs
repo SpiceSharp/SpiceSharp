@@ -3,47 +3,66 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Sweep instance
+    /// Class that implements a sweep.
     /// </summary>
     public class SweepInstance
     {
         /// <summary>
-        /// Gets the current value
+        /// Gets the current value.
         /// </summary>
+        /// <value>
+        /// The current value.
+        /// </value>
         public double CurrentValue { get; private set; }
 
         /// <summary>
-        /// Gets the current step index
+        /// Gets the current step index.
         /// </summary>
+        /// <value>
+        /// The current step.
+        /// </value>
         public int CurrentStep { get; private set; }
 
         /// <summary>
-        /// The number of steps
+        /// Gets the maximum number of steps.
         /// </summary>
+        /// <value>
+        /// The limit.
+        /// </value>
         public int Limit { get; }
 
         /// <summary>
-        /// Gets the initial value
+        /// Gets the initial value.
         /// </summary>
+        /// <value>
+        /// The initial.
+        /// </value>
         public double Initial { get; }
 
         /// <summary>
-        /// Gets the final value
+        /// Gets the final value.
         /// </summary>
+        /// <value>
+        /// The final.
+        /// </value>
         public double Final { get; }
 
         /// <summary>
-        /// Gets the parameter that is swept
+        /// Gets the parameter identifier that is swept.
         /// </summary>
+        /// <value>
+        /// The parameter.
+        /// </value>
         public Identifier Parameter { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SweepInstance"/> class.
         /// </summary>
-        /// <param name="parameter">The parameter</param>
-        /// <param name="start">Initial value</param>
-        /// <param name="stop">Final value</param>
-        /// <param name="step">Step value</param>
+        /// <param name="parameter">The parameter identifier.</param>
+        /// <param name="start">The initial value.</param>
+        /// <param name="stop">The final value.</param>
+        /// <param name="step">The step value.</param>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid sweep: {0} to {1} cannot be reached in steps of {2}".FormatString(start, stop, step)</exception>
         public SweepInstance(Identifier parameter, double start, double stop, double step)
         {
             Parameter = parameter;
@@ -61,7 +80,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Reset
+        /// Resets this instance.
         /// </summary>
         public void Reset()
         {
@@ -70,7 +89,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Increment the sweep
+        /// Go to the next step in the sweep.
         /// </summary>
         public void Increment()
         {

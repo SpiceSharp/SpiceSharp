@@ -3,36 +3,50 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Event arguments for searching a parameter used as a sweep in DC analysis
+    /// Event arguments for searching a parameter used as a sweep in DC analysis.
     /// </summary>
+    /// <seealso cref="System.EventArgs" />
     public class DCParameterSearchEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the name of the parameter
+        /// Gets the name of the parameter.
         /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public Identifier Name { get; }
 
         /// <summary>
-        /// Gets the level of the sweep
+        /// Gets the level of the sweep.
         /// </summary>
+        /// <value>
+        /// The sweep level.
+        /// </value>
         public int Level { get; }
 
         /// <summary>
-        /// Gets or sets the found parameter
+        /// Gets or sets the found parameter.
         /// </summary>
+        /// <value>
+        /// The result.
+        /// </value>
         public Parameter<double> Result { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not Temperature behaviors need to be run for every sweep point
         /// of the analysis
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if temperature dependent calculations are needed when changing this parameter; otherwise, <c>false</c>.
+        /// </value>
         public bool TemperatureNeeded { get; set; } = true;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="DCParameterSearchEventArgs"/> class.
         /// </summary>
-        /// <param name="name">Name of the swept variable</param>
-        /// <param name="level">Level (in nested sweeps)</param>
+        /// <param name="name">The identifier of the parameter.</param>
+        /// <param name="level">The sweep level.</param>
+        /// <exception cref="ArgumentNullException">name</exception>
         public DCParameterSearchEventArgs(Identifier name, int level)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

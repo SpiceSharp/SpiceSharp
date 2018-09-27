@@ -3,29 +3,29 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// Exception for a bad parameter.
+    /// Exception for identifying a bad parameter.
     /// </summary>
     public class BadParameterException : CircuitException
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BadParameterException"/> class.
         /// </summary>
         public BadParameterException() { }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BadParameterException"/> class.
         /// </summary>
-        /// <param name="parameterName">Parameter name</param>
+        /// <param name="parameterName">Name of the parameter.</param>
         public BadParameterException(string parameterName)
             : base("Invalid parameter value for '{0}'".FormatString(parameterName))
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BadParameterException"/> class.
         /// </summary>
-        /// <param name="parameterName">Parameter name</param>
-        /// <param name="innerException">Inner exception</param>
+        /// <param name="parameterName">Name of the parameter.</param>
+        /// <param name="innerException">The inner exception.</param>
         public BadParameterException(string parameterName, Exception innerException)
             : base("Invalid parameter value for '{0}'".FormatString(parameterName), innerException)
         {

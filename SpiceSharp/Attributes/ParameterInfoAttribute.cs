@@ -3,31 +3,31 @@
 namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Specifies a description and other metadata of a parameter
-    /// It can be applied to a field, property or method
+    /// This attribute specifies a description and other metadata of a parameter. It can be applied to a field, property or method
     /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
     public sealed class ParameterInfoAttribute : Attribute
     {
         /// <summary>
-        /// Gets the parameter description
+        /// Gets the parameter description.
         /// </summary>
         public string Description { get; }
 
         /// <summary>
-        /// Is this parameter interesting? Defaults to true.
+        /// Gets or sets whether or not this parameter is interesting. Defaults to true.
         /// </summary>
         public bool Interesting { get; set; } = true;
 
         /// <summary>
-        /// Is this parameter a principal design parameter? Defaults to false.
+        /// Gets or sets whether or not this parameter is a principal design parameter. Defaults to false.
         /// </summary>
         public bool IsPrincipal { get; set; } = false;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ParameterInfoAttribute"/> class.
         /// </summary>
-        /// <param name="description"></param>
+        /// <param name="description">The description of the parameter.</param>
         public ParameterInfoAttribute(string description)
         {
             Description = description;

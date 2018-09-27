@@ -3,47 +3,47 @@ using System.Globalization;
 using System.Text;
 using SpiceSharp.Algebra.Solve;
 
-// ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// A system of linear equations
+    /// A class that represents a system of linear equations.
     /// </summary>
-    /// <typeparam name="T">Base type</typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="IFormattable" />
     public abstract class SparseLinearSystem<T> : IFormattable where T : IFormattable, IEquatable<T>
     {
         /// <summary>
-        /// Gets the order of the matrix (matrix size)
+        /// Gets the order of the matrix (matrix size).
         /// </summary>
         public int Order { get; private set; }
 
         /// <summary>
-        /// Gets whether or not the number of equations and variables is fixed
+        /// Gets whether or not the number of equations and variables is fixed.
         /// </summary>
         public bool IsFixed { get; private set; }
 
         /// <summary>
-        /// Gets the row translation
+        /// Gets the row translation.
         /// </summary>
         protected Translation Row { get; } = new Translation();
 
         /// <summary>
-        /// Gets the column translation
+        /// Gets the column translation.
         /// </summary>
         protected Translation Column { get; } = new Translation();
 
         /// <summary>
-        /// Gets the matrix to work on
+        /// Gets the matrix to work on.
         /// </summary>
         protected SparseMatrix<T> Matrix { get; }
 
         /// <summary>
-        /// Gets the right-hand side vector
+        /// Gets the right-hand side vector.
         /// </summary>
         protected SparseVector<T> Rhs { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseLinearSystem{T}"/> class.
         /// </summary>
         protected SparseLinearSystem()
         {
@@ -52,9 +52,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseLinearSystem{T}"/> class.
         /// </summary>
-        /// <param name="size">Size</param>
+        /// <param name="size">The number of equations and variables.</param>
         protected SparseLinearSystem(int size)
         {
             Matrix = new SparseMatrix<T>(size);
@@ -62,21 +62,26 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Fix the number of equations and variables
+        /// Fix the number of equations and variables.
         /// </summary>
+        /// <remarks>
+        /// This method can be used to make sure that the matrix is fixed during
+        /// solving. When fixed, it is impossible to add more elements to the sparse
+        /// matrix or vector.
+        /// </remarks>
         public virtual void FixEquations() => IsFixed = true;
 
         /// <summary>
-        /// Unfix the number of equations and variables
+        /// Unfix the number of equations and variables.
         /// </summary>
         public virtual void UnfixEquations() => IsFixed = false;
 
         /// <summary>
-        /// Get matrix element
+        /// Get a matrix element.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>The matrix element.</returns>
         public MatrixElement<T> GetMatrixElement(int row, int column)
         {
             row = Row[row];
@@ -91,12 +96,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Find a matrix element
-        /// Returns null if no element is found
+        /// Find a matrix element.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>The matrix element or null if there is none.</returns>
         public MatrixElement<T> FindMatrixElement(int row, int column)
         {
             row = Row[row];
@@ -105,10 +109,10 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Get right-hand side element
+        /// Get the right-hand side element.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <param name="index">The index of the element.</param>
+        /// <returns>The vector element.</returns>
         public VectorElement<T> GetRhsElement(int index)
         {
             index = Row[index];
@@ -122,37 +126,40 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the first row element in the reordered matrix
+        /// Gets the first row element in the reordered matrix.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <returns>The first element in the row or null if there are none.</returns>
         public MatrixElement<T> FirstInReorderedRow(int row) => Matrix.GetFirstInRow(row);
 
         /// <summary>
-        /// Gets the first column element in the reordered matrix
+        /// Gets the first column element in the reordered matrix.
         /// </summary>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="column">The column index.</param>
+        /// <returns>The first element in the column or null if there are none.</returns>
         public MatrixElement<T> FirstInReorderedColumn(int column) => Matrix.GetFirstInColumn(column);
 
         /// <summary>
-        /// Gets the diagonal element in the reordered matrix
+        /// Gets the diagonal element in the reordered matrix.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <param name="index">The row/column of the diagonal element.</param>
+        /// <returns>The first diagonal or null if there are none.</returns>
         public MatrixElement<T> ReorderedDiagonal(int index) => Matrix.GetDiagonalElement(index);
 
         /// <summary>
-        /// Gets the first element in the reordered Right-Hand Side vector
+        /// Gets the first element in the reordered Right-Hand Side vector.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The first element in the vector or null if there are none.</returns>
         public VectorElement<T> FirstInReorderedRhs() => Rhs.First;
 
         /// <summary>
-        /// Map external indices to internal indices
+        /// Map the external indices to internal indices.
         /// </summary>
-        /// <param name="externalIndexes">External indices</param>
-        /// <returns></returns>
+        /// <param name="externalIndexes">A tuple of external row and column indices.</param>
+        /// <returns>
+        /// A tuple of internal row and column indices.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">externalIndexes</exception>
         public Tuple<int, int> ExternalToInternal(Tuple<int, int> externalIndexes)
         {
             if (externalIndexes == null)
@@ -164,10 +171,13 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Map internal indices to external indices
+        /// Map the internal indices to external indices.
         /// </summary>
-        /// <param name="internalIndexes">Internal indices</param>
-        /// <returns></returns>
+        /// <param name="internalIndexes">A tuple of internal row and column indices.</param>
+        /// <returns>
+        /// A tuple of external row and column indices.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">internalIndexes</exception>
         public Tuple<int, int> InternalToExternal(Tuple<int, int> internalIndexes)
         {
             if (internalIndexes == null)
@@ -179,10 +189,10 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Swap (internal) rows in the system
+        /// Swap two (internal) rows in the linear system.
         /// </summary>
-        /// <param name="row1">Row 1</param>
-        /// <param name="row2">Row 2</param>
+        /// <param name="row1">The first row index.</param>
+        /// <param name="row2">The second row index.</param>
         protected void SwapRows(int row1, int row2)
         {
             Matrix.SwapRows(row1, row2);
@@ -191,10 +201,10 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Swap (internal) columns in the system
+        /// Swap two (internal) columns in the system.
         /// </summary>
-        /// <param name="column1">Column 1</param>
-        /// <param name="column2">Column 2</param>
+        /// <param name="column1">The first column index.</param>
+        /// <param name="column2">The second column index.</param>
         protected void SwapColumns(int column1, int column2)
         {
             Matrix.SwapColumns(column1, column2);
@@ -202,7 +212,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Clear the matrix and right-hand side vector
+        /// Clear the matrix and right-hand side vector.
         /// </summary>
         public virtual void Clear()
         {
@@ -228,20 +238,24 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Convert to a string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return ToString(null, CultureInfo.CurrentCulture);
         }
 
         /// <summary>
-        /// Convert to a string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <param name="format"></param>
-        /// <param name="formatProvider"></param>
-        /// <returns></returns>
+        /// <param name="format">The format.</param>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             // Build a matrix of strings for each element of the matrix

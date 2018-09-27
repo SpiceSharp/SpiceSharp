@@ -4,21 +4,24 @@ using System.Collections.Generic;
 namespace SpiceSharp
 {
     /// <summary>
-    /// Collection for parameters
-    /// This class will keep track which parameter sets belong to which entity. Only ParameterSets can be requested from the collection.
+    /// Collection for parameter sets. This class will keep track which parameter sets belong to which entity.
+    /// Only a <see cref="ParameterSet" /> can be requested from the collection.
     /// </summary>
     public class ParameterPool
     {
         /// <summary>
-        /// Parameters indexed by the entity identifier
+        /// The entity parameters
         /// </summary>
         private readonly Dictionary<Identifier, ParameterSetDictionary> _entityParameters = new Dictionary<Identifier, ParameterSetDictionary>();
 
         /// <summary>
-        /// Gets the entity parameter set for a specific identifier
+        /// Gets the associated <see cref="ParameterSetDictionary"/> of an entity.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <value>
+        /// The <see cref="ParameterSetDictionary"/>.
+        /// </value>
+        /// <param name="name">The entity identifier.</param>
+        /// <returns>The parameter set associated to the specified entity identifier.</returns>
         public ParameterSetDictionary this[Identifier name]
         {
             get
@@ -30,10 +33,10 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Add a parameter set to the collection
+        /// Adds the specified parameter set to the pool.
         /// </summary>
-        /// <param name="creator">Creator</param>
-        /// <param name="parameters">Parameters</param>
+        /// <param name="creator">The entity identifier to which the parameter set belongs.</param>
+        /// <param name="parameters">The parameter set.</param>
         public void Add(Identifier creator, ParameterSet parameters)
         {
             if (!_entityParameters.TryGetValue(creator, out var ep))
@@ -45,10 +48,10 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Gets the entity parameter set for a specific identifier
+        /// Gets the entity parameter set for a specific identifier.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <param name="name">The identifier of the entity.</param>
+        /// <returns>The parameter set associated to the specified entity identifier.</returns>
         [Obsolete]
         public ParameterSetDictionary GetEntityParameters(Identifier name)
         {
@@ -58,14 +61,16 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Check if base parameters are available vor a specific identifier
+        /// Checks if a parameter set exists for a specified entity identifier.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <param name="name">The entity identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if a parameter set exists; otherwise <c>false</c>.
+        /// </returns>
         public bool Contains(Identifier name) => _entityParameters.ContainsKey(name);
 
         /// <summary>
-        /// Clear all parameter sets in the pool
+        /// Clears all parameter sets in the pool.
         /// </summary>
         public void Clear() => _entityParameters.Clear();
     }

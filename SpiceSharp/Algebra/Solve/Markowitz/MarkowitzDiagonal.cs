@@ -3,9 +3,9 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// Markowitz-based pivot strategy: diagonal search
+    /// Markowitz-count based strategy for finding a pivot. Searches the whole diagonal of the submatrix.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public class MarkowitzDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
@@ -14,12 +14,20 @@ namespace SpiceSharp.Algebra.Solve
         private const int TiesMultiplier = 5;
 
         /// <summary>
-        /// Find the pivot on the diagonal
+        /// Find a pivot in a matrix.
         /// </summary>
-        /// <param name="markowitz">Markowitz</param>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="eliminationStep">Step</param>
-        /// <returns></returns>
+        /// <param name="markowitz">The Markowitz pivot strategy.</param>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="eliminationStep">The current elimination step.</param>
+        /// <returns>
+        /// The pivot element, or null if no pivot was found.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// matrix
+        /// or
+        /// markowitz
+        /// </exception>
+        /// <exception cref="ArgumentException">Invalid elimination step</exception>
         public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
         {
             if (matrix == null)

@@ -17,24 +17,37 @@ namespace SpiceSharp.Simulations
         private bool _locked;
 
         /// <summary>
-        /// The initial conditions
-        /// This is the initial value when simulation starts
+        /// The initial conditions.
         /// </summary>
+        /// <value>
+        /// The initial conditions by their variable identifier name.
+        /// </value>
+        /// <remarks>
+        /// Initial conditions specify at which value a <see cref="TimeSimulation" /> should start.
+        /// </remarks>
+        /// <seealso cref="TimeSimulation" />
         public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
-        /// The nodeset values
-        /// This value can help convergence
+        /// The nodeset values by their variable identifier name.
         /// </summary>
+        /// <value>
+        /// The node sets.
+        /// </value>
+        /// <remarks>
+        /// Nodeset values can help convergence. Specifying values here will allow the simulator
+        /// to find a starting point while iterating to a solution. Choosing some values close to the
+        /// final solution will usually speed up convergence greatly.
+        /// </remarks>
         public Dictionary<Identifier, double> NodeSets { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
-        /// Gets the ground node
+        /// Gets the ground node.
         /// </summary>
         public Variable Ground { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="VariableSet"/> class.
         /// </summary>
         public VariableSet()
         {
@@ -48,24 +61,29 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Find a node by index
+        /// Gets the <see cref="Variable"/> at the specified index.
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <value>
+        /// The <see cref="Variable"/>.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>The variable at the specified index.</returns>
         public Variable this[int index] => _unknowns[index];
 
         /// <summary>
-        /// Gets the node count
+        /// Gets the number of variables.
         /// </summary>
         public int Count => _unknowns.Count;
 
         /// <summary>
-        /// Map the voltage of a node
-        /// If the variable already exists, then that variable is returned
+        /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <param name="type">Type</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// If the variable already exists, the variable type is ignored.
+        /// </remarks>
+        /// <param name="id">The identifier of the variable.</param>
+        /// <param name="type">The type of the variable.</param>
+        /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
         public Variable MapNode(Identifier id, VariableType type)
         {
             if (_locked)
@@ -82,17 +100,21 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Map a node in the circuit
+        /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <returns></returns>
+        /// <param name="id">The identifier of the variable.</param>
+        /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
         public Variable MapNode(Identifier id) => MapNode(id, VariableType.Voltage);
 
         /// <summary>
-        /// Make an alias for the voltage at a node
+        /// Make an alias for a variable identifier.
         /// </summary>
-        /// <param name="original">Original name</param>
-        /// <param name="alias">The alias that will be turned into this alias</param>
+        /// <remarks>
+        /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
+        /// point to the ground node.
+        /// </remarks>
+        /// <param name="original">The original identifier.</param>
+        /// <param name="alias">The alias for the identifier.</param>
         public void AliasNode(Identifier original, Identifier alias)
         {
             var originalNode = _map[original];
@@ -100,13 +122,19 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create a new variable
+        /// Create a new variable.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <param name="type">Type</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Variables created using this method cannot be found back using the method <see cref="MapNode(Identifier,VariableType)"/>.
+        /// </remarks>
+        /// <param name="id">The identifier of the new variable.</param>
+        /// <param name="type">The type of the variable.</param>
+        /// <returns>A new variable.</returns>
         public Variable Create(Identifier id, VariableType type)
         {
+            if (_locked)
+                throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
+
             // Create the node
             var index = _unknowns.Count + 1;
             var node = new Variable(id, type, index);
@@ -115,40 +143,50 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create a new node without reference
+        /// Create a new variable.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Variables created using this method cannot be found back using the method <see cref="MapNode(Identifier,VariableType)"/>.
+        /// </remarks>
+        /// <param name="id">The identifier of the new variable.</param>
+        /// <returns>A new variable.</returns>
         public Variable Create(Identifier id) => Create(id, VariableType.Voltage);
 
         /// <summary>
-        /// Check if a node voltage exists
+        /// Determines whether the set contains a mapped variable by a specified identifier.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <returns></returns>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
+        /// </returns>
         public bool ContainsNode(Identifier id) => _map.ContainsKey(id);
 
         /// <summary>
-        /// Check if an unknown exists
+        /// Determines whether the set contains any variable by a specified identifier.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(Identifier id) => _unknowns.Exists(node => node.Name.Equals(id));
 
         /// <summary>
-        /// Try to get a node
+        /// Tries to get a variable.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <param name="node">Node</param>
-        /// <returns></returns>
+        /// <param name="id">The identifier.</param>
+        /// <param name="node">The found variable.</param>
+        /// <returns>
+        ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
+        /// </returns>
         public bool TryGetNode(Identifier id, out Variable node) => _map.TryGetValue(id, out node);
 
         /// <summary>
-        /// Get a node voltage variable
-        /// If the node voltage does not exist, an exception will be thrown
+        /// Gets a mapped variable. If the node voltage does not exist, an exception will be thrown.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <returns></returns>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// The node with the specified identifier.
+        /// </returns>
         public Variable GetNode(Identifier id)
         {
             if (id == null)
@@ -159,24 +197,27 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Get an unknown
+        /// Gets a variable.
         /// </summary>
         /// <param name="id">Identifier</param>
-        /// <returns>Returns null if no unknown was found</returns>
+        /// <returns>Return the variable with the specified identifier, or <c>null</c> if it doesn't exist.</returns>
         public Variable GetVariable(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
 
         /// <summary>
-        /// Get unknowns
+        /// Enumerates all variables.
         /// </summary>
         public IEnumerable<Variable> GetVariables() => _unknowns;
 
         /// <summary>
-        /// Avoid changing to the internal structure by locking the node list
+        /// Avoids any further additions of variables.
         /// </summary>
+        /// <remarks>
+        /// It is not possible to dynamically add and remove nodes while performing some operations (like most simulations).
+        /// </remarks>
         public void Lock() => _locked = true;
 
         /// <summary>
-        /// Clear all nodes
+        /// Clear all variables.
         /// </summary>
         public void Clear()
         {

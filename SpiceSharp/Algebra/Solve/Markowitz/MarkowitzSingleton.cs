@@ -3,20 +3,27 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// Markowitz-count based strategy for finding a pivot
-    /// This strategy will search for singletons (rows or columns with only one element), these
-    /// can be found rather cheaply.
+    /// Markowitz-count based strategy for finding a pivot. This strategy will search for 
+    /// singletons (rows or columns with only one element), these can be found rather cheaply.
     /// </summary>
-    /// <typeparam name="T">Base type</typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
-        /// Find a pivot
+        /// Find a pivot in a matrix.
         /// </summary>
-        /// <param name="markowitz">Markowitz object</param>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="eliminationStep">Step</param>
-        /// <returns></returns>
+        /// <param name="markowitz">The Markowitz pivot strategy.</param>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="eliminationStep">The current elimination step.</param>
+        /// <returns>
+        /// The pivot element, or null if no pivot was found.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// markowitz
+        /// or
+        /// matrix
+        /// </exception>
+        /// <exception cref="ArgumentException">Invalid elimination step</exception>
         public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
         {
             if (markowitz == null)

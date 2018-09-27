@@ -5,18 +5,25 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Noise analysis
+    /// A class that implements a noise analysis.
     /// </summary>
+    /// <seealso cref="FrequencySimulation" />
     public class Noise : FrequencySimulation
     {
         /// <summary>
-        /// Gets the currently active noise configuration
+        /// Gets the currently active noise configuration.
         /// </summary>
+        /// <value>
+        /// The noise configuration.
+        /// </value>
         public NoiseConfiguration NoiseConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets the noise state
+        /// Gets the noise state.
         /// </summary>
+        /// <value>
+        /// The noise state.
+        /// </value>
         public NoiseState NoiseState { get; private set; }
 
         /// <summary>
@@ -25,9 +32,9 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseNoiseBehavior> _noiseBehaviors;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">The identifier of the simulation.</param>
         public Noise(Identifier name) : base(name)
         {
             ParameterSets.Add(new NoiseConfiguration());
@@ -35,12 +42,12 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="output">Output node</param>
-        /// <param name="input">Input source</param>
-        /// <param name="frequencySweep">Frequency sweep</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="output">The output node identifier.</param>
+        /// <param name="input">The input source identifier.</param>
+        /// <param name="frequencySweep">The frequency sweep.</param>
         public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             ParameterSets.Add(new NoiseConfiguration(output, null, input));
@@ -48,13 +55,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="output">Output node</param>
-        /// <param name="reference">Reference output node</param>
-        /// <param name="input">Input</param>
-        /// <param name="frequencySweep">Frequency sweep</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="output">The output node identifier.</param>
+        /// <param name="reference">The reference output node identifier.</param>
+        /// <param name="input">The input source identifier.</param>
+        /// <param name="frequencySweep">The frequency sweep.</param>
         public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             ParameterSets.Add(new NoiseConfiguration(output, reference, input));
@@ -62,9 +69,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Setup the simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -79,7 +87,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup the simulation
+        /// Destroys the simulation.
         /// </summary>
         protected override void Unsetup()
         {
@@ -95,7 +103,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Execute the noise analysis
+        /// Executes the simulation.
         /// </summary>
         protected override void Execute()
         {
@@ -155,14 +163,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Calculate the solution for <see cref="Noise"/> analysis
+        /// Calculate the solution for <see cref="Noise" /> analysis
+        /// </summary>
+        /// <param name="posDrive">The positive driving node index.</param>
+        /// <param name="negDrive">The negative driving node index.</param>
+        /// <remarks>
         /// This routine solves the adjoint system. It assumes that the matrix has
         /// already been loaded by a call to AcIterate, so it only alters the right
         /// hand side vector. The unit-valued current excitation is applied between
         /// nodes posDrive and negDrive.
-        /// </summary>
-        /// <param name="posDrive">The positive driving node</param>
-        /// <param name="negDrive">The negative driving node</param>
+        /// </remarks>
         private void NzIterate(int posDrive, int negDrive)
         {
             var solver = ComplexState.Solver;

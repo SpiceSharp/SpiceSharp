@@ -1,21 +1,26 @@
 ﻿namespace SpiceSharp
 {
     /// <summary>
-    /// A base template for a parameter that can be used in parameter sets
-    /// Classes not inheriting from this class might fail to be cloned correctly.
+    /// A template for a parameter that can be used in parameter sets.
     /// </summary>
+    /// <remarks>
+    /// Use this class to ensure that parameter sets are cloned correctly to avoid issues when running
+    /// multiple simulations in parallel.
+    /// </remarks>
     public abstract class BaseParameter
     {
         /// <summary>
-        /// Clone the parameter
+        /// Clones the parameter.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The cloned parameter.
+        /// </returns>
         public abstract BaseParameter Clone();
 
         /// <summary>
-        /// Copy the parameter to this parameter
+        /// Copies the contents of a parameter to this parameter.
         /// </summary>
-        /// <param name="source">Source parameter</param>
+        /// <param name="source">The source parameter.</param>
         public abstract void CopyFrom(BaseParameter source);
     }
 }

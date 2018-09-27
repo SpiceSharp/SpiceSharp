@@ -3,7 +3,7 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// Can map external to internal indices and vice-versa
+    /// This class can map external to internal indices and vice-versa.
     /// </summary>
     public class Translation
     {
@@ -20,14 +20,14 @@ namespace SpiceSharp.Algebra.Solve
         private int _allocated;
 
         /// <summary>
-        /// Gets the current length of the translation vector
+        /// Gets the current length of the translation vector.
         /// </summary>
         public int Length { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Translation"/> class.
         /// </summary>
-        /// <param name="size">Number</param>
+        /// <param name="size">The number of translations to be allocated.</param>
         public Translation(int size)
         {
             _extToInt = new int[size + 1];
@@ -41,7 +41,7 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Translation"/> class.
         /// </summary>
         public Translation()
             : this(4)
@@ -49,10 +49,10 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Indexer will map external indices to internal indices
+        /// Gets the internal index.
         /// </summary>
-        /// <param name="index">External index</param>
-        /// <returns></returns>
+        /// <param name="index">The external index.</param>
+        /// <returns>The internal index.</returns>
         public int this[int index]
         {
             get
@@ -67,10 +67,10 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Reverse lookup for the translation
+        /// Gets the external index.
         /// </summary>
-        /// <param name="index">Internal index</param>
-        /// <returns></returns>
+        /// <param name="index">The internal index</param>
+        /// <returns>The external index.</returns>
         public int Reverse(int index)
         {
             if (index == 0)
@@ -81,10 +81,10 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Swap two (internal) indices
+        /// Swap two (internal) indices.
         /// </summary>
-        /// <param name="index1">Index 1</param>
-        /// <param name="index2">Index 2</param>
+        /// <param name="index1">First index.</param>
+        /// <param name="index2">Second index.</param>
         public void Swap(int index1, int index2)
         {
             if (index1 > Length || index2 > Length)
@@ -101,11 +101,17 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Scramble a vector
+        /// Scramble a vector according to the map.
         /// </summary>
-        /// <typeparam name="T">Base type</typeparam>
-        /// <param name="source">Source</param>
-        /// <param name="target">Target</param>
+        /// <typeparam name="T">The value type of the vector.</typeparam>
+        /// <param name="source">The source vector.</param>
+        /// <param name="target">The target vector.</param>
+        /// <exception cref="ArgumentNullException">
+        /// source
+        /// or
+        /// target
+        /// </exception>
+        /// <exception cref="ArgumentException">Length of inputs does not match</exception>
         public void Scramble<T>(Vector<T> source, Vector<T> target) where T : IFormattable
         {
             if (source == null)
@@ -124,12 +130,11 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Unscramble a vector
-        /// The first index of the array is ignored
+        /// Unscramble a vector. The first index of the array is ignored.
         /// </summary>
-        /// <typeparam name="T">Base type</typeparam>
-        /// <param name="source">Source</param>
-        /// <param name="target">Target</param>
+        /// <typeparam name="T">The value type of the vector.</typeparam>
+        /// <param name="source">The source vector.</param>
+        /// <param name="target">The target vector.</param>
         public void Unscramble<T>(T[] source, Vector<T> target) where T : IFormattable
         {
             if (source == null)
@@ -148,9 +153,9 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Expand translation
+        /// Expand the translation map.
         /// </summary>
-        /// <param name="newLength">New length</param>
+        /// <param name="newLength">The new length.</param>
         private void ExpandTranslation(int newLength)
         {
             // No need to reallocate vector

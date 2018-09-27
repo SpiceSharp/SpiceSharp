@@ -3,22 +3,25 @@
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Temperature-dependent behavior for circuit objects
+    /// A template that describes temperature-dependent behavior.
     /// </summary>
     public abstract class BaseTemperatureBehavior : Behavior
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BaseTemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name of the behavior</param>
+        /// <param name="name">The identifier of the behavior.</param>
+        /// <remarks>
+        /// The identifier of the behavior should be the same as that of the entity creating it.
+        /// </remarks>
         protected BaseTemperatureBehavior(Identifier name) : base(name)
         {
         }
 
         /// <summary>
-        /// Do temperature-dependent calculations
+        /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
+        /// <param name="simulation">The base simulation.</param>
         public abstract void Temperature(BaseSimulation simulation);
     }
 }

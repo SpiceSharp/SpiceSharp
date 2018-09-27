@@ -3,25 +3,35 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// Class for modified identifiers
+    /// Class for an identifier with multiple parts.
     /// </summary>
+    /// <seealso cref="Identifier" />
+    /// <remarks>
+    /// This is meant for identifying for example entities inside subcircuits. The modifier indicates the
+    /// subcircuit, while Id will identify the actual name of the entity.
+    /// </remarks>
     public class SubIdentifier : Identifier
     {
         /// <summary>
-        /// Gets the base identifier
+        /// Gets the base identifier.
         /// </summary>
         public Identifier Id { get; }
 
         /// <summary>
-        /// Gets the modifier
+        /// Gets the modifier.
         /// </summary>
         public Identifier Sub { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SubIdentifier"/> class.
         /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <param name="sub">Modifier</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="sub">The modifier.</param>
+        /// <exception cref="ArgumentNullException">
+        /// id
+        /// or
+        /// sub
+        /// </exception>
         public SubIdentifier(Identifier id, Identifier sub)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
@@ -29,9 +39,11 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Clone the identifier
+        /// Clones this identifier.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The cloned identifier.
+        /// </returns>
         public override Identifier Clone()
         {
             return new SubIdentifier(
@@ -40,9 +52,11 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get the hashcode
+        /// Returns a hash code for this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             var a = Id.GetHashCode();
@@ -51,10 +65,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Check equality
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="other">Other identifier</param>
-        /// <returns></returns>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// <c>true</c> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(Identifier other)
         {
             if (other == null)
@@ -65,10 +81,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Check equality
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">Other object</param>
-        /// <returns></returns>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -79,9 +97,11 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Convert to string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "{0}[{1}]".FormatString(Id, Sub);

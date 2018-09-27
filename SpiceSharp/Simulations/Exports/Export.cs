@@ -3,13 +3,17 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Export method
+    /// A template for exporting data for a simulation.
     /// </summary>
+    /// <typeparam name="T">The base value type.</typeparam>
     public abstract class Export<T>
     {
         /// <summary>
-        /// Gets if the export is currently valid
+        /// Returns true if the exporter is currently valid.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </value>
         public bool IsValid
         {
             get
@@ -21,18 +25,30 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// The extractor used to 
+        /// Gets or sets the extractor function.
         /// </summary>
+        /// <value>
+        /// The extractor.
+        /// </value>
         protected Func<T> Extractor { get; set; }
 
         /// <summary>
-        /// Gets the parent simulation
+        /// Gets the simulation from which the data needs to be extracted.
         /// </summary>
+        /// <value>
+        /// The simulation.
+        /// </value>
         protected Simulation Simulation { get; }
 
         /// <summary>
-        /// Gets the current value of the export
+        /// Gets the current value from the simulation.
         /// </summary>
+        /// <value>
+        /// The current value.
+        /// </value>
+        /// <remarks>
+        /// This property will return a default if there is nothing to extract.
+        /// </remarks>
         public T Value
         {
             get
@@ -50,9 +66,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Export{T}"/> class.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         protected Export(Simulation simulation)
         {
             Simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
@@ -61,7 +78,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load the export for the simulation after it has already set up
+        /// Load the export extractor if the simulation has already started.
         /// </summary>
         protected void LazyLoad()
         {
@@ -71,17 +88,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize the export
+        /// Initializes the export.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Event arguments</param>
+        /// <param name="sender">The object (simulation) sending the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected abstract void Initialize(object sender, EventArgs e);
 
         /// <summary>
-        /// Finalize the export
+        /// Finalizes the export.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Event arguments</param>
+        /// <param name="sender">The object (simulation) sending the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void Finalize(object sender, EventArgs e)
         {
             Extractor = null;

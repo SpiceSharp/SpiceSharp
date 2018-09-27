@@ -3,8 +3,9 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A class that represents noise
+    /// A class that represents the state of a <see cref="Noise" /> analysis.
     /// </summary>
+    /// <seealso cref="State" />
     public class NoiseState : State
     {
         /// <summary>
@@ -13,8 +14,11 @@ namespace SpiceSharp.Simulations
         private double _gainSquareInverted, _currentFrequency, _lastFrequency, _logLastFrequency, _deltaFrequency, _deltaLogFrequency, _logFrequency;
 
         /// <summary>
-        /// Current frequency point
+        /// Gets or sets the current frequency.
         /// </summary>
+        /// <value>
+        /// The frequency.
+        /// </value>
         public double Frequency
         {
             get => _currentFrequency;
@@ -35,8 +39,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the frequency step
+        /// Gets or sets the frequency step.
         /// </summary>
+        /// <value>
+        /// The frequency step.
+        /// </value>
         public double DeltaFrequency => _deltaFrequency;
 
         /// <summary>
@@ -45,18 +52,30 @@ namespace SpiceSharp.Simulations
         public double OutputNoise { get; set; }
 
         /// <summary>
-        /// Input referred noise
+        /// Gets or sets the total input-referred noise.
         /// </summary>
+        /// <value>
+        /// The total input-referred noise.
+        /// </value>
         public double InputNoise { get; set; }
 
         /// <summary>
-        /// Output noise density
+        /// Gets or sets the total output noise density.
         /// </summary>
+        /// <value>
+        /// The total output noise density.
+        /// </value>
         public double OutputNoiseDensity { get; set; } = 0.0;
 
         /// <summary>
-        /// Gets or sets the inverse squared gain
+        /// Gets or sets the inverse squared gain.
         /// </summary>
+        /// <value>
+        /// The inverted squared gain.
+        /// </value>
+        /// <remarks>
+        /// This value is used to compute the input noise density from the output noise density.
+        /// </remarks>
         public double GainInverseSquared
         {
             get => _gainSquareInverted;
@@ -68,14 +87,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the logarithm of the gain squared
+        /// Gets the logarithm of the gain squared.
         /// </summary>
+        /// <value>
+        /// The log of the inverse gain.
+        /// </value>
         public double LogInverseGain { get; private set; }
 
         /// <summary>
-        /// Reset frequency
+        /// Reset the frequency.
         /// </summary>
-        /// <param name="frequency"></param>
+        /// <param name="frequency">The new frequency point.</param>
         public void Reset(double frequency)
         {
             // Set the current and last frequency
@@ -88,17 +110,19 @@ namespace SpiceSharp.Simulations
         }
         
         /// <summary>
-        /// This subroutine evaluate the integratl of the function
+        /// This subroutine evaluate the integration of the function
         /// NOISE = a * (FREQUENCY) ^ (EXPONENT)
         /// given two points from the curve. If EXPONENT is relatively close to 0, the noise is simply multiplied
         /// by the change in frequency.
         /// If it isn't, a more complicated expression must be used.
         /// Note that EXPONENT = -1 gives a different equation than EXPONENT != -1.
         /// </summary>
-        /// <param name="noiseDensity">Noise density</param>
-        /// <param name="logNoiseDensity">Last noise density</param>
-        /// <param name="lastLogNoiseDensity">Last log noise density</param>
-        /// <returns></returns>
+        /// <param name="noiseDensity">The noise density.</param>
+        /// <param name="logNoiseDensity">The previous noise density</param>
+        /// <param name="lastLogNoiseDensity">The previous log noise density</param>
+        /// <returns>
+        /// The integrated noise.
+        /// </returns>
         public double Integrate(double noiseDensity, double logNoiseDensity, double lastLogNoiseDensity)
         {
             var exponent = (logNoiseDensity - lastLogNoiseDensity) / _deltaLogFrequency;

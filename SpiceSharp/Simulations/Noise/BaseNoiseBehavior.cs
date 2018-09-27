@@ -3,18 +3,22 @@
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Behavior for noise analysis
+    /// A template that describes noise analysis behavior.
     /// </summary>
+    /// <seealso cref="Behavior" />
     public abstract class BaseNoiseBehavior : Behavior
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BaseNoiseBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">The identifier of the behavior.</param>
+        /// <remarks>
+        /// The identifier of the behavior should be the same as that of the entity creating it.
+        /// </remarks>
         protected BaseNoiseBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Connect noise sources
+        /// Connects the noise sources.
         /// </summary>
         public virtual void ConnectNoise()
         {
@@ -22,9 +26,9 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Noise calculations
+        /// Perform noise calculations.
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
+        /// <param name="simulation">The noise simulation.</param>
         public abstract void Noise(Noise simulation);
     }
 }

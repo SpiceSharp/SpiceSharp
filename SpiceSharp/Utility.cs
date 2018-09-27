@@ -10,23 +10,30 @@ namespace SpiceSharp
     public static class Utility
     {
         /// <summary>
-        /// Format a string with the current culture
+        /// Format a string with the current culture.
         /// </summary>
-        /// <param name="format">The formatting string</param>
-        /// <param name="args">The arguments</param>
-        /// <returns></returns>
+        /// <param name="format">The formatting.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatString(this string format, params object[] args)
         {
             return string.Format(CultureInfo.CurrentCulture, format, args);
         }
 
         /// <summary>
-        /// Copies properties from a source object to a destination object.
+        /// Copies all properties and fields from a source object to a destination object.
         /// </summary>
-        /// <param name="source">A source object.</param>
-        /// <param name="destination">A destination object</param>
+        /// <remarks>
+        /// This method heavily uses reflection to find valid properties and methods. It supports properties and fields
+        /// of types <see cref="double"/>, <see cref="int"/>, <see cref="string"/>, <see cref="bool"/> and
+        /// <see cref="BaseParameter"/>.
+        /// </remarks>
+        /// <param name="source">The source object.</param>
+        /// <param name="destination">The destination object</param>
         public static void CopyPropertiesAndFields(object source, object destination)
         {
+            // TODO: Check that the types are valid(?)
+
             var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {

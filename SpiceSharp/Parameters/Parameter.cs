@@ -3,21 +3,26 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// Base class for parameters
-    /// Parameters are objects that contain a double value, and that have some basic manipulations. They
-    /// also make it easier to be referenced by simulations, sweeps and other features.
+    /// A template for parameters of a specific type.
     /// </summary>
+    /// <typeparam name="T">The base value type</typeparam>
+    /// <seealso cref="BaseParameter" />
     public abstract class Parameter<T> : BaseParameter where T : struct
     {
         /// <summary>
-        /// Gets or sets the value of the parameter
+        /// Gets or sets the value of the parameter.
         /// </summary>
+        /// <value>
+        /// The value of the parameter.
+        /// </value>
         public abstract T Value { get; set; }
 
         /// <summary>
-        /// Copy from another parameter
+        /// Copies the contents of a parameter to this parameter.
         /// </summary>
-        /// <param name="source">Source</param>
+        /// <param name="source">The source parameter.</param>
+        /// <exception cref="ArgumentNullException">source</exception>
+        /// <exception cref="CircuitException">Cannot copy: source is not a Parameter</exception>
         public override void CopyFrom(BaseParameter source)
         {
             if (source == null)
@@ -29,15 +34,20 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Implicit conversion for a parameter to a double
+        /// Performs an implicit conversion from <see cref="Parameter{T}"/> to <typeparamref name="T"/>.
         /// </summary>
-        /// <param name="parameter">Parameter</param>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
         public static implicit operator T(Parameter<T> parameter) => parameter?.Value ?? default(T);
 
         /// <summary>
-        /// Convert to a string
+        /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "Parameter {0}".FormatString(Value);

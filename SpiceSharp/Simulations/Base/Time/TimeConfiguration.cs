@@ -4,36 +4,52 @@ using SpiceSharp.IntegrationMethods;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Configuration for a <see cref="TimeConfiguration"/>
+    /// Configuration for a <see cref="TimeConfiguration" />
     /// </summary>
+    /// <seealso cref="SpiceSharp.ParameterSet" />
     public class TimeConfiguration : ParameterSet
     {
         /// <summary>
-        /// Gets or sets the integration method
+        /// Gets or sets the integration method that needs to be used.
         /// </summary>
+        /// <value>
+        /// The integration method.
+        /// </value>
         public IntegrationMethod Method { get; set; } = new Trapezoidal();
 
         /// <summary>
-        /// Gets or sets the initial timepoint that should be exported
+        /// Gets or sets the initial timepoint that should be exported.
         /// </summary>
+        /// <value>
+        /// The initialize time.
+        /// </value>
         [ParameterName("init"), ParameterName("start"), ParameterInfo("The starting timepoint")]
         public double InitTime { get; set; } = 0.0;
 
         /// <summary>
-        /// Gets or sets the final simulation timepoint
+        /// Gets or sets the final simulation timepoint.
         /// </summary>
+        /// <value>
+        /// The final time.
+        /// </value>
         [ParameterName("final"), ParameterName("stop"), ParameterInfo("The final timepoint")]
         public double FinalTime { get; set; } = double.NaN;
 
         /// <summary>
-        /// Gets or sets the step
+        /// Gets or sets the step size.
         /// </summary>
+        /// <value>
+        /// The step.
+        /// </value>
         [ParameterName("step"), ParameterInfo("The timestep")]
         public double Step { get; set; } = double.NaN;
 
         /// <summary>
-        /// Gets or sets the maximum timestep
+        /// Gets or sets the maximum timestep.
         /// </summary>
+        /// <value>
+        /// The maximum step.
+        /// </value>
         [ParameterName("maxstep"), ParameterInfo("The maximum allowed timestep")]
         public double MaxStep
         {
@@ -49,49 +65,55 @@ namespace SpiceSharp.Simulations
         private double _maxstep = double.NaN;
 
         /// <summary>
-        /// Gets the minimum timestep allowed
+        /// Gets the minimum timestep allowed.
         /// </summary>
+        /// <value>
+        /// The delta minimum.
+        /// </value>
         [ParameterName("deltamin"), ParameterInfo("The minimum delta for breakpoints")]
         public double DeltaMin => 1e-13 * MaxStep;
 
         /// <summary>
-        /// Maximum number of iterations for each time point
+        /// Gets or sets the maximum number of iterations allowed for each time point.
         /// </summary>
+        /// <value>
+        /// The tran maximum iterations.
+        /// </value>
         public int TranMaxIterations { get; set; } = 10;
 
         /// <summary>
-        /// Use initial conditions
+        /// Use initial conditions.
         /// </summary>
         public bool UseIc { get; set; } = false;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
         public TimeConfiguration()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
-        /// <param name="step"></param>
-        /// <param name="stop"></param>
-        public TimeConfiguration(double step, double stop)
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        public TimeConfiguration(double step, double final)
         {
             Step = step;
-            FinalTime = stop;
+            FinalTime = final;
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
-        /// <param name="step">Step</param>
-        /// <param name="stop">Stop</param>
-        /// <param name="max">Maximum timestep</param>
-        public TimeConfiguration(double step, double stop, double max)
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        /// <param name="max">The maximum timestep.</param>
+        public TimeConfiguration(double step, double final, double max)
         {
             Step = step;
-            FinalTime = stop;
+            FinalTime = final;
             MaxStep = max;
         }
     }

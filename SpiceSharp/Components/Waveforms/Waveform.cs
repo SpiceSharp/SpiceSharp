@@ -4,33 +4,36 @@ using System;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Provides values in function of time. This is an abstract class.
+    /// Template for a waveform that can change value over time.
     /// </summary>
+    /// <seealso cref="BaseParameter" />
     public abstract class Waveform : BaseParameter
     {
         /// <summary>
-        /// Setup the waveform
+        /// Sets up the waveform.
         /// </summary>
         public abstract void Setup();
 
         /// <summary>
-        /// Calculate the value of the waveform at a specific value
+        /// Calculates the value of the waveform at a specific timepoint.
         /// </summary>
-        /// <param name="time">The time point</param>
-        /// <returns></returns>
+        /// <param name="time">The time point.</param>
+        /// <returns>
+        /// The value of the waveform.
+        /// </returns>
         public abstract double At(double time);
 
         /// <summary>
-        /// Accept the current timepoint
+        /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
+        /// <param name="simulation">The time-based simulation</param>
         public abstract void Accept(TimeSimulation simulation);
 
         /// <summary>
-        /// Clones the object.
+        /// Clones the parameter.
         /// </summary>
         /// <returns>
-        /// A clone of the object.
+        /// The cloned parameter.
         /// </returns>
         public override BaseParameter Clone()
         {
@@ -43,9 +46,9 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Copy from another object
+        /// Copies the contents of a parameter to this parameter.
         /// </summary>
-        /// <param name="source">Source</param>
+        /// <param name="source">The source parameter.</param>
         public override void CopyFrom(BaseParameter source)
         {
             Utility.CopyPropertiesAndFields(source, this);

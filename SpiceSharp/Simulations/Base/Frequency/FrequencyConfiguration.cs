@@ -1,22 +1,29 @@
 ﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Parameters for a <see cref="FrequencySimulation"/>
+    /// A configuration for a <see cref="FrequencySimulation" />.
     /// </summary>
+    /// <seealso cref="SpiceSharp.ParameterSet" />
     public class FrequencyConfiguration : ParameterSet
     {
         /// <summary>
-        /// Keep operating point information
+        /// Gets or sets a value indicating whether the operation point should be exported.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the operating point should be exported; otherwise, <c>false</c>.
+        /// </value>
         public bool KeepOpInfo { get; set; } = false;
 
         /// <summary>
-        /// The sweep used for the frequency
+        /// Gets or sets the frequency sweep.
         /// </summary>
+        /// <value>
+        /// The frequency sweep.
+        /// </value>
         public Sweep<double> FrequencySweep { get; set; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.
         /// </summary>
         public FrequencyConfiguration()
         {
@@ -25,9 +32,9 @@
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.
         /// </summary>
-        /// <param name="frequencySweep">Sweep used for the frequency points</param>
+        /// <param name="frequencySweep">The frequency sweep.</param>
         public FrequencyConfiguration(Sweep<double> frequencySweep)
         {
             FrequencySweep = frequencySweep;

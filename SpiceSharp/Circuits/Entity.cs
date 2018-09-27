@@ -5,56 +5,59 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// Base class for any circuit object that can take part in simulations
+    /// Base class for any circuit object that can take part in simulations.
     /// </summary>
     public abstract class Entity
     {
         /// <summary>
-        /// Factories for behaviors
+        /// Factories for behaviors.
         /// </summary>
         protected BehaviorFactoryDictionary Behaviors { get; } = new BehaviorFactoryDictionary();
 
         /// <summary>
-        /// Gets a collection of parameters
+        /// Gets a collection of parameters.
         /// </summary>
         public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
 
         /// <summary>
-        /// Gets the name of the object
+        /// Gets the name of the entity.
         /// </summary>
         public Identifier Name { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
-        /// <param name="name">Name of the object</param>
+        /// <param name="name">The name of the entity.</param>
         protected Entity(Identifier name)
         {
             Name = name;
         }
 
         /// <summary>
-        /// Sets a parameter
+        /// Sets a parameter with a specific name.
         /// </summary>
-        /// <param name="name">Parameter name</param>
-        /// <param name="value">Value</param>
-        /// <returns>False if the parameter could not be found</returns>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>False if the parameter could not be found.</returns>
         public bool SetParameter(string name, double value) => ParameterSets.SetParameter(name, value);
 
         /// <summary>
-        /// Sets a parameter
+        /// Sets a parameter with a specific name.
         /// </summary>
-        /// <param name="name">Parameter name</param>
-        /// <param name="value">Value</param>
-        /// <returns>False if the parameter could not be found</returns>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>False if the parameter could not be found.</returns>
         public bool SetParameter(string name, object value) => ParameterSets.SetParameter(name, value);
 
         /// <summary>
-        /// Create a behavior for a simulation
+        /// Create a behavior of a specific base type for a simulation.
         /// </summary>
-        /// <typeparam name="T">Behavior base type</typeparam>
-        /// <param name="simulation"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The behavior base type.</typeparam>
+        /// <param name="simulation">The simulation that will use the behavior.</param>
+        /// <returns>A behavior of the requested type, or null if it doesn't apply to this entity.</returns>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual T CreateBehavior<T>(Simulation simulation) where T : Behavior
         {
             if (simulation == null)
@@ -77,10 +80,17 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Build the data provider for setting up a behavior for the entity
-        /// The entity can control which parameters and behaviors are visible to behaviors in this way
+        /// Build the data provider for setting up a behavior for the entity. The entity can control which parameters
+        /// and behaviors are visible to behaviors using this method.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="parameters">The parameters in the simulation.</param>
+        /// <param name="behaviors">The behaviors in the simulation.</param>
+        /// <returns>A data provider for the behaviors.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// parameters
+        /// or
+        /// behaviors
+        /// </exception>
         protected virtual SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
             if (parameters == null)
@@ -96,7 +106,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Gets the priority of this object
+        /// Gets the priority of this object.
         /// </summary>
         public int Priority { get; protected set; } = 0;
     }

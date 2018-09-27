@@ -4,29 +4,39 @@ using System.Collections.Generic;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// History of objects using a linked list
+    /// A class that implements a history using a linked list.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="History{T}" />
     public class NodeHistory<T> : History<T>
     {
         /// <summary>
-        /// Represents a single point in history
+        /// A class that represents a node in the history.
         /// </summary>
         protected class NodeHistoryPoint
         {
             /// <summary>
-            /// The value at this point
+            /// Gets the value.
             /// </summary>
+            /// <value>
+            /// The value.
+            /// </value>
             public T Value { get; set; }
 
             /// <summary>
-            /// The previous point
+            /// Gets or sets the previous node.
             /// </summary>
+            /// <value>
+            /// The previous node.
+            /// </value>
             public NodeHistoryPoint Previous { get; set; }
 
             /// <summary>
-            /// The next point
+            /// Gets or sets the next node.
             /// </summary>
+            /// <value>
+            /// The next node.
+            /// </value>
             public NodeHistoryPoint Next { get; set; }
         }
 
@@ -36,8 +46,11 @@ namespace SpiceSharp.IntegrationMethods
         private NodeHistoryPoint _currentPoint;
 
         /// <summary>
-        /// Gets or sets the current point
+        /// Gets or sets the current value.
         /// </summary>
+        /// <value>
+        /// The current value.
+        /// </value>
         public override T Current
         {
             get => _currentPoint.Value;
@@ -45,10 +58,15 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Gets a point in history
+        /// Gets the value at the specified index.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <value>
+        /// The value at the specified index.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The value at the specified index.
+        /// </returns>
         public override T this[int index]
         {
             get
@@ -62,9 +80,28 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Constructor
+        /// Gets all points in the history.
         /// </summary>
-        /// <param name="length">Length</param>
+        /// <value>
+        /// The points.
+        /// </value>
+        protected override IEnumerable<T> Points
+        {
+            get
+            {
+                var current = _currentPoint;
+                for (var i = 0; i < Length; i++)
+                {
+                    yield return current.Value;
+                    current = current.Next;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NodeHistory{T}"/> class.
+        /// </summary>
+        /// <param name="length">The number of points to store.</param>
         public NodeHistory(int length)
             : base(length)
         {
@@ -84,10 +121,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NodeHistory{T}"/> class.
         /// </summary>
-        /// <param name="length">Length</param>
-        /// <param name="defaultValue">Default value</param>
+        /// <param name="length">The number of points to store.</param>
+        /// <param name="defaultValue">The default value.</param>
         public NodeHistory(int length, T defaultValue)
             : base(length)
         {
@@ -108,10 +145,11 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NodeHistory{T}"/> class.
         /// </summary>
-        /// <param name="length">Length</param>
-        /// <param name="generator">Generator</param>
+        /// <param name="length">The number of points to store.</param>
+        /// <param name="generator">The function that generates the initial values.</param>
+        /// <exception cref="ArgumentNullException">generator</exception>
         public NodeHistory(int length, Func<int, T> generator)
             : base(length)
         {
@@ -138,7 +176,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Cycle
+        /// Cycles through history.
         /// </summary>
         public override void Cycle()
         {
@@ -146,9 +184,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Store
+        /// Store a new value in the history.
         /// </summary>
-        /// <param name="newValue">New value</param>
+        /// <param name="newValue">The new value.</param>
         public override void Store(T newValue)
         {
             _currentPoint = _currentPoint.Next;
@@ -156,9 +194,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Clear with a value
+        /// Clear the whole history with the same value.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The value to be cleared with.</param>
         public override void Clear(T value)
         {
             var current = _currentPoint;
@@ -170,9 +208,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Clear with a generator
+        /// Clear the history using a function by index.
         /// </summary>
-        /// <param name="generator">Generator</param>
+        /// <param name="generator">The function generating the values.</param>
+        /// <exception cref="ArgumentNullException">generator</exception>
         public override void Clear(Func<int, T> generator)
         {
             if (generator == null)
@@ -183,22 +222,6 @@ namespace SpiceSharp.IntegrationMethods
             {
                 current.Value = generator(i);
                 current = current.Next;
-            }
-        }
-
-        /// <summary>
-        /// Gets all points in history
-        /// </summary>
-        protected override IEnumerable<T> Points
-        {
-            get
-            {
-                var current = _currentPoint;
-                for (var i = 0; i < Length; i++)
-                {
-                    yield return current.Value;
-                    current = current.Next;
-                }
             }
         }
     }

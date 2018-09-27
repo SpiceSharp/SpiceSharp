@@ -4,29 +4,30 @@ using System.Numerics;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Frequency-domain analysis (AC analysis)
+    /// Class that implements a frequency-domain analysis (AC analysis).
     /// </summary>
+    /// <seealso cref="SpiceSharp.Simulations.FrequencySimulation" />
     public class AC : FrequencySimulation
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
+        /// <param name="name">The identifier of the simulation.</param>
         public AC(Identifier name) : base(name)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="frequencySweep">Frequency sweep</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="frequencySweep">The frequency sweep.</param>
         public AC(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
         }
 
         /// <summary>
-        /// Execute
+        /// Executes the simulation.
         /// </summary>
         protected override void Execute()
         {

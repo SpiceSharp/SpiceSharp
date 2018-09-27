@@ -1,20 +1,21 @@
 ﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Operating Point analysis
+    /// Class that implements the operating point analysis.
     /// </summary>
+    /// <seealso cref="BaseSimulation" />
     public class OP : BaseSimulation
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OP"/> class.
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
+        /// <param name="name">The identifier of the simulation.</param>
         public OP(Identifier name) : base(name)
         {
         }
 
         /// <summary>
-        /// Execute the DC simulation
+        /// Executes the simulation.
         /// </summary>
         protected override void Execute()
         {

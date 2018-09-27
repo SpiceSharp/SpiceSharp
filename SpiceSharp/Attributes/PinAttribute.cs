@@ -3,26 +3,27 @@
 namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Specifies the pins for a circuit component that extends <see cref="Components.Component"/>.
+    /// Specifies the pins for a circuit component that extends <see cref="Components.Component" />.
     /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class PinAttribute : Attribute
     {
         /// <summary>
-        /// Index of the pin
+        /// The index of the pin.
         /// </summary>
         public int Index { get; }
 
         /// <summary>
-        /// Name of the pin
+        /// The name of the pin.
         /// </summary>
         public string Name { get; }
-        
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PinAttribute"/> class.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <param name="name">Name</param>
+        /// <param name="index">The index of the pin.</param>
+        /// <param name="name">The name of the pin.</param>
         public PinAttribute(int index, string name)
         {
             Index = index;

@@ -3,27 +3,37 @@
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Base class for vectors
+    /// A base class for vectors.
     /// </summary>
-    /// <typeparam name="T">Base type</typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public abstract class Vector<T> where T : IFormattable
     {
         /// <summary>
-        /// Gets or sets a value in the vector
+        /// Gets or sets the value at the specified index.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.
+        /// </remarks>
+        /// <value>
+        /// The value at the specified index.
+        /// </value>
+        /// <param name="index">The index in the vector.</param>
+        /// <returns>The value at the specified index.</returns>
         public abstract T this[int index] { get; set; }
 
         /// <summary>
-        /// Gets the length of a vector
+        /// Gets the length of the vector.
         /// </summary>
+        /// <remarks>
+        /// Since the element at index 0 is considered a trash can element, the length also indicates the maximum index.
+        /// </remarks>
         public int Length { get; protected set; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Vector{T}"/> class.
         /// </summary>
-        /// <param name="length">Length</param>
+        /// <param name="length">The length of the vector.</param>
+        /// <exception cref="SparseException">Invalid vector length {0}".FormatString(length)</exception>
         protected Vector(int length)
         {
             if (length < 0)
@@ -32,9 +42,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Copy the vector contents to another vector
+        /// Copy the vector contents to another vector.
         /// </summary>
-        /// <param name="target">Target</param>
+        /// <param name="target">The target vector.</param>
         public void CopyTo(Vector<T> target)
         {
             if (target == null)

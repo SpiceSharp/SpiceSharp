@@ -12,68 +12,107 @@ namespace SpiceSharp.IntegrationMethods
     public abstract class SpiceIntegrationMethod : IntegrationMethod, IBreakpoints
     {
         /// <summary>
-        /// The breakpoints
+        /// Gets the breakpoint system.
         /// </summary>
+        /// <value>
+        /// The breakpoints.
+        /// </value>
         public Breakpoints Breakpoints { get; } = new Breakpoints();
 
         /// <summary>
-        /// True if we just hit a breakpoint earlier
+        /// Gets a value indicating whether this point is the first after a breakpoint.
         /// </summary>
+        /// <value>
+        /// <c>true</c> if we just hit a breakpoint; otherwise, <c>false</c>.
+        /// </value>
         public bool Break { get; protected set; }
 
         /// <summary>
-        /// Transient tolerance correction factor
+        /// Gets the transient tolerance correction factor.
         /// </summary>
+        /// <value>
+        /// The transient tolerance correction factor.
+        /// </value>
         protected double TrTol { get; private set; } = 7.0;
 
         /// <summary>
-        /// Allowed relative tolerance for the local truncation error
+        /// Gets or sets the local truncation error relative tolerance.
         /// </summary>
+        /// <value>
+        /// The local truncation error relative tolerance.
+        /// </value>
         protected double LteRelTol { get; private set; } = 1e-3;
 
         /// <summary>
-        /// Allowed absolute tolerance for the local truncation error
+        /// Gets or sets the local truncation truncation error absolute tolerance.
         /// </summary>
+        /// <value>
+        /// The local truncation error absolute tolerance.
+        /// </value>
         protected double LteAbsTol { get; private set; } = 1e-6;
 
         /// <summary>
-        /// Allowed tolerance on charge
+        /// Gets or sets the absolute tolerance for charges.
         /// </summary>
+        /// <value>
+        /// The allowed tolernace on charges.
+        /// </value>
         protected double ChgTol { get; private set; } = 1e-14;
 
         /// <summary>
-        /// Allowed absolute tolerance
+        /// Gets the allowed absolute tolerance.
         /// </summary>
+        /// <value>
+        /// The absolute tolerance.
+        /// </value>
         protected double AbsTol { get; private set; } = 1e-12;
 
         /// <summary>
-        /// Allowed relative tolerance
+        /// Gets the allowed relative tolerance.
         /// </summary>
+        /// <value>
+        /// The relative tolerance.
+        /// </value>
         protected double RelTol { get; private set; } = 1e-3;
 
         /// <summary>
-        /// Allowed maximum timestep
+        /// Gets the maximum timestep.
         /// </summary>
+        /// <value>
+        /// The maximum timestep.
+        /// </value>
         protected double MaxStep { get; private set; } = 1e-6;
 
         /// <summary>
-        /// Expansion factor
+        /// Gets the timestep expansion factor.
         /// </summary>
+        /// <value>
+        /// The expansion factor.
+        /// </value>
         protected double Expansion { get; private set; } = 2.0;
 
         /// <summary>
-        /// Minimum timestep
+        /// Gets the minimum timestep.
         /// </summary>
+        /// <value>
+        /// The minimum timestep.
+        /// </value>
         protected double MinStep { get; private set; }
 
         /// <summary>
-        /// Gets the prediction vector
+        /// Gets the prediction vector.
         /// </summary>
+        /// <value>
+        /// The prediction vector.
+        /// </value>
         protected Vector<double> Prediction { get; private set; }
 
         /// <summary>
-        /// Keep track of all states that can be truncated
+        /// Gets a list with all truncatable states.
         /// </summary>
+        /// <value>
+        /// The truncatable states.
+        /// </value>
         protected List<ITruncatable> TruncatableStates { get; } = new List<ITruncatable>();
 
         /// <summary>
@@ -83,8 +122,9 @@ namespace SpiceSharp.IntegrationMethods
         private double _oldDelta;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SpiceIntegrationMethod"/> class.
         /// </summary>
+        /// <param name="maxOrder">The maximum integration order.</param>
         protected SpiceIntegrationMethod(int maxOrder)
             : base(maxOrder)
         {
@@ -92,9 +132,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Setup the integration method
+        /// Sets up for the specified simulation.
         /// </summary>
-        /// <param name="simulation">Time simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         public override void Setup(TimeSimulation simulation)
         {
             base.Setup(simulation);
@@ -128,9 +168,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Initialize the integration method
+        /// Initializes the integration method.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         public override void Initialize(TimeSimulation simulation)
         {
             base.Initialize(simulation);
@@ -144,9 +184,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Accept the current time point as a final solution
+        /// Accepts the last evaluated time point.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         public override void Accept(TimeSimulation simulation)
         {
             // Clear breakpoints
@@ -158,10 +198,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Continue
+        /// Continues the simulation.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="delta">Delta</param>
+        /// <param name="simulation">The time-based simulation</param>
+        /// <param name="delta">The initial probing timestep.</param>
         public override void Continue(TimeSimulation simulation, ref double delta)
         {
             // Modify the timestep
@@ -195,10 +235,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Probe a new time point
+        /// Starts probing a new timepoint.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="delta">Timestep</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="delta">The timestep to be probed.</param>
         public override void Probe(TimeSimulation simulation, double delta)
         {
             base.Probe(simulation, delta);
@@ -211,10 +251,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Indicate that the solution did not converge
+        /// Updates the integration method in case the solution did not converge.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="newDelta">The new timestep</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="newDelta">The next timestep to be probed.</param>
         public override void NonConvergence(TimeSimulation simulation, out double newDelta)
         {
             base.NonConvergence(simulation, out newDelta);
@@ -225,11 +265,14 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Evaluate the found solution
+        /// Evaluates whether or not the current solution can be accepted.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="newDelta">The new timestep</param>
-        /// <returns></returns>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="newDelta">The next requested timestep in case the solution is not accepted.</param>
+        /// <returns>
+        /// <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="SpiceSharp.CircuitException">Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime)</exception>
         public override bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
             var result = base.Evaluate(simulation, out newDelta);
@@ -254,7 +297,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Unsetup the integration method
+        /// Destroys the integration method.
         /// </summary>
         public override void Unsetup()
         {
@@ -272,17 +315,18 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Create a state that can be derived
+        /// Creates a state for which a derivative with respect to time can be determined.
         /// </summary>
+        /// <param name="track">if set to <c>false</c>, the state is considered purely informative.</param>
+        /// <returns>
+        /// A <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> object that is compatible with this integration method.
+        /// </returns>
         /// <remarks>
-        /// Tracked derivatives are used in more advanced features by the integration method if they
-        /// are implemented. For example, derived states can be used for finding a good time step
-        /// by approximating the local truncation error (ie. the error made by taking discrete
-        /// time steps). If you do not want the derivative to participate in these features, set
-        /// <see cref="track"/> to false.
+        /// Tracked derivatives are used in more advanced features implemented by the integration method.
+        /// For example, derived states can be used for finding a good time step by approximating the
+        /// local truncation error (ie. the error made by taking discrete time steps). If you do not
+        /// want the derivative to participate in these features, set <paramref name="track" /> to false.
         /// </remarks>
-        /// <param name="track">If false, this derivative is treated as purely informative</param>
-        /// <returns></returns>
         public override StateDerivative CreateDerivative(bool track)
         {
             var ds = ProduceDerivative();
@@ -292,27 +336,29 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Compute the coefficients for the current timestep
+        /// Computes the integration coefficients.
         /// </summary>
         protected abstract void ComputeCoefficients();
 
         /// <summary>
-        /// Predict a solution
+        /// Predicts a solution
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         protected abstract void Predict(TimeSimulation simulation);
 
         /// <summary>
-        /// Factory for derivative states used by this integration method
+        /// Produces a derivative.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="StateDerivative" /> that can be used with this integration method.
+        /// </returns>
         protected abstract StateDerivative ProduceDerivative();
 
         /// <summary>
-        /// Truncate the timestep using states
+        /// Truncates the timestep based on the states.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="args">Arguments</param>
+        /// <param name="sender">The sender (integration method).</param>
+        /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected virtual void TruncateStates(object sender, TruncateEvaluateEventArgs args)
         {
             // Don't truncate the first step
@@ -354,10 +400,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Truncate the timestep using nodes
+        /// Truncates the timestep using nodes.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="args">Arguments</param>
+        /// <param name="sender">The sender (integration method).</param>
+        /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected abstract void TruncateNodes(object sender, TruncateEvaluateEventArgs args);
     }
 }

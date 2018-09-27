@@ -3,50 +3,60 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// Regular string identifier
+    /// A normal identifier that is just identified by a string.
     /// </summary>
+    /// <seealso cref="Identifier" />
     public class StringIdentifier : Identifier
     {
         /// <summary>
-        /// The id
+        /// The identifier.
         /// </summary>
         private readonly string _id;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="StringIdentifier"/> class.
         /// </summary>
-        /// <param name="id">Id</param>
+        /// <param name="id">The identifier.</param>
+        /// <exception cref="ArgumentNullException">id</exception>
         public StringIdentifier(string id)
         {
             _id = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         /// <summary>
-        /// Convert to string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString() => _id;
 
         /// <summary>
-        /// Get hash code
+        /// Returns a hash code for this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode() => _id.GetHashCode();
 
         /// <summary>
-        /// Clone the string
+        /// Clones this identifier.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The cloned identifier.
+        /// </returns>
         public override Identifier Clone()
         {
             return new StringIdentifier(_id);
         }
 
         /// <summary>
-        /// Check equality
+        /// Indicates whether the current identifier is equal to another identifier.
         /// </summary>
-        /// <param name="other">Other identifier</param>
-        /// <returns></returns>
+        /// <param name="other">An identifier to compare with this identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if the current identifier is equal to the <paramref name="other" /> parameter; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(Identifier other)
         {
             if (other is StringIdentifier si)
@@ -55,10 +65,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Check equality
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">Other object</param>
-        /// <returns></returns>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (obj is StringIdentifier si)

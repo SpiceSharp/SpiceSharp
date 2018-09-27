@@ -5,8 +5,9 @@ using SpiceSharp.Algebra.Solve;
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Class for solving real matrices
+    /// Class for solving sets of equations with real numbers.
     /// </summary>
+    /// <seealso cref="SpiceSharp.Algebra.Solver{Double}" />
     public class RealSolver : Solver<double>
     {
         /// <summary>
@@ -16,7 +17,7 @@ namespace SpiceSharp.Algebra
         private MatrixElement<double>[] _dest;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RealSolver"/> class.
         /// </summary>
         public RealSolver()
             : base(new Markowitz<double>())
@@ -24,27 +25,32 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RealSolver"/> class.
         /// </summary>
-        /// <param name="size">Matrix size</param>
+        /// <param name="size">The number of equations and variables.</param>
         public RealSolver(int size)
             : base(new Markowitz<double>(), size)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RealSolver"/> class.
         /// </summary>
-        /// <param name="size">Size</param>
-        /// <param name="strategy">Strategy</param>
+        /// <param name="size">The number of equations and variables.</param>
+        /// <param name="strategy">The pivot strategy.</param>
         public RealSolver(int size, PivotStrategy<double> strategy)
             : base(strategy, size)
         {
         }
 
         /// <summary>
-        /// Fix the number of equations and variables
+        /// Fix the number of equations and variables.
         /// </summary>
+        /// <remarks>
+        /// This method can be used to make sure that the matrix is fixed during
+        /// solving. When fixed, it is impossible to add more elements to the sparse
+        /// matrix or vector.
+        /// </remarks>
         public override void FixEquations()
         {
             base.FixEquations();
@@ -53,7 +59,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Unfix the number of equations and variables
+        /// Unfix the number of equations and variables.
         /// </summary>
         public override void UnfixEquations()
         {
@@ -63,9 +69,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Factor the matrix
-        /// Assumes that pivoting has been done
+        /// Factor the matrix.
         /// </summary>
+        /// <returns>
+        /// True if factoring was successful.
+        /// </returns>
         public override bool Factor()
         {
             if (!IsFixed)
@@ -122,9 +130,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Find the solution for a factored matrix and a right-hand-side
+        /// Solve the system of equations.
         /// </summary>
-        /// <param name="solution">Solution vector</param>
+        /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
+        /// <exception cref="ArgumentNullException">solution</exception>
+        /// <exception cref="SparseException">Solver is not yet factored</exception>
         public override void Solve(Vector<double> solution)
         {
             if (solution == null)
@@ -189,9 +199,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Find the solution for a factored matrix and a right-hand-side (transposed)
+        /// Solve the transposed problem.
         /// </summary>
-        /// <param name="solution">Solution vector</param>
+        /// <param name="solution">The solution vector that will hold the solution to the transposed set of equations.</param>
+        /// <exception cref="ArgumentNullException">solution</exception>
+        /// <exception cref="SparseException">Solver is not yet factored</exception>
         public override void SolveTransposed(Vector<double> solution)
         {
             if (solution == null)
@@ -305,9 +317,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Eliminate a row
+        /// Eliminate a row.
         /// </summary>
-        /// <param name="pivot">Current pivot</param>
+        /// <param name="pivot">The current pivot element.</param>
         private void Elimination(MatrixElement<double> pivot)
         {
             // Test for zero pivot

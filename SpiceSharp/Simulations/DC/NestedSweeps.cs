@@ -5,25 +5,34 @@ using System.Linq;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Sweeps that can be nested
+    /// A class describing sweeps that can be nested
     /// </summary>
     public class NestedSweeps
     {
         /// <summary>
-        /// Gets a sweep instance
+        /// Gets a sweep instance.
         /// </summary>
+        /// <value>
+        /// The <see cref="SweepInstance"/>.
+        /// </value>
         /// <param name="index">Index</param>
         /// <returns></returns>
         public SweepInstance this[int index] => _instances[index];
 
         /// <summary>
-        /// Gets the amount of nested sweeps
+        /// Gets the sweep count.
         /// </summary>
+        /// <value>
+        /// The sweep count.
+        /// </value>
         public int Count => _instances.Count;
 
         /// <summary>
-        /// Get the top-most sweep
+        /// Gets the top-most sweep.
         /// </summary>
+        /// <value>
+        /// The top.
+        /// </value>
         public SweepInstance Top => _instances.Last();
 
         /// <summary>
@@ -32,9 +41,10 @@ namespace SpiceSharp.Simulations
         private readonly List<SweepInstance> _instances = new List<SweepInstance>();
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NestedSweeps"/> class.
         /// </summary>
-        /// <param name="sweeps">Sweeps to be nested (in order)</param>
+        /// <param name="sweeps">The sweeps.</param>
+        /// <exception cref="ArgumentNullException">sweeps</exception>
         public NestedSweeps(IEnumerable<SweepConfiguration> sweeps)
         {
             if (sweeps == null)
@@ -45,16 +55,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Add a sweep
+        /// Adds the specified sweep.
         /// </summary>
-        /// <param name="sweep">Sweep</param>
+        /// <param name="sweep">The sweep.</param>
         private void Add(SweepConfiguration sweep)
         {
             _instances.Add(new SweepInstance(sweep.ComponentName, sweep.Start, sweep.Stop, sweep.Step));
         }
 
         /// <summary>
-        /// Clear
+        /// Clears this instance.
         /// </summary>
         public void Clear()
         {

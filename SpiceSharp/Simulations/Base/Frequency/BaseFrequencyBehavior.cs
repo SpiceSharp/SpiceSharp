@@ -6,30 +6,38 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// AC behavior for circuit objects
+    /// A template that describes frequency-dependent behavior.
     /// </summary>
+    /// <seealso cref="SpiceSharp.Behaviors.Behavior" />
     public abstract class BaseFrequencyBehavior : Behavior
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BaseFrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">The identifier of the behavior.</param>
+        /// <remarks>
+        /// The identifier of the behavior should be the same as that of the entity creating it.
+        /// </remarks>
         protected BaseFrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Create an export method for AC analysis
+        /// Creates a getter for a complex parameter.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <returns>
+        /// A function get return the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
         public virtual Func<Complex> CreateAcExport(Simulation simulation, string propertyName)
         {
             return CreateGetter<Complex>(simulation, propertyName);
         }
 
         /// <summary>
-        /// Initialize parameters for AC analysis
+        /// Initializes the parameters.
         /// </summary>
+        /// <param name="simulation">The frequency simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual void InitializeParameters(FrequencySimulation simulation)
         {
 			if (simulation == null)
@@ -39,15 +47,15 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets equation pointers
+        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
-        /// <param name="solver">Solver</param>
+        /// <param name="solver">The solver.</param>
         public abstract void GetEquationPointers(Solver<Complex> solver);
 
         /// <summary>
-        /// Load the Y-matrix and Rhs-vector for AC analysis
+        /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
+        /// <param name="simulation">The frequency simulation.</param>
         public abstract void Load(FrequencySimulation simulation);
     }
 }

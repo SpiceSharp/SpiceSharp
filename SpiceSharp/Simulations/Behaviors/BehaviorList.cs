@@ -5,8 +5,9 @@ using System.Linq;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Ordered list of behaviors
+    /// Class representing an ordered list of behaviors.
     /// </summary>
+    /// <typeparam name="T">The base behavior type.</typeparam>
     public class BehaviorList<T> where T : Behavior
     {
         /// <summary>
@@ -15,21 +16,28 @@ namespace SpiceSharp.Behaviors
         private readonly T[] _behaviors;
 
         /// <summary>
-        /// Gets a behavior at a specific index
+        /// Gets the behavior at the specified index.
         /// </summary>
-        /// <param name="index">Index</param>
+        /// <value>
+        /// The behavior at the specified index.
+        /// </value>
+        /// <param name="index">The index.</param>
         /// <returns></returns>
         public T this[int index] => _behaviors[index];
 
         /// <summary>
-        /// Gets the number of behaviors in the list
+        /// Gets the number of behaviors in the list.
         /// </summary>
+        /// <value>
+        /// The count.
+        /// </value>
         public int Count { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BehaviorList{T}"/> class.
         /// </summary>
-        /// <param name="behaviors"></param>
+        /// <param name="behaviors">An enumeration of all behaviors that need to be added.</param>
+        /// <exception cref="ArgumentNullException">behaviors</exception>
         public BehaviorList(IEnumerable<T> behaviors)
         {
             if (behaviors == null)

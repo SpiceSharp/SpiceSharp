@@ -1,29 +1,33 @@
 ﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Class representing a state
+    /// This class represents a simulation state.
     /// </summary>
     public abstract class State
     {
         /// <summary>
-        /// Initialize the state
+        /// Gets a value indicating whether this state is set up.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is setup; otherwise, <c>false</c>.
+        /// </value>
         public bool IsSetup { get; private set; }
 
         /// <summary>
-        /// Initialize
+        /// Setup the simulation state.
         /// </summary>
-        /// <param name="nodes">The circuit</param>
+        /// <param name="nodes">The unknown variables for which the state is used.</param>
         public virtual void Setup(VariableSet nodes)
         {
             IsSetup = true;
         }
 
         /// <summary>
-        /// Destroy the state
+        /// Unsetup the state.
         /// </summary>
         public virtual void Destroy()
         {
+            // TODO: Call this Unsetup
             IsSetup = false;
         }
     }

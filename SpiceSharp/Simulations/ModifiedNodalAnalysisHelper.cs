@@ -4,16 +4,17 @@ using SpiceSharp.Algebra;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Helper class
+    /// A helper class that is specific to Modified Nodal Analysis.
     /// </summary>
     public static class ModifiedNodalAnalysisHelper
     {
         /// <summary>
-        /// Method for preordering a matrix used in Modified Nodal Analysis (MNA)
+        /// This method preorders a matrix that is typically constructed using Modified Nodal Analysis (MNA).
         /// </summary>
-        /// <typeparam name="T">Base type</typeparam>
-        /// <param name="solver">Solver</param>
-        /// <param name="magnitude">Magnitude method</param>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="solver">The solver.</param>
+        /// <param name="magnitude">The method that converts the base value type to a scalar.</param>
+        /// <exception cref="ArgumentNullException">solver</exception>
         public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             if (solver == null)
@@ -87,10 +88,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Apply a gmin to the diagonal elements
+        /// Apply an additional conductance to the diagonal elements of a matrix that is typically constructed using Modified Nodal Analysis (MNA).
         /// </summary>
-        /// <param name="solver">Solver</param>
-        /// <param name="gmin">Conductance</param>
+        /// <param name="solver">The solver.</param>
+        /// <param name="gmin">The conductance to be added.</param>
+        /// <exception cref="ArgumentNullException">solver</exception>
         public static void ApplyDiagonalGmin(this SparseLinearSystem<double> solver, double gmin)
         {
             if (solver == null)
@@ -110,14 +112,18 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Count the number of twins
+        /// Count the number of twins in a matrix that is typically constructed using Modified Nodal Analysis (MNA).
         /// </summary>
-        /// <param name="solver">Solver</param>
-        /// <param name="column">Column</param>
-        /// <param name="twin1">First twin element</param>
-        /// <param name="twin2">Second twin element</param>
-        /// <param name="magnitude">Magnitude method</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// A twin is a matrix element that is equal to one, and also has a one on the transposed position. MNA formulation
+        /// often leads to many twins, allowing us to save some time by searching for them beforehand.
+        /// </remarks>
+        /// <param name="solver">The solver.</param>
+        /// <param name="column">The column index.</param>
+        /// <param name="twin1">The first twin element.</param>
+        /// <param name="twin2">The second twin element.</param>
+        /// <param name="magnitude">The method that converts the base value type to a scalar.</param>
+        /// <returns>The number of twins found.</returns>
         private static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             var twins = 0;

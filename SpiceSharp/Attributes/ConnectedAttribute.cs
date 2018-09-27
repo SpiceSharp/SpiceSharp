@@ -4,27 +4,28 @@ namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// Indicates that two pins are connected by a finite impedance at DC. This attribute can be
-    /// applied to a <see cref="Components.Component"/> to check for floating nodes.
+    /// applied to a <see cref="Components.Component" /> to check for floating nodes using a <see cref="SpiceSharp.Circuits.Validator" />.
     /// If this attribute is not applied, then all pins are assumed to be connected.
     /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class ConnectedAttribute : Attribute
     {
         /// <summary>
-        /// First connected pin
+        /// Gets the first connected pin index.
         /// </summary>
         public int Pin1 { get; }
 
         /// <summary>
-        /// Second connected pin
+        /// Gets the second connected pin index.
         /// </summary>
         public int Pin2 { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ConnectedAttribute"/> class.
         /// </summary>
-        /// <param name="pin1">First pin</param>
-        /// <param name="pin2">Second pin</param>
+        /// <param name="pin1">The first pin index.</param>
+        /// <param name="pin2">The second pin index.</param>
         public ConnectedAttribute(int pin1, int pin2)
         {
             Pin1 = pin1;
@@ -32,8 +33,7 @@ namespace SpiceSharp.Attributes
         }
 
         /// <summary>
-        /// Constructor
-        /// No parameters mean no pins are connected
+        /// Initializes a new instance of the <see cref="ConnectedAttribute"/> class.
         /// </summary>
         public ConnectedAttribute()
         {

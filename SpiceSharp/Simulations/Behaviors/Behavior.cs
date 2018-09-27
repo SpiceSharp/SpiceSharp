@@ -7,61 +7,71 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Represents a behavior for a class
+    /// Template for a behavior.
     /// </summary>
     public abstract class Behavior : NamedParameterized
     {
         /// <summary>
-        /// Gets the name of the behavior
+        /// Gets the identifier of the behavior.
         /// </summary>
+        /// <remarks>
+        /// This should be the same identifier as the entity that created it.
+        /// </remarks>
         public Identifier Name { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Behavior"/> class.
         /// </summary>
-        /// <param name="name">Name of the behavior</param>
+        /// <param name="name">The identifier of the behavior.</param>
+        /// <remarks>
+        /// The identifier of the behavior should be the same as that of the entity creating it.
+        /// </remarks>
         protected Behavior(Identifier name)
         {
             Name = name;
         }
-        
+
         /// <summary>
-        /// Setup the behavior
+        /// Setup the behavior.
         /// </summary>
-        /// <param name="simulation">The simulation that is setting up</param>
-        /// <param name="provider">The data provider</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="provider">The data provider.</param>
         public virtual void Setup(Simulation simulation, SetupDataProvider provider)
         {
             // Do nothing
         }
 
         /// <summary>
-        /// Unsetup the behavior
+        /// Destroy the behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
+        /// <param name="simulation">The simulation.</param>
         public virtual void Unsetup(Simulation simulation)
         {
             // Do nothing
         }
 
         /// <summary>
-        /// Create a delegate for extracting data for a specific simulation
+        /// Creates a getter for extracting data from the specified simulation.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Parameter</param>
-        /// <returns>Returns null if there is no export method</returns>
+        /// <param name="simulation">The simulation</param>
+        /// <param name="propertyName">The name of the parameter.</param>
+        /// <returns>
+        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
         public virtual Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
             return CreateGetter<double>(simulation, propertyName);
         }
 
         /// <summary>
-        /// Create a method for exporting a property using reflection. Supported:
+        /// Creates a getter for extracting data from the specified simulation.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="name">Property name</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
         protected Func<T> CreateGetter<T>(Simulation simulation, string name) where T : struct 
         {
             // Find methods to create the export
@@ -87,12 +97,14 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Create an export method from a MethodInfo (reflection)
+        /// Creates a getter for a MethodInfo using reflection. This method allows creating getters for methods that needs the simulation as a parameter.
         /// </summary>
-        /// <typeparam name="T">Return type</typeparam>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="method">Method</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="method">The method information.</param>
+        /// <returns>
+        /// A function that returns the value of the method, or <c>null</c> if the method doesn't exist.
+        /// </returns>
         private Func<T> CreateMethodGetter<T>(Simulation simulation, MethodInfo method) where T : struct
         {
             // First make sure it is the right return type

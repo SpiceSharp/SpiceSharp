@@ -1,14 +1,16 @@
 ﻿namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Indicates that a class can truncate a timestep
+    /// This interface indicates that a <see cref="StateDerivative"/> is capable of truncating the timestep.
     /// </summary>
     public interface ITruncatable
     {
         /// <summary>
-        /// Calculates a timestep to manage the truncation error
+        /// Truncates the current timestep.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The maximum timestep allowed by this state.
+        /// </returns>
         double Truncate();
     }
 }

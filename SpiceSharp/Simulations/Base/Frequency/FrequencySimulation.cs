@@ -4,13 +4,17 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A base class for frequency-dependent analysis
+    /// A template for frequency-dependent analysis.
     /// </summary>
+    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
     public abstract class FrequencySimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active frequency configuration
+        /// Gets the currently active frequency configuration.
         /// </summary>
+        /// <value>
+        /// The frequency configuration.
+        /// </value>
         public FrequencyConfiguration FrequencyConfiguration { get; protected set; }
 
         /// <summary>
@@ -20,48 +24,60 @@ namespace SpiceSharp.Simulations
         private LoadStateEventArgs _loadStateEventArgs;
 
         /// <summary>
-        /// Event called before loading the frequency behaviors
+        /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
         public event EventHandler<LoadStateEventArgs> BeforeFrequencyLoad;
 
         /// <summary>
-        /// Event called after loading the frequency behaviors
+        /// Occurs after loading the matrix and right-hand side vector.
         /// </summary>
-        public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad; 
+        public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad;
 
         /// <summary>
-        /// Gets the complex state
+        /// Gets the complex simulation state.
         /// </summary>
+        /// <value>
+        /// The state of the complex.
+        /// </value>
         public ComplexState ComplexState { get; protected set; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">The identifier of the simulation.</param>
         protected FrequencySimulation(Identifier name) : base(name)
         {
             ParameterSets.Add(new FrequencyConfiguration());
         }
 
         /// <summary>
-        /// The sweep for frequency points
+        /// Gets the frequency sweep.
         /// </summary>
+        /// <value>
+        /// The frequency sweep.
+        /// </value>
         protected Sweep<double> FrequencySweep { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="frequencySweep">Sweep for the frequency points</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="frequencySweep">The frequency sweep.</param>
         protected FrequencySimulation(Identifier name, Sweep<double> frequencySweep) : base(name)
         {
             ParameterSets.Add(new FrequencyConfiguration(frequencySweep));
         }
 
         /// <summary>
-        /// Setup the simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
+        /// <exception cref="SpiceSharp.CircuitException">
+        /// No frequency configuration found
+        /// or
+        /// No frequency sweep found
+        /// </exception>
         protected override void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -88,7 +104,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Execute
+        /// Executes the simulation.
         /// </summary>
         protected override void Execute()
         {
@@ -99,7 +115,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup the simulation
+        /// Destroys the simulation.
         /// </summary>
         protected override void Unsetup()
         {
@@ -118,9 +134,9 @@ namespace SpiceSharp.Simulations
 
             base.Unsetup();
         }
-        
+
         /// <summary>
-        /// Calculate the AC solution
+        /// Acs the iterate.
         /// </summary>
         protected void AcIterate()
         {
@@ -155,17 +171,19 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Call event before loading frequency behaviors
+        /// Raises the <see cref="E:BeforeFrequencyLoad" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeFrequencyLoad(LoadStateEventArgs args) => BeforeFrequencyLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Call event after loading frequency behaviors
+        /// Raises the <see cref="E:AfterFrequencyLoad" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterFrequencyLoad(LoadStateEventArgs args) => AfterFrequencyLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Initialize all AC parameters
+        /// Initializes the ac parameters.
         /// </summary>
         protected void InitializeAcParameters()
         {
@@ -179,7 +197,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load AC behaviors
+        /// Loads the Y-matrix and right-hand side vector.
         /// </summary>
         protected void FrequencyLoad()
         {
@@ -194,7 +212,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load frequency behaviors
+        /// Loads the Y-matrix and right-hand side vector.
         /// </summary>
         protected virtual void LoadFrequencyBehaviors()
         {

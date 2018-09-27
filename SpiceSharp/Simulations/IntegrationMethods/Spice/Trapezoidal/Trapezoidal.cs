@@ -4,17 +4,21 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Trapezoidal integration method
+    /// A class that implements the trapezoidal integration method as implemented by Spice.
     /// </summary>
+    /// <seealso cref="SpiceIntegrationMethod" />
     public partial class Trapezoidal : SpiceIntegrationMethod
     {
         /// <summary>
         /// Integration coefficients
         /// </summary>
+        /// <value>
+        /// The coefficients.
+        /// </value>
         protected double[] Coefficients { get; } = new double[2];
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Trapezoidal"/> class.
         /// </summary>
         public Trapezoidal()
             : base(2)
@@ -22,9 +26,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Initialize the trapezoidal integration method
+        /// Initializes the integration method.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         public override void Initialize(TimeSimulation simulation)
         {
             base.Initialize(simulation);
@@ -35,7 +39,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Unsetup the integration method
+        /// Destroys the integration method.
         /// </summary>
         public override void Unsetup()
         {
@@ -47,9 +51,11 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Predict a new solution based on the previous ones
+        /// Predicts a solution
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
         protected override void Predict(TimeSimulation simulation)
         {
             if (simulation == null)
@@ -91,10 +97,11 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Truncate the timestep using nodes
+        /// Truncates the timestep using nodes.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="args">Arguments</param>
+        /// <param name="sender">The sender (integration method).</param>
+        /// <param name="args">The <see cref="TruncateEvaluateEventArgs" /> instance containing the event data.</param>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
             // Get the state
@@ -160,8 +167,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Compute the coefficients for Trapezoidal integration
+        /// Computes the integration coefficients.
         /// </summary>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid order {0}".FormatString(Order)</exception>
         protected override void ComputeCoefficients()
         {
             var delta = IntegrationStates[0].Delta;
@@ -188,9 +196,11 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Produce a derivative for the trapezoidal integration method
+        /// Produces a derivative.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="StateDerivative" /> that can be used with this integration method.
+        /// </returns>
         protected override StateDerivative ProduceDerivative() => new TrapezoidalStateDerivative(this);
     }
 }

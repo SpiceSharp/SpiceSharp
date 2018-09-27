@@ -4,9 +4,10 @@ using System.Collections.ObjectModel;
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// Markowitz
+    /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="SpiceSharp.Algebra.Solve.PivotStrategy{T}" />
     public class Markowitz<T> : PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
@@ -17,53 +18,53 @@ namespace SpiceSharp.Algebra.Solve
         private int[] _markowitzProduct;
 
         /// <summary>
-        /// Gets the relative pivot threshold
+        /// Gets the relative pivot threshold.
         /// </summary>
         public double RelativePivotThreshold { get; set; } = 1e-3;
 
         /// <summary>
-        /// Gets the absolute pivot threshold
+        /// Gets the absolute pivot threshold.
         /// </summary>
         public double AbsolutePivotThreshold { get; set; } = 0;
 
         /// <summary>
         /// The maximum Markowitz count that will not result in Int32 overflow when squared
-        /// Markowitz counts are capped at this quantity
+        /// Markowitz counts are capped at this quantity.
         /// </summary>
         private const int MaxMarkowitzCount = 46340;
 
         /// <summary>
-        /// Gets the Markowitz row counts
+        /// Gets the Markowitz row counts.
         /// </summary>
         public int RowCount(int row) => _markowitzRow[row];
 
         /// <summary>
-        /// Gets the Markowitz column counts
+        /// Gets the Markowitz column counts.
         /// </summary>
         public int ColumnCount(int column) => _markowitzColumn[column];
 
         /// <summary>
-        /// Gets the Markowitz products
+        /// Gets the Markowitz products.
         /// </summary>
         public int Product(int index) => _markowitzProduct[index];
 
         /// <summary>
-        /// Gets the number of singletons
+        /// Gets the number of singletons.
         /// </summary>
         public int Singletons { get; private set; }
 
         /// <summary>
-        /// Gets the magnitude method
+        /// Gets the magnitude method.
         /// </summary>
         public Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
-        /// Private variables
+        /// Gets the strategies used for finding a pivot.
         /// </summary>
         public Collection<MarkowitzSearchStrategy<T>> Strategies { get; } = new Collection<MarkowitzSearchStrategy<T>>();
-        
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Markowitz{T}"/> class.
         /// </summary>
         public Markowitz()
         {
@@ -75,10 +76,14 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Check that the pivot is valid
+        /// This method will check whether or not a pivot element is valid or not.
+        /// It checks for the submatrix right/below of the pivot.
         /// </summary>
-        /// <param name="pivot">Pivot</param>
-        /// <returns></returns>
+        /// <param name="pivot">The pivot candidate.</param>
+        /// <returns>
+        /// True if the pivot can be used.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">pivot</exception>
         public override bool IsValidPivot(MatrixElement<T> pivot)
         {
             if (pivot == null)
@@ -103,9 +108,10 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Initialize
+        /// Initializes the pivot searching algorithm.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <exception cref="ArgumentNullException">matrix</exception>
         public void Initialize(Matrix<T> matrix)
         {
             if (matrix == null)
@@ -118,11 +124,11 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Count Markowitz numbers
+        /// Count the Markowitz numbers.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="rhs">Right-hand side</param>
-        /// <param name="step">Step</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="rhs">The right-hand side vector.</param>
+        /// <param name="step">The elimination step.</param>
         private void Count(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
         {
             MatrixElement<T> element;
@@ -171,10 +177,10 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Calculate Markowitz products
+        /// Calculate the Markowitz products.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="step">Step</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="step">The elimination step.</param>
         private void Products(SparseMatrix<T> matrix, int step)
         {
             Singletons = 0;
@@ -189,12 +195,13 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Setup the pivoting strategy
+        /// Setup the pivot strategy.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="rhs">Rhs</param>
-        /// <param name="eliminationStep">Step</param>
-        /// <param name="magnitude">Magnitude method</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="rhs">The right-hand side vector.</param>
+        /// <param name="eliminationStep">The current elimination step.</param>
+        /// <param name="magnitude">The method used to determine the magnitude of an element.</param>
+        /// <exception cref="ArgumentNullException">matrix</exception>
         public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
         {
             if (matrix == null)
@@ -211,12 +218,16 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Update pivoting strategy before moving the pivot
+        /// Move the pivot to the diagonal for this elimination step.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="rhs">Rhs</param>
-        /// <param name="pivot">Pivot</param>
-        /// <param name="eliminationStep">Step</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="rhs">The right-hand side vector.</param>
+        /// <param name="pivot">The pivot element.</param>
+        /// <param name="eliminationStep">The elimination step.</param>
+        /// <exception cref="ArgumentNullException">pivot</exception>
+        /// <remarks>
+        /// This is done by swapping the rows and columns of the diagonal and that of the pivot.
+        /// </remarks>
         public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int eliminationStep)
         {
             // If we haven't setup, just skip
@@ -295,11 +306,12 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Update the pivoting strategy
+        /// Update the strategy after the pivot was moved.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="pivot">Pivot</param>
-        /// <param name="eliminationStep">Step</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="pivot">The pivot element.</param>
+        /// <param name="eliminationStep">The elimination step.</param>
+        /// <exception cref="ArgumentNullException">pivot</exception>
         public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep)
         {
             // If we haven't setup, just skip
@@ -339,11 +351,16 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Find a pivot
+        /// Find a pivot in the matrix.
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="eliminationStep">Step</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="eliminationStep">The current elimination step.</param>
         /// <returns></returns>
+        /// <remarks>
+        /// The pivot should be searched for in the submatrix towards the right and down of the
+        /// current diagonal at row/column <paramref name="eliminationStep" />. This pivot element
+        /// will be moved to the diagonal for this elimination step.
+        /// </remarks>
         public override MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int eliminationStep)
         {
             foreach (var strategy in Strategies)

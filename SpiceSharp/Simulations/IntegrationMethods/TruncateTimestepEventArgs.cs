@@ -4,19 +4,29 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Event arguments for probing a new time point
+    /// Event arguments for probing a new time point.
     /// </summary>
+    /// <seealso cref="EventArgs" />
     public class TruncateTimestepEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the time simulation
+        /// Gets the time-based simulation.
         /// </summary>
+        /// <value>
+        /// The time-based simulation.
+        /// </value>
         public TimeSimulation Simulation { get; }
 
         /// <summary>
-        /// Gets or sets the timestep to be probed
-        /// Be careful when increasing the timestep, as it could cause truncation errors
+        /// Gets or sets the timestep to be probed.
         /// </summary>
+        /// <value>
+        /// The timestep.
+        /// </value>
+        /// <exception cref="ArgumentException">Cannot set the the timestep to a non-positive values</exception>
+        /// <remarks>
+        /// Be careful when increasing the timestep, as it could cause truncation errors!
+        /// </remarks>
         public double Delta
         {
             get => _delta;
@@ -34,19 +44,19 @@ namespace SpiceSharp.IntegrationMethods
         private double _delta;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TruncateTimestepEventArgs"/> class.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
+        /// <param name="simulation">The time-based simulation.</param>
         public TruncateTimestepEventArgs(TimeSimulation simulation)
             : this(simulation, double.PositiveInfinity)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TruncateTimestepEventArgs"/> class.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
-        /// <param name="delta">The initial timestep</param>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <param name="delta">The maximum timestep.</param>
         public TruncateTimestepEventArgs(TimeSimulation simulation, double delta)
         {
             Simulation = simulation;

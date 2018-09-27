@@ -3,31 +3,32 @@
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Sparse-related
+    /// Sparse matrix exception
     /// </summary>
+    /// <seealso cref="Exception" />
     public class SparseException : Exception
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseException"/> class.
         /// </summary>
         public SparseException()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseException"/> class.
         /// </summary>
-        /// <param name="message">Message</param>
+        /// <param name="message">The message that describes the error.</param>
         public SparseException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SparseException"/> class.
         /// </summary>
-        /// <param name="message">Message</param>
-        /// <param name="innerException">Inner exception</param>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public SparseException(string message, Exception innerException)
             : base(message, innerException)
         {

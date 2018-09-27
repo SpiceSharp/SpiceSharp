@@ -10,21 +10,27 @@
     public interface IBreakpoints
     {
         /// <summary>
-        /// Gets the current time point
+        /// Gets the current time point.
         /// </summary>
+        /// <value>
+        /// The current time.
+        /// </value>
         double Time { get; }
 
         /// <summary>
-        /// Gets the breakpoint class
+        /// Gets the breakpoint system.
         /// </summary>
+        /// <value>
+        /// The breakpoints.
+        /// </value>
         Breakpoints Breakpoints { get; }
 
         /// <summary>
-        /// Gets whether or not we just hit a breakpoint
+        /// Gets a value indicating whether this point is the first after a breakpoint.
         /// </summary>
-        /// <remarks>
-        /// If true, then we are now calculating the first point after a breakpoint
-        /// </remarks>
+        /// <value>
+        ///   <c>true</c> if we just hit a breakpoint; otherwise, <c>false</c>.
+        /// </value>
         bool Break { get; }
     }
 }

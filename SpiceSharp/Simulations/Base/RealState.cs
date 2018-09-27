@@ -4,13 +4,15 @@ using SpiceSharp.Algebra;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Container for the state of an electronic circuit.
+    /// A simulation state for simulations using real numbers.
     /// </summary>
+    /// <seealso cref="State" />
     public class RealState : State
     {
         #region Simulation parameters
+
         /// <summary>
-        /// Initialization flags
+        /// Possible states of initialization
         /// </summary>
         [Flags]
         public enum InitializationStates
@@ -43,8 +45,9 @@ namespace SpiceSharp.Simulations
             InitTransient
         }
 
+        // TODO: This should probably be separated.
         /// <summary>
-        /// Sparse matrix flags
+        /// Possible states for solving using sparse matrices
         /// </summary>
         [Flags]
         public enum SparseStates
@@ -69,103 +72,176 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// All possible domain types
+        /// Possible domain types.
         /// </summary>
         public enum DomainType
         {
+            /// <summary>
+            /// No domain.
+            /// </summary>
             None,
+
+            /// <summary>
+            /// The simulation uses the time domain
+            /// </summary>
             Time,
+
+            /// <summary>
+            /// The simulation uses the frequency domain
+            /// </summary>
             Frequency,
+
+            /// <summary>
+            /// The simulation uses the laplace domain (complex domain)
+            /// </summary>
             Laplace
         }
 
         /// <summary>
-        /// Extra conductance that is added to all nodes to ground to aid convergence
+        /// An extra conductance that can be added to all nodes to ground to aid convergence.
         /// </summary>
+        /// <value>
+        /// The conductance added on the diagonal.
+        /// </value>
         public double DiagonalGmin { get; set; }
 
         /// <summary>
-        /// Gets or sets the initialization flag
+        /// Gets or sets the initialization flag.
         /// </summary>
+        /// <value>
+        /// The flag.
+        /// </value>
         public InitializationStates Init { get; set; }
 
         /// <summary>
-        /// Gets or sets the sparse matrix flags
+        /// Gets or sets flags for solving using sparse matrices.
         /// </summary>
+        /// <value>
+        /// The flags.
+        /// </value>
         public SparseStates Sparse { get; set; }
 
         /// <summary>
-        /// Gets or sets the current domain for simulation
+        /// Gets or sets the current domain for simulation.
         /// </summary>
+        /// <value>
+        /// The domain.
+        /// </value>
         public DomainType Domain { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag for ignoring time-related effects
-        /// If true, each device should assume the circuit is in rest
+        /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the simulation assumes a DC solution; otherwise, <c>false</c>.
+        /// </value>
         public bool UseDc { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag for using initial conditions
-        /// If true, the operating point will not be calculated, and initial 
-        /// conditions will be used instead.
+        /// Gets or sets the flag for using initial conditions. If true, the operating point will not be calculated, and initial conditions will be used instead.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if [use ic]; otherwise, <c>false</c>.
+        /// </value>
         public bool UseIc { get; set; }
 
         /// <summary>
-        /// The current Gmin parameter
-        /// This parameter is changed when doing GMIN stepping for aiding convergence
+        /// The current minimum conductance parameter.
+        /// This parameter is changed when doing GMIN stepping for aiding convergence.
         /// </summary>
+        /// <value>
+        /// The minimum conductance.
+        /// </value>
+        /// <remarks>
+        /// Convergence is mainly an issue with semiconductor junctions, which often lead to exponential curves. Exponential dependencies
+        /// are very harsh on convergence. A lower Gmin will cause iterations to converge faster, but to a (slightly) wrong value. By
+        /// steadily relaxing this value back to 0 it is possible to progressively reach a solution without having non-convergence.
+        /// </remarks>
         public double Gmin { get; set; } = 1e-12;
 
         /// <summary>
-        /// The current source factor
-        /// This parameter is changed when doing source stepping for aiding convergence
+        /// The current source factor.
+        /// This parameter is changed when doing source stepping for aiding convergence.
         /// </summary>
+        /// <remarks>
+        /// In source stepping, all sources are considered to be at 0 which has typically only one single solution (all nodes and
+        /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
+        /// without having non-convergence.
+        /// </remarks>
         public double SourceFactor { get; set; } = 1.0;
 
         /// <summary>
         /// Is the current iteration convergent?
-        /// This parameter is used to communicate convergence
+        /// This parameter is used to communicate convergence.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the iterations converged; otherwise, <c>false</c>.
+        /// </value>
         public bool IsConvergent { get; set; } = true;
 
         /// <summary>
-        /// The temperature for this circuit
+        /// The current temperature for this circuit in Kelvin.
         /// </summary>
+        /// <value>
+        /// The temperature.
+        /// </value>
         public double Temperature { get; set; } = 300.15;
 
         /// <summary>
-        /// The nominal temperature for the circuit
-        /// Used for model parameters as the default
+        /// The nominal temperature for the circuit in Kelvin.
+        /// Used by models as the default temperature where the parameters were measured.
         /// </summary>
+        /// <value>
+        /// The nominal temperature.
+        /// </value>
         public double NominalTemperature { get; set; } = 300.15;
 
         /// <summary>
-        /// Were the nodeset values assigned?
+        /// Gets or sets a value indicating whether nodesets were applied.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if nodesets were applied; otherwise, <c>false</c>.
+        /// </value>
+        /// <remarks>
+        /// Nodesets allow the simulator to start iterating to a solution using specified start
+        /// values. If values are chosen close to the final solution, then convergence can be
+        /// much faster.
+        /// </remarks>
         public bool HadNodeSet { get; set; } = false;
         #endregion
 
         /// <summary>
-        /// Solver
+        /// Gets the solver for solving linear systems of equations.
         /// </summary>
+        /// <value>
+        /// The solver.
+        /// </value>
         public RealSolver Solver { get; } = new RealSolver();
 
         /// <summary>
-        /// Gets the real solution vector
+        /// Gets the solution vector.
         /// </summary>
+        /// <value>
+        /// The solution.
+        /// </value>
         public Vector<double> Solution { get; private set; }
 
         /// <summary>
-        /// Gets the old solution
+        /// Gets the previous solution vector.
         /// </summary>
+        /// <value>
+        /// The old solution.
+        /// </value>
+        /// <remarks>
+        /// This vector is needed for determining convergence.
+        /// </remarks>
         public Vector<double> OldSolution { get; private set; }
 
         /// <summary>
-        /// Initialize the state
+        /// Setup the simulation state.
         /// </summary>
-        /// <param name="nodes">Nodes</param>
+        /// <param name="nodes">The unknown variables for which the state is used.</param>
+        /// <exception cref="ArgumentNullException">nodes</exception>
         public override void Setup(VariableSet nodes)
         {
             if (nodes == null)
@@ -187,7 +263,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Destroy/clear the state
+        /// Unsetup the state.
         /// </summary>
         public override void Destroy()
         {
@@ -197,7 +273,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Store the solution
+        /// Stores the solution.
         /// </summary>
         public void StoreSolution()
         {

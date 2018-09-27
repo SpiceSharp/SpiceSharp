@@ -4,13 +4,17 @@ using System.Collections.Generic;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A linear sweep
+    /// A class that implements a linear sweep.
     /// </summary>
+    /// <seealso cref="Sweep{T}" />
     public class LinearSweep : Sweep<double>
     {
         /// <summary>
-        /// Gets all points in the sweep
+        /// Gets an enumeration of the points in the sweep.
         /// </summary>
+        /// <value>
+        /// The points in the sweep.
+        /// </value>
         public override IEnumerable<double> Points
         {
             get
@@ -28,22 +32,22 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="LinearSweep"/> class.
         /// </summary>
-        /// <param name="initial">Initial value</param>
-        /// <param name="final">Final value</param>
-        /// <param name="count">Number of points</param>
+        /// <param name="initial">The initial value.</param>
+        /// <param name="final">The final value.</param>
+        /// <param name="count">The number of points.</param>
         public LinearSweep(double initial, double final, int count)
             : base(initial, final, count)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="LinearSweep"/> class.
         /// </summary>
-        /// <param name="initial">Initial value</param>
-        /// <param name="final">Final value</param>
-        /// <param name="delta">Step</param>
+        /// <param name="initial">The initial value.</param>
+        /// <param name="final">The final value.</param>
+        /// <param name="delta">The step size.</param>
         public LinearSweep(double initial, double final, double delta)
             : base(initial, final, 1)
         {

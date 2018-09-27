@@ -4,53 +4,49 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A time-domain analysis (Transient simulation)
+    /// This class implements the transient analysis.
     /// </summary>
     public class Transient : TimeSimulation
     {
-        /// <summary>
-        /// Event that is called when the timestep has been cut due to convergence problems
-        /// </summary>
-        public event EventHandler<TimestepCutEventArgs> ConvergenceFailed;
-
         /// <summary>
         /// Behaviors for accepting a timepoint
         /// </summary>
         private BehaviorList<BaseAcceptBehavior> _acceptBehaviors;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">The identifier of the simulation.</param>
         public Transient(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="step">Step</param>
-        /// <param name="final">Final time</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
         public Transient(Identifier name, double step, double final) 
             : base(name, step, final)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="step">Step</param>
-        /// <param name="final">Final time</param>
-        /// <param name="maxStep">Maximum timestep</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        /// <param name="maxStep">The maximum step.</param>
         public Transient(Identifier name, double step, double final, double maxStep) 
             : base(name, step, final, maxStep)
         {
         }
 
         /// <summary>
-        /// Setup the simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -62,7 +58,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup the behavior
+        /// Destroys the simulation.
         /// </summary>
         protected override void Unsetup()
         {
@@ -75,8 +71,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Execute the transient simulation
+        /// Executes the simulation.
         /// </summary>
+        /// <exception cref="SpiceSharp.CircuitException">{0}: transient terminated".FormatString(Name)</exception>
         protected override void Execute()
         {
             // First do temperature-dependent calculations and IC
@@ -180,19 +177,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Call the event for when convergence fails
+        /// Loads initial conditions.
         /// </summary>
-        /// <param name="args">Argument</param>
-        protected void OnConvergenceFailed(TimestepCutEventArgs args)
-        {
-            ConvergenceFailed?.Invoke(this, args);
-        }
-
-        /// <summary>
-        /// Load initial conditions
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Arguments</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected void LoadInitialConditions(object sender, LoadStateEventArgs e)
         {
             var state = RealState;

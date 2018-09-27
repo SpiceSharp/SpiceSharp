@@ -6,120 +6,126 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A class that can perform a simulation
+    /// A template for any simulation.
     /// </summary>
     public abstract class Simulation
     {
         /// <summary>
-        /// Possible statuses for a simulation
+        /// Possible statuses for a simulation.
         /// </summary>
         public enum Statuses
         {
             /// <summary>
-            /// Indicates that the simulation has not started
+            /// Indicates that the simulation has not started.
             /// </summary>
             None,
 
             /// <summary>
-            /// Indicates that the simulation is now in its setup phase
+            /// Indicates that the simulation is now in its setup phase.
             /// </summary>
             Setup,
 
             /// <summary>
-            /// Indicates that the simulation is running
+            /// Indicates that the simulation is running.
             /// </summary>
             Running,
 
             /// <summary>
-            /// Indicates that the simulation is cleaning up all its resources
+            /// Indicates that the simulation is cleaning up all its resources.
             /// </summary>
             Unsetup
         }
 
         /// <summary>
-        /// Gets the current status of the simulation
+        /// Gets the current status of the simulation.
         /// </summary>
         public Statuses Status { get; private set; } = Statuses.None;
 
         /// <summary>
-        /// Simulation configuration
+        /// Gets a set of <see cref="ParameterSet"/> that hold the configuration for the simulation.
         /// </summary>
         public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
 
         /// <summary>
-        /// States of the simulation
+        /// A dictionary of simulation states.
         /// </summary>
         public StateDictionary States { get; } = new StateDictionary();
 
         /// <summary>
-        /// Gets the node map for this simulation
+        /// Gets the variable set.
         /// </summary>
         public VariableSet Nodes { get; } = new VariableSet();
 
         #region Events
         /// <summary>
-        /// Event that is called when new simulation data is available
+        /// Occurs when simulation data can be exported.
         /// </summary>
         public event EventHandler<ExportDataEventArgs> ExportSimulationData;
 
         /// <summary>
-        /// Event called before setting up the simulation
+        /// Occurs before the simulation is set up.
         /// </summary>
         public event EventHandler<EventArgs> BeforeSetup;
 
         /// <summary>
-        /// Event called after setting up the simulation
+        /// Occurs after the simulation is set up.
         /// </summary>
         public event EventHandler<EventArgs> AfterSetup;
 
         /// <summary>
-        /// Event called before executing the simulation
+        /// Occurs before the simulation starts its execution.
         /// </summary>
         public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
 
         /// <summary>
-        /// Event called after executing the simulation
+        /// Occurs after the simulation has executed.
         /// </summary>
-        public event EventHandler<SimulationFlowEventArgs> AfterExecute; 
+        /// <remarks>
+        /// Subscribing to this event allows determining if another execution should follow.
+        /// </remarks>
+        public event EventHandler<SimulationFlowEventArgs> AfterExecute;
 
         /// <summary>
-        /// Event called before cleaning up the simulation
+        /// Occurs before the simulation is destroyed.
         /// </summary>
         public event EventHandler<EventArgs> BeforeUnsetup;
 
         /// <summary>
-        /// Event called after cleaning up the simulation
+        /// Occurs after the simulation is destroyed.
         /// </summary>
         public event EventHandler<EventArgs> AfterUnsetup; 
         #endregion
 
         /// <summary>
-        /// Gets the name of the simulation
+        /// Gets the identifier of the simulation.
         /// </summary>
         public Identifier Name { get; }
 
         /// <summary>
-        /// Gets a pool of all behaviors active in the simulation
+        /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
         public BehaviorPool EntityBehaviors { get; } = new BehaviorPool();
 
         /// <summary>
-        /// Gets a pool of all parameters active in the simulation
+        /// Gets a pool of all entity parameter sets active in the simulation.
         /// </summary>
         public ParameterPool EntityParameters { get; } = new ParameterPool();
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
         protected Simulation(Identifier name)
         {
             Name = name;
         }
 
         /// <summary>
-        /// Run the simulation using a circuit
+        /// Runs the simulation on the specified circuit.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit to simulate.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
+        /// <exception cref="CircuitException">{0}: No circuit nodes for simulation".FormatString(Name)</exception>
         public virtual void Run(Circuit circuit)
         {
             if (circuit == null)
@@ -166,9 +172,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Setup the simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
+        /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
         protected virtual void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -186,7 +194,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup the simulation
+        /// Destroys the simulation.
         /// </summary>
         protected virtual void Unsetup()
         {
@@ -202,42 +210,51 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Execute the simulation
+        /// Executes the simulation.
         /// </summary>
         protected abstract void Execute();
 
         #region Methods for raising events
         /// <summary>
-        /// Call event for exporting data
+        /// Raises the <see cref="E:ExportSimulationData" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="ExportDataEventArgs"/> instance containing the event data.</param>
         protected virtual void OnExport(ExportDataEventArgs args) => ExportSimulationData?.Invoke(this, args);
 
         /// <summary>
-        /// Call event to indicate we're about to set up the simulation
+        /// Raises the <see cref="E:BeforeSetup" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
 
         /// <summary>
-        /// Call event just after setting up the simulation
+        /// Raises the <see cref="E:AfterSetup" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
 
         /// <summary>
-        /// Call event just before cleaning up the circuit
+        /// Raises the <see cref="E:BeforeUnsetup" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeUnsetup(EventArgs args) => BeforeUnsetup?.Invoke(this, args);
 
         /// <summary>
-        /// Call event just after cleaning up the circuit
+        /// Raises the <see cref="E:AfterUnsetup" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);
         #endregion
 
         /// <summary>
-        /// Collect behaviors of all circuit entities while also setting them up
+        /// Collect and set up the behaviors of all circuit entities.
         /// </summary>
-        /// <typeparam name="T">Base behavior</typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <param name="entities">The entities for which behaviors need to be collected.</param>
+        /// <returns>
+        /// A list of behaviors.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">entities</exception>
         protected BehaviorList<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
         {
             if (entities == null)
@@ -254,8 +271,14 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Collect parameter sets of all circuit entities
+        /// Collect and set up the parameter sets of all circuit entities.
         /// </summary>
+        /// <remarks>
+        /// The parameter sets are cloned during set up to avoid issues when running multiple
+        /// simulations in parallel.
+        /// </remarks>
+        /// <param name="entities">The entities for which parameter sets need to be collected.</param>
+        /// <exception cref="ArgumentNullException">entities</exception>
         private void SetupParameters(IEnumerable<Entity> entities)
         {
             if (entities == null)

@@ -3,15 +3,14 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a model.
-    /// It also has parameters.
+    /// This class represents a (Spice) model.
     /// </summary>
     public abstract class Model : Entity
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Model"/> class.
         /// </summary>
-        /// <param name="name">The name of the model</param>
+        /// <param name="name">The name of the model.</param>
         protected Model(Identifier name)
             : base(name)
         {

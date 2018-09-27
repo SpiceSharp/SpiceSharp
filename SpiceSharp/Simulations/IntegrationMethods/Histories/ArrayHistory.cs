@@ -4,13 +4,18 @@ using System.Collections.Generic;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// History of objects using an array
+    /// A class that implements a history with an array.
     /// </summary>
+    /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="History{T}" />
     public class ArrayHistory<T> : History<T>
     {
         /// <summary>
-        /// Gets or sets the current value
+        /// Gets or sets the current value.
         /// </summary>
+        /// <value>
+        /// The current value.
+        /// </value>
         public override T Current
         {
             get => _history[0];
@@ -18,10 +23,16 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Gets a value in history
+        /// Gets the value at the specified index.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <value>
+        /// The value at the specified index.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The value at the specified index.
+        /// </returns>
+        /// <exception cref="ArgumentException">Invalid index {0}".FormatString(index)</exception>
         public override T this[int index]
         {
             get
@@ -33,14 +44,22 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Gets all points in the history.
+        /// </summary>
+        /// <value>
+        /// The points.
+        /// </value>
+        protected override IEnumerable<T> Points => _history;
+
+        /// <summary>
         /// Timesteps in history
         /// </summary>
         private readonly T[] _history;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ArrayHistory{T}"/> class.
         /// </summary>
-        /// <param name="length">Length</param>
+        /// <param name="length">The number of points to store.</param>
         public ArrayHistory(int length)
             : base(length)
         {
@@ -48,10 +67,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ArrayHistory{T}"/> class.
         /// </summary>
-        /// <param name="length">Length</param>
-        /// <param name="defaultValue">Default value</param>
+        /// <param name="length">The number of points to store.</param>
+        /// <param name="defaultValue">The default value.</param>
         public ArrayHistory(int length, T defaultValue)
             : base(length)
         {
@@ -61,10 +80,11 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ArrayHistory{T}"/> class.
         /// </summary>
-        /// <param name="length">Length</param>
-        /// <param name="generator">Default value generator</param>
+        /// <param name="length">The number of points to store.</param>
+        /// <param name="generator">The function that generates the initial values.</param>
+        /// <exception cref="ArgumentNullException">generator</exception>
         public ArrayHistory(int length, Func<int, T> generator)
             : base(length)
         {
@@ -76,7 +96,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Store the current value
+        /// Cycles through history.
         /// </summary>
         public override void Cycle()
         {
@@ -87,9 +107,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Store a new value
+        /// Store a new value in the history.
         /// </summary>
-        /// <param name="newValue"></param>
+        /// <param name="newValue">The new value.</param>
         public override void Store(T newValue)
         {
             // Shift the history
@@ -99,9 +119,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Clear the whole history with the same value
+        /// Clear the whole history with the same value.
         /// </summary>
-        /// <param name="value">Value</param>
+        /// <param name="value">The value to be cleared with.</param>
         public override void Clear(T value)
         {
             for (var i = 0; i < Length; i++)
@@ -109,9 +129,10 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Clear the history using a generator
+        /// Clear the history using a function by index.
         /// </summary>
-        /// <param name="generator">Generator</param>
+        /// <param name="generator">The function generating the values.</param>
+        /// <exception cref="ArgumentNullException">generator</exception>
         public override void Clear(Func<int, T> generator)
         {
             if (generator == null)
@@ -120,10 +141,5 @@ namespace SpiceSharp.IntegrationMethods
             for (var i = 0; i < Length; i++)
                 _history[i] = generator(i);
         }
-
-        /// <summary>
-        /// Gets enumerable version
-        /// </summary>
-        protected override IEnumerable<T> Points => _history;
     }
 }

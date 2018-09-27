@@ -6,26 +6,28 @@ using System.Reflection;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Collection for behaviors
-    /// This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.
+    /// A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.
     /// </summary>
     public class BehaviorPool
     {
         /// <summary>
-        /// Behaviors indexed by the entity that created them
+        /// Behaviors indexed by the entity that created them.
         /// </summary>
         private readonly Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
 
         /// <summary>
-        /// Lists of behaviors
+        /// Lists of behaviors.
         /// </summary>
         private readonly Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
 
         /// <summary>
-        /// Get entity behaviors by identifier
+        /// Gets the associated <see cref="Behavior"/> of an entity.
         /// </summary>
-        /// <param name="name">Identifier</param>
-        /// <returns></returns>
+        /// <value>
+        /// The <see cref="EntityBehaviorDictionary"/>.
+        /// </value>
+        /// <param name="name">The entity identifier.</param>
+        /// <returns>The behavior associated to the specified entity identifier.</returns>
         public EntityBehaviorDictionary this[Identifier name]
         {
             get
@@ -37,10 +39,11 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Add a behavior to the collection
+        /// Adds the specified behavior to the pool.
         /// </summary>
-        /// <param name="creator">Name of the entity creating the behavior</param>
-        /// <param name="behavior">Created behavior</param>
+        /// <param name="creator">The entity identifier to which the .</param>
+        /// <param name="behavior">The behavior.</param>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
         public void Add(Identifier creator, Behavior behavior)
         {
             if (!_entityBehaviors.TryGetValue(creator, out var eb))
@@ -61,10 +64,12 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets a list of behaviors
+        /// Gets a list of behaviors of a specific type.
         /// </summary>
-        /// <typeparam name="T">Behavior type</typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <returns>
+        /// A <see cref="BehaviorList{T}" /> with all behaviors of the specified type.
+        /// </returns>
         public BehaviorList<T> GetBehaviorList<T>() where T : Behavior
         {
             if (_behaviors.TryGetValue(typeof(T), out var list))
@@ -74,10 +79,10 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the entity behaviors for a specific identifier
+        /// Gets the entity behaviors for a specific identifier.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <param name="name">The identifier of the entity.</param>
+        /// <returns>The behaviors associated to the specified entity identifier.</returns>
         [Obsolete]
         public EntityBehaviorDictionary GetEntityBehaviors(Identifier name)
         {
@@ -87,14 +92,16 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Determines whether the pool contains the specified key
+        /// Checks if behaviors exist for a specified entity identifier.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <param name="name">The entity identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if behaviors exist; otherwise, <c>false</c>.
+        /// </returns>
         public bool ContainsKey(Identifier name) => _entityBehaviors.ContainsKey(name);
 
         /// <summary>
-        /// Clear all behaviors in the pool
+        /// Clears all behaviors in the pool.
         /// </summary>
         public void Clear()
         {

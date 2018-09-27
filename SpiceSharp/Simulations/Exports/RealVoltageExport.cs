@@ -3,25 +3,33 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Export for real voltages
+    /// This class can export real voltages.
     /// </summary>
+    /// <seealso cref="Export{T}" />
     public class RealVoltageExport : Export<double>
     {
         /// <summary>
-        /// Gets the identifier of the positive node
+        /// Gets the identifier of the positive node.
         /// </summary>
+        /// <value>
+        /// The positive node identifier.
+        /// </value>
         public Identifier PosNode { get; }
 
         /// <summary>
-        /// Gets the identifier of the negative node
+        /// Gets the identifier of the negative node.
         /// </summary>
+        /// <value>
+        /// The negative node identifier.
+        /// </value>
         public Identifier NegNode { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="posNode">Positive node</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="posNode">The node identifier.</param>
+        /// <exception cref="ArgumentNullException">posNode</exception>
         public RealVoltageExport(Simulation simulation, Identifier posNode)
             : base(simulation)
         {
@@ -30,11 +38,12 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="posNode">Positive node</param>
-        /// <param name="negNode">Negative (reference) node</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="posNode">The positive node identifier.</param>
+        /// <param name="negNode">The negative node identifier.</param>
+        /// <exception cref="ArgumentNullException">posNode</exception>
         public RealVoltageExport(Simulation simulation, Identifier posNode, Identifier negNode)
             : base(simulation)
         {
@@ -44,10 +53,10 @@ namespace SpiceSharp.Simulations
 
 
         /// <summary>
-        /// Initialize the export
+        /// Initializes the export.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Arguments</param>
+        /// <param name="sender">The object (simulation) sending the event.</param>
+        /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!

@@ -3,9 +3,9 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// A pivot strategy that can be used for any generic type
+    /// Markowitz-count based strategy for finding a pivot. Search the complete submatrix.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
@@ -14,14 +14,21 @@ namespace SpiceSharp.Algebra.Solve
         private const int TiesMultiplier = 5;
 
         /// <summary>
-        /// Search the entire matrix for a suitable pivot
-        /// In order to preserve sparsity, Markowitz counts are used to find the largest valid
-        /// pivot with the smallest number of elements.
+        /// Find a pivot in a matrix.
         /// </summary>
-        /// <param name="markowitz">Markowitz object</param>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="eliminationStep">Step</param>
-        /// <returns></returns>
+        /// <param name="markowitz">The Markowitz pivot strategy.</param>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="eliminationStep">The current elimination step.</param>
+        /// <returns>
+        /// The pivot element, or null if no pivot was found.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// markowitz
+        /// or
+        /// matrix
+        /// </exception>
+        /// <exception cref="ArgumentException">Invalid elimination step</exception>
+        /// <exception cref="SingularException"></exception>
         public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
         {
             if (markowitz == null)

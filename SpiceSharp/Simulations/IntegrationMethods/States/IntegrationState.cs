@@ -3,31 +3,40 @@
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Represents the state of an integration method at a certain time point
+    /// Represents the state of an integration method at a certain time point.
     /// </summary>
     public class IntegrationState
     {
         /// <summary>
-        /// Gets or sets the time step
+        /// Gets or sets the timestep.
         /// </summary>
+        /// <value>
+        /// The timestep.
+        /// </value>
         public double Delta { get; set; }
 
         /// <summary>
-        /// Gets the associated solution
+        /// Gets the associated solution with the timepoint.
         /// </summary>
+        /// <value>
+        /// The solution.
+        /// </value>
         public Vector<double> Solution { get; }
 
         /// <summary>
-        /// Gets the states allocated by entities
+        /// Gets the states allocated by entities at this timepoint.
         /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
         public Vector<double> State { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="IntegrationState"/> class.
         /// </summary>
-        /// <param name="delta"></param>
-        /// <param name="solution"></param>
-        /// <param name="state"></param>
+        /// <param name="delta">The timestep.</param>
+        /// <param name="solution">The solution.</param>
+        /// <param name="state">The state.</param>
         public IntegrationState(double delta, Vector<double> solution, Vector<double> state)
         {
             Delta = delta;

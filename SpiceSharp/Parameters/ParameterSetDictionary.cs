@@ -3,13 +3,15 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// A collection of <see cref="ParameterSet"/>
-    /// Only one instance of each type is allowed
+    /// A dictionary of <see cref="ParameterSet" />. Only one instance of each type is allowed.
     /// </summary>
+    /// <seealso cref="TypeDictionary{ParameterSet}" />
     public class ParameterSetDictionary : TypeDictionary<ParameterSet>
     {
+        // TODO: Add consistency- always set ALL parameters with a specified name...
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
         /// </summary>
         public ParameterSetDictionary()
             : base(typeof(ParameterSet))
@@ -17,9 +19,9 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Add a parameter set
+        /// Adds a parameter set to the dictionary.
         /// </summary>
-        /// <param name="set">Parameter set</param>
+        /// <param name="set">The parameter set.</param>
         public void Add(ParameterSet set)
         {
             if (set == null)
@@ -29,11 +31,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get a parameter from the parameter set
-        /// Returns null if no matching parameter was found
+        /// Gets a parameter from any parameter set in the dictionary.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// The parameter of the specified type and with the specified name, or <c>null</c> if no parameter was found.
+        /// </returns>
         public Parameter<T> GetParameter<T>(string name) where T : struct
         {
             foreach (var ps in Values)
@@ -47,10 +51,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get a parameter from the parameter set
-        /// Returns null if no matching parameter was found
+        /// Gets the principal parameter from any parameter set in the dictionary.
         /// </summary>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <returns>
+        /// The principal parameter of the specified type, or <c>null</c> if no principal parameter was found.
+        /// </returns>
         public Parameter<T> GetParameter<T>() where T : struct
         {
             foreach (var ps in Values)
@@ -64,11 +70,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get a setter for a parameter in the parameter set
-        /// Returns null if no matching parameter was found
+        /// Gets a setter for a parameter with a specified name in any parameter set in the dictionary.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// An action for setting the parameter with the specified type and name, or <c>null</c> if no parameter was found.
+        /// </returns>
         public Action<T> GetSetter<T>(string name) where T : struct
         {
             foreach (var ps in Values)
@@ -82,10 +90,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get a setter for a parameter in the parameter set
-        /// Returns null if no matching parameter was found
+        /// Gets a setter for a principal parameter in any parameter set in the dictionary.
         /// </summary>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <returns>
+        /// An action for setting the principal parameter with the specified type and name, or <c>null</c> if no parameter was found.
+        /// </returns>
         public Action<T> GetSetter<T>() where T : struct
         {
             foreach (var ps in Values)
@@ -99,12 +109,15 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Set a parameter by name
-        /// If multiple parameters exist by this name, all of them will be set
+        /// Sets a parameter with a specified name in any parameter set in the dictionary.
+        /// If multiple parameters exist by this name, all of them will be set.
         /// </summary>
-        /// <param name="name">Property name</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="value">The parameter value.</param>
+        /// <returns>
+        ///   <c>true</c> if one or more parameters were set, otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter<T>(string name, T value) where T : struct
         {
             var isset = false;
@@ -118,11 +131,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Set the principal parameter
-        /// Only the first found principal parameter will be set
+        /// Sets the principal parameter. Only the first found principal parameter will be set.
         /// </summary>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter<T>(T value) where T : struct
         {
             foreach (var ps in Values)
@@ -135,10 +150,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Calls a parameter method
+        /// Calls a parameter method with a specified name. If multiple methods exist,
+        /// all of them will be called.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name">The name of the method.</param>
+        /// <returns>
+        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter(string name)
         {
             var isset = false;
@@ -152,11 +170,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Set a parameter by name
+        /// Sets a parameter with a specified name in any parameter set in the dictionary.
         /// </summary>
-        /// <param name="name">Property name</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if a parameter was set with the specified name; otherwise <c>false</c>.
+        /// </returns>
         public bool SetParameter(string name, object value)
         {
             foreach (var ps in Values)

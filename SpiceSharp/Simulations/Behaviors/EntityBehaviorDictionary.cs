@@ -4,19 +4,25 @@ using System.Reflection;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Component behaviors
+    /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
+    /// <seealso cref="TypeDictionary{Behavior}" />
     public class EntityBehaviorDictionary : TypeDictionary<Behavior>
     {
+        // TODO: Take another look at this class... I'm not sure why the constructor uses Func<Behavior>.
+
         /// <summary>
-        /// Source entity
+        /// Gets the source identifier.
         /// </summary>
+        /// <value>
+        /// The entity identifier.
+        /// </value>
         public Identifier Source { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="EntityBehaviorDictionary"/> class.
         /// </summary>
-        /// <param name="source">The source of the behaviors</param>
+        /// <param name="source">The entity identifier that will provide the behaviors.</param>
         public EntityBehaviorDictionary(Identifier source)
             : base(typeof(Func<Behavior>))
         {
@@ -24,9 +30,11 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Register a behavior
+        /// Register a behavior.
         /// </summary>
         /// <param name="behavior">Behavior</param>
+        /// <exception cref="ArgumentNullException">behavior</exception>
+        /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
         public void Register(Behavior behavior)
         {
             if (behavior == null)

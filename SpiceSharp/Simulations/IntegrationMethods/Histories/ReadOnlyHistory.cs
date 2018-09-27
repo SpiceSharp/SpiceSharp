@@ -1,32 +1,43 @@
 ﻿namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Wrapper to make a history read-only
+    /// A wrapper class to make a history read-only.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public class ReadOnlyHistory<T>
     {
         /// <summary>
-        /// Gets the base history
+        /// Gets the base history object.
         /// </summary>
+        /// <value>
+        /// The history.
+        /// </value>
         protected History<T> History { get; }
 
         /// <summary>
-        /// Gets the current value
+        /// Gets the current value.
         /// </summary>
+        /// <value>
+        /// The current value.
+        /// </value>
         public T Current => History.Current;
 
         /// <summary>
-        /// Gets a value in history
+        /// Gets a value in history.
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <value>
+        /// The value at the specified index.
+        /// </value>
+        /// <param name="index">The number of points to go back in time. 0 means the current point.</param>
+        /// <returns>
+        /// The value at the specified timepoint.
+        /// </returns>
         public T this[int index] => History[index];
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ReadOnlyHistory{T}"/> class.
         /// </summary>
-        /// <param name="history">Base history</param>
+        /// <param name="history">The base history.</param>
         public ReadOnlyHistory(History<T> history)
         {
             History = history;

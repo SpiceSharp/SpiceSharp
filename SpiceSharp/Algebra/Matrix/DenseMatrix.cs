@@ -5,20 +5,31 @@ using System.Text;
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Matrix using a dense representation
-    /// The matrix is always kept square!
+    /// A square matrix using a dense representation. As a small optimization, the row and column with
+    /// index 0 are not considered trash can elements.
     /// </summary>
-    /// <typeparam name="T">Type for the element</typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public class DenseMatrix<T> : Matrix<T> where T : IFormattable, IEquatable<T>
     {
+        /// <summary>
+        /// Private variables
+        /// </summary>
         private readonly T[] _array;
 
         /// <summary>
-        /// Gets or sets an element in the matrix
+        /// Gets or sets a value at the specified row and column.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
+        /// <value>
+        /// The value at the specified row and column.
+        /// </value>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentException">
+        /// Invalid indices ({0}, {1})".FormatString(row, column)
+        /// or
+        /// Invalid indices ({0}, {1})".FormatString(row, column)
+        /// </exception>
         public T this[int row, int column]
         {
             get
@@ -40,9 +51,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="DenseMatrix{T}"/> class.
         /// </summary>
-        /// <param name="size">Size of the matrix</param>
+        /// <param name="size">The matrix size.</param>
         public DenseMatrix(int size)
             : base(size)
         {
@@ -50,11 +61,14 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets a value in the matrix at a specific row and column
+        /// Gets a value in the matrix at a specific row and column.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The value at the specified row and column.
+        /// </returns>
+        /// <exception cref="ArgumentException">Invalid indices ({0}, {1})".FormatString(row, column)</exception>
         public override T GetValue(int row, int column)
         {
             if (row < 0 || column < 0 || row >= Size || column >= Size)
@@ -65,11 +79,12 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Sets the value in the matrix at a specific row and column
+        /// Sets the value in the matrix at a specific row and column.
         /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <param name="value">Value</param>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentException">Invalid indices ({0}, {1})".FormatString(row, column)</exception>
         public override void SetValue(int row, int column, T value)
         {
             if (row < 0 || column < 0 || row >= Size || column >= Size)
@@ -78,9 +93,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Convert to a string
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return ToString(null, CultureInfo.CurrentCulture.NumberFormat);

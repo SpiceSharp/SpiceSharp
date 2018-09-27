@@ -17,7 +17,7 @@ namespace SpiceSharp.Algebra
         private MatrixElement<Complex>[] _dest;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ComplexSolver"/> class.
         /// </summary>
         public ComplexSolver()
             : base(new Markowitz<Complex>())
@@ -25,27 +25,32 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ComplexSolver"/> class.
         /// </summary>
-        /// <param name="size">Matrix size</param>
+        /// <param name="size">The number of equations and variables.</param>
         public ComplexSolver(int size)
             : base(new Markowitz<Complex>(), size)
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ComplexSolver"/> class.
         /// </summary>
-        /// <param name="size">Size</param>
-        /// <param name="strategy">Strategy</param>
+        /// <param name="size">The number of equations and variables.</param>
+        /// <param name="strategy">The pivot strategy.</param>
         public ComplexSolver(int size, PivotStrategy<Complex> strategy)
             : base(strategy, size)
         {
         }
 
         /// <summary>
-        /// Fix the number of equations and variables
+        /// Fix the number of equations and variables.
         /// </summary>
+        /// <remarks>
+        /// This method can be used to make sure that the matrix is fixed during
+        /// solving. When fixed, it is impossible to add more elements to the sparse
+        /// matrix or vector.
+        /// </remarks>
         public override void FixEquations()
         {
             base.FixEquations();
@@ -54,7 +59,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Unfix the number of equations and variables
+        /// Unfix the number of equations and variables.
         /// </summary>
         public override void UnfixEquations()
         {
@@ -64,8 +69,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Factor the matrix
+        /// Factor the matrix.
         /// </summary>
+        /// <returns>
+        /// True if factoring was successful.
+        /// </returns>
         public override bool Factor()
         {
             if (!IsFixed)
@@ -122,9 +130,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Find the solution for a factored matrix and a right-hand-side
+        /// Solve the system of equations.
         /// </summary>
-        /// <param name="solution">Solution vector</param>
+        /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
+        /// <exception cref="ArgumentNullException">solution</exception>
+        /// <exception cref="SparseException">Solver is not factored yet</exception>
         public override void Solve(Vector<Complex> solution)
         {
             if (solution == null)
@@ -189,9 +199,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Find the solution for a factored matrix and a right-hand-side (transposed)
+        /// Solve the transposed problem.
         /// </summary>
-        /// <param name="solution">Solution vector</param>
+        /// <param name="solution">The solution vector that will hold the solution to the transposed set of equations.</param>
+        /// <exception cref="ArgumentNullException">solution</exception>
+        /// <exception cref="SparseException">Solver is not factored yet</exception>
         public override void SolveTransposed(Vector<Complex> solution)
         {
             if (solution == null)
@@ -250,8 +262,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Factor while reordering the matrix
+        /// Order and factor the matrix.
         /// </summary>
+        /// <exception cref="SparseException">Singular matrix</exception>
         public override void OrderAndFactor()
         {
             if (!IsFixed)
@@ -303,9 +316,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Eliminate a row
+        /// Eliminate a row.
         /// </summary>
-        /// <param name="pivot">Current pivot</param>
+        /// <param name="pivot">The current pivot.</param>
         private void Elimination(MatrixElement<Complex> pivot)
         {
             // Test for zero pivot
@@ -344,17 +357,17 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Magnitude method
+        /// Method for finding the magnitude of a complex value.
         /// </summary>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <param name="value">The complex value.</param>
+        /// <returns>A scalar indicating the magnitude of the complex value.</returns>
         private static double Magnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
         /// <summary>
-        /// Calculate inverse of a complex number
+        /// Calculates the inverse of a complex number.
         /// </summary>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
+        /// <param name="value">The complex value.</param>
+        /// <returns>The inverse value.</returns>
         private static Complex Inverse(Complex value)
         {
             double real, imaginary;

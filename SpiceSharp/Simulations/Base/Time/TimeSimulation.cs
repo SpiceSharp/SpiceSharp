@@ -5,40 +5,47 @@ using SpiceSharp.IntegrationMethods;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A base class for time-domain analysis
+    /// A base class for time-domain analysis.
     /// </summary>
+    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
     public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active configuration
+        /// Gets the currently active time configuration.
         /// </summary>
+        /// <value>
+        /// The time configuration.
+        /// </value>
         public TimeConfiguration TimeConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets the integration method
+        /// Gets the active integration method.
         /// </summary>
+        /// <value>
+        /// The method.
+        /// </value>
         public IntegrationMethod Method { get; protected set; }
 
         /// <summary>
-        /// Time-domain behaviors
+        /// Time-domain behaviors.
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">The identifier of the simulation.</param>
         protected TimeSimulation(Identifier name) : base(name)
         {
             ParameterSets.Add(new TimeConfiguration());
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="step">Timestep</param>
-        /// <param name="final">Final time</param>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
         protected TimeSimulation(Identifier name, double step, double final)
             : base(name)
         {
@@ -46,22 +53,28 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="step">Timstep</param>
-        /// <param name="stop">Stop</param>
-        /// <param name="maxStep">Maximum timestep</param>
-        protected TimeSimulation(Identifier name, double step, double stop, double maxStep)
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        /// <param name="maxStep">The maximum step.</param>
+        protected TimeSimulation(Identifier name, double step, double final, double maxStep)
             : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration(step, stop, maxStep));
+            ParameterSets.Add(new TimeConfiguration(step, final, maxStep));
         }
 
         /// <summary>
-        /// Setup the simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
+        /// <exception cref="SpiceSharp.CircuitException">
+        /// {0}: No time configuration".FormatString(Name)
+        /// or
+        /// {0}: No integration method specified".FormatString(Name)
+        /// </exception>
         protected override void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -86,7 +99,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup the simulation
+        /// Destroys the simulation.
         /// </summary>
         protected override void Unsetup()
         {
@@ -102,9 +115,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Iterate for time-domain analysis
+        /// Iterates to a solution for time simulations.
         /// </summary>
-        /// <param name="maxIterations">Maximum iterations</param>
+        /// <param name="maxIterations">The maximum number of iterations.</param>
+        /// <returns>
+        ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="SpiceSharp.CircuitException">Could not find flag</exception>
         protected bool TimeIterate(int maxIterations)
         {
             var state = RealState;
@@ -246,7 +263,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize all transient behaviors to assume that the current solution is the DC solution
+        /// Initializes all transient behaviors to assume that the current solution is the DC solution.
         /// </summary>
         protected virtual void GetDcStates()
         {
@@ -256,7 +273,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load all behaviors
+        /// Load all behaviors for time simulation.
         /// </summary>
         protected override void LoadBehaviors()
         {

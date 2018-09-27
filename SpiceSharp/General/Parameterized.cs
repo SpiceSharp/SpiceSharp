@@ -6,13 +6,16 @@ using System.Reflection;
 namespace SpiceSharp
 {
     /// <summary>
-    /// A class that can be used to address properties and fields using reflection
+    /// A template class with methods to address properties and fields using reflection.
     /// </summary>
     public abstract class Parameterized
     {
         /// <summary>
-        /// Gets all members in the class
+        /// Gets all members in the class.
         /// </summary>
+        /// <value>
+        /// The members.
+        /// </value>
         protected IEnumerable<MemberInfo> Members
         {
             get
@@ -23,11 +26,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a setter
+        /// Create a setter for a member.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="member">Member information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="member">The member information.</param>
+        /// <returns>An action that sets the member of this object.</returns>
+        /// <exception cref="ArgumentNullException">member</exception>
         protected Action<T> CreateSetter<T>(MemberInfo member) where T : struct
         {
             if (member == null)
@@ -46,11 +50,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a getter
+        /// Create a getter for a member.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="member">Member information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="member">The member information.</param>
+        /// <returns>A function that gets the member of this object.</returns>
+        /// <exception cref="ArgumentNullException">member</exception>
         protected Func<T> CreateGetter<T>(MemberInfo member) where T : struct
         {
             if (member == null)
@@ -70,12 +75,14 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Set the value of a member
+        /// Sets the value of a member.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="member">Member information</param>
-        /// <param name="value">Value</param>
-        /// <returns>Returns true if the member was set</returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="member">The member information.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the member was set; otherwise <c>false</c>.
+        /// </returns>
         protected bool SetMember<T>(MemberInfo member, T value) where T : struct
         { 
             if (member is PropertyInfo pi)
@@ -111,11 +118,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a setter delegate for methods
+        /// Creates a setter for a method.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="method">Method information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="method">The method information.</param>
+        /// <returns>
+        /// An action that calls the method for this instance.
+        /// </returns>
         private Action<T> CreateSetterForMethod<T>(MethodInfo method) where T : struct
         {
             // Match the return type
@@ -132,11 +141,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a getter delegate for methods
+        /// Creates a getter for a method.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="method">Method information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="method">The method information.</param>
+        /// <returns>
+        /// A function that calls the method for this instance.
+        /// </returns>
         private Func<T> CreateGetterForMethod<T>(MethodInfo method) where T : struct
         {
             // Match the return type
@@ -153,11 +164,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a setter delegate for properties
+        /// Creates a setter for a property.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="property">Property information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="property">The property information.</param>
+        /// <returns>
+        /// An action that sets the property value for this instance.
+        /// </returns>
         private Action<T> CreateSetterForProperty<T>(PropertyInfo property) where T : struct
         {
             // Parameter objects are supported
@@ -179,11 +192,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a getter for a property
+        /// Creates a getter for a property.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="property">Property information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="property">The property information.</param>
+        /// <returns>
+        /// A function that gets the property value for this instance.
+        /// </returns>
         private Func<T> CreateGetterForProperty<T>(PropertyInfo property) where T : struct
         {
             // Parameter objects are supported
@@ -204,11 +219,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a setter delegate for fields
+        /// Creates a setter for a field.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="field">Field information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="field">The field information.</param>
+        /// <returns>
+        /// An action that sets the field value for this instance.
+        /// </returns>
         private Action<T> CreateSetterForField<T>(FieldInfo field) where T : struct
         {
             if (field.FieldType == typeof(T))
@@ -225,11 +242,13 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a getter for fields
+        /// Create a getter for a field.
         /// </summary>
-        /// <typeparam name="T">Base value type</typeparam>
-        /// <param name="field">Field information</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="field">The field information.</param>
+        /// <returns>
+        /// A function that gets the field value for this instance.
+        /// </returns>
         private Func<T> CreateGetterForField<T>(FieldInfo field) where T : struct
         {
             if (field.FieldType == typeof(T))

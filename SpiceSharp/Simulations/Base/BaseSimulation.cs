@@ -5,48 +5,69 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Base class with common methods
+    /// The base simulation.
     /// </summary>
+    /// <seealso cref="SpiceSharp.Simulations.Simulation" />
+    /// <remarks>
+    /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="RealState" /> is always part of the simulation.
+    /// </remarks>
+    /// <seealso cref="Simulation" />
     public abstract class BaseSimulation : Simulation
     {
         /// <summary>
-        /// Gets the currently active configuration
+        /// Gets the currently active configuration.
         /// </summary>
+        /// <value>
+        /// The base configuration.
+        /// </value>
         public BaseConfiguration BaseConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets the currently active state
+        /// Gets the currently active simulation state.
         /// </summary>
+        /// <value>
+        /// The real state.
+        /// </value>
         public RealState RealState { get; protected set; }
 
         /// <summary>
-        /// Gets statistics
+        /// Gets the statistics.
         /// </summary>
+        /// <value>
+        /// The statistics.
+        /// </value>
         public Statistics Statistics { get; } = new Statistics();
 
         /// <summary>
-        /// The node that gives problems
+        /// Gets the variable that caused issues.
         /// </summary>
+        /// <value>
+        /// The problem variable.
+        /// </value>
+        /// <remarks>
+        /// This variable can be used to close in on the problem in case of non-convergence.
+        /// </remarks>
         public Variable ProblemVariable { get; protected set; }
 
         #region Events
+
         /// <summary>
-        /// Event called before the current state is loaded
+        /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
         public event EventHandler<LoadStateEventArgs> BeforeLoad;
 
         /// <summary>
-        /// Event called after the current state is loaded
+        /// Occurs after loading the matrix and right-hand side vector.
         /// </summary>
-        public event EventHandler<LoadStateEventArgs> AfterLoad; 
+        public event EventHandler<LoadStateEventArgs> AfterLoad;
 
         /// <summary>
-        /// Event called before temperature calculations
+        /// Occurs before performing temperature-dependent calculations.
         /// </summary>
         public event EventHandler<LoadStateEventArgs> BeforeTemperature;
 
         /// <summary>
-        /// Event called after temperature calculations
+        /// Occurs after performing temperature-dependent calculations.
         /// </summary>
         public event EventHandler<LoadStateEventArgs> AfterTemperature;
         #endregion
@@ -60,9 +81,9 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The identifier of the simulation.</param>
         protected BaseSimulation(Identifier name)
             : base(name)
         {
@@ -70,9 +91,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Setup the simulation
+        /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">Circuit</param>
+        /// <param name="circuit">The circuit that will be used.</param>
+        /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(Circuit circuit)
         {
             if (circuit == null)
@@ -100,7 +122,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Execute the simulation
+        /// Executes the simulation.
         /// </summary>
         protected override void Execute()
         {
@@ -111,7 +133,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Do temperature-dependent calculations
+        /// Perform temperature-dependent calculations.
         /// </summary>
         protected void Temperature()
         {
@@ -123,7 +145,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Unsetup the simulation
+        /// Destroys the simulation.
         /// </summary>
         protected override void Unsetup()
         {
@@ -153,9 +175,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Calculate the operating point of the circuit
+        /// Calculates the operating point of the circuit.
         /// </summary>
-        /// <param name="maxIterations">Maximum iterations</param>
+        /// <param name="maxIterations">The maximum amount of allowed iterations.</param>
+        /// <exception cref="SpiceSharp.CircuitException">Could not determine operating point</exception>
         protected void Op(int maxIterations)
         {
             var state = RealState;
@@ -222,10 +245,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Solve iteratively for simulations
+        /// Iterates towards a solution.
         /// </summary>
-        /// <param name="maxIterations">Maximum number of iterations</param>
-        /// <returns></returns>
+        /// <param name="maxIterations">The maximum allowed iterations.</param>
+        /// <returns>
+        ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="SpiceSharp.CircuitException">Could not find flag</exception>
         protected bool Iterate(int maxIterations)
         {
             var state = RealState;
@@ -367,7 +393,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load the circuit with the load behaviors
+        /// Load the current simulation state solver.
         /// </summary>
         protected void Load()
         {
@@ -387,7 +413,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load all behaviors
+        /// Loads the current simulation state solver.
         /// </summary>
         protected virtual void LoadBehaviors()
         {
@@ -395,8 +421,9 @@ namespace SpiceSharp.Simulations
                 _loadBehaviors[i].Load(this);
         }
 
+        // TODO: Are initial conditions here actually needed?
         /// <summary>
-        /// Set the initial conditions
+        /// Applies initial conditions and nodesets.
         /// </summary>
         protected void InitialConditions()
         {
@@ -444,7 +471,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Apply nodesets
+        /// Applies nodesets.
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
@@ -481,12 +508,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Reset the row to 0.0 and return true if the row is a current equation
+        /// Reset the row to 0.0 and return true if the row is a current equation.
         /// </summary>
-        /// <param name="solver">Solver</param>
-        /// <param name="variables">List of unknowns/variables</param>
-        /// <param name="rowIndex">Row number</param>
-        /// <returns></returns>
+        /// <param name="solver">The solver</param>
+        /// <param name="variables">The set of unknowns/variables</param>
+        /// <param name="rowIndex">The row index</param>
+        /// <returns>
+        ///   <c>true</c> if the variable does not indicate a voltage, but a current; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">solver
+        /// or
+        /// variables</exception>
         protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, VariableSet variables, int rowIndex)
         {
             if (solver == null)
@@ -511,9 +543,12 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Check if we are converging during iterations
+        /// Checks that the solution converges to a solution.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///   <c>true</c> if the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="SpiceSharp.CircuitException">Non-convergence, node {0} is not a number.".FormatString(node)</exception>
         protected bool IsConvergent()
         {
             var rstate = RealState;
@@ -584,24 +619,29 @@ namespace SpiceSharp.Simulations
         }
 
         #region Methods for calling events
+
         /// <summary>
-        /// Call event just before loading
+        /// Raises the <see cref="E:BeforeLoad" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeLoad(LoadStateEventArgs args) => BeforeLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Call event just after loading
+        /// Raises the <see cref="E:AfterLoad" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterLoad(LoadStateEventArgs args) => AfterLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Call event just before temperature calculations
+        /// Raises the <see cref="E:BeforeTemperature" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeTemperature(LoadStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
 
         /// <summary>
-        /// Call event just after temperature calculations
+        /// Raises the <see cref="E:AfterTemperature" /> event.
         /// </summary>
+        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion

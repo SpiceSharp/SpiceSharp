@@ -4,26 +4,38 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Export for real properties
+    /// This class can export real properties.
     /// </summary>
+    /// <seealso cref="Export{T}" />
     public class RealPropertyExport : Export<double>
     {
         /// <summary>
-        /// Gets the name of the entity
+        /// Gets the identifier of the entity.
         /// </summary>
+        /// <value>
+        /// The identifier of the entity.
+        /// </value>
         public Identifier EntityName { get; }
 
         /// <summary>
-        /// Gets the property name
+        /// Gets the name of the property.
         /// </summary>
+        /// <value>
+        /// The property name.
+        /// </value>
         public string PropertyName { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="entityName">Entity name</param>
-        /// <param name="propertyName">Property name</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entityName">The identifier of the entity.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <exception cref="ArgumentNullException">
+        /// entityName
+        /// or
+        /// propertyName
+        /// </exception>
         public RealPropertyExport(Simulation simulation, Identifier entityName, string propertyName)
             : base(simulation)
         {
@@ -32,10 +44,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize
+        /// Initializes the export.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Arguments</param>
+        /// <param name="sender">The object (simulation) sending the event.</param>
+        /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        /// <exception cref="ArgumentNullException">e</exception>
         protected override void Initialize(object sender, EventArgs e)
         {
             if (e == null)

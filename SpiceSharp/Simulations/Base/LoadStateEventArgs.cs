@@ -3,19 +3,23 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Arguments when a state is loaded
+    /// Event arguments that are used when a state is loaded.
     /// </summary>
+    /// <seealso cref="EventArgs" />
     public class LoadStateEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the state
+        /// Gets the state.
         /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
         public State State { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="LoadStateEventArgs"/> class.
         /// </summary>
-        /// <param name="state">State</param>
+        /// <param name="state">The state.</param>
         public LoadStateEventArgs(State state)
         {
             State = state;

@@ -9,18 +9,27 @@ namespace SpiceSharp.IntegrationMethods
     public class Breakpoints
     {
         /// <summary>
-        /// The minimum space between two breakpoints
+        /// Gets the minimum space between two breakpoints.
         /// </summary>
+        /// <value>
+        /// The minimum break space.
+        /// </value>
         public double MinBreak { get; set; } = 0.0;
 
         /// <summary>
-        /// Gets the first breakpoint
+        /// Gets the first breakpoint.
         /// </summary>
+        /// <value>
+        /// The first breakpoint.
+        /// </value>
         public double First { get; private set; }
 
         /// <summary>
-        /// Gets the delta set by the first two breakpoints
+        /// Gets the timestep set by the first two breakpoints.
         /// </summary>
+        /// <value>
+        /// The timestep.
+        /// </value>
         public double Delta { get; private set; } = double.PositiveInfinity;
 
         /// <summary>
@@ -29,10 +38,9 @@ namespace SpiceSharp.IntegrationMethods
         private readonly List<double> _bps = new List<double> { 0.0, double.PositiveInfinity };
 
         /// <summary>
-        /// Wrapper for CKTsetBreak in cktsetbk.c
-        /// Add a breakpoint to the list
+        /// Adds a breakpoint to the list.
         /// </summary>
-        /// <param name="timePoint">Time point</param>
+        /// <param name="timePoint">The time point.</param>
         public void SetBreakpoint(double timePoint)
         {
             // Insert
@@ -64,7 +72,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Clear breakpoint
+        /// Clears a breakpoint.
         /// </summary>
         public void ClearBreakpoint()
         {
@@ -83,7 +91,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Clear all breakpoints
+        /// Clears all breakpoints.
         /// </summary>
         public void Clear()
         {
