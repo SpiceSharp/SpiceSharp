@@ -183,14 +183,14 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
 
             // No use simulating an empty circuit
-            if (circuit.Objects.Count == 0)
+            if (circuit.Entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
             // Setup all objects
-            circuit.Objects.BuildOrderedComponentList();
+            circuit.Entities.BuildOrderedComponentList();
 
             // Get all parameters
-            SetupParameters(circuit.Objects);
+            SetupParameters(circuit.Entities);
         }
 
         /// <summary>

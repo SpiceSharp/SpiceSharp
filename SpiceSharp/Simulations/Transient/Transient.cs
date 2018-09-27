@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors and configurations
-            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Objects);
+            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Entities);
         }
 
         /// <summary>

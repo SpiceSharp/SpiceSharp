@@ -103,9 +103,9 @@ namespace SpiceSharp.Simulations
 
             // Setup behaviors, configurations and states
             BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
-            _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Objects);
-            _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Objects);
-            _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Objects);
+            _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
+            _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
+            _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
 
             // Add a state for real numbers
             RealState = new RealState();

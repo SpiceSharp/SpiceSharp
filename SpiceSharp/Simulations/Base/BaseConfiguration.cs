@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A configuration for a <see cref="BaseSimulation" />
+    /// A configuration for a <see cref="BaseSimulation" />.
     /// </summary>
     /// <seealso cref="SpiceSharp.ParameterSet" />
     public class BaseConfiguration : ParameterSet

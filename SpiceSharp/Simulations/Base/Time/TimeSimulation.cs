@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             TimeConfiguration = config;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Objects);
+            _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
 
             // Allow all transient behaviors to allocate equation elements and create states
             for (var i = 0; i < _transientBehaviors.Count; i++)

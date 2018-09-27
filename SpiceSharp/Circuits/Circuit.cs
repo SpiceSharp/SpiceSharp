@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Circuits;
 
 namespace SpiceSharp
@@ -20,9 +21,21 @@ namespace SpiceSharp
         public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>
+        /// Gets a collection of all entities in the circuit.
+        /// </summary>
+        /// <value>
+        /// The entities.
+        /// </value>
+        public EntityCollection Entities { get; } = new EntityCollection();
+
+        /// <summary>
         /// Gets a collection of all circuit objects.
         /// </summary>
-        public EntityCollection Objects { get; } = new EntityCollection();
+        /// <value>
+        /// The objects.
+        /// </value>
+        [Obsolete]
+        public EntityCollection Objects => Entities;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Circuit"/> class.
@@ -41,7 +54,7 @@ namespace SpiceSharp
                 return;
             foreach (var entity in entities)
             {
-                Objects.Add(entity);
+                Entities.Add(entity);
             }
         }
 
@@ -51,7 +64,7 @@ namespace SpiceSharp
         /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(params Entity[] entities)
         {
-            Objects.Add(entities);
+            Entities.Add(entities);
         }
 
         /// <summary>
@@ -60,7 +73,7 @@ namespace SpiceSharp
         public void Clear()
         {
             // Clear all values
-            Objects.Clear();
+            Entities.Clear();
         }
 
         /// <summary>

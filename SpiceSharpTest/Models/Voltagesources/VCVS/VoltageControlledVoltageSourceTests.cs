@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", 0.0),
                 new VoltageControlledVoltageSource("E1", "out", "0", "in", "0", gain)
                 );
-            ckt.Objects["V1"].SetParameter("acmag", magnitude);
+            ckt.Entities["V1"].SetParameter("acmag", magnitude);
 
             // Build simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1.0, 10e3, 4));

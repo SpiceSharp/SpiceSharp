@@ -34,7 +34,7 @@ namespace SpiceSharp.Circuits
                 throw new ArgumentNullException(nameof(circuit));
 
             // Connect all objects in the circuit, we need this information to find connectivity issues
-            circuit.Objects.BuildOrderedComponentList();
+            circuit.Entities.BuildOrderedComponentList();
 
             // Initialize
             _hasSource = false;
@@ -45,7 +45,7 @@ namespace SpiceSharp.Circuits
             _nodes.Clear();
 
             // Check all objects
-            foreach (var c in circuit.Objects)
+            foreach (var c in circuit.Entities)
                 CheckEntity(c);
 
             // Check if a voltage source is available

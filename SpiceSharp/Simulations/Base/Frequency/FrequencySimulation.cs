@@ -95,7 +95,7 @@ namespace SpiceSharp.Simulations
             FrequencySweep = FrequencyConfiguration.FrequencySweep ??
                              throw new CircuitException("No frequency sweep found");
 
-            _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Objects);
+            _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Entities);
             var solver = ComplexState.Solver;
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);

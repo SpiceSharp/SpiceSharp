@@ -102,7 +102,7 @@ namespace SpiceSharpTest.Models
                     "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
                     "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1"))
                 );
-            ckt.Objects["V1"].SetParameter("acmag", 1.0);
+            ckt.Entities["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));

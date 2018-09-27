@@ -54,8 +54,8 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "d", "g", "0", "0",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
-            ckt.Objects["M1"].SetParameter("w", 1e-6);
-            ckt.Objects["M1"].SetParameter("l", 1e-6);
+            ckt.Entities["M1"].SetParameter("w", 1e-6);
+            ckt.Entities["M1"].SetParameter("l", 1e-6);
 
             // Create simulation
             var dc = new DC("dc", new[] {
@@ -106,9 +106,9 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "out", "g", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
-            ckt.Objects["Vin"].SetParameter("acmag", 1.0);
-            ckt.Objects["M1"].SetParameter("w", 1e-6);
-            ckt.Objects["M1"].SetParameter("l", 1e-6);
+            ckt.Entities["Vin"].SetParameter("acmag", 1.0);
+            ckt.Entities["M1"].SetParameter("w", 1e-6);
+            ckt.Entities["M1"].SetParameter("l", 1e-6);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
@@ -163,8 +163,8 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "out", "in", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
-            ckt.Objects["M1"].SetParameter("w", 1e-6);
-            ckt.Objects["M1"].SetParameter("l", 1e-6);
+            ckt.Entities["M1"].SetParameter("w", 1e-6);
+            ckt.Entities["M1"].SetParameter("l", 1e-6);
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 10e-6);
@@ -252,9 +252,9 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "out", "g", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5 KF=1e-24")
                 );
-            ckt.Objects["M1"].SetParameter("w", 1e-6);
-            ckt.Objects["M1"].SetParameter("l", 1e-6);
-            ckt.Objects["V1"].SetParameter("acmag", 1.0);
+            ckt.Entities["M1"].SetParameter("w", 1e-6);
+            ckt.Entities["M1"].SetParameter("l", 1e-6);
+            ckt.Entities["V1"].SetParameter("acmag", 1.0);
 
             // Make simulation, exports and references
             var noise = new Noise("Noise", "out", "V1", new DecadeSweep(10.0, 10.0e9, 10));

@@ -18,7 +18,7 @@ namespace SpiceSharpTest.Models
             var sum = 0.0;
             for (var i = 0; i < voltages.Length; i++)
             {
-                ckt.Objects.Add(new VoltageSource($"V{i + 1}", $"{i + 1}", $"{i}", voltages[i]));
+                ckt.Entities.Add(new VoltageSource($"V{i + 1}", $"{i + 1}", $"{i}", voltages[i]));
                 sum += voltages[i];
             }
 
