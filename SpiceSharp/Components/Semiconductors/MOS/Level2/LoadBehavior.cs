@@ -232,6 +232,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
+            var baseConfig = simulation.BaseConfiguration;
             var rstate = state;
             double drainSatCur, sourceSatCur,
                 vgs, vds, vbs, vbd, vgd;
@@ -343,24 +344,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             {
                 CondBs = sourceSatCur / vt;
                 BsCurrent = CondBs * vbs;
-                CondBs += state.Gmin;
+                CondBs += baseConfig.Gmin;
             }
             else
             {
                 var evbs = Math.Exp(vbs / vt);
-                CondBs = sourceSatCur * evbs / vt + state.Gmin;
+                CondBs = sourceSatCur * evbs / vt + baseConfig.Gmin;
                 BsCurrent = sourceSatCur * (evbs - 1);
             }
             if (vbd <= 0)
             {
                 CondBd = drainSatCur / vt;
                 BdCurrent = CondBd * vbd;
-                CondBd += state.Gmin;
+                CondBd += baseConfig.Gmin;
             }
             else
             {
                 var evbd = Math.Exp(vbd / vt);
-                CondBd = drainSatCur * evbd / vt + state.Gmin;
+                CondBd = drainSatCur * evbd / vt + baseConfig.Gmin;
                 BdCurrent = drainSatCur * (evbd - 1);
             }
             if (vds >= 0)
@@ -921,8 +922,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* 
 			* load current vector
 			*/
-            var ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - state.Gmin) * vbs);
-            var ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - state.Gmin) * vbd);
+            var ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - baseConfig.Gmin) * vbs);
+            var ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - baseConfig.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;

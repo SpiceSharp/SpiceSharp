@@ -26,7 +26,6 @@
             var baseconfig = BaseConfiguration;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
-            state.Gmin = baseconfig.Gmin;
 
             Op(baseconfig.DcMaxIterations);
 

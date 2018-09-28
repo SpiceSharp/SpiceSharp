@@ -226,6 +226,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
+            var baseConfig = simulation.BaseConfiguration;
             double vbe;
             double vbc;
             double gben;
@@ -285,8 +286,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbe > -5 * vtn)
             {
                 var evbe = Math.Exp(vbe / vtn);
-                CurrentBe = csat * (evbe - 1) + state.Gmin * vbe;
-                CondBe = csat * evbe / vtn + state.Gmin;
+                CurrentBe = csat * (evbe - 1) + baseConfig.Gmin * vbe;
+                CondBe = csat * evbe / vtn + baseConfig.Gmin;
                 if (c2.Equals(0)) // Avoid Exp()
                 {
                     cben = 0;
@@ -301,7 +302,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                CondBe = -csat / vbe + state.Gmin;
+                CondBe = -csat / vbe + baseConfig.Gmin;
                 CurrentBe = CondBe * vbe;
                 gben = -c2 / vbe;
                 cben = gben * vbe;
@@ -311,8 +312,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbc > -5 * vtn)
             {
                 var evbc = Math.Exp(vbc / vtn);
-                CurrentBc = csat * (evbc - 1) + state.Gmin * vbc;
-                CondBc = csat * evbc / vtn + state.Gmin;
+                CurrentBc = csat * (evbc - 1) + baseConfig.Gmin * vbc;
+                CondBc = csat * evbc / vtn + baseConfig.Gmin;
                 if (c4.Equals(0)) // Avoid Exp()
                 {
                     cbcn = 0;
@@ -327,7 +328,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                CondBc = -csat / vbc + state.Gmin;
+                CondBc = -csat / vbc + baseConfig.Gmin;
                 CurrentBc = CondBc * vbc;
                 gbcn = -c4 / vbc;
                 cbcn = gbcn * vbc;

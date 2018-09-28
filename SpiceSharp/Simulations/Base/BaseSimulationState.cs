@@ -9,8 +9,6 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="SimulationState" />
     public class BaseSimulationState : SimulationState
     {
-        #region Simulation parameters
-
         /// <summary>
         /// Gets or sets the initialization flag.
         /// </summary>
@@ -34,20 +32,6 @@ namespace SpiceSharp.Simulations
         ///   <c>true</c> if [use ic]; otherwise, <c>false</c>.
         /// </value>
         public bool UseIc { get; set; }
-
-        /// <summary>
-        /// The current minimum conductance parameter.
-        /// This parameter is changed when doing GMIN stepping for aiding convergence.
-        /// </summary>
-        /// <value>
-        /// The minimum conductance.
-        /// </value>
-        /// <remarks>
-        /// Convergence is mainly an issue with semiconductor junctions, which often lead to exponential curves. Exponential dependencies
-        /// are very harsh on convergence. A lower Gmin will cause iterations to converge faster, but to a (slightly) wrong value. By
-        /// steadily relaxing this value back to 0 it is possible to progressively reach a solution without having non-convergence.
-        /// </remarks>
-        public double Gmin { get; set; } = 1e-12;
 
         /// <summary>
         /// The current source factor.
@@ -85,7 +69,6 @@ namespace SpiceSharp.Simulations
         /// The nominal temperature.
         /// </value>
         public double NominalTemperature { get; set; } = 300.15;
-        #endregion
 
         /// <summary>
         /// Gets the solver for solving linear systems of equations.

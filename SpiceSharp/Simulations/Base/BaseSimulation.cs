@@ -150,9 +150,6 @@ namespace SpiceSharp.Simulations
                     aid.Initialize(this);
                 AfterLoad += LoadNodeSets;
             }
-
-            // Copy configuration
-            RealState.Gmin = BaseConfiguration.Gmin;
         }
 
         /// <summary>

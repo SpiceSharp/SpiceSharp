@@ -43,7 +43,6 @@ namespace SpiceSharp.Simulations
             cstate.Laplace = 0.0;
             state.UseIc = false;
             state.UseDc = true;
-            state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices

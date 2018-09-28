@@ -387,6 +387,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
+            var baseConfig = simulation.BaseConfiguration;
             double sargsw;
 
             var vbs = _load.VoltageBs;
@@ -594,8 +595,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			*/
 
             // Load current vector
-            var ceqbs = _mbp.MosfetType * (cbs - (gbs - state.Gmin) * vbs);
-            var ceqbd = _mbp.MosfetType * (cbd - (gbd - state.Gmin) * vbd);
+            var ceqbs = _mbp.MosfetType * (cbs - (gbs - baseConfig.Gmin) * vbs);
+            var ceqbd = _mbp.MosfetType * (cbd - (gbd - baseConfig.Gmin) * vbd);
             GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
             BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
             DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;

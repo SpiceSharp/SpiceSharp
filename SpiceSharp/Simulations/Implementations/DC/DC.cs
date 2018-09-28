@@ -115,7 +115,6 @@ namespace SpiceSharp.Simulations
             state.Init = InitializationModes.Junction;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
-            state.Gmin = baseconfig.Gmin;
 
             // Initialize
             Sweeps = new NestedSweeps(dcconfig.Sweeps);

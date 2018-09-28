@@ -152,6 +152,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
+            var baseConfig = simulation.BaseConfiguration;
             double vd;
             double cd, gd;
 
@@ -196,23 +197,23 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 // Forward bias
                 var evd = Math.Exp(vd / vte);
-                cd = csat * (evd - 1) + state.Gmin * vd;
-                gd = csat * evd / vte + state.Gmin;
+                cd = csat * (evd - 1) + baseConfig.Gmin * vd;
+                gd = csat * evd / vte + baseConfig.Gmin;
             }
             else if (!_mbp.BreakdownVoltage.Given || vd >= -_temp.TempBreakdownVoltage)
             {
                 // Reverse bias
                 var arg = 3 * vte / (vd * Math.E);
                 arg = arg * arg * arg;
-                cd = -csat * (1 + arg) + state.Gmin * vd;
-                gd = csat * 3 * arg / vd + state.Gmin;
+                cd = -csat * (1 + arg) + baseConfig.Gmin * vd;
+                gd = csat * 3 * arg / vd + baseConfig.Gmin;
             }
             else
             {
                 // Reverse breakdown
                 var evrev = Math.Exp(-(_temp.TempBreakdownVoltage + vd) / vte);
-                cd = -csat * evrev + state.Gmin * vd;
-                gd = csat * evrev / vte + state.Gmin;
+                cd = -csat * evrev + baseConfig.Gmin * vd;
+                gd = csat * evrev / vte + baseConfig.Gmin;
             }
 
             // Check convergence
