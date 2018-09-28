@@ -100,7 +100,7 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
 
-            ComplexState.Setup(Nodes);
+            ComplexState.Setup(Variables);
         }
 
         /// <summary>

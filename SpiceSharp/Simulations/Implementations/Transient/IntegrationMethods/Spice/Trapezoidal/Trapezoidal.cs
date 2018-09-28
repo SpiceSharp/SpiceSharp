@@ -108,7 +108,7 @@ namespace SpiceSharp.IntegrationMethods
             var state = args.Simulation.RealState;
             double tol, diff, tmp;
             var timetemp = double.PositiveInfinity;
-            var nodes = args.Simulation.Nodes;
+            var nodes = args.Simulation.Variables;
             int index;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...

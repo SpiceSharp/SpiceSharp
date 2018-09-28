@@ -49,12 +49,23 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// A dictionary of simulation states.
         /// </summary>
-        public StateDictionary States { get; } = new StateDictionary();
+        public SimulationStateDictionary States { get; } = new SimulationStateDictionary();
 
         /// <summary>
-        /// Gets the variable set.
+        /// Gets the set of variables (unknowns).
         /// </summary>
-        public VariableSet Nodes { get; } = new VariableSet();
+        /// <value>
+        /// The set of variables.
+        /// </value>
+        public VariableSet Variables { get; } = new VariableSet();
+
+        /// <summary>
+        /// Gets the nodes.
+        /// </summary>
+        /// <value>
+        /// The nodes.
+        /// </value>
+        [Obsolete] public VariableSet Nodes => Variables;
 
         #region Events
         /// <summary>
@@ -138,7 +149,7 @@ namespace SpiceSharp.Simulations
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
-            if (Nodes.Count < 1)
+            if (Variables.Count < 1)
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Execute the simulation
@@ -203,7 +214,7 @@ namespace SpiceSharp.Simulations
             EntityParameters.Clear();
 
             // Clear all nodes
-            Nodes.Clear();
+            Variables.Clear();
 
             // Clear all states
             States.Clear();

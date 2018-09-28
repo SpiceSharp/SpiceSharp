@@ -5,12 +5,12 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Dictionary of simulation states
     /// </summary>
-    public class StateDictionary : TypeDictionary<SimulationState>
+    public class SimulationStateDictionary : TypeDictionary<SimulationState>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StateDictionary"/> class.
+        /// Initializes a new instance of the <see cref="SimulationStateDictionary"/> class.
         /// </summary>
-        public StateDictionary()
+        public SimulationStateDictionary()
             : base(typeof(SimulationState))
         {
         }

@@ -102,7 +102,7 @@ namespace SpiceSharp.Simulations
             // TODO: Compatibility - initial conditions from nodes instead of configuration should be removed eventually
             if (BaseConfiguration.Nodesets.Count == 0)
             {
-                foreach (var ns in Nodes.InitialConditions)
+                foreach (var ns in Variables.InitialConditions)
                     _initialConditions.Add(new ConvergenceAid(ns.Key, ns.Value));
             }
 

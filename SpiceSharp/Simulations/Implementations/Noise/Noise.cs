@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
             NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
             _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
             NoiseState = States.Get<NoiseState>();
-            NoiseState.Setup(Nodes);
+            NoiseState.Setup(Variables);
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? Nodes.GetNode(noiseconfig.Output).Index : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? Nodes.GetNode(noiseconfig.OutputRef).Index : 0;
+            var posOutNode = noiseconfig.Output != null ? Variables.GetNode(noiseconfig.Output).Index : 0;
+            var negOutNode = noiseconfig.OutputRef != null ? Variables.GetNode(noiseconfig.OutputRef).Index : 0;
 
             // Initialize
             nstate.Reset(FrequencySweep.Initial);

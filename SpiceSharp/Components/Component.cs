@@ -82,7 +82,7 @@ namespace SpiceSharp.Components
             if (behavior is IConnectedBehavior cb)
             {
                 // Connect the behavior
-                var indexes = ApplyConnections(simulation.Nodes);
+                var indexes = ApplyConnections(simulation.Variables);
                 cb.Connect(indexes);
             }
             return behavior;

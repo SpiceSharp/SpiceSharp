@@ -91,14 +91,14 @@ namespace SpiceSharp.Simulations
         public virtual void Initialize(BaseSimulation simulation)
         {
             // Get the unknown variables
-            Variables = simulation.Nodes;
+            Variables = simulation.Variables;
 
             // Get the solver
             var state = simulation.States.Get<RealSimulationState>();
             Solver = state.Solver;
 
             // Get the node
-            if (!simulation.Nodes.TryGetNode(Name, out var node))
+            if (!simulation.Variables.TryGetNode(Name, out var node))
             {
                 CircuitWarning.Warning(this, "Could not set convergence aid: variable {0} not found.".FormatString(Name));
                 Node = null;

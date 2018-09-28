@@ -109,7 +109,7 @@ namespace SpiceSharp.IntegrationMethods
             // Get the state
             var state = args.Simulation.RealState;
             var timetmp = double.PositiveInfinity;
-            var nodes = args.Simulation.Nodes;
+            var nodes = args.Simulation.Variables;
 
             var delsum = 0.0;
             for (var i = 0; i <= Order; i++)

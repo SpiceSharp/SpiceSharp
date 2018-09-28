@@ -116,13 +116,13 @@ namespace SpiceSharp.Simulations
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
             for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
-            RealState.Setup(Nodes);
+                _loadBehaviors[i].GetEquationPointers(Variables, RealState.Solver);
+            RealState.Setup(Variables);
 
             // TODO: Compatibility - nodesets from nodes instead of configuration should be removed eventually
             if (BaseConfiguration.Nodesets.Count == 0)
             {
-                foreach (var ns in Nodes.NodeSets)
+                foreach (var ns in Variables.NodeSets)
                     _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
             }
 
@@ -511,9 +511,9 @@ namespace SpiceSharp.Simulations
             var config = BaseConfiguration;
 
             // Check convergence for each node
-            for (var i = 0; i < Nodes.Count; i++)
+            for (var i = 0; i < Variables.Count; i++)
             {
-                var node = Nodes[i];
+                var node = Variables[i];
                 var n = rstate.Solution[node.Index];
                 var o = rstate.OldSolution[node.Index];
 
