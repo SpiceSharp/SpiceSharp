@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public ComplexVoltageExport(Simulation simulation, Identifier posNode, Identifier negNode)
+        public ComplexVoltageExport(FrequencySimulation simulation, Identifier posNode, Identifier negNode)
             : base(simulation)
         {
             PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));
@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = Simulation.States.Get<ComplexSimulationState>();
+            var state = ((FrequencySimulation) Simulation).ComplexState;
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 var posNodeIndex = posNode.Index;

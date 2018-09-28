@@ -47,11 +47,6 @@ namespace SpiceSharp.Simulations
         public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
 
         /// <summary>
-        /// A dictionary of simulation states.
-        /// </summary>
-        public SimulationStateDictionary States { get; } = new SimulationStateDictionary();
-
-        /// <summary>
         /// Gets the set of variables (unknowns).
         /// </summary>
         /// <value>
@@ -215,9 +210,6 @@ namespace SpiceSharp.Simulations
 
             // Clear all nodes
             Variables.Clear();
-
-            // Clear all states
-            States.Clear();
         }
 
         /// <summary>

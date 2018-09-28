@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
@@ -75,7 +76,6 @@ namespace SpiceSharp.Behaviors
         protected Func<T> CreateGetter<T>(Simulation simulation, string name) where T : struct 
         {
             // Find methods to create the export
-            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             Func<T> result = null;
             foreach (var member in Named(name))
             {
@@ -128,11 +128,18 @@ namespace SpiceSharp.Behaviors
 
                 // Method: TResult Method(State)
                 // Works for any child class of State
-                if (parameters[0].ParameterType.GetTypeInfo().IsSubclassOf(typeof(SimulationState)))
+                var paramType = parameters[0].ParameterType;
+                if (paramType.GetTypeInfo().IsSubclassOf(typeof(SimulationState)))
                 {
-                    // Get the state from the simulation that this method needs
-                    if (!simulation.States.TryGetValue(parameters[0].ParameterType, out var state))
+                    // Try to find a property of the same type using reflection
+                    var stateMember = simulation.GetType().GetTypeInfo()
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        .FirstOrDefault(property => property.PropertyType == paramType);
+                    if (stateMember == null)
                         return null;
+
+                    // Get this state
+                    var state = (SimulationState) stateMember.GetValue(simulation);
 
                     // Create the expression
                     var expression = Expression.Call(Expression.Constant(this), method, Expression.Constant(state));

@@ -93,8 +93,8 @@ namespace SpiceSharp.Simulations
             // Get the unknown variables
             Variables = simulation.Variables;
 
-            // Get the solver
-            var state = simulation.States.Get<RealSimulationState>();
+            // Get the real solver
+            var state = simulation.RealState;
             Solver = state.Solver;
 
             // Get the node

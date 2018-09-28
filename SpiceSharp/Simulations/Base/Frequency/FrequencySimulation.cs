@@ -87,7 +87,6 @@ namespace SpiceSharp.Simulations
             // Create the state for complex numbers
             ComplexState = new ComplexSimulationState();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
-            States.Add(ComplexState);
 
             // Get behaviors, configurations and states
             FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ??

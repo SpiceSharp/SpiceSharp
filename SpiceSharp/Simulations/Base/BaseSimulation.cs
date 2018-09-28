@@ -109,9 +109,8 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
 
-            // Add a state for real numbers
+            // Create the state for this simulation
             RealState = new RealSimulationState();
-            States.Add(RealState);
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);

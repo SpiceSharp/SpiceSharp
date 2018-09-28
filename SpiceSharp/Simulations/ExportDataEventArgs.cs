@@ -117,8 +117,10 @@ namespace SpiceSharp.Simulations
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));
-            var state = _simulation.States.Get<RealSimulationState>() ??
-                        throw new CircuitException("Simulation does not support real voltages");
+
+            if (!(_simulation is BaseSimulation bs))
+                throw new CircuitException("Simulation does not support real voltages.");
+            var state = bs.RealState;
 
             // Get the voltage of the positive node
             var index = _simulation.Variables.GetNode(positive).Index;
@@ -159,8 +161,10 @@ namespace SpiceSharp.Simulations
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));
-            var state = _simulation.States.Get<ComplexSimulationState>() ??
-                        throw new CircuitException("Simulation does not support complex voltages");
+
+            if (!(_simulation is FrequencySimulation fs))
+                throw new CircuitException("Simulation does not support complex voltages.");
+            var state = fs.ComplexState;
 
             // Get the voltage of the positive node
             var index = _simulation.Variables.GetNode(positive).Index;

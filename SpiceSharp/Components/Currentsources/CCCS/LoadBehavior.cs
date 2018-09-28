@@ -61,20 +61,23 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Create an export method
+        /// Creates a getter for extracting data from the specified simulation.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
+        /// <param name="simulation">The simulation</param>
+        /// <param name="propertyName">The name of the parameter.</param>
+        /// <returns>
+        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         public override Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            // We avoid using reflection for common components
-            var state = simulation.States.Get<RealSimulationState>();
-            if (state == null)
+            // Let's cache
+            if (!(simulation is BaseSimulation bs))
                 return null;
+            var state = bs.RealState;
             switch (propertyName)
             {
                 case "c":

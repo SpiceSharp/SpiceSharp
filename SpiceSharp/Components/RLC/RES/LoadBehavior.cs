@@ -67,10 +67,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
             // Get the state
-            var state = simulation?.States.Get<RealSimulationState>();
-            if (state == null)
+            if (!(simulation is BaseSimulation bs))
                 return null;
+            var state = bs.RealState;
 
+            // Avoid reflection for common components
             switch (propertyName)
             {
                 case "v": return () => GetVoltage(state);
