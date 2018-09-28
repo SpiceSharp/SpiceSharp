@@ -8,8 +8,6 @@ namespace SpiceSharp
     /// <seealso cref="TypeDictionary{ParameterSet}" />
     public class ParameterSetDictionary : TypeDictionary<ParameterSet>
     {
-        // TODO: Add consistency- always set ALL parameters with a specified name...
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
         /// </summary>
@@ -96,6 +94,9 @@ namespace SpiceSharp
         /// <returns>
         /// An action for setting the principal parameter with the specified type and name, or <c>null</c> if no parameter was found.
         /// </returns>
+        /// <remarks>
+        /// Only the first encountered principal parameter will be set using the setter returned from this method.
+        /// </remarks>
         public Action<T> GetSetter<T>() where T : struct
         {
             foreach (var ps in Values)
@@ -109,8 +110,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets a parameter with a specified name in any parameter set in the dictionary.
-        /// If multiple parameters exist by this name, all of them will be set.
+        /// Sets all parameters with a specified name in any parameter set in the dictionary.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The parameter name.</param>
@@ -131,13 +131,16 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets the principal parameter. Only the first found principal parameter will be set.
+        /// Sets the principal parameter.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
         ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
+        /// <remarks>
+        /// Only the first encountered principal parameter will be set.
+        /// </remarks>
         public bool SetParameter<T>(T value) where T : struct
         {
             foreach (var ps in Values)
@@ -170,7 +173,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets a parameter with a specified name in any parameter set in the dictionary.
+        /// Sets all parameter with a specified name in any parameter set in the dictionary.
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
@@ -179,12 +182,13 @@ namespace SpiceSharp
         /// </returns>
         public bool SetParameter(string name, object value)
         {
+            var isset = false;
             foreach (var ps in Values)
             {
                 if (ps.SetParameter(name, value))
-                    return true;
+                    isset = true;
             }
-            return false;
+            return isset;
         }
     }
 }
