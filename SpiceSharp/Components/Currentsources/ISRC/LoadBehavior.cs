@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="state"></param>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
-        public double GetV(RealSimulationState state)
+        public double GetV(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
-        public double GetP(RealSimulationState state)
+        public double GetP(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -141,7 +141,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             double value, time = 0.0;
 
             // Time domain analysis
-            if (state.Domain == RealSimulationState.DomainType.Time)
+            if (state.Domain == BaseSimulationState.DomainType.Time)
             {
                 if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;

@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterInfo("Voltage source current")]
-        public double GetCurrent(RealSimulationState state)
+        public double GetCurrent(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             return state.Solution[BranchEq];
         }
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
-        public double GetPower(RealSimulationState state)
+        public double GetPower(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -173,7 +173,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             NegBranchPtr.Value -= 1;
             BranchNegPtr.Value -= 1;
 
-            if (state.Domain == RealSimulationState.DomainType.Time)
+            if (state.Domain == BaseSimulationState.DomainType.Time)
             {
                 if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;

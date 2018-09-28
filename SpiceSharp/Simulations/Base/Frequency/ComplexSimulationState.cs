@@ -122,10 +122,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Unsetup the state.
         /// </summary>
-        public override void Destroy()
+        public override void Unsetup()
         {
             Solution = null;
-            base.Destroy();
+            base.Unsetup();
         }
     }
 }

@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The real state.
         /// </value>
-        public RealSimulationState RealState { get; protected set; }
+        public BaseSimulationState RealState { get; protected set; }
 
         /// <summary>
         /// Gets the statistics.
@@ -81,6 +81,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
         private List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
+        private double _diagonalGmin = 0.0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
@@ -110,7 +111,7 @@ namespace SpiceSharp.Simulations
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
 
             // Create the state for this simulation
-            RealState = new RealSimulationState();
+            RealState = new BaseSimulationState();
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
@@ -185,7 +186,7 @@ namespace SpiceSharp.Simulations
                 _temperatureBehaviors[i].Unsetup(this);
 
             // Clear the state
-            RealState.Destroy();
+            RealState.Unsetup();
             RealState = null;
             _realStateLoadArgs = null;
 
@@ -205,7 +206,7 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var config = BaseConfiguration;
-            state.Init = RealSimulationState.InitializationStates.InitJunction;
+            state.Init = BaseSimulationState.InitializationStates.InitJunction;
 
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
@@ -219,34 +220,39 @@ namespace SpiceSharp.Simulations
             // No convergence, try Gmin stepping
             if (config.GminSteps > 1)
             {
-                state.Init = RealSimulationState.InitializationStates.InitJunction;
+                // Apply gmin step to AfterLoad event
+                _diagonalGmin = config.Gmin;
+                void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
+                AfterLoad += ApplyGminStep;
+
+                state.Init = BaseSimulationState.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
-                state.DiagonalGmin = config.Gmin;
                 for (var i = 0; i < config.GminSteps; i++)
-                    state.DiagonalGmin *= 10.0;
+                    _diagonalGmin *= 10.0;
                 for (var i = 0; i <= config.GminSteps; i++)
                 {
                     state.IsConvergent = false;
                     if (!Iterate(maxIterations))
                     {
-                        state.DiagonalGmin = 0.0;
+                        _diagonalGmin = 0.0;
                         CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
                         break;
                     }
-                    state.DiagonalGmin /= 10.0;
-                    state.Init = RealSimulationState.InitializationStates.InitFloat;
+                    _diagonalGmin /= 10.0;
+                    state.Init = BaseSimulationState.InitializationStates.InitFloat;
                 }
-                state.DiagonalGmin = 0.0;
+
+                // Try one more time without the gmin stepping
+                AfterLoad -= ApplyGminStep;
+                _diagonalGmin = 0.0;
                 if (Iterate(maxIterations))
-                {
                     return;
-                }
             }
 
             // Nope, still not converging, let's try source stepping
             if (config.SourceSteps > 1)
             {
-                state.Init = RealSimulationState.InitializationStates.InitJunction;
+                state.Init = BaseSimulationState.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
                 for (var i = 0; i <= config.SourceSteps; i++)
                 {
@@ -311,36 +317,34 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if ((state.Sparse & RealSimulationState.SparseStates.DidPreorder) == 0)
+                if ((state.Sparse & BaseSimulationState.SparseStates.DidPreorder) == 0)
                 {
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= RealSimulationState.SparseStates.DidPreorder;
+                    state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
                 }
-                if (state.Init == RealSimulationState.InitializationStates.InitJunction || state.Init == RealSimulationState.InitializationStates.InitTransient)
+                if (state.Init == BaseSimulationState.InitializationStates.InitJunction || state.Init == BaseSimulationState.InitializationStates.InitTransient)
                 {
-                    state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
+                    state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                 }
 
                 // Reorder
-                if ((state.Sparse & RealSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder)
+                if ((state.Sparse & BaseSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder)
                 {
                     Statistics.ReorderTime.Start();
-                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~RealSimulationState.SparseStates.ShouldReorder;
+                    state.Sparse &= ~BaseSimulationState.SparseStates.ShouldReorder;
                 }
                 else
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     var success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
-                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
+                        state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                         continue;
                     }
                 }
@@ -372,7 +376,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case RealSimulationState.InitializationStates.InitFloat:
+                    case BaseSimulationState.InitializationStates.InitFloat:
                         if (state.UseDc && state.HadNodeSet)
                         {
                             if (pass)
@@ -386,25 +390,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case RealSimulationState.InitializationStates.InitJunction:
-                        state.Init = RealSimulationState.InitializationStates.InitFix;
-                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
+                    case BaseSimulationState.InitializationStates.InitJunction:
+                        state.Init = BaseSimulationState.InitializationStates.InitFix;
+                        state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                         break;
 
-                    case RealSimulationState.InitializationStates.InitFix:
+                    case BaseSimulationState.InitializationStates.InitFix:
                         if (state.IsConvergent)
-                            state.Init = RealSimulationState.InitializationStates.InitFloat;
+                            state.Init = BaseSimulationState.InitializationStates.InitFloat;
                         pass = true;
                         break;
 
-                    case RealSimulationState.InitializationStates.InitTransient:
+                    case BaseSimulationState.InitializationStates.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = RealSimulationState.SparseStates.ShouldReorder;
-                        state.Init = RealSimulationState.InitializationStates.InitFloat;
+                            state.Sparse = BaseSimulationState.SparseStates.ShouldReorder;
+                        state.Init = BaseSimulationState.InitializationStates.InitFloat;
                         break;
 
-                    case RealSimulationState.InitializationStates.None:
-                        state.Init = RealSimulationState.InitializationStates.InitFloat;
+                    case BaseSimulationState.InitializationStates.None:
+                        state.Init = BaseSimulationState.InitializationStates.InitFloat;
                         break;
 
                     default:
@@ -453,48 +457,13 @@ namespace SpiceSharp.Simulations
             var state = RealState;
 
             // Consider doing nodeset assignments when we're starting out or in trouble
-            if ((state.Init & (RealSimulationState.InitializationStates.InitJunction | RealSimulationState.InitializationStates.InitFix)) ==
+            if ((state.Init & (BaseSimulationState.InitializationStates.InitJunction | BaseSimulationState.InitializationStates.InitFix)) ==
                 0) 
                 return;
 
             // Aid in convergence
             foreach (var aid in _nodesets)
                 aid.Aid();
-        }
-
-        /// <summary>
-        /// Reset the row to 0.0 and return true if the row is a current equation.
-        /// </summary>
-        /// <param name="solver">The solver</param>
-        /// <param name="variables">The set of unknowns/variables</param>
-        /// <param name="rowIndex">The row index</param>
-        /// <returns>
-        ///   <c>true</c> if the variable does not indicate a voltage, but a current; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">solver
-        /// or
-        /// variables</exception>
-        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, VariableSet variables, int rowIndex)
-        {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
-            if (variables == null)
-                throw new ArgumentNullException(nameof(variables));
-
-            var currents = false;
-            for (var n = 0; n < variables.Count; n++)
-            {
-                var node = variables[n];
-                var x = solver.FindMatrixElement(rowIndex, node.Index);
-                if (x != null && !x.Value.Equals(0.0))
-                {
-                    if (node.UnknownType == VariableType.Current)
-                        currents = true;
-                    else
-                        x.Value = 0.0;
-                }
-            }
-            return currents;
         }
 
         /// <summary>

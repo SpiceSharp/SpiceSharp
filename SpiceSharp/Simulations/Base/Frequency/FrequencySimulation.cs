@@ -124,7 +124,7 @@ namespace SpiceSharp.Simulations
             _frequencyBehaviors = null;
 
             // Remove the state
-            ComplexState.Destroy();
+            ComplexState.Unsetup();
             ComplexState = null;
 
             // Configuration
@@ -186,7 +186,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
-            RealState.Domain = RealSimulationState.DomainType.Frequency;
+            RealState.Domain = BaseSimulationState.DomainType.Frequency;
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {

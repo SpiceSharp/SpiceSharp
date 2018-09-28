@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            NoiseState.Destroy();
+            NoiseState.Unsetup();
             NoiseState = null;
             for (var i = 0; i < _noiseBehaviors.Count; i++)
                 _noiseBehaviors[i].Unsetup(this);
@@ -121,12 +121,12 @@ namespace SpiceSharp.Simulations
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
-            state.Domain = RealSimulationState.DomainType.None;
+            state.Domain = BaseSimulationState.DomainType.None;
             state.UseIc = false;
             state.UseDc = true;
             state.Gmin = BaseConfiguration.Gmin;
             Op(baseconfig.DcMaxIterations);
-            state.Sparse |= RealSimulationState.SparseStates.AcShouldReorder;
+            state.Sparse |= BaseSimulationState.SparseStates.AcShouldReorder;
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();

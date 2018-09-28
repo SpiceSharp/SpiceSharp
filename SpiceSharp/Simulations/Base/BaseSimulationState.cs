@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// A simulation state for simulations using real numbers.
     /// </summary>
     /// <seealso cref="SimulationState" />
-    public class RealSimulationState : SimulationState
+    public class BaseSimulationState : SimulationState
     {
         #region Simulation parameters
 
@@ -96,14 +96,6 @@ namespace SpiceSharp.Simulations
             /// </summary>
             Laplace
         }
-
-        /// <summary>
-        /// An extra conductance that can be added to all nodes to ground to aid convergence.
-        /// </summary>
-        /// <value>
-        /// The conductance added on the diagonal.
-        /// </value>
-        public double DiagonalGmin { get; set; }
 
         /// <summary>
         /// Gets or sets the initialization flag.
@@ -255,7 +247,6 @@ namespace SpiceSharp.Simulations
             Init = InitializationStates.None;
             Sparse = SparseStates.ShouldReorder;
             Domain = DomainType.None;
-            DiagonalGmin = 0;
             UseDc = true;
             UseIc = false;
 
@@ -265,11 +256,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Unsetup the state.
         /// </summary>
-        public override void Destroy()
+        public override void Unsetup()
         {
             Solution = null;
             OldSolution = null;
-            base.Destroy();
+            base.Unsetup();
         }
 
         /// <summary>

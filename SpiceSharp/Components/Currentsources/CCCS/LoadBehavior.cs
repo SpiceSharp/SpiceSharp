@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
-        public double GetCurrent(RealSimulationState state)
+        public double GetCurrent(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             return state.Solution[ControlBranchEq] * _bp.Coefficient;
         }
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage(RealSimulationState state)
+        public double GetVoltage(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("p"), ParameterInfo("Power")]
-        public double GetPower(RealSimulationState state)
+        public double GetPower(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
