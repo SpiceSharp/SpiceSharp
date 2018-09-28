@@ -273,8 +273,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			* share some code, so we put them first - others later on
 			*/
 
-            if (state.Init == BaseSimulationState.InitializationStates.InitFloat || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
-                state.Init == BaseSimulationState.InitializationStates.InitFix && !_bp.Off)
+            if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
+                state.Init == InitializationModes.Fix && !_bp.Off)
             {
                 // General iteration
                 vbs = _mbp.MosfetType * (state.Solution[_bulkNode] - state.Solution[SourceNodePrime]);
@@ -330,7 +330,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				* called.  We still just initialize the three voltages
 				*/
 
-                if (state.Init == BaseSimulationState.InitializationStates.InitJunction && !_bp.Off)
+                if (state.Init == InitializationModes.Junction && !_bp.Off)
                 {
                     vds = _mbp.MosfetType * _bp.InitialVoltageDs;
                     vgs = _mbp.MosfetType * _bp.InitialVoltageGs;
@@ -756,7 +756,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * check convergence
 			 */
-            if (!_bp.Off || state.Init != BaseSimulationState.InitializationStates.InitFix)
+            if (!_bp.Off || state.Init != InitializationModes.Fix)
             {
                 if (check == 1)
                     state.IsConvergent = false;

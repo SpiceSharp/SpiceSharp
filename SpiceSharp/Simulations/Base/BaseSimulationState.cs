@@ -11,33 +11,7 @@ namespace SpiceSharp.Simulations
     {
         #region Simulation parameters
 
-        /// <summary>
-        /// Possible states of initialization
-        /// </summary>
-        [Flags]
-        public enum InitializationStates
-        {
-            /// <summary>
-            /// Default state
-            /// </summary>
-            None,
 
-            /// <summary>
-            /// Indicates that nodes may still be everywhere, and a first solution should be calculated
-            /// </summary>
-            InitFloat,
-
-            /// <summary>
-            /// Indicates that PN junctions should be initialized to a specific voltage
-            /// </summary>
-            /// <remarks>PN junction often don't behave well in iterative methods. A good initial value can be critical.</remarks>
-            InitJunction,
-
-            /// <summary>
-            /// Indicates that an initial iteration has been done and that we need to fix it to check for convergence
-            /// </summary>
-            InitFix
-        }
 
         // TODO: This should probably be separated.
         /// <summary>
@@ -71,7 +45,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The flag.
         /// </value>
-        public InitializationStates Init { get; set; }
+        public InitializationModes Init { get; set; }
 
         /// <summary>
         /// Gets or sets flags for solving using sparse matrices.
@@ -204,7 +178,7 @@ namespace SpiceSharp.Simulations
             OldSolution = new DenseVector<double>(Solver.Order);
 
             // Initialize all states and parameters
-            Init = InitializationStates.None;
+            Init = InitializationModes.None;
             Sparse = SparseStates.ShouldReorder;
             UseDc = true;
             UseIc = false;

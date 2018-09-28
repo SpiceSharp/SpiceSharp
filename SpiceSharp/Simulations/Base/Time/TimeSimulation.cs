@@ -217,7 +217,7 @@ namespace SpiceSharp.Simulations
                     state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
                 }
 
-                if (state.Init == BaseSimulationState.InitializationStates.InitJunction || initTransient)
+                if (state.Init == InitializationModes.Junction || initTransient)
                 {
                     state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                 }
@@ -273,13 +273,13 @@ namespace SpiceSharp.Simulations
                     initTransient = false;
                     if (iterno <= 1)
                         state.Sparse = BaseSimulationState.SparseStates.ShouldReorder;
-                    state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                    state.Init = InitializationModes.Float;
                 }
 
                 {
                     switch (state.Init)
                     {
-                        case BaseSimulationState.InitializationStates.InitFloat:
+                        case InitializationModes.Float:
                             if (state.UseDc && state.HadNodeSet)
                             {
                                 if (pass)
@@ -295,19 +295,19 @@ namespace SpiceSharp.Simulations
 
                             break;
 
-                        case BaseSimulationState.InitializationStates.InitJunction:
-                            state.Init = BaseSimulationState.InitializationStates.InitFix;
+                        case InitializationModes.Junction:
+                            state.Init = InitializationModes.Fix;
                             state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                             break;
 
-                        case BaseSimulationState.InitializationStates.InitFix:
+                        case InitializationModes.Fix:
                             if (state.IsConvergent)
-                                state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                                state.Init = InitializationModes.Float;
                             pass = true;
                             break;
 
-                        case BaseSimulationState.InitializationStates.None:
-                            state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                        case InitializationModes.None:
+                            state.Init = InitializationModes.Float;
                             break;
 
                         default:

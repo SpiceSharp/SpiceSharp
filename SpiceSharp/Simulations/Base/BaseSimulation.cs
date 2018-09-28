@@ -206,7 +206,7 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var config = BaseConfiguration;
-            state.Init = BaseSimulationState.InitializationStates.InitJunction;
+            state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
@@ -225,7 +225,7 @@ namespace SpiceSharp.Simulations
                 void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
                 AfterLoad += ApplyGminStep;
 
-                state.Init = BaseSimulationState.InitializationStates.InitJunction;
+                state.Init = InitializationModes.Junction;
                 CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
                 for (var i = 0; i < config.GminSteps; i++)
                     _diagonalGmin *= 10.0;
@@ -239,7 +239,7 @@ namespace SpiceSharp.Simulations
                         break;
                     }
                     _diagonalGmin /= 10.0;
-                    state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                    state.Init = InitializationModes.Float;
                 }
 
                 // Try one more time without the gmin stepping
@@ -252,7 +252,7 @@ namespace SpiceSharp.Simulations
             // Nope, still not converging, let's try source stepping
             if (config.SourceSteps > 1)
             {
-                state.Init = BaseSimulationState.InitializationStates.InitJunction;
+                state.Init = InitializationModes.Junction;
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
                 for (var i = 0; i <= config.SourceSteps; i++)
                 {
@@ -322,7 +322,7 @@ namespace SpiceSharp.Simulations
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
                 }
-                if (state.Init == BaseSimulationState.InitializationStates.InitJunction)
+                if (state.Init == InitializationModes.Junction)
                 {
                     state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                 }
@@ -376,7 +376,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case BaseSimulationState.InitializationStates.InitFloat:
+                    case InitializationModes.Float:
                         if (state.UseDc && state.HadNodeSet)
                         {
                             if (pass)
@@ -390,19 +390,19 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case BaseSimulationState.InitializationStates.InitJunction:
-                        state.Init = BaseSimulationState.InitializationStates.InitFix;
+                    case InitializationModes.Junction:
+                        state.Init = InitializationModes.Fix;
                         state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                         break;
 
-                    case BaseSimulationState.InitializationStates.InitFix:
+                    case InitializationModes.Fix:
                         if (state.IsConvergent)
-                            state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                            state.Init = InitializationModes.Float;
                         pass = true;
                         break;
 
-                    case BaseSimulationState.InitializationStates.None:
-                        state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                    case InitializationModes.None:
+                        state.Init = InitializationModes.Float;
                         break;
 
                     default:
@@ -451,7 +451,7 @@ namespace SpiceSharp.Simulations
             var state = RealState;
 
             // Consider doing nodeset assignments when we're starting out or in trouble
-            if ((state.Init & (BaseSimulationState.InitializationStates.InitJunction | BaseSimulationState.InitializationStates.InitFix)) ==
+            if ((state.Init & (InitializationModes.Junction | InitializationModes.Fix)) ==
                 0) 
                 return;
 

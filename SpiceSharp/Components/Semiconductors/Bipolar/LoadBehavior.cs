@@ -250,18 +250,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var xjrb = _mbp.BaseCurrentHalfResist * _bp.Area;
 
             // Initialization
-            if (state.Init == BaseSimulationState.InitializationStates.InitJunction && (simulation is TimeSimulation) && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && (simulation is TimeSimulation) && state.UseDc && state.UseIc)
             {
                 vbe = _mbp.BipolarType * _bp.InitialVoltageBe;
                 var vce = _mbp.BipolarType * _bp.InitialVoltageCe;
                 vbc = vbe - vce;
             }
-            else if (state.Init == BaseSimulationState.InitializationStates.InitJunction && !_bp.Off)
+            else if (state.Init == InitializationModes.Junction && !_bp.Off)
             {
                 vbe = _temp.TempVCritical;
                 vbc = 0;
             }
-            else if (state.Init == BaseSimulationState.InitializationStates.InitJunction || state.Init == BaseSimulationState.InitializationStates.InitFix && _bp.Off)
+            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && _bp.Off)
             {
                 vbe = 0;
                 vbc = 0;

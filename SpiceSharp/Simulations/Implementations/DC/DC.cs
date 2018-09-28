@@ -112,7 +112,7 @@ namespace SpiceSharp.Simulations
             var state = RealState;
             var dcconfig = DcConfiguration;
             var baseconfig = BaseConfiguration;
-            state.Init = BaseSimulationState.InitializationStates.InitJunction;
+            state.Init = InitializationModes.Junction;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
             state.Gmin = baseconfig.Gmin;
@@ -175,7 +175,7 @@ namespace SpiceSharp.Simulations
                     level++;
                     Sweeps[level].Reset();
                     swept[level].Value = Sweeps[level].CurrentValue;
-                    state.Init = BaseSimulationState.InitializationStates.InitJunction;
+                    state.Init = InitializationModes.Junction;
                 }
 
                 // Calculate the solution

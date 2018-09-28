@@ -258,8 +258,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var beta = _temp.TempTransconductance * _bp.Width / effectiveLength;
             var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
-            if (state.Init == BaseSimulationState.InitializationStates.InitFloat || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
-                state.Init == BaseSimulationState.InitializationStates.InitFix && !_bp.Off)
+            if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
+                state.Init == InitializationModes.Fix && !_bp.Off)
             {
                 // general iteration
                 vbs = _mbp.MosfetType * (rstate.Solution[_bulkNode] - rstate.Solution[SourceNodePrime]);
@@ -308,7 +308,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				 * look at other possibilities 
 				 */
 
-                if (state.Init == BaseSimulationState.InitializationStates.InitJunction && !_bp.Off)
+                if (state.Init == InitializationModes.Junction && !_bp.Off)
                 {
                     vds = _mbp.MosfetType * _bp.InitialVoltageDs;
                     vgs = _mbp.MosfetType * _bp.InitialVoltageGs;
@@ -908,7 +908,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* 
 			 * check convergence
 			 */
-            if (!_bp.Off || state.Init != BaseSimulationState.InitializationStates.InitFix)
+            if (!_bp.Off || state.Init != InitializationModes.Fix)
             {
                 if (check == 1)
                     state.IsConvergent = false;
