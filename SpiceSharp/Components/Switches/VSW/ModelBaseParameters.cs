@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
@@ -18,5 +19,17 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         public GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
         [ParameterName("vh"), ParameterInfo("Hysteresis voltage")]
         public GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Method for calculating the default values of derived parameters.
+        /// </summary>
+        /// <remarks>
+        /// These calculations should be run whenever a parameter has been changed.
+        /// </remarks>
+        public override void CalculateDefaults()
+        {
+            // Only positive hysteresis values allowed
+            Hysteresis.RawValue = Math.Abs(Hysteresis.RawValue);
+        }
     }
 }

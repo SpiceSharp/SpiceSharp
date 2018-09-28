@@ -66,9 +66,6 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
-            // TODO: This should be part of the parameter...
-            _mbp.Hysteresis.RawValue = Math.Abs(_mbp.Hysteresis.RawValue);
-
             // Get behaviors
             _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
         }

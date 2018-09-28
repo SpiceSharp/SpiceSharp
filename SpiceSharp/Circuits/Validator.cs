@@ -33,7 +33,7 @@ namespace SpiceSharp.Circuits
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
 
-            // Connect all objects in the circuit, we need this information to find connectivity issues
+            // Connect all entities in the circuit, we need this information to find connectivity issues
             circuit.Entities.BuildOrderedComponentList();
 
             // Initialize
@@ -44,7 +44,7 @@ namespace SpiceSharp.Circuits
             _cgroup = 1;
             _nodes.Clear();
 
-            // Check all objects
+            // Check all entities
             foreach (var c in circuit.Entities)
                 CheckEntity(c);
 
@@ -139,7 +139,7 @@ namespace SpiceSharp.Circuits
                     }
                 }
 
-                // If the object does not have connected pins specified, assume they're all connected
+                // If the entities do not have connected pins specified, assume they're all connected
                 if (!hasconnections)
                     AddConnections(nodes);
             }

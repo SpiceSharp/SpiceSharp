@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
@@ -18,5 +19,17 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         public GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
         [ParameterName("ih"), ParameterInfo("Hysteresis current")]
         public GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Method for calculating the default values of derived parameters.
+        /// </summary>
+        /// <remarks>
+        /// These calculations should be run whenever a parameter has been changed.
+        /// </remarks>
+        public override void CalculateDefaults()
+        {
+            // Only positive hysteresis values!
+            Hysteresis.RawValue = Math.Abs(Hysteresis.RawValue);
+        }
     }
 }
