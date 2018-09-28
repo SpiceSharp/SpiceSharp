@@ -124,12 +124,12 @@ namespace SpiceSharp.Simulations
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
-            state.Domain = RealState.DomainType.None;
+            state.Domain = RealSimulationState.DomainType.None;
             state.UseIc = false;
             state.UseDc = true;
             state.Gmin = BaseConfiguration.Gmin;
             Op(baseconfig.DcMaxIterations);
-            state.Sparse |= RealState.SparseStates.AcShouldReorder;
+            state.Sparse |= RealSimulationState.SparseStates.AcShouldReorder;
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();

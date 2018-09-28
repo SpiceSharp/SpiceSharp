@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A simulation state using complex numbers.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.State" />
-    public class ComplexState : State
+    /// <seealso cref="SimulationState" />
+    public class ComplexSimulationState : SimulationState
     {
         /// <summary>
         /// Gets or sets a value indicating whether the solution converges.

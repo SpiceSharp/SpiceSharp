@@ -126,7 +126,7 @@ namespace SpiceSharp.Simulations
 
                         // Try to solve the new point
                         if (Method.BaseTime.Equals(0.0))
-                            state.Init = RealState.InitializationStates.InitTransient;
+                            state.Init = RealSimulationState.InitializationStates.InitTransient;
                         var converged = TimeIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -14,6 +15,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         ///   <c>true</c> if the simulation should go straight to gmin stepping; otherwise, <c>false</c>.
         /// </value>
+        [ParameterName("noopiter"), ParameterInfo("Skip immediately to gmin stepping.")]
         public bool NoOperatingPointIterations { get; set; } = false;
 
         /// <summary>
@@ -27,6 +29,7 @@ namespace SpiceSharp.Simulations
         /// are very harsh on convergence. A lower Gmin will cause iterations to converge faster, but to a (slightly) wrong value. By
         /// steadily relaxing this value back to 0 it is possible to progressively reach a solution without having non-convergence.
         /// </remarks>
+        [ParameterName("gmin"), ParameterInfo("A minimum conductance for helping convergence.")]
         public double Gmin { get; set; } = 1e-12;
 
         /// <summary>
@@ -35,6 +38,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The number of gmin steps.
         /// </value>
+        [ParameterName("gminsteps"), ParameterInfo("The number of steps used for gmin stepping.")]
         public int GminSteps { get; set; } = 10;
 
         /// <summary>
@@ -48,6 +52,7 @@ namespace SpiceSharp.Simulations
         /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
         /// without having non-convergence.
         /// </remarks>
+        [ParameterName("sourcesteps"), ParameterInfo("The number of steps used for source stepping.")]
         public int SourceSteps { get; set; } = 10;
 
         /// <summary>
@@ -56,6 +61,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The relative tolerance.
         /// </value>
+        [ParameterName("reltol"), ParameterInfo("The relative error tolerance.")]
         public double RelativeTolerance { get; set; } = 1e-3;
 
         /// <summary>
@@ -64,6 +70,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The voltage tolerance.
         /// </value>
+        [ParameterName("vntol"), ParameterInfo("The absolute voltage error tolerance.")]
         public double VoltageTolerance { get; set; } = 1e-6;
 
         /// <summary>
@@ -72,6 +79,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The absolute tolerance.
         /// </value>
+        [ParameterName("abstol"), ParameterInfo("The absolute error tolerance.")]
         public double AbsoluteTolerance { get; set; } = 1e-12;
 
         /// <summary>
@@ -80,6 +88,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The charge tolerance.
         /// </value>
+        [ParameterName("chgtol"), ParameterInfo("The absolute charge error tolerance.")]
         public double ChargeTolerance { get; set; } = 1e-14;
 
         /// <summary>
@@ -88,6 +97,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The maximum amount of iterations.
         /// </value>
+        [ParameterName("itl1"), ParameterName("dciter"), ParameterInfo("The DC iteration limit.")]
         public int DcMaxIterations { get; set; } = 100;
 
         /// <summary>

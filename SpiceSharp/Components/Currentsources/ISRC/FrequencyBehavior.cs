@@ -29,14 +29,14 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexState state)
+        public Complex GetVoltage(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("p"), ParameterInfo("Complex power")]
-        public Complex GetPower(ComplexState state)
+        public Complex GetPower(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));

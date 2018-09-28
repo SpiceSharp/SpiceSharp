@@ -94,7 +94,7 @@ namespace SpiceSharp.Simulations
             Variables = simulation.Nodes;
 
             // Get the solver
-            var state = simulation.States.Get<RealState>();
+            var state = simulation.States.Get<RealSimulationState>();
             Solver = state.Solver;
 
             // Get the node

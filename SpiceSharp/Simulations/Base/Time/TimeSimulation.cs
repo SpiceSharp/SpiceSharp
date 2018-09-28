@@ -131,7 +131,7 @@ namespace SpiceSharp.Simulations
             var state = RealState;
             state.UseIc = TimeConfiguration.UseIc;
             state.UseDc = true;
-            state.Domain = RealState.DomainType.Time;
+            state.Domain = RealSimulationState.DomainType.Time;
             Op(BaseConfiguration.DcMaxIterations);
             Statistics.TimePoints++;
 
@@ -181,7 +181,7 @@ namespace SpiceSharp.Simulations
             var iterno = 0;
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIc && state.Domain == RealState.DomainType.Time)
+            if (state.UseIc && state.Domain == RealSimulationState.DomainType.Time)
             {
                 state.StoreSolution();
 
@@ -211,24 +211,24 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if ((state.Sparse & RealState.SparseStates.DidPreorder) == 0) // !state.Sparse.HasFlag(RealState.SparseStates.DidPreorder)
+                if ((state.Sparse & RealSimulationState.SparseStates.DidPreorder) == 0) // !state.Sparse.HasFlag(RealState.SparseStates.DidPreorder)
                 {
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= RealState.SparseStates.DidPreorder;
+                    state.Sparse |= RealSimulationState.SparseStates.DidPreorder;
                 }
-                if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)
+                if (state.Init == RealSimulationState.InitializationStates.InitJunction || state.Init == RealSimulationState.InitializationStates.InitTransient)
                 {
-                    state.Sparse |= RealState.SparseStates.ShouldReorder;
+                    state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
                 }
 
                 // Reorder
-                if ((state.Sparse & RealState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
+                if ((state.Sparse & RealSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~RealState.SparseStates.ShouldReorder;
+                    state.Sparse &= ~RealSimulationState.SparseStates.ShouldReorder;
                 }
                 else
                 {
@@ -240,7 +240,7 @@ namespace SpiceSharp.Simulations
 
                     if (!success)
                     {
-                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
                         continue;
                     }
                 }
@@ -271,7 +271,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case RealState.InitializationStates.InitFloat:
+                    case RealSimulationState.InitializationStates.InitFloat:
                         if (state.UseDc && state.HadNodeSet)
                         {
                             if (pass)
@@ -285,25 +285,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case RealState.InitializationStates.InitJunction:
-                        state.Init = RealState.InitializationStates.InitFix;
-                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                    case RealSimulationState.InitializationStates.InitJunction:
+                        state.Init = RealSimulationState.InitializationStates.InitFix;
+                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
                         break;
 
-                    case RealState.InitializationStates.InitFix:
+                    case RealSimulationState.InitializationStates.InitFix:
                         if (state.IsConvergent)
-                            state.Init = RealState.InitializationStates.InitFloat;
+                            state.Init = RealSimulationState.InitializationStates.InitFloat;
                         pass = true;
                         break;
 
-                    case RealState.InitializationStates.InitTransient:
+                    case RealSimulationState.InitializationStates.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = RealState.SparseStates.ShouldReorder;
-                        state.Init = RealState.InitializationStates.InitFloat;
+                            state.Sparse = RealSimulationState.SparseStates.ShouldReorder;
+                        state.Init = RealSimulationState.InitializationStates.InitFloat;
                         break;
 
-                    case RealState.InitializationStates.None:
-                        state.Init = RealState.InitializationStates.InitFloat;
+                    case RealSimulationState.InitializationStates.None:
+                        state.Init = RealSimulationState.InitializationStates.InitFloat;
                         break;
 
                     default:

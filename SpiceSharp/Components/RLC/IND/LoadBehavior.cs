@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
             // Get the state
-            var state = simulation?.States.Get<RealState>();
+            var state = simulation?.States.Get<RealSimulationState>();
             if (state == null)
                 return null;
 

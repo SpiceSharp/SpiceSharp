@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the state currently being operated on
         /// </summary>
-        public RealState State { get; }
+        public RealSimulationState State { get; }
 
         /// <summary>
         /// Constructor
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="current">Current</param>
         /// <param name="flux">Flux</param>
         /// <param name="state">State</param>
-        public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, RealState state)
+        public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, RealSimulationState state)
         {
             if (flux == null)
                 throw new ArgumentNullException(nameof(flux));

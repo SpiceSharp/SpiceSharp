@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterInfo("Output current")]
-        public double GetCurrent(RealState state)
+        public double GetCurrent(RealSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             return state.Solution[BranchEq];
         }
         [ParameterName("v"), ParameterInfo("Output voltage")]
-        public double GetVoltage(RealState state)
+        public double GetVoltage(RealSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("p"), ParameterInfo("Power")]
-        public double GetPower(RealState state)
+        public double GetPower(RealSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public override Func<double> CreateGetter(Simulation simulation, string propertyName)
         {
             // Get the state
-            var state = simulation?.States.Get<RealState>();
+            var state = simulation?.States.Get<RealSimulationState>();
             if (state == null)
                 return null;
 

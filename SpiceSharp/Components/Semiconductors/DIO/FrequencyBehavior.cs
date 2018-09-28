@@ -39,21 +39,21 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("cd"), ParameterInfo("Diode capacitance")]
         public double Capacitance { get; protected set; }
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetDiodeVoltage(ComplexState state)
+        public Complex GetDiodeVoltage(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posPrimeNode] - state.Solution[_negNode];
         }
         [ParameterName("v"), ParameterInfo("Voltage across the diode")]
-        public Complex GetVoltage(ComplexState state)
+        public Complex GetVoltage(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
-        public Complex GetCurrent(ComplexState state)
+        public Complex GetCurrent(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             return voltage * geq;
         }
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
-        public Complex GetPower(ComplexState state)
+        public Complex GetPower(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));

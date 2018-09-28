@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The real state.
         /// </value>
-        public RealState RealState { get; protected set; }
+        public RealSimulationState RealState { get; protected set; }
 
         /// <summary>
         /// Gets the statistics.
@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
 
             // Add a state for real numbers
-            RealState = new RealState();
+            RealState = new RealSimulationState();
             States.Add(RealState);
 
             // Setup the load behaviors
@@ -206,7 +206,7 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var config = BaseConfiguration;
-            state.Init = RealState.InitializationStates.InitJunction;
+            state.Init = RealSimulationState.InitializationStates.InitJunction;
 
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
@@ -220,7 +220,7 @@ namespace SpiceSharp.Simulations
             // No convergence, try Gmin stepping
             if (config.GminSteps > 1)
             {
-                state.Init = RealState.InitializationStates.InitJunction;
+                state.Init = RealSimulationState.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
                 state.DiagonalGmin = config.Gmin;
                 for (var i = 0; i < config.GminSteps; i++)
@@ -235,7 +235,7 @@ namespace SpiceSharp.Simulations
                         break;
                     }
                     state.DiagonalGmin /= 10.0;
-                    state.Init = RealState.InitializationStates.InitFloat;
+                    state.Init = RealSimulationState.InitializationStates.InitFloat;
                 }
                 state.DiagonalGmin = 0.0;
                 if (Iterate(maxIterations))
@@ -247,7 +247,7 @@ namespace SpiceSharp.Simulations
             // Nope, still not converging, let's try source stepping
             if (config.SourceSteps > 1)
             {
-                state.Init = RealState.InitializationStates.InitJunction;
+                state.Init = RealSimulationState.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
                 for (var i = 0; i <= config.SourceSteps; i++)
                 {
@@ -312,24 +312,24 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if ((state.Sparse & RealState.SparseStates.DidPreorder) == 0)
+                if ((state.Sparse & RealSimulationState.SparseStates.DidPreorder) == 0)
                 {
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= RealState.SparseStates.DidPreorder;
+                    state.Sparse |= RealSimulationState.SparseStates.DidPreorder;
                 }
-                if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)
+                if (state.Init == RealSimulationState.InitializationStates.InitJunction || state.Init == RealSimulationState.InitializationStates.InitTransient)
                 {
-                    state.Sparse |= RealState.SparseStates.ShouldReorder;
+                    state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
                 }
 
                 // Reorder
-                if ((state.Sparse & RealState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder)
+                if ((state.Sparse & RealSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder)
                 {
                     Statistics.ReorderTime.Start();
                     solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~RealState.SparseStates.ShouldReorder;
+                    state.Sparse &= ~RealSimulationState.SparseStates.ShouldReorder;
                 }
                 else
                 {
@@ -341,7 +341,7 @@ namespace SpiceSharp.Simulations
 
                     if (!success)
                     {
-                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
                         continue;
                     }
                 }
@@ -373,7 +373,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case RealState.InitializationStates.InitFloat:
+                    case RealSimulationState.InitializationStates.InitFloat:
                         if (state.UseDc && state.HadNodeSet)
                         {
                             if (pass)
@@ -387,25 +387,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case RealState.InitializationStates.InitJunction:
-                        state.Init = RealState.InitializationStates.InitFix;
-                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                    case RealSimulationState.InitializationStates.InitJunction:
+                        state.Init = RealSimulationState.InitializationStates.InitFix;
+                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
                         break;
 
-                    case RealState.InitializationStates.InitFix:
+                    case RealSimulationState.InitializationStates.InitFix:
                         if (state.IsConvergent)
-                            state.Init = RealState.InitializationStates.InitFloat;
+                            state.Init = RealSimulationState.InitializationStates.InitFloat;
                         pass = true;
                         break;
 
-                    case RealState.InitializationStates.InitTransient:
+                    case RealSimulationState.InitializationStates.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = RealState.SparseStates.ShouldReorder;
-                        state.Init = RealState.InitializationStates.InitFloat;
+                            state.Sparse = RealSimulationState.SparseStates.ShouldReorder;
+                        state.Init = RealSimulationState.InitializationStates.InitFloat;
                         break;
 
-                    case RealState.InitializationStates.None:
-                        state.Init = RealState.InitializationStates.InitFloat;
+                    case RealSimulationState.InitializationStates.None:
+                        state.Init = RealSimulationState.InitializationStates.InitFloat;
                         break;
 
                     default:
@@ -454,7 +454,7 @@ namespace SpiceSharp.Simulations
             var state = RealState;
 
             // Consider doing nodeset assignments when we're starting out or in trouble
-            if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) ==
+            if ((state.Init & (RealSimulationState.InitializationStates.InitJunction | RealSimulationState.InitializationStates.InitFix)) ==
                 0) 
                 return;
 

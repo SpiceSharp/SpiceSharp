@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
         public double InternalVoltage { get; protected set; }
         [ParameterName("v"), ParameterInfo("Voltage across the diode")]
-        public double GetVoltage(RealState state)
+        public double GetVoltage(RealSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
         public double Conduct { get; protected set; }
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
-        public double GetPower(RealState state)
+        public double GetPower(RealSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -165,11 +165,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Initialization
             var check = false;
-            if (state.Init == RealState.InitializationStates.InitJunction)
+            if (state.Init == RealSimulationState.InitializationStates.InitJunction)
             {
                 vd = _bp.Off ? 0.0 : _temp.TempVCritical;
             }
-            else if (state.Init == RealState.InitializationStates.InitFix && _bp.Off)
+            else if (state.Init == RealSimulationState.InitializationStates.InitFix && _bp.Off)
             {
                 vd = 0.0;
             }
@@ -216,7 +216,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Check convergence
-            if (state.Init != RealState.InitializationStates.InitFix || !_bp.Off)
+            if (state.Init != RealSimulationState.InitializationStates.InitFix || !_bp.Off)
             {
                 if (check)
                     state.IsConvergent = false;

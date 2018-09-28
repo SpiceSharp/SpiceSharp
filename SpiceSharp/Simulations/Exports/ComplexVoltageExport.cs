@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = Simulation.States.Get<ComplexState>();
+            var state = Simulation.States.Get<ComplexSimulationState>();
             if (Simulation.Nodes.TryGetNode(PosNode, out var posNode))
             {
                 var posNodeIndex = posNode.Index;

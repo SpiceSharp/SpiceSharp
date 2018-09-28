@@ -259,8 +259,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 			 * step or the general iteration step and they
 			 * share some code, so we put them first - others later on
 			 */
-            if (state.Init == RealState.InitializationStates.InitFloat || state.Init == RealState.InitializationStates.InitTransient ||
-                state.Init == RealState.InitializationStates.InitFix && !_bp.Off)
+            if (state.Init == RealSimulationState.InitializationStates.InitFloat || state.Init == RealSimulationState.InitializationStates.InitTransient ||
+                state.Init == RealSimulationState.InitializationStates.InitFix && !_bp.Off)
             {
                 // general iteration
                 vbs = _mbp.MosfetType * (state.Solution[_bulkNode] - state.Solution[SourceNodePrime]);
@@ -310,14 +310,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				 * called.  We still just initialize the three voltages
 				 */
 
-                if (state.Init == RealState.InitializationStates.InitJunction && !_bp.Off)
+                if (state.Init == RealSimulationState.InitializationStates.InitJunction && !_bp.Off)
                 {
                     vds = _mbp.MosfetType * _bp.InitialVoltageDs;
                     vgs = _mbp.MosfetType * _bp.InitialVoltageGs;
                     vbs = _mbp.MosfetType * _bp.InitialVoltageBs;
 
                     // This is what Spice 3f5 does, but I'm not sure how valid this still is
-                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (state.UseDc || state.Domain == RealState.DomainType.None || !state.UseIc))
+                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (state.UseDc || state.Domain == RealSimulationState.DomainType.None || !state.UseIc))
                     {
                         vbs = -1;
                         vgs = _mbp.MosfetType * _temp.TempVt0;
@@ -470,7 +470,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * check convergence
 			 */
-            if (!_bp.Off || state.Init != RealState.InitializationStates.InitFix)
+            if (!_bp.Off || state.Init != RealSimulationState.InitializationStates.InitFix)
             {
                 if (check == 1)
                     state.IsConvergent = false;

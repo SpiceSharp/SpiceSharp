@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A simulation state for simulations using real numbers.
     /// </summary>
-    /// <seealso cref="State" />
-    public class RealState : State
+    /// <seealso cref="SimulationState" />
+    public class RealSimulationState : SimulationState
     {
         #region Simulation parameters
 

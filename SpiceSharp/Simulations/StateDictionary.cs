@@ -5,13 +5,13 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Dictionary of simulation states
     /// </summary>
-    public class StateDictionary : TypeDictionary<State>
+    public class StateDictionary : TypeDictionary<SimulationState>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StateDictionary"/> class.
         /// </summary>
         public StateDictionary()
-            : base(typeof(State))
+            : base(typeof(SimulationState))
         {
         }
 
@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="state">The state.</param>
         /// <exception cref="ArgumentNullException">state</exception>
-        public void Add(State state)
+        public void Add(SimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));

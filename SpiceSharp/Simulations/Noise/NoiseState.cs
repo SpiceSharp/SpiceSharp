@@ -5,8 +5,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A class that represents the state of a <see cref="Noise" /> analysis.
     /// </summary>
-    /// <seealso cref="State" />
-    public class NoiseState : State
+    /// <seealso cref="SimulationState" />
+    public class NoiseState : SimulationState
     {
         /// <summary>
         /// Private variables

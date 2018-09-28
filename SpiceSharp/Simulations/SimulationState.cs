@@ -3,7 +3,7 @@
     /// <summary>
     /// This class represents a simulation state.
     /// </summary>
-    public abstract class State
+    public abstract class SimulationState
     {
         /// <summary>
         /// Gets a value indicating whether this state is set up.

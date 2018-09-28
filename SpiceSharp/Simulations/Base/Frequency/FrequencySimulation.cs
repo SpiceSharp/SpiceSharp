@@ -39,7 +39,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The state of the complex.
         /// </value>
-        public ComplexState ComplexState { get; protected set; }
+        public ComplexSimulationState ComplexState { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
@@ -85,7 +85,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Create the state for complex numbers
-            ComplexState = new ComplexState();
+            ComplexState = new ComplexSimulationState();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
             States.Add(ComplexState);
 
@@ -111,7 +111,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Initialize the state
-            ComplexState.Sparse |= ComplexState.SparseStates.AcShouldReorder;
+            ComplexState.Sparse |= ComplexSimulationState.SparseStates.AcShouldReorder;
         }
 
         /// <summary>
@@ -149,16 +149,16 @@ namespace SpiceSharp.Simulations
             // Load AC
             FrequencyLoad();
 
-            if ((cstate.Sparse & ComplexState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
+            if ((cstate.Sparse & ComplexSimulationState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
             {
                 solver.OrderAndFactor();
-                cstate.Sparse &= ~ComplexState.SparseStates.AcShouldReorder;
+                cstate.Sparse &= ~ComplexSimulationState.SparseStates.AcShouldReorder;
             }
             else
             {
                 if (!solver.Factor())
                 {
-                    cstate.Sparse |= ComplexState.SparseStates.AcShouldReorder;
+                    cstate.Sparse |= ComplexSimulationState.SparseStates.AcShouldReorder;
                     goto retry;
                 }
             }
@@ -187,7 +187,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
-            RealState.Domain = RealState.DomainType.Frequency;
+            RealState.Domain = RealSimulationState.DomainType.Frequency;
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {

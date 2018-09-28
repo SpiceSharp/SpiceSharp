@@ -128,7 +128,7 @@ namespace SpiceSharp.Behaviors
 
                 // Method: TResult Method(State)
                 // Works for any child class of State
-                if (parameters[0].ParameterType.GetTypeInfo().IsSubclassOf(typeof(State)))
+                if (parameters[0].ParameterType.GetTypeInfo().IsSubclassOf(typeof(SimulationState)))
                 {
                     // Get the state from the simulation that this method needs
                     if (!simulation.States.TryGetValue(parameters[0].ParameterType, out var state))
