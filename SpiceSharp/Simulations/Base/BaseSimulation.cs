@@ -322,7 +322,7 @@ namespace SpiceSharp.Simulations
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
                 }
-                if (state.Init == BaseSimulationState.InitializationStates.InitJunction || state.Init == BaseSimulationState.InitializationStates.InitTransient)
+                if (state.Init == BaseSimulationState.InitializationStates.InitJunction)
                 {
                     state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                 }
@@ -399,12 +399,6 @@ namespace SpiceSharp.Simulations
                         if (state.IsConvergent)
                             state.Init = BaseSimulationState.InitializationStates.InitFloat;
                         pass = true;
-                        break;
-
-                    case BaseSimulationState.InitializationStates.InitTransient:
-                        if (iterno <= 1)
-                            state.Sparse = BaseSimulationState.SparseStates.ShouldReorder;
-                        state.Init = BaseSimulationState.InitializationStates.InitFloat;
                         break;
 
                     case BaseSimulationState.InitializationStates.None:

@@ -273,7 +273,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			* share some code, so we put them first - others later on
 			*/
 
-            if (state.Init == BaseSimulationState.InitializationStates.InitFloat || state.Init == BaseSimulationState.InitializationStates.InitTransient ||
+            if (state.Init == BaseSimulationState.InitializationStates.InitFloat || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
                 state.Init == BaseSimulationState.InitializationStates.InitFix && !_bp.Off)
             {
                 // General iteration

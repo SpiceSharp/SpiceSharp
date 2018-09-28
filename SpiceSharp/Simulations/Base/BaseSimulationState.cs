@@ -36,13 +36,7 @@ namespace SpiceSharp.Simulations
             /// <summary>
             /// Indicates that an initial iteration has been done and that we need to fix it to check for convergence
             /// </summary>
-            InitFix,
-
-            /// <summary>
-            /// Indicates that we are switching from DC to time-domain analysis.
-            /// This is the case when calculating the first nonzero timepoint in Transient analysis.
-            /// </summary>
-            InitTransient
+            InitFix
         }
 
         // TODO: This should probably be separated.

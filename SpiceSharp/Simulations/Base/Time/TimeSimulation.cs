@@ -178,6 +178,7 @@ namespace SpiceSharp.Simulations
             var solver = state.Solver;
             var pass = false;
             var iterno = 0;
+            var initTransient = Method.BaseTime.Equals(0.0);
 
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIc)
@@ -215,7 +216,8 @@ namespace SpiceSharp.Simulations
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
                 }
-                if (state.Init == BaseSimulationState.InitializationStates.InitJunction || state.Init == BaseSimulationState.InitializationStates.InitTransient)
+
+                if (state.Init == BaseSimulationState.InitializationStates.InitJunction || initTransient)
                 {
                     state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
                 }
@@ -266,46 +268,52 @@ namespace SpiceSharp.Simulations
                 else
                     state.IsConvergent = false;
 
-                switch (state.Init)
+                if (initTransient)
                 {
-                    case BaseSimulationState.InitializationStates.InitFloat:
-                        if (state.UseDc && state.HadNodeSet)
-                        {
-                            if (pass)
-                                state.IsConvergent = false;
-                            pass = false;
-                        }
-                        if (state.IsConvergent)
-                        {
-                            Statistics.Iterations += iterno;
-                            return true;
-                        }
-                        break;
+                    initTransient = false;
+                    if (iterno <= 1)
+                        state.Sparse = BaseSimulationState.SparseStates.ShouldReorder;
+                    state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                }
 
-                    case BaseSimulationState.InitializationStates.InitJunction:
-                        state.Init = BaseSimulationState.InitializationStates.InitFix;
-                        state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
-                        break;
+                {
+                    switch (state.Init)
+                    {
+                        case BaseSimulationState.InitializationStates.InitFloat:
+                            if (state.UseDc && state.HadNodeSet)
+                            {
+                                if (pass)
+                                    state.IsConvergent = false;
+                                pass = false;
+                            }
 
-                    case BaseSimulationState.InitializationStates.InitFix:
-                        if (state.IsConvergent)
+                            if (state.IsConvergent)
+                            {
+                                Statistics.Iterations += iterno;
+                                return true;
+                            }
+
+                            break;
+
+                        case BaseSimulationState.InitializationStates.InitJunction:
+                            state.Init = BaseSimulationState.InitializationStates.InitFix;
+                            state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
+                            break;
+
+                        case BaseSimulationState.InitializationStates.InitFix:
+                            if (state.IsConvergent)
+                                state.Init = BaseSimulationState.InitializationStates.InitFloat;
+                            pass = true;
+                            break;
+
+                        case BaseSimulationState.InitializationStates.None:
                             state.Init = BaseSimulationState.InitializationStates.InitFloat;
-                        pass = true;
-                        break;
+                            break;
 
-                    case BaseSimulationState.InitializationStates.InitTransient:
-                        if (iterno <= 1)
-                            state.Sparse = BaseSimulationState.SparseStates.ShouldReorder;
-                        state.Init = BaseSimulationState.InitializationStates.InitFloat;
-                        break;
-
-                    case BaseSimulationState.InitializationStates.None:
-                        state.Init = BaseSimulationState.InitializationStates.InitFloat;
-                        break;
-
-                    default:
-                        Statistics.Iterations += iterno;
-                        throw new CircuitException("Could not find flag");
+                        default:
+                            Statistics.Iterations += iterno;
+                            throw new CircuitException("Could not find flag");
+                    }
                 }
             }
         }

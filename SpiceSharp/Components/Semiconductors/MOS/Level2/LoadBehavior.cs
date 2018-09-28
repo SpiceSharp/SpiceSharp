@@ -258,7 +258,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var beta = _temp.TempTransconductance * _bp.Width / effectiveLength;
             var oxideCap = _mbp.OxideCapFactor * effectiveLength * _bp.Width;
 
-            if (state.Init == BaseSimulationState.InitializationStates.InitFloat || state.Init == BaseSimulationState.InitializationStates.InitTransient ||
+            if (state.Init == BaseSimulationState.InitializationStates.InitFloat || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
                 state.Init == BaseSimulationState.InitializationStates.InitFix && !_bp.Off)
             {
                 // general iteration

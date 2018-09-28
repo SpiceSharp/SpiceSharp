@@ -125,8 +125,6 @@ namespace SpiceSharp.Simulations
                         Method.Probe(this, newDelta);
 
                         // Try to solve the new point
-                        if (Method.BaseTime.Equals(0.0))
-                            state.Init = BaseSimulationState.InitializationStates.InitTransient;
                         var converged = TimeIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
