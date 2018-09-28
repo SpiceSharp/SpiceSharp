@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class VariableSet
+    public class VariableSet : IEnumerable<Variable>
     {
         /// <summary>
         /// Private variables
@@ -26,6 +27,7 @@ namespace SpiceSharp.Simulations
         /// Initial conditions specify at which value a <see cref="TimeSimulation" /> should start.
         /// </remarks>
         /// <seealso cref="TimeSimulation" />
+        [Obsolete]
         public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
@@ -39,6 +41,7 @@ namespace SpiceSharp.Simulations
         /// to find a starting point while iterating to a solution. Choosing some values close to the
         /// final solution will usually speed up convergence greatly.
         /// </remarks>
+        [Obsolete]
         public Dictionary<Identifier, double> NodeSets { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
@@ -231,5 +234,21 @@ namespace SpiceSharp.Simulations
             // Unlock
             _locked = false;
         }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<Variable> GetEnumerator() => _unknowns.GetEnumerator();
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

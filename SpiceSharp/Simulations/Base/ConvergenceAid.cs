@@ -1,0 +1,169 @@
+﻿using SpiceSharp.Algebra;
+
+namespace SpiceSharp.Simulations
+{
+    /// <summary>
+    /// A template for aiding convergence.
+    /// </summary>
+    /// <remarks>
+    /// The convergence aid will try to bring the solution of a variable as close
+    /// as possible to the specified value. If this value is close to the final
+    /// solution, then convergence can be achieved much faster.
+    /// </remarks>
+    public class ConvergenceAid
+    {
+        /// <summary>
+        /// The amount with which a value is forced to the convergence aid value.
+        /// </summary>
+        private const double Force = 1.0e10;
+
+        /// <summary>
+        /// Gets the name of the variable.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public Identifier Name { get; }
+
+        /// <summary>
+        /// Gets the value for the convergence aid.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        public double Value { get; }
+
+        /// <summary>
+        /// Gets the unknown variables.
+        /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
+        protected VariableSet Variables { get; private set; }
+
+        /// <summary>
+        /// Gets the solver of the system of equations.
+        /// </summary>
+        /// <value>
+        /// The solver.
+        /// </value>
+        protected Solver<double> Solver { get; private set; }
+
+        /// <summary>
+        /// Gets the diagonal element.
+        /// </summary>
+        /// <value>
+        /// The diagonal element.
+        /// </value>
+        protected MatrixElement<double> Diagonal { get; private set; }
+
+        /// <summary>
+        /// Gets the right-hand side element.
+        /// </summary>
+        /// <value>
+        /// The right-hand side element.
+        /// </value>
+        protected VectorElement<double> Rhs { get; private set; }
+
+        /// <summary>
+        /// Gets the node for which the aid is meant.
+        /// </summary>
+        /// <value>
+        /// The node.
+        /// </value>
+        protected Variable Node { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConvergenceAid"/> class.
+        /// </summary>
+        /// <param name="name">The name of the variable.</param>
+        /// <param name="value">The value.</param>
+        public ConvergenceAid(Identifier name, double value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        /// <summary>
+        /// Sets up the convergence aid for a specific simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        public virtual void Initialize(BaseSimulation simulation)
+        {
+            // Get the unknown variables
+            Variables = simulation.Nodes;
+
+            // Get the solver
+            var state = simulation.States.Get<RealState>();
+            Solver = state.Solver;
+
+            // Get the node
+            if (!simulation.Nodes.TryGetNode(Name, out var node))
+            {
+                CircuitWarning.Warning(this, "Could not set convergence aid: variable {0} not found.".FormatString(Name));
+                Node = null;
+                return;
+            }
+            Node = node;
+
+            // Get the necessary elements
+            Diagonal = Solver.GetMatrixElement(node.Index, node.Index);
+            Rhs = Value.Equals(0.0) ? null : Solver.GetRhsElement(node.Index);
+
+            // Update the current solution to reflect our convergence aid value
+            state.Solution[node.Index] = Value;
+        }
+
+        /// <summary>
+        /// Aids the convergence.
+        /// </summary>
+        public virtual void Aid()
+        {
+            // Don't execute if the convergence aid wasn't initialized properly
+            if (Diagonal == null)
+                return;
+
+            // Clear the row
+            var hasOtherTypes = false;
+            foreach (var v in Variables)
+            {
+                // If the variable is a current, then we can't just set it to 0... 
+                if (v.UnknownType == VariableType.Current)
+                    hasOtherTypes = true;
+                else
+                {
+                    var elt = Solver.FindMatrixElement(Node.Index, v.Index);
+                    if (elt != null)
+                        elt.Value = 0.0;
+                }
+            }
+
+            // If there are current contributions, then we can't just hard-set the value
+            if (hasOtherTypes)
+            {
+                Diagonal.Value = Force;
+                if (Rhs != null)
+                    Rhs.Value = Force * Value;
+            }
+            else
+            {
+                Diagonal.Value = 1.0;
+                if (Rhs != null)
+                    Rhs.Value = Value;
+            }
+        }
+
+        /// <summary>
+        /// Destroys the convergence aid.
+        /// </summary>
+        public virtual void Unsetup()
+        {
+            // Clear all variables
+            Variables = null;
+            Solver = null;
+            Node = null;
+            Diagonal = null;
+            Rhs = null;
+        }
+    }
+}

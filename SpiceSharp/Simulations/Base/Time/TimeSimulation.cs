@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 
@@ -30,6 +31,7 @@ namespace SpiceSharp.Simulations
         /// Time-domain behaviors.
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
+        private List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -96,6 +98,48 @@ namespace SpiceSharp.Simulations
                 _transientBehaviors[i].CreateStates(Method);
             }
             Method.Setup(this);
+
+            // TODO: Compatibility - initial conditions from nodes instead of configuration should be removed eventually
+            if (BaseConfiguration.Nodesets.Count == 0)
+            {
+                foreach (var ns in Nodes.InitialConditions)
+                    _initialConditions.Add(new ConvergenceAid(ns.Key, ns.Value));
+            }
+
+            // Set up initial conditions
+            foreach (var ic in TimeConfiguration.InitialConditions)
+                _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
+        }
+
+        /// <summary>
+        /// Executes the simulation.
+        /// </summary>
+        protected override void Execute()
+        {
+            base.Execute();
+
+            // Apply initial conditions if they are not set for the devices (UseIc).
+            if (_initialConditions.Count > 0 && !RealState.UseIc)
+            {
+                // Initialize initial conditions
+                foreach (var ic in _initialConditions)
+                    ic.Initialize(this);
+                AfterLoad += LoadInitialConditions;
+            }
+
+            // Calculate the operating point of the circuit
+            var state = RealState;
+            state.UseIc = TimeConfiguration.UseIc;
+            state.UseDc = true;
+            state.Domain = RealState.DomainType.Time;
+            Op(BaseConfiguration.DcMaxIterations);
+            Statistics.TimePoints++;
+
+            // Stop calculating the operating point
+            state.UseIc = false;
+            state.UseDc = false;
+            GetDcStates();
+            AfterLoad -= LoadInitialConditions;
         }
 
         /// <summary>
@@ -108,8 +152,15 @@ namespace SpiceSharp.Simulations
                 _transientBehaviors[i].Unsetup(this);
             _transientBehaviors = null;
 
+            // Destroy the integration method
             Method.Unsetup();
             Method = null;
+
+            // Destroy the initial conditions
+            AfterLoad -= LoadInitialConditions;
+            foreach (var ic in _initialConditions)
+                ic.Unsetup();
+            _initialConditions.Clear();
 
             base.Unsetup();
         }
@@ -270,6 +321,17 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _transientBehaviors.Count; i++)
                 _transientBehaviors[i].GetDcState(this);
             Method.Initialize(this);
+        }
+
+        /// <summary>
+        /// Applies nodesets.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Arguments</param>
+        protected void LoadInitialConditions(object sender, LoadStateEventArgs e)
+        {
+            foreach (var ic in _initialConditions)
+                ic.Aid();
         }
 
         /// <summary>

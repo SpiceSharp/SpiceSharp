@@ -81,27 +81,7 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             var state = RealState;
-            var baseConfig = BaseConfiguration;
             var timeConfig = TimeConfiguration;
-
-            // Initialize before starting the simulation
-            state.UseIc = timeConfig.UseIc;
-            state.Domain = RealState.DomainType.Time;
-            state.Gmin = baseConfig.Gmin;
-
-            // Use node initial conditions if device initial conditions are not used
-            if (!timeConfig.UseIc)
-                AfterLoad += LoadInitialConditions;
-
-            // Calculate the operating point
-            Op(baseConfig.DcMaxIterations);
-            Statistics.TimePoints++;
-
-            // Stop calculating a DC solution
-            state.UseIc = false;
-            state.UseDc = false;
-            GetDcStates();
-            AfterLoad -= LoadInitialConditions;
 
             // Start our statistics
             Statistics.TransientTime.Start();
@@ -173,41 +153,6 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientIterations += Statistics.Iterations - startIters;
                 Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
-            }
-        }
-
-        /// <summary>
-        /// Loads initial conditions.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        protected void LoadInitialConditions(object sender, LoadStateEventArgs e)
-        {
-            var state = RealState;
-            var nodes = Nodes;
-            var solver = state.Solver;
-
-            for (var i = 0; i < nodes.Count; i++)
-            {
-                var node = nodes[i];
-                if (nodes.InitialConditions.ContainsKey(node.Name))
-                {
-                    var ic = nodes.InitialConditions[node.Name];
-                    if (ZeroNoncurrentRow(solver, nodes, node.Index))
-                    {
-                        // Avoid creating sparse elements if it is not necessary
-                        if (!ic.Equals(0.0))
-                            solver.GetRhsElement(node.Index).Value = 1.0e10 * ic;
-                        node.Diagonal.Value = 1.0e10;
-                    }
-                    else
-                    {
-                        // Avoid creating sparse elements if it is not necessary
-                        if (!ic.Equals(0.0))
-                            solver.GetRhsElement(node.Index).Value = ic;
-                        node.Diagonal.Value = 1.0;
-                    }
-                }
             }
         }
     }

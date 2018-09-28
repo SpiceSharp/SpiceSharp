@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 
@@ -79,6 +80,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseLoadBehavior> _loadBehaviors;
         private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
+        private List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
@@ -117,8 +119,16 @@ namespace SpiceSharp.Simulations
                 _loadBehaviors[i].GetEquationPointers(Nodes, RealState.Solver);
             RealState.Setup(Nodes);
 
-            // Allow nodesets to help convergence
-            AfterLoad += LoadNodeSets;
+            // TODO: Compatibility - nodesets from nodes instead of configuration should be removed eventually
+            if (BaseConfiguration.Nodesets.Count == 0)
+            {
+                foreach (var ns in Nodes.NodeSets)
+                    _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
+            }
+
+            // Set up nodesets
+            foreach (var ns in BaseConfiguration.Nodesets)
+                _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
         }
 
         /// <summary>
@@ -126,10 +136,20 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
+            // Perform temperature-dependent calculations
             Temperature();
 
-            // Do initial conditions
-            InitialConditions();
+            // Apply nodesets if they are specified
+            if (_nodesets.Count > 0)
+            {
+                // Initialize the nodesets
+                foreach (var aid in _nodesets)
+                    aid.Initialize(this);
+                AfterLoad += LoadNodeSets;
+            }
+
+            // Copy configuration
+            RealState.Gmin = BaseConfiguration.Gmin;
         }
 
         /// <summary>
@@ -153,6 +173,9 @@ namespace SpiceSharp.Simulations
 
             // Remove nodeset
             AfterLoad -= LoadNodeSets;
+            foreach (var aid in _nodesets)
+                aid.Unsetup();
+            _nodesets.Clear();
 
             // Unsetup all behaviors
             for (var i = 0; i < _initialConditionBehaviors.Count; i++)
@@ -421,55 +444,6 @@ namespace SpiceSharp.Simulations
                 _loadBehaviors[i].Load(this);
         }
 
-        // TODO: Are initial conditions here actually needed?
-        /// <summary>
-        /// Applies initial conditions and nodesets.
-        /// </summary>
-        protected void InitialConditions()
-        {
-            var state = RealState;
-            var nodes = Nodes;
-            var solver = state.Solver;
-
-            // Clear the current solution
-            var element = solver.FirstInReorderedRhs();
-            while (element != null)
-            {
-                element.Value = 0.0;
-                element = element.Below;
-            }
-
-            // Go over all nodes
-            for (var i = 0; i < nodes.Count; i++)
-            {
-                var node = nodes[i];
-                if (nodes.NodeSets.ContainsKey(node.Name))
-                {
-                    node.Diagonal = solver.GetMatrixElement(node.Index, node.Index);
-
-                    // Avoid creating a sparse element if it is not needed
-                    if (!nodes.NodeSets[node.Name].Equals(0.0))
-                        solver.GetRhsElement(node.Index).Value = nodes.NodeSets[node.Name];
-                    state.HadNodeSet = true;
-                }
-                if (nodes.InitialConditions.ContainsKey(node.Name))
-                {
-                    node.Diagonal = solver.GetMatrixElement(node.Index, node.Index);
-
-                    // Avoid creating a sparse element if it is not needed
-                    if (!nodes.InitialConditions[node.Name].Equals(0.0))
-                        solver.GetRhsElement(node.Index).Value = nodes.InitialConditions[node.Name];
-                }
-            }
-
-            // Use initial conditions
-            if (state.UseIc)
-            {
-                for (var i = 0; i < _initialConditionBehaviors.Count; i++)
-                    _initialConditionBehaviors[i].SetInitialCondition(this);
-            }
-        }
-
         /// <summary>
         /// Applies nodesets.
         /// </summary>
@@ -478,33 +452,15 @@ namespace SpiceSharp.Simulations
         protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
             var state = RealState;
-            var nodes = Nodes;
 
-            // Consider doing nodeset & ic assignments
-            if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) != 0)
-            {
-                // Do nodesets
-                for (var i = 0; i < nodes.Count; i++)
-                {
-                    var node = nodes[i];
-                    if (nodes.NodeSets.ContainsKey(node.Name))
-                    {
-                        var ns = nodes.NodeSets[node.Name];
-                        if (ZeroNoncurrentRow(state.Solver, nodes, node.Index))
-                        {
-                            if (!ns.Equals(0.0))
-                                state.Solver.GetRhsElement(node.Index).Value = 1.0e10 * ns;
-                            node.Diagonal.Value = 1.0e10;
-                        }
-                        else
-                        {
-                            if (!ns.Equals(0.0))
-                                state.Solver.GetRhsElement(node.Index).Value = ns;
-                            node.Diagonal.Value = 1.0;
-                        }
-                    }
-                }
-            }
+            // Consider doing nodeset assignments when we're starting out or in trouble
+            if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) ==
+                0) 
+                return;
+
+            // Aid in convergence
+            foreach (var aid in _nodesets)
+                aid.Aid();
         }
 
         /// <summary>

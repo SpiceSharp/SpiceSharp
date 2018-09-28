@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using System.Collections.Generic;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A configuration for a <see cref="BaseSimulation" />.
@@ -87,5 +89,13 @@
         /// The maximum amount of iterations.
         /// </value>
         public int DcMaxIterations { get; set; } = 100;
+
+        /// <summary>
+        /// Gets the nodesets.
+        /// </summary>
+        /// <value>
+        /// The nodesets.
+        /// </value>
+        public Dictionary<Identifier, double> Nodesets { get; } = new Dictionary<Identifier, double>();
     }
 }

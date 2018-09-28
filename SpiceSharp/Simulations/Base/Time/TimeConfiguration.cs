@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System.Collections.Generic;
+using SpiceSharp.Attributes;
 using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
@@ -85,6 +86,14 @@ namespace SpiceSharp.Simulations
         /// Use initial conditions.
         /// </summary>
         public bool UseIc { get; set; } = false;
+
+        /// <summary>
+        /// Gets the initial conditions.
+        /// </summary>
+        /// <value>
+        /// The initial conditions.
+        /// </value>
+        public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
