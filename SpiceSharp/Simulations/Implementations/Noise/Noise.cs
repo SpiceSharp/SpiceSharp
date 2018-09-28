@@ -30,6 +30,7 @@ namespace SpiceSharp.Simulations
         /// Noise behaviors
         /// </summary>
         private BehaviorList<BaseNoiseBehavior> _noiseBehaviors;
+        private bool _shouldReorder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
@@ -81,6 +82,8 @@ namespace SpiceSharp.Simulations
             _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
             NoiseState = new NoiseState();
             NoiseState.Setup(Variables);
+
+            _shouldReorder = true;
         }
 
         /// <summary>
@@ -125,7 +128,7 @@ namespace SpiceSharp.Simulations
             state.UseDc = true;
             state.Gmin = BaseConfiguration.Gmin;
             Op(baseconfig.DcMaxIterations);
-            state.Sparse |= BaseSimulationState.SparseStates.AcShouldReorder;
+            _shouldReorder = true;
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();

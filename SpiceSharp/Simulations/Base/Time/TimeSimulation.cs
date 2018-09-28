@@ -32,6 +32,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
         private List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
+        private bool _shouldReorder = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -176,7 +177,7 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var solver = state.Solver;
-            var pass = false;
+            // var pass = false;
             var iterno = 0;
             var initTransient = Method.BaseTime.Equals(0.0);
 
@@ -210,25 +211,18 @@ namespace SpiceSharp.Simulations
                     throw;
                 }
 
-                // Preorder matrix
-                if ((state.Sparse & BaseSimulationState.SparseStates.DidPreorder) == 0) // !state.Sparse.HasFlag(RealState.SparseStates.DidPreorder)
-                {
-                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
-                }
+                // Preordering is already done in the operating point calculation
 
                 if (state.Init == InitializationModes.Junction || initTransient)
-                {
-                    state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
-                }
+                    _shouldReorder = true;
 
                 // Reorder
-                if ((state.Sparse & BaseSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
+                if (_shouldReorder)
                 {
                     Statistics.ReorderTime.Start();
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~BaseSimulationState.SparseStates.ShouldReorder;
+                    _shouldReorder = false;
                 }
                 else
                 {
@@ -239,7 +233,7 @@ namespace SpiceSharp.Simulations
 
                     if (!success)
                     {
-                        state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
+                        _shouldReorder = true;
                         continue;
                     }
                 }
@@ -272,20 +266,21 @@ namespace SpiceSharp.Simulations
                 {
                     initTransient = false;
                     if (iterno <= 1)
-                        state.Sparse = BaseSimulationState.SparseStates.ShouldReorder;
+                        _shouldReorder = true;
                     state.Init = InitializationModes.Float;
                 }
-
+                else
                 {
                     switch (state.Init)
                     {
                         case InitializationModes.Float:
-                            if (state.UseDc && state.HadNodeSet)
+                            // TimeIterate is only used during simulation, so the next part is never reached
+                            /* if (state.UseDc && state.HadNodeSet)
                             {
                                 if (pass)
                                     state.IsConvergent = false;
                                 pass = false;
-                            }
+                            } */
 
                             if (state.IsConvergent)
                             {
@@ -297,13 +292,13 @@ namespace SpiceSharp.Simulations
 
                         case InitializationModes.Junction:
                             state.Init = InitializationModes.Fix;
-                            state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
+                            _shouldReorder = true;
                             break;
 
                         case InitializationModes.Fix:
                             if (state.IsConvergent)
                                 state.Init = InitializationModes.Float;
-                            pass = true;
+                            // pass = true;
                             break;
 
                         case InitializationModes.None:

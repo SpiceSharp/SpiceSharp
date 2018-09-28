@@ -11,34 +11,6 @@ namespace SpiceSharp.Simulations
     {
         #region Simulation parameters
 
-
-
-        // TODO: This should probably be separated.
-        /// <summary>
-        /// Possible states for solving using sparse matrices
-        /// </summary>
-        [Flags]
-        public enum SparseStates
-        {
-            /// <summary>
-            /// Indicates that the matrix should be reordered
-            /// </summary>
-            /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            ShouldReorder = 0x01,
-
-            /// <summary>
-            /// Indicates that the matrix is preordered
-            /// </summary>
-            /// <remarks>Preordering uses common observations in matrices for Modifed Nodal Analysis (MNA) to reorder the matrix before running any analysis.</remarks>
-            DidPreorder = 0x100,
-
-            /// <summary>
-            /// Indicates that the matrix should be reordered for AC analysis
-            /// </summary>
-            /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            AcShouldReorder = 0x10
-        }
-
         /// <summary>
         /// Gets or sets the initialization flag.
         /// </summary>
@@ -46,14 +18,6 @@ namespace SpiceSharp.Simulations
         /// The flag.
         /// </value>
         public InitializationModes Init { get; set; }
-
-        /// <summary>
-        /// Gets or sets flags for solving using sparse matrices.
-        /// </summary>
-        /// <value>
-        /// The flags.
-        /// </value>
-        public SparseStates Sparse { get; set; }
 
         /// <summary>
         /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
@@ -121,19 +85,6 @@ namespace SpiceSharp.Simulations
         /// The nominal temperature.
         /// </value>
         public double NominalTemperature { get; set; } = 300.15;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether nodesets were applied.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if nodesets were applied; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Nodesets allow the simulator to start iterating to a solution using specified start
-        /// values. If values are chosen close to the final solution, then convergence can be
-        /// much faster.
-        /// </remarks>
-        public bool HadNodeSet { get; set; } = false;
         #endregion
 
         /// <summary>
@@ -179,7 +130,6 @@ namespace SpiceSharp.Simulations
 
             // Initialize all states and parameters
             Init = InitializationModes.None;
-            Sparse = SparseStates.ShouldReorder;
             UseDc = true;
             UseIc = false;
 

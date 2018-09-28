@@ -82,6 +82,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
         private List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin = 0.0;
+        private bool _isPreordered, _shouldReorder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
@@ -112,6 +113,8 @@ namespace SpiceSharp.Simulations
 
             // Create the state for this simulation
             RealState = new BaseSimulationState();
+            _isPreordered = false;
+            _shouldReorder = true;
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
@@ -317,23 +320,21 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if ((state.Sparse & BaseSimulationState.SparseStates.DidPreorder) == 0)
+                if (!_isPreordered)
                 {
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= BaseSimulationState.SparseStates.DidPreorder;
+                    _isPreordered = true;
                 }
                 if (state.Init == InitializationModes.Junction)
-                {
-                    state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
-                }
+                    _shouldReorder = true;
 
                 // Reorder
-                if ((state.Sparse & BaseSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder)
+                if (_shouldReorder)
                 {
                     Statistics.ReorderTime.Start();
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~BaseSimulationState.SparseStates.ShouldReorder;
+                    _shouldReorder = false;
                 }
                 else
                 {
@@ -344,7 +345,7 @@ namespace SpiceSharp.Simulations
 
                     if (!success)
                     {
-                        state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
+                        _shouldReorder = true;
                         continue;
                     }
                 }
@@ -377,7 +378,7 @@ namespace SpiceSharp.Simulations
                 switch (state.Init)
                 {
                     case InitializationModes.Float:
-                        if (state.UseDc && state.HadNodeSet)
+                        if (state.UseDc && _nodesets.Count > 0)
                         {
                             if (pass)
                                 state.IsConvergent = false;
@@ -392,7 +393,7 @@ namespace SpiceSharp.Simulations
 
                     case InitializationModes.Junction:
                         state.Init = InitializationModes.Fix;
-                        state.Sparse |= BaseSimulationState.SparseStates.ShouldReorder;
+                        _shouldReorder = true;
                         break;
 
                     case InitializationModes.Fix:
