@@ -131,7 +131,6 @@ namespace SpiceSharp.Simulations
             var state = RealState;
             state.UseIc = TimeConfiguration.UseIc;
             state.UseDc = true;
-            state.Domain = BaseSimulationState.DomainType.Time;
             Op(BaseConfiguration.DcMaxIterations);
             Statistics.TimePoints++;
 
@@ -181,7 +180,7 @@ namespace SpiceSharp.Simulations
             var iterno = 0;
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIc && state.Domain == BaseSimulationState.DomainType.Time)
+            if (state.UseIc)
             {
                 state.StoreSolution();
 

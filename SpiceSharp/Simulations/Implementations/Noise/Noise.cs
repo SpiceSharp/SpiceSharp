@@ -121,7 +121,6 @@ namespace SpiceSharp.Simulations
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
-            state.Domain = BaseSimulationState.DomainType.None;
             state.UseIc = false;
             state.UseDc = true;
             state.Gmin = BaseConfiguration.Gmin;

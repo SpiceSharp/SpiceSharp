@@ -315,7 +315,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     vbs = _mbp.MosfetType * _bp.InitialVoltageBs;
 
                     // TODO: At some point, check what this is supposed to do
-                    if (vds.Equals(0.0) && vgs.Equals(0.0) && vbs.Equals(0.0) && (state.UseDc || state.Domain == BaseSimulationState.DomainType.None || !state.UseIc))
+                    if (vds.Equals(0.0) && vgs.Equals(0.0) && vbs.Equals(0.0) && (state.UseDc || !state.UseIc))
                     {
                         vbs = -1;
                         vgs = _mbp.MosfetType * _temp.TempVt0;

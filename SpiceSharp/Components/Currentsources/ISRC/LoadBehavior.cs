@@ -138,13 +138,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double value, time = 0.0;
+            double value;
 
             // Time domain analysis
-            if (state.Domain == BaseSimulationState.DomainType.Time)
+            if (simulation is TimeSimulation ts)
             {
-                if (simulation is TimeSimulation tsim)
-                    time = tsim.Method.Time;
+                var time = ts.Method.Time;
 
                 // Use the waveform if possible
                 if (_bp.Waveform != null)

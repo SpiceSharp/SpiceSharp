@@ -165,7 +165,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var time = 0.0;
             double value;
 
             PosBranchPtr.Value += 1;
@@ -173,10 +172,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             NegBranchPtr.Value -= 1;
             BranchNegPtr.Value -= 1;
 
-            if (state.Domain == BaseSimulationState.DomainType.Time)
+            if (simulation is TimeSimulation ts)
             {
-                if (simulation is TimeSimulation tsim)
-                    time = tsim.Method.Time;
+                var time = ts.Method.Time;
 
                 // Use the waveform if possible
                 if (_bp.Waveform != null)

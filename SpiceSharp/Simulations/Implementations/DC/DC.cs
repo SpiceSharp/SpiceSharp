@@ -115,7 +115,6 @@ namespace SpiceSharp.Simulations
             state.Init = BaseSimulationState.InitializationStates.InitJunction;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
-            state.Domain = BaseSimulationState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 
             // Initialize

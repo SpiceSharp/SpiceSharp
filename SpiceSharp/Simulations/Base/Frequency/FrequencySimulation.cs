@@ -186,7 +186,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
-            RealState.Domain = BaseSimulationState.DomainType.Frequency;
+            RealState.UseDc = false;
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {

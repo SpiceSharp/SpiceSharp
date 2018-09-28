@@ -72,32 +72,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Possible domain types.
-        /// </summary>
-        public enum DomainType
-        {
-            /// <summary>
-            /// No domain.
-            /// </summary>
-            None,
-
-            /// <summary>
-            /// The simulation uses the time domain
-            /// </summary>
-            Time,
-
-            /// <summary>
-            /// The simulation uses the frequency domain
-            /// </summary>
-            Frequency,
-
-            /// <summary>
-            /// The simulation uses the laplace domain (complex domain)
-            /// </summary>
-            Laplace
-        }
-
-        /// <summary>
         /// Gets or sets the initialization flag.
         /// </summary>
         /// <value>
@@ -112,14 +86,6 @@ namespace SpiceSharp.Simulations
         /// The flags.
         /// </value>
         public SparseStates Sparse { get; set; }
-
-        /// <summary>
-        /// Gets or sets the current domain for simulation.
-        /// </summary>
-        /// <value>
-        /// The domain.
-        /// </value>
-        public DomainType Domain { get; set; }
 
         /// <summary>
         /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
@@ -246,7 +212,6 @@ namespace SpiceSharp.Simulations
             // Initialize all states and parameters
             Init = InitializationStates.None;
             Sparse = SparseStates.ShouldReorder;
-            Domain = DomainType.None;
             UseDc = true;
             UseIc = false;
 
