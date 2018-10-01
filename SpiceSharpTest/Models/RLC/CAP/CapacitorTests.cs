@@ -3,7 +3,6 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models

@@ -18,16 +18,6 @@ namespace SpiceSharp.Algebra.Solve
         private int[] _markowitzProduct;
 
         /// <summary>
-        /// Gets the relative pivot threshold.
-        /// </summary>
-        public double RelativePivotThreshold { get; set; } = 1e-3;
-
-        /// <summary>
-        /// Gets the absolute pivot threshold.
-        /// </summary>
-        public double AbsolutePivotThreshold { get; set; } = 0;
-
-        /// <summary>
         /// The maximum Markowitz count that will not result in Int32 overflow when squared
         /// Markowitz counts are capped at this quantity.
         /// </summary>

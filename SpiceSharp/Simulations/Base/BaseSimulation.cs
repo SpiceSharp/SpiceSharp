@@ -115,6 +115,9 @@ namespace SpiceSharp.Simulations
             RealState = new BaseSimulationState();
             _isPreordered = false;
             _shouldReorder = true;
+            var strategy = RealState.Solver.Strategy;
+            strategy.RelativePivotThreshold = BaseConfiguration.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = BaseConfiguration.AbsolutePivotThreshold;
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);

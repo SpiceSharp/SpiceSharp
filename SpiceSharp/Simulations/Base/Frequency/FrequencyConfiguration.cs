@@ -15,6 +15,22 @@
         public bool KeepOpInfo { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets the absolute threshold for choosing pivots.
+        /// </summary>
+        /// <value>
+        /// The absolute pivot threshold.
+        /// </value>
+        public double AbsolutePivotThreshold { get; set; }
+
+        /// <summary>
+        /// Gets or sets the relative threshold for choosing pivots.
+        /// </summary>
+        /// <value>
+        /// The relative pivot threshold.
+        /// </value>
+        public double RelativePivotThreshold { get; set; } = 1e-3;
+
+        /// <summary>
         /// Gets or sets the frequency sweep.
         /// </summary>
         /// <value>
