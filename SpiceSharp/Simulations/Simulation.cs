@@ -42,9 +42,20 @@ namespace SpiceSharp.Simulations
         public Statuses Status { get; private set; } = Statuses.None;
 
         /// <summary>
-        /// Gets a set of <see cref="ParameterSet"/> that hold the configuration for the simulation.
+        /// Gets a set of <see cref="ParameterSet" /> that hold the configurations for the simulation.
         /// </summary>
-        public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
+        /// <value>
+        /// The dictionary with configurations.
+        /// </value>
+        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
+
+        /// <summary>
+        /// Gets the configuration parameter sets. Obsolete, use <see cref="Configurations" /> instead.
+        /// </summary>
+        /// <value>
+        /// The parameter sets.
+        /// </value>
+        [Obsolete] public ParameterSetDictionary ParameterSets => Configurations;
 
         /// <summary>
         /// Gets the set of variables (unknowns).
@@ -55,7 +66,7 @@ namespace SpiceSharp.Simulations
         public VariableSet Variables { get; } = new VariableSet();
 
         /// <summary>
-        /// Gets the nodes.
+        /// Gets the nodes. Obsolete, use <see cref="Variables" /> instead.
         /// </summary>
         /// <value>
         /// The nodes.

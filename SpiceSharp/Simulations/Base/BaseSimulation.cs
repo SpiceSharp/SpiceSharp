@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         protected BaseSimulation(Identifier name)
             : base(name)
         {
-            ParameterSets.Add(new BaseConfiguration());
+            Configurations.Add(new BaseConfiguration());
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Setup behaviors, configurations and states
-            BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
+            BaseConfiguration = Configurations.Get<BaseConfiguration>();
             _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
             _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);

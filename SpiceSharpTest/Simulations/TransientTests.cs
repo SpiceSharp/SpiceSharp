@@ -22,8 +22,8 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.ParameterSets.Get<TimeConfiguration>().InitTime = 0.0;
-            tran.ParameterSets.Get<TimeConfiguration>().Method = new Gear();
+            tran.Configurations.Get<TimeConfiguration>().InitTime = 0.0;
+            tran.Configurations.Get<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) =>
             {
                 Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-9);

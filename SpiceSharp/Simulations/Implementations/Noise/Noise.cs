@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         public Noise(Identifier name) : base(name)
         {
-            ParameterSets.Add(new NoiseConfiguration());
+            Configurations.Add(new NoiseConfiguration());
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         /// <param name="frequencySweep">The frequency sweep.</param>
         public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            ParameterSets.Add(new NoiseConfiguration(output, null, input));
+            Configurations.Add(new NoiseConfiguration(output, null, input));
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SpiceSharp.Simulations
         /// <param name="frequencySweep">The frequency sweep.</param>
         public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            ParameterSets.Add(new NoiseConfiguration(output, reference, input));
+            Configurations.Add(new NoiseConfiguration(output, reference, input));
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors, parameters and states
-            NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
+            NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
             _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
             NoiseState = new NoiseState();
             NoiseState.Setup(Variables);

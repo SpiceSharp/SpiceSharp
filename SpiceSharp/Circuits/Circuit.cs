@@ -29,13 +29,12 @@ namespace SpiceSharp
         public EntityCollection Entities { get; } = new EntityCollection();
 
         /// <summary>
-        /// Gets a collection of all circuit objects.
+        /// Gets a collection of all circuit objects. Obsolete, use <see cref="Entities" /> instead.
         /// </summary>
         /// <value>
         /// The objects.
         /// </value>
-        [Obsolete]
-        public EntityCollection Objects => Entities;
+        [Obsolete] public EntityCollection Objects => Entities;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Circuit"/> class.

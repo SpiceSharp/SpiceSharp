@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         private bool _locked;
 
         /// <summary>
-        /// The initial conditions.
+        /// The initial conditions. Obsolete, use initial conditions in the <see cref="TimeConfiguration" /> of a <see cref="TimeSimulation" /> instead.
         /// </summary>
         /// <value>
         /// The initial conditions by their variable identifier name.
@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
-        /// The nodeset values by their variable identifier name.
+        /// The nodeset values by their variable identifier name. Obsolete, use nodesets in the <see cref="BaseConfiguration" /> of a <see cref="BaseSimulation" /> instead.
         /// </summary>
         /// <value>
         /// The node sets.

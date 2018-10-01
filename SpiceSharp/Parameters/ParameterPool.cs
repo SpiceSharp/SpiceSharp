@@ -49,6 +49,7 @@ namespace SpiceSharp
 
         /// <summary>
         /// Gets the entity parameter set for a specific identifier.
+        /// Obsolete, use the indexer instead.
         /// </summary>
         /// <param name="name">The identifier of the entity.</param>
         /// <returns>The parameter set associated to the specified entity identifier.</returns>

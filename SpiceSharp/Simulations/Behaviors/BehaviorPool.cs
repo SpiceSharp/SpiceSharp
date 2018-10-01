@@ -79,7 +79,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the entity behaviors for a specific identifier.
+        /// Gets the entity behaviors for a specific identifier. Obsolete, use the indexer instead.
         /// </summary>
         /// <param name="name">The identifier of the entity.</param>
         /// <returns>The behaviors associated to the specified entity identifier.</returns>

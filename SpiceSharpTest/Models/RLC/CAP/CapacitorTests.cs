@@ -58,7 +58,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.ParameterSets.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 

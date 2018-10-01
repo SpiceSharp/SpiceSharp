@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         protected TimeSimulation(Identifier name) : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration());
+            Configurations.Add(new TimeConfiguration());
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
         protected TimeSimulation(Identifier name, double step, double final)
             : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration(step, final));
+            Configurations.Add(new TimeConfiguration(step, final));
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SpiceSharp.Simulations
         protected TimeSimulation(Identifier name, double step, double final, double maxStep)
             : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration(step, final, maxStep));
+            Configurations.Add(new TimeConfiguration(step, final, maxStep));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors and configurations
-            var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
+            var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             TimeConfiguration = config;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);

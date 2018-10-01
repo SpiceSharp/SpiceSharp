@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         protected FrequencySimulation(Identifier name) : base(name)
         {
-            ParameterSets.Add(new FrequencyConfiguration());
+            Configurations.Add(new FrequencyConfiguration());
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SpiceSharp.Simulations
         /// <param name="frequencySweep">The frequency sweep.</param>
         protected FrequencySimulation(Identifier name, Sweep<double> frequencySweep) : base(name)
         {
-            ParameterSets.Add(new FrequencyConfiguration(frequencySweep));
+            Configurations.Add(new FrequencyConfiguration(frequencySweep));
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
 
             // Get behaviors, configurations and states
-            FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ??
+            FrequencyConfiguration = Configurations.Get<FrequencyConfiguration>() ??
                                      throw new CircuitException("No frequency configuration found");
             FrequencySweep = FrequencyConfiguration.FrequencySweep ??
                              throw new CircuitException("No frequency sweep found");

@@ -42,7 +42,7 @@ namespace SpiceSharp.Simulations
         public DC(Identifier name) : base(name)
         {
             var config = new DcConfiguration();
-            ParameterSets.Add(config);
+            Configurations.Add(config);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
             var config = new DcConfiguration();
             var s = new SweepConfiguration(source, start, stop, step);
             config.Sweeps.Add(s);
-            ParameterSets.Add(config);
+            Configurations.Add(config);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
             var dcconfig = new DcConfiguration();
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);
-            ParameterSets.Add(dcconfig);
+            Configurations.Add(dcconfig);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get DC configuration
-            DcConfiguration = ParameterSets.Get<DcConfiguration>();
+            DcConfiguration = Configurations.Get<DcConfiguration>();
 
             // Get sweeps
             Sweeps = new NestedSweeps(DcConfiguration.Sweeps);
