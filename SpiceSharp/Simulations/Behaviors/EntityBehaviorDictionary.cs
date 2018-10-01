@@ -9,8 +9,6 @@ namespace SpiceSharp.Behaviors
     /// <seealso cref="TypeDictionary{Behavior}" />
     public class EntityBehaviorDictionary : TypeDictionary<Behavior>
     {
-        // TODO: Take another look at this class... I'm not sure why the constructor uses Func<Behavior>.
-
         /// <summary>
         /// Gets the source identifier.
         /// </summary>
@@ -24,7 +22,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
         public EntityBehaviorDictionary(Identifier source)
-            : base(typeof(Func<Behavior>))
+            : base(typeof(Behavior))
         {
             Source = source;
         }
