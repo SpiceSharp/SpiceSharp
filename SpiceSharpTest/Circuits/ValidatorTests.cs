@@ -10,9 +10,9 @@ namespace SpiceSharpTest.Validation
         [Test]
         public void When_GroundNameInvalid_Expect_Exception()
         {
-            // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "gnd"
+            // Verifies that CircuitException is thrown during Check when circuit has a ground node called "gnd"
             var ckt = CreateCircuit("gnd");
-            ckt.Validate();
+           Assert.Throws<CircuitException>( () => ckt.Validate());
         }
 
         [Test]

@@ -11,9 +11,9 @@ namespace SpiceSharpTest.General
         {
             Identifier s = "abC";
 
-            Assert.AreEqual(s, "AbC");
-            Assert.AreEqual(s, "ABC");
-            Assert.AreEqual(s, "abc");
+            Assert.AreEqual(s, "abC");
+            Assert.AreNotEqual(s, "ABC");
+            Assert.AreNotEqual(s, "abc");
         }
 
         [Test]
@@ -21,19 +21,19 @@ namespace SpiceSharpTest.General
         {
             Identifier s = "abC";
 
-            Assert.AreEqual(s, new StringIdentifier("abC"));
-            Assert.AreEqual(s, new StringIdentifier("ABC"));
-            Assert.AreEqual(s, new StringIdentifier("abc"));
+            Assert.AreEqual(s, new StringIdentifier("abC", false));
+            Assert.AreEqual(s, new StringIdentifier("ABC", false));
+            Assert.AreEqual(s, new StringIdentifier("abc", false));
         }
 
         [Test]
         public void When_StringIdentifier_Is_Created_From_Constructor_Comparision_With_StringIdentifiers_Test()
         {
-            Identifier s = new StringIdentifier("abC");
+            Identifier s = new StringIdentifier("abC", false);
 
-            Assert.AreEqual(s, new StringIdentifier("abC"));
-            Assert.AreEqual(s, new StringIdentifier("ABC"));
-            Assert.AreEqual(s, new StringIdentifier("abc"));
+            Assert.AreEqual(s, new StringIdentifier("abC", false));
+            Assert.AreEqual(s, new StringIdentifier("ABC", false));
+            Assert.AreEqual(s, new StringIdentifier("abc", false));
         }
 
         [Test]

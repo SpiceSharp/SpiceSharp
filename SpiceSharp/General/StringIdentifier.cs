@@ -24,7 +24,7 @@ namespace SpiceSharp
         /// <param name="id">The identifier.</param>
         /// <param name="caseSensitive">Specifies whether string identifier is case-sensitive</param>
         /// <exception cref="ArgumentNullException">id</exception>
-        public StringIdentifier(string id, bool caseSensitive = false)
+        public StringIdentifier(string id, bool caseSensitive = true)
         {
             _id = id ?? throw new ArgumentNullException(nameof(id));
             _caseSensitive = caseSensitive;
@@ -46,14 +46,7 @@ namespace SpiceSharp
         /// </returns>
         public override int GetHashCode()
         {
-            if (_caseSensitive)
-            {
-                return _id.GetHashCode();
-            }
-            else
-            {
-                return _id.ToUpper().GetHashCode();
-            }
+            return _id.ToUpper().GetHashCode();
         }
 
         /// <summary>
