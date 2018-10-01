@@ -14,13 +14,20 @@ namespace SpiceSharp
         private readonly string _id;
 
         /// <summary>
+        /// Specifies whether string identifier is case-sensitive
+        /// </summary>
+        private readonly bool _caseSensitive;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="StringIdentifier"/> class.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="caseSensitive">Specifies whether string identifier is case-sensitive</param>
         /// <exception cref="ArgumentNullException">id</exception>
-        public StringIdentifier(string id)
+        public StringIdentifier(string id, bool caseSensitive = true)
         {
             _id = id ?? throw new ArgumentNullException(nameof(id));
+            _caseSensitive = caseSensitive;
         }
 
         /// <summary>
@@ -37,7 +44,10 @@ namespace SpiceSharp
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => _id.GetHashCode();
+        public override int GetHashCode()
+        {
+            return _id.ToUpper().GetHashCode();
+        }
 
         /// <summary>
         /// Clones this identifier.
@@ -47,7 +57,7 @@ namespace SpiceSharp
         /// </returns>
         public override Identifier Clone()
         {
-            return new StringIdentifier(_id);
+            return new StringIdentifier(_id, _caseSensitive);
         }
 
         /// <summary>
@@ -60,7 +70,13 @@ namespace SpiceSharp
         public override bool Equals(Identifier other)
         {
             if (other is StringIdentifier si)
-                return _id.Equals(si._id);
+            {
+                if (_caseSensitive && si._caseSensitive)
+                {
+                    return _id.Equals(si._id, StringComparison.CurrentCulture);
+                }
+                return _id.Equals(si._id, StringComparison.CurrentCultureIgnoreCase);
+            }
             return false;
         }
 
@@ -74,9 +90,15 @@ namespace SpiceSharp
         public override bool Equals(object obj)
         {
             if (obj is StringIdentifier si)
-                return _id.Equals(si._id);
+                return Equals(si);
             if (obj is string str)
-                return _id.Equals(str);
+            {
+                if (_caseSensitive)
+                {
+                    return _id.Equals(str);
+                }
+                return _id.Equals(str, StringComparison.CurrentCultureIgnoreCase);
+            }
             return false;
         }
     }
