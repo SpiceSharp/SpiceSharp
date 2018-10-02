@@ -15,7 +15,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly Dictionary<Identifier, Entity> _objects = new Dictionary<Identifier, Entity>();
+        private readonly Dictionary<Identifier, Entity> _objects;
         private readonly List<Entity> _ordered = new List<Entity>();
         private readonly ReaderWriterLockSlim _lock;
 
@@ -30,6 +30,18 @@ namespace SpiceSharp.Circuits
         public EntityCollection()
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _objects = new Dictionary<Identifier, Entity>();
+            _isOrdered = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityCollection"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer for identifiers.</param>
+        public EntityCollection(IEqualityComparer<Identifier> comparer)
+        {
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _objects = new Dictionary<Identifier, Entity>(comparer);
             _isOrdered = false;
         }
 

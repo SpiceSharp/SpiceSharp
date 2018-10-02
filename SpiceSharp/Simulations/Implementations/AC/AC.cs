@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -14,6 +15,16 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         public AC(Identifier name) : base(name)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AC"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
+        public AC(Identifier name, IEqualityComparer<Identifier> comparer)
+            : base(name, comparer)
         {
         }
 

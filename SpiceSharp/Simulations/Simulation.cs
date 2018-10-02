@@ -121,12 +121,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
-        public BehaviorPool EntityBehaviors { get; } = new BehaviorPool();
+        public BehaviorPool EntityBehaviors { get; }
 
         /// <summary>
         /// Gets a pool of all entity parameter sets active in the simulation.
         /// </summary>
-        public ParameterPool EntityParameters { get; } = new ParameterPool();
+        public ParameterPool EntityParameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
@@ -135,6 +135,20 @@ namespace SpiceSharp.Simulations
         protected Simulation(Identifier name)
         {
             Name = name;
+            EntityBehaviors = new BehaviorPool();
+            EntityParameters = new ParameterPool();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Simulation"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
+        protected Simulation(Identifier name, IEqualityComparer<Identifier> comparer)
+        {
+            Name = name;
+            EntityBehaviors = new BehaviorPool(comparer);
+            EntityParameters = new ParameterPool(comparer);
         }
 
         /// <summary>

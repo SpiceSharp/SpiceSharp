@@ -80,7 +80,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseLoadBehavior> _loadBehaviors;
         private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
-        private List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
+        private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin = 0.0;
         private bool _isPreordered, _shouldReorder;
 
@@ -90,6 +90,17 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         protected BaseSimulation(Identifier name)
             : base(name)
+        {
+            Configurations.Add(new BaseConfiguration());
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
+        protected BaseSimulation(Identifier name, IEqualityComparer<Identifier> comparer)
+            : base(name, comparer)
         {
             Configurations.Add(new BaseConfiguration());
         }

@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using System.Collections.Generic;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class that implements the operating point analysis.
@@ -11,6 +13,16 @@
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         public OP(Identifier name) : base(name)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OP"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
+        public OP(Identifier name, IEqualityComparer<Identifier> comparer)
+            : base(name, comparer)
         {
         }
 

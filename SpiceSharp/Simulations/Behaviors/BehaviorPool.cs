@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them.
         /// </summary>
-        private readonly Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
+        private readonly Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors;
 
         /// <summary>
         /// Lists of behaviors.
@@ -36,6 +36,23 @@ namespace SpiceSharp.Behaviors
                     return result;
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// </summary>
+        public BehaviorPool()
+        {
+            _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer for identifiers.</param>
+        public BehaviorPool(IEqualityComparer<Identifier> comparer)
+        {
+            _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>(comparer);
         }
 
         /// <summary>

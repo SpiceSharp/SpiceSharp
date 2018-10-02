@@ -93,13 +93,23 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The initial conditions.
         /// </value>
-        public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<Identifier, double> InitialConditions { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
         public TimeConfiguration()
         {
+            InitialConditions = new Dictionary<Identifier, double>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer for initial condition identifiers.</param>
+        public TimeConfiguration(IEqualityComparer<Identifier> comparer)
+        {
+            InitialConditions = new Dictionary<Identifier, double>(comparer);
         }
 
         /// <summary>
@@ -108,6 +118,7 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         public TimeConfiguration(double step, double final)
+            : this()
         {
             Step = step;
             FinalTime = final;
@@ -120,6 +131,7 @@ namespace SpiceSharp.Simulations
         /// <param name="final">The final time.</param>
         /// <param name="max">The maximum timestep.</param>
         public TimeConfiguration(double step, double final, double max)
+            : this()
         {
             Step = step;
             FinalTime = final;

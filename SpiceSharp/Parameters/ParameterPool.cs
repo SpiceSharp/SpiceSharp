@@ -12,7 +12,7 @@ namespace SpiceSharp
         /// <summary>
         /// The entity parameters
         /// </summary>
-        private readonly Dictionary<Identifier, ParameterSetDictionary> _entityParameters = new Dictionary<Identifier, ParameterSetDictionary>();
+        private readonly Dictionary<Identifier, ParameterSetDictionary> _entityParameters;
 
         /// <summary>
         /// Gets the associated <see cref="ParameterSetDictionary"/> of an entity.
@@ -30,6 +30,23 @@ namespace SpiceSharp
                     return result;
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterPool"/> class.
+        /// </summary>
+        public ParameterPool()
+        {
+            _entityParameters = new Dictionary<Identifier, ParameterSetDictionary>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterPool"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer for identifiers.</param>
+        public ParameterPool(IEqualityComparer<Identifier> comparer)
+        {
+            _entityParameters = new Dictionary<Identifier, ParameterSetDictionary>(comparer);
         }
 
         /// <summary>

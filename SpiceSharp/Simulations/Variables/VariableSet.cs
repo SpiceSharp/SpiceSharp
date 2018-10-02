@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private readonly List<Variable> _unknowns = new List<Variable>();
-        private readonly Dictionary<Identifier, Variable> _map = new Dictionary<Identifier, Variable>();
+        private readonly Dictionary<Identifier, Variable> _map;
         private bool _locked;
 
         /// <summary>
@@ -56,8 +56,29 @@ namespace SpiceSharp.Simulations
         {
             // Setup the ground node
             Ground = new Variable("0", 0);
-            _map.Add(Ground.Name, Ground);
-            _map.Add("GND", Ground);
+            _map = new Dictionary<Identifier, Variable>
+            {
+                {Ground.Name, Ground}, 
+                {"GND", Ground}
+            };
+
+            // Unlock
+            _locked = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableSet"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer for identifiers.</param>
+        public VariableSet(IEqualityComparer<Identifier> comparer)
+        {
+            // Setup the ground node
+            Ground = new Variable("0", 0);
+            _map = new Dictionary<Identifier, Variable>(comparer)
+            {
+                {Ground.Name, Ground}, 
+                {"GND", Ground}
+            };
 
             // Unlock
             _locked = false;

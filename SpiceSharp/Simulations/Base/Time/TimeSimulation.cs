@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         /// Time-domain behaviors.
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
-        private List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
+        private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
         private bool _shouldReorder = true;
 
         /// <summary>
@@ -39,6 +39,17 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         protected TimeSimulation(Identifier name) : base(name)
+        {
+            Configurations.Add(new TimeConfiguration());
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
+        protected TimeSimulation(Identifier name, IEqualityComparer<Identifier> comparer)
+            : base(name, comparer)
         {
             Configurations.Add(new TimeConfiguration());
         }
