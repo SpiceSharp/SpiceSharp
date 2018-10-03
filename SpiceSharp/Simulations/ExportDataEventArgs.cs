@@ -103,7 +103,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, consider using <see cref="RealVoltageExport" />.
         /// </remarks>
         /// <seealso cref="RealVoltageExport" />
-        public double GetVoltage(Identifier node) => GetVoltage(node, null);
+        public double GetVoltage(string node) => GetVoltage(node, null);
 
         /// <summary>
         /// Gets the differential voltage between two specified nodes.
@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
         /// <returns>The extracted voltage.</returns>
         /// <exception cref="ArgumentNullException">positive</exception>
         /// <exception cref="CircuitException">Simulation does not support real voltages</exception>
-        public double GetVoltage(Identifier positive, Identifier negative)
+        public double GetVoltage(string positive, string negative)
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));
@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, consider using <see cref="ComplexVoltageExport"/>
         /// </remarks>
         /// <seealso cref="ComplexVoltageExport"/>
-        public Complex GetComplexVoltage(Identifier node) => GetComplexVoltage(node, null);
+        public Complex GetComplexVoltage(string node) => GetComplexVoltage(node, null);
 
         /// <summary>
         /// Gets the differential complex voltage between two specified nodes.
@@ -157,7 +157,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         /// <exception cref="ArgumentNullException">positive</exception>
         /// <exception cref="CircuitException">Simulation does not support complex voltages</exception>
-        public Complex GetComplexVoltage(Identifier positive, Identifier negative)
+        public Complex GetComplexVoltage(string positive, string negative)
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));

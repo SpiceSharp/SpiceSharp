@@ -20,9 +20,9 @@ namespace SpiceSharpTest.Models
         /// <param name="subst">Substrate</param>
         /// <param name="model">Model name</param>
         /// <param name="modelparams">Model parameters</param>
-        BipolarJunctionTransistor CreateBJT(Identifier name, 
-            Identifier c, Identifier b, Identifier e, Identifier subst, 
-            Identifier model, string modelparams)
+        BipolarJunctionTransistor CreateBJT(string name, 
+            string c, string b, string e, string subst, 
+            string model, string modelparams)
         {
             // Create the model
             var bjtmodel = new BipolarJunctionTransistorModel(model);

@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Mosfet3(Identifier name) : base(name, Mosfet3PinCount)
+        public Mosfet3(string name) : base(name, Mosfet3PinCount)
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters());

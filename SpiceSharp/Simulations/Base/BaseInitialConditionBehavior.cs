@@ -15,7 +15,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseInitialConditionBehavior(Identifier name) : base(name) { }
+        protected BaseInitialConditionBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Sets the initial conditions for the behavior.

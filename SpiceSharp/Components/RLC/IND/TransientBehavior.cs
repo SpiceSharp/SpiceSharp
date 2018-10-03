@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Create export method

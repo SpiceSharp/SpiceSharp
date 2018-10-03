@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public CurrentSource(Identifier name) 
+        public CurrentSource(string name) 
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public CurrentSource(Identifier name, Identifier pos, Identifier neg, double dc)
+        public CurrentSource(string name, string pos, string neg, double dc)
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The Waveform-object</param>
-        public CurrentSource(Identifier name, Identifier pos, Identifier neg, Waveform waveform)
+        public CurrentSource(string name, string pos, string neg, Waveform waveform)
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters

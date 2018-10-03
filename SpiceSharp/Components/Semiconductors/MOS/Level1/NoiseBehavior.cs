@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public NoiseBehavior(Identifier name) : base(name) { }
+        public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

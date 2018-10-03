@@ -65,7 +65,7 @@ namespace SpiceSharp.Circuits
             var unconnected = FindFloatingNodes();
             if (unconnected.Count > 0)
             {
-                var un = new List<Identifier>();
+                var un = new List<string>();
                 for (var i = 0; i < _nodes.Count; i++)
                 {
                     var index = _nodes[i].Index;

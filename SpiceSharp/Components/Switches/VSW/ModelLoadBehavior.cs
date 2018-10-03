@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public ModelLoadBehavior(Identifier name) : base(name) { }
+        public ModelLoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

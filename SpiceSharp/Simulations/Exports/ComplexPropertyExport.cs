@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The identifier of the entity.
         /// </value>
-        public Identifier EntityName { get; }
+        public string EntityName { get; }
 
         /// <summary>
         /// Gets the property name.
@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         /// or
         /// propertyName
         /// </exception>
-        public ComplexPropertyExport(Simulation simulation, Identifier entityName, string propertyName)
+        public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
             EntityName = entityName ?? throw new ArgumentNullException(nameof(entityName));

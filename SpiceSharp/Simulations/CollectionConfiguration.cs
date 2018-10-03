@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The comparer for <see cref="Variable"/> identifiers.
         /// </value>
-        public IEqualityComparer<Identifier> VariableComparer { get; set; }
+        public IEqualityComparer<string> VariableComparer { get; set; }
 
         /// <summary>
         /// Gets or sets the  comparer used for comparing two entity identifiers.
@@ -23,6 +23,6 @@ namespace SpiceSharp.Simulations
         /// The comparer for entity identifiers.
         /// </value>
         /// <remarks>Typically, you'll want this comparer to be identical to the one used for circuits.</remarks>
-        public IEqualityComparer<Identifier> EntityComparer { get; set; }
+        public IEqualityComparer<string> EntityComparer { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public ModelTemperatureBehavior(Identifier name) : base(name) { }
+        public ModelTemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

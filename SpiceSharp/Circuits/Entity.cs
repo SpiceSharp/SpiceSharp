@@ -22,13 +22,13 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the name of the entity.
         /// </summary>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
-        protected Entity(Identifier name)
+        protected Entity(string name)
         {
             Name = name;
         }

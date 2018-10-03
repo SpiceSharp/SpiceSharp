@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="OP"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        public OP(Identifier name) : base(name)
+        public OP(string name) : base(name)
         {
         }
 

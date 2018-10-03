@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create
-            PosPrimeNode = _mbp.Resistance > 0 ? variables.Create(new SubIdentifier(Name, "pos")).Index : _posNode;
+            PosPrimeNode = _mbp.Resistance > 0 ? variables.Create(Name.Combine("pos")).Index : _posNode;
 
             // Get matrix elements
             PosPosPrimePtr = solver.GetMatrixElement(_posNode, PosPrimeNode);

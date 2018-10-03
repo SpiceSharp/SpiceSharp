@@ -88,7 +88,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected BaseSimulation(Identifier name)
+        protected BaseSimulation(string name)
             : base(name)
         {
             Configurations.Add(new BaseConfiguration());

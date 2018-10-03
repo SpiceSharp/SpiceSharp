@@ -14,7 +14,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseAcceptBehavior(Identifier name) : base(name) { }
+        protected BaseAcceptBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Accepts the current timepoint.

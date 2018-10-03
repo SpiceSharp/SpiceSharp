@@ -14,7 +14,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseTemperatureBehavior(Identifier name) : base(name)
+        protected BaseTemperatureBehavior(string name) : base(name)
         {
         }
 

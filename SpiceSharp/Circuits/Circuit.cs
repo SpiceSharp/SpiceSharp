@@ -48,7 +48,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         /// <param name="comparer">The comparer for identifiers.</param>
-        public Circuit(IEqualityComparer<Identifier> comparer)
+        public Circuit(IEqualityComparer<string> comparer)
         {
             Entities = new EntityCollection(comparer);
         }

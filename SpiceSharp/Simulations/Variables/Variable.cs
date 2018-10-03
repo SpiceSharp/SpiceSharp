@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the identifier of the variable.
         /// </summary>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the index of the node.
@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the variable.</param>
         /// <param name="index">The index of the unknown variable.</param>
-        public Variable(Identifier name, int index)
+        public Variable(string name, int index)
         {
             Name = name;
             UnknownType = VariableType.Voltage;
@@ -51,7 +51,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the variable.</param>
         /// <param name="type">The type of variable.</param>
         /// <param name="index">The index of the unknown variable.</param>
-        public Variable(Identifier name, VariableType type, int index)
+        public Variable(string name, VariableType type, int index)
         {
             Name = name;
             UnknownType = type;
@@ -73,6 +73,6 @@ namespace SpiceSharp.Simulations
         /// Clones this variable.
         /// </summary>
         /// <returns>A clone of this variable.</returns>
-        public Variable Clone() => new Variable(Name.Clone(), UnknownType, Index);
+        public Variable Clone() => new Variable(Name, UnknownType, Index);
     }
 }

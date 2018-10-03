@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// This should be the same identifier as the entity that created it.
         /// </remarks>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
@@ -27,7 +27,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected Behavior(Identifier name)
+        protected Behavior(string name)
         {
             Name = name;
         }

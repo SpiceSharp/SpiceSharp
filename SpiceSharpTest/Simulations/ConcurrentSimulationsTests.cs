@@ -33,7 +33,7 @@ namespace SpiceSharpTest.Simulations
                 config.Sweeps.Add(new SweepConfiguration("V1", 1, 5, 0.1)); // Sweep V1 from 1V to 5V per 100mV
                 dc.OnParameterSearch += (sender, args) =>
                 {
-                    if (args.Name.Equals(new StringIdentifier("R2")))
+                    if (args.Name.Equals("R2"))
                     {
                         args.Result = dc.EntityParameters["R2"].GetParameter<double>("resistance");
                         args.TemperatureNeeded = true;

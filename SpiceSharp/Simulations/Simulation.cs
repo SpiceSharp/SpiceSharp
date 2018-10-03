@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the identifier of the simulation.
         /// </summary>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
@@ -132,7 +132,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected Simulation(Identifier name)
+        protected Simulation(string name)
         {
             Name = name;
         }
@@ -206,10 +206,10 @@ namespace SpiceSharp.Simulations
             // Create the list of parameters for our simulation run
             if (Configurations.TryGet(out CollectionConfiguration cconfig))
             {
-                var ec = cconfig.EntityComparer ?? EqualityComparer<Identifier>.Default;
+                var ec = cconfig.EntityComparer ?? EqualityComparer<string>.Default;
                 EntityParameters = new ParameterPool(ec);
                 EntityBehaviors = new BehaviorPool(ec);
-                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<Identifier>.Default);
+                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default);
             }
             else
             {

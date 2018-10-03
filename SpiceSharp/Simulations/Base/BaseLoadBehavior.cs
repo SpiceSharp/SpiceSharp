@@ -15,7 +15,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseLoadBehavior(Identifier name) : base(name) { }
+        protected BaseLoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional

@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Create export method
@@ -131,7 +131,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 
             // Create/get nodes
             _contBranchEq = _vsrcload.BranchEq;
-            BranchEq = variables.Create(new SubIdentifier(Name, "branch"), VariableType.Current).Index;
+            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);

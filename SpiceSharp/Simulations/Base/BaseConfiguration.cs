@@ -122,6 +122,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The nodesets.
         /// </value>
-        public Dictionary<Identifier, double> Nodesets { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<string, double> Nodesets { get; } = new Dictionary<string, double>();
     }
 }

@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseTransientBehavior(Identifier name) : base(name) { }
+        protected BaseTransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Creates all necessary states for the transient behavior.

@@ -18,7 +18,7 @@ namespace SpiceSharpTest.Models
         /// <param name="modelName">Model name</param>
         /// <param name="modelParameters">Model parameters</param>
         /// <returns></returns>
-        CurrentSwitch CreateCurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier contSource, Identifier modelName, string modelParameters)
+        CurrentSwitch CreateCurrentSwitch(string name, string pos, string neg, string contSource, string modelName, string modelParameters)
         {
             var model = new CurrentSwitchModel(modelName);
             ApplyParameters(model, modelParameters);

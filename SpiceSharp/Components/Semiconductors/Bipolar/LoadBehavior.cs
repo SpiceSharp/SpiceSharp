@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -145,13 +145,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Add a series collector node if necessary
-            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? variables.Create(new SubIdentifier(Name, "col")).Index : _collectorNode;
+            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col")).Index : _collectorNode;
 
             // Add a series base node if necessary
-            BasePrimeNode = _mbp.BaseResist.Value > 0 ? variables.Create(new SubIdentifier(Name, "base")).Index : _baseNode;
+            BasePrimeNode = _mbp.BaseResist.Value > 0 ? variables.Create(Name.Combine("base")).Index : _baseNode;
 
             // Add a series emitter node if necessary
-            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? variables.Create(new SubIdentifier(Name, "emit")).Index : _emitterNode;
+            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? variables.Create(Name.Combine("emit")).Index : _emitterNode;
 
             // Get solver pointers
             CollectorCollectorPrimePtr = solver.GetMatrixElement(_collectorNode, CollectorPrimeNode);

@@ -93,23 +93,23 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The initial conditions.
         /// </value>
-        public Dictionary<Identifier, double> InitialConditions { get; }
+        public Dictionary<string, double> InitialConditions { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
         public TimeConfiguration()
         {
-            InitialConditions = new Dictionary<Identifier, double>();
+            InitialConditions = new Dictionary<string, double>();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
         /// <param name="comparer">The comparer for initial condition identifiers.</param>
-        public TimeConfiguration(IEqualityComparer<Identifier> comparer)
+        public TimeConfiguration(IEqualityComparer<string> comparer)
         {
-            InitialConditions = new Dictionary<Identifier, double>(comparer);
+            InitialConditions = new Dictionary<string, double>(comparer);
         }
 
         /// <summary>

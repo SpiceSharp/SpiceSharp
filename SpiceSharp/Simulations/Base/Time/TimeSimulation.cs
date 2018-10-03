@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected TimeSimulation(Identifier name) : base(name)
+        protected TimeSimulation(string name) : base(name)
         {
             Configurations.Add(new TimeConfiguration());
         }
@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
-        protected TimeSimulation(Identifier name, double step, double final)
+        protected TimeSimulation(string name, double step, double final)
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final));
@@ -62,7 +62,7 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         /// <param name="maxStep">The maximum step.</param>
-        protected TimeSimulation(Identifier name, double step, double final, double maxStep)
+        protected TimeSimulation(string name, double step, double final, double maxStep)
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final, maxStep));

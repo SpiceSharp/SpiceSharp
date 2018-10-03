@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("control"), ParameterInfo("Name of the controlling source")]
-        public Identifier ControllingName { get; set; }
+        public string ControllingName { get; set; }
 
         /// <summary>
         /// Constants
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentSource(Identifier name) 
+        public CurrentControlledCurrentSource(string name) 
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
             // Make sure the current controlled current source happens after voltage sources
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="voltageSource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentSource(Identifier name, Identifier pos, Identifier neg, Identifier voltageSource, double gain)
+        public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
             // Register behaviors

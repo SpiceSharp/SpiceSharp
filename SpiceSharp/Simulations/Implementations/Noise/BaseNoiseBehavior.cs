@@ -15,7 +15,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseNoiseBehavior(Identifier name) : base(name) { }
+        protected BaseNoiseBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Connects the noise sources.

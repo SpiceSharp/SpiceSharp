@@ -19,7 +19,7 @@ namespace SpiceSharpTest.Simulations
         /// <param name="model">Model</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        Diode CreateDiode(Identifier name, Identifier anode, Identifier cathode, Identifier model, string modelparams)
+        Diode CreateDiode(string name, string anode, string cathode, string model, string modelparams)
         {
             var d = new Diode(name);
             var dm = new DiodeModel(model);
@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Simulations
             config.Sweeps.Add(new SweepConfiguration("V1", 0, 5, 0.1)); // Sweep V1 from 0V to 5V per 100mV
             dc.OnParameterSearch += (sender, args) =>
             {
-                if (args.Name.Equals(new StringIdentifier("R2")))
+                if (args.Name.Equals("R2"))
                 {
                     args.Result = dc.EntityParameters["R2"].GetParameter<double>("resistance");
                     args.TemperatureNeeded = true;
