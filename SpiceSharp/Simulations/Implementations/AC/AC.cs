@@ -22,16 +22,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        public AC(Identifier name, IEqualityComparer<Identifier> comparer)
-            : base(name, comparer)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AC"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
         public AC(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {

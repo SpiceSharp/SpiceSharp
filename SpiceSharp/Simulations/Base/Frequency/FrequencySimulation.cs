@@ -53,17 +53,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        protected FrequencySimulation(Identifier name, IEqualityComparer<Identifier> comparer)
-            : base(name, comparer)
-        {
-            Configurations.Add(new FrequencyConfiguration());
-        }
-
-        /// <summary>
         /// Gets the frequency sweep.
         /// </summary>
         /// <value>

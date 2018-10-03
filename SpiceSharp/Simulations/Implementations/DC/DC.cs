@@ -48,17 +48,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        public DC(Identifier name, IEqualityComparer<Identifier> comparer)
-            : base(name, comparer)
-        {
-            Configurations.Add(new DcConfiguration());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DC"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
         /// <param name="source">The source identifier.</param>
         /// <param name="start">The starting value.</param>
         /// <param name="stop">The stop value.</param>

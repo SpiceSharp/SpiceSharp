@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The set of variables.
         /// </value>
-        public VariableSet Variables { get; } = new VariableSet();
+        public VariableSet Variables { get; private set; }
 
         /// <summary>
         /// Gets the nodes. Obsolete, use <see cref="Variables" /> instead.
@@ -121,12 +121,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
-        public BehaviorPool EntityBehaviors { get; }
+        public BehaviorPool EntityBehaviors { get; private set; }
 
         /// <summary>
         /// Gets a pool of all entity parameter sets active in the simulation.
         /// </summary>
-        public ParameterPool EntityParameters { get; }
+        public ParameterPool EntityParameters { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
@@ -135,20 +135,6 @@ namespace SpiceSharp.Simulations
         protected Simulation(Identifier name)
         {
             Name = name;
-            EntityBehaviors = new BehaviorPool();
-            EntityParameters = new ParameterPool();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Simulation"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        protected Simulation(Identifier name, IEqualityComparer<Identifier> comparer)
-        {
-            Name = name;
-            EntityBehaviors = new BehaviorPool(comparer);
-            EntityParameters = new ParameterPool(comparer);
         }
 
         /// <summary>
@@ -217,6 +203,21 @@ namespace SpiceSharp.Simulations
             if (circuit.Entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
+            // Create the list of parameters for our simulation run
+            if (Configurations.TryGet(out CollectionConfiguration cconfig))
+            {
+                var ec = cconfig.EntityComparer ?? EqualityComparer<Identifier>.Default;
+                EntityParameters = new ParameterPool(ec);
+                EntityBehaviors = new BehaviorPool(ec);
+                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<Identifier>.Default);
+            }
+            else
+            {
+                EntityParameters = new ParameterPool();
+                EntityBehaviors = new BehaviorPool();
+                Variables = new VariableSet();
+            }
+
             // Setup all objects
             circuit.Entities.BuildOrderedComponentList();
 
@@ -231,10 +232,13 @@ namespace SpiceSharp.Simulations
         {
             // Clear all parameters
             EntityBehaviors.Clear();
+            EntityBehaviors = null;
             EntityParameters.Clear();
+            EntityParameters = null;
 
             // Clear all nodes
             Variables.Clear();
+            Variables = null;
         }
 
         /// <summary>

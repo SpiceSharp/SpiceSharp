@@ -95,17 +95,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        protected BaseSimulation(Identifier name, IEqualityComparer<Identifier> comparer)
-            : base(name, comparer)
-        {
-            Configurations.Add(new BaseConfiguration());
-        }
-
-        /// <summary>
         /// Set up the simulation.
         /// </summary>
         /// <param name="circuit">The circuit that will be used.</param>
