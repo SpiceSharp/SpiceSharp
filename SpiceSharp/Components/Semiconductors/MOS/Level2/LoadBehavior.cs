@@ -96,7 +96,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -151,13 +151,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             // Add a series drain node if necessary
             if (_mbp.DrainResistance > 0 || _bp.DrainSquares > 0 && _mbp.SheetResistance > 0)
-                DrainNodePrime = variables.Create(new SubIdentifier(Name, "drain")).Index;
+                DrainNodePrime = variables.Create(Name.Combine("drain")).Index;
             else
                 DrainNodePrime = _drainNode;
 
             // Add a series source node if necessary
             if (_mbp.SourceResistance > 0 || _bp.SourceSquares > 0 && _mbp.SheetResistance > 0)
-                SourceNodePrime = variables.Create(new SubIdentifier(Name, "source")).Index;
+                SourceNodePrime = variables.Create(Name.Combine("source")).Index;
             else
                 SourceNodePrime = _sourceNode;
 

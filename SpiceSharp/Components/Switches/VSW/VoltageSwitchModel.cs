@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public VoltageSwitchModel(Identifier name)
+        public VoltageSwitchModel(string name)
             : base(name)
         {
             // Add parameters

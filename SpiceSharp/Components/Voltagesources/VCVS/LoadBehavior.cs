@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Create exports
@@ -128,7 +128,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            BranchEq = variables.Create(new SubIdentifier(Name, "branch"), VariableType.Current).Index;
+            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);

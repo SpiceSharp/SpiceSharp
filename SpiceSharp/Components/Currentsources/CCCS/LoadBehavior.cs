@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Creates a getter for extracting data from the specified simulation.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -13,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        public AC(Identifier name) : base(name)
+        public AC(string name) : base(name)
         {
         }
 
@@ -22,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public AC(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public AC(string name, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
         }
 

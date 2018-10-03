@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

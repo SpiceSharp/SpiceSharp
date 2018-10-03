@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public VoltageSource(Identifier name) : base(name, VoltageSourcePinCount)
+        public VoltageSource(string name) : base(name, VoltageSourcePinCount)
         {
             // Register parameters
             ParameterSets.Add(new BaseParameters());
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public VoltageSource(Identifier name, Identifier pos, Identifier neg, double dc)
+        public VoltageSource(string name, string pos, string neg, double dc)
             : base(name, VoltageSourcePinCount)
         {
             // Register parameters
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The waveform</param>
-        public VoltageSource(Identifier name, Identifier pos, Identifier neg, Waveform waveform) 
+        public VoltageSource(string name, string pos, string neg, Waveform waveform) 
             : base(name, VoltageSourcePinCount)
         {
             // Register parameters

@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentSource(Identifier name)
+        public VoltageControlledCurrentSource(string name)
             : base(name, VoltageControlledCurrentSourcePinCount)
         {
             // Add parameters
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The transconductance gain</param>
-        public VoltageControlledCurrentSource(Identifier name, Identifier pos, Identifier neg, Identifier controlPos, Identifier controlNeg, double gain)
+        public VoltageControlledCurrentSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain)
             : base(name, VoltageControlledCurrentSourcePinCount)
         {
             // Add parameters

@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencyBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

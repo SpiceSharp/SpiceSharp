@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private readonly List<Variable> _unknowns = new List<Variable>();
-        private readonly Dictionary<Identifier, Variable> _map = new Dictionary<Identifier, Variable>();
+        private readonly Dictionary<string, Variable> _map;
         private bool _locked;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         /// <seealso cref="TimeSimulation" />
         [Obsolete]
-        public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<string, double> InitialConditions { get; } = new Dictionary<string, double>();
 
         /// <summary>
         /// The nodeset values by their variable identifier name. Obsolete, use nodesets in the <see cref="BaseConfiguration" /> of a <see cref="BaseSimulation" /> instead.
@@ -42,7 +42,7 @@ namespace SpiceSharp.Simulations
         /// final solution will usually speed up convergence greatly.
         /// </remarks>
         [Obsolete]
-        public Dictionary<Identifier, double> NodeSets { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<string, double> NodeSets { get; } = new Dictionary<string, double>();
 
         /// <summary>
         /// Gets the ground node.
@@ -56,8 +56,29 @@ namespace SpiceSharp.Simulations
         {
             // Setup the ground node
             Ground = new Variable("0", 0);
-            _map.Add(Ground.Name, Ground);
-            _map.Add("GND", Ground);
+            _map = new Dictionary<string, Variable>
+            {
+                {Ground.Name, Ground}, 
+                {"GND", Ground}
+            };
+
+            // Unlock
+            _locked = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableSet"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer for identifiers.</param>
+        public VariableSet(IEqualityComparer<string> comparer)
+        {
+            // Setup the ground node
+            Ground = new Variable("0", 0);
+            _map = new Dictionary<string, Variable>(comparer)
+            {
+                {Ground.Name, Ground}, 
+                {"GND", Ground}
+            };
 
             // Unlock
             _locked = false;
@@ -87,7 +108,7 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier of the variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
-        public Variable MapNode(Identifier id, VariableType type)
+        public Variable MapNode(string id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
@@ -107,7 +128,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">The identifier of the variable.</param>
         /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
-        public Variable MapNode(Identifier id) => MapNode(id, VariableType.Voltage);
+        public Variable MapNode(string id) => MapNode(id, VariableType.Voltage);
 
         /// <summary>
         /// Make an alias for a variable identifier.
@@ -118,7 +139,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         /// <param name="original">The original identifier.</param>
         /// <param name="alias">The alias for the identifier.</param>
-        public void AliasNode(Identifier original, Identifier alias)
+        public void AliasNode(string original, string alias)
         {
             var originalNode = _map[original];
             _map.Add(alias, originalNode);
@@ -128,12 +149,12 @@ namespace SpiceSharp.Simulations
         /// Create a new variable.
         /// </summary>
         /// <remarks>
-        /// Variables created using this method cannot be found back using the method <see cref="MapNode(Identifier,VariableType)"/>.
+        /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.
         /// </remarks>
         /// <param name="id">The identifier of the new variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable.</returns>
-        public Variable Create(Identifier id, VariableType type)
+        public Variable Create(string id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
@@ -149,11 +170,11 @@ namespace SpiceSharp.Simulations
         /// Create a new variable.
         /// </summary>
         /// <remarks>
-        /// Variables created using this method cannot be found back using the method <see cref="MapNode(Identifier,VariableType)"/>.
+        /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.
         /// </remarks>
         /// <param name="id">The identifier of the new variable.</param>
         /// <returns>A new variable.</returns>
-        public Variable Create(Identifier id) => Create(id, VariableType.Voltage);
+        public Variable Create(string id) => Create(id, VariableType.Voltage);
 
         /// <summary>
         /// Determines whether the set contains a mapped variable by a specified identifier.
@@ -162,7 +183,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsNode(Identifier id) => _map.ContainsKey(id);
+        public bool ContainsNode(string id) => _map.ContainsKey(id);
 
         /// <summary>
         /// Determines whether the set contains any variable by a specified identifier.
@@ -171,7 +192,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(Identifier id) => _unknowns.Exists(node => node.Name.Equals(id));
+        public bool Contains(string id) => _unknowns.Exists(node => node.Name.Equals(id));
 
         /// <summary>
         /// Tries to get a variable.
@@ -181,7 +202,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(Identifier id, out Variable node) => _map.TryGetValue(id, out node);
+        public bool TryGetNode(string id, out Variable node) => _map.TryGetValue(id, out node);
 
         /// <summary>
         /// Gets a mapped variable. If the node voltage does not exist, an exception will be thrown.
@@ -190,7 +211,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The node with the specified identifier.
         /// </returns>
-        public Variable GetNode(Identifier id)
+        public Variable GetNode(string id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
@@ -202,9 +223,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a variable.
         /// </summary>
-        /// <param name="id">Identifier</param>
+        /// <param name="id">string</param>
         /// <returns>Return the variable with the specified identifier, or <c>null</c> if it doesn't exist.</returns>
-        public Variable GetVariable(Identifier id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
+        public Variable GetVariable(string id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
 
         /// <summary>
         /// Enumerates all variables.

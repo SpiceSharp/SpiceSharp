@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TemperatureBehavior(Identifier name) : base(name) { }
+        public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

@@ -82,7 +82,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

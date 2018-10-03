@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -17,7 +18,9 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        public Transient(Identifier name) : base(name) { }
+        public Transient(string name) : base(name)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
@@ -25,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
-        public Transient(Identifier name, double step, double final) 
+        public Transient(string name, double step, double final) 
             : base(name, step, final)
         {
         }
@@ -37,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         /// <param name="maxStep">The maximum step.</param>
-        public Transient(Identifier name, double step, double final, double maxStep) 
+        public Transient(string name, double step, double final, double maxStep) 
             : base(name, step, final, maxStep)
         {
         }

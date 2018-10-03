@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the behavior</param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Create export method
@@ -91,7 +91,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create current equation
-            BranchEq = variables.Create(new SubIdentifier(Name, "branch"), VariableType.Current).Index;
+            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);

@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseFrequencyBehavior(Identifier name) : base(name) { }
+        protected BaseFrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Creates a getter for a complex parameter.

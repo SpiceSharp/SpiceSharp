@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 
@@ -35,7 +36,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        public Noise(Identifier name) : base(name)
+        public Noise(string name) : base(name)
         {
             Configurations.Add(new NoiseConfiguration());
         }
@@ -47,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// <param name="output">The output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Noise(string name, string output, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, null, input));
         }
@@ -60,7 +61,7 @@ namespace SpiceSharp.Simulations
         /// <param name="reference">The reference output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Noise(string name, string output, string reference, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, reference, input));
         }

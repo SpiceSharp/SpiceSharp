@@ -26,8 +26,8 @@ namespace SpiceSharpTest.Models
         /// <param name="nmos">True for NMOS, false for PMOS</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        protected Mosfet3 CreateMOS3(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
-            Identifier modelname, bool nmos, string modelparams)
+        protected Mosfet3 CreateMOS3(string name, string d, string g, string s, string b,
+            string modelname, bool nmos, string modelparams)
         {
             // Create model
             var model = new Mosfet3Model(modelname, nmos);

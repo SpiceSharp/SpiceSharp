@@ -19,7 +19,7 @@ namespace SpiceSharpTest.Models
         /// <param name="modelName">Model name</param>
         /// <param name="modelParameters">Model parameters</param>
         /// <returns></returns>
-        VoltageSwitch CreateVoltageSwitch(Identifier name, Identifier pos, Identifier neg, Identifier contPos, Identifier contNeg, Identifier modelName, string modelParameters)
+        VoltageSwitch CreateVoltageSwitch(string name, string pos, string neg, string contPos, string contNeg, string modelName, string modelParameters)
         {
             var model = new VoltageSwitchModel(modelName);
             ApplyParameters(model, modelParameters);

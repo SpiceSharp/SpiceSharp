@@ -15,13 +15,13 @@ namespace SpiceSharp.Behaviors
         /// <value>
         /// The entity identifier.
         /// </value>
-        public Identifier Source { get; }
+        public string Source { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBehaviorDictionary"/> class.
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
-        public EntityBehaviorDictionary(Identifier source)
+        public EntityBehaviorDictionary(string source)
             : base(typeof(Behavior))
         {
             Source = source;

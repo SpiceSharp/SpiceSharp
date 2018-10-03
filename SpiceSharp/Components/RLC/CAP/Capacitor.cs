@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(Identifier name) : base(name, CapacitorPinCount)
+        public Capacitor(string name) : base(name, CapacitorPinCount)
         {
             // Register parameters
             ParameterSets.Add(new BaseParameters());
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(Identifier name, Identifier pos, Identifier neg, double cap) 
+        public Capacitor(string name, string pos, string neg, double cap) 
             : base(name, CapacitorPinCount)
         {
             // Register parameters

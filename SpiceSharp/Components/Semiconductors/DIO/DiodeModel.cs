@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public DiodeModel(Identifier name) : base(name)
+        public DiodeModel(string name) : base(name)
         {
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
