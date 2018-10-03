@@ -26,16 +26,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        public Transient(Identifier name, IEqualityComparer<Identifier> comparer)
-            : base(name, comparer)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Transient"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         public Transient(Identifier name, double step, double final) 

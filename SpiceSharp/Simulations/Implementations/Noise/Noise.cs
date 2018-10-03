@@ -45,17 +45,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="comparer">The comparer for identifiers of behaviors and parameters.</param>
-        public Noise(Identifier name, IEqualityComparer<Identifier> comparer)
-            : base(name, comparer)
-        {
-            Configurations.Add(new NoiseConfiguration());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Noise"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
         /// <param name="output">The output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
