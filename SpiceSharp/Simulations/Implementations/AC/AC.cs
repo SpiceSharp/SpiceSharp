@@ -29,6 +29,10 @@ namespace SpiceSharp.Simulations
         {
         }
 
+        /// <summary>
+        /// Set up the simulation.
+        /// </summary>
+        /// <param name="circuit">The circuit that will be used.</param>
         protected override void Setup(Circuit circuit)
         {
             base.Setup(circuit);
