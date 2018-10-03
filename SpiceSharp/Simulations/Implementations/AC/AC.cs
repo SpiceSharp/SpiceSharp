@@ -10,6 +10,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="SpiceSharp.Simulations.FrequencySimulation" />
     public class AC : FrequencySimulation
     {
+        private bool _keepOpInfo;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
@@ -27,6 +29,14 @@ namespace SpiceSharp.Simulations
         {
         }
 
+        protected override void Setup(Circuit circuit)
+        {
+            base.Setup(circuit);
+
+            var config = Configurations.Get<FrequencyConfiguration>();
+            _keepOpInfo = config.KeepOpInfo;
+        }
+
         /// <summary>
         /// Executes the simulation.
         /// </summary>
@@ -37,21 +47,19 @@ namespace SpiceSharp.Simulations
 
             var state = RealState;
             var cstate = ComplexState;
-            var baseconfig = BaseConfiguration;
-            var freqconfig = FrequencyConfiguration;
             
             // Calculate the operating point
             cstate.Laplace = 0.0;
             state.UseIc = false;
             state.UseDc = true;
-            Op(baseconfig.DcMaxIterations);
+            Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();
 
             // Export operating point if requested
             var exportargs = new ExportDataEventArgs(this);
-            if (freqconfig.KeepOpInfo)
+            if (_keepOpInfo)
                 OnExport(exportargs);
 
             // Sweep the frequency

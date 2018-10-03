@@ -18,6 +18,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         private ModelBaseParameters _mbp;
         private TemperatureBehavior _temp;
         private ModelTemperatureBehavior _modeltemp;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Some signs used in the model
@@ -107,6 +108,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
+
+            // Get configurations
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -232,7 +236,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var baseConfig = simulation.BaseConfiguration;
             var rstate = state;
             double drainSatCur, sourceSatCur,
                 vgs, vds, vbs, vbd, vgd;
@@ -344,24 +347,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             {
                 CondBs = sourceSatCur / vt;
                 BsCurrent = CondBs * vbs;
-                CondBs += baseConfig.Gmin;
+                CondBs += _baseConfig.Gmin;
             }
             else
             {
                 var evbs = Math.Exp(vbs / vt);
-                CondBs = sourceSatCur * evbs / vt + baseConfig.Gmin;
+                CondBs = sourceSatCur * evbs / vt + _baseConfig.Gmin;
                 BsCurrent = sourceSatCur * (evbs - 1);
             }
             if (vbd <= 0)
             {
                 CondBd = drainSatCur / vt;
                 BdCurrent = CondBd * vbd;
-                CondBd += baseConfig.Gmin;
+                CondBd += _baseConfig.Gmin;
             }
             else
             {
                 var evbd = Math.Exp(vbd / vt);
-                CondBd = drainSatCur * evbd / vt + baseConfig.Gmin;
+                CondBd = drainSatCur * evbd / vt + _baseConfig.Gmin;
                 BdCurrent = drainSatCur * (evbd - 1);
             }
             if (vds >= 0)
@@ -922,8 +925,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* 
 			* load current vector
 			*/
-            var ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - baseConfig.Gmin) * vbs);
-            var ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - baseConfig.Gmin) * vbd);
+            var ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - _baseConfig.Gmin) * vbs);
+            var ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - _baseConfig.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
@@ -971,7 +974,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var config = simulation.BaseConfiguration;
 
             double cdhat;
 
@@ -1004,14 +1006,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /*
              *  check convergence
              */
-            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
+            var tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsConvergent = false;
                 return false;
             }
 
-            tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + config.AbsoluteTolerance;
+            tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cbhat - (BsCurrent + BdCurrent)) > tol)
             {
                 state.IsConvergent = false;

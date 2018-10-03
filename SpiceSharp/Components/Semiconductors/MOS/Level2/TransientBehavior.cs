@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         private ModelBaseParameters _mbp;
         private LoadBehavior _load;
         private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Nodes
@@ -88,6 +88,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
+            // Get configuration
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
+
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
@@ -95,7 +98,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _load = provider.GetBehavior<LoadBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -385,9 +387,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
-
-            var state = simulation.RealState;
-            var baseConfig = simulation.BaseConfiguration;
             double sargsw;
 
             var vbs = _load.VoltageBs;
@@ -594,9 +593,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			* store charge storage info for meyer's cap in lx table
 			*/
 
+            // TODO: Check the Gmin here, as it should be time-independent (?)
             // Load current vector
-            var ceqbs = _mbp.MosfetType * (cbs - (gbs - baseConfig.Gmin) * vbs);
-            var ceqbd = _mbp.MosfetType * (cbd - (gbd - baseConfig.Gmin) * vbd);
+            var ceqbs = _mbp.MosfetType * (cbs - (gbs - _baseConfig.Gmin) * vbs);
+            var ceqbd = _mbp.MosfetType * (cbd - (gbd - _baseConfig.Gmin) * vbd);
             GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
             BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
             DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;

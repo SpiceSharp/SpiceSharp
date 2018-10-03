@@ -25,11 +25,10 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = RealState;
-            var baseconfig = BaseConfiguration;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
 
-            Op(baseconfig.DcMaxIterations);
+            Op(DcMaxIterations);
 
             var exportargs = new ExportDataEventArgs(this);
             OnExport(exportargs);

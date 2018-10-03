@@ -19,6 +19,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private TemperatureBehavior _temp;
         private BaseParameters _bp;
         private ModelBaseParameters _mbp;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Nodes
@@ -74,6 +75,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
+
+            // Get configurations
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -152,7 +156,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var baseConfig = simulation.BaseConfiguration;
             double vd;
             double cd, gd;
 
@@ -197,23 +200,23 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 // Forward bias
                 var evd = Math.Exp(vd / vte);
-                cd = csat * (evd - 1) + baseConfig.Gmin * vd;
-                gd = csat * evd / vte + baseConfig.Gmin;
+                cd = csat * (evd - 1) + _baseConfig.Gmin * vd;
+                gd = csat * evd / vte + _baseConfig.Gmin;
             }
             else if (!_mbp.BreakdownVoltage.Given || vd >= -_temp.TempBreakdownVoltage)
             {
                 // Reverse bias
                 var arg = 3 * vte / (vd * Math.E);
                 arg = arg * arg * arg;
-                cd = -csat * (1 + arg) + baseConfig.Gmin * vd;
-                gd = csat * 3 * arg / vd + baseConfig.Gmin;
+                cd = -csat * (1 + arg) + _baseConfig.Gmin * vd;
+                gd = csat * 3 * arg / vd + _baseConfig.Gmin;
             }
             else
             {
                 // Reverse breakdown
                 var evrev = Math.Exp(-(_temp.TempBreakdownVoltage + vd) / vte);
-                cd = -csat * evrev + baseConfig.Gmin * vd;
-                gd = csat * evrev / vte + baseConfig.Gmin;
+                cd = -csat * evrev + _baseConfig.Gmin * vd;
+                gd = csat * evrev / vte + _baseConfig.Gmin;
             }
 
             // Check convergence
@@ -254,7 +257,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var config = simulation.BaseConfiguration;
             var vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
 
             var delvd = vd - InternalVoltage;
@@ -262,7 +264,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var cd = Current;
 
             // check convergence
-            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsoluteTolerance;
+            var tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 state.IsConvergent = false;

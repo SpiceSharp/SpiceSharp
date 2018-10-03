@@ -110,7 +110,6 @@ namespace SpiceSharp.Simulations
             // Setup the state
             var state = RealState;
             var dcconfig = DcConfiguration;
-            var baseconfig = BaseConfiguration;
             state.Init = InitializationModes.Junction;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
@@ -180,7 +179,7 @@ namespace SpiceSharp.Simulations
                 if (!Iterate(dcconfig.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, EventArgs.Empty);
-                    Op(baseconfig.DcMaxIterations);
+                    Op(DcMaxIterations);
                 }
 
                 // Export data
