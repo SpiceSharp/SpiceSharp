@@ -16,7 +16,17 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The frequency configuration.
         /// </value>
-        public FrequencyConfiguration FrequencyConfiguration { get; protected set; }
+        public FrequencyConfiguration FrequencyConfiguration
+        {
+            get
+            {
+                if (Configurations.TryGet<FrequencyConfiguration>(out var config))
+                {
+                    return config;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Private variables
@@ -87,8 +97,11 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors, configurations and states
-            FrequencyConfiguration = Configurations.Get<FrequencyConfiguration>() ??
-                                     throw new CircuitException("No frequency configuration found");
+            if (FrequencyConfiguration == null)
+            {
+                throw new CircuitException("No frequency configuration found");
+            }
+
             FrequencySweep = FrequencyConfiguration.FrequencySweep ??
                              throw new CircuitException("No frequency sweep found");
 
@@ -133,7 +146,6 @@ namespace SpiceSharp.Simulations
             ComplexState = null;
 
             // Configuration
-            FrequencyConfiguration = null;
             FrequencySweep = null;
 
             base.Unsetup();

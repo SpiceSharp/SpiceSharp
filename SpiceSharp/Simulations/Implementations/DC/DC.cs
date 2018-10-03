@@ -15,7 +15,17 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The dc configuration.
         /// </value>
-        public DcConfiguration DcConfiguration { get; protected set; }
+        public DcConfiguration DcConfiguration
+        {
+            get
+            {
+                if (Configurations.TryGet<DcConfiguration>(out var config))
+                {
+                    return config;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets the currently active sweeps.
@@ -84,9 +94,6 @@ namespace SpiceSharp.Simulations
         protected override void Setup(Circuit circuit)
         {
             base.Setup(circuit);
-
-            // Get DC configuration
-            DcConfiguration = Configurations.Get<DcConfiguration>();
 
             // Get sweeps
             Sweeps = new NestedSweeps(DcConfiguration.Sweeps);
@@ -217,7 +224,6 @@ namespace SpiceSharp.Simulations
             Sweeps = null;
 
             // Clear configuration
-            DcConfiguration = null;
             base.Unsetup();
         }
     }
