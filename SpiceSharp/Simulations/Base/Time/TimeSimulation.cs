@@ -12,12 +12,22 @@ namespace SpiceSharp.Simulations
     public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active time configuration.
+        /// Gets the currently time configuration.
         /// </summary>
         /// <value>
         /// The time configuration.
         /// </value>
-        public TimeConfiguration TimeConfiguration { get; protected set; }
+        public TimeConfiguration TimeConfiguration
+        {
+            get
+            {
+                if (Configurations.TryGet<TimeConfiguration>(out var config))
+                {
+                    return config;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets the active integration method.
@@ -87,9 +97,7 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors and configurations
-            var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
-            TimeConfiguration = config;
-            Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
+            Method = TimeConfiguration?.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
 
             // Allow all transient behaviors to allocate equation elements and create states

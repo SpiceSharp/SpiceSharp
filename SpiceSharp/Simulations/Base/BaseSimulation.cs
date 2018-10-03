@@ -21,7 +21,17 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The base configuration.
         /// </value>
-        public BaseConfiguration BaseConfiguration { get; protected set; }
+        public BaseConfiguration BaseConfiguration
+        {
+            get
+            {
+                if (Configurations.TryGet<BaseConfiguration>(out var config))
+                {
+                    return config;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets the currently active simulation state.
@@ -105,8 +115,7 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
-            // Setup behaviors, configurations and states
-            BaseConfiguration = Configurations.Get<BaseConfiguration>();
+            // Setup behaviors, configurations and states            
             _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
             _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
@@ -197,7 +206,6 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = null;
             _initialConditionBehaviors = null;
             _temperatureBehaviors = null;
-            BaseConfiguration = null;
         }
 
         /// <summary>
