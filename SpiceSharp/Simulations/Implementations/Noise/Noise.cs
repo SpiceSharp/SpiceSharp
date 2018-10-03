@@ -112,7 +112,6 @@ namespace SpiceSharp.Simulations
             var nstate = NoiseState;
 
             var noiseconfig = NoiseConfiguration;
-            var baseconfig = BaseConfiguration;
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
@@ -124,7 +123,7 @@ namespace SpiceSharp.Simulations
             cstate.Laplace = 0;
             state.UseIc = false;
             state.UseDc = true;
-            Op(baseconfig.DcMaxIterations);
+            Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();

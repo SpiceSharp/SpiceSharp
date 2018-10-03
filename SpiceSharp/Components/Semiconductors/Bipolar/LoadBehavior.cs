@@ -19,6 +19,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private ModelBaseParameters _mbp;
         private TemperatureBehavior _temp;
         private ModelTemperatureBehavior _modeltemp;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Methods
@@ -106,6 +107,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
+
+            // Get configurations
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -226,7 +230,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var baseConfig = simulation.BaseConfiguration;
             double vbe;
             double vbc;
             double gben;
@@ -286,8 +289,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbe > -5 * vtn)
             {
                 var evbe = Math.Exp(vbe / vtn);
-                CurrentBe = csat * (evbe - 1) + baseConfig.Gmin * vbe;
-                CondBe = csat * evbe / vtn + baseConfig.Gmin;
+                CurrentBe = csat * (evbe - 1) + _baseConfig.Gmin * vbe;
+                CondBe = csat * evbe / vtn + _baseConfig.Gmin;
                 if (c2.Equals(0)) // Avoid Exp()
                 {
                     cben = 0;
@@ -302,7 +305,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                CondBe = -csat / vbe + baseConfig.Gmin;
+                CondBe = -csat / vbe + _baseConfig.Gmin;
                 CurrentBe = CondBe * vbe;
                 gben = -c2 / vbe;
                 cben = gben * vbe;
@@ -312,8 +315,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbc > -5 * vtn)
             {
                 var evbc = Math.Exp(vbc / vtn);
-                CurrentBc = csat * (evbc - 1) + baseConfig.Gmin * vbc;
-                CondBc = csat * evbc / vtn + baseConfig.Gmin;
+                CurrentBc = csat * (evbc - 1) + _baseConfig.Gmin * vbc;
+                CondBc = csat * evbc / vtn + _baseConfig.Gmin;
                 if (c4.Equals(0)) // Avoid Exp()
                 {
                     cbcn = 0;
@@ -328,7 +331,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                CondBc = -csat / vbc + baseConfig.Gmin;
+                CondBc = -csat / vbc + _baseConfig.Gmin;
                 CurrentBc = CondBc * vbc;
                 gbcn = -c4 / vbc;
                 cbcn = gbcn * vbc;
@@ -423,6 +426,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimeBasePrimePtr.Value += -gpi - gm;
         }
 
+        // TODO: I believe this method of checking convergence is unnecessary and/or can be improved.
         /// <summary>
         /// Check if the BJT is convergent
         /// </summary>
@@ -434,8 +438,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var config = simulation.BaseConfiguration;
-
             var vbe = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
             var vbc = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
             var delvbe = vbe - VoltageBe;
@@ -446,14 +448,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var cb = BaseCurrent;
 
             // Check convergence
-            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;
+            var tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cchat - cc) > tol)
             {
                 state.IsConvergent = false;
                 return false;
             }
 
-            tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsoluteTolerance;
+            tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cbhat - cb) > tol)
             {
                 state.IsConvergent = false;

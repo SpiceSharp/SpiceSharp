@@ -11,14 +11,6 @@ namespace SpiceSharp.Simulations
     public abstract class FrequencySimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active frequency configuration.
-        /// </summary>
-        /// <value>
-        /// The frequency configuration.
-        /// </value>
-        public FrequencyConfiguration FrequencyConfiguration { get; protected set; }
-
-        /// <summary>
         /// Private variables
         /// </summary>
         private BehaviorList<BaseFrequencyBehavior> _frequencyBehaviors;
@@ -87,17 +79,15 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors, configurations and states
-            FrequencyConfiguration = Configurations.Get<FrequencyConfiguration>() ??
-                                     throw new CircuitException("No frequency configuration found");
-            FrequencySweep = FrequencyConfiguration.FrequencySweep ??
-                             throw new CircuitException("No frequency sweep found");
+            var config = Configurations.Get<FrequencyConfiguration>();
+            FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
 
             // Create the state for complex numbers
             ComplexState = new ComplexSimulationState();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
             var strategy = ComplexState.Solver.Strategy;
-            strategy.RelativePivotThreshold = FrequencyConfiguration.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = FrequencyConfiguration.AbsolutePivotThreshold;
+            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
             // Setup behaviors
             _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Entities);
@@ -133,7 +123,6 @@ namespace SpiceSharp.Simulations
             ComplexState = null;
 
             // Configuration
-            FrequencyConfiguration = null;
             FrequencySweep = null;
 
             base.Unsetup();

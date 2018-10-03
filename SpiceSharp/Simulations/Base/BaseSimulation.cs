@@ -16,14 +16,6 @@ namespace SpiceSharp.Simulations
     public abstract class BaseSimulation : Simulation
     {
         /// <summary>
-        /// Gets the currently active configuration.
-        /// </summary>
-        /// <value>
-        /// The base configuration.
-        /// </value>
-        public BaseConfiguration BaseConfiguration { get; protected set; }
-
-        /// <summary>
         /// Gets the currently active simulation state.
         /// </summary>
         /// <value>
@@ -81,8 +73,12 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
-        private double _diagonalGmin = 0.0;
+        private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
+        
+        protected int DcMaxIterations { get; private set; }
+        protected double AbsTol { get; private set; }
+        protected double RelTol { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
@@ -105,8 +101,13 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
+            // Copy configuration
+            var config = Configurations.Get<BaseConfiguration>();
+            DcMaxIterations = config.DcMaxIterations;
+            AbsTol = config.AbsoluteTolerance;
+            RelTol = config.RelativeTolerance;
+
             // Setup behaviors, configurations and states
-            BaseConfiguration = Configurations.Get<BaseConfiguration>();
             _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
             _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
@@ -116,8 +117,8 @@ namespace SpiceSharp.Simulations
             _isPreordered = false;
             _shouldReorder = true;
             var strategy = RealState.Solver.Strategy;
-            strategy.RelativePivotThreshold = BaseConfiguration.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = BaseConfiguration.AbsolutePivotThreshold;
+            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
@@ -126,14 +127,14 @@ namespace SpiceSharp.Simulations
             RealState.Setup(Variables);
 
             // TODO: Compatibility - nodesets from nodes instead of configuration should be removed eventually
-            if (BaseConfiguration.Nodesets.Count == 0)
+            if (config.Nodesets.Count == 0)
             {
                 foreach (var ns in Variables.NodeSets)
                     _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
             }
 
             // Set up nodesets
-            foreach (var ns in BaseConfiguration.Nodesets)
+            foreach (var ns in config.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
         }
 
@@ -197,7 +198,6 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = null;
             _initialConditionBehaviors = null;
             _temperatureBehaviors = null;
-            BaseConfiguration = null;
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace SpiceSharp.Simulations
         protected void Op(int maxIterations)
         {
             var state = RealState;
-            var config = BaseConfiguration;
+            var config = Configurations.Get<BaseConfiguration>();
             state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
@@ -471,7 +471,6 @@ namespace SpiceSharp.Simulations
         protected bool IsConvergent()
         {
             var rstate = RealState;
-            var config = BaseConfiguration;
 
             // Check convergence for each node
             for (var i = 0; i < Variables.Count; i++)
@@ -485,7 +484,7 @@ namespace SpiceSharp.Simulations
 
                 if (node.UnknownType == VariableType.Voltage)
                 {
-                    var tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
+                    var tol = RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + AbsTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
@@ -494,7 +493,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    var tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsoluteTolerance;
+                    var tol = RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + AbsTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;

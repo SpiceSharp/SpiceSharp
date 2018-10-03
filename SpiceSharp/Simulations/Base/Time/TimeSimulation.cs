@@ -12,14 +12,6 @@ namespace SpiceSharp.Simulations
     public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active time configuration.
-        /// </summary>
-        /// <value>
-        /// The time configuration.
-        /// </value>
-        public TimeConfiguration TimeConfiguration { get; protected set; }
-
-        /// <summary>
         /// Gets the active integration method.
         /// </summary>
         /// <value>
@@ -32,7 +24,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
-        private bool _shouldReorder = true;
+        private bool _shouldReorder = true, _useIc = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -88,7 +80,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors and configurations
             var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
-            TimeConfiguration = config;
+            _useIc = config.UseIc;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
 
@@ -101,14 +93,14 @@ namespace SpiceSharp.Simulations
             Method.Setup(this);
 
             // TODO: Compatibility - initial conditions from nodes instead of configuration should be removed eventually
-            if (BaseConfiguration.Nodesets.Count == 0)
+            if (config.InitialConditions.Count == 0)
             {
                 foreach (var ns in Variables.InitialConditions)
                     _initialConditions.Add(new ConvergenceAid(ns.Key, ns.Value));
             }
 
             // Set up initial conditions
-            foreach (var ic in TimeConfiguration.InitialConditions)
+            foreach (var ic in config.InitialConditions)
                 _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
         }
 
@@ -130,9 +122,9 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point of the circuit
             var state = RealState;
-            state.UseIc = TimeConfiguration.UseIc;
+            state.UseIc = _useIc;
             state.UseDc = true;
-            Op(BaseConfiguration.DcMaxIterations);
+            Op(DcMaxIterations);
             Statistics.TimePoints++;
 
             // Stop calculating the operating point

@@ -15,6 +15,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private BaseParameters _bp;
         private ModelBaseParameters _mbp;
         private ModelTemperatureBehavior _modeltemp;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Extra variables
@@ -42,6 +43,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
+
+            // Get base configuration
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -110,7 +114,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 }
                 else
                 {
-                    var tol = simulation.BaseConfiguration.RelativeTolerance * cbv;
+                    var tol = _baseConfig.RelativeTolerance * cbv;
                     xbv = _mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
                     int iter;
                     for (iter = 0; iter < 25; iter++)
