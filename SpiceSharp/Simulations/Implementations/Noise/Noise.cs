@@ -17,7 +17,17 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The noise configuration.
         /// </value>
-        public NoiseConfiguration NoiseConfiguration { get; protected set; }
+        public NoiseConfiguration NoiseConfiguration
+        {
+            get
+            {
+                if (Configurations.TryGet<NoiseConfiguration>(out var config))
+                {
+                    return config;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets the noise state.
@@ -78,7 +88,6 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors, parameters and states
-            NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
             _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
             NoiseState = new NoiseState();
             NoiseState.Setup(Variables);
@@ -95,7 +104,6 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _noiseBehaviors.Count; i++)
                 _noiseBehaviors[i].Unsetup(this);
             _noiseBehaviors = null;
-            NoiseConfiguration = null;
 
             base.Unsetup();
         }
