@@ -25,6 +25,14 @@ namespace SpiceSharp.Circuits
         private bool _isOrdered;
 
         /// <summary>
+        /// Gets the comparer for entity identifiers.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer => _objects.Comparer;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
         /// </summary>
         public EntityCollection()

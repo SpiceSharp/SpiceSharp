@@ -203,20 +203,14 @@ namespace SpiceSharp.Simulations
             if (circuit.Entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
-            // Create the list of parameters for our simulation run
-            if (Configurations.TryGet(out CollectionConfiguration cconfig))
-            {
-                var ec = cconfig.EntityComparer ?? EqualityComparer<string>.Default;
-                EntityParameters = new ParameterPool(ec);
-                EntityBehaviors = new BehaviorPool(ec);
-                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default);
-            }
-            else
-            {
-                EntityParameters = new ParameterPool();
-                EntityBehaviors = new BehaviorPool();
-                Variables = new VariableSet();
-            }
+            // Use the same comparer as the circuit. This is crucial because they use the same identifiers!
+            EntityParameters = new ParameterPool(circuit.Entities.Comparer);
+            EntityBehaviors = new BehaviorPool(circuit.Entities.Comparer);
+
+            // Create the variables that will need solving
+            Variables = Configurations.TryGet(out CollectionConfiguration cconfig)
+                ? new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default)
+                : new VariableSet();
 
             // Setup all objects
             circuit.Entities.BuildOrderedComponentList();
