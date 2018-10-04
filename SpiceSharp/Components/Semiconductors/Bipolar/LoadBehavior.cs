@@ -426,7 +426,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimeBasePrimePtr.Value += -gpi - gm;
         }
 
-        // TODO: I believe this method of checking convergence is unnecessary and/or can be improved.
+        // TODO: I believe this method of checking convergence can be improved. These calculations seem to be common for multiple behaviors.
         /// <summary>
         /// Check if the BJT is convergent
         /// </summary>

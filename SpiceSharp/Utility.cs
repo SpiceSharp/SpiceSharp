@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using System.Globalization;
 using System.Reflection;
 
@@ -51,7 +52,12 @@ namespace SpiceSharp
         /// <param name="destination">The destination object</param>
         public static void CopyPropertiesAndFields(object source, object destination)
         {
-            // TODO: Check that the types are valid(?)
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (destination == null)
+                throw new ArgumentNullException(nameof(destination));
+            if (source.GetType() != destination.GetType())
+                throw new ArgumentException(@"Source and target are not of the same type.");
 
             var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
