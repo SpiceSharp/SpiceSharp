@@ -106,7 +106,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
         /// </summary>
-        /// <param name="comparer">The comparer for initial condition identifiers.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing initial condition node names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         public TimeConfiguration(IEqualityComparer<string> comparer)
         {
             InitialConditions = new Dictionary<string, double>(comparer);

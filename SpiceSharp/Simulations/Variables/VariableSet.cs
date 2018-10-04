@@ -69,7 +69,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableSet"/> class.
         /// </summary>
-        /// <param name="comparer">The comparer for identifiers.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing variable/node names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         public VariableSet(IEqualityComparer<string> comparer)
         {
             // Setup the ground node

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -59,34 +60,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         /// <param name="name">Name</param>
         public LoadBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Creates a getter for extracting data from the specified simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation</param>
-        /// <param name="propertyName">The name of the parameter.</param>
-        /// <returns>
-        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">simulation</exception>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
-
-            // Let's cache
-            if (!(simulation is BaseSimulation bs))
-                return null;
-            var state = bs.RealState;
-            switch (propertyName)
-            {
-                case "c":
-                case "i": return () => GetCurrent(state);
-                case "v": return () => GetVoltage(state);
-                case "p": return () => GetPower(state);
-                default: return null;
-            }
-        }
 
         /// <summary>
         /// Setup behavior

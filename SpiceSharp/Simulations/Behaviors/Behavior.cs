@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -56,12 +57,13 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="simulation">The simulation</param>
         /// <param name="propertyName">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName)
+        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
         {
-            return CreateGetter<double>(simulation, propertyName);
+            return CreateGetter<double>(simulation, propertyName, comparer);
         }
 
         /// <summary>
@@ -70,14 +72,15 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The base value type</typeparam>
         /// <param name="simulation">The simulation.</param>
         /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        protected Func<T> CreateGetter<T>(Simulation simulation, string name) where T : struct 
+        protected Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null) where T : struct 
         {
             // Find methods to create the export
             Func<T> result = null;
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 // Use methods
                 if (member is MethodInfo mi)

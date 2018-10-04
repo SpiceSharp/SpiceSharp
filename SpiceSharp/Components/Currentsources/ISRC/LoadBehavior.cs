@@ -53,30 +53,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Parameter name</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            // Get the state
-            if (!(simulation is BaseSimulation bs))
-                return null;
-            var state = bs.RealState;
-
-            // Avoid using reflection for common components
-            switch (propertyName)
-            {
-                case "v": return () => GetV(state);
-                case "p": return () => GetP(state);
-                case "i":
-                case "c": return () => Current;
-                default: return null;
-            }
-        }
-
-        /// <summary>
         /// Setup behavior
         /// </summary>
         /// <param name="simulation">Simulation</param>

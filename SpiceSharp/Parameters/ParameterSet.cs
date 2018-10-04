@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using SpiceSharp.Attributes;
 
@@ -19,13 +20,14 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// The parameter with the specified name.
         /// </returns>
-        public Parameter<T> GetParameter<T>(string name) where T : struct
+        public Parameter<T> GetParameter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
             // Get the property by name
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 // Check for methods
                 if (member is MethodInfo mi)
@@ -81,14 +83,15 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
         /// </returns>
-        public bool SetParameter<T>(string name, T value) where T : struct
+        public bool SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) where T : struct
         {
             // Set the property if any
             var isset = false;
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 // Set the member
                 if (SetMember(member, value))
@@ -126,6 +129,35 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Calls a method by name without arguments.
+        /// If multiple parameters by this name exist, all of them will be called.
+        /// </summary>
+        /// <param name="name">The name of the method.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
+        /// </returns>
+        public bool SetParameter(string name, IEqualityComparer<string> comparer)
+        {
+            // Set the property if any
+            var isset = false;
+            foreach (var member in Named(name, comparer))
+            {
+                // Set the member
+                if (member is MethodInfo mi)
+                {
+                    var parameters = mi.GetParameters();
+                    if (parameters.Length == 0)
+                    {
+                        mi.Invoke(this, null);
+                        isset = true;
+                    }
+                }
+            }
+            return isset;
+        }
+
+        /// <summary>
         /// Sets the value of the principal parameter. Only the first principal parameter is changed.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -147,14 +179,15 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if one or more parameters are set; otherwise <c>false</c>.
         /// </returns>
-        public bool SetParameter(string name, object value)
+        public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null)
         {
             // Set the property if any
             var isset = false;
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 if (member is PropertyInfo pi)
                 {
@@ -202,7 +235,7 @@ namespace SpiceSharp
         public virtual ParameterSet DeepClone()
         {
             // 1. Make new object
-            var destinationObject = (ParameterSet)Activator.CreateInstance(GetType());
+            var destinationObject = (ParameterSet) Activator.CreateInstance(GetType());
 
             // 2. Copy properties of the current object
             Utility.CopyPropertiesAndFields(this, destinationObject);

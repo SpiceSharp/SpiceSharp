@@ -31,30 +31,6 @@ namespace SpiceSharp.Components.InductorBehaviors
         public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Create export method
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            // Get the state
-            if (!(simulation is BaseSimulation bs))
-                return null;
-            var state = bs.RealState;
-
-            // Avoid reflection for common components
-            switch (propertyName)
-            {
-                case "v": return () => state.Solution[_posNode] - state.Solution[_negNode];
-                case "i":
-                case "c": return () => state.Solution[BranchEq];
-                case "p": return () => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
-                default: return null;
-            }
-        }
-
-        /// <summary>
         /// Setup behavior
         /// </summary>
         /// <param name="simulation">Simulation</param>

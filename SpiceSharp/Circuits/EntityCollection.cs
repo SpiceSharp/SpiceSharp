@@ -45,7 +45,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
         /// </summary>
-        /// <param name="comparer">The comparer for strings.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         public EntityCollection(IEqualityComparer<string> comparer)
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);

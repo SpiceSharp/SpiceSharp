@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
@@ -25,12 +26,13 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="propertyName">The name of the property.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// A function get return the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        public virtual Func<Complex> CreateAcExport(Simulation simulation, string propertyName)
+        public virtual Func<Complex> CreateAcExport(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
         {
-            return CreateGetter<Complex>(simulation, propertyName);
+            return CreateGetter<Complex>(simulation, propertyName, comparer);
         }
 
         /// <summary>
