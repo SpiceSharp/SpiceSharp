@@ -10,6 +10,86 @@ namespace SpiceSharpTest
     public class BasicExampleTests
     {
         [Test]
+        public void When_BasicResistor_Expect_NoException()
+        {
+            // <example_structure_resistor>
+            // Build the circuit
+            var ckt = new Circuit(
+                new Resistor("R1", "a", "b", 1e3)
+            );
+
+            // Change the value of the resistor
+            var resParameters = ckt.Entities["R1"].ParameterSets;
+            resParameters.Get<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
+            // </example_structure_resistor>
+
+            // <example_structure_resistor_2>
+            // Using the ParameterNameAttribute
+            ckt.Entities["R1"].SetParameter("resistance", 2.0e3);
+            ckt.Entities["R1"].ParameterSets.SetParameter("resistance", 2.0e3);
+
+            // Using the ParameterInfoAttributes IsPrincipal=true
+            ckt.Entities["R1"].ParameterSets.SetParameter(2.0e3);
+            // </example_structure_resistor_2>
+        }
+
+        [Test]
+        public void When_BasicSimulation_Expect_NoException()
+        {
+            // <example_structure_dc>
+            // Build the simulation
+            var dc = new DC("DC 1");
+
+            // Add a sweep
+            var dcConfig = dc.Configurations.Get<DCConfiguration>();
+            dcConfig.Sweeps.Add(new SweepConfiguration("V1", 0.0, 3.3, 0.1));
+            // </example_structure_dc>
+
+            // <example_structure_dc_2>
+            var baseConfig = dc.Configurations.Get<BaseConfiguration>();
+            baseConfig.RelativeTolerance = 1e-4;
+            baseConfig.AbsoluteTolerance = 1e-10;
+            // </example_structure_dc_2>
+        }
+
+        [Test]
+        public void When_BasicParameters_Expect_NoException()
+        {
+            // Create the mosfet
+            var model = new Mosfet1Model("M1");
+            var parameters =
+                model.ParameterSets.Get<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
+
+            // <example_parameters_mos1_creategetter>
+            // Create a getter for the nominal temperature of the mosfet1 model
+            var tnomGetter = parameters.CreateGetter<double>("tnom");
+            double temperature = tnomGetter(); // In degrees Celsius
+            // </example_parameters_mos1_creategetter>
+
+            // <example_parameters_mos1_createsetter>
+            // Create a setter for the gate-drain overlap capacitance of the mosfet1 model
+            var cgdoSetter = parameters.CreateSetter<double>("cgdo");
+            cgdoSetter(1e-15); // 1pF
+            // </example_parameters_mos1_createsetter>
+
+            // <example_parameters_mos1_getparameter>
+            // Get the parameter that describes the oxide thickness of the mosfet1 model
+            var toxParameter = parameters.GetParameter<double>("tox");
+            // </example_parameters_mos1_getparameter>
+
+            // <example_parameters_mos1_setparameter>
+            // Flag the model as a PMOS type
+            parameters.SetParameter("pmos", true);
+            // </example_parameters_mos1_setparameter>
+
+            // <example_parameters_res_setparameter>
+            // Set the resistance of the resistor
+            var res = new Resistor("R1");
+            res.ParameterSets.SetParameter(2.0e3); // 2kOhm
+            // </example_parameters_res_setparameter>
+        }
+
+        [Test]
         public void When_BasicCircuit_Expect_NoException()
         {
             // <example01_build>

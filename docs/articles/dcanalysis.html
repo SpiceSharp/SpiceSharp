@@ -108,7 +108,7 @@ dc.ExportSimulationData += (sender, args) =&gt;
 dc.Run(ckt);
 </code></pre><p>First we build an NMOS transistor. For this we need a <strong><a class="xref" href="../api/SpiceSharp.Components.Component.html">Component</a></strong>, which we can connect to nodes in the circuit. Most components also need a <strong><a class="xref" href="../api/SpiceSharp.Components.Model.html">Model</a></strong> in order to work. Models typically describe common environmental properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).</p>
 <p>In our case, the component is a  <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which needs a <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong> to work.
-Every component or model can have parameters, which can be set by using the method <em><a class="xref" href="../api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Double_">SetParameter</a></em>. The parameter names for MOS level 1 transistors are defined in the model specification and are all lower case.</p>
+Every component or model can have parameters, which can be set by using the method <em><a href="xref:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double)">SetParameter</a></em>. The parameter names for MOS level 1 transistors are defined in the model specification and are all lower case.</p>
 <p>After running and plotting the data we get:</p>
 <p align="center"><img src="images/example_DCgraph.svg"></p>
 

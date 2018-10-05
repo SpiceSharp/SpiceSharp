@@ -3290,15 +3290,15 @@ references:
   fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateGetter(Of T)()
   nameWithType: NamedParameterized.CreateGetter<T>()
   nameWithType.vb: NamedParameterized.CreateGetter(Of T)()
-- uid: SpiceSharp.Attributes.NamedParameterized.CreateGetter``1(System.String)
-  name: CreateGetter<T>(String)
-  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_
-  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateGetter``1(System.String)
-  name.vb: CreateGetter(Of T)(String)
-  fullName: SpiceSharp.Attributes.NamedParameterized.CreateGetter<T>(System.String)
-  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateGetter(Of T)(System.String)
-  nameWithType: NamedParameterized.CreateGetter<T>(String)
-  nameWithType.vb: NamedParameterized.CreateGetter(Of T)(String)
+- uid: SpiceSharp.Attributes.NamedParameterized.CreateGetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateGetter<T>(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateGetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateGetter(Of T)(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Attributes.NamedParameterized.CreateGetter<T>(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateGetter(Of T)(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: NamedParameterized.CreateGetter<T>(String, IEqualityComparer<String>)
+  nameWithType.vb: NamedParameterized.CreateGetter(Of T)(String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Attributes.NamedParameterized.CreateGetters*
   name: CreateGetters
   href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters_
@@ -3306,15 +3306,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Attributes.NamedParameterized.CreateGetters
   nameWithType: NamedParameterized.CreateGetters
-- uid: SpiceSharp.Attributes.NamedParameterized.CreateGetters``1
-  name: CreateGetters<T>()
-  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1
-  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateGetters``1
-  name.vb: CreateGetters(Of T)()
-  fullName: SpiceSharp.Attributes.NamedParameterized.CreateGetters<T>()
-  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateGetters(Of T)()
-  nameWithType: NamedParameterized.CreateGetters<T>()
-  nameWithType.vb: NamedParameterized.CreateGetters(Of T)()
+- uid: SpiceSharp.Attributes.NamedParameterized.CreateGetters``1(System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateGetters<T>(IEqualityComparer<String>)
+  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateGetters``1(System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateGetters(Of T)(IEqualityComparer(Of String))
+  fullName: SpiceSharp.Attributes.NamedParameterized.CreateGetters<T>(System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateGetters(Of T)(System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: NamedParameterized.CreateGetters<T>(IEqualityComparer<String>)
+  nameWithType.vb: NamedParameterized.CreateGetters(Of T)(IEqualityComparer(Of String))
 - uid: SpiceSharp.Attributes.NamedParameterized.CreateSetter*
   name: CreateSetter
   href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter_
@@ -3331,15 +3331,15 @@ references:
   fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateSetter(Of T)()
   nameWithType: NamedParameterized.CreateSetter<T>()
   nameWithType.vb: NamedParameterized.CreateSetter(Of T)()
-- uid: SpiceSharp.Attributes.NamedParameterized.CreateSetter``1(System.String)
-  name: CreateSetter<T>(String)
-  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_
-  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateSetter``1(System.String)
-  name.vb: CreateSetter(Of T)(String)
-  fullName: SpiceSharp.Attributes.NamedParameterized.CreateSetter<T>(System.String)
-  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateSetter(Of T)(System.String)
-  nameWithType: NamedParameterized.CreateSetter<T>(String)
-  nameWithType.vb: NamedParameterized.CreateSetter(Of T)(String)
+- uid: SpiceSharp.Attributes.NamedParameterized.CreateSetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateSetter<T>(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateSetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateSetter(Of T)(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Attributes.NamedParameterized.CreateSetter<T>(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateSetter(Of T)(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: NamedParameterized.CreateSetter<T>(String, IEqualityComparer<String>)
+  nameWithType.vb: NamedParameterized.CreateSetter(Of T)(String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Attributes.NamedParameterized.CreateSetters*
   name: CreateSetters
   href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters_
@@ -3347,21 +3347,24 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Attributes.NamedParameterized.CreateSetters
   nameWithType: NamedParameterized.CreateSetters
-- uid: SpiceSharp.Attributes.NamedParameterized.CreateSetters``1
-  name: CreateSetters<T>()
-  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1
-  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateSetters``1
-  name.vb: CreateSetters(Of T)()
-  fullName: SpiceSharp.Attributes.NamedParameterized.CreateSetters<T>()
-  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateSetters(Of T)()
-  nameWithType: NamedParameterized.CreateSetters<T>()
-  nameWithType.vb: NamedParameterized.CreateSetters(Of T)()
-- uid: SpiceSharp.Attributes.NamedParameterized.Named(System.String)
-  name: Named(String)
-  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_
-  commentId: M:SpiceSharp.Attributes.NamedParameterized.Named(System.String)
-  fullName: SpiceSharp.Attributes.NamedParameterized.Named(System.String)
-  nameWithType: NamedParameterized.Named(String)
+- uid: SpiceSharp.Attributes.NamedParameterized.CreateSetters``1(System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateSetters<T>(IEqualityComparer<String>)
+  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Attributes.NamedParameterized.CreateSetters``1(System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateSetters(Of T)(IEqualityComparer(Of String))
+  fullName: SpiceSharp.Attributes.NamedParameterized.CreateSetters<T>(System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Attributes.NamedParameterized.CreateSetters(Of T)(System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: NamedParameterized.CreateSetters<T>(IEqualityComparer<String>)
+  nameWithType.vb: NamedParameterized.CreateSetters(Of T)(IEqualityComparer(Of String))
+- uid: SpiceSharp.Attributes.NamedParameterized.Named(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: Named(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Attributes.NamedParameterized.Named(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: Named(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Attributes.NamedParameterized.Named(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Attributes.NamedParameterized.Named(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: NamedParameterized.Named(String, IEqualityComparer<String>)
+  nameWithType.vb: NamedParameterized.Named(String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Attributes.NamedParameterized.Named*
   name: Named
   href: api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_
@@ -3682,12 +3685,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Behaviors.BaseFrequencyBehavior.BaseFrequencyBehavior
   nameWithType: BaseFrequencyBehavior.BaseFrequencyBehavior
-- uid: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateAcExport(Simulation, String)
-  href: api/SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_CreateAcExport_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: BaseFrequencyBehavior.CreateAcExport(Simulation, String)
+- uid: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateAcExport(Simulation, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_CreateAcExport_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateAcExport(Simulation, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: BaseFrequencyBehavior.CreateAcExport(Simulation, String, IEqualityComparer<String>)
+  nameWithType.vb: BaseFrequencyBehavior.CreateAcExport(Simulation, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport*
   name: CreateAcExport
   href: api/SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_CreateAcExport_
@@ -4013,12 +4019,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Behaviors.Behavior.Behavior
   nameWithType: Behavior.Behavior
-- uid: SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: Behavior.CreateGetter(Simulation, String)
+- uid: SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateGetter(Simulation, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateGetter(Simulation, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: Behavior.CreateGetter(Simulation, String, IEqualityComparer<String>)
+  nameWithType.vb: Behavior.CreateGetter(Simulation, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Behaviors.Behavior.CreateGetter*
   name: CreateGetter
   href: api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_
@@ -4026,15 +4035,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Behaviors.Behavior.CreateGetter
   nameWithType: Behavior.CreateGetter
-- uid: SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter<T>(Simulation, String)
-  href: api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String)
-  name.vb: CreateGetter(Of T)(Simulation, String)
-  fullName: SpiceSharp.Behaviors.Behavior.CreateGetter<T>(SpiceSharp.Simulations.Simulation, System.String)
-  fullName.vb: SpiceSharp.Behaviors.Behavior.CreateGetter(Of T)(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: Behavior.CreateGetter<T>(Simulation, String)
-  nameWithType.vb: Behavior.CreateGetter(Of T)(Simulation, String)
+- uid: SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateGetter<T>(Simulation, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateGetter(Of T)(Simulation, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Behaviors.Behavior.CreateGetter<T>(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Behaviors.Behavior.CreateGetter(Of T)(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: Behavior.CreateGetter<T>(Simulation, String, IEqualityComparer<String>)
+  nameWithType.vb: Behavior.CreateGetter(Of T)(Simulation, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Behaviors.Behavior.Name
   name: Name
   href: api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name
@@ -4710,18 +4719,24 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Circuits.Entity.Priority
   nameWithType: Entity.Priority
-- uid: SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double)
-  name: SetParameter(String, Double)
-  href: api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Double_
-  commentId: M:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double)
-  fullName: SpiceSharp.Circuits.Entity.SetParameter(System.String, System.Double)
-  nameWithType: Entity.SetParameter(String, Double)
-- uid: SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Object)
-  name: SetParameter(String, Object)
-  href: api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Object_
-  commentId: M:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Object)
-  fullName: SpiceSharp.Circuits.Entity.SetParameter(System.String, System.Object)
-  nameWithType: Entity.SetParameter(String, Object)
+- uid: SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter(String, Double, IEqualityComparer<String>)
+  href: api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Double_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(String, Double, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Circuits.Entity.SetParameter(System.String, System.Double, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Circuits.Entity.SetParameter(System.String, System.Double, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: Entity.SetParameter(String, Double, IEqualityComparer<String>)
+  nameWithType.vb: Entity.SetParameter(String, Double, IEqualityComparer(Of String))
+- uid: SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter(String, Object, IEqualityComparer<String>)
+  href: api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(String, Object, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Circuits.Entity.SetParameter(System.String, System.Object, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Circuits.Entity.SetParameter(System.String, System.Object, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: Entity.SetParameter(String, Object, IEqualityComparer<String>)
+  nameWithType.vb: Entity.SetParameter(String, Object, IEqualityComparer(Of String))
 - uid: SpiceSharp.Circuits.Entity.SetParameter*
   name: SetParameter
   href: api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_
@@ -9524,19 +9539,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.ControlBranchEq
   nameWithType: LoadBehavior.ControlBranchEq
-- uid: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentControlledCurrentSourceBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentControlledCurrentSourceBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.GetCurrent(SpiceSharp.Simulations.BaseSimulationState)
   name: GetCurrent(BaseSimulationState)
   href: api/SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentControlledCurrentSourceBehaviors_LoadBehavior_GetCurrent_SpiceSharp_Simulations_BaseSimulationState_
@@ -10026,19 +10028,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentControlledVoltageSourceBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentControlledVoltageSourceBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.GetCurrent(SpiceSharp.Simulations.BaseSimulationState)
   name: GetCurrent(BaseSimulationState)
   href: api/SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentControlledVoltageSourceBehaviors_LoadBehavior_GetCurrent_SpiceSharp_Simulations_BaseSimulationState_
@@ -10339,12 +10328,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.Connect
   nameWithType: FrequencyBehavior.Connect
-- uid: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateAcExport(Simulation, String)
-  href: api/SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentSourceBehaviors_FrequencyBehavior_CreateAcExport_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: FrequencyBehavior.CreateAcExport(Simulation, String)
+- uid: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateAcExport(Simulation, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentSourceBehaviors_FrequencyBehavior_CreateAcExport_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateAcExport(Simulation, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: FrequencyBehavior.CreateAcExport(Simulation, String, IEqualityComparer<String>)
+  nameWithType.vb: FrequencyBehavior.CreateAcExport(Simulation, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.CreateAcExport*
   name: CreateAcExport
   href: api/SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.html#SpiceSharp_Components_CurrentSourceBehaviors_FrequencyBehavior_CreateAcExport_
@@ -10548,19 +10540,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSourceBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSourceBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.Current
   name: Current
   href: api/SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_CurrentSourceBehaviors_LoadBehavior_Current
@@ -13254,19 +13233,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.InductorBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.InductorBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.InductorBehaviors.LoadBehavior.html#SpiceSharp_Components_InductorBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.InductorBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.InductorBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.InductorBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.InductorBehaviors.LoadBehavior.html#SpiceSharp_Components_InductorBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.InductorBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.InductorBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.InductorBehaviors.LoadBehavior.GetEquationPointers(SpiceSharp.Simulations.VariableSet,SpiceSharp.Algebra.Solver{System.Double})
   name: GetEquationPointers(VariableSet, Solver<Double>)
   href: api/SpiceSharp.Components.InductorBehaviors.LoadBehavior.html#SpiceSharp_Components_InductorBehaviors_LoadBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__
@@ -13393,12 +13359,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.InductorBehaviors.TransientBehavior.BranchPtr
   nameWithType: TransientBehavior.BranchPtr
-- uid: SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.InductorBehaviors.TransientBehavior.html#SpiceSharp_Components_InductorBehaviors_TransientBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: TransientBehavior.CreateGetter(Simulation, String)
+- uid: SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: CreateGetter(Simulation, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Components.InductorBehaviors.TransientBehavior.html#SpiceSharp_Components_InductorBehaviors_TransientBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: CreateGetter(Simulation, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: TransientBehavior.CreateGetter(Simulation, String, IEqualityComparer<String>)
+  nameWithType.vb: TransientBehavior.CreateGetter(Simulation, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Components.InductorBehaviors.TransientBehavior.CreateGetter*
   name: CreateGetter
   href: api/SpiceSharp.Components.InductorBehaviors.TransientBehavior.html#SpiceSharp_Components_InductorBehaviors_TransientBehavior_CreateGetter_
@@ -24657,19 +24626,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.ResistorBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.ResistorBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.ResistorBehaviors.LoadBehavior.html#SpiceSharp_Components_ResistorBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.ResistorBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.ResistorBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.ResistorBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.ResistorBehaviors.LoadBehavior.html#SpiceSharp_Components_ResistorBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.ResistorBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.ResistorBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.ResistorBehaviors.LoadBehavior.GetCurrent(SpiceSharp.Simulations.BaseSimulationState)
   name: GetCurrent(BaseSimulationState)
   href: api/SpiceSharp.Components.ResistorBehaviors.LoadBehavior.html#SpiceSharp_Components_ResistorBehaviors_LoadBehavior_GetCurrent_SpiceSharp_Simulations_BaseSimulationState_
@@ -25557,19 +25513,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageControlledCurrentSourceBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageControlledCurrentSourceBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.GetCurrent(SpiceSharp.Simulations.BaseSimulationState)
   name: GetCurrent(BaseSimulationState)
   href: api/SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageControlledCurrentSourceBehaviors_LoadBehavior_GetCurrent_SpiceSharp_Simulations_BaseSimulationState_
@@ -26098,19 +26041,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageControlledVoltageSourceBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageControlledVoltageSourceBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.GetCurrent(SpiceSharp.Simulations.BaseSimulationState)
   name: GetCurrent(BaseSimulationState)
   href: api/SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageControlledVoltageSourceBehaviors_LoadBehavior_GetCurrent_SpiceSharp_Simulations_BaseSimulationState_
@@ -26718,19 +26648,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.Connect
   nameWithType: LoadBehavior.Connect
-- uid: SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  name: CreateGetter(Simulation, String)
-  href: api/SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSourceBehaviors_LoadBehavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_
-  commentId: M:SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)
-  fullName: SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.CreateGetter(SpiceSharp.Simulations.Simulation, System.String)
-  nameWithType: LoadBehavior.CreateGetter(Simulation, String)
-- uid: SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.CreateGetter*
-  name: CreateGetter
-  href: api/SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSourceBehaviors_LoadBehavior_CreateGetter_
-  commentId: Overload:SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.CreateGetter
-  isSpec: "True"
-  fullName: SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.CreateGetter
-  nameWithType: LoadBehavior.CreateGetter
 - uid: SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.GetCurrent(SpiceSharp.Simulations.BaseSimulationState)
   name: GetCurrent(BaseSimulationState)
   href: api/SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.html#SpiceSharp_Components_VoltageSourceBehaviors_LoadBehavior_GetCurrent_SpiceSharp_Simulations_BaseSimulationState_
@@ -30464,27 +30381,39 @@ references:
   fullName.vb: SpiceSharp.ParameterSet.GetParameter(Of T)()
   nameWithType: ParameterSet.GetParameter<T>()
   nameWithType.vb: ParameterSet.GetParameter(Of T)()
-- uid: SpiceSharp.ParameterSet.GetParameter``1(System.String)
-  name: GetParameter<T>(String)
-  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_GetParameter__1_System_String_
-  commentId: M:SpiceSharp.ParameterSet.GetParameter``1(System.String)
-  name.vb: GetParameter(Of T)(String)
-  fullName: SpiceSharp.ParameterSet.GetParameter<T>(System.String)
-  fullName.vb: SpiceSharp.ParameterSet.GetParameter(Of T)(System.String)
-  nameWithType: ParameterSet.GetParameter<T>(String)
-  nameWithType.vb: ParameterSet.GetParameter(Of T)(String)
+- uid: SpiceSharp.ParameterSet.GetParameter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: GetParameter<T>(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_GetParameter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSet.GetParameter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: GetParameter(Of T)(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSet.GetParameter<T>(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSet.GetParameter(Of T)(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSet.GetParameter<T>(String, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSet.GetParameter(Of T)(String, IEqualityComparer(Of String))
 - uid: SpiceSharp.ParameterSet.SetParameter(System.String)
   name: SetParameter(String)
   href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_
   commentId: M:SpiceSharp.ParameterSet.SetParameter(System.String)
   fullName: SpiceSharp.ParameterSet.SetParameter(System.String)
   nameWithType: ParameterSet.SetParameter(String)
-- uid: SpiceSharp.ParameterSet.SetParameter(System.String,System.Object)
-  name: SetParameter(String, Object)
-  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_System_Object_
-  commentId: M:SpiceSharp.ParameterSet.SetParameter(System.String,System.Object)
-  fullName: SpiceSharp.ParameterSet.SetParameter(System.String, System.Object)
-  nameWithType: ParameterSet.SetParameter(String, Object)
+- uid: SpiceSharp.ParameterSet.SetParameter(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSet.SetParameter(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSet.SetParameter(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSet.SetParameter(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSet.SetParameter(String, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSet.SetParameter(String, IEqualityComparer(Of String))
+- uid: SpiceSharp.ParameterSet.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter(String, Object, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSet.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(String, Object, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSet.SetParameter(System.String, System.Object, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSet.SetParameter(System.String, System.Object, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSet.SetParameter(String, Object, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSet.SetParameter(String, Object, IEqualityComparer(Of String))
 - uid: SpiceSharp.ParameterSet.SetParameter*
   name: SetParameter
   href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_
@@ -30501,15 +30430,15 @@ references:
   fullName.vb: SpiceSharp.ParameterSet.SetParameter(Of T)(T)
   nameWithType: ParameterSet.SetParameter<T>(T)
   nameWithType.vb: ParameterSet.SetParameter(Of T)(T)
-- uid: SpiceSharp.ParameterSet.SetParameter``1(System.String,``0)
-  name: SetParameter<T>(String, T)
-  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter__1_System_String___0_
-  commentId: M:SpiceSharp.ParameterSet.SetParameter``1(System.String,``0)
-  name.vb: SetParameter(Of T)(String, T)
-  fullName: SpiceSharp.ParameterSet.SetParameter<T>(System.String, T)
-  fullName.vb: SpiceSharp.ParameterSet.SetParameter(Of T)(System.String, T)
-  nameWithType: ParameterSet.SetParameter<T>(String, T)
-  nameWithType.vb: ParameterSet.SetParameter(Of T)(String, T)
+- uid: SpiceSharp.ParameterSet.SetParameter``1(System.String,``0,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter<T>(String, T, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter__1_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSet.SetParameter``1(System.String,``0,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(Of T)(String, T, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSet.SetParameter<T>(System.String, T, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSet.SetParameter(Of T)(System.String, T, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSet.SetParameter<T>(String, T, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSet.SetParameter(Of T)(String, T, IEqualityComparer(Of String))
 - uid: SpiceSharp.ParameterSetDictionary
   name: ParameterSetDictionary
   href: api/SpiceSharp.ParameterSetDictionary.html
@@ -30558,15 +30487,15 @@ references:
   fullName.vb: SpiceSharp.ParameterSetDictionary.GetParameter(Of T)()
   nameWithType: ParameterSetDictionary.GetParameter<T>()
   nameWithType.vb: ParameterSetDictionary.GetParameter(Of T)()
-- uid: SpiceSharp.ParameterSetDictionary.GetParameter``1(System.String)
-  name: GetParameter<T>(String)
-  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_GetParameter__1_System_String_
-  commentId: M:SpiceSharp.ParameterSetDictionary.GetParameter``1(System.String)
-  name.vb: GetParameter(Of T)(String)
-  fullName: SpiceSharp.ParameterSetDictionary.GetParameter<T>(System.String)
-  fullName.vb: SpiceSharp.ParameterSetDictionary.GetParameter(Of T)(System.String)
-  nameWithType: ParameterSetDictionary.GetParameter<T>(String)
-  nameWithType.vb: ParameterSetDictionary.GetParameter(Of T)(String)
+- uid: SpiceSharp.ParameterSetDictionary.GetParameter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: GetParameter<T>(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_GetParameter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSetDictionary.GetParameter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: GetParameter(Of T)(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSetDictionary.GetParameter<T>(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSetDictionary.GetParameter(Of T)(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSetDictionary.GetParameter<T>(String, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSetDictionary.GetParameter(Of T)(String, IEqualityComparer(Of String))
 - uid: SpiceSharp.ParameterSetDictionary.GetSetter*
   name: GetSetter
   href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_GetSetter_
@@ -30583,27 +30512,39 @@ references:
   fullName.vb: SpiceSharp.ParameterSetDictionary.GetSetter(Of T)()
   nameWithType: ParameterSetDictionary.GetSetter<T>()
   nameWithType.vb: ParameterSetDictionary.GetSetter(Of T)()
-- uid: SpiceSharp.ParameterSetDictionary.GetSetter``1(System.String)
-  name: GetSetter<T>(String)
-  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_GetSetter__1_System_String_
-  commentId: M:SpiceSharp.ParameterSetDictionary.GetSetter``1(System.String)
-  name.vb: GetSetter(Of T)(String)
-  fullName: SpiceSharp.ParameterSetDictionary.GetSetter<T>(System.String)
-  fullName.vb: SpiceSharp.ParameterSetDictionary.GetSetter(Of T)(System.String)
-  nameWithType: ParameterSetDictionary.GetSetter<T>(String)
-  nameWithType.vb: ParameterSetDictionary.GetSetter(Of T)(String)
+- uid: SpiceSharp.ParameterSetDictionary.GetSetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: GetSetter<T>(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_GetSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSetDictionary.GetSetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: GetSetter(Of T)(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSetDictionary.GetSetter<T>(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSetDictionary.GetSetter(Of T)(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSetDictionary.GetSetter<T>(String, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSetDictionary.GetSetter(Of T)(String, IEqualityComparer(Of String))
 - uid: SpiceSharp.ParameterSetDictionary.SetParameter(System.String)
   name: SetParameter(String)
   href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_System_String_
   commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter(System.String)
   fullName: SpiceSharp.ParameterSetDictionary.SetParameter(System.String)
   nameWithType: ParameterSetDictionary.SetParameter(String)
-- uid: SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Object)
-  name: SetParameter(String, Object)
-  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Object_
-  commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Object)
-  fullName: SpiceSharp.ParameterSetDictionary.SetParameter(System.String, System.Object)
-  nameWithType: ParameterSetDictionary.SetParameter(String, Object)
+- uid: SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter(String, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSetDictionary.SetParameter(System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSetDictionary.SetParameter(System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSetDictionary.SetParameter(String, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSetDictionary.SetParameter(String, IEqualityComparer(Of String))
+- uid: SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter(String, Object, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(String, Object, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSetDictionary.SetParameter(System.String, System.Object, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSetDictionary.SetParameter(System.String, System.Object, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSetDictionary.SetParameter(String, Object, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSetDictionary.SetParameter(String, Object, IEqualityComparer(Of String))
 - uid: SpiceSharp.ParameterSetDictionary.SetParameter*
   name: SetParameter
   href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter_
@@ -30620,15 +30561,15 @@ references:
   fullName.vb: SpiceSharp.ParameterSetDictionary.SetParameter(Of T)(T)
   nameWithType: ParameterSetDictionary.SetParameter<T>(T)
   nameWithType.vb: ParameterSetDictionary.SetParameter(Of T)(T)
-- uid: SpiceSharp.ParameterSetDictionary.SetParameter``1(System.String,``0)
-  name: SetParameter<T>(String, T)
-  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter__1_System_String___0_
-  commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter``1(System.String,``0)
-  name.vb: SetParameter(Of T)(String, T)
-  fullName: SpiceSharp.ParameterSetDictionary.SetParameter<T>(System.String, T)
-  fullName.vb: SpiceSharp.ParameterSetDictionary.SetParameter(Of T)(System.String, T)
-  nameWithType: ParameterSetDictionary.SetParameter<T>(String, T)
-  nameWithType.vb: ParameterSetDictionary.SetParameter(Of T)(String, T)
+- uid: SpiceSharp.ParameterSetDictionary.SetParameter``1(System.String,``0,System.Collections.Generic.IEqualityComparer{System.String})
+  name: SetParameter<T>(String, T, IEqualityComparer<String>)
+  href: api/SpiceSharp.ParameterSetDictionary.html#SpiceSharp_ParameterSetDictionary_SetParameter__1_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.ParameterSetDictionary.SetParameter``1(System.String,``0,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: SetParameter(Of T)(String, T, IEqualityComparer(Of String))
+  fullName: SpiceSharp.ParameterSetDictionary.SetParameter<T>(System.String, T, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.ParameterSetDictionary.SetParameter(Of T)(System.String, T, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ParameterSetDictionary.SetParameter<T>(String, T, IEqualityComparer<String>)
+  nameWithType.vb: ParameterSetDictionary.SetParameter(Of T)(String, T, IEqualityComparer(Of String))
 - uid: SpiceSharp.Simulations
   name: SpiceSharp.Simulations
   href: api/SpiceSharp.Simulations.html
@@ -31399,12 +31340,15 @@ references:
   commentId: T:SpiceSharp.Simulations.ComplexPropertyExport
   fullName: SpiceSharp.Simulations.ComplexPropertyExport
   nameWithType: ComplexPropertyExport
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String)
-  name: ComplexPropertyExport(Simulation, String, String)
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_Simulation_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String)
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.Simulation, System.String, System.String)
-  nameWithType: ComplexPropertyExport.ComplexPropertyExport(Simulation, String, String)
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: ComplexPropertyExport(Simulation, String, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_Simulation_System_String_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: ComplexPropertyExport(Simulation, String, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.Simulation, System.String, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.Simulation, System.String, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: ComplexPropertyExport.ComplexPropertyExport(Simulation, String, String, IEqualityComparer<String>)
+  nameWithType.vb: ComplexPropertyExport.ComplexPropertyExport(Simulation, String, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor*
   name: ComplexPropertyExport
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_
@@ -31412,6 +31356,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport
   nameWithType: ComplexPropertyExport.ComplexPropertyExport
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.Comparer
+  name: Comparer
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Comparer
+  commentId: P:SpiceSharp.Simulations.ComplexPropertyExport.Comparer
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Comparer
+  nameWithType: ComplexPropertyExport.Comparer
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.Comparer*
+  name: Comparer
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Comparer_
+  commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.Comparer
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Comparer
+  nameWithType: ComplexPropertyExport.Comparer
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.EntityName
   name: EntityName
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_EntityName
@@ -31808,19 +31765,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.DC.DC
   nameWithType: DC.DC
-- uid: SpiceSharp.Simulations.DC.DcConfiguration
-  name: DcConfiguration
-  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_DcConfiguration
-  commentId: P:SpiceSharp.Simulations.DC.DcConfiguration
-  fullName: SpiceSharp.Simulations.DC.DcConfiguration
-  nameWithType: DC.DcConfiguration
-- uid: SpiceSharp.Simulations.DC.DcConfiguration*
-  name: DcConfiguration
-  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_DcConfiguration_
-  commentId: Overload:SpiceSharp.Simulations.DC.DcConfiguration
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.DC.DcConfiguration
-  nameWithType: DC.DcConfiguration
 - uid: SpiceSharp.Simulations.DC.Execute
   name: Execute()
   href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_Execute
@@ -31885,38 +31829,38 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.DC.Unsetup
   nameWithType: DC.Unsetup
-- uid: SpiceSharp.Simulations.DcConfiguration
-  name: DcConfiguration
-  href: api/SpiceSharp.Simulations.DcConfiguration.html
-  commentId: T:SpiceSharp.Simulations.DcConfiguration
-  fullName: SpiceSharp.Simulations.DcConfiguration
-  nameWithType: DcConfiguration
-- uid: SpiceSharp.Simulations.DcConfiguration.SweepMaxIterations
+- uid: SpiceSharp.Simulations.DCConfiguration
+  name: DCConfiguration
+  href: api/SpiceSharp.Simulations.DCConfiguration.html
+  commentId: T:SpiceSharp.Simulations.DCConfiguration
+  fullName: SpiceSharp.Simulations.DCConfiguration
+  nameWithType: DCConfiguration
+- uid: SpiceSharp.Simulations.DCConfiguration.SweepMaxIterations
   name: SweepMaxIterations
-  href: api/SpiceSharp.Simulations.DcConfiguration.html#SpiceSharp_Simulations_DcConfiguration_SweepMaxIterations
-  commentId: P:SpiceSharp.Simulations.DcConfiguration.SweepMaxIterations
-  fullName: SpiceSharp.Simulations.DcConfiguration.SweepMaxIterations
-  nameWithType: DcConfiguration.SweepMaxIterations
-- uid: SpiceSharp.Simulations.DcConfiguration.SweepMaxIterations*
+  href: api/SpiceSharp.Simulations.DCConfiguration.html#SpiceSharp_Simulations_DCConfiguration_SweepMaxIterations
+  commentId: P:SpiceSharp.Simulations.DCConfiguration.SweepMaxIterations
+  fullName: SpiceSharp.Simulations.DCConfiguration.SweepMaxIterations
+  nameWithType: DCConfiguration.SweepMaxIterations
+- uid: SpiceSharp.Simulations.DCConfiguration.SweepMaxIterations*
   name: SweepMaxIterations
-  href: api/SpiceSharp.Simulations.DcConfiguration.html#SpiceSharp_Simulations_DcConfiguration_SweepMaxIterations_
-  commentId: Overload:SpiceSharp.Simulations.DcConfiguration.SweepMaxIterations
+  href: api/SpiceSharp.Simulations.DCConfiguration.html#SpiceSharp_Simulations_DCConfiguration_SweepMaxIterations_
+  commentId: Overload:SpiceSharp.Simulations.DCConfiguration.SweepMaxIterations
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.DcConfiguration.SweepMaxIterations
-  nameWithType: DcConfiguration.SweepMaxIterations
-- uid: SpiceSharp.Simulations.DcConfiguration.Sweeps
+  fullName: SpiceSharp.Simulations.DCConfiguration.SweepMaxIterations
+  nameWithType: DCConfiguration.SweepMaxIterations
+- uid: SpiceSharp.Simulations.DCConfiguration.Sweeps
   name: Sweeps
-  href: api/SpiceSharp.Simulations.DcConfiguration.html#SpiceSharp_Simulations_DcConfiguration_Sweeps
-  commentId: P:SpiceSharp.Simulations.DcConfiguration.Sweeps
-  fullName: SpiceSharp.Simulations.DcConfiguration.Sweeps
-  nameWithType: DcConfiguration.Sweeps
-- uid: SpiceSharp.Simulations.DcConfiguration.Sweeps*
+  href: api/SpiceSharp.Simulations.DCConfiguration.html#SpiceSharp_Simulations_DCConfiguration_Sweeps
+  commentId: P:SpiceSharp.Simulations.DCConfiguration.Sweeps
+  fullName: SpiceSharp.Simulations.DCConfiguration.Sweeps
+  nameWithType: DCConfiguration.Sweeps
+- uid: SpiceSharp.Simulations.DCConfiguration.Sweeps*
   name: Sweeps
-  href: api/SpiceSharp.Simulations.DcConfiguration.html#SpiceSharp_Simulations_DcConfiguration_Sweeps_
-  commentId: Overload:SpiceSharp.Simulations.DcConfiguration.Sweeps
+  href: api/SpiceSharp.Simulations.DCConfiguration.html#SpiceSharp_Simulations_DCConfiguration_Sweeps_
+  commentId: Overload:SpiceSharp.Simulations.DCConfiguration.Sweeps
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.DcConfiguration.Sweeps
-  nameWithType: DcConfiguration.Sweeps
+  fullName: SpiceSharp.Simulations.DCConfiguration.Sweeps
+  nameWithType: DCConfiguration.Sweeps
 - uid: SpiceSharp.Simulations.DCParameterSearchEventArgs
   name: DCParameterSearchEventArgs
   href: api/SpiceSharp.Simulations.DCParameterSearchEventArgs.html
@@ -33296,12 +33240,15 @@ references:
   commentId: T:SpiceSharp.Simulations.RealPropertyExport
   fullName: SpiceSharp.Simulations.RealPropertyExport
   nameWithType: RealPropertyExport
-- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String)
-  name: RealPropertyExport(Simulation, String, String)
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_Simulation_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String)
-  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.Simulation, System.String, System.String)
-  nameWithType: RealPropertyExport.RealPropertyExport(Simulation, String, String)
+- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name: RealPropertyExport(Simulation, String, String, IEqualityComparer<String>)
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_Simulation_System_String_System_String_System_Collections_Generic_IEqualityComparer_System_String__
+  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String,System.Collections.Generic.IEqualityComparer{System.String})
+  name.vb: RealPropertyExport(Simulation, String, String, IEqualityComparer(Of String))
+  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.Simulation, System.String, System.String, System.Collections.Generic.IEqualityComparer<System.String>)
+  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.Simulation, System.String, System.String, System.Collections.Generic.IEqualityComparer(Of System.String))
+  nameWithType: RealPropertyExport.RealPropertyExport(Simulation, String, String, IEqualityComparer<String>)
+  nameWithType.vb: RealPropertyExport.RealPropertyExport(Simulation, String, String, IEqualityComparer(Of String))
 - uid: SpiceSharp.Simulations.RealPropertyExport.#ctor*
   name: RealPropertyExport
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_
@@ -33309,6 +33256,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport
   nameWithType: RealPropertyExport.RealPropertyExport
+- uid: SpiceSharp.Simulations.RealPropertyExport.Comparer
+  name: Comparer
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Comparer
+  commentId: P:SpiceSharp.Simulations.RealPropertyExport.Comparer
+  fullName: SpiceSharp.Simulations.RealPropertyExport.Comparer
+  nameWithType: RealPropertyExport.Comparer
+- uid: SpiceSharp.Simulations.RealPropertyExport.Comparer*
+  name: Comparer
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Comparer_
+  commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.Comparer
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.RealPropertyExport.Comparer
+  nameWithType: RealPropertyExport.Comparer
 - uid: SpiceSharp.Simulations.RealPropertyExport.EntityName
   name: EntityName
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_EntityName

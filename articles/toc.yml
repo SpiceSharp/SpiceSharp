@@ -9,5 +9,12 @@
     href: acanalysis.md
   - name: Transient analysis
     href: transientanalysis.md
+- name: Spice# Structure
+  href: structure.md
+  items:
+    - name: Entities, components and models
+      href: entities.md
+    - name: Parameters
+      href: parameters.md
 - name: Custom models
   href: custommodels.md

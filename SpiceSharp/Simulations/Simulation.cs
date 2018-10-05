@@ -165,14 +165,14 @@ namespace SpiceSharp.Simulations
             do
             {
                 // Before execution
-                BeforeExecute?.Invoke(this, beforeArgs);
+                OnBeforeSetup(beforeArgs);
 
                 // Execute simulation
                 Execute();
 
                 // Reset
                 afterArgs.Repeat = false;
-                AfterExecute?.Invoke(this, afterArgs);
+                OnAfterSetup(afterArgs);
 
                 // We're going to repeat the simulation, change the event arguments
                 if (afterArgs.Repeat)

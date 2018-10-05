@@ -10,14 +10,6 @@ namespace SpiceSharp.Simulations
     public class DC : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active DC configuration.
-        /// </summary>
-        /// <value>
-        /// The dc configuration.
-        /// </value>
-        public DcConfiguration DcConfiguration { get; protected set; }
-
-        /// <summary>
         /// Gets the currently active sweeps.
         /// </summary>
         /// <value>
@@ -41,7 +33,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         public DC(string name) : base(name)
         {
-            Configurations.Add(new DcConfiguration());
+            Configurations.Add(new DCConfiguration());
         }
 
         /// <summary>
@@ -54,7 +46,7 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The step value.</param>
         public DC(string name, string source, double start, double stop, double step) : base(name)
         {
-            var config = new DcConfiguration();
+            var config = new DCConfiguration();
             var s = new SweepConfiguration(source, start, stop, step);
             config.Sweeps.Add(s);
             Configurations.Add(config);
@@ -71,7 +63,7 @@ namespace SpiceSharp.Simulations
             if (sweeps == null)
                 throw new ArgumentNullException(nameof(sweeps));
 
-            var dcconfig = new DcConfiguration();
+            var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);
             Configurations.Add(dcconfig);
@@ -85,11 +77,9 @@ namespace SpiceSharp.Simulations
         {
             base.Setup(circuit);
 
-            // Get DC configuration
-            DcConfiguration = Configurations.Get<DcConfiguration>();
-
             // Get sweeps
-            Sweeps = new NestedSweeps(DcConfiguration.Sweeps);
+            var config = Configurations.Get<DCConfiguration>();
+            Sweeps = new NestedSweeps(config.Sweeps);
         }
 
         /// <summary>
@@ -109,7 +99,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = RealState;
-            var dcconfig = DcConfiguration;
+            var dcconfig = Configurations.Get<DCConfiguration>();
             state.Init = InitializationModes.Junction;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
@@ -216,7 +206,6 @@ namespace SpiceSharp.Simulations
             Sweeps = null;
 
             // Clear configuration
-            DcConfiguration = null;
             base.Unsetup();
         }
     }

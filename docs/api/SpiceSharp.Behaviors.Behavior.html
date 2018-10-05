@@ -93,28 +93,28 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_">NamedParameterized.Named(String)</a>
+      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Principal">NamedParameterized.Principal</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1">NamedParameterized.CreateSetters&lt;T&gt;()</a>
+      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_">NamedParameterized.CreateSetter&lt;T&gt;(String)</a>
+      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1">NamedParameterized.CreateSetter&lt;T&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_">NamedParameterized.CreateGetter&lt;T&gt;(String)</a>
+      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1">NamedParameterized.CreateGetter&lt;T&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1">NamedParameterized.CreateGetters&lt;T&gt;()</a>
+      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_Members">Parameterized.Members</a>
@@ -220,13 +220,13 @@
   <h3 id="methods">Methods
   </h3>
   <a id="SpiceSharp_Behaviors_Behavior_CreateGetter_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String)">CreateGetter(Simulation, String)</h4>
+  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})">CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Creates a getter for extracting data from the specified simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual Func&lt;double&gt; CreateGetter(Simulation simulation, string propertyName)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual Func&lt;double&gt; CreateGetter(Simulation simulation, string propertyName, IEqualityComparer&lt;string&gt; comparer = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -250,6 +250,12 @@
         <td><p>The name of the parameter.</p>
 </td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
+</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -269,13 +275,13 @@
     </tbody>
   </table>
   <a id="SpiceSharp_Behaviors_Behavior_CreateGetter_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String)">CreateGetter&lt;T&gt;(Simulation, String)</h4>
+  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})">CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Creates a getter for extracting data from the specified simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Func&lt;T&gt; CreateGetter&lt;T&gt;(Simulation simulation, string name)
+    <pre><code class="lang-csharp hljs">protected Func&lt;T&gt; CreateGetter&lt;T&gt;(Simulation simulation, string name, IEqualityComparer&lt;string&gt; comparer = null)
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -298,6 +304,12 @@
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
         <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
 </td>
       </tr>
     </tbody>

@@ -133,13 +133,13 @@
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Simulations_RealPropertyExport__ctor_" data-uid="SpiceSharp.Simulations.RealPropertyExport.#ctor*"></a>
-  <h4 id="SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_Simulation_System_String_System_String_" data-uid="SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String)">RealPropertyExport(Simulation, String, String)</h4>
+  <h4 id="SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_Simulation_System_String_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.Simulation,System.String,System.String,System.Collections.Generic.IEqualityComparer{System.String})">RealPropertyExport(Simulation, String, String, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Simulations.RealPropertyExport.html">RealPropertyExport</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public RealPropertyExport(Simulation simulation, string entityName, string propertyName)</code></pre>
+    <pre><code class="lang-csharp hljs">public RealPropertyExport(Simulation simulation, string entityName, string propertyName, IEqualityComparer&lt;string&gt; comparer = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -169,6 +169,12 @@
         <td><p>The name of the property.</p>
 </td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
+</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="exceptions">Exceptions</h5>
@@ -191,6 +197,31 @@ propertyName</p>
   </table>
   <h3 id="properties">Properties
   </h3>
+  <a id="SpiceSharp_Simulations_RealPropertyExport_Comparer_" data-uid="SpiceSharp.Simulations.RealPropertyExport.Comparer*"></a>
+  <h4 id="SpiceSharp_Simulations_RealPropertyExport_Comparer" data-uid="SpiceSharp.Simulations.RealPropertyExport.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"><p>Gets the comparer for finding the parameter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEqualityComparer&lt;string&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>The comparer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_RealPropertyExport_EntityName_" data-uid="SpiceSharp.Simulations.RealPropertyExport.EntityName*"></a>
   <h4 id="SpiceSharp_Simulations_RealPropertyExport_EntityName" data-uid="SpiceSharp.Simulations.RealPropertyExport.EntityName">EntityName</h4>
   <div class="markdown level1 summary"><p>Gets the identifier of the entity.</p>

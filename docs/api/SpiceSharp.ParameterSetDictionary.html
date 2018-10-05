@@ -262,13 +262,13 @@
     </tbody>
   </table>
   <a id="SpiceSharp_ParameterSetDictionary_GetParameter_" data-uid="SpiceSharp.ParameterSetDictionary.GetParameter*"></a>
-  <h4 id="SpiceSharp_ParameterSetDictionary_GetParameter__1_System_String_" data-uid="SpiceSharp.ParameterSetDictionary.GetParameter``1(System.String)">GetParameter&lt;T&gt;(String)</h4>
+  <h4 id="SpiceSharp_ParameterSetDictionary_GetParameter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.ParameterSetDictionary.GetParameter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})">GetParameter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Gets a parameter from any parameter set in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Parameter&lt;T&gt; GetParameter&lt;T&gt;(string name)
+    <pre><code class="lang-csharp hljs">public Parameter&lt;T&gt; GetParameter&lt;T&gt;(string name, IEqualityComparer&lt;string&gt; comparer = null)
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -285,6 +285,12 @@
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
         <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
 </td>
       </tr>
     </tbody>
@@ -367,13 +373,13 @@
   <div class="markdown level1 remarks"><p>Only the first encountered principal parameter will be set using the setter returned from this method.</p>
 </div>
   <a id="SpiceSharp_ParameterSetDictionary_GetSetter_" data-uid="SpiceSharp.ParameterSetDictionary.GetSetter*"></a>
-  <h4 id="SpiceSharp_ParameterSetDictionary_GetSetter__1_System_String_" data-uid="SpiceSharp.ParameterSetDictionary.GetSetter``1(System.String)">GetSetter&lt;T&gt;(String)</h4>
+  <h4 id="SpiceSharp_ParameterSetDictionary_GetSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.ParameterSetDictionary.GetSetter``1(System.String,System.Collections.Generic.IEqualityComparer{System.String})">GetSetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Gets a setter for a parameter with a specified name in any parameter set in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Action&lt;T&gt; GetSetter&lt;T&gt;(string name)
+    <pre><code class="lang-csharp hljs">public Action&lt;T&gt; GetSetter&lt;T&gt;(string name, IEqualityComparer&lt;string&gt; comparer = null)
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -390,6 +396,12 @@
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
         <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
 </td>
       </tr>
     </tbody>
@@ -471,13 +483,63 @@ all of them will be called.</p>
     </tbody>
   </table>
   <a id="SpiceSharp_ParameterSetDictionary_SetParameter_" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter*"></a>
-  <h4 id="SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Object_" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Object)">SetParameter(String, Object)</h4>
+  <h4 id="SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Collections.Generic.IEqualityComparer{System.String})">SetParameter(String, IEqualityComparer&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Calls a parameter method with a specified name. If multiple methods exist,
+all of them will be called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SetParameter(string name, IEqualityComparer&lt;string&gt; comparer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the method.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if one or more methods were called; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_ParameterSetDictionary_SetParameter_" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter*"></a>
+  <h4 id="SpiceSharp_ParameterSetDictionary_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter(System.String,System.Object,System.Collections.Generic.IEqualityComparer{System.String})">SetParameter(String, Object, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Sets all parameter with a specified name in any parameter set in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool SetParameter(string name, object value)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool SetParameter(string name, object value, IEqualityComparer&lt;string&gt; comparer = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -499,6 +561,12 @@ all of them will be called.</p>
         <td><span class="xref">System.Object</span></td>
         <td><span class="parametername">value</span></td>
         <td><p>The value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
 </td>
       </tr>
     </tbody>
@@ -583,13 +651,13 @@ all of them will be called.</p>
   <div class="markdown level1 remarks"><p>Only the first encountered principal parameter will be set.</p>
 </div>
   <a id="SpiceSharp_ParameterSetDictionary_SetParameter_" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter*"></a>
-  <h4 id="SpiceSharp_ParameterSetDictionary_SetParameter__1_System_String___0_" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter``1(System.String,``0)">SetParameter&lt;T&gt;(String, T)</h4>
+  <h4 id="SpiceSharp_ParameterSetDictionary_SetParameter__1_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.ParameterSetDictionary.SetParameter``1(System.String,``0,System.Collections.Generic.IEqualityComparer{System.String})">SetParameter&lt;T&gt;(String, T, IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Sets all parameters with a specified name in any parameter set in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool SetParameter&lt;T&gt;(string name, T value)
+    <pre><code class="lang-csharp hljs">public bool SetParameter&lt;T&gt;(string name, T value, IEqualityComparer&lt;string&gt; comparer = null)
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -612,6 +680,12 @@ all of them will be called.</p>
         <td><span class="xref">T</span></td>
         <td><span class="parametername">value</span></td>
         <td><p>The parameter value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
 </td>
       </tr>
     </tbody>
