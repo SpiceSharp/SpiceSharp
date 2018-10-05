@@ -16,20 +16,12 @@ namespace SpiceSharp.Simulations
     public abstract class BaseSimulation : Simulation
     {
         /// <summary>
-        /// Gets the currently active configuration.
-        /// </summary>
-        /// <value>
-        /// The base configuration.
-        /// </value>
-        public BaseConfiguration BaseConfiguration { get; protected set; }
-
-        /// <summary>
         /// Gets the currently active simulation state.
         /// </summary>
         /// <value>
         /// The real state.
         /// </value>
-        public RealSimulationState RealState { get; protected set; }
+        public BaseSimulationState RealState { get; protected set; }
 
         /// <summary>
         /// Gets the statistics.
@@ -80,16 +72,22 @@ namespace SpiceSharp.Simulations
         private BehaviorList<BaseLoadBehavior> _loadBehaviors;
         private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
-        private List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
+        private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
+        private double _diagonalGmin;
+        private bool _isPreordered, _shouldReorder;
+        
+        protected int DcMaxIterations { get; private set; }
+        protected double AbsTol { get; private set; }
+        protected double RelTol { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected BaseSimulation(Identifier name)
+        protected BaseSimulation(string name)
             : base(name)
         {
-            ParameterSets.Add(new BaseConfiguration());
+            Configurations.Add(new BaseConfiguration());
         }
 
         /// <summary>
@@ -103,15 +101,24 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
+            // Copy configuration
+            var config = Configurations.Get<BaseConfiguration>();
+            DcMaxIterations = config.DcMaxIterations;
+            AbsTol = config.AbsoluteTolerance;
+            RelTol = config.RelativeTolerance;
+
             // Setup behaviors, configurations and states
-            BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
             _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
             _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
             _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
 
-            // Add a state for real numbers
-            RealState = new RealSimulationState();
-            States.Add(RealState);
+            // Create the state for this simulation
+            RealState = new BaseSimulationState();
+            _isPreordered = false;
+            _shouldReorder = true;
+            var strategy = RealState.Solver.Strategy;
+            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
             // Setup the load behaviors
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
@@ -120,14 +127,14 @@ namespace SpiceSharp.Simulations
             RealState.Setup(Variables);
 
             // TODO: Compatibility - nodesets from nodes instead of configuration should be removed eventually
-            if (BaseConfiguration.Nodesets.Count == 0)
+            if (config.Nodesets.Count == 0)
             {
                 foreach (var ns in Variables.NodeSets)
                     _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
             }
 
             // Set up nodesets
-            foreach (var ns in BaseConfiguration.Nodesets)
+            foreach (var ns in config.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
         }
 
@@ -147,9 +154,6 @@ namespace SpiceSharp.Simulations
                     aid.Initialize(this);
                 AfterLoad += LoadNodeSets;
             }
-
-            // Copy configuration
-            RealState.Gmin = BaseConfiguration.Gmin;
         }
 
         /// <summary>
@@ -186,7 +190,7 @@ namespace SpiceSharp.Simulations
                 _temperatureBehaviors[i].Unsetup(this);
 
             // Clear the state
-            RealState.Destroy();
+            RealState.Unsetup();
             RealState = null;
             _realStateLoadArgs = null;
 
@@ -194,7 +198,6 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = null;
             _initialConditionBehaviors = null;
             _temperatureBehaviors = null;
-            BaseConfiguration = null;
         }
 
         /// <summary>
@@ -205,8 +208,8 @@ namespace SpiceSharp.Simulations
         protected void Op(int maxIterations)
         {
             var state = RealState;
-            var config = BaseConfiguration;
-            state.Init = RealSimulationState.InitializationStates.InitJunction;
+            var config = Configurations.Get<BaseConfiguration>();
+            state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
@@ -220,34 +223,39 @@ namespace SpiceSharp.Simulations
             // No convergence, try Gmin stepping
             if (config.GminSteps > 1)
             {
-                state.Init = RealSimulationState.InitializationStates.InitJunction;
+                // Apply gmin step to AfterLoad event
+                _diagonalGmin = config.Gmin;
+                void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
+                AfterLoad += ApplyGminStep;
+
+                state.Init = InitializationModes.Junction;
                 CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
-                state.DiagonalGmin = config.Gmin;
                 for (var i = 0; i < config.GminSteps; i++)
-                    state.DiagonalGmin *= 10.0;
+                    _diagonalGmin *= 10.0;
                 for (var i = 0; i <= config.GminSteps; i++)
                 {
                     state.IsConvergent = false;
                     if (!Iterate(maxIterations))
                     {
-                        state.DiagonalGmin = 0.0;
+                        _diagonalGmin = 0.0;
                         CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
                         break;
                     }
-                    state.DiagonalGmin /= 10.0;
-                    state.Init = RealSimulationState.InitializationStates.InitFloat;
+                    _diagonalGmin /= 10.0;
+                    state.Init = InitializationModes.Float;
                 }
-                state.DiagonalGmin = 0.0;
+
+                // Try one more time without the gmin stepping
+                AfterLoad -= ApplyGminStep;
+                _diagonalGmin = 0.0;
                 if (Iterate(maxIterations))
-                {
                     return;
-                }
             }
 
             // Nope, still not converging, let's try source stepping
             if (config.SourceSteps > 1)
             {
-                state.Init = RealSimulationState.InitializationStates.InitJunction;
+                state.Init = InitializationModes.Junction;
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
                 for (var i = 0; i <= config.SourceSteps; i++)
                 {
@@ -312,36 +320,32 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if ((state.Sparse & RealSimulationState.SparseStates.DidPreorder) == 0)
+                if (!_isPreordered)
                 {
                     solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= RealSimulationState.SparseStates.DidPreorder;
+                    _isPreordered = true;
                 }
-                if (state.Init == RealSimulationState.InitializationStates.InitJunction || state.Init == RealSimulationState.InitializationStates.InitTransient)
-                {
-                    state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
-                }
+                if (state.Init == InitializationModes.Junction)
+                    _shouldReorder = true;
 
                 // Reorder
-                if ((state.Sparse & RealSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder)
+                if (_shouldReorder)
                 {
                     Statistics.ReorderTime.Start();
-                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~RealSimulationState.SparseStates.ShouldReorder;
+                    _shouldReorder = false;
                 }
                 else
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     var success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
-                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
+                        _shouldReorder = true;
                         continue;
                     }
                 }
@@ -373,8 +377,8 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case RealSimulationState.InitializationStates.InitFloat:
-                        if (state.UseDc && state.HadNodeSet)
+                    case InitializationModes.Float:
+                        if (state.UseDc && _nodesets.Count > 0)
                         {
                             if (pass)
                                 state.IsConvergent = false;
@@ -387,25 +391,19 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case RealSimulationState.InitializationStates.InitJunction:
-                        state.Init = RealSimulationState.InitializationStates.InitFix;
-                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
+                    case InitializationModes.Junction:
+                        state.Init = InitializationModes.Fix;
+                        _shouldReorder = true;
                         break;
 
-                    case RealSimulationState.InitializationStates.InitFix:
+                    case InitializationModes.Fix:
                         if (state.IsConvergent)
-                            state.Init = RealSimulationState.InitializationStates.InitFloat;
+                            state.Init = InitializationModes.Float;
                         pass = true;
                         break;
 
-                    case RealSimulationState.InitializationStates.InitTransient:
-                        if (iterno <= 1)
-                            state.Sparse = RealSimulationState.SparseStates.ShouldReorder;
-                        state.Init = RealSimulationState.InitializationStates.InitFloat;
-                        break;
-
-                    case RealSimulationState.InitializationStates.None:
-                        state.Init = RealSimulationState.InitializationStates.InitFloat;
+                    case InitializationModes.None:
+                        state.Init = InitializationModes.Float;
                         break;
 
                     default:
@@ -454,48 +452,13 @@ namespace SpiceSharp.Simulations
             var state = RealState;
 
             // Consider doing nodeset assignments when we're starting out or in trouble
-            if ((state.Init & (RealSimulationState.InitializationStates.InitJunction | RealSimulationState.InitializationStates.InitFix)) ==
+            if ((state.Init & (InitializationModes.Junction | InitializationModes.Fix)) ==
                 0) 
                 return;
 
             // Aid in convergence
             foreach (var aid in _nodesets)
                 aid.Aid();
-        }
-
-        /// <summary>
-        /// Reset the row to 0.0 and return true if the row is a current equation.
-        /// </summary>
-        /// <param name="solver">The solver</param>
-        /// <param name="variables">The set of unknowns/variables</param>
-        /// <param name="rowIndex">The row index</param>
-        /// <returns>
-        ///   <c>true</c> if the variable does not indicate a voltage, but a current; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">solver
-        /// or
-        /// variables</exception>
-        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, VariableSet variables, int rowIndex)
-        {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
-            if (variables == null)
-                throw new ArgumentNullException(nameof(variables));
-
-            var currents = false;
-            for (var n = 0; n < variables.Count; n++)
-            {
-                var node = variables[n];
-                var x = solver.FindMatrixElement(rowIndex, node.Index);
-                if (x != null && !x.Value.Equals(0.0))
-                {
-                    if (node.UnknownType == VariableType.Current)
-                        currents = true;
-                    else
-                        x.Value = 0.0;
-                }
-            }
-            return currents;
         }
 
         /// <summary>
@@ -508,7 +471,6 @@ namespace SpiceSharp.Simulations
         protected bool IsConvergent()
         {
             var rstate = RealState;
-            var config = BaseConfiguration;
 
             // Check convergence for each node
             for (var i = 0; i < Variables.Count; i++)
@@ -522,7 +484,7 @@ namespace SpiceSharp.Simulations
 
                 if (node.UnknownType == VariableType.Voltage)
                 {
-                    var tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
+                    var tol = RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + AbsTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
@@ -531,7 +493,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    var tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsoluteTolerance;
+                    var tol = RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + AbsTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;

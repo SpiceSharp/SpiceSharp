@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
@@ -49,22 +50,23 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencyBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Create delegate for a property
+        /// Creates a getter for a complex parameter.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
-        public override Func<Complex> CreateAcExport(Simulation simulation, string propertyName)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        /// A function get return the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
+        public override Func<Complex> CreateAcExport(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
         {
-            switch (propertyName)
-            {
-                case "i":
-                case "c": return () => _ac;
-                default: return base.CreateAcExport(simulation, propertyName);
-            }
+            comparer = comparer ?? EqualityComparer<string>.Default;
+            if (comparer.Equals("c", propertyName))
+                return () => _ac;
+            return base.CreateAcExport(simulation, propertyName, comparer);
         }
 
         /// <summary>

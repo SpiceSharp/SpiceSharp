@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly Identifier[] _connections;
+        private readonly string[] _connections;
 
         /// <summary>
         /// Gets the number of nodes.
@@ -24,13 +24,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="Component" /> class.
         /// </summary>
-        /// <param name="name">The identifier of the entity.</param>
+        /// <param name="name">The string of the entity.</param>
         /// <param name="nodeCount">The node count.</param>
-        protected Component(Identifier name, int nodeCount)
+        protected Component(string name, int nodeCount)
             : base(name)
         {
             // Initialize
-            _connections = nodeCount > 0 ? new Identifier[nodeCount] : null;
+            _connections = nodeCount > 0 ? new string[nodeCount] : null;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components
         /// node " + (i + 1)
         /// </exception>
         /// <exception cref="CircuitException">{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length)</exception>
-        public void Connect(params Identifier[] nodes)
+        public void Connect(params string[] nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
@@ -119,7 +119,7 @@ namespace SpiceSharp.Components
         /// </remarks>
         /// <param name="index">The pin index.</param>
         /// <returns>The node index.</returns>
-        public virtual Identifier GetNode(int index)
+        public virtual string GetNode(int index)
         {
             if (index < 0 || index >= _connections.Length)
                 throw new CircuitException("Invalid node {0}".FormatString(index));

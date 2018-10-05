@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them.
         /// </summary>
-        private readonly Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
+        private readonly Dictionary<string, EntityBehaviorDictionary> _entityBehaviors;
 
         /// <summary>
         /// Lists of behaviors.
@@ -28,7 +28,7 @@ namespace SpiceSharp.Behaviors
         /// </value>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The behavior associated to the specified entity identifier.</returns>
-        public EntityBehaviorDictionary this[Identifier name]
+        public EntityBehaviorDictionary this[string name]
         {
             get
             {
@@ -39,12 +39,29 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// </summary>
+        public BehaviorPool()
+        {
+            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// </summary>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public BehaviorPool(IEqualityComparer<string> comparer)
+        {
+            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>(comparer);
+        }
+
+        /// <summary>
         /// Adds the specified behavior to the pool.
         /// </summary>
         /// <param name="creator">The entity identifier to which the .</param>
         /// <param name="behavior">The behavior.</param>
         /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
-        public void Add(Identifier creator, Behavior behavior)
+        public void Add(string creator, Behavior behavior)
         {
             if (!_entityBehaviors.TryGetValue(creator, out var eb))
             {
@@ -79,12 +96,12 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the entity behaviors for a specific identifier.
+        /// Gets the entity behaviors for a specific identifier. Obsolete, use the indexer instead.
         /// </summary>
         /// <param name="name">The identifier of the entity.</param>
         /// <returns>The behaviors associated to the specified entity identifier.</returns>
         [Obsolete]
-        public EntityBehaviorDictionary GetEntityBehaviors(Identifier name)
+        public EntityBehaviorDictionary GetEntityBehaviors(string name)
         {
             if (_entityBehaviors.TryGetValue(name, out var result))
                 return result;
@@ -98,7 +115,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if behaviors exist; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsKey(Identifier name) => _entityBehaviors.ContainsKey(name);
+        public bool ContainsKey(string name) => _entityBehaviors.ContainsKey(name);
 
         /// <summary>
         /// Clears all behaviors in the pool.

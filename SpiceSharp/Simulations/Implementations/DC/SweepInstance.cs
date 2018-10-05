@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The parameter.
         /// </value>
-        public Identifier Parameter { get; }
+        public string Parameter { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SweepInstance"/> class.
@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">The final value.</param>
         /// <param name="step">The step value.</param>
         /// <exception cref="SpiceSharp.CircuitException">Invalid sweep: {0} to {1} cannot be reached in steps of {2}".FormatString(start, stop, step)</exception>
-        public SweepInstance(Identifier parameter, double start, double stop, double step)
+        public SweepInstance(string parameter, double start, double stop, double step)
         {
             Parameter = parameter;
             CurrentStep = 0;

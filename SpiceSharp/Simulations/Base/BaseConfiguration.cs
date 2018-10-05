@@ -92,6 +92,22 @@ namespace SpiceSharp.Simulations
         public double ChargeTolerance { get; set; } = 1e-14;
 
         /// <summary>
+        /// Gets or sets the absolute threshold for choosing pivots.
+        /// </summary>
+        /// <value>
+        /// The absolute pivot threshold.
+        /// </value>
+        public double AbsolutePivotThreshold { get; set; }
+
+        /// <summary>
+        /// Gets or sets the relative threshold for choosing pivots.
+        /// </summary>
+        /// <value>
+        /// The relative pivot threshold.
+        /// </value>
+        public double RelativePivotThreshold { get; set; } = 1e-3;
+
+        /// <summary>
         /// Gets or sets the maximum number of iterations for operating point simulation.
         /// </summary>
         /// <value>
@@ -106,6 +122,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The nodesets.
         /// </value>
-        public Dictionary<Identifier, double> Nodesets { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<string, double> Nodesets { get; } = new Dictionary<string, double>();
     }
 }

@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage(RealSimulationState state)
+        public double GetVoltage(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
-        public double GetCurrent(RealSimulationState state)
+        public double GetCurrent(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             return (state.Solution[_posNode] - state.Solution[_negNode]) * _bp.Coefficient;
         }
         [ParameterName("p"), ParameterInfo("Power")]
-        public double GetPower(RealSimulationState state)
+        public double GetPower(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -58,31 +58,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create export method
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            // Get the state
-            var state = simulation?.States.Get<RealSimulationState>();
-            if (state == null)
-                return null;
-
-            // Avoid reflection for common components
-            switch (propertyName)
-            {
-                case "v": return () => GetVoltage(state);
-                case "i":
-                case "c": return () => GetCurrent(state);
-                case "p": return () => GetPower(state);
-                default: return null;
-            }
-        }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 
@@ -35,10 +36,9 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        public Noise(Identifier name) : base(name)
+        public Noise(string name) : base(name)
         {
-            ParameterSets.Add(new NoiseConfiguration());
-            States.Add(new NoiseState());
+            Configurations.Add(new NoiseConfiguration());
         }
 
         /// <summary>
@@ -48,10 +48,9 @@ namespace SpiceSharp.Simulations
         /// <param name="output">The output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Noise(string name, string output, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            ParameterSets.Add(new NoiseConfiguration(output, null, input));
-            States.Add(new NoiseState());
+            Configurations.Add(new NoiseConfiguration(output, null, input));
         }
 
         /// <summary>
@@ -62,10 +61,9 @@ namespace SpiceSharp.Simulations
         /// <param name="reference">The reference output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Noise(string name, string output, string reference, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            ParameterSets.Add(new NoiseConfiguration(output, reference, input));
-            States.Add(new NoiseState());
+            Configurations.Add(new NoiseConfiguration(output, reference, input));
         }
 
         /// <summary>
@@ -80,9 +78,9 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors, parameters and states
-            NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
+            NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
             _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
-            NoiseState = States.Get<NoiseState>();
+            NoiseState = new NoiseState();
             NoiseState.Setup(Variables);
         }
 
@@ -92,7 +90,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            NoiseState.Destroy();
+            NoiseState.Unsetup();
             NoiseState = null;
             for (var i = 0; i < _noiseBehaviors.Count; i++)
                 _noiseBehaviors[i].Unsetup(this);
@@ -114,7 +112,6 @@ namespace SpiceSharp.Simulations
             var nstate = NoiseState;
 
             var noiseconfig = NoiseConfiguration;
-            var baseconfig = BaseConfiguration;
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
@@ -124,12 +121,9 @@ namespace SpiceSharp.Simulations
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
-            state.Domain = RealSimulationState.DomainType.None;
             state.UseIc = false;
             state.UseDc = true;
-            state.Gmin = BaseConfiguration.Gmin;
-            Op(baseconfig.DcMaxIterations);
-            state.Sparse |= RealSimulationState.SparseStates.AcShouldReorder;
+            Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();

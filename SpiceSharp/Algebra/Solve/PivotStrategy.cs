@@ -9,6 +9,22 @@ namespace SpiceSharp.Algebra.Solve
     public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
+        /// Gets or sets the relative threshold for choosing a pivot.
+        /// </summary>
+        /// <value>
+        /// The pivot relative threshold.
+        /// </value>
+        public double RelativePivotThreshold { get; set; } = 1e-3;
+
+        /// <summary>
+        /// Gets or sets the absolute threshold for choosing a pivot.
+        /// </summary>
+        /// <value>
+        /// The pivot absolute threshold.
+        /// </value>
+        public double AbsolutePivotThreshold { get; set; }
+
+        /// <summary>
         /// This method will check whether or not a pivot element is valid or not.
         /// It checks for the submatrix right/below of the pivot.
         /// </summary>

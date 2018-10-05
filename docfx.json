@@ -12,7 +12,7 @@
       "dest": "SpiceSharp/obj/api",
       "properties":
       {
-        "TargetFramework": "net45"  
+        "TargetFramework": "net45"
       }
 	}
   ],
@@ -40,7 +40,7 @@
 	},
     "dest": "docs",
     "maxParallelism": 4,
-    "template": [ "statictoc" ],
+    "template": [ "default" ],
 	"force": true
   }
 }

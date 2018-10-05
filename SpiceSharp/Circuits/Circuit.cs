@@ -26,22 +26,31 @@ namespace SpiceSharp
         /// <value>
         /// The entities.
         /// </value>
-        public EntityCollection Entities { get; } = new EntityCollection();
+        public EntityCollection Entities { get; }
 
         /// <summary>
-        /// Gets a collection of all circuit objects.
+        /// Gets a collection of all circuit objects. Obsolete, use <see cref="Entities" /> instead.
         /// </summary>
         /// <value>
         /// The objects.
         /// </value>
-        [Obsolete]
-        public EntityCollection Objects => Entities;
+        [Obsolete] public EntityCollection Objects => Entities;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         public Circuit()
         {
+            Entities = new EntityCollection();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Circuit"/> class.
+        /// </summary>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public Circuit(IEqualityComparer<string> comparer)
+        {
+            Entities = new EntityCollection(comparer);
         }
 
         /// <summary>
@@ -50,12 +59,11 @@ namespace SpiceSharp
         /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(IEnumerable<Entity> entities)
         {
+            Entities = new EntityCollection();
             if (entities == null)
                 return;
             foreach (var entity in entities)
-            {
                 Entities.Add(entity);
-            }
         }
 
         /// <summary>
@@ -64,7 +72,10 @@ namespace SpiceSharp
         /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(params Entity[] entities)
         {
-            Entities.Add(entities);
+            Entities = new EntityCollection
+            {
+                entities
+            };
         }
 
         /// <summary>

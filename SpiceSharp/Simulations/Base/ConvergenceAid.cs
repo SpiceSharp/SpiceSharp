@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The identifier.
         /// </value>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the value for the convergence aid.
@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the variable.</param>
         /// <param name="value">The value.</param>
-        public ConvergenceAid(Identifier name, double value)
+        public ConvergenceAid(string name, double value)
         {
             Name = name;
             Value = value;
@@ -93,8 +93,8 @@ namespace SpiceSharp.Simulations
             // Get the unknown variables
             Variables = simulation.Variables;
 
-            // Get the solver
-            var state = simulation.States.Get<RealSimulationState>();
+            // Get the real solver
+            var state = simulation.RealState;
             Solver = state.Solver;
 
             // Get the node

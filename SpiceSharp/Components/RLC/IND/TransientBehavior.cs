@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
@@ -35,21 +36,23 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Create export method
+        /// Creates a getter for extracting data from the specified simulation.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
+        /// <param name="simulation">The simulation</param>
+        /// <param name="propertyName">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
+        public override Func<double> CreateGetter(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
         {
-            switch (propertyName)
-            {
-                case "flux": return () => _flux.Current;
-                default: return null;
-            }
+            comparer = comparer ?? EqualityComparer<string>.Default;
+            if (comparer.Equals("flux", propertyName))
+                return () => _flux.Current;
+            return base.CreateGetter(simulation, propertyName, comparer);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using System.Globalization;
 using System.Reflection;
 
@@ -10,6 +11,14 @@ namespace SpiceSharp
     public static class Utility
     {
         /// <summary>
+        /// Gets or sets the separator used when combining strings.
+        /// </summary>
+        /// <value>
+        /// The separator.
+        /// </value>
+        public static string Separator { get; set; } = "/";
+
+        /// <summary>
         /// Format a string with the current culture.
         /// </summary>
         /// <param name="format">The formatting.</param>
@@ -18,6 +27,17 @@ namespace SpiceSharp
         public static string FormatString(this string format, params object[] args)
         {
             return string.Format(CultureInfo.CurrentCulture, format, args);
+        }
+
+        /// <summary>
+        /// Combines a name with the specified appendix, using <see cref="Separator"/>.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="appendix">The appendix.</param>
+        /// <returns></returns>
+        public static string Combine(this string name, string appendix)
+        {
+            return name + Separator + appendix;
         }
 
         /// <summary>
@@ -32,7 +52,12 @@ namespace SpiceSharp
         /// <param name="destination">The destination object</param>
         public static void CopyPropertiesAndFields(object source, object destination)
         {
-            // TODO: Check that the types are valid(?)
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (destination == null)
+                throw new ArgumentNullException(nameof(destination));
+            if (source.GetType() != destination.GetType())
+                throw new ArgumentException(@"Source and target are not of the same type.");
 
             var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)

@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The positive node identifier.
         /// </value>
-        public Identifier PosNode { get; }
+        public string PosNode { get; }
 
         /// <summary>
         /// Gets the identifier of the negative node.
@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The negative node identifier.
         /// </value>
-        public Identifier NegNode { get; }
+        public string NegNode { get; }
 
         /// <summary>
         /// Gets the amplitude in decibels (dB).
@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public ComplexVoltageExport(Simulation simulation, Identifier posNode)
+        public ComplexVoltageExport(Simulation simulation, string posNode)
             : base(simulation)
         {
             PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));
@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public ComplexVoltageExport(Simulation simulation, Identifier posNode, Identifier negNode)
+        public ComplexVoltageExport(FrequencySimulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));
@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = Simulation.States.Get<ComplexSimulationState>();
+            var state = ((FrequencySimulation) Simulation).ComplexState;
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 var posNodeIndex = posNode.Index;

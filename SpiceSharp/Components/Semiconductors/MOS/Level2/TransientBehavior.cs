@@ -18,7 +18,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         private ModelBaseParameters _mbp;
         private LoadBehavior _load;
         private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
@@ -76,7 +75,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -95,7 +94,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _load = provider.GetBehavior<LoadBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -385,8 +383,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
-
-            var state = simulation.RealState;
             double sargsw;
 
             var vbs = _load.VoltageBs;
@@ -594,8 +590,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			*/
 
             // Load current vector
-            var ceqbs = _mbp.MosfetType * (cbs - (gbs - state.Gmin) * vbs);
-            var ceqbd = _mbp.MosfetType * (cbd - (gbd - state.Gmin) * vbd);
+            var ceqbs = _mbp.MosfetType * (cbs - gbs * vbs);
+            var ceqbd = _mbp.MosfetType * (cbd - gbd * vbd);
             GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
             BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
             DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;

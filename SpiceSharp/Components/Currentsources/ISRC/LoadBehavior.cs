@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="state"></param>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
-        public double GetV(RealSimulationState state)
+        public double GetV(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
-        public double GetP(RealSimulationState state)
+        public double GetP(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -50,31 +50,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Parameter name</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            // Get the state
-            var state = simulation?.States.Get<RealSimulationState>();
-            if (state == null)
-                return null;
-
-            // Avoid using reflection for common components
-            switch (propertyName)
-            {
-                case "v": return () => GetV(state);
-                case "p": return () => GetP(state);
-                case "i":
-                case "c": return () => Current;
-                default: return null;
-            }
-        }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -138,13 +114,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double value, time = 0.0;
+            double value;
 
             // Time domain analysis
-            if (state.Domain == RealSimulationState.DomainType.Time)
+            if (simulation is TimeSimulation ts)
             {
-                if (simulation is TimeSimulation tsim)
-                    time = tsim.Method.Time;
+                var time = ts.Method.Time;
 
                 // Use the waveform if possible
                 if (_bp.Waveform != null)

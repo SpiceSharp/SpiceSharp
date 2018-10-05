@@ -19,6 +19,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private ModelBaseParameters _mbp;
         private TemperatureBehavior _temp;
         private ModelTemperatureBehavior _modeltemp;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Methods
@@ -95,7 +96,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -106,6 +107,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
+
+            // Get configurations
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -145,13 +149,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Add a series collector node if necessary
-            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? variables.Create(new SubIdentifier(Name, "col")).Index : _collectorNode;
+            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col")).Index : _collectorNode;
 
             // Add a series base node if necessary
-            BasePrimeNode = _mbp.BaseResist.Value > 0 ? variables.Create(new SubIdentifier(Name, "base")).Index : _baseNode;
+            BasePrimeNode = _mbp.BaseResist.Value > 0 ? variables.Create(Name.Combine("base")).Index : _baseNode;
 
             // Add a series emitter node if necessary
-            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? variables.Create(new SubIdentifier(Name, "emit")).Index : _emitterNode;
+            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? variables.Create(Name.Combine("emit")).Index : _emitterNode;
 
             // Get solver pointers
             CollectorCollectorPrimePtr = solver.GetMatrixElement(_collectorNode, CollectorPrimeNode);
@@ -250,18 +254,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var xjrb = _mbp.BaseCurrentHalfResist * _bp.Area;
 
             // Initialization
-            if (state.Init == RealSimulationState.InitializationStates.InitJunction && state.Domain == RealSimulationState.DomainType.Time && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && (simulation is TimeSimulation) && state.UseDc && state.UseIc)
             {
                 vbe = _mbp.BipolarType * _bp.InitialVoltageBe;
                 var vce = _mbp.BipolarType * _bp.InitialVoltageCe;
                 vbc = vbe - vce;
             }
-            else if (state.Init == RealSimulationState.InitializationStates.InitJunction && !_bp.Off)
+            else if (state.Init == InitializationModes.Junction && !_bp.Off)
             {
                 vbe = _temp.TempVCritical;
                 vbc = 0;
             }
-            else if (state.Init == RealSimulationState.InitializationStates.InitJunction || state.Init == RealSimulationState.InitializationStates.InitFix && _bp.Off)
+            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && _bp.Off)
             {
                 vbe = 0;
                 vbc = 0;
@@ -285,8 +289,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbe > -5 * vtn)
             {
                 var evbe = Math.Exp(vbe / vtn);
-                CurrentBe = csat * (evbe - 1) + state.Gmin * vbe;
-                CondBe = csat * evbe / vtn + state.Gmin;
+                CurrentBe = csat * (evbe - 1) + _baseConfig.Gmin * vbe;
+                CondBe = csat * evbe / vtn + _baseConfig.Gmin;
                 if (c2.Equals(0)) // Avoid Exp()
                 {
                     cben = 0;
@@ -301,7 +305,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                CondBe = -csat / vbe + state.Gmin;
+                CondBe = -csat / vbe + _baseConfig.Gmin;
                 CurrentBe = CondBe * vbe;
                 gben = -c2 / vbe;
                 cben = gben * vbe;
@@ -311,8 +315,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbc > -5 * vtn)
             {
                 var evbc = Math.Exp(vbc / vtn);
-                CurrentBc = csat * (evbc - 1) + state.Gmin * vbc;
-                CondBc = csat * evbc / vtn + state.Gmin;
+                CurrentBc = csat * (evbc - 1) + _baseConfig.Gmin * vbc;
+                CondBc = csat * evbc / vtn + _baseConfig.Gmin;
                 if (c4.Equals(0)) // Avoid Exp()
                 {
                     cbcn = 0;
@@ -327,7 +331,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                CondBc = -csat / vbc + state.Gmin;
+                CondBc = -csat / vbc + _baseConfig.Gmin;
                 CurrentBc = CondBc * vbc;
                 gbcn = -c4 / vbc;
                 cbcn = gbcn * vbc;
@@ -422,6 +426,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimeBasePrimePtr.Value += -gpi - gm;
         }
 
+        // TODO: I believe this method of checking convergence can be improved. These calculations seem to be common for multiple behaviors.
         /// <summary>
         /// Check if the BJT is convergent
         /// </summary>
@@ -433,8 +438,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var config = simulation.BaseConfiguration;
-
             var vbe = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
             var vbc = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
             var delvbe = vbe - VoltageBe;
@@ -445,14 +448,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var cb = BaseCurrent;
 
             // Check convergence
-            var tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;
+            var tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cchat - cc) > tol)
             {
                 state.IsConvergent = false;
                 return false;
             }
 
-            tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsoluteTolerance;
+            tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + _baseConfig.AbsoluteTolerance;
             if (Math.Abs(cbhat - cb) > tol)
             {
                 state.IsConvergent = false;

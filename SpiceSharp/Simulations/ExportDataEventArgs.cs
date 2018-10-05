@@ -103,7 +103,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, consider using <see cref="RealVoltageExport" />.
         /// </remarks>
         /// <seealso cref="RealVoltageExport" />
-        public double GetVoltage(Identifier node) => GetVoltage(node, null);
+        public double GetVoltage(string node) => GetVoltage(node, null);
 
         /// <summary>
         /// Gets the differential voltage between two specified nodes.
@@ -113,12 +113,14 @@ namespace SpiceSharp.Simulations
         /// <returns>The extracted voltage.</returns>
         /// <exception cref="ArgumentNullException">positive</exception>
         /// <exception cref="CircuitException">Simulation does not support real voltages</exception>
-        public double GetVoltage(Identifier positive, Identifier negative)
+        public double GetVoltage(string positive, string negative)
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));
-            var state = _simulation.States.Get<RealSimulationState>() ??
-                        throw new CircuitException("Simulation does not support real voltages");
+
+            if (!(_simulation is BaseSimulation bs))
+                throw new CircuitException("Simulation does not support real voltages.");
+            var state = bs.RealState;
 
             // Get the voltage of the positive node
             var index = _simulation.Variables.GetNode(positive).Index;
@@ -143,7 +145,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, consider using <see cref="ComplexVoltageExport"/>
         /// </remarks>
         /// <seealso cref="ComplexVoltageExport"/>
-        public Complex GetComplexVoltage(Identifier node) => GetComplexVoltage(node, null);
+        public Complex GetComplexVoltage(string node) => GetComplexVoltage(node, null);
 
         /// <summary>
         /// Gets the differential complex voltage between two specified nodes.
@@ -155,12 +157,14 @@ namespace SpiceSharp.Simulations
         /// </returns>
         /// <exception cref="ArgumentNullException">positive</exception>
         /// <exception cref="CircuitException">Simulation does not support complex voltages</exception>
-        public Complex GetComplexVoltage(Identifier positive, Identifier negative)
+        public Complex GetComplexVoltage(string positive, string negative)
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));
-            var state = _simulation.States.Get<ComplexSimulationState>() ??
-                        throw new CircuitException("Simulation does not support complex voltages");
+
+            if (!(_simulation is FrequencySimulation fs))
+                throw new CircuitException("Simulation does not support complex voltages.");
+            var state = fs.ComplexState;
 
             // Get the voltage of the positive node
             var index = _simulation.Variables.GetNode(positive).Index;

@@ -12,14 +12,6 @@ namespace SpiceSharp.Simulations
     public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active time configuration.
-        /// </summary>
-        /// <value>
-        /// The time configuration.
-        /// </value>
-        public TimeConfiguration TimeConfiguration { get; protected set; }
-
-        /// <summary>
         /// Gets the active integration method.
         /// </summary>
         /// <value>
@@ -31,15 +23,16 @@ namespace SpiceSharp.Simulations
         /// Time-domain behaviors.
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
-        private List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
+        private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
+        private bool _shouldReorder = true, _useIc = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected TimeSimulation(Identifier name) : base(name)
+        protected TimeSimulation(string name) : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration());
+            Configurations.Add(new TimeConfiguration());
         }
 
         /// <summary>
@@ -48,10 +41,10 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
-        protected TimeSimulation(Identifier name, double step, double final)
+        protected TimeSimulation(string name, double step, double final)
             : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration(step, final));
+            Configurations.Add(new TimeConfiguration(step, final));
         }
 
         /// <summary>
@@ -61,10 +54,10 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         /// <param name="maxStep">The maximum step.</param>
-        protected TimeSimulation(Identifier name, double step, double final, double maxStep)
+        protected TimeSimulation(string name, double step, double final, double maxStep)
             : base(name)
         {
-            ParameterSets.Add(new TimeConfiguration(step, final, maxStep));
+            Configurations.Add(new TimeConfiguration(step, final, maxStep));
         }
 
         /// <summary>
@@ -86,8 +79,8 @@ namespace SpiceSharp.Simulations
             base.Setup(circuit);
 
             // Get behaviors and configurations
-            var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
-            TimeConfiguration = config;
+            var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
+            _useIc = config.UseIc;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
 
@@ -100,14 +93,14 @@ namespace SpiceSharp.Simulations
             Method.Setup(this);
 
             // TODO: Compatibility - initial conditions from nodes instead of configuration should be removed eventually
-            if (BaseConfiguration.Nodesets.Count == 0)
+            if (config.InitialConditions.Count == 0)
             {
                 foreach (var ns in Variables.InitialConditions)
                     _initialConditions.Add(new ConvergenceAid(ns.Key, ns.Value));
             }
 
             // Set up initial conditions
-            foreach (var ic in TimeConfiguration.InitialConditions)
+            foreach (var ic in config.InitialConditions)
                 _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
         }
 
@@ -129,10 +122,9 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point of the circuit
             var state = RealState;
-            state.UseIc = TimeConfiguration.UseIc;
+            state.UseIc = _useIc;
             state.UseDc = true;
-            state.Domain = RealSimulationState.DomainType.Time;
-            Op(BaseConfiguration.DcMaxIterations);
+            Op(DcMaxIterations);
             Statistics.TimePoints++;
 
             // Stop calculating the operating point
@@ -177,11 +169,12 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var solver = state.Solver;
-            var pass = false;
+            // var pass = false;
             var iterno = 0;
+            var initTransient = Method.BaseTime.Equals(0.0);
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIc && state.Domain == RealSimulationState.DomainType.Time)
+            if (state.UseIc)
             {
                 state.StoreSolution();
 
@@ -210,37 +203,29 @@ namespace SpiceSharp.Simulations
                     throw;
                 }
 
-                // Preorder matrix
-                if ((state.Sparse & RealSimulationState.SparseStates.DidPreorder) == 0) // !state.Sparse.HasFlag(RealState.SparseStates.DidPreorder)
-                {
-                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
-                    state.Sparse |= RealSimulationState.SparseStates.DidPreorder;
-                }
-                if (state.Init == RealSimulationState.InitializationStates.InitJunction || state.Init == RealSimulationState.InitializationStates.InitTransient)
-                {
-                    state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
-                }
+                // Preordering is already done in the operating point calculation
+
+                if (state.Init == InitializationModes.Junction || initTransient)
+                    _shouldReorder = true;
 
                 // Reorder
-                if ((state.Sparse & RealSimulationState.SparseStates.ShouldReorder) != 0) // state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
+                if (_shouldReorder)
                 {
                     Statistics.ReorderTime.Start();
-                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~RealSimulationState.SparseStates.ShouldReorder;
+                    _shouldReorder = false;
                 }
                 else
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     var success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
-                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
+                        _shouldReorder = true;
                         continue;
                     }
                 }
@@ -269,46 +254,53 @@ namespace SpiceSharp.Simulations
                 else
                     state.IsConvergent = false;
 
-                switch (state.Init)
+                if (initTransient)
                 {
-                    case RealSimulationState.InitializationStates.InitFloat:
-                        if (state.UseDc && state.HadNodeSet)
-                        {
-                            if (pass)
-                                state.IsConvergent = false;
-                            pass = false;
-                        }
-                        if (state.IsConvergent)
-                        {
+                    initTransient = false;
+                    if (iterno <= 1)
+                        _shouldReorder = true;
+                    state.Init = InitializationModes.Float;
+                }
+                else
+                {
+                    switch (state.Init)
+                    {
+                        case InitializationModes.Float:
+                            // TimeIterate is only used during simulation, so the next part is never reached
+                            /* if (state.UseDc && state.HadNodeSet)
+                            {
+                                if (pass)
+                                    state.IsConvergent = false;
+                                pass = false;
+                            } */
+
+                            if (state.IsConvergent)
+                            {
+                                Statistics.Iterations += iterno;
+                                return true;
+                            }
+
+                            break;
+
+                        case InitializationModes.Junction:
+                            state.Init = InitializationModes.Fix;
+                            _shouldReorder = true;
+                            break;
+
+                        case InitializationModes.Fix:
+                            if (state.IsConvergent)
+                                state.Init = InitializationModes.Float;
+                            // pass = true;
+                            break;
+
+                        case InitializationModes.None:
+                            state.Init = InitializationModes.Float;
+                            break;
+
+                        default:
                             Statistics.Iterations += iterno;
-                            return true;
-                        }
-                        break;
-
-                    case RealSimulationState.InitializationStates.InitJunction:
-                        state.Init = RealSimulationState.InitializationStates.InitFix;
-                        state.Sparse |= RealSimulationState.SparseStates.ShouldReorder;
-                        break;
-
-                    case RealSimulationState.InitializationStates.InitFix:
-                        if (state.IsConvergent)
-                            state.Init = RealSimulationState.InitializationStates.InitFloat;
-                        pass = true;
-                        break;
-
-                    case RealSimulationState.InitializationStates.InitTransient:
-                        if (iterno <= 1)
-                            state.Sparse = RealSimulationState.SparseStates.ShouldReorder;
-                        state.Init = RealSimulationState.InitializationStates.InitFloat;
-                        break;
-
-                    case RealSimulationState.InitializationStates.None:
-                        state.Init = RealSimulationState.InitializationStates.InitFloat;
-                        break;
-
-                    default:
-                        Statistics.Iterations += iterno;
-                        throw new CircuitException("Could not find flag");
+                            throw new CircuitException("Could not find flag");
+                    }
                 }
             }
         }

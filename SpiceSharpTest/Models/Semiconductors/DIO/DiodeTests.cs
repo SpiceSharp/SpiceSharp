@@ -22,7 +22,7 @@ namespace SpiceSharpTest.Models
         /// <param name="model">Model</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        Diode CreateDiode(Identifier name, Identifier anode, Identifier cathode, Identifier model, string modelparams)
+        Diode CreateDiode(string name, string anode, string cathode, string model, string modelparams)
         {
             Diode d = new Diode(name);
             DiodeModel dm = new DiodeModel(model);

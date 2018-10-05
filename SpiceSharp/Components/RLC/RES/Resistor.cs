@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
-        public Resistor(Identifier name) 
+        public Resistor(string name) 
             : base(name, ResistorPinCount)
         {
             // Register parameters
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(Identifier name, Identifier pos, Identifier neg, double res) 
+        public Resistor(string name, string pos, string neg, double res) 
             : base(name, ResistorPinCount)
         {
             // Register parameters

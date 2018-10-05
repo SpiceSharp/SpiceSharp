@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterInfo("Output current")]
-        public double GetCurrent(RealSimulationState state)
+        public double GetCurrent(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             return state.Solution[BranchEq];
         }
         [ParameterName("v"), ParameterInfo("Output current")]
-        public double GetVoltage(RealSimulationState state)
+        public double GetVoltage(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("p"), ParameterInfo("Power")]
-        public double GetPower(RealSimulationState state)
+        public double GetPower(BaseSimulationState state)
         { 
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -60,31 +60,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create exports
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Parameter</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            // Get the state
-            var state = simulation?.States.Get<RealSimulationState>();
-            if (state == null)
-                return null;
-
-            // Avoid reflection for common components
-            switch (propertyName)
-            {
-                case "v": return () => GetVoltage(state);
-                case "i":
-                case "c": return () => GetCurrent(state);
-                case "p": return () => GetPower(state);
-                default: return null;
-            }
-        }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -128,7 +104,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            BranchEq = variables.Create(new SubIdentifier(Name, "branch"), VariableType.Current).Index;
+            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);

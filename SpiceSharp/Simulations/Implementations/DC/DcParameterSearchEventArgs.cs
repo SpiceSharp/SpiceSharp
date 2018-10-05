@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The name.
         /// </value>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the level of the sweep.
@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the parameter.</param>
         /// <param name="level">The sweep level.</param>
         /// <exception cref="ArgumentNullException">name</exception>
-        public DCParameterSearchEventArgs(Identifier name, int level)
+        public DCParameterSearchEventArgs(string name, int level)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Level = level;

@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(Identifier name)
+        public Inductor(string name)
             : base(name, InductorPinCount)
         {
             // Add parameters
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="inductance">The inductance</param>
-        public Inductor(Identifier name, Identifier pos, Identifier neg, double inductance) 
+        public Inductor(string name, string pos, string neg, double inductance) 
             : base(name, InductorPinCount)
         {
             // Add parameters

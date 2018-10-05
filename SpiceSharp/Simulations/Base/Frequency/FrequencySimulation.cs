@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -10,18 +11,11 @@ namespace SpiceSharp.Simulations
     public abstract class FrequencySimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets the currently active frequency configuration.
-        /// </summary>
-        /// <value>
-        /// The frequency configuration.
-        /// </value>
-        public FrequencyConfiguration FrequencyConfiguration { get; protected set; }
-
-        /// <summary>
         /// Private variables
         /// </summary>
         private BehaviorList<BaseFrequencyBehavior> _frequencyBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
+        private bool _shouldReorderAc;
 
         /// <summary>
         /// Occurs before loading the matrix and right-hand side vector.
@@ -45,9 +39,9 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected FrequencySimulation(Identifier name) : base(name)
+        protected FrequencySimulation(string name) : base(name)
         {
-            ParameterSets.Add(new FrequencyConfiguration());
+            Configurations.Add(new FrequencyConfiguration());
         }
 
         /// <summary>
@@ -63,9 +57,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        protected FrequencySimulation(Identifier name, Sweep<double> frequencySweep) : base(name)
+        protected FrequencySimulation(string name, Sweep<double> frequencySweep) : base(name)
         {
-            ParameterSets.Add(new FrequencyConfiguration(frequencySweep));
+            Configurations.Add(new FrequencyConfiguration(frequencySweep));
         }
 
         /// <summary>
@@ -84,22 +78,22 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
+            // Get behaviors, configurations and states
+            var config = Configurations.Get<FrequencyConfiguration>();
+            FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
+
             // Create the state for complex numbers
             ComplexState = new ComplexSimulationState();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
-            States.Add(ComplexState);
+            var strategy = ComplexState.Solver.Strategy;
+            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
-            // Get behaviors, configurations and states
-            FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ??
-                                     throw new CircuitException("No frequency configuration found");
-            FrequencySweep = FrequencyConfiguration.FrequencySweep ??
-                             throw new CircuitException("No frequency sweep found");
-
+            // Setup behaviors
             _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Entities);
             var solver = ComplexState.Solver;
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
-
             ComplexState.Setup(Variables);
         }
 
@@ -111,7 +105,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Initialize the state
-            ComplexState.Sparse |= ComplexSimulationState.SparseStates.AcShouldReorder;
+            _shouldReorderAc = true;
         }
 
         /// <summary>
@@ -125,11 +119,10 @@ namespace SpiceSharp.Simulations
             _frequencyBehaviors = null;
 
             // Remove the state
-            ComplexState.Destroy();
+            ComplexState.Unsetup();
             ComplexState = null;
 
             // Configuration
-            FrequencyConfiguration = null;
             FrequencySweep = null;
 
             base.Unsetup();
@@ -149,16 +142,16 @@ namespace SpiceSharp.Simulations
             // Load AC
             FrequencyLoad();
 
-            if ((cstate.Sparse & ComplexSimulationState.SparseStates.AcShouldReorder) != 0) //cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
+            if (_shouldReorderAc)
             {
                 solver.OrderAndFactor();
-                cstate.Sparse &= ~ComplexSimulationState.SparseStates.AcShouldReorder;
+                _shouldReorderAc = false;
             }
             else
             {
                 if (!solver.Factor())
                 {
-                    cstate.Sparse |= ComplexSimulationState.SparseStates.AcShouldReorder;
+                    _shouldReorderAc = true;
                     goto retry;
                 }
             }
@@ -187,7 +180,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
-            RealState.Domain = RealSimulationState.DomainType.Frequency;
+            RealState.UseDc = false;
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {

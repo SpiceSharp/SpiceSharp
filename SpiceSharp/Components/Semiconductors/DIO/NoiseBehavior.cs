@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public NoiseBehavior(Identifier name) : base(name) { }
+        public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="Model"/> class.
         /// </summary>
         /// <param name="name">The name of the model.</param>
-        protected Model(Identifier name)
+        protected Model(string name)
             : base(name)
         {
             // Make sure the models are evaluated before the actual components

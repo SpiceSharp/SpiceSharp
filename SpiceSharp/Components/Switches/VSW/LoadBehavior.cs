@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             bool currentState;
             var state = simulation.RealState;
 
-            if (state.Init == RealSimulationState.InitializationStates.InitFix || state.Init == RealSimulationState.InitializationStates.InitJunction)
+            if (state.Init == InitializationModes.Fix || state.Init == InitializationModes.Junction)
             {
                 if (_bp.ZeroState)
                 {

@@ -15,7 +15,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly Dictionary<Identifier, Entity> _objects = new Dictionary<Identifier, Entity>();
+        private readonly Dictionary<string, Entity> _objects;
         private readonly List<Entity> _ordered = new List<Entity>();
         private readonly ReaderWriterLockSlim _lock;
 
@@ -25,26 +25,46 @@ namespace SpiceSharp.Circuits
         private bool _isOrdered;
 
         /// <summary>
+        /// Gets the comparer for entity identifiers.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer => _objects.Comparer;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
         /// </summary>
         public EntityCollection()
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _objects = new Dictionary<string, Entity>();
             _isOrdered = false;
         }
 
         /// <summary>
-        /// Search for an entity by its identifier.
+        /// Initializes a new instance of the <see cref="EntityCollection"/> class.
+        /// </summary>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public EntityCollection(IEqualityComparer<string> comparer)
+        {
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _objects = new Dictionary<string, Entity>(comparer);
+            _isOrdered = false;
+        }
+
+        /// <summary>
+        /// Search for an entity by its string.
         /// </summary>
         /// <value>
         /// The <see cref="Entity"/>.
         /// </value>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The string.</param>
         /// <returns>
-        /// The entity with the specified identifier.
+        /// The entity with the specified string.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        public Entity this[Identifier id]
+        public Entity this[string id]
         {
             get
             {
@@ -128,8 +148,8 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Remove specific entities from the collection.
         /// </summary>
-        /// <param name="ids">Identifiers of the entities that need to be deleted.</param>
-        public void Remove(params Identifier[] ids)
+        /// <param name="ids">strings of the entities that need to be deleted.</param>
+        public void Remove(params string[] ids)
         {
             try
             {
@@ -140,7 +160,7 @@ namespace SpiceSharp.Circuits
                 foreach (var id in ids)
                 {
                     if (id == null)
-                        throw new CircuitException("No identifier specified");
+                        throw new CircuitException("No string specified");
                     _objects.Remove(id);
 
                     // Note: Removing objects does not interfere with the order!
@@ -153,11 +173,11 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// This method checks if a component exists with a specified identifier.
+        /// This method checks if a component exists with a specified string.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>True if the collection contains an entity with a certain identifier.</returns>
-        public bool Contains(Identifier id)
+        /// <param name="id">The string.</param>
+        /// <returns>True if the collection contains an entity with a certain string.</returns>
+        public bool Contains(string id)
         {
             try
             {
@@ -173,10 +193,10 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Try to find an entity in the collection.
         /// </summary>
-        /// <param name="id">The identifier to be searched for.</param>
+        /// <param name="id">The string to be searched for.</param>
         /// <param name="entity">The found entity.</param>
         /// <returns>True if the entity was found.</returns>
-        public bool TryGetEntity(Identifier id, out Entity entity)
+        public bool TryGetEntity(string id, out Entity entity)
         {
             try
             {

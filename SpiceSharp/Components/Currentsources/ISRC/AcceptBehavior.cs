@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcceptBehavior(Identifier name) : base(name) { }
+        public AcceptBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

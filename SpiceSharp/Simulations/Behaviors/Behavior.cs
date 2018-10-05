@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
@@ -17,7 +19,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// This should be the same identifier as the entity that created it.
         /// </remarks>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
@@ -26,7 +28,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected Behavior(Identifier name)
+        protected Behavior(string name)
         {
             Name = name;
         }
@@ -55,12 +57,13 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="simulation">The simulation</param>
         /// <param name="propertyName">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName)
+        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
         {
-            return CreateGetter<double>(simulation, propertyName);
+            return CreateGetter<double>(simulation, propertyName, comparer);
         }
 
         /// <summary>
@@ -69,15 +72,15 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The base value type</typeparam>
         /// <param name="simulation">The simulation.</param>
         /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        protected Func<T> CreateGetter<T>(Simulation simulation, string name) where T : struct 
+        protected Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null) where T : struct 
         {
             // Find methods to create the export
-            var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             Func<T> result = null;
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 // Use methods
                 if (member is MethodInfo mi)
@@ -128,11 +131,18 @@ namespace SpiceSharp.Behaviors
 
                 // Method: TResult Method(State)
                 // Works for any child class of State
-                if (parameters[0].ParameterType.GetTypeInfo().IsSubclassOf(typeof(SimulationState)))
+                var paramType = parameters[0].ParameterType;
+                if (paramType.GetTypeInfo().IsSubclassOf(typeof(SimulationState)))
                 {
-                    // Get the state from the simulation that this method needs
-                    if (!simulation.States.TryGetValue(parameters[0].ParameterType, out var state))
+                    // Try to find a property of the same type using reflection
+                    var stateMember = simulation.GetType().GetTypeInfo()
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        .FirstOrDefault(property => property.PropertyType == paramType);
+                    if (stateMember == null)
                         return null;
+
+                    // Get this state
+                    var state = (SimulationState) stateMember.GetValue(simulation);
 
                     // Create the expression
                     var expression = Expression.Call(Expression.Constant(this), method, Expression.Constant(state));

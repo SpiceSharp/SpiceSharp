@@ -14,15 +14,15 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("inductor1"), ParameterInfo("First coupled inductor")]
-        public Identifier InductorName1 { get; set; }
+        public string InductorName1 { get; set; }
         [ParameterName("inductor2"), ParameterInfo("Second coupled inductor")]
-        public Identifier InductorName2 { get; set; }
+        public string InductorName2 { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
-        public MutualInductance(Identifier name) : base(name, 0)
+        public MutualInductance(string name) : base(name, 0)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components
         /// <param name="inductorName1">Inductor 1</param>
         /// <param name="inductorName2">Inductor 2</param>
         /// <param name="coupling">Mutual inductance</param>
-        public MutualInductance(Identifier name, Identifier inductorName1, Identifier inductorName2, double coupling)
+        public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
             : base(name, 0)
         {
             // Make sure mutual inductances are evaluated AFTER inductors

@@ -20,8 +20,8 @@ namespace SpiceSharpTest.Models
         /// <param name="modelname">Model name</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        protected Mosfet1 CreateMOS1(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
-            Identifier modelname, string modelparams)
+        protected Mosfet1 CreateMOS1(string name, string d, string g, string s, string b,
+            string modelname, string modelparams)
         {
             // Create model
             var model = new Mosfet1Model(modelname);

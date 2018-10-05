@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using System.Collections.Generic;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class that implements the operating point analysis.
@@ -10,7 +12,7 @@
         /// Initializes a new instance of the <see cref="OP"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        public OP(Identifier name) : base(name)
+        public OP(string name) : base(name)
         {
         }
 
@@ -23,13 +25,10 @@
 
             // Setup the state
             var state = RealState;
-            var baseconfig = BaseConfiguration;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
-            state.Domain = RealSimulationState.DomainType.None;
-            state.Gmin = baseconfig.Gmin;
 
-            Op(baseconfig.DcMaxIterations);
+            Op(DcMaxIterations);
 
             var exportargs = new ExportDataEventArgs(this);
             OnExport(exportargs);

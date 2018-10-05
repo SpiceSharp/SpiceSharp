@@ -1,12 +1,11 @@
 ﻿namespace SpiceSharp.Behaviors
 {
-    /// <inheritdoc />
     /// <summary>
     /// Factory for behaviors
     /// </summary>
+    /// <seealso cref="TypeDictionary{BehaviorFactoryMethod}" />
     public class BehaviorFactoryDictionary : TypeDictionary<BehaviorFactoryMethod>
     {
-        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
@@ -19,5 +18,6 @@
     /// <summary>
     /// Delegate
     /// </summary>
+    /// <returns>The behavior created by the factory.</returns>
     public delegate Behavior BehaviorFactoryMethod();
 }

@@ -28,30 +28,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create export method
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="propertyName">Property</param>
-        /// <returns></returns>
-        public override Func<double> CreateGetter(Simulation simulation, string propertyName)
-        {
-            // Get the state
-            var state = simulation?.States.Get<RealSimulationState>();
-            if (state == null)
-                return null;
-
-            switch (propertyName)
-            {
-                case "v": return () => state.Solution[_posNode] - state.Solution[_negNode];
-                case "i":
-                case "c": return () => state.Solution[BranchEq];
-                case "p": return () => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
-                default: return null;
-            }
-        }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -90,7 +67,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create current equation
-            BranchEq = variables.Create(new SubIdentifier(Name, "branch"), VariableType.Current).Index;
+            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);

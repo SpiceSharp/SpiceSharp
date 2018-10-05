@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
-        public VoltageControlledVoltageSource(Identifier name) 
+        public VoltageControlledVoltageSource(string name) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
             // Add parameters
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
-        public VoltageControlledVoltageSource(Identifier name, Identifier pos, Identifier neg, Identifier controlPos, Identifier controlNeg, double gain) 
+        public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
             // Add parameters

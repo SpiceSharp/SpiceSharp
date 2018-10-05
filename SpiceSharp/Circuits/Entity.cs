@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -22,13 +23,13 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the name of the entity.
         /// </summary>
-        public Identifier Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
-        protected Entity(Identifier name)
+        protected Entity(string name)
         {
             Name = name;
         }
@@ -40,16 +41,18 @@ namespace SpiceSharp.Circuits
         /// </remarks>
         /// <param name="name">The parameter name.</param>
         /// <param name="value">The parameter value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>False if the parameter could not be found.</returns>
-        public bool SetParameter(string name, double value) => ParameterSets.SetParameter(name, value);
+        public bool SetParameter(string name, double value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
         /// Sets a parameter with a specific name.
         /// </summary>
         /// <param name="name">The parameter name.</param>
         /// <param name="value">The parameter value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>False if the parameter could not be found.</returns>
-        public bool SetParameter(string name, object value) => ParameterSets.SetParameter(name, value);
+        public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
         /// Create a behavior of a specific base type for a simulation.

@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        protected BaseTransientBehavior(Identifier name) : base(name) { }
+        protected BaseTransientBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Creates all necessary states for the transient behavior.
@@ -64,7 +64,8 @@ namespace SpiceSharp.Behaviors
         public abstract void Transient(TimeSimulation simulation);
 
         /// <summary>
-        /// Truncates the timestep based on the LTE (Local Truncation Error).
+        /// Truncates the timestep based on the LTE (Local Truncation Error). Obsolete, truncation is now
+        /// handled by the <see cref="StateDerivative" /> returned by the integration method.
         /// </summary>
         /// <returns>
         /// The timestep that should be used for this behavior.

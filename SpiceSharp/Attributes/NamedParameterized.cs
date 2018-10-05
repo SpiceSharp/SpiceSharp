@@ -15,16 +15,16 @@ namespace SpiceSharp.Attributes
         /// Returns all members tagged with a certain name.
         /// </summary>
         /// <param name="name">The name of the member.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>An enumerable with all member info containing at least one name.</returns>
-        protected IEnumerable<MemberInfo> Named(string name)
+        protected IEnumerable<MemberInfo> Named(string name, IEqualityComparer<string> comparer = null)
         {
+            // Make sure we always have a default
+            comparer = comparer ?? EqualityComparer<string>.Default;
             return Members.Where(m =>
-            {
-                foreach (var pn in m.GetCustomAttributes<ParameterNameAttribute>())
-                    if (pn.Name == name)
-                        return true;
-                return false;
-            });
+                {
+                    return m.GetCustomAttributes<ParameterNameAttribute>().Any(pn => comparer.Equals(pn.Name, name));
+                });
         }
 
         /// <summary>
@@ -35,12 +35,9 @@ namespace SpiceSharp.Attributes
             get
             {
                 return Members.FirstOrDefault(m =>
-                {
-                    foreach (var pi in m.GetCustomAttributes<ParameterInfoAttribute>())
-                        if (pi.IsPrincipal)
-                            return true;
-                    return false;
-                });
+                    {
+                        return m.GetCustomAttributes<ParameterInfoAttribute>().Any(pi => pi.IsPrincipal);
+                    });
             }
         }
 
@@ -48,10 +45,11 @@ namespace SpiceSharp.Attributes
         /// Create setters for all named parameters.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>A dictionary with all setters by their name.</returns>
-        public Dictionary<string, Action<T>> CreateSetters<T>() where T : struct
+        public Dictionary<string, Action<T>> CreateSetters<T>(IEqualityComparer<string> comparer = null) where T : struct
         {
-            var result = new Dictionary<string, Action<T>>();
+            var result = new Dictionary<string, Action<T>>(comparer);
             foreach (var member in Members)
             {
                 if (!member.IsDefined(typeof(ParameterNameAttribute)))
@@ -78,10 +76,11 @@ namespace SpiceSharp.Attributes
         /// </remarks>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>An action for setting the value of the parameter.</returns>
-        public Action<T> CreateSetter<T>(string name) where T : struct
+        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 var result = CreateSetter<T>(member);
                 if (result != null)
@@ -109,10 +108,11 @@ namespace SpiceSharp.Attributes
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The name the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>A function returning the value of the parameter.</returns>
-        public Func<T> CreateGetter<T>(string name) where T : struct
+        public Func<T> CreateGetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
-            foreach (var member in Named(name))
+            foreach (var member in Named(name, comparer))
             {
                 var result = CreateGetter<T>(member);
                 if (result != null)
@@ -139,10 +139,11 @@ namespace SpiceSharp.Attributes
         /// Create getters for all named parameters.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>A dictionary with all getters by their name.</returns>
-        public Dictionary<string, Func<T>> CreateGetters<T>() where T : struct
+        public Dictionary<string, Func<T>> CreateGetters<T>(IEqualityComparer<string> comparer = null) where T : struct
         {
-            var result = new Dictionary<string, Func<T>>();
+            var result = new Dictionary<string, Func<T>>(comparer);
             foreach (var member in Members)
             {
                 if (!member.IsDefined(typeof(ParameterNameAttribute)))

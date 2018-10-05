@@ -24,7 +24,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BipolarJunctionTransistor(Identifier name) 
+        public BipolarJunctionTransistor(string name) 
             : base(name, BipolarJunctionTransistorPinCount)
         {
             // Add parameters

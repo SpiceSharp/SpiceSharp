@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 
@@ -16,7 +17,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The identifier of the entity.
         /// </value>
-        public Identifier EntityName { get; }
+        public string EntityName { get; }
 
         /// <summary>
         /// Gets the property name.
@@ -27,21 +28,31 @@ namespace SpiceSharp.Simulations
         public string PropertyName { get; }
 
         /// <summary>
+        /// Gets the comparer for parameter names.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ComplexPropertyExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="entityName">The identifier of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <exception cref="ArgumentNullException">
         /// entityName
         /// or
         /// propertyName
         /// </exception>
-        public ComplexPropertyExport(Simulation simulation, Identifier entityName, string propertyName)
+        public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName, IEqualityComparer<string> comparer = null)
             : base(simulation)
         {
             EntityName = entityName ?? throw new ArgumentNullException(nameof(entityName));
             PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
+            Comparer = comparer ?? EqualityComparer<string>.Default;
         }
 
         /// <summary>
@@ -61,7 +72,7 @@ namespace SpiceSharp.Simulations
             // Get the necessary behavior in order:
             // 1) First try transient analysis
             if (eb.TryGet<BaseFrequencyBehavior>(out var behavior))
-                Extractor = behavior.CreateAcExport(Simulation, PropertyName);
+                Extractor = behavior.CreateAcExport(Simulation, PropertyName, Comparer);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Mosfet2Model(Identifier name) : base(name)
+        public Mosfet2Model(string name) : base(name)
         {
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());

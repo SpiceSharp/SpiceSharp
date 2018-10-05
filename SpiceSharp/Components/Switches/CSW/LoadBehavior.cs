@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Methods
         /// </summary>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
-        public double GetVoltage(RealSimulationState state)
+        public double GetVoltage(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [ParameterName("i"), ParameterInfo("Switch current")]
-        public double GetCurrent(RealSimulationState state)
+        public double GetCurrent(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             return (state.Solution[_posNode] - state.Solution[_negNode]) * Cond;
         }
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
-        public double GetPower(RealSimulationState state)
+        public double GetPower(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -82,7 +82,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -162,7 +162,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             var state = simulation.RealState;
 
             // decide the state of the switch
-            if (state.Init == RealSimulationState.InitializationStates.InitFix || state.Init == RealSimulationState.InitializationStates.InitJunction)
+            if (state.Init == InitializationModes.Fix || state.Init == InitializationModes.Junction)
             {
                 if (_bp.ZeroState)
                 {

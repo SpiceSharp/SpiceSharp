@@ -22,7 +22,7 @@ namespace SpiceSharp.Components
         /// Controlling source name
         /// </summary>
         [ParameterName("control"), ParameterInfo("Name of the controlling source")]
-        public Identifier ControllingName { get; set; }
+        public string ControllingName { get; set; }
 
         /// <summary>
         /// Constants
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(Identifier name) : base(name, CurrentSwitchPinCount)
+        public CurrentSwitch(string name) : base(name, CurrentSwitchPinCount)
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="controllingSource">The controlling voltage source</param>
-        public CurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier controllingSource)
+        public CurrentSwitch(string name, string pos, string neg, string controllingSource)
             : base(name, CurrentSwitchPinCount)
         {
             // Make sure the current switch is processed after voltage sources

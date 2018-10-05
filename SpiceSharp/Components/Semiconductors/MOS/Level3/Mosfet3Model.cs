@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Mosfet3Model(Identifier name) : base(name)
+        public Mosfet3Model(string name) : base(name)
         {
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>
-        public Mosfet3Model(Identifier name, bool nmos) : base(name)
+        public Mosfet3Model(string name, bool nmos) : base(name)
         {
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters(nmos));

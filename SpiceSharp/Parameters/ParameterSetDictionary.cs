@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -33,14 +34,17 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// The parameter of the specified type and with the specified name, or <c>null</c> if no parameter was found.
         /// </returns>
-        public Parameter<T> GetParameter<T>(string name) where T : struct
+        public Parameter<T> GetParameter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter<T>(name);
+                var p = ps.GetParameter<T>(name, comparer);
                 if (p != null)
                     return p;
             }
@@ -72,14 +76,17 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// An action for setting the parameter with the specified type and name, or <c>null</c> if no parameter was found.
         /// </returns>
-        public Action<T> GetSetter<T>(string name) where T : struct
+        public Action<T> GetSetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
             foreach (var ps in Values)
             {
-                var s = ps.CreateSetter<T>(name);
+                var s = ps.CreateSetter<T>(name, comparer);
                 if (s != null)
                     return s;
             }
@@ -115,15 +122,18 @@ namespace SpiceSharp
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="name">The parameter name.</param>
         /// <param name="value">The parameter value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if one or more parameters were set, otherwise <c>false</c>.
         /// </returns>
-        public bool SetParameter<T>(string name, T value) where T : struct
+        public bool SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) where T : struct
         {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
             var isset = false;
             foreach (var ps in Values)
             {
-                if (ps.SetParameter(name, value))
+                if (ps.SetParameter(name, value, comparer))
                     isset = true;
             }
 
@@ -173,19 +183,45 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Calls a parameter method with a specified name. If multiple methods exist,
+        /// all of them will be called.
+        /// </summary>
+        /// <param name="name">The name of the method.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
+        /// </returns>
+        public bool SetParameter(string name, IEqualityComparer<string> comparer)
+        {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
+            var isset = false;
+            foreach (var ps in Values)
+            {
+                if (ps.SetParameter(name, comparer))
+                    isset = true;
+            }
+
+            return isset;
+        }
+
+        /// <summary>
         /// Sets all parameter with a specified name in any parameter set in the dictionary.
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if a parameter was set with the specified name; otherwise <c>false</c>.
         /// </returns>
-        public bool SetParameter(string name, object value)
+        public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null)
         {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
             var isset = false;
             foreach (var ps in Values)
             {
-                if (ps.SetParameter(name, value))
+                if (ps.SetParameter(name, value, comparer))
                     isset = true;
             }
             return isset;

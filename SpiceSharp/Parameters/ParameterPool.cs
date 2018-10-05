@@ -12,7 +12,7 @@ namespace SpiceSharp
         /// <summary>
         /// The entity parameters
         /// </summary>
-        private readonly Dictionary<Identifier, ParameterSetDictionary> _entityParameters = new Dictionary<Identifier, ParameterSetDictionary>();
+        private readonly Dictionary<string, ParameterSetDictionary> _entityParameters;
 
         /// <summary>
         /// Gets the associated <see cref="ParameterSetDictionary"/> of an entity.
@@ -22,7 +22,7 @@ namespace SpiceSharp
         /// </value>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The parameter set associated to the specified entity identifier.</returns>
-        public ParameterSetDictionary this[Identifier name]
+        public ParameterSetDictionary this[string name]
         {
             get
             {
@@ -33,11 +33,28 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterPool"/> class.
+        /// </summary>
+        public ParameterPool()
+        {
+            _entityParameters = new Dictionary<string, ParameterSetDictionary>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterPool"/> class.
+        /// </summary>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public ParameterPool(IEqualityComparer<string> comparer)
+        {
+            _entityParameters = new Dictionary<string, ParameterSetDictionary>(comparer);
+        }
+
+        /// <summary>
         /// Adds the specified parameter set to the pool.
         /// </summary>
         /// <param name="creator">The entity identifier to which the parameter set belongs.</param>
         /// <param name="parameters">The parameter set.</param>
-        public void Add(Identifier creator, ParameterSet parameters)
+        public void Add(string creator, ParameterSet parameters)
         {
             if (!_entityParameters.TryGetValue(creator, out var ep))
             {
@@ -49,11 +66,12 @@ namespace SpiceSharp
 
         /// <summary>
         /// Gets the entity parameter set for a specific identifier.
+        /// Obsolete, use the indexer instead.
         /// </summary>
         /// <param name="name">The identifier of the entity.</param>
         /// <returns>The parameter set associated to the specified entity identifier.</returns>
         [Obsolete]
-        public ParameterSetDictionary GetEntityParameters(Identifier name)
+        public ParameterSetDictionary GetEntityParameters(string name)
         {
             if (_entityParameters.TryGetValue(name, out var result))
                 return result;
@@ -67,7 +85,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if a parameter set exists; otherwise <c>false</c>.
         /// </returns>
-        public bool Contains(Identifier name) => _entityParameters.ContainsKey(name);
+        public bool Contains(string name) => _entityParameters.ContainsKey(name);
 
         /// <summary>
         /// Clears all parameter sets in the pool.
