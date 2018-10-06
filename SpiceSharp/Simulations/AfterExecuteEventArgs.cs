@@ -3,9 +3,10 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Event arguments for determining whether or not another simulation should be executed.
+    /// Event arguments that are used after simulation execution.
     /// </summary>
-    public class SimulationFlowEventArgs : EventArgs
+    /// <seealso cref="EventArgs" />
+    public class AfterExecuteEventArgs : EventArgs
     {
         /// <summary>
         /// If <c>true</c>, the simulation will be requested to repeat the simulation another time.
