@@ -97,10 +97,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Occurs after the simulation has executed.
         /// </summary>
-        /// <remarks>
-        /// Subscribing to this event allows determining if another execution should follow.
-        /// </remarks>
-        public event EventHandler<SimulationFlowEventArgs> AfterExecute;
+        public event EventHandler<AfterExecuteEventArgs> AfterExecute;
 
         /// <summary>
         /// Occurs before the simulation is destroyed.
@@ -161,18 +158,18 @@ namespace SpiceSharp.Simulations
             // Execute the simulation
             Status = Statuses.Running;
             var beforeArgs = new BeforeExecuteEventArgs(false);
-            var afterArgs = new SimulationFlowEventArgs();
+            var afterArgs = new AfterExecuteEventArgs();
             do
             {
                 // Before execution
-                OnBeforeSetup(beforeArgs);
+                OnBeforeExecute(beforeArgs);
 
                 // Execute simulation
                 Execute();
 
                 // Reset
                 afterArgs.Repeat = false;
-                OnAfterSetup(afterArgs);
+                OnAfterExecute(afterArgs);
 
                 // We're going to repeat the simulation, change the event arguments
                 if (afterArgs.Repeat)
@@ -254,10 +251,22 @@ namespace SpiceSharp.Simulations
         protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
 
         /// <summary>
+        /// Raises the <see cref="E:BeforeExecute" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="BeforeExecuteEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnBeforeExecute(BeforeExecuteEventArgs args) => BeforeExecute?.Invoke(this, args);
+
+        /// <summary>
         /// Raises the <see cref="E:AfterSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="E:AfterSetup" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnAfterExecute(AfterExecuteEventArgs args) => AfterExecute?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="E:BeforeUnsetup" /> event.
