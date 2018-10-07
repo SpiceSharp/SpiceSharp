@@ -30630,6 +30630,25 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.AC.Setup
   nameWithType: AC.Setup
+- uid: SpiceSharp.Simulations.AfterExecuteEventArgs
+  name: AfterExecuteEventArgs
+  href: api/SpiceSharp.Simulations.AfterExecuteEventArgs.html
+  commentId: T:SpiceSharp.Simulations.AfterExecuteEventArgs
+  fullName: SpiceSharp.Simulations.AfterExecuteEventArgs
+  nameWithType: AfterExecuteEventArgs
+- uid: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
+  name: Repeat
+  href: api/SpiceSharp.Simulations.AfterExecuteEventArgs.html#SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat
+  commentId: P:SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
+  fullName: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
+  nameWithType: AfterExecuteEventArgs.Repeat
+- uid: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat*
+  name: Repeat
+  href: api/SpiceSharp.Simulations.AfterExecuteEventArgs.html#SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat_
+  commentId: Overload:SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
+  nameWithType: AfterExecuteEventArgs.Repeat
 - uid: SpiceSharp.Simulations.BaseConfiguration
   name: BaseConfiguration
   href: api/SpiceSharp.Simulations.BaseConfiguration.html
@@ -33511,6 +33530,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.Nodes
   nameWithType: Simulation.Nodes
+- uid: SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)
+  name: OnAfterExecute(AfterExecuteEventArgs)
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_
+  commentId: M:SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)
+  fullName: SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)
+  nameWithType: Simulation.OnAfterExecute(AfterExecuteEventArgs)
+- uid: SpiceSharp.Simulations.Simulation.OnAfterExecute*
+  name: OnAfterExecute
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterExecute_
+  commentId: Overload:SpiceSharp.Simulations.Simulation.OnAfterExecute
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Simulation.OnAfterExecute
+  nameWithType: Simulation.OnAfterExecute
 - uid: SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)
   name: OnAfterSetup(EventArgs)
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_
@@ -33537,6 +33569,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.OnAfterUnsetup
   nameWithType: Simulation.OnAfterUnsetup
+- uid: SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)
+  name: OnBeforeExecute(BeforeExecuteEventArgs)
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeExecute_SpiceSharp_Simulations_BeforeExecuteEventArgs_
+  commentId: M:SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)
+  fullName: SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)
+  nameWithType: Simulation.OnBeforeExecute(BeforeExecuteEventArgs)
+- uid: SpiceSharp.Simulations.Simulation.OnBeforeExecute*
+  name: OnBeforeExecute
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeExecute_
+  commentId: Overload:SpiceSharp.Simulations.Simulation.OnBeforeExecute
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Simulation.OnBeforeExecute
+  nameWithType: Simulation.OnBeforeExecute
 - uid: SpiceSharp.Simulations.Simulation.OnBeforeSetup(System.EventArgs)
   name: OnBeforeSetup(EventArgs)
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeSetup_System_EventArgs_
@@ -33700,25 +33745,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.Variables
   nameWithType: Simulation.Variables
-- uid: SpiceSharp.Simulations.SimulationFlowEventArgs
-  name: SimulationFlowEventArgs
-  href: api/SpiceSharp.Simulations.SimulationFlowEventArgs.html
-  commentId: T:SpiceSharp.Simulations.SimulationFlowEventArgs
-  fullName: SpiceSharp.Simulations.SimulationFlowEventArgs
-  nameWithType: SimulationFlowEventArgs
-- uid: SpiceSharp.Simulations.SimulationFlowEventArgs.Repeat
-  name: Repeat
-  href: api/SpiceSharp.Simulations.SimulationFlowEventArgs.html#SpiceSharp_Simulations_SimulationFlowEventArgs_Repeat
-  commentId: P:SpiceSharp.Simulations.SimulationFlowEventArgs.Repeat
-  fullName: SpiceSharp.Simulations.SimulationFlowEventArgs.Repeat
-  nameWithType: SimulationFlowEventArgs.Repeat
-- uid: SpiceSharp.Simulations.SimulationFlowEventArgs.Repeat*
-  name: Repeat
-  href: api/SpiceSharp.Simulations.SimulationFlowEventArgs.html#SpiceSharp_Simulations_SimulationFlowEventArgs_Repeat_
-  commentId: Overload:SpiceSharp.Simulations.SimulationFlowEventArgs.Repeat
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.SimulationFlowEventArgs.Repeat
-  nameWithType: SimulationFlowEventArgs.Repeat
 - uid: SpiceSharp.Simulations.SimulationState
   name: SimulationState
   href: api/SpiceSharp.Simulations.SimulationState.html

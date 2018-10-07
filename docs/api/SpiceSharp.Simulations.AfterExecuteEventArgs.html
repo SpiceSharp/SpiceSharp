@@ -5,9 +5,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>AC analysis </title>
+    <title>Class AfterExecuteEventArgs
+   </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="AC analysis ">
+    <meta name="title" content="Class AfterExecuteEventArgs
+   ">
     <meta name="generator" content="docfx 2.39.2.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -66,48 +68,83 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="">
-<h1 id="ac-analysis">AC analysis</h1>
-
-<p>An AC analysis allows you to find the behavior of a circuit for small signals. The simulation will first determine the operating point, after which small perturbations are applied. The result of this analysis indicates how the circuit behaves for these small perturbations. This is useful when the gain and bandwidth needs to be characterized of a filter.</p>
-<p>By assuming the perturbations are small and sinusoidal, the circuit can be linearized which makes this type of simulation relatively fast. The result is a <em>Complex</em> number, which contain the amplitude and phase information.</p>
-<p>Consider the following circuit:</p>
-<p align="center"><img src="images/example_AC.svg"></p>
-
-<p>To simulate this, we can write</p>
-<pre><code class="lang-csharp" name="Circuit">// Build the circuit
-var ckt = new Circuit(
-    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0),
-    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 10.0e3),
-    new Capacitor(&quot;C1&quot;, &quot;out&quot;, &quot;0&quot;, 1e-6)
-    );
-ckt.Entities[&quot;V1&quot;].SetParameter(&quot;acmag&quot;, 1.0);
-
-// Create the simulation
-var ac = new AC(&quot;AC 1&quot;, new DecadeSweep(1e-2, 1.0e3, 5));
-
-// Make the export
-var exportVoltage = new ComplexVoltageExport(ac, &quot;out&quot;);
-
-// Simulate
-ac.ExportSimulationData += (sender, args) =&gt;
-{
-    var output = exportVoltage.Value;
-    var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
-};
-ac.Run(ckt);
-</code></pre><p>For our AC analysis, we need an AC source that will excite the circuit. The amplitude and phase of the excitation can be set by using the <em>acmag</em> and <em>acphase</em> parameters for a <strong><a class="xref" href="../api/SpiceSharp.Components.VoltageSource.html">Voltage source</a></strong>.</p>
-<p>The frequency points that are simulated range from 10mHz to 1kHz, simulating 5 points per decade, logarithmically spaced.</p>
-<p>This is effectively the same as using the following netlist in Spice 3f5:</p>
-<pre><code>V1 in 0 0 AC 1
-R1 in out 10k
-C1 out 0 1u
-
-.AC dec 5 10m 1k
-</code></pre><p>Plotting the output amplitude (dB) yields the following graph:</p>
-<p align="center"><img src="images/example_ACgraph.svg"></p>
-
-<div class="pull-left"><a href="dcanalysis.html">Previous: DC analysis</a></div> <div class="pull-right"><a href="transientanalysis.html">Next: Transient analysis</a></div>
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Simulations.AfterExecuteEventArgs">
+  
+  
+  <h1 id="SpiceSharp_Simulations_AfterExecuteEventArgs" data-uid="SpiceSharp.Simulations.AfterExecuteEventArgs" class="text-break">Class AfterExecuteEventArgs
+  </h1>
+  <div class="markdown level0 summary"><p>Event arguments that are used after simulation execution.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.EventArgs</span></div>
+    <div class="level2"><span class="xref">AfterExecuteEventArgs</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.EventArgs.Empty</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Simulations.html">SpiceSharp.Simulations</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Simulations_AfterExecuteEventArgs_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class AfterExecuteEventArgs : EventArgs</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat_" data-uid="SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat*"></a>
+  <h4 id="SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat" data-uid="SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat">Repeat</h4>
+  <div class="markdown level1 summary"><p>If <code>true</code>, the simulation will be requested to repeat the simulation another time.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Repeat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><span class="xref">System.EventArgs</span></div>
+  </div>
 </article>
           </div>
           

@@ -70,4 +70,4 @@ Yielding the output:
 1 V : 0.667 V. -3.33E-05 A
 ```
 
-<div class="pull-right">[Next: Analysis](analysis.md)</p>
+<div class="pull-right">[Next: Analysis](analysis.md)</div>

@@ -3033,7 +3033,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.AC.html",
-          "hash": "TO6YqUSE7xr0G6JoB1xVdA=="
+          "hash": "7xezt2QwPZyTTIbqvsVu1w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/obj/api/SpiceSharp.Simulations.AfterExecuteEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.AfterExecuteEventArgs.html",
+          "hash": "SlNFtUvhFlxpdoY8lGimjA=="
         }
       },
       "is_incremental": false,
@@ -3057,7 +3069,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.BaseSimulation.html",
-          "hash": "H0YnI3A6JUCsd3FFm7QRxg=="
+          "hash": "zvkKaDY01JZzQc1znDFyJg=="
         }
       },
       "is_incremental": false,
@@ -3153,7 +3165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.DC.html",
-          "hash": "65OiPazJBC6l3hcuJoUGOA=="
+          "hash": "Odx16J89+WR06iEA0AAFIA=="
         }
       },
       "is_incremental": false,
@@ -3237,7 +3249,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.FrequencySimulation.html",
-          "hash": "54haNp1HNrx/4/2KVUox6Q=="
+          "hash": "1rKWEsHyPZh/R2s/O69HDw=="
         }
       },
       "is_incremental": false,
@@ -3357,7 +3369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Noise.html",
-          "hash": "sXVyCvTpueyIkk4fk2zF1w=="
+          "hash": "n1TPQIB8RKFDCtgaeFW8Rg=="
         }
       },
       "is_incremental": false,
@@ -3393,7 +3405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.OP.html",
-          "hash": "EwoNcyX6z+K4nreyewIAGQ=="
+          "hash": "gMsfV2Dw0W56SjlQKF+LBw=="
         }
       },
       "is_incremental": false,
@@ -3465,19 +3477,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Simulation.html",
-          "hash": "stW23EPzV7ssMzs2006GUQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/obj/api/SpiceSharp.Simulations.SimulationFlowEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.SimulationFlowEventArgs.html",
-          "hash": "fedDfocUvrKMLRWzOZKDaQ=="
+          "hash": "nA4BMo6MK5pV0mLL702iDQ=="
         }
       },
       "is_incremental": false,
@@ -3561,7 +3561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.TimeSimulation.html",
-          "hash": "j/glnFmX57WXo+vTwS2SKw=="
+          "hash": "egC/EPGOnlCHMSImz1XIjA=="
         }
       },
       "is_incremental": false,
@@ -3573,7 +3573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Transient.html",
-          "hash": "5zwW26l4UWWJBrn/koNOFw=="
+          "hash": "Fnff83f0+jpCSQKIea9ljw=="
         }
       },
       "is_incremental": false,
@@ -3621,7 +3621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.html",
-          "hash": "xEcIRvl3lxkHmwUoNxYCHg=="
+          "hash": "2YOK/G6hSbxvG2bV/T2Kyw=="
         }
       },
       "is_incremental": false,
@@ -3681,7 +3681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "/erd5J/VSux4Jhk5b6wdWA=="
+          "hash": "GBcs9sv4XCMDW0LSPH45wQ=="
         }
       },
       "is_incremental": false,
@@ -3749,7 +3749,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/acanalysis.html",
-          "hash": "P6U5Myl2qMFuFb2yvYV/Aw=="
+          "hash": "O0WEpYuBl2P3UldMl3mWmQ=="
         }
       },
       "is_incremental": false,
@@ -3761,7 +3761,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/analysis.html",
-          "hash": "9l9q+CTFcXRDHg+wz32NNg=="
+          "hash": "3XRaBS1jbVa7rATrakEllQ=="
         }
       },
       "is_incremental": false,
@@ -3769,11 +3769,23 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/custommodels.md",
+      "source_relative_path": "articles/base_behaviors.md",
       "output": {
         ".html": {
-          "relative_path": "articles/custommodels.html",
-          "hash": "QhnmO7Hp0CRplFsyJ9y+cA=="
+          "relative_path": "articles/base_behaviors.html",
+          "hash": "B8EBNdGTjXy4v5N1AZJRAg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/custom_models.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/custom_models.html",
+          "hash": "8UDoXgiUtp2dtli2LVgjog=="
         }
       },
       "is_incremental": false,
@@ -3785,7 +3797,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/dcanalysis.html",
-          "hash": "+VqsIv/EUHNQNPOshsXzjQ=="
+          "hash": "jipZLPBE4LM3jUaeH8Xcsg=="
         }
       },
       "is_incremental": false,
@@ -3797,7 +3809,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/entities.html",
-          "hash": "F5FtD84xupGPO2TSrGh8sw=="
+          "hash": "+OVJa7aS2jJ19qlsGuZclQ=="
         }
       },
       "is_incremental": false,
@@ -3809,7 +3821,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/gettingstarted.html",
-          "hash": "mOwGW3yGVC8QAETWYwOKXg=="
+          "hash": "hpFOZKKNYLBpRToeX9YXkA=="
         }
       },
       "is_incremental": false,
@@ -3927,6 +3939,17 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "articles/images/example_custommodel_nlres_graph.svg",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/example_custommodel_nlres_graph.svg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "articles/images/simulation_flow.svg",
       "output": {
         "resource": {
@@ -3942,7 +3965,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/modified_nodal_analysis.html",
-          "hash": "nPpsElWUYnftcZWSSaJlDQ=="
+          "hash": "DVaQDmZLgUjY9BvFOTXX1A=="
         }
       },
       "is_incremental": false,
@@ -3954,7 +3977,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/parameters.html",
-          "hash": "QttxJTq/v7FRMerZMmGKFw=="
+          "hash": "xdMQ2VHUenPBpfVN+8cIWg=="
         }
       },
       "is_incremental": false,
@@ -3966,7 +3989,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/structure.html",
-          "hash": "bEpSWkSyLUU1imaisrT+Ug=="
+          "hash": "YHRuvUpLzNVnTPgdup11hA=="
         }
       },
       "is_incremental": false,
@@ -3978,7 +4001,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "6aIie7m6RO5M0SHMaas0eA=="
+          "hash": "fcHow3INUmZnIT5lPquYYA=="
         }
       },
       "is_incremental": false,
@@ -3990,7 +4013,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/transientanalysis.html",
-          "hash": "R4lMgRQRjv2DqfpicBmEwA=="
+          "hash": "g1njtfAacgPffJ+7kL26BA=="
         }
       },
       "is_incremental": false,
@@ -4029,17 +4052,17 @@
         "incrementalPhase": "build"
       },
       "processors": {
-        "ResourceDocumentProcessor": {
+        "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         },
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build"
         },
-        "ManagedReferenceDocumentProcessor": {
+        "ResourceDocumentProcessor": {
           "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         },
         "TocDocumentProcessor": {

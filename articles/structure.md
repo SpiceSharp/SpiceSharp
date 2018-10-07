@@ -58,4 +58,4 @@ Execution of the simulation is entirely dependent on the type of simulation. Aft
 
 In this phase the simulation will dispose of all the data previously allocated during setup.
 
-<div class="pull-right">[Next: Entities, components and models](entities.md)</p>
+<div class="pull-left">[Previous: Transient analysis]</div> <div class="pull-right">[Next: Entities, components and models](entities.md)</div>

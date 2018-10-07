@@ -21,4 +21,4 @@ Using some attributes, it is possible to add meta-information about the entity. 
 - **[IndependentSourceAttribute](xref:SpiceSharp.Attributes.IndependentSourceAttribute)**: Flags the entity as one that describes an independent source. This attribute can be used by a **[Validator](xref:SpiceSharp.Circuits.Validator)** to make sure there is at least one independent source in the circuit.
 - **[VoltageDriverAttribute](xref:SpiceSharp.Attributes.VoltageDriverAttribute)**: Indicates that this entity will fix the voltage between two nodes. This attribute can be used by a **[Validator](xref:SpiceSharp.Circuits.Validator)** to find voltage source loops which are invalid. Note that the counterpart for current drivers is already validated using the **[ConnectedAttribute](xref:SpiceSharp.Attributes.ConnectedAttribute)**.
 
-<div class="pull-left">[Previous: Structure](structure.md)</div> <div class="pull-right">[Next: Parameters](parameters.md)</p>
+<div class="pull-left">[Previous: Structure](structure.md)</div> <div class="pull-right">[Next: Parameters](parameters.md)</div>

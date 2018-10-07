@@ -158,7 +158,7 @@ namespace SpiceSharpTest
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("Vgs", "g", "0", 0),
-                new VoltageSource("Vds", "d", "0", 0.0),
+                new VoltageSource("Vds", "d", "0", 0),
                 nmos
                 );
 

@@ -38,4 +38,4 @@ It is possible to provide parameters with attributes containing more meta-inform
 
     [!code-csharp[SetParameter IsPrincipal example](../SpiceSharpTest/BasicExampleTests.cs#example_parameters_res_setparameter)]
 
-<div class="pull-left">[Previous: Entities, components and models](entities.md)</div> <div class="pull-right">[Next: Parameters](parameters.md)</p>
+<div class="pull-left">[Previous: Entities, components and models](entities.md)</div> <div class="pull-right">[Next: Custom models](custom_models.md)</div>

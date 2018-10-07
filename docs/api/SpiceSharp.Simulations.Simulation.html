@@ -352,6 +352,33 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected abstract void Execute()</code></pre>
   </div>
+  <a id="SpiceSharp_Simulations_Simulation_OnAfterExecute_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterExecute*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)">OnAfterExecute(AfterExecuteEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <span class="xref">AfterSetup</span> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnAfterExecute(AfterExecuteEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.AfterExecuteEventArgs.html">AfterExecuteEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td><p>The <span class="xref">System.EventArgs</span> instance containing the event data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_Simulation_OnAfterSetup_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterSetup*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)">OnAfterSetup(EventArgs)</h4>
   <div class="markdown level1 summary"><p>Raises the <span class="xref">AfterSetup</span> event.</p>
@@ -402,6 +429,33 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
         <td><span class="xref">System.EventArgs</span></td>
         <td><span class="parametername">args</span></td>
         <td><p>The <span class="xref">System.EventArgs</span> instance containing the event data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_OnBeforeExecute_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeExecute*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeExecute_SpiceSharp_Simulations_BeforeExecuteEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)">OnBeforeExecute(BeforeExecuteEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <span class="xref">BeforeExecute</span> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnBeforeExecute(BeforeExecuteEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td><p>The <a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a> instance containing the event data.</p>
 </td>
       </tr>
     </tbody>
@@ -676,7 +730,7 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;SimulationFlowEventArgs&gt; AfterExecute</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AfterExecuteEventArgs&gt; AfterExecute</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -688,14 +742,11 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Simulations.SimulationFlowEventArgs.html">SimulationFlowEventArgs</a>&gt;</td>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Simulations.AfterExecuteEventArgs.html">AfterExecuteEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Simulations_Simulation_AfterExecute_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>Subscribing to this event allows determining if another execution should follow.</p>
-</div>
   <h4 id="SpiceSharp_Simulations_Simulation_AfterSetup" data-uid="SpiceSharp.Simulations.Simulation.AfterSetup">AfterSetup</h4>
   <div class="markdown level1 summary"><p>Occurs after the simulation is set up.</p>
 </div>

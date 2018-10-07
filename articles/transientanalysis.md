@@ -1,12 +1,10 @@
 # Transient analysis
 
-A transient analysis will attempt to include as many effects possible. The unfortunate consequence is that this type of simulation is also by far the slowest. Luckily, it is also relatively straightforward to understand.
+A transient analysis will attempt to include as many effects possible. The unfortunate consequence is that this type of simulation is also by far the slowest. Luckily, it is relatively straightforward to understand.
 
-Let's use our RC filter from before and apply a pulsed voltage source.
+Let's use our RC filter from before and apply a *pulsed* voltage source.
 
 <p align="center"><img src="images/example_AC.svg" /></p>
-
-Associated code:
 
 [!code-csharp[Circuit](../SpiceSharpTest/BasicExampleTests.cs#example_Transient)]
 
@@ -18,4 +16,14 @@ The resulting waveforms look as follows:
 
 <p align="center"><img src="images/example_TransientGraph.svg" /></p>
 
-<div class="pull-left">[Previous: AC anslysis](acanalysis.md)</div> <div class="pull-right">Next</p>
+Note that Spice 3f5 will simulate the same thing if you feed it the following netlist.
+
+```
+V1 in 0 PULSE(0 5 10m 1m 1m 20m 40m)
+R1 in out 10k
+C1 out 0 1u
+
+.TRAN 1m 0.1
+```
+
+<div class="pull-left">[Previous: AC anslysis](acanalysis.md)</div> <div class="pull-right">[Next: Spice# Structure](structure.md)</p>

@@ -52,6 +52,10 @@
   <ItemGroup>
     <Compile Include="BasicExampleTests.cs" />
     <Compile Include="Circuits\ValidatorTests.cs" />
+    <Compile Include="Examples\BaseParameters.cs" />
+    <Compile Include="Examples\NonlinearResistor.cs" />
+    <Compile Include="Examples\LoadBehavior.cs" />
+    <Compile Include="Examples\NonlinearResistorTests.cs" />
     <Compile Include="Models\Currentsources\CCCS\CurrentControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\VCCS\VoltageControlledCurrentSourceTests.cs" />

@@ -17,7 +17,9 @@
     - name: Parameters
       href: parameters.md
 - name: Custom models
-  href: custommodels.md
+  href: custom_models.md
   items:
   - name: Modified Nodal Analysis
     href: modified_nodal_analysis.md
+  - name: Base behaviors
+    href: base_behaviors.md

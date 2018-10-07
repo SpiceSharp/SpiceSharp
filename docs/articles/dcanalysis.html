@@ -69,7 +69,8 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="dc-analysis">DC analysis</h1>
 
-<p>It is possible to sweep over multiple sources for a DC analysis. It is possible to construct DC transfer curves using this type of analysis. This type of simulation is run by the <strong><a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a></strong> class. Consider the following circuit:</p>
+<p>This type of analysis makes it possible to sweep over one or more independent sources, assuming the circuit is in steady-state. You can for example construct DC transfer curves of amplifiers using this type of analysis. It is run using the <strong><a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a></strong> class.</p>
+<p>Let&#39;s consider the following circuit:</p>
 <p align="center"><img src="images/example_DC.svg"></p>
 
 <p>We wish to find the I-V curve for multiple Vgs voltages. This can be achieved by passing multiple <strong><a class="xref" href="../api/SpiceSharp.Simulations.SweepConfiguration.html">SweepConfiguration</a></strong>-objects to the <strong><a class="xref" href="../api/SpiceSharp.Simulations.DC.html">DC</a></strong> constructor.</p>
@@ -84,7 +85,7 @@ nmos.SetModel(nmosmodel);
 // Build the circuit
 var ckt = new Circuit(
     new VoltageSource(&quot;Vgs&quot;, &quot;g&quot;, &quot;0&quot;, 0),
-    new VoltageSource(&quot;Vds&quot;, &quot;d&quot;, &quot;0&quot;, 0.0),
+    new VoltageSource(&quot;Vds&quot;, &quot;d&quot;, &quot;0&quot;, 0),
     nmos
     );
 
@@ -106,13 +107,20 @@ dc.ExportSimulationData += (sender, args) =&gt;
     var current = currentExport.Value;
 };
 dc.Run(ckt);
-</code></pre><p>First we build an NMOS transistor. For this we need a <strong><a class="xref" href="../api/SpiceSharp.Components.Component.html">Component</a></strong>, which we can connect to nodes in the circuit. Most components also need a <strong><a class="xref" href="../api/SpiceSharp.Components.Model.html">Model</a></strong> in order to work. Models typically describe common environmental properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).</p>
-<p>In our case, the component is a  <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which needs a <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong> to work.
+</code></pre><p>First we will build an NMOS transistor. For this we need a <strong><a class="xref" href="../api/SpiceSharp.Components.Component.html">Component</a></strong> implementation of a transistor, which we can connect to nodes in the circuit. Most components also need a <strong><a class="xref" href="../api/SpiceSharp.Components.Model.html">Model</a></strong> in order to work. Models typically describe general common properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).</p>
+<p>In our case, Spice# provides us with a component that implements the model equations of a transistor, called <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which is accompanied by a <strong><a class="xref" href="../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong>.
 Every component or model can have parameters, which can be set by using the method <em><a href="xref:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double)">SetParameter</a></em>. The parameter names for MOS level 1 transistors are defined in the model specification and are all lower case.</p>
 <p>After running and plotting the data we get:</p>
 <p align="center"><img src="images/example_DCgraph.svg"></p>
 
-<p><div class="pull-left"><a href="analysis.html">Previous: Analysis</a></div> <div class="pull-right"><a href="acanalysis.html">Next: AC analysis</a><p>
+<p>Running this example in Spice 3f5 would involve writing the following netlist.</p>
+<pre><code>.MODEL example NMOS(Kp=150m)
+M1 d g 0 0
+Vgs g 0 0
+Vds d 0 0
+
+.DC Vds 0 5 0.1 Vgs 0 3 0.2
+</code></pre><p><div class="pull-left"><a href="analysis.html">Previous: Analysis</a></div> <div class="pull-right"><a href="acanalysis.html">Next: AC analysis</a><p>
 </div></article>
           </div>
           
