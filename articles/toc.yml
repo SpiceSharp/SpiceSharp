@@ -7,3 +7,6 @@
 - name: Custom components
   href: custom_components/toc.yml
   topicHref: custom_components/custom_models.md
+- name: Changing parameters during simulation
+  href: changing_parameters/toc.yml
+  topicHref: changing_parameters/changing_parameters_during_simulation.md

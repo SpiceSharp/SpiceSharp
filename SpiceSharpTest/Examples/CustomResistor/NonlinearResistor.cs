@@ -16,10 +16,10 @@ namespace SpiceSharp.Components
         /// <param name="nodeB">Node B</param>
         public NonlinearResistor(string name, string nodeA, string nodeB) : base(name, 2)
         {
-            // Add a SpiceSharp.Components.NonlinearResistorBehaviors.BaseParameters
+            // Add a NonlinearResistorBehaviors.BaseParameters
             ParameterSets.Add(new BaseParameters());
 
-            // Add a factory method for SpiceSharp.Components.NonlinearResistorBehaviors.LoadBehavior
+            // Add a NonlinearResistorBehaviors.LoadBehavior factory
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
 
             // Connect the entity
