@@ -11,7 +11,7 @@ You can also clone the repository directly. However, while you get the latest fe
 
 AppVeyor CI (Windows) build status: [![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master)
 
-Travis CI (Linux/Mono) build status: [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development)](https://travis-ci.org/SpiceSharp/SpiceSharp)
+Travis CI (Linux/Mono) build status: [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp)
 
 ## Building the circuit
 Let's start with a very simple circuit called a *resistive voltage divider*. The schematic looks as follows.
