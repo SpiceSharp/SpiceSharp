@@ -6,7 +6,7 @@ Let's use our RC filter from before and apply a *pulsed* voltage source.
 
 <p align="center"><img src="images/example_AC.svg" /></p>
 
-[!code-csharp[Circuit](../SpiceSharpTest/BasicExampleTests.cs#example_Transient)]
+[!code-csharp[Circuit](../../SpiceSharpTest/BasicExampleTests.cs#example_Transient)]
 
 The voltage source now is passed a **[Pulse](xref:SpiceSharp.Components.Pulse)** object that will calculate the voltage in time for us.
 
@@ -26,4 +26,4 @@ C1 out 0 1u
 .TRAN 1m 0.1
 ```
 
-<div class="pull-left">[Previous: AC anslysis](acanalysis.md)</div> <div class="pull-right">[Next: Spice# Structure](structure.md)</p>
+<div class="pull-left">[Previous: AC anslysis](acanalysis.md)</div> <div class="pull-right">[Next: Spice# Structure](../structure/structure.md)</p>

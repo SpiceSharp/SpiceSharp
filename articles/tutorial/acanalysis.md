@@ -10,7 +10,7 @@ Consider the following circuit:
 
 To simulate this, we can write
 
-[!code-csharp[Circuit](../SpiceSharpTest/BasicExampleTests.cs#example_AC)]
+[!code-csharp[Circuit](../../SpiceSharpTest/BasicExampleTests.cs#example_AC)]
 
 For our AC analysis, we need an AC source that will excite the circuit. The amplitude and phase of the excitation can be set by using the *acmag* and *acphase* parameters for a **[Voltage source](xref:SpiceSharp.Components.VoltageSource)**.
 

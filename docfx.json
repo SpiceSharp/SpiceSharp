@@ -23,13 +23,23 @@
         "src": "SpiceSharp/obj"
       },
       {
-        "files": [ "*.md", "*.yml", "api/*.md", "articles/*.md", "articles/*.yml" ],
+        "files": [
+            "*.md",
+            "*.yml",
+            "api/*.md",
+            "articles/*.md", "articles/*.yml",
+            "articles/**/*.md", "articles/**/*.yml"
+        ],
         "exclude": [ "appveyor.yml", ".travis.yml", "docs/**", "SpiceSharp/**" ]
       }
     ],
     "resource": [
       {
-        "files": [ "api/images/**", "articles/images/**" ],
+        "files": [
+            "api/images/**",
+            "articles/images/**",
+            "articles/**/images/**"
+        ],
         "exclude": [ "docs/**" ]
       }
     ],

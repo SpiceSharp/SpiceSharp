@@ -28,31 +28,31 @@ Let us borrow the same convention as a regular resistor.
 
 But this time the resistor does *not* follow Ohm's law. Let us say we managed to model our resistor using the following relationship:
 
-<p align="center"><img src="https://latex.codecogs.com/gif.latex?v_R&space;=&space;a\cdot&space;(i_R)^b" alt="v_R = a*(i_R)^b" /></p>
+<p align="center"><img src="https://latex.codecogs.com/svg.latex?v_R&space;=&space;a\cdot&space;(i_R)^b" alt="v_R = a*(i_R)^b" /></p>
 
 Our entity has 2 parameters, a and b. So will create some base parameters which can be used to describe our nonlinear behavior.
 
-[!code-csharp[Base parameters](../SpiceSharpTest/Examples/BaseParameters.cs)]
+[!code-csharp[Base parameters](../../SpiceSharpTest/Examples/CustomResistor/BaseParameters.cs)]
 
 ### The load behavior
 
 The load behavior will load the Y-matrix and RHS-vector according to the equation of our resistor. Similar to the previous chapter about [Modified Nodal Analysis](modified_nodal_analysis.md), we calculate the contributions.
 
-The current ![i_R](https://latex.codecogs.com/gif.latex?\inline&space;i_R) flows out of node A and into node B, so we find that
+The current ![i_R](https://latex.codecogs.com/svg.latex?\inline&space;i_R) flows out of node A and into node B, so we find that
 
-<p align="center"><img src="https://latex.codecogs.com/gif.latex?\begin{align*}&space;v_R&=v_A-v_B\\&space;f_A(...,v_A,...,v_B,...)&=&plus;i_R=\left(\frac{v_R}{a}\right)^{(1/b)}\\&space;f_B(...,v_A,...,v_B,...)&=-i_R=-\left(\frac{v_R}{a}\right)^{(1/b)}&space;\end{align*}" /></p>
+<p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;v_R&=v_A-v_B\\&space;f_A(...,v_A,...,v_B,...)&=&plus;i_R=\left(\frac{v_R}{a}\right)^{(1/b)}\\&space;f_B(...,v_A,...,v_B,...)&=-i_R=-\left(\frac{v_R}{a}\right)^{(1/b)}&space;\end{align*}" /></p>
 
 We calculate the contribution to the Y-matrix:
 
-<img src="https://latex.codecogs.com/gif.latex?\begin{align*}&space;Y_{A,A}&=\frac{\partial&space;f_A}{\partial&space;v_A}=\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=&plus;g\\&space;Y_{A,B}&=\frac{\partial&space;f_A}{\partial&space;v_B}=-\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=-g\\&space;Y_{B,A}&=\frac{\partial&space;f_B}{\partial&space;v_A}=-\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=-g\\&space;Y_{B,B}&=\frac{\partial&space;f_B}{\partial&space;v_B}=\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=&plus;g&space;\end{align*}" />
+<img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;Y_{A,A}&=\frac{\partial&space;f_A}{\partial&space;v_A}=\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=&plus;g\\&space;Y_{A,B}&=\frac{\partial&space;f_A}{\partial&space;v_B}=-\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=-g\\&space;Y_{B,A}&=\frac{\partial&space;f_B}{\partial&space;v_A}=-\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=-g\\&space;Y_{B,B}&=\frac{\partial&space;f_B}{\partial&space;v_B}=\frac{1}{a}\left(\frac{v_R^{(k)}}{a}\right)^{\frac{1}{b}-1}&=&plus;g&space;\end{align*}" />
 
 And the contribution to the RHS-matrix, which is simply
 
-<img src="https://latex.codecogs.com/gif.latex?\begin{align*}&space;RHS_A&space;&=&space;&plus;\left((i_R)^{(k)}-g\cdot&space;v_R^{(k)}\right)\\&space;RHS_B&space;&=&space;-\left((i_R)^{(k)}-g\cdot&space;v_R^{(k)}\right)&space;\end{align*}" />
+<img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;RHS_A&space;&=&space;&plus;\left((i_R)^{(k)}-g\cdot&space;v_R^{(k)}\right)\\&space;RHS_B&space;&=&space;-\left((i_R)^{(k)}-g\cdot&space;v_R^{(k)}\right)&space;\end{align*}" />
 
 We now have everything to create our loading behavior. The load behavior is shown below
 
-[!code-csharp[Load behavior](../SpiceSharpTest/Examples/LoadBehavior.cs)]
+[!code-csharp[Load behavior](../../SpiceSharpTest/Examples/CustomResistor/LoadBehavior.cs)]
 
 Our behavior implements
 - **[BaseLoadBehavior](xref:SpiceSharp.Behaviors.BaseLoadBehavior)**, which is the layout for any loading behavior.
@@ -62,7 +62,7 @@ In the *Setup* method, the necessary parameters and behaviors can be requested i
 
 In the *Unsetup* method we simply remove the reference to our base parameters to allow the garbage collector to clean up.
 
-After the behavior has been set up, the *GetEquationPointers* method is called. In this method, the behavior gets the chance to allocate elements in the Y-matrix and RHS vector (ie. ![elements](https://latex.codecogs.com/gif.latex?\inline&space;Y_{A,A},&space;Y_{A,B},&space;Y_{B,A},&space;Y_{B,B},&space;RHS_A,&space;RHS_B)).
+After the behavior has been set up, the *GetEquationPointers* method is called. In this method, the behavior gets the chance to allocate elements in the Y-matrix and RHS vector (ie. ![elements](https://latex.codecogs.com/svg.latex?\inline&space;Y_{A,A},&space;Y_{A,B},&space;Y_{B,A},&space;Y_{B,B},&space;RHS_A,&space;RHS_B)).
 
 Finally we have the method called *Load*. Usually the behavior will in this method
 1. Find out the current iteration solution.
@@ -75,7 +75,7 @@ Finally we have the method called *Load*. Usually the behavior will in this meth
 
 All that is left is bringing it all together in a **[Component](xref:SpiceSharp.Components.Component)**.
 
-[!code-csharp[Component definition](../SpiceSharpTest/Examples/NonlinearResistor.cs)]
+[!code-csharp[Component definition](../../SpiceSharpTest/Examples/CustomResistor/NonlinearResistor.cs)]
 
 We add an instance of our **BaseParameters** created earlier, and we provide a factory for our **LoadBehavior**. When the simulation now asks the component for a **[BaseLoadBehavior](xref:SpiceSharp.Behaviors.BaseLoadBehavior)**, it will automatically create a new **LoadBehavior** that can be used by the simulation.
 
@@ -83,7 +83,7 @@ We add an instance of our **BaseParameters** created earlier, and we provide a f
 
 We can now plot the I-V curve using a simple **[DC](xref:SpiceSharp.Simulations.DC)** simulation. For example:
 
-[!code-csharp[Nonlinear resistor DC](../SpiceSharpTest/Examples/NonlinearResistorTests.cs#example_customcomponent_nonlinearresistor_test)]
+[!code-csharp[Nonlinear resistor DC](../../SpiceSharpTest/Examples/CustomResistor/NonlinearResistorTests.cs#example_customcomponent_nonlinearresistor_test)]
 
 The resulting waveform is as expected:
 

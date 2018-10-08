@@ -22,7 +22,7 @@ The output voltage of this circuit is 2/3 times the input voltage.
 
 Creating this circuit is done using the **[Circuit](xref:SpiceSharp.Circuit)**-class. This is a container of multiple entities, such as voltage sources and resistors. The **[Circuit](xref:SpiceSharp.Circuit)**-class is defined in the namespace *@SpiceSharp*, while all default components are in the namespace *@SpiceSharp.Components*.
 
-[!code-csharp[Circuit](../SpiceSharpTest/BasicExampleTests.cs#example01_build)]
+[!code-csharp[Circuit](../../SpiceSharpTest/BasicExampleTests.cs#example01_build)]
 
 ## Running a DC analysis
 
@@ -30,7 +30,7 @@ A **[DC](xref:SpiceSharp.Simulations.DC)** simulation will (by default) sweep a 
 
 We will sweep the input voltage source from -1V to 1V in steps of 200mV.
 
-[!code-csharp[Simulation](../SpiceSharpTest/BasicExampleTests.cs#example01_simulate)]
+[!code-csharp[Simulation](../../SpiceSharpTest/BasicExampleTests.cs#example01_simulate)]
 
 The output will yield as expected:
 
@@ -52,7 +52,7 @@ The output will yield as expected:
 
 Using **[Export<T>](xref:SpiceSharp.Simulations.Export`1)** gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:
 
-[!code-csharp[Simulation](../SpiceSharpTest/BasicExampleTests.cs#example01_simulate2)]
+[!code-csharp[Simulation](../../SpiceSharpTest/BasicExampleTests.cs#example01_simulate2)]
 
 Yielding the output:
 

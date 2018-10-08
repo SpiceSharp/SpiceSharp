@@ -12,7 +12,7 @@ These simulators have typically been continued in C++. This had the following un
 I originally wanted to learn more about circuit simulation and their techniques. Transforming the original Spice project to a completely managed, completely object-oriented piece of software definitely proved to be a challenge. A lot of bugs have been sorted out, and the project in general has evolved quite nicely.
 
 ## Tutorial
-You can find a tutorial for using Spice# [here](articles/gettingstarted.md)
+You can find a tutorial for using Spice# [here](articles/tutorial/gettingstarted.md)
 
 ## API
 The API can be found [here](api/index.md).

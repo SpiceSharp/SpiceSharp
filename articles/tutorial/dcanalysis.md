@@ -10,7 +10,7 @@ We wish to find the I-V curve for multiple Vgs voltages. This can be achieved by
 
 The code looks as follows:
 
-[!code-csharp[Circuit](../SpiceSharpTest/BasicExampleTests.cs#example_DC)]
+[!code-csharp[Circuit](../../SpiceSharpTest/BasicExampleTests.cs#example_DC)]
 
 First we will build an NMOS transistor. For this we need a **[Component](xref:SpiceSharp.Components.Component)** implementation of a transistor, which we can connect to nodes in the circuit. Most components also need a **[Model](xref:SpiceSharp.Components.Model)** in order to work. Models typically describe general common properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).
 

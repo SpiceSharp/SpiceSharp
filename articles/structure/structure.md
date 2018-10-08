@@ -12,11 +12,11 @@ The main container for storing your circuit will be the **[Circuit](xref:SpiceSh
 
 For example, a **[Resistor](xref:SpiceSharp.Components.Resistor)** will typically contain one set of parameters, namely an object of the class  **[SpiceSharp.Components.ResistorBehaviors.BaseParameters](xref:SpiceSharp.Components.ResistorBehaviors.BaseParameters)**. This parameter set contains - among others - the **[Resistance](xref:SpiceSharp.Components.ResistorBehaviors.BaseParameters#SpiceSharp_Components_ResistorBehaviors_BaseParameters_Resistance)** of the resistor. So we can change the resistance of a **[Resistor](xref:SpiceSharp.Components.Resistor)** by writing:
 
-[!code-csharp[Resistor](../SpiceSharpTest/BasicExampleTests.cs#example_structure_resistor)]
+[!code-csharp[Resistor](../../SpiceSharpTest/BasicExampleTests.cs#example_structure_resistor)]
 
 Alternatively, we can see that the same property is tagged with a **[ParameterNameAttribute](xref:SpiceSharp.Attributes.ParameterNameAttribute)** that gives the property the name "resistance", and a **[ParameterInfoAttribute](xref:SpiceSharp.Attributes.ParameterInfoAttribute)** that indicates that the property is a *principal* parameter. These two attributes allow us to edit the same property in two other ways. Respectively:
 
-[!code-csharp[Resistor 2](../SpiceSharpTest/BasicExampleTests.cs#example_structure_resistor_2)]
+[!code-csharp[Resistor 2](../../SpiceSharpTest/BasicExampleTests.cs#example_structure_resistor_2)]
 
 Depending on the situation, parameter sets can be added for different types of simulations or situations.
 
@@ -24,11 +24,11 @@ Depending on the situation, parameter sets can be added for different types of s
 
 Simulations can be set up in a similar fashion. They also contain a property with parameter sets called **[Configurations](xref:SpiceSharp.Simulations.Simulation#SpiceSharp_Simulations_Simulation_Configurations)**. For example, a **[DC](xref:SpiceSharp.Simulations.DC)** simulation will use a **[DCConfiguration](xref:SpiceSharp.Simulations.DCConfiguration)** to determine the sweeps of the analysis. These can be accessed using the following code:
 
-[!code-csharp[DC example](../SpiceSharpTest/BasicExampleTests.cs#example_structure_dc)]
+[!code-csharp[DC example](../../SpiceSharpTest/BasicExampleTests.cs#example_structure_dc)]
 
 The **[DC](xref:SpiceSharp.Simulations.DC)** class also implements **[BaseSimulation](xref:SpiceSharp.Simulations.BaseSimulation)** which also means it uses a **[BaseConfiguration](xref:SpiceSharp.Simulations.BaseConfiguration)** to have access to for example the tolerance on accepted solutions.
 
-[!code-csharp[DC example 2](../SpiceSharpTest/BasicExampleTests.cs#example_structure_dc_2)]
+[!code-csharp[DC example 2](../../SpiceSharpTest/BasicExampleTests.cs#example_structure_dc_2)]
 
 ## Running simulations
 
@@ -58,4 +58,4 @@ Execution of the simulation is entirely dependent on the type of simulation. Aft
 
 In this phase the simulation will dispose of all the data previously allocated during setup.
 
-<div class="pull-left">[Previous: Transient analysis]</div> <div class="pull-right">[Next: Entities, components and models](entities.md)</div>
+<div class="pull-left">[Previous: Transient analysis](../tutorial/transientanalysis.md)</div> <div class="pull-right">[Next: Entities, components and models](entities.md)</div>

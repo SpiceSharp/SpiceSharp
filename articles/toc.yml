@@ -1,25 +1,9 @@
 - name: Getting started
-  href: gettingstarted.md
-- name: Analysis
-  href: analysis.md
-  items:
-  - name: DC analysis
-    href: dcanalysis.md
-  - name: AC analysis
-    href: acanalysis.md
-  - name: Transient analysis
-    href: transientanalysis.md
-- name: Spice# Structure
-  href: structure.md
-  items:
-    - name: Entities, components and models
-      href: entities.md
-    - name: Parameters
-      href: parameters.md
-- name: Custom models
-  href: custom_models.md
-  items:
-  - name: Modified Nodal Analysis
-    href: modified_nodal_analysis.md
-  - name: Base behaviors
-    href: base_behaviors.md
+  href: tutorial/toc.yml
+  topicHref: tutorial/gettingstarted.md
+- name: Spice# structure
+  href: structure/toc.yml
+  topicHref: structure/structure.md
+- name: Custom components
+  href: custom_components/toc.yml
+  topicHref: custom_components/custom_models.md
