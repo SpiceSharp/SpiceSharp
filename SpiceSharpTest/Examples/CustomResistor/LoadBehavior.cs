@@ -16,6 +16,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         private MatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
         private VectorElement<double> _aPtr, _bPtr;
         private BaseParameters _bp;
+        private BaseConfiguration _baseConfig;
 
         // Constructor
         public LoadBehavior(string name) : base(name)
@@ -25,6 +26,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         // Get the base parameters
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
             _bp = provider.GetParameterSet<BaseParameters>();
         }
 
@@ -68,7 +70,25 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             // Calculate the derivative w.r.t. one of the voltages
             var isNegative = v < 0;
             var c = Math.Pow(Math.Abs(v) / _bp.A, 1.0 / _bp.B);
-            var g = Math.Pow(Math.Abs(v) / _bp.A, 1.0 / _bp.B - 1.0) / _bp.A;
+            double g;
+
+            // Isolate special cases for the derivative
+            if (_bp.B.Equals(1.0))
+            {
+                // i = v/a
+                g = 1.0 / _bp.A;
+            }
+            else
+            {
+                // If v=0 the derivative is either 0 or infinity (avoid 0^(negative number))
+                if (v.Equals(0.0))
+                    g = _bp.B < 1.0 / _bp.A ? double.PositiveInfinity : 0.0;
+                else
+                    g = Math.Pow(Math.Abs(v) / _bp.A, 1.0 / _bp.B - 1.0) / _bp.A;
+            }
+
+            // At v=0
+            g += _baseConfig.Gmin;
 
             // If the voltage was reversed, reverse the current
             if (isNegative)

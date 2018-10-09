@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
@@ -105,6 +106,28 @@ namespace SpiceSharpTest.Simulations
                     Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
                 }
             };
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_FixedEuler_Expect_NoException()
+        {
+            // Create a circuit with a nonlinear component
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-6, 1e-6, 1e-5, 2e-5)),
+                new NonlinearResistor("NLR1", "in", "out"),
+                new Capacitor("C1", "out", "0", 1.0e-9)
+                );
+            ckt.Entities["NLR1"].SetParameter("a", 100.0);
+            ckt.Entities["NLR1"].SetParameter("b", 0.7);
+
+            // Create a transient analysis using Backward Euler with fixed timesteps
+            var tran = new Transient("tran", 1e-7, 10e-5);
+            tran.Configurations.Get<TimeConfiguration>().Method = new FixedEuler();
+            var export = new RealVoltageExport(tran, "out");
+            tran.ExportSimulationData += (sender, args) =>
+                Console.Write(args.Time.ToString(CultureInfo.InvariantCulture) + ", " +
+                                  export.Value.ToString(CultureInfo.InvariantCulture) + "; ");
             tran.Run(ckt);
         }
     }

@@ -213,13 +213,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </returns>
         public virtual bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
-            // Spice 3f5 ignores the first timestep
-            if (BaseTime.Equals(0.0))
-            {
-                newDelta = IntegrationStates[0].Delta;
-                return true;
-            }
-
             // Call event
             var args = new TruncateEvaluateEventArgs(simulation, MaxOrder)
             {

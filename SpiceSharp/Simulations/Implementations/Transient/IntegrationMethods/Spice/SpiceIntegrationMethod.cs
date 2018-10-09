@@ -275,6 +275,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="SpiceSharp.CircuitException">Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime)</exception>
         public override bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
+            // Spice 3f5 ignores the first timestep
+            if (BaseTime.Equals(0.0))
+            {
+                newDelta = IntegrationStates[0].Delta;
+                return true;
+            }
+
             var result = base.Evaluate(simulation, out newDelta);
 
             // Limit the expansion of the timestep
