@@ -124,10 +124,6 @@ namespace SpiceSharpTest.Simulations
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", 1e-7, 10e-5);
             tran.Configurations.Get<TimeConfiguration>().Method = new FixedEuler();
-            var export = new RealVoltageExport(tran, "out");
-            tran.ExportSimulationData += (sender, args) =>
-                Console.Write(args.Time.ToString(CultureInfo.InvariantCulture) + ", " +
-                                  export.Value.ToString(CultureInfo.InvariantCulture) + "; ");
             tran.Run(ckt);
         }
     }

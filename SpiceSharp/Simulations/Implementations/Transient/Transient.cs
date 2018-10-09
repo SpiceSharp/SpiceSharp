@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations

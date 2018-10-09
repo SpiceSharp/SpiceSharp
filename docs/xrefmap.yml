@@ -27886,6 +27886,196 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.IntegrationMethods.Breakpoints.SetBreakpoint
   nameWithType: Breakpoints.SetBreakpoint
+- uid: SpiceSharp.IntegrationMethods.FixedEuler
+  name: FixedEuler
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html
+  commentId: T:SpiceSharp.IntegrationMethods.FixedEuler
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler
+  nameWithType: FixedEuler
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.#ctor
+  name: FixedEuler()
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler__ctor
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.#ctor
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEuler()
+  nameWithType: FixedEuler.FixedEuler()
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.#ctor*
+  name: FixedEuler
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler__ctor_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.#ctor
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEuler
+  nameWithType: FixedEuler.FixedEuler
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Continue(SpiceSharp.Simulations.TimeSimulation,System.Double@)
+  name: Continue(TimeSimulation, ref Double)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Continue_SpiceSharp_Simulations_TimeSimulation_System_Double__
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.Continue(SpiceSharp.Simulations.TimeSimulation,System.Double@)
+  name.vb: Continue(TimeSimulation, ByRef Double)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Continue(SpiceSharp.Simulations.TimeSimulation, ref System.Double)
+  fullName.vb: SpiceSharp.IntegrationMethods.FixedEuler.Continue(SpiceSharp.Simulations.TimeSimulation, ByRef System.Double)
+  nameWithType: FixedEuler.Continue(TimeSimulation, ref Double)
+  nameWithType.vb: FixedEuler.Continue(TimeSimulation, ByRef Double)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Continue*
+  name: Continue
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Continue_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.Continue
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Continue
+  nameWithType: FixedEuler.Continue
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.CreateDerivative(System.Boolean)
+  name: CreateDerivative(Boolean)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_CreateDerivative_System_Boolean_
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.CreateDerivative(System.Boolean)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.CreateDerivative(System.Boolean)
+  nameWithType: FixedEuler.CreateDerivative(Boolean)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.CreateDerivative*
+  name: CreateDerivative
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_CreateDerivative_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.CreateDerivative
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.CreateDerivative
+  nameWithType: FixedEuler.CreateDerivative
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Evaluate(SpiceSharp.Simulations.TimeSimulation,System.Double@)
+  name: Evaluate(TimeSimulation, out Double)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Evaluate_SpiceSharp_Simulations_TimeSimulation_System_Double__
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.Evaluate(SpiceSharp.Simulations.TimeSimulation,System.Double@)
+  name.vb: Evaluate(TimeSimulation, ByRef Double)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Evaluate(SpiceSharp.Simulations.TimeSimulation, out System.Double)
+  fullName.vb: SpiceSharp.IntegrationMethods.FixedEuler.Evaluate(SpiceSharp.Simulations.TimeSimulation, ByRef System.Double)
+  nameWithType: FixedEuler.Evaluate(TimeSimulation, out Double)
+  nameWithType.vb: FixedEuler.Evaluate(TimeSimulation, ByRef Double)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Evaluate*
+  name: Evaluate
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Evaluate_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.Evaluate
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Evaluate
+  nameWithType: FixedEuler.Evaluate
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative
+  name: FixedEuler.FixedEulerStateDerivative
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html
+  commentId: T:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative
+  nameWithType: FixedEuler.FixedEulerStateDerivative
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.#ctor(SpiceSharp.IntegrationMethods.FixedEuler)
+  name: FixedEulerStateDerivative(FixedEuler)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative__ctor_SpiceSharp_IntegrationMethods_FixedEuler_
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.#ctor(SpiceSharp.IntegrationMethods.FixedEuler)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.FixedEulerStateDerivative(SpiceSharp.IntegrationMethods.FixedEuler)
+  nameWithType: FixedEuler.FixedEulerStateDerivative.FixedEulerStateDerivative(FixedEuler)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.#ctor*
+  name: FixedEulerStateDerivative
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative__ctor_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.#ctor
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.FixedEulerStateDerivative
+  nameWithType: FixedEuler.FixedEulerStateDerivative.FixedEulerStateDerivative
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Current
+  name: Current
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Current
+  commentId: P:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Current
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Current
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Current
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Current*
+  name: Current
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Current_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Current
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Current
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Current
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Derivative
+  name: Derivative
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Derivative
+  commentId: P:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Derivative
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Derivative
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Derivative
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Derivative*
+  name: Derivative
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Derivative_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Derivative
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Derivative
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Derivative
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Integrate
+  name: Integrate()
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Integrate
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Integrate
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Integrate()
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Integrate()
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Integrate*
+  name: Integrate
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Integrate_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Integrate
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Integrate
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Integrate
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item(System.Int32)
+  name: Item[Int32]
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Item_System_Int32_
+  commentId: P:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item[System.Int32]
+  fullName.vb: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item(System.Int32)
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Item[Int32]
+  nameWithType.vb: FixedEuler.FixedEulerStateDerivative.Item(Int32)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item*
+  name: Item
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Item_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Item
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Item
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Jacobian(System.Double)
+  name: Jacobian(Double)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Jacobian_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Jacobian(System.Double)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Jacobian(System.Double)
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Jacobian(Double)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Jacobian*
+  name: Jacobian
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_Jacobian_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Jacobian
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.Jacobian
+  nameWithType: FixedEuler.FixedEulerStateDerivative.Jacobian
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.RhsCurrent
+  name: RhsCurrent()
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_RhsCurrent
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.RhsCurrent
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.RhsCurrent()
+  nameWithType: FixedEuler.FixedEulerStateDerivative.RhsCurrent()
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.RhsCurrent*
+  name: RhsCurrent
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.html#SpiceSharp_IntegrationMethods_FixedEuler_FixedEulerStateDerivative_RhsCurrent_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.RhsCurrent
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.FixedEulerStateDerivative.RhsCurrent
+  nameWithType: FixedEuler.FixedEulerStateDerivative.RhsCurrent
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Initialize(SpiceSharp.Simulations.TimeSimulation)
+  name: Initialize(TimeSimulation)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Initialize_SpiceSharp_Simulations_TimeSimulation_
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.Initialize(SpiceSharp.Simulations.TimeSimulation)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Initialize(SpiceSharp.Simulations.TimeSimulation)
+  nameWithType: FixedEuler.Initialize(TimeSimulation)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Initialize*
+  name: Initialize
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Initialize_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.Initialize
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Initialize
+  nameWithType: FixedEuler.Initialize
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Probe(SpiceSharp.Simulations.TimeSimulation,System.Double)
+  name: Probe(TimeSimulation, Double)
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Probe_SpiceSharp_Simulations_TimeSimulation_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.FixedEuler.Probe(SpiceSharp.Simulations.TimeSimulation,System.Double)
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Probe(SpiceSharp.Simulations.TimeSimulation, System.Double)
+  nameWithType: FixedEuler.Probe(TimeSimulation, Double)
+- uid: SpiceSharp.IntegrationMethods.FixedEuler.Probe*
+  name: Probe
+  href: api/SpiceSharp.IntegrationMethods.FixedEuler.html#SpiceSharp_IntegrationMethods_FixedEuler_Probe_
+  commentId: Overload:SpiceSharp.IntegrationMethods.FixedEuler.Probe
+  isSpec: "True"
+  fullName: SpiceSharp.IntegrationMethods.FixedEuler.Probe
+  nameWithType: FixedEuler.Probe
 - uid: SpiceSharp.IntegrationMethods.Gear
   name: Gear
   href: api/SpiceSharp.IntegrationMethods.Gear.html

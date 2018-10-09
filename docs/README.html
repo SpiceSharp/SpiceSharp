@@ -70,6 +70,22 @@
 <li>The general structure of Spice#.</li>
 <li>A tutorial on how to implement your own <em>custom</em> model equations (prerequisite knowledge needed).</li>
 </ul>
+<h2 id="quickstart">Quickstart</h2>
+<p>Simulating a circuit is relatively straightforward. For example:</p>
+<pre><code class="lang-csharp">// Build the circuit
+var ckt = new Circuit(
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0),
+    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e3),
+    new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e3)
+);
+
+// Create a DC sweep and register to the event for exporting simulation data
+var dc = new DC(&quot;dc&quot;, &quot;V1&quot;, 0.0, 5.0, 0.001);
+dc.ExportSimulationData += (sender, args) =&gt; Console.WriteLine(args.GetVoltage(&quot;out&quot;));
+
+// Run the simulation
+dc.Run(ckt);
+</code></pre><p>Most standard Spice-components are available, and building your own custom components is also possible!</p>
 <h2 id="installation">Installation</h2>
 <p>Spice# is available as a <strong>NuGet Package</strong>.</p>
 <p><a href="https://www.nuget.org/packages/SpiceSharp/"><img src="https://buildstats.info/nuget/spicesharp" alt="NuGet Badge"></a> SpiceSharp</p>

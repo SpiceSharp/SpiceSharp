@@ -27,9 +27,6 @@ namespace SpiceSharp.Behaviors
         /// <exception cref="ArgumentNullException">method</exception>
         public virtual void CreateStates(IntegrationMethod method)
         {
-			if (method == null)
-				throw new ArgumentNullException(nameof(method));
-
             // Do nothing (for now)
         }
 
@@ -44,9 +41,6 @@ namespace SpiceSharp.Behaviors
         /// </remarks>
         public virtual void GetDcState(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
-
             // Do nothing (for now)
         }
 

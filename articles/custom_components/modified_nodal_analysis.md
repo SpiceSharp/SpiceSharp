@@ -31,18 +31,18 @@ What happens if we introduce a *voltage source* into the circuit?
 
 <p align="center"><img src="images/example_circuit_mna_2.svg" alt="Example circuit" /></p>
 
-We can't use the KCL equation now, because it is in the nature of a voltage source to *not care* about currents! This is where we get creative. We define a new unknown variable, ![i_V](https://latex.codecogs.com/svg.latex?\inline&space;i_V), such that we can use it in the Y-matrix. We also add one more equation to the system:
+We can't use the KCL equation now, because it is in the nature of a voltage source to *not care* about currents! This is where we get creative. We define a new unknown variable, the current through the voltage source ![i_V](https://latex.codecogs.com/svg.latex?\inline&space;i_V). We also add the equation of the voltage source to the system of equations:
 
 <p align="center"><a href="https://www.codecogs.com/eqnedit.php?latex=v_1&space;=&space;1V"><img src="https://latex.codecogs.com/svg.latex?v_1&space;=&space;1V" /></a></p>
 
-But what we find is a useful result: we can again combine it all in a Y-matrix and RHS vector!
+And what we find is the useful result: we can combine it all using a matrix and vector again!
 
 <p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{pmatrix}&space;\frac{1}{5\Omega}&space;&&space;-\frac{1}{5\Omega}&space;&&space;0&space;&&space;1&space;\\&space;-\frac{1}{5\Omega}&space;&&space;\frac{1}{5\Omega}&space;&plus;&space;\frac{1}{10\Omega}&space;&plus;&space;\frac{1}{7\Omega}&space;&&space;-\frac{1}{7\Omega}&space;&&space;0&space;\\&space;0&space;&&space;-\frac{1}{7\Omega}&space;&&space;\frac{1}{7\Omega}&space;&&space;0&space;\\&space;1&space;&&space;0&space;&&space;0&space;&&space;0&space;\end{pmatrix}&space;\begin{pmatrix}&space;v_1&space;\\&space;v_2&space;\\&space;v_3&space;\\&space;i_V&space;\end{pmatrix}&space;=&space;\begin{pmatrix}&space;0&space;\\&space;0&space;\\&space;1.5A&space;\\&space;1V&space;\end{pmatrix}" /></p>
 
 We notice the following properties:
-- We added an unknown *current*. For regular Nodal Analysis, the unknowns are *always a voltage*.
+- We added an unknown *current*. For *regular* Nodal Analysis, the unknowns are *always a voltage*.
 - The circuit got *larger* because we added a voltage source. While this may not be desirable when working it out by hand, a simulator will rarely feel the difference.
-- Each component of the circuit has its own unique contribution to the admittance matrix and current vector. In fact, the resistors only affect the elements to which they are connected to. For example, the 5 ohm resistor only affects the rows and columns of ![v_1](https://www.codecogs.com/svg.latex?\inline&space;v_1) and ![v_2](https://www.codecogs.com/svg.latex?\inline&space;v_2). This turns out to be an important general property! A Spice simulator will give the matrix and vector to each component, and the component will *stamp* the matrix and vector with contributions that depend *only* on that component!
+- Each component of the circuit has its own unique contribution to the admittance matrix and current vector. This is a direct consequence of KCL that says that the **sum** of currents needs to total to 0. In fact, the resistors only affect the elements to which they are connected to - ie. the nodes where they add or subtract current. For example, the 5 ohm resistor only affects the rows and columns of ![v_1](https://www.codecogs.com/svg.latex?\inline&space;v_1) and ![v_2](https://www.codecogs.com/svg.latex?\inline&space;v_2). This turns out to be an important general property! A Spice simulator will give the matrix and vector to each component, and the component will *stamp* the matrix and vector with contributions that depend *only* on that component!
 
 ## Nonlinear components
 
