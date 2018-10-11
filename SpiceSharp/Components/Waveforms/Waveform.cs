@@ -10,18 +10,23 @@ namespace SpiceSharp.Components
     public abstract class Waveform : BaseParameter
     {
         /// <summary>
+        /// Gets the current waveform value at the last probed timepoint.
+        /// </summary>
+        /// <value>
+        /// The waveform value.
+        /// </value>
+        public virtual double Value { get; protected set; }
+        
+        /// <summary>
         /// Sets up the waveform.
         /// </summary>
         public abstract void Setup();
 
         /// <summary>
-        /// Calculates the value of the waveform at a specific timepoint.
+        /// Indicates a new timepoint is being probed.
         /// </summary>
-        /// <param name="time">The time point.</param>
-        /// <returns>
-        /// The value of the waveform.
-        /// </returns>
-        public abstract double At(double time);
+        /// <param name="simulation">The time-based simulation.</param>
+        public abstract void Probe(TimeSimulation simulation);
 
         /// <summary>
         /// Accepts the current timepoint.

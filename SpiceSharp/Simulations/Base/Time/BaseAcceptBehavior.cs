@@ -17,6 +17,12 @@ namespace SpiceSharp.Behaviors
         protected BaseAcceptBehavior(string name) : base(name) { }
 
         /// <summary>
+        /// Called when a new timepoint is being tested.
+        /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
+        public abstract void Probe(TimeSimulation simulation);
+
+        /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>

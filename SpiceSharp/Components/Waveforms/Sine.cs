@@ -110,6 +110,7 @@ namespace SpiceSharp.Components
             _freq = Frequency * 2.0 * Math.PI;
             _td = Delay;
             _theta = Theta;
+            Value = _vo;
 
             // Some checks
             if (_freq < 0)
@@ -117,14 +118,12 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Calculates the value of the waveform at a specific timepoint.
+        /// Indicates a new timepoint is being probed.
         /// </summary>
-        /// <param name="time">The time point.</param>
-        /// <returns>
-        /// The value of the waveform.
-        /// </returns>
-        public override double At(double time)
+        /// <param name="simulation">The time-based simulation.</param>
+        public override void Probe(TimeSimulation simulation)
         {
+            var time = simulation.Method.Time;
             time -= _td;
 
             // Calculate sine wave result (no offset)
@@ -139,7 +138,7 @@ namespace SpiceSharp.Components
                 result *= Math.Exp(-time * _theta);
 
             // Return result (with offset)
-            return _vo + result;
+            Value = _vo + result;
         }
 
         /// <summary>
@@ -149,6 +148,12 @@ namespace SpiceSharp.Components
         public override void Accept(TimeSimulation simulation)
         {
             // Do nothing
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
+            // Initialize the sinewave
+            if (simulation.Method.Time.Equals(0.0))
+                Value = _vo;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
@@ -8,11 +7,6 @@ namespace SpiceSharp.Simulations
     /// </summary>
     public class Transient : TimeSimulation
     {
-        /// <summary>
-        /// Behaviors for accepting a timepoint
-        /// </summary>
-        private BehaviorList<BaseAcceptBehavior> _acceptBehaviors;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
@@ -45,34 +39,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Set up the simulation.
-        /// </summary>
-        /// <param name="circuit">The circuit that will be used.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
-        protected override void Setup(Circuit circuit)
-        {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
-            base.Setup(circuit);
-
-            // Get behaviors and configurations
-            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Entities);
-        }
-
-        /// <summary>
-        /// Destroys the simulation.
-        /// </summary>
-        protected override void Unsetup()
-        {
-            // Remove references
-            for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Unsetup(this);
-            _acceptBehaviors = null;
-
-            base.Unsetup();
-        }
-
-        /// <summary>
         /// Executes the simulation.
         /// </summary>
         /// <exception cref="SpiceSharp.CircuitException">{0}: transient terminated".FormatString(Name)</exception>
@@ -94,10 +60,7 @@ namespace SpiceSharp.Simulations
                 while (true)
                 {
                     // Accept the last evaluated time point
-                    for (var i = 0; i < _acceptBehaviors.Count; i++)
-                        _acceptBehaviors[i].Accept(this);
-                    Method.Accept(this);
-                    Statistics.Accepted++;
+                    Accept();
 
                     // Export the current timepoint
                     if (Method.Time >= timeConfig.InitTime)
@@ -122,7 +85,7 @@ namespace SpiceSharp.Simulations
                     while (true)
                     {
                         // Probe the next time point
-                        Method.Probe(this, newDelta);
+                        Probe(newDelta);
 
                         // Try to solve the new point
                         var converged = TimeIterate(timeConfig.TranMaxIterations);

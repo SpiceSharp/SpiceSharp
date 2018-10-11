@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
                 // Use the waveform if possible
                 if (_bp.Waveform != null)
-                    value = _bp.Waveform.At(time);
+                    value = _bp.Waveform.Value;
                 else
                     value = _bp.DcValue * state.SourceFactor;
             }

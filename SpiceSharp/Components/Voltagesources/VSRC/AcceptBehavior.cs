@@ -35,6 +35,15 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         }
 
         /// <summary>
+        /// Called when a new timepoint is being tested.
+        /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
+        public override void Probe(TimeSimulation simulation)
+        {
+            _bp.Waveform?.Probe(simulation);
+        }
+
+        /// <summary>
         /// Accept the current timepoint
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>

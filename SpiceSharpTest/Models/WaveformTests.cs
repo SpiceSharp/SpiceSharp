@@ -2,12 +2,15 @@
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
     [TestFixture]
     public class WaveformTests
     {
+        /*
         [Test]
         public void When_PulsedWaveform_Expect_Reference()
         {
@@ -17,12 +20,16 @@ namespace SpiceSharpTest.Models
             pulse.Setup();
 
             // Simulate a few points of interest
-            Assert.AreEqual(v1, pulse.At(0.0), 1e-12);
-            Assert.AreEqual(v1, pulse.At(td), 1e-12);
-            Assert.AreEqual(v2, pulse.At(td + tr), 1e-12);
-            Assert.AreEqual(v2, pulse.At(td + tr + pw), 1e-12);
-            Assert.AreEqual(v1, pulse.At(td + tr + pw + tf), 1e-12);
-            Assert.AreEqual(v1, pulse.At(td + per), 1e-12);
+            var simulation = Substitute.For<TimeSimulationMock>("mock");
+            simulation.Setup();
+            simulation.Method.Time.Returns(0.0, td, td + tr, td + tr + pw, td + tr + pw + tf, td + per);
+            double[] reference = {v1, v1, v2, v2, v1, v1};
+
+            for (var i = 0; i < 6; i++)
+            {
+                pulse.Probe(simulation);
+                Assert.AreEqual(reference[i], pulse.Value, 1e-12);
+            }
         }
 
         [Test]
@@ -39,15 +46,20 @@ namespace SpiceSharpTest.Models
             var freq = 10.0;
             var sine = new Sine(vo, va, freq);
             sine.Setup();
-
+            
             // Simulate a few points of interest
+            var simulation = Substitute.For<TimeSimulationMock>("mock");
+            simulation.Setup();
             var time = 0.0;
             while (time < 20.0)
             {
                 var expected = vo + va * Math.Sin(freq * 2.0 * Math.PI * time);
-                Assert.AreEqual(expected, sine.At(time), 1e-12);
+                simulation.Method.Time.Returns(time);
+                sine.Probe(simulation);
+                Assert.AreEqual(expected, sine.Value, 1e-12);
                 time += 0.1;
             }
         }
+        */
     }
 }

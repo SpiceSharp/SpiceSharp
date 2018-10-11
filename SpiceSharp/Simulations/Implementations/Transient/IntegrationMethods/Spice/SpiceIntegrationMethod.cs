@@ -306,9 +306,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Destroys the integration method.
         /// </summary>
-        public override void Unsetup()
+        public override void Unsetup(TimeSimulation simulation)
         {
-            base.Unsetup();
+            base.Unsetup(simulation);
 
             // Clear prediction
             Prediction = null;

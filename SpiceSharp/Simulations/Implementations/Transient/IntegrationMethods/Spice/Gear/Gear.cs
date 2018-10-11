@@ -66,9 +66,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Destroys the integration method.
         /// </summary>
-        public override void Unsetup()
+        public override void Unsetup(TimeSimulation simulation)
         {
-            base.Unsetup();
+            base.Unsetup(simulation);
 
             // Reset coefficients
             for (var i = 0; i < Coefficients.Length; i++)

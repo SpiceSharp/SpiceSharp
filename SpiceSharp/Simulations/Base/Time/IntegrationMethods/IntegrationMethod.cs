@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
@@ -55,7 +56,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <value>
         /// The current time.
         /// </value>
-        public double Time { get; private set; }
+        public virtual double Time { get; private set; }
 
         /// <summary>
         /// The first order derivative of any variable that is
@@ -259,13 +260,14 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Destroys the integration method.
         /// </summary>
-        public virtual void Unsetup()
+        /// <param name="simulation">The simulation.</param>
+        public virtual void Unsetup(TimeSimulation simulation)
         {
             StateManager.Unsetup();
 
             // Clear the timesteps and solutions
-            IntegrationStates.Clear((IntegrationState) null);
-            
+            IntegrationStates.Clear((IntegrationState)null);
+
             // Clear variables
             Order = 0;
             Slope = 0.0;

@@ -8,19 +8,20 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.DelayBehaviors
 {
     /// <summary>
-    /// Loading behavior for a <see cref="Delay" />
+    /// Load behavior for a <see cref="Delay" />.
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
+    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
     public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
-        // Necessary behaviors and parameters
+        /// <summary>
+        /// Nodes
+        /// </summary>
         private int _input, _output;
         public int Branch { get; private set; }
-
-        protected MatrixElement<double> OutBranchPtr { get; private set; }
-        protected MatrixElement<double> BranchOutPtr { get; private set; }
-        protected MatrixElement<double> BranchInPtr { get; private set; }
-
+        protected MatrixElement<double> OutputBranchPtr { get; private set; }
+        protected MatrixElement<double> BranchOutputPtr { get; private set; }
+        protected MatrixElement<double> BranchInputPtr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadBehavior"/> class.
@@ -29,7 +30,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        public LoadBehavior(string name) : base(name)
+        public LoadBehavior(string name)
+            : base(name)
         {
         }
 
@@ -51,10 +53,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="solver">The solver.</param>
         public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            Branch = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            OutBranchPtr = solver.GetMatrixElement(_output, Branch);
-            BranchOutPtr = solver.GetMatrixElement(Branch, _output);
-            BranchInPtr = solver.GetMatrixElement(Branch, _input);
+            Branch = variables.Create(Name.Combine("branch")).Index;
+
+            OutputBranchPtr = solver.GetMatrixElement(_output, Branch);
+            BranchOutputPtr = solver.GetMatrixElement(Branch, _output);
+            BranchInputPtr = solver.GetMatrixElement(Branch, _input);
         }
 
         /// <summary>
@@ -63,13 +66,13 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="simulation">The base simulation.</param>
         public override void Load(BaseSimulation simulation)
         {
-            var state = simulation.RealState;
+            // Act like a voltage source
+            OutputBranchPtr.Value += 1.0;
+            BranchOutputPtr.Value += 1.0;
 
-            // In DC, the delay should act like a short-circuit without loading the input
-            OutBranchPtr.Value += 1.0;
-            BranchOutPtr.Value += 1.0;
-            if (state.UseDc)
-                BranchInPtr.Value -= 1.0;
+            // In DC, this should act like a short-circuit
+            if (simulation.RealState.UseDc)
+                BranchInputPtr.Value -= 1.0;
         }
     }
 }

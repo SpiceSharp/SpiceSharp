@@ -23,6 +23,7 @@ namespace SpiceSharp.Simulations
         /// Time-domain behaviors.
         /// </summary>
         private BehaviorList<BaseTransientBehavior> _transientBehaviors;
+        private BehaviorList<BaseAcceptBehavior> _acceptBehaviors;
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
         private bool _shouldReorder = true, _useIc = false;
 
@@ -83,6 +84,7 @@ namespace SpiceSharp.Simulations
             _useIc = config.UseIc;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
+            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Entities);
 
             // Allow all transient behaviors to allocate equation elements and create states
             for (var i = 0; i < _transientBehaviors.Count; i++)
@@ -143,9 +145,12 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _transientBehaviors.Count; i++)
                 _transientBehaviors[i].Unsetup(this);
             _transientBehaviors = null;
+            for (var i = 0; i < _acceptBehaviors.Count; i++)
+                _acceptBehaviors[i].Unsetup(this);
+            _acceptBehaviors = null;
 
             // Destroy the integration method
-            Method.Unsetup();
+            Method.Unsetup(this);
             Method = null;
 
             // Destroy the initial conditions
@@ -339,6 +344,28 @@ namespace SpiceSharp.Simulations
                 for (var i = 0; i < _transientBehaviors.Count; i++)
                     _transientBehaviors[i].Transient(this);
             }
+        }
+
+        /// <summary>
+        /// Accepts the current simulation state as a valid timepoint.
+        /// </summary>
+        protected void Accept()
+        {
+            for (var i = 0; i < _acceptBehaviors.Count; i++)
+                _acceptBehaviors[i].Accept(this);
+            Method.Accept(this);
+            Statistics.Accepted++;
+        }
+
+        /// <summary>
+        /// Probe for a new time point.
+        /// </summary>
+        /// <param name="delta">The timestep.</param>
+        protected void Probe(double delta)
+        {
+            Method.Probe(this, delta);
+            for (var i = 0; i < _acceptBehaviors.Count; i++)
+                _acceptBehaviors[i].Probe(this);
         }
     }
 }

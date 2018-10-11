@@ -143,18 +143,17 @@ namespace SpiceSharp.Components
                 throw new CircuitException("Invalid period {0}".FormatString(_per));
             if (_per < _tr + _pw + _tf)
                 throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(_per));
+            Value = _v1;
         }
 
         /// <summary>
-        /// Calculates the value of the waveform at a specific timepoint.
+        /// Indicates a new timepoint is being probed.
         /// </summary>
-        /// <param name="time">The time point.</param>
-        /// <returns>
-        /// The value of the waveform.
-        /// </returns>
-        public override double At(double time)
+        /// <param name="simulation">The time-based simulation.</param>
+        public override void Probe(TimeSimulation simulation)
         {
             // Get a relative time variable
+            var time = simulation.Method.Time;
             time -= _td;
             if (time > _per)
             {
@@ -163,12 +162,13 @@ namespace SpiceSharp.Components
             }
 
             if (time <= 0.0 || time >= _tr + _pw + _tf)
-                return _v1;
-            if (time >= _tr && time <= _tr + _pw)
-                return _v2;
-            if (time > 0 && time < _tr)
-                return _v1 + (_v2 - _v1) * time / _tr;
-            return _v2 + (_v1 - _v2) * (time - _tr - _pw) / _tf;
+                Value = _v1;
+            else if (time >= _tr && time <= _tr + _pw)
+                Value = _v2;
+            else if (time > 0 && time < _tr)
+                Value = _v1 + (_v2 - _v1) * time / _tr;
+            else
+                Value = _v2 + (_v1 - _v2) * (time - _tr - _pw) / _tf;
         }
 
         /// <summary>
@@ -181,59 +181,61 @@ namespace SpiceSharp.Components
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            // Should not be here
-            if (simulation.Method == null)
-                return;
+            // Initialize the pulse
+            if (simulation.Method.Time.Equals(0.0))
+                Value = _v1;
 
             // Are we at a breakpoint?
-            if (!(simulation.Method is IBreakpoints method))
-                return;
-            var breaks = method.Breakpoints;
-            if (!method.Break)
-                return;
+            if (simulation.Method is IBreakpoints method)
+            {
+                var breaks = method.Breakpoints;
+                if (!method.Break)
+                    return;
 
-            // Find the time relative to the first period
-            var time = method.Time - _td;
-            var basetime = 0.0;
-            if (time >= _per)
-            {
-                basetime = _per * Math.Floor(time / _per);
-                time -= basetime;
-            }
-            var tol = 1e-7 * _pw;
+                // Find the time relative to the first period
+                var time = method.Time - _td;
+                var basetime = 0.0;
+                if (time >= _per)
+                {
+                    basetime = _per * Math.Floor(time / _per);
+                    time -= basetime;
+                }
 
-            // Are we at the start of a breakpoint?
-            if (time <= 0 || time >= _tr + _pw + _tf)
-            {
-                if (Math.Abs(time - 0) <= tol)
-                    breaks.SetBreakpoint(basetime + _tr + _td);
-                else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
-                    breaks.SetBreakpoint(basetime + _per + _td);
-                else if (time <= -_td)
-                    breaks.SetBreakpoint(basetime + _td);
-                else if (Math.Abs(_per - time) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _tr + _per);
-            }
-            else if (time >= _tr && time <= _tr + _pw)
-            {
-                if (Math.Abs(time - _tr) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _tr + _pw);
-                else if (Math.Abs(_tr + _pw - time) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
-            }
-            else if (time > 0 && time < _tr)
-            {
-                if (Math.Abs(time - 0) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _tr);
-                else if (Math.Abs(time - _tr) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _tr + _pw);
-            }
-            else
-            {
-                if (Math.Abs(_tr + _pw - time) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
-                else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
-                    breaks.SetBreakpoint(basetime + _td + _per);
+                var tol = 1e-7 * _pw;
+
+                // Are we at the start of a breakpoint?
+                if (time <= 0 || time >= _tr + _pw + _tf)
+                {
+                    if (Math.Abs(time - 0) <= tol)
+                        breaks.SetBreakpoint(basetime + _tr + _td);
+                    else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
+                        breaks.SetBreakpoint(basetime + _per + _td);
+                    else if (time <= -_td)
+                        breaks.SetBreakpoint(basetime + _td);
+                    else if (Math.Abs(_per - time) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _tr + _per);
+                }
+                else if (time >= _tr && time <= _tr + _pw)
+                {
+                    if (Math.Abs(time - _tr) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _tr + _pw);
+                    else if (Math.Abs(_tr + _pw - time) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
+                }
+                else if (time > 0 && time < _tr)
+                {
+                    if (Math.Abs(time - 0) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _tr);
+                    else if (Math.Abs(time - _tr) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _tr + _pw);
+                }
+                else
+                {
+                    if (Math.Abs(_tr + _pw - time) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
+                    else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
+                        breaks.SetBreakpoint(basetime + _td + _per);
+                }
             }
         }
     }
