@@ -234,8 +234,6 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Store the current solution
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
-
-            // Allow modifying the timestep (eg. for breakpoint systems)
             OnAcceptSolution(EventArgs.Empty);
         }
 

@@ -54,15 +54,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Timesteps in history
         /// </summary>
-        private readonly T[] _history;
+        private T[] _history;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ArrayHistory{T}"/> class.
         /// </summary>
         /// <param name="length">The number of points to store.</param>
         public ArrayHistory(int length)
-            : base(length)
         {
+            Length = length;
             _history = new T[length];
         }
 
@@ -72,8 +72,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="length">The number of points to store.</param>
         /// <param name="defaultValue">The default value.</param>
         public ArrayHistory(int length, T defaultValue)
-            : base(length)
         {
+            Length = length;
             _history = new T[length];
             for (var i = 0; i < length; i++)
                 _history[i] = defaultValue;
@@ -86,11 +86,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="generator">The function that generates the initial values.</param>
         /// <exception cref="ArgumentNullException">generator</exception>
         public ArrayHistory(int length, Func<int, T> generator)
-            : base(length)
         {
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
 
+            Length = length;
             for (var i = 0; i < length; i++)
                 _history[i] = generator(i);
         }
@@ -116,6 +116,18 @@ namespace SpiceSharp.IntegrationMethods
             for (var i = Length - 1; i > 0; i--)
                 _history[i] = _history[i - 1];
             _history[0] = newValue;
+        }
+
+        /// <summary>
+        /// Expands the specified new size.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        public override void Expand(int newSize)
+        {
+            if (newSize < Length)
+                return;
+            Array.Resize(ref _history, newSize);
+            Length = newSize;
         }
 
         /// <summary>

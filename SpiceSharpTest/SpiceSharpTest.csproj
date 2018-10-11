@@ -60,6 +60,7 @@
     <Compile Include="Models\Currentsources\CCCS\CurrentControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\VCCS\VoltageControlledCurrentSourceTests.cs" />
+    <Compile Include="Models\Distributed\DelayTests.cs" />
     <Compile Include="Models\RLC\CAP\CapacitorTests.cs" />
     <Compile Include="Models\RLC\IND\InductorTests.cs" />
     <Compile Include="Models\RLC\MUT\MutualInductanceTests.cs" />

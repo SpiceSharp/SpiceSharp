@@ -13,13 +13,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// A class that represents a node in the history.
         /// </summary>
-        protected class NodeHistoryPoint
+        protected class Node
         {
             /// <summary>
-            /// Gets the value.
+            /// Gets or sets the node value.
             /// </summary>
             /// <value>
-            /// The value.
+            /// The node value.
             /// </value>
             public T Value { get; set; }
 
@@ -29,7 +29,7 @@ namespace SpiceSharp.IntegrationMethods
             /// <value>
             /// The previous node.
             /// </value>
-            public NodeHistoryPoint Previous { get; set; }
+            public Node Previous { get; set; }
 
             /// <summary>
             /// Gets or sets the next node.
@@ -37,13 +37,13 @@ namespace SpiceSharp.IntegrationMethods
             /// <value>
             /// The next node.
             /// </value>
-            public NodeHistoryPoint Next { get; set; }
+            public Node Next { get; set; }
         }
 
         /// <summary>
         /// The current point
         /// </summary>
-        private NodeHistoryPoint _currentPoint;
+        private Node _currentPoint;
 
         /// <summary>
         /// Gets or sets the current value.
@@ -103,14 +103,15 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="length">The number of points to store.</param>
         public NodeHistory(int length)
-            : base(length)
         {
+            Length = length;
+
             // Create a cycle
-            var first = new NodeHistoryPoint();
+            var first = new Node();
             var current = first;
             for (var i = 1; i < length; i++)
             {
-                current.Next = new NodeHistoryPoint
+                current.Next = new Node
                 {
                     Previous = current
                 };
@@ -126,14 +127,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="length">The number of points to store.</param>
         /// <param name="defaultValue">The default value.</param>
         public NodeHistory(int length, T defaultValue)
-            : base(length)
         {
             // Create a cycle
-            var first = new NodeHistoryPoint();
+            var first = new Node();
             var current = first;
             for (var i = 1; i < length; i++)
             {
-                current.Next = new NodeHistoryPoint
+                current.Next = new Node
                 {
                     Previous = current,
                     Value = defaultValue
@@ -151,20 +151,20 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="generator">The function that generates the initial values.</param>
         /// <exception cref="ArgumentNullException">generator</exception>
         public NodeHistory(int length, Func<int, T> generator)
-            : base(length)
         {
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
+            Length = length;
 
             // Create a cycle
-            var first = new NodeHistoryPoint
+            var first = new Node
             {
                 Value = generator(0)
             };
             var current = first;
             for (var i = 1; i < length; i++)
             {
-                current.Next = new NodeHistoryPoint
+                current.Next = new Node
                 {
                     Previous = current,
                     Value = generator(i)
@@ -191,6 +191,34 @@ namespace SpiceSharp.IntegrationMethods
         {
             _currentPoint = _currentPoint.Next;
             _currentPoint.Value = newValue;
+        }
+
+        /// <summary>
+        /// Expand the history length.
+        /// </summary>
+        /// <param name="newLength">The new number of points in history to track.</param>
+        public override void Expand(int newLength)
+        {
+            if (newLength < Length)
+                return;
+
+            var last = _currentPoint.Next;
+            for (var i = Length; i < newLength; i++)
+            {
+                // Create elements between current and last
+                var newElt = new Node
+                {
+                    Next = last
+                };
+                last.Previous = newElt;
+                last = newElt;
+            }
+
+            // Close links
+            _currentPoint.Next = last;
+            last.Previous = _currentPoint;
+
+            Length = newLength;
         }
 
         /// <summary>

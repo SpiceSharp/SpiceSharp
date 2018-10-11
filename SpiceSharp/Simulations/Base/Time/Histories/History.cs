@@ -34,7 +34,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <value>
         /// The length.
         /// </value>
-        public int Length { get; }
+        public int Length { get; protected set; }
 
         /// <summary>
         /// Gets all points in the history.
@@ -43,18 +43,6 @@ namespace SpiceSharp.IntegrationMethods
         /// The points.
         /// </value>
         protected abstract IEnumerable<T> Points { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="History{T}"/> class.
-        /// </summary>
-        /// <param name="length">The number of points to store.</param>
-        /// <exception cref="SpiceSharp.CircuitException">Not enough points</exception>
-        protected History(int length)
-        {
-            if (length < 1)
-                throw new CircuitException("Not enough points");
-            Length = length;
-        }
 
         /// <summary>
         /// Cycles through history.
@@ -66,6 +54,12 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="newValue">The new value.</param>
         public abstract void Store(T newValue);
+
+        /// <summary>
+        /// Expand the history length.
+        /// </summary>
+        /// <param name="newLength">The new number of points in history to track.</param>
+        public abstract void Expand(int newLength);
 
         /// <summary>
         /// Clear the whole history with the same value.
