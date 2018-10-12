@@ -60,6 +60,8 @@ namespace SpiceSharp.Components.Distributed
             Delay = delay;
             Size = size;
             Values = new double[size];
+            if (delay <= 0)
+                throw new CircuitException("Invalid delay {0}.".FormatString(delay));
 
             // Setup our linked list
             _reference = _oldest = _probed = new Node(size)

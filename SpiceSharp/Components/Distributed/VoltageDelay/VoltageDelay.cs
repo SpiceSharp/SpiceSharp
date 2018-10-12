@@ -7,10 +7,10 @@ namespace SpiceSharp.Components
     /// A component that will drive an output to a delayed input voltage.
     /// </summary>
     /// <seealso cref="SpiceSharp.Components.Component" />
-    [Pin(0, "input"), Pin(1, "output")]
+    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-")]
     public class VoltageDelay : Component
     {
-        private const int VoltageDelayPinCount = 2;
+        private const int VoltageDelayPinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageDelay"/> class.
@@ -31,15 +31,17 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageDelay"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="input">The input node.</param>
-        /// <param name="output">The output node.</param>
-        /// <param name="delay"></param>
-        public VoltageDelay(string name, string input, string output, double delay)
+        /// <param name="name">The name of the voltage-controlled voltage source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="controlPos">The positive controlling node.</param>
+        /// <param name="controlNeg">The negative controlling node.</param>
+        /// <param name="delay">The delay.</param>
+        public VoltageDelay(string name, string pos, string neg, string controlPos, string controlNeg, double delay)
             : this(name)
         {
             ParameterSets.Get<BaseParameters>().Delay = delay;
-            Connect(input, output);
+            Connect(pos, neg, controlPos, controlNeg);
         }
     }
 }

@@ -6,6 +6,11 @@ using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
+    /// <summary>
+    /// Transient
+    /// </summary>
+    /// <seealso cref="SpiceSharp.Behaviors.BaseTransientBehavior" />
+    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
     public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
     {
         // Necessary behaviors and parameters
@@ -15,7 +20,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _input, _branch;
+        private int _contPosNode, _contNegNode, _branch;
         protected VectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
@@ -44,7 +49,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="pins">Pin indices in order</param>
         public void Connect(params int[] pins)
         {
-            _input = pins[0];
+            _contPosNode = pins[2];
+            _contNegNode = pins[3];
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="solver">The solver.</param>
         public override void GetEquationPointers(Solver<double> solver)
         {
-            _branch = _load.Branch;
+            _branch = _load.BranchEq;
             BranchPtr = solver.GetRhsElement(_branch);
         }
 
@@ -88,7 +94,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </remarks>
         public override void GetDcState(TimeSimulation simulation)
         {
-            var input = simulation.RealState.Solution[_input];
+            var sol = simulation.RealState.Solution;
+            var input = sol[_contPosNode] - sol[_contNegNode];
             DelayedSignal.SetProbedValues(input);
         }
 
@@ -98,8 +105,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="simulation">The time-based simulation.</param>
         public override void Transient(TimeSimulation simulation)
         {
-            // Add the RHS value
-            var input = simulation.RealState.Solution[_input];
+            var sol = simulation.RealState.Solution;
+            var input = sol[_contPosNode] - sol[_contNegNode];
             DelayedSignal.SetProbedValues(input);
             BranchPtr.Value += DelayedSignal.Values[0];
         }
