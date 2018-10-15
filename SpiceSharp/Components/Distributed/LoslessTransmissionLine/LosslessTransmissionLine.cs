@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
             Connect(pos1, neg1, pos2, neg2);
 
             var bp = ParameterSets.Get<BaseParameters>();
-            bp.Impedance.Value = impedance;
+            bp.Impedance = impedance;
             bp.Delay.Value = delay;
         }
     }

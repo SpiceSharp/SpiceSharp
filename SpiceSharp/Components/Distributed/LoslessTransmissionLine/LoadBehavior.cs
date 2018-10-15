@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Algebra;
+﻿using System;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -63,6 +64,10 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="pins">Pin indices in order</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _pos1 = pins[0];
             _neg1 = pins[1];
             _pos2 = pins[2];
@@ -189,9 +194,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                 Ibr1Pos2Ptr.Value -= 1.0;
                 Ibr1Neg2Ptr.Value += 1.0;
 
-                // IBR1 = IBR2
+                // IBR1 = -IBR2
                 Ibr2Ibr1Ptr.Value += 1.0;
-                Ibr2Ibr2Ptr.Value -= 1.0;
+                Ibr2Ibr2Ptr.Value += 1.0;
             }
             else
             {

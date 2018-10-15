@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     public class BaseParameters : ParameterSet
     {
         [ParameterName("z0"), ParameterName("zo"), ParameterInfo("Characteristic impedance")]
-        public GivenParameter<double> Impedance { get; } = new GivenParameter<double>();
+        public double Impedance { get; set; } = 50.0;
 
         [ParameterName("f"), ParameterInfo("Frequency")]
         public GivenParameter<double> Frequency { get; } = new GivenParameter<double>(1e9);
@@ -20,9 +20,11 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         [ParameterName("nl"), ParameterInfo("Normalized length at the given frequency")]
         public GivenParameter<double> NormalizedLength { get; } = new GivenParameter<double>(0.25);
 
-        public double RelativeTolerance { get; set; }
+        [ParameterName("reltol"), ParameterInfo("The relative tolerance used to decide on adding a breakpoint.")]
+        public double RelativeTolerance { get; set; } = 1.0;
 
-        public double AbsoluteTolerance { get; set; }
+        [ParameterName("abstol"), ParameterInfo("The absolute tolerance used to decide on adding a breakpoint.")]
+        public double AbsoluteTolerance { get; set; } = 1.0;
 
         /// <summary>
         /// Gets the admittance (reciprocal of the impedance).
@@ -43,8 +45,16 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             if (!Delay.Given)
                 Delay.RawValue = NormalizedLength.Value / Frequency.Value;
 
-            if (!Impedance.Given)
-                throw new CircuitException("{0}: Characteristic impedance is required.");
+            if (Delay < 0.0)
+                throw new CircuitException("Non-causal delay {0:e3} detected. Delays should be larger than 0.".FormatString(Delay));
+            if (RelativeTolerance <= 0.0)
+                throw new CircuitException("Relative tolerance {0:e3} should be larger than 0.".FormatString(RelativeTolerance));
+            if (AbsoluteTolerance <= 0.0)
+                throw new CircuitException("Absolute tolerance {0:e3} should be larger than 0.".FormatString(AbsoluteTolerance));
+
+            // Calculate the admittance for saving a division operation
+            if (Impedance <= 0.0)
+                throw new CircuitException("Invalid characteristic impedance of {0:e3}. Should be larger than 0.".FormatString(Impedance));
             Admittance = 1.0 / Impedance;
         }
     }

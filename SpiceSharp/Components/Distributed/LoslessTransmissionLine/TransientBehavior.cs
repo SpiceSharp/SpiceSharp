@@ -112,8 +112,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var sol = simulation.RealState.Solution;
 
             // Calculate the inputs
-            var input1 = sol[_pos1] - sol[_neg1] + _bp.Impedance * sol[_branchEq1];
-            var input2 = sol[_pos2] - sol[_neg2] + _bp.Impedance * sol[_branchEq2];
+            var input1 = sol[_pos2] - sol[_neg2] + _bp.Impedance * sol[_branchEq2];
+            var input2 = sol[_pos1] - sol[_neg1] + _bp.Impedance * sol[_branchEq1];
             Signals.SetProbedValues(input1, input2);
         }
 
