@@ -110,7 +110,6 @@ namespace SpiceSharpTest
             {
                 var input = args.GetVoltage("in");
                 var output = args.GetVoltage("out");
-                Console.WriteLine($@"{input:G3} V : {output:G3} V");
             };
             dc.Run(ckt);
             // </example01_simulate>
@@ -138,7 +137,9 @@ namespace SpiceSharpTest
             // Catch exported data
             dc.ExportSimulationData += (sender, args) =>
             {
-                Console.WriteLine($@"{inputExport.Value:G3} V : {outputExport.Value:G3} V, {currentExport.Value:G3} A");
+                var input = inputExport.Value;
+                var output = outputExport.Value;
+                var current = currentExport.Value;
             };
             dc.Run(ckt);
             // </example01_simulate2>

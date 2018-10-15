@@ -31,11 +31,12 @@ namespace SpiceSharpTest.Examples
             // <example_change_parameter_transient>
             // Create the transient analysis and exports
             var tran = new Transient("tran", 1e-6, 10e-5);
-            var output = new RealVoltageExport(tran, "out");
-            tran.ExportSimulationData += (sender, args) => 
-                Console.Write(
-                    args.Time.ToString(CultureInfo.InvariantCulture) + @", " + 
-                    output.Value.ToString(CultureInfo.InvariantCulture) + @"; ");
+            var outputExport = new RealVoltageExport(tran, "out");
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                var time = args.Time;
+                var output = outputExport.Value;
+            };
             // </example_change_parameter_transient>
 
             // <example_change_parameter_setup>

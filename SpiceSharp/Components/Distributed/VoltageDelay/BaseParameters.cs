@@ -7,6 +7,10 @@ namespace SpiceSharp.Components.DelayBehaviors
         [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.")]
         public double Delay { get; set; }
 
+        public double RelativeTolerance { get; set; }
+
+        public double AbsoluteTolerance { get; set; }
+
         /// <summary>
         /// Method for calculating the default values of derived parameters.
         /// </summary>

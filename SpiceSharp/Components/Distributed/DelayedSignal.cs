@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.Distributed
     /// <summary>
     /// This class will keep track of a signal and can calculate the delayed version of it.
     /// </summary>
-    public class Delayed
+    public class DelayedSignal
     {
         /// <summary>
         /// A node used for our linked list
@@ -51,11 +51,11 @@ namespace SpiceSharp.Components.Distributed
         public double[] Values { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Delayed"/> class.
+        /// Initializes a new instance of the <see cref="DelayedSignal"/> class.
         /// </summary>
         /// <param name="size">The number of elements to be stored.</param>
         /// <param name="delay">The amount of time to look back.</param>
-        public Delayed(int size, double delay)
+        public DelayedSignal(int size, double delay)
         {
             Delay = delay;
             Size = size;
@@ -113,8 +113,8 @@ namespace SpiceSharp.Components.Distributed
             }
             else
             {
-                // Do cubic interpolation
-                if (breakpoint)
+                // Do cubic interpolation if possible, else use linear interpolation
+                if (breakpoint || _reference.Older == null)
                 {
                     var f1 = (refTime - _reference.Newer.Time) / (_reference.Time - _reference.Newer.Time);
                     var f2 = (refTime - _reference.Time) / (_reference.Newer.Time - _reference.Time);
@@ -265,6 +265,22 @@ namespace SpiceSharp.Components.Distributed
 
             // Update
             _reference = r;
+        }
+
+        /// <summary>
+        /// Clears any memory in the delayed signal.
+        /// </summary>
+        public void Clear()
+        {
+            // Setup our linked list
+            _reference = _oldest = _probed = new Node(Size)
+            {
+                Time = 0.0
+            };
+
+            // Clear values
+            for (var i = 0; i < Size; i++)
+                Values[i] = 0.0;
         }
     }
 }

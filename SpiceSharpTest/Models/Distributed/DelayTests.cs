@@ -9,7 +9,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.Distributed
+namespace SpiceSharpTest.Models
 {
     [TestFixture]
     public class DelayTests : Framework
@@ -27,12 +27,13 @@ namespace SpiceSharpTest.Models.Distributed
             var tran = new Transient("tran", 1e-7, 10e-5);
             var input = new RealVoltageExport(tran, "in");
             var output = new RealVoltageExport(tran, "out");
-            tran.ExportSimulationData += (sender, args) =>
+            /* tran.ExportSimulationData += (sender, args) =>
             {
                 Console.Write(args.Time.ToString(CultureInfo.InvariantCulture) + ", " +
                               input.Value.ToString(CultureInfo.InvariantCulture) + ", " +
                               output.Value.ToString(CultureInfo.InvariantCulture) + "; ");
-            };
+            }; */
+            // TODO: Still add reference
 
             tran.Run(ckt);
         }

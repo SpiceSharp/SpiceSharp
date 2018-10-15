@@ -4,13 +4,12 @@ using SpiceSharp.Components.Distributed;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.DelayBehaviors
+namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
     /// <summary>
-    /// Transient
+    /// Transient behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.BaseTransientBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
     public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
     {
         // Necessary behaviors and parameters
@@ -18,19 +17,20 @@ namespace SpiceSharp.Components.DelayBehaviors
         private LoadBehavior _load;
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        private int _contPosNode, _contNegNode, _branch;
-        protected VectorElement<double> BranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the delayed signal.
+        /// Gets the delayed signals.
         /// </summary>
         /// <value>
-        /// The delayed signal.
+        /// The signals.
         /// </value>
-        public DelayedSignal Signal { get; private set; }
+        public DelayedSignal Signals { get; private set; }
 
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        private int _pos1, _neg1, _pos2, _neg2, _branchEq1, _branchEq2;
+        protected VectorElement<double> Ibr1Ptr { get; private set; }
+        protected VectorElement<double> Ibr2Ptr { get; private set; }
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
@@ -49,8 +49,10 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="pins">Pin indices in order</param>
         public void Connect(params int[] pins)
         {
-            _contPosNode = pins[2];
-            _contNegNode = pins[3];
+            _pos1 = pins[0];
+            _neg1 = pins[1];
+            _pos2 = pins[2];
+            _neg2 = pins[3];
         }
 
         /// <summary>
@@ -65,14 +67,27 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
+        /// Destroy the behavior.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        public override void Unsetup(Simulation simulation)
+        {
+            _bp = null;
+            _load = null;
+        }
+
+        /// <summary>
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
         /// equations can also be allocated here.
         /// </summary>
         /// <param name="solver">The solver.</param>
         public override void GetEquationPointers(Solver<double> solver)
         {
-            _branch = _load.BranchEq;
-            BranchPtr = solver.GetRhsElement(_branch);
+            _branchEq1 = _load.BranchEq1;
+            _branchEq2 = _load.BranchEq2;
+
+            Ibr1Ptr = solver.GetRhsElement(_branchEq1);
+            Ibr2Ptr = solver.GetRhsElement(_branchEq2);
         }
 
         /// <summary>
@@ -81,7 +96,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="method">The integration method.</param>
         public override void CreateStates(IntegrationMethod method)
         {
-            Signal = new DelayedSignal(1, _bp.Delay);
+            Signals = new DelayedSignal(2, _bp.Delay);
         }
 
         /// <summary>
@@ -95,8 +110,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void GetDcState(TimeSimulation simulation)
         {
             var sol = simulation.RealState.Solution;
-            var input = sol[_contPosNode] - sol[_contNegNode];
-            Signal.SetProbedValues(input);
+
+            // Calculate the inputs
+            var input1 = sol[_pos1] - sol[_neg1] + _bp.Impedance * sol[_branchEq1];
+            var input2 = sol[_pos2] - sol[_neg2] + _bp.Impedance * sol[_branchEq2];
+            Signals.SetProbedValues(input1, input2);
         }
 
         /// <summary>
@@ -106,9 +124,15 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Transient(TimeSimulation simulation)
         {
             var sol = simulation.RealState.Solution;
-            var input = sol[_contPosNode] - sol[_contNegNode];
-            Signal.SetProbedValues(input);
-            BranchPtr.Value += Signal.Values[0];
+
+            // Calculate inputs
+            var input1 = sol[_pos2] - sol[_neg2] + _bp.Impedance * sol[_branchEq2];
+            var input2 = sol[_pos1] - sol[_neg1] + _bp.Impedance * sol[_branchEq1];
+            Signals.SetProbedValues(input1, input2);
+
+            // Update the branch equations
+            Ibr1Ptr.Value += Signals.Values[0];
+            Ibr2Ptr.Value += Signals.Values[1];
         }
     }
 }
