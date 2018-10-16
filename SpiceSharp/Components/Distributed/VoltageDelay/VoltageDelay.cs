@@ -24,6 +24,7 @@ namespace SpiceSharp.Components
 
             // Add behaviors
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
             Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
