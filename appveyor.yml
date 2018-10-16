@@ -1,8 +1,5 @@
-configuration: Debug
-before_build:
-  - nuget restore
-build:
-  project: SpiceSharp.sln
+configuration:
+  - Debug
 
 os: Visual Studio 2017
 
@@ -12,7 +9,22 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
 
+environment:
+  CODECOV_TOKEN: 862c0870-53eb-4ed5-9a82-759c70cf78e0
+
 branches:
   only:
     - master
     - development
+
+before_build:
+  - nuget restore
+  - choco install opencover.portable
+  - choco install codecov
+
+build:
+  project: SpiceSharp.sln
+
+test_script:
+  - OpenCover.Console.exe -register:user -oldStyle -target:"packages\NUnit.ConsoleRunner.3.9.0\tools\nunit3-console.exe" -targetargs:"SpiceSharpTest\bin\Debug\SpiceSharpTest.dll" -filter:"+[*]*" -output:"SpiceSharpCoverage.xml"
+  - codecov -f "SpiceSharpCoverage.xml"
