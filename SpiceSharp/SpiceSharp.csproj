@@ -16,6 +16,8 @@
     <Company />
     <NeutralLanguage>en-001</NeutralLanguage>
     <FileVersion>2.5.0.0</FileVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
