@@ -4,10 +4,10 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.MosfetBehaviors.Level3
+namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
     /// <summary>
-    /// AC behavior for <see cref="Mosfet3"/>
+    /// Common small-signal behavior for a MOS transistor.
     /// </summary>
     public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
@@ -18,7 +18,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         private ModelBaseParameters _mbp;
         private LoadBehavior _load;
         private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Shared variables
@@ -61,6 +60,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }
+        
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+            _drainNode = pins[0];
+            _gateNode = pins[1];
+            _sourceNode = pins[2];
+            _bulkNode = pins[3];
+        }
 
         /// <summary>
         /// Setup behavior
@@ -79,23 +94,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _load = provider.GetBehavior<LoadBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
-        }
-
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _drainNode = pins[0];
-            _gateNode = pins[1];
-            _sourceNode = pins[2];
-            _bulkNode = pins[3];
         }
 
         /// <summary>
@@ -142,6 +140,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="simulation"></param>
         public override void Unsetup(Simulation simulation)
         {
+            _bp = null;
+            _mbp = null;
+            _temp = null;
+            _load = null;
+
             // Remove references
             DrainDrainPtr = null;
             GateGatePtr = null;
@@ -203,53 +206,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             * 
             * .. bulk - drain and bulk - source depletion capacitances
             */
-            /* CAPBYPASS */
-
-            /* can't bypass the diode capacitance calculations */
-            /* CAPZEROBYPASS */
             if (vbs < _temp.TempDepletionCap)
             {
                 double arg = 1 - vbs / _temp.TempBulkPotential, sarg;
-                /* 
-                * the following block looks somewhat long and messy, 
-                * but since most users use the default grading
-                * coefficients of .5, and sqrt is MUCH faster than an
-                * Math.Exp(Math.Log()) we use this special case code to buy time.
-                * (as much as 10% of total job time!)
-                */
+
                 if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(_mbp.BulkJunctionSideGradingCoefficient.Value))
                 {
                     if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
-                    {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
-                    }
                     else
-                    {
                         sarg = sargsw = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-                    }
                 }
                 else
                 {
                     if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
-                    {
                         sarg = 1 / Math.Sqrt(arg);
-                    }
                     else
-                    {
-                        /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-                    }
                     if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
-                    {
                         sargsw = 1 / Math.Sqrt(arg);
-                    }
                     else
-                    {
-                        /* NOSQRT */
                         sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
-                    }
                 }
-                /* NOSQRT */
                 CapBs = _temp.CapBs * sarg + _temp.CapBsSidewall * sargsw;
             }
             else
@@ -260,13 +238,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             if (vbd < _temp.TempDepletionCap)
             {
                 double arg = 1 - vbd / _temp.TempBulkPotential, sarg;
-                /* 
-                * the following block looks somewhat long and messy, 
-                * but since most users use the default grading
-                * coefficients of .5, and sqrt is MUCH faster than an
-                * Math.Exp(Math.Log()) we use this special case code to buy time.
-                * (as much as 10% of total job time!)
-                */
+
                 if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5) && _mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
@@ -274,46 +246,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 else
                 {
                     if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
-                    {
                         sarg = 1 / Math.Sqrt(arg);
-                    }
                     else
-                    {
-                        /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-                    }
                     if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
-                    {
                         sargsw = 1 / Math.Sqrt(arg);
-                    }
                     else
-                    {
-                        /* NOSQRT */
                         sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
-                    }
                 }
-                /* NOSQRT */
                 CapBd = _temp.CapBd * sarg + _temp.CapBdSidewall * sargsw;
             }
             else
-            {
                 CapBd = _temp.F2D + vbd * _temp.F3D;
-            }
-            /* CAPZEROBYPASS */
-
-            /* (above only excludes tranop, since we're only at this
-            * point if tran or tranop)
-            */
 
             /* 
              * calculate meyer's capacitors
-             */
-            /* 
-             * new cmeyer - this just evaluates at the current time, 
-             * expects you to remember values from previous time
-             * returns 1 / 2 of non - constant portion of capacitance
-             * you must add in the other half from previous time
-             * and the constant part
              */
             double icapgs, icapgd, icapgb;
             if (_load.Mode > 0)

@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
             // Add factories
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(MosfetBehaviors.Common.FrequencyBehavior), () => new MosfetBehaviors.Common.FrequencyBehavior(Name));
             Behaviors.Add(typeof(MosfetBehaviors.Common.TransientBehavior), () => new MosfetBehaviors.Common.TransientBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
