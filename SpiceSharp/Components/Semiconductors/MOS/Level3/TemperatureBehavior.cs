@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// <summary>
     /// Temperature behavior for a <see cref="Mosfet3"/>
     /// </summary>
-    public class TemperatureBehavior : BaseTemperatureBehavior
+    public class TemperatureBehavior : Common.TemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -20,14 +20,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [ParameterName("sourceconductance"), ParameterInfo("Source conductance")]
-        public double SourceConductance { get; protected set; }
-        [ParameterName("drainconductance"), ParameterInfo("Drain conductance")]
-        public double DrainConductance { get; protected set; }
-        [ParameterName("sourcevcrit"), ParameterInfo("Critical source voltage")]
-        public double SourceVCritical { get; protected set; }
-        [ParameterName("drainvcrit"), ParameterInfo("Critical drain voltage")]
-        public double DrainVCritical { get; protected set; }
         [ParameterName("cbd0"), ParameterInfo("Zero-Bias B-D junction capacitance")]
         public double CapBd { get; protected set; }
         [ParameterName("cbdsw0"), ParameterInfo("Zero-Bias B-D sidewall capacitance")]
@@ -37,37 +29,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [ParameterName("cbssw0"), ParameterInfo("Zero-Bias B-S sidewall capacitance")]
         public double CapBsSidewall { get; protected set; }
 
-        [ParameterName("rs"), ParameterInfo("Source resistance")]
-        public double SourceResistance
-        {
-            get
-            {
-                if (SourceConductance > 0.0)
-                    return 1.0 / SourceConductance;
-                return 0.0;
-            }
-        }
-        [ParameterName("rd"), ParameterInfo("Drain resistance")]
-        public double DrainResistance
-        {
-            get
-            {
-                if (DrainConductance > 0.0)
-                    return 1.0 / DrainConductance;
-                return 0.0;
-            }
-        }
-
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double TempTransconductance { get; protected set; }
         public double TempSurfaceMobility { get; protected set; }
         public double TempPhi { get; protected set; }
         public double TempVoltageBi { get; protected set; }
-        public double TempVt0 { get; protected set; }
-        public double TempSaturationCurrent { get; protected set; }
-        public double TempSaturationCurrentDensity { get; protected set; }
         public double TempCapBd { get; protected set; }
         public double TempCapBs { get; protected set; }
         public double TempJunctionCap { get; protected set; }
