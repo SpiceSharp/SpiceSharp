@@ -525,7 +525,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             ChargeGd.Current = (vgd - vgd1) * capgd + ChargeGd[1];
             ChargeGb.Current = (vgb - vgb1) * capgb + ChargeGb[1];
 
-
             /* NOTE: We can't reset derivatives!
             if (capgs == 0)
                 state.States[0][States + Cqgs] = 0;

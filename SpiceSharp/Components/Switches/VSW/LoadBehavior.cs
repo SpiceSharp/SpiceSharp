@@ -191,6 +191,5 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             NegPosPtr.Value -= gNow;
             NegNegPtr.Value += gNow;
         }
-
     }
 }

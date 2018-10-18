@@ -242,7 +242,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var vt = Circuit.KOverQ * _bp.Temperature;
             var check = 1;
 
-
             /* DETAILPROF */
 
             /* first, we compute a few useful values - these could be
@@ -324,7 +323,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     vbs = vbd + vds;
                 }
                 /* NODELIMITING */
-
             }
             else
             {
@@ -776,7 +774,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * meyer's capacitor model
 			 */
-
 
             /* DETAILPROF */
             /* 

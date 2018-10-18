@@ -8,7 +8,6 @@ namespace SpiceSharp.IntegrationMethods
     /// <seealso cref="TruncateTimestepEventArgs" />
     public class TruncateEvaluateEventArgs : TruncateTimestepEventArgs
     {
-
         /// <summary>
         /// Gets or sets the order to continue integration. The order is capped between 1 and the maximum integration order.
         /// </summary>

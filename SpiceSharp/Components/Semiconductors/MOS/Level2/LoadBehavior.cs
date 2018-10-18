@@ -579,7 +579,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 goto line500;
                 line410:
                 ufact = 1.0;
-                ueff = _mbp.SurfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */ ;
+                ueff = _mbp.SurfaceMobility * 1e-4; /* (m^2 / cm^2) */
                 dudvgs = 0.0;
                 dudvds = 0.0;
                 dudvbs = 0.0;
@@ -899,8 +899,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 /* 
 				* finished
 				*/
-
             }
+
             doneval:
             Von = _mbp.MosfetType * von;
             SaturationVoltageDs = _mbp.MosfetType * vdsat;

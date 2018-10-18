@@ -217,7 +217,6 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                         state.IsConvergent = false;
                 }
 
-
                 // Store the current state
                 CurrentState = currentState;
 

@@ -46,7 +46,6 @@ namespace SpiceSharp.Components
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
         public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
 
-
         /// <summary>
         /// Gets the damping factor theta of the sinewave.
         /// </summary>
