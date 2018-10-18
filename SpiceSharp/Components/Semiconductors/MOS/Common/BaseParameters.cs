@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     /// Common parameters for mosfet components.
     /// </summary>
     /// <seealso cref="SpiceSharp.ParameterSet" />
-    public class BaseParameters : ParameterSet
+    public abstract class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the temperature in degrees celsius.
