@@ -157,7 +157,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				*/
 
                 /* XXX constant per device */
-                var factor = 0.125 * _mbp.NarrowFactor * 2.0 * Math.PI * Transistor.EpsilonSilicon / oxideCap * effectiveLength;
+                var factor = 0.125 * _mbp.NarrowFactor * 2.0 * Math.PI * EpsilonSilicon / oxideCap * effectiveLength;
                 /* XXX constant per device */
                 var eta = 1.0 + factor;
                 var vbin = _temp.TempVoltageBi * _mbp.MosfetType + factor * phiMinVbs;
@@ -268,7 +268,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 line400:
                 if (oxideCap <= 0.0) goto line410;
                 var udenom = vgst;
-                tmp = _mbp.CriticalField * 100 /* cm / m */  * Transistor.EpsilonSilicon / _mbp.OxideCapFactor;
+                tmp = _mbp.CriticalField * 100 /*cm/m*/  * EpsilonSilicon / _mbp.OxideCapFactor;
                 if (udenom <= tmp) goto line410;
                 ufact = Math.Exp(_mbp.CriticalFieldExp * Math.Log(tmp / udenom));
                 ueff = _mbp.SurfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */  * ufact;
@@ -278,12 +278,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 goto line500;
                 line410:
                 ufact = 1.0;
-                ueff = _mbp.SurfaceMobility * 1e-4; /* (m^2 / cm^2) */
+                ueff = _mbp.SurfaceMobility * 1e-4; /* (m^2/cm^2) */
                 dudvgs = 0.0;
                 dudvds = 0.0;
                 dudvbs = 0.0;
                 /*
-				 * evaluate saturation voltage and its derivatives according to
+				 * Evaluate saturation voltage and its derivatives according to
 				 * grove - frohman equation
 				 */
                 line500:

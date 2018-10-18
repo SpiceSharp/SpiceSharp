@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     var wkfngs = wkfng - (3.25 + 0.5 * EgFet1 + fermis);
                     if (!_mbp.Gamma.Given)
                     {
-                        _mbp.Gamma.RawValue = Math.Sqrt(2 * Transistor.EpsilonSilicon * Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
+                        _mbp.Gamma.RawValue = Math.Sqrt(2 * EpsilonSilicon * Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
                                               _mbp.OxideCapFactor;
                     }
                     if (!_mbp.Vt0.Given)
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                         _mbp.Vt0.RawValue = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
                     }
 
-                    Alpha = (Transistor.EpsilonSilicon + Transistor.EpsilonSilicon) / (Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
+                    Alpha = (EpsilonSilicon + EpsilonSilicon) / (Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
                     CoefficientDepletionLayerWidth = Math.Sqrt(Alpha);
                 }
                 else

@@ -3,6 +3,7 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using Semiconductor = SpiceSharp.Components.Semiconductors.Semiconductor;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
@@ -12,6 +13,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
     public abstract class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
+        /// <summary>
+        /// The permittivity of silicon
+        /// </summary>
+        protected const double EpsilonSilicon = 11.7 * 8.854214871e-12;
+        protected const double MaximumExponentArgument = 709.0;
+
         // Necessary behaviors and parameters
         private BaseConfiguration _baseConfig;
         private ModelBaseParameters _mbp;
@@ -295,9 +302,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
                 throw new ArgumentNullException(nameof(simulation));
             var state = simulation.RealState;
 
-            double vgs, vds, vbs, vbd, vgd, von;
+            double vgs, vds, vbs, vbd, vgd;
             double drainSatCur, sourceSatCur;
-            int check = 1;
+            bool check = true;
 
             if (_temp.TempSaturationCurrentDensity.Equals(0) || _bp.DrainArea.Value <= 0 || _bp.SourceArea.Value <= 0)
             {
@@ -324,7 +331,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
                 vbd = vbs - vds;
                 vgd = vgs - vds;
                 var vgdo = VoltageGs - VoltageDs;
-                von = _mbp.MosfetType * Von;
+                var von = _mbp.MosfetType * Von;
 
                 /*
 				 * limiting
@@ -337,22 +344,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
                 {
                     vgs = Transistor.LimitFet(vgs, VoltageGs, von);
                     vds = vgs - vgd;
-                    vds = Transistor.LimitVoltageDs(vds, VoltageDs);
+                    vds = Transistor.LimitVds(vds, VoltageDs);
                 }
                 else
                 {
                     vgd = Transistor.LimitFet(vgd, vgdo, von);
                     vds = vgs - vgd;
-                    vds = -Transistor.LimitVoltageDs(-vds, -VoltageDs);
+                    vds = -Transistor.LimitVds(-vds, -VoltageDs);
                     vgs = vgd + vds;
                 }
+
+                check = false;
                 if (vds >= 0)
-                {
-                    vbs = Transistor.LimitJunction(vbs, VoltageBs, vt, _temp.SourceVCritical, out check);
-                }
+                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, vt, _temp.SourceVCritical, ref check);
                 else
                 {
-                    vbd = Transistor.LimitJunction(vbd, VoltageBd, vt, _temp.DrainVCritical, out check);
+                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, vt, _temp.DrainVCritical, ref check);
                     vbs = vbd + vds;
                 }
             }
@@ -402,7 +409,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             }
             else
             {
-                var evbs = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbs / vt));
+                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / vt));
                 CondBs = sourceSatCur * evbs / vt + _baseConfig.Gmin;
                 BsCurrent = sourceSatCur * (evbs - 1);
             }
@@ -414,7 +421,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             }
             else
             {
-                var evbd = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbd / vt));
+                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / vt));
                 CondBd = drainSatCur * evbd / vt + _baseConfig.Gmin;
                 BdCurrent = drainSatCur * (evbd - 1);
             }
@@ -447,7 +454,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             // Check convergence
             if (!_bp.Off || state.Init != InitializationModes.Fix)
             {
-                if (check == 1)
+                if (check)
                     state.IsConvergent = false;
             }
 

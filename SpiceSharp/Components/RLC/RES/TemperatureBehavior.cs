@@ -10,16 +10,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class TemperatureBehavior : BaseTemperatureBehavior
     {
         /// <summary>
-        /// Gets or sets the random generator for resistors
-        /// </summary>
-        public static Random Generator { get; set; } = new Random();
-
-        /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
         private ModelBaseParameters _mbp;
         private BaseParameters _bp;
-        private double _original = double.NaN;
 
         /// <summary>
         /// Gets the default conductance for this model
@@ -54,10 +48,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Unsetup(Simulation simulation)
         {
             base.Unsetup(simulation);
-
-            // Revert the parameter value
-            if (!double.IsNaN(_original))
-                _bp.Resistance.RawValue = _original;
 
             // Clear references
             _bp = null;

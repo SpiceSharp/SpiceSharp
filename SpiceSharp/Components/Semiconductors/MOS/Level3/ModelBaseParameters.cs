@@ -9,6 +9,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     public class ModelBaseParameters : Common.ModelBaseParameters
     {
         /// <summary>
+        /// The permittivity of silicon
+        /// </summary>
+        private const double EpsilonSilicon = 11.7 * 8.854214871e-12;
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [ParameterName("eta"), ParameterInfo("Vds dependence of threshold voltage")]
@@ -126,7 +131,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             base.CalculateDefaults();
 
             // Calculate the narrowing factor
-            NarrowFactor = Delta * 0.5 * Math.PI * Transistor.EpsilonSilicon / OxideCapFactor;
+            NarrowFactor = Delta * 0.5 * Math.PI * EpsilonSilicon / OxideCapFactor;
         }
 
         /// <summary>

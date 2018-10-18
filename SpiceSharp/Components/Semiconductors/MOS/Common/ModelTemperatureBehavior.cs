@@ -10,6 +10,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     /// <seealso cref="SpiceSharp.Behaviors.BaseTemperatureBehavior" />
     public abstract class ModelTemperatureBehavior : BaseTemperatureBehavior
     {
+        /// <summary>
+        /// The permittivity of silicon
+        /// </summary>
+        protected const double EpsilonSilicon = 11.7 * 8.854214871e-12;
+
         // Necessary behaviors and parameters
         private ModelBaseParameters _mbp;
 
