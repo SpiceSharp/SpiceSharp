@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
             Behaviors.Add(typeof(MosfetBehaviors.Common.FrequencyBehavior), () => new MosfetBehaviors.Common.FrequencyBehavior(Name));
             Behaviors.Add(typeof(MosfetBehaviors.Common.TransientBehavior), () => new MosfetBehaviors.Common.TransientBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
+            Behaviors.Add(typeof(MosfetBehaviors.Common.NoiseBehavior), () => new MosfetBehaviors.Common.NoiseBehavior(Name));
         }
     }
 }

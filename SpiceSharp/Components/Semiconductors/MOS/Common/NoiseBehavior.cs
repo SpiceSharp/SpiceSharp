@@ -3,10 +3,10 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.MosfetBehaviors.Level2
+namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
     /// <summary>
-    /// Noise behavior for <see cref="Mosfet2"/>
+    /// Common noise behavior for MOS transistors.
     /// </summary>
     public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior
     {
@@ -18,25 +18,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         private ModelNoiseParameters _mnp;
         private LoadBehavior _load;
         private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
-
-        /// <summary>
-        /// Noise generators by their index
-        /// </summary>
-        private const int RdNoise = 0;
-        private const int RsNoise = 1;
-        private const int IdNoise = 2;
-        private const int FlickerNoise = 3;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _sourceNodePrime, _drainNodePrime;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+
+        /// <summary>
+        /// Noise generators by their index
+        /// </summary>
+        protected const int RdNoise = 0;
+        protected const int RsNoise = 1;
+        protected const int IdNoise = 2;
+        protected const int FlickerNoise = 3;
 
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise Mosfet2Noise { get; } = new ComponentNoise(
+        public ComponentNoise MosfetNoise { get; } = new ComponentNoise(
             new NoiseThermal("rd", 0, 4),
             new NoiseThermal("rs", 2, 5),
             new NoiseThermal("id", 4, 5),
@@ -67,7 +66,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _load = provider.GetBehavior<LoadBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -87,7 +85,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         }
 
         /// <summary>
-        /// Connect noise sources
+        /// Connect noise
         /// </summary>
         public override void ConnectNoise()
         {
@@ -95,8 +93,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             _drainNodePrime = _load.DrainNodePrime;
             _sourceNodePrime = _load.SourceNodePrime;
 
-            // Connect noise source
-            Mosfet2Noise.Setup(_drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime);
+            // Connect noise sources
+            MosfetNoise.Setup(_drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime);
         }
 
         /// <summary>
@@ -111,14 +109,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            Mosfet2Noise.Generators[RdNoise].SetCoefficients(_temp.DrainConductance);
-            Mosfet2Noise.Generators[RsNoise].SetCoefficients(_temp.SourceConductance);
-            Mosfet2Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(_load.Transconductance));
-            Mosfet2Noise.Generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(_load.DrainCurrent), 1e-38))) 
-                / (_bp.Width * (_bp.Length - 2 * _mbp.LateralDiffusion) * _mbp.OxideCapFactor * _mbp.OxideCapFactor) / noise.Frequency);
+            MosfetNoise.Generators[RdNoise].SetCoefficients(_temp.DrainConductance);
+            MosfetNoise.Generators[RsNoise].SetCoefficients(_temp.SourceConductance);
+            MosfetNoise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(_load.Transconductance));
+            MosfetNoise.Generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent 
+                * Math.Log(Math.Max(Math.Abs(_load.DrainCurrent), 1e-38))) / (_bp.Width * (_bp.Length - 2 * _mbp.LateralDiffusion) 
+                * OxideCapSquared) / noise.Frequency);
 
             // Evaluate noise sources
-            Mosfet2Noise.Evaluate(simulation);
+            MosfetNoise.Evaluate(simulation);
         }
+
+        /// <summary>
+        /// Gets the oxide capacitance factor squared.
+        /// </summary>
+        /// <value>
+        /// The oxide capacitance factor squared.
+        /// </value>
+        protected virtual double OxideCapSquared => _mbp.OxideCapFactor * _mbp.OxideCapFactor;
     }
 }
