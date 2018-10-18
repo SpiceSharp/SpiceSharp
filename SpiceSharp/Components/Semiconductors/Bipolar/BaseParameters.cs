@@ -37,8 +37,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             switch (value.Length)
             {
-                case 2: InitialVoltageCe.Value = value[1]; goto case 1;
-                case 1: InitialVoltageBe.Value = value[0]; break;
+                case 2:
+                    InitialVoltageCe.Value = value[1];
+                    goto case 1;
+                case 1:
+                    InitialVoltageBe.Value = value[0];
+                    break;
                 default:
                     throw new CircuitException("Bad parameter");
             }

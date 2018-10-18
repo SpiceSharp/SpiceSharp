@@ -23,9 +23,15 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             switch (ac.Length)
             {
-                case 2: AcPhase.Value = ac[1]; goto case 1;
-                case 1: AcMagnitude.Value = ac[0]; break;
-                case 0: AcMagnitude.Value = 0.0; break;
+                case 2:
+                    AcPhase.Value = ac[1];
+                    goto case 1;
+                case 1:
+                    AcMagnitude.Value = ac[0];
+                    break;
+                case 0:
+                    AcMagnitude.Value = 0.0;
+                    break;
                 default:
                     throw new BadParameterException("ac");
             }

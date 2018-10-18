@@ -54,9 +54,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             switch (value.Length)
             {
-                case 3: InitialVoltageBs.Value = value[2]; goto case 2;
-                case 2: InitialVoltageGs.Value = value[1]; goto case 1;
-                case 1: InitialVoltageDs.Value = value[0]; break;
+                case 3: 
+                    InitialVoltageBs.Value = value[2];
+                    goto case 2;
+                case 2: 
+                    InitialVoltageGs.Value = value[1]; 
+                    goto case 1;
+                case 1: 
+                    InitialVoltageDs.Value = value[0]; 
+                    break;
                 default:
                     throw new CircuitException("Bad parameter");
             }
