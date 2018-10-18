@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// <summary>
     /// Temperature behavior for a <see cref="Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : BaseTemperatureBehavior
+    public class ModelTemperatureBehavior : Common.ModelTemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -17,10 +17,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double Factor1 { get; protected set; }
-        public double VtNominal { get; protected set; }
-        public double EgFet1 { get; protected set; }
-        public double PbFactor1 { get; protected set; }
         public double Xd { get; protected set; }
 
         /// <summary>

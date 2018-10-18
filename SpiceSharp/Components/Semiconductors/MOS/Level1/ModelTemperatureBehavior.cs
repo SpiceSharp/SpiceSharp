@@ -7,21 +7,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// Temperature behavior for a <see cref="Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : BaseTemperatureBehavior
+    public class ModelTemperatureBehavior : Common.ModelTemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
         private ModelBaseParameters _mbp;
-
-        /// <summary>
-        /// Extra variables
-        /// </summary>
-        public double Fact1 { get; protected set; }
-        public double VtNominal { get; protected set; }
-        public double EgFet1 { get; protected set; }
-        public double PbFactor1 { get; protected set; }
-        public double OxideCapFactor { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -56,12 +47,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             if (!_mbp.NominalTemperature.Given)
                 _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
 
-            Fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            Factor1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
             VtNominal = _mbp.NominalTemperature * Circuit.KOverQ;
             var kt1 = Circuit.Boltzmann * _mbp.NominalTemperature;
             EgFet1 = 1.16 - 7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature / (_mbp.NominalTemperature + 1108);
             var arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
+            PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Factor1) + Circuit.Charge * arg1);
 
             /* now model parameter preprocessing */
 
