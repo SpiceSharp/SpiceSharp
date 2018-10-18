@@ -17,7 +17,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         private ModelBaseParameters _mbp;
         private TemperatureBehavior _temp;
         private LoadBehavior _load;
-        private ModelTemperatureBehavior _modeltemp;
         private ModelNoiseParameters _mnp;
 
         /// <summary>
@@ -64,7 +63,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
             _load = provider.GetBehavior<LoadBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -109,8 +107,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var noise = simulation.NoiseState;
 
             double coxSquared;
-            if (_modeltemp.OxideCapFactor > 0.0)
-                coxSquared = _modeltemp.OxideCapFactor;
+            if (_mbp.OxideCapFactor > 0.0)
+                coxSquared = _mbp.OxideCapFactor;
             else
                 coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
             coxSquared *= coxSquared;

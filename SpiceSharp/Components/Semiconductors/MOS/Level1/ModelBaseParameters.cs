@@ -15,5 +15,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </value>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
         public GivenParameter<double> Lambda { get; } = new GivenParameter<double>();
+
+        public override void CalculateDefaults()
+        {
+            base.CalculateDefaults();
+
+            if (!OxideThickness.Given)
+                OxideCapFactor = 0.0;
+        }
     }
 }

@@ -316,7 +316,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <value>
         /// The oxide capacitance density.
         /// </value>
-        public double OxideCapFactor { get; private set; }
+        public double OxideCapFactor { get; protected set; }
 
         /// <summary>
         /// Method for calculating the default values of derived parameters.
