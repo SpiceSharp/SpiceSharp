@@ -56,15 +56,43 @@ namespace SpiceSharp.Components
         public GivenParameter<double> Theta { get; } = new GivenParameter<double>();
 
         /// <summary>
+        /// Gets the phase of the sinewave.
+        /// </summary>
+        /// <value>
+        /// The phase.
+        /// </value>
+        [ParameterName("phase"), ParameterInfo("The phase")]
+        public GivenParameter<double> Phase { get; } = new GivenParameter<double>();
+
+        /// <summary>
         /// Private variables
         /// </summary>
-        private double _vo, _va, _freq, _td, _theta;
+        private double _vo, _va, _freq, _td, _theta, _phase;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sine"/> class.
         /// </summary>
         public Sine()
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sine"/> class.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <param name="amplitude">The amplitude.</param>
+        /// <param name="frequency">The frequency.</param>
+        /// <param name="delay">The delay.</param>
+        /// <param name="theta">The theta.</param>
+        /// <param name="phase">The phase.</param>
+        public Sine(double offset, double amplitude, double frequency, double delay, double theta, double phase)
+        {
+            Offset.Value = offset;
+            Amplitude.Value = amplitude;
+            Frequency.Value = frequency;
+            Delay.Value = delay;
+            Theta.Value = theta;
+            Phase.Value = phase;
         }
 
         /// <summary>
@@ -130,7 +158,7 @@ namespace SpiceSharp.Components
             if (time <= 0.0)
                 result = 0.0;
             else
-                result = _va * Math.Sin(_freq * time);
+                result = _va * Math.Sin(_freq * time + (_phase / 360.0));
 
             // Modify with theta
             if (Theta.Given)
