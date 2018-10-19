@@ -69,6 +69,7 @@
     <Compile Include="Models\Framework.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\BJTTests.cs" />
     <Compile Include="Models\Semiconductors\DIO\DiodeTests.cs" />
+    <Compile Include="Models\Semiconductors\JFET\JFETTests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Tests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Tests.cs" />
     <Compile Include="Algebra\NewSparseMatrixTest.cs" />
