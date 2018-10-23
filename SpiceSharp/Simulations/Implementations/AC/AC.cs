@@ -13,6 +13,11 @@ namespace SpiceSharp.Simulations
         private bool _keepOpInfo;
 
         /// <summary>
+        /// Occurs before each frequency sweep.
+        /// </summary>
+        public event EventHandler<FrequencySweepDataEventArgs> BeforeSweepFrequency;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
@@ -72,12 +77,20 @@ namespace SpiceSharp.Simulations
                 // Calculate the current frequency
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
+                OnBeforeSweepFrequency(new FrequencySweepDataEventArgs(this));
+
                 // Solve
                 AcIterate();
 
-                // Export the timepoint
+                // Export the frequency point
                 OnExport(exportargs);
             }
         }
+
+        /// <summary>
+        /// Raises the <see cref="E:BeforeSweepFrequency" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="FrequencySweepDataEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnBeforeSweepFrequency(FrequencySweepDataEventArgs args) => BeforeSweepFrequency?.Invoke(this, args);
     }
 }
