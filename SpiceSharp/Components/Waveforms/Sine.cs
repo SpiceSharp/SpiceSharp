@@ -137,6 +137,8 @@ namespace SpiceSharp.Components
             _freq = Frequency * 2.0 * Math.PI;
             _td = Delay;
             _theta = Theta;
+            _phase = 2 * Math.PI * Phase / 360.0;
+
             Value = _vo;
 
             // Some checks
@@ -158,7 +160,7 @@ namespace SpiceSharp.Components
             if (time <= 0.0)
                 result = 0.0;
             else
-                result = _va * Math.Sin(_freq * time + (_phase / 360.0));
+                result = _va * Math.Sin(_freq * time + _phase);
 
             // Modify with theta
             if (Theta.Given)
