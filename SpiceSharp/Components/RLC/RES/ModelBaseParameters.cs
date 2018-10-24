@@ -19,8 +19,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
         [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
         public GivenParameter<double> TemperatureCoefficient1 { get; } = new GivenParameter<double>();
-        [ParameterName("tc2"), ParameterInfo("Second order temperature oefficient")]
+        [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient")]
         public GivenParameter<double> TemperatureCoefficient2 { get; } = new GivenParameter<double>();
+        [ParameterName("tce"), ParameterInfo("Exponential temperature coefficient")]
+        public GivenParameter<double> ExponentialCoefficient { get; } = new GivenParameter<double>();
         [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
         public GivenParameter<double> SheetResistance { get; } = new GivenParameter<double>();
         [ParameterName("defw"), ParameterInfo("Default device width")]
