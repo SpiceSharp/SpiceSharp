@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             double factor;
-            double resist = _bp.Resistance;
+            double resistance = _bp.Resistance;
 
             // Default Value Processing for Resistor Instance
             if (!_bp.Temperature.Given)
@@ -77,25 +77,30 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 if (!_bp.Resistance.Given)
                 {
                     if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && _bp.Length > 0)
-                        resist = _mbp.SheetResistance * (_bp.Length - _mbp.Narrow) / (_bp.Width - _mbp.Narrow);
+                        resistance = _mbp.SheetResistance * (_bp.Length - _mbp.Narrow) / (_bp.Width - _mbp.Narrow);
                     else
                     {
                         CircuitWarning.Warning(this, "{0}: resistance=0, set to 1000".FormatString(Name));
-                        resist = 1000;
+                        resistance = 1000;
                     }
                 }
 
                 var difference = _bp.Temperature - _mbp.NominalTemperature;
-                factor = 1.0 + _mbp.TemperatureCoefficient1 * difference + _mbp.TemperatureCoefficient2 * difference * difference;
+
+                if (_mbp.ExponentialCoefficient.Given)
+                    factor = Math.Pow(1.01, _mbp.ExponentialCoefficient * difference);
+                else
+                    factor = 1.0 + _mbp.TemperatureCoefficient1 * difference + _mbp.TemperatureCoefficient2 * difference * difference;
             }
             else
             {
                 factor = 1.0;
             }
 
-            if (resist < 1e-12)
-                resist = 1e-12;
-            Conductance = 1.0 / (resist * factor);
+            if (resistance < 1e-12)
+                resistance = 1e-12;
+
+            Conductance = 1.0 / (resistance * factor);
         }
     }
 }
