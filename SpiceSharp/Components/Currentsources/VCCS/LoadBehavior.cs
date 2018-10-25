@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _contPosourceNode, _contNegateNode;
+        private int _posNode, _negNode, _contPosNode, _contNegNode;
         protected MatrixElement<double> PosControlPosPtr { get; private set; }
         protected MatrixElement<double> PosControlNegPtr { get; private set; }
         protected MatrixElement<double> NegControlPosPtr { get; private set; }
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[_posNode] - state.Solution[_negNode]) * _bp.Coefficient;
+            return (state.Solution[_contPosNode] - state.Solution[_contNegNode]) * _bp.Coefficient;
         }
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
@@ -51,7 +51,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             var v = state.Solution[_posNode] - state.Solution[_negNode];
-            return v * v * _bp.Coefficient;
+            var i = (state.Solution[_contPosNode] - state.Solution[_contNegNode]) * _bp.Coefficient;
+            return -v * i;
         }
 
         /// <summary>
@@ -86,8 +87,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
                 throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _posNode = pins[0];
             _negNode = pins[1];
-            _contPosourceNode = pins[2];
-            _contNegateNode = pins[3];
+            _contPosNode = pins[2];
+            _contNegNode = pins[3];
         }
 
         /// <summary>
@@ -99,10 +100,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
-            PosControlPosPtr = solver.GetMatrixElement(_posNode, _contPosourceNode);
-            PosControlNegPtr = solver.GetMatrixElement(_posNode, _contNegateNode);
-            NegControlPosPtr = solver.GetMatrixElement(_negNode, _contPosourceNode);
-            NegControlNegPtr = solver.GetMatrixElement(_negNode, _contNegateNode);
+            PosControlPosPtr = solver.GetMatrixElement(_posNode, _contPosNode);
+            PosControlNegPtr = solver.GetMatrixElement(_posNode, _contNegNode);
+            NegControlPosPtr = solver.GetMatrixElement(_negNode, _contPosNode);
+            NegControlNegPtr = solver.GetMatrixElement(_negNode, _contNegNode);
         }
 
         /// <summary>

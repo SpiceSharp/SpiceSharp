@@ -51,5 +51,21 @@ namespace SpiceSharpTest.Models
             Func<double, Complex>[] references = { freq => magnitude * transconductance * resistance, freq => magnitude * transconductance };
             AnalyzeAC(ac, ckt, exports, references);
         }
+
+        [Test]
+        public void When_VCCSDC2_Expect_Reference()
+        {
+            // Found by Marcin Golebiowski
+            var ckt = new Circuit(
+                new VoltageSource("V1", "1", "0", 200),
+                new Resistor("R1", "1", "0", 10),
+                new VoltageControlledCurrentSource("G1", "2", "0", "1", "0", 1.5),
+                new Resistor("R2", "2", "0", 100));
+
+            var op = new OP("op1");
+            var current = new RealPropertyExport(op, "G1", "i");
+            op.ExportSimulationData += (sender, args) => Assert.AreEqual(300.0, current.Value, 1e-12);
+            op.Run(ckt);
+        }
     }
 }

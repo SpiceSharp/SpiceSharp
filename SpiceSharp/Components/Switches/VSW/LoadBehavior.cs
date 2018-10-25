@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _contPosourceNode, _contNegateNode;
+        private int _posNode, _negNode, _contPosNode, _contNegNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegPosPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
@@ -82,8 +82,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _posNode = pins[0];
             _negNode = pins[1];
-            _contPosourceNode = pins[2];
-            _contNegateNode = pins[3];
+            _contPosNode = pins[2];
+            _contNegNode = pins[3];
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             else
             {
                 // First iteration after a new timepoint!
-                var vCtrl = state.Solution[_contPosourceNode] - state.Solution[_contNegateNode];
+                var vCtrl = state.Solution[_contPosNode] - state.Solution[_contNegNode];
                 if (UseOldState)
                 {
                     // Calculate the current state
