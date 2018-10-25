@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            var ap = provider.GetParameterSet<FrequencyParameters>();
+            var ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
 
             // Calculate AC vector
             var radians = ap.AcPhase * Math.PI / 180.0;

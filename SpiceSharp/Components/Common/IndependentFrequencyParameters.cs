@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CurrentSourceBehaviors
+namespace SpiceSharp.Components.CommonBehaviors
 {
     /// <summary>
-    /// AC parameters for a <see cref="CurrentSource"/>
+    /// AC parameters for an independent source.
     /// </summary>
-    public class FrequencyParameters : ParameterSet
+    public class IndependentFrequencyParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
@@ -37,9 +38,17 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         }
 
         /// <summary>
+        /// Gets the phasor represented by the amplitude and phase.
+        /// </summary>
+        /// <value>
+        /// The phasor.
+        /// </value>
+        public Complex Phasor { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public FrequencyParameters()
+        public IndependentFrequencyParameters()
         {
         }
 
@@ -48,10 +57,24 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         /// <param name="magnitude">Magnitude</param>
         /// <param name="phase">Phase</param>
-        public FrequencyParameters(double magnitude, double phase)
+        public IndependentFrequencyParameters(double magnitude, double phase)
         {
             AcMagnitude.Value = magnitude;
             AcPhase.Value = phase;
+        }
+
+        /// <summary>
+        /// Method for calculating the default values of derived parameters.
+        /// </summary>
+        /// <remarks>
+        /// These calculations should be run whenever a parameter has been changed.
+        /// </remarks>
+        public override void CalculateDefaults()
+        {
+            var phase = AcPhase * Math.PI / 180.0;
+            Phasor = new Complex(
+                AcMagnitude * Math.Cos(phase),
+                AcMagnitude * Math.Sin(phase));
         }
     }
 }

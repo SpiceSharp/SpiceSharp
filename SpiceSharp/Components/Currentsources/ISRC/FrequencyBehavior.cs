@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        private FrequencyParameters _ap;
+        private CommonBehaviors.IndependentFrequencyParameters _ap;
 
         /// <summary>
         /// Nodes
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _ap = provider.GetParameterSet<FrequencyParameters>();
+            _ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
 
             // Calculate the AC vector
             var radians = _ap.AcPhase * Math.PI / 180.0;

@@ -1,16 +1,16 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.VoltageSourceBehaviors
+namespace SpiceSharp.Components.CommonBehaviors
 {
     /// <summary>
-    /// Parameters for a <see cref="VoltageSource"/>
+    /// Base parameters for an independent source.
     /// </summary>
-    public class BaseParameters : ParameterSet
+    public class IndependentBaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("waveform"), ParameterInfo("Waveform shape")]
+        [ParameterName("waveform"), ParameterInfo("The waveform object for this source")]
         public Waveform Waveform { get; set; }
         [ParameterName("dc"), ParameterInfo("D.C. source value")]
         public GivenParameter<double> DcValue { get; } = new GivenParameter<double>();
@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        public BaseParameters()
+        public IndependentBaseParameters()
         {
         }
 
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="dc">DC value</param>
-        public BaseParameters(double dc)
+        public IndependentBaseParameters(double dc)
         {
             DcValue.Value = dc;
         }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="waveform">Waveform</param>
-        public BaseParameters(Waveform waveform)
+        public IndependentBaseParameters(Waveform waveform)
         {
             Waveform = waveform;
         }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        private BaseParameters _bp;
+        private CommonBehaviors.IndependentBaseParameters _bp;
 
         /// <summary>
         /// Constructor
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
+            _bp = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
         }
 
         /// <summary>
