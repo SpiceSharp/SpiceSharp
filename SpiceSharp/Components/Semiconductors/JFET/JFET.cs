@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.JFETBehaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Components.JFETBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -6,6 +7,7 @@ namespace SpiceSharp.Components
     /// A junction field-effect transistor.
     /// </summary>
     /// <seealso cref="SpiceSharp.Components.Component" />
+    [Pin(0, "drain"), Pin(1, "gate"), Pin(2, "source")]
     public class JFET : Component
     {
         /// <summary>
@@ -32,6 +34,8 @@ namespace SpiceSharp.Components
             // Add behavior factories
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
         }
     }
 }
