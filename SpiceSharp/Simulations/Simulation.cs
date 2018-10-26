@@ -125,6 +125,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public ParameterPool EntityParameters { get; private set; }
 
+        // Private parameters
+        private bool _cloneParameters;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
@@ -205,9 +208,16 @@ namespace SpiceSharp.Simulations
             EntityBehaviors = new BehaviorPool(circuit.Entities.Comparer);
 
             // Create the variables that will need solving
-            Variables = Configurations.TryGet(out CollectionConfiguration cconfig)
-                ? new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default)
-                : new VariableSet();
+            if (Configurations.TryGet(out CollectionConfiguration cconfig))
+            {
+                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default);
+                _cloneParameters = cconfig.CloneParameters;
+            }
+            else
+            {
+                Variables = new VariableSet();
+                _cloneParameters = false;
+            }
 
             // Setup all objects
             circuit.Entities.BuildOrderedComponentList();
@@ -325,7 +335,7 @@ namespace SpiceSharp.Simulations
                 foreach (var p in entity.ParameterSets.Values)
                 {
                     p.CalculateDefaults();
-                    EntityParameters.Add(entity.Name, p.DeepClone());
+                    EntityParameters.Add(entity.Name, _cloneParameters ? p.DeepClone() : p);
                 }
             }
         }

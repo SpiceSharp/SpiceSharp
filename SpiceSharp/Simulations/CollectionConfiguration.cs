@@ -17,12 +17,15 @@ namespace SpiceSharp.Simulations
         public IEqualityComparer<string> VariableComparer { get; set; }
 
         /// <summary>
-        /// Gets or sets the  comparer used for comparing two entity identifiers.
+        /// Gets or sets a flag indicating whether the simulation should clone all parameters.
         /// </summary>
+        /// <remarks>
+        /// This is mainly useful when using the same circuit for multiple simulations and
+        /// running them in multiple threads.
+        /// </remarks>
         /// <value>
-        /// The comparer for entity identifiers.
+        ///   <c>true</c> if parameters need to be cloned; otherwise, <c>false</c>.
         /// </value>
-        /// <remarks>Typically, you'll want this comparer to be identical to the one used for circuits.</remarks>
-        public IEqualityComparer<string> EntityComparer { get; set; }
+        public bool CloneParameters { get; set; }
     }
 }

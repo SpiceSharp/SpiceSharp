@@ -64,6 +64,19 @@ namespace SpiceSharp.Components.CommonBehaviors
         }
 
         /// <summary>
+        /// Creates a deep clone of the parameter set.
+        /// </summary>
+        /// <returns>
+        /// A deep clone of the parameter set.
+        /// </returns>
+        public override ParameterSet DeepClone()
+        {
+            var result = (IndependentFrequencyParameters) base.DeepClone();
+            result.Phasor = Phasor;
+            return result;
+        }
+
+        /// <summary>
         /// Method for calculating the default values of derived parameters.
         /// </summary>
         /// <remarks>
