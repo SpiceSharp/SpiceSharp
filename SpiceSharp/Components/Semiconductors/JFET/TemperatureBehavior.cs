@@ -95,6 +95,9 @@ namespace SpiceSharp.Components.JFETBehaviors
             CorDepCap = _mbp.DepletionCapCoefficient * TempGatePotential;
             F1 = TempGatePotential * (1 - Math.Exp((1 - .5) * _modeltemp.Xfc)) / (1 - .5);
             Vcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
+
+            if (TempGatePotential.Equals(0.0))
+                throw new CircuitException("Invalid parameter " + nameof(TempGatePotential));
         }
     }
 }
