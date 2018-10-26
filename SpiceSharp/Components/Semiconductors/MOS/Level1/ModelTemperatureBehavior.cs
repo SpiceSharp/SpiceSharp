@@ -7,21 +7,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// Temperature behavior for a <see cref="Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : BaseTemperatureBehavior
+    public class ModelTemperatureBehavior : Common.ModelTemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
         private ModelBaseParameters _mbp;
-
-        /// <summary>
-        /// Extra variables
-        /// </summary>
-        public double Fact1 { get; protected set; }
-        public double VtNominal { get; protected set; }
-        public double EgFet1 { get; protected set; }
-        public double PbFactor1 { get; protected set; }
-        public double OxideCapFactor { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -38,9 +29,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
+            base.Setup(simulation, provider);
 
             // Get parameters
             _mbp = provider.GetParameterSet<ModelBaseParameters>();
+        }
+
+        /// <summary>
+        /// Destroy the behavior.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        public override void Unsetup(Simulation simulation)
+        {
+            _mbp = null;
+
+            base.Unsetup(simulation);
         }
 
         /// <summary>
@@ -49,37 +52,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            base.Temperature(simulation);
 
-            /* perform model defaulting */
-            if (!_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
-
-            Fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
-            VtNominal = _mbp.NominalTemperature * Circuit.KOverQ;
-            var kt1 = Circuit.Boltzmann * _mbp.NominalTemperature;
-            EgFet1 = 1.16 - 7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature / (_mbp.NominalTemperature + 1108);
-            var arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
-
-            /* now model parameter preprocessing */
-
-            if (!_mbp.OxideThickness.Given || _mbp.OxideThickness.Value.Equals(0))
+            if (_mbp.OxideThickness.Given)
             {
-                OxideCapFactor = 0;
-            }
-            else
-            {
-                OxideCapFactor = 3.9 * 8.854214871e-12 / _mbp.OxideThickness;
+                // Now model parameter preprocessing
                 if (!_mbp.Transconductance.Given)
                 {
                     if (!_mbp.SurfaceMobility.Given)
-                    {
                         _mbp.SurfaceMobility.RawValue = 600;
-                    }
-                    _mbp.Transconductance.RawValue = _mbp.SurfaceMobility * OxideCapFactor * 1e-4;
+                    _mbp.Transconductance.RawValue = _mbp.SurfaceMobility * _mbp.OxideCapFactor * 1e-4;
                 }
+
                 if (_mbp.SubstrateDoping.Given)
                 {
                     if (_mbp.SubstrateDoping * 1e6 > 1.45e16)
@@ -89,6 +73,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                             _mbp.Phi.RawValue = 2 * VtNominal * Math.Log(_mbp.SubstrateDoping * 1e6 / 1.45e16);
                             _mbp.Phi.RawValue = Math.Max(.1, _mbp.Phi);
                         }
+
                         var fermis = _mbp.MosfetType * .5 * _mbp.Phi;
                         var wkfng = 3.2;
                         if (!_mbp.GateType.Given)
@@ -98,16 +83,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                             var fermig = _mbp.MosfetType * _mbp.GateType * .5 * EgFet1;
                             wkfng = 3.25 + .5 * EgFet1 - fermig;
                         }
+
                         var wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
                         if (!_mbp.Gamma.Given)
                         {
-                            _mbp.Gamma.RawValue = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * _mbp.SubstrateDoping * 1e6) / OxideCapFactor;
+                            _mbp.Gamma.RawValue =
+                                Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * _mbp.SubstrateDoping * 1e6) /
+                                _mbp.OxideCapFactor;
                         }
+
                         if (!_mbp.Vt0.Given)
                         {
                             if (!_mbp.SurfaceStateDensity.Given)
                                 _mbp.SurfaceStateDensity.RawValue = 0;
-                            var vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
+                            var vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / _mbp.OxideCapFactor;
                             _mbp.Vt0.RawValue = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
                         }
                     }

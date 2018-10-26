@@ -19,8 +19,22 @@ namespace SpiceSharp.Components.ResistorBehaviors
             set => Temperature.Value = value + Circuit.CelsiusKelvin;
         }
         public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+
+        /// <summary>
+        /// Gets the width of the resistor.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
         [ParameterName("w"), ParameterInfo("Width", Interesting = false)]
         public GivenParameter<double> Width { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Gets the length of the resistor.
+        /// </summary>
+        /// <value>
+        /// The length.
+        /// </value>
         [ParameterName("l"), ParameterInfo("Length", Interesting = false)]
         public GivenParameter<double> Length { get; } = new GivenParameter<double>();
 

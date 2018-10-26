@@ -70,12 +70,20 @@ namespace SpiceSharp.Behaviors
             }
             eb.Register(behavior);
 
-            // Store in the behavior list
-            var basetype = behavior.GetType().GetTypeInfo().BaseType ?? throw new CircuitException("Invalid behavior");
-            if (!_behaviors.TryGetValue(basetype, out var list))
+            // Find the parent behavior
+            var behaviorType = behavior.GetType();
+            var baseType = behaviorType.GetTypeInfo().BaseType;
+            while (baseType != null && baseType != typeof(Behavior))
+            {
+                behaviorType = baseType;
+                baseType = behaviorType.GetTypeInfo().BaseType;
+            }
+
+            // Add
+            if (!_behaviors.TryGetValue(behaviorType, out var list))
             {
                 list = new List<Behavior>();
-                _behaviors.Add(basetype, list);
+                _behaviors.Add(behaviorType, list);
             }
             list.Add(behavior);
         }

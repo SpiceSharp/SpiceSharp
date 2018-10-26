@@ -40,6 +40,15 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         }
 
         /// <summary>
+        /// Called when a new timepoint is being tested.
+        /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
+        public override void Probe(TimeSimulation simulation)
+        {
+            // Not needed
+        }
+
+        /// <summary>
         /// Accept the current timepoint
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>

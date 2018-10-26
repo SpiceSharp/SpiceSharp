@@ -46,7 +46,6 @@ namespace SpiceSharp.Components
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
         public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
 
-
         /// <summary>
         /// Gets the damping factor theta of the sinewave.
         /// </summary>
@@ -57,15 +56,43 @@ namespace SpiceSharp.Components
         public GivenParameter<double> Theta { get; } = new GivenParameter<double>();
 
         /// <summary>
+        /// Gets the phase of the sinewave.
+        /// </summary>
+        /// <value>
+        /// The phase.
+        /// </value>
+        [ParameterName("phase"), ParameterInfo("The phase")]
+        public GivenParameter<double> Phase { get; } = new GivenParameter<double>();
+
+        /// <summary>
         /// Private variables
         /// </summary>
-        private double _vo, _va, _freq, _td, _theta;
+        private double _vo, _va, _freq, _td, _theta, _phase;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sine"/> class.
         /// </summary>
         public Sine()
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sine"/> class.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <param name="amplitude">The amplitude.</param>
+        /// <param name="frequency">The frequency.</param>
+        /// <param name="delay">The delay.</param>
+        /// <param name="theta">The theta.</param>
+        /// <param name="phase">The phase.</param>
+        public Sine(double offset, double amplitude, double frequency, double delay, double theta, double phase)
+        {
+            Offset.Value = offset;
+            Amplitude.Value = amplitude;
+            Frequency.Value = frequency;
+            Delay.Value = delay;
+            Theta.Value = theta;
+            Phase.Value = phase;
         }
 
         /// <summary>
@@ -110,6 +137,9 @@ namespace SpiceSharp.Components
             _freq = Frequency * 2.0 * Math.PI;
             _td = Delay;
             _theta = Theta;
+            _phase = 2 * Math.PI * Phase / 360.0;
+
+            Value = _vo;
 
             // Some checks
             if (_freq < 0)
@@ -117,14 +147,12 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Calculates the value of the waveform at a specific timepoint.
+        /// Indicates a new timepoint is being probed.
         /// </summary>
-        /// <param name="time">The time point.</param>
-        /// <returns>
-        /// The value of the waveform.
-        /// </returns>
-        public override double At(double time)
+        /// <param name="simulation">The time-based simulation.</param>
+        public override void Probe(TimeSimulation simulation)
         {
+            var time = simulation.Method.Time;
             time -= _td;
 
             // Calculate sine wave result (no offset)
@@ -132,14 +160,14 @@ namespace SpiceSharp.Components
             if (time <= 0.0)
                 result = 0.0;
             else
-                result = _va * Math.Sin(_freq * time);
+                result = _va * Math.Sin(_freq * time + _phase);
 
             // Modify with theta
             if (Theta.Given)
                 result *= Math.Exp(-time * _theta);
 
             // Return result (with offset)
-            return _vo + result;
+            Value = _vo + result;
         }
 
         /// <summary>
@@ -149,6 +177,12 @@ namespace SpiceSharp.Components
         public override void Accept(TimeSimulation simulation)
         {
             // Do nothing
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
+            // Initialize the sinewave
+            if (simulation.Method.Time.Equals(0.0))
+                Value = _vo;
         }
     }
 }

@@ -14,9 +14,20 @@ namespace SpiceSharp
     public abstract class TypeDictionary<T> : IDictionary<Type, T> where T : class
     {
         /// <summary>
-        /// Gets the dictionary with all types.
+        /// Gets the dictionary to look up using types.
         /// </summary>
+        /// <value>
+        /// The dictionary.
+        /// </value>
         protected Dictionary<Type, T> Dictionary { get; }
+
+        /// <summary>
+        /// Inheritance can cause instances to appear multiple times, cache a set of unique values this way.
+        /// </summary>
+        /// <value>
+        /// The unique values.
+        /// </value>
+        protected HashSet<T> UniqueValues { get; }
 
         /// <summary>
         /// Gets the base class type.
@@ -37,7 +48,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the values in the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public ICollection<T> Values => Dictionary.Values;
+        public ICollection<T> Values => UniqueValues;
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="TypeDictionary{T}" />.
@@ -84,6 +95,7 @@ namespace SpiceSharp
         {
             BaseClass = baseClass;
             Dictionary = new Dictionary<Type, T>();
+            UniqueValues = new HashSet<T>();
         }
 
         /// <summary>
@@ -97,7 +109,7 @@ namespace SpiceSharp
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
-
+            
             var currentType = key;
             while (currentType != null && currentType != BaseClass)
             {
@@ -106,6 +118,9 @@ namespace SpiceSharp
                 if (currentType == typeof(object))
                     throw new CircuitException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
             }
+
+            // Keep it in our set of unique instances
+            UniqueValues.Add(value);
         }
 
         /// <summary>
@@ -151,7 +166,25 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the element is successfully removed; otherwise, <c>false</c>.  This method also returns false if <paramref name="key" /> was not found in the original <see cref="TypeDictionary{T}" />.
         /// </returns>
-        public bool Remove(Type key) => Dictionary.Remove(key);
+        public bool Remove(Type key)
+        {
+            if (Dictionary.TryGetValue(key, out T value))
+            {
+                // Remove from the set
+                UniqueValues.Remove(value);
+
+                // Remove the key and all references to the same value
+                foreach (var entry in Dictionary)
+                {
+                    if (entry.Value == value)
+                        Dictionary.Remove(entry.Key);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Gets the value associated with the specified key.
@@ -174,7 +207,11 @@ namespace SpiceSharp
         /// <summary>
         /// Removes all items from the <see cref="TypeDictionary{T}"/>.
         /// </summary>
-        public void Clear() => Dictionary.Clear();
+        public void Clear()
+        {
+            UniqueValues.Clear();
+            Dictionary.Clear();
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

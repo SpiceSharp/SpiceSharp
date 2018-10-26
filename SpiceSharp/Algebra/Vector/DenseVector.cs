@@ -111,7 +111,6 @@ namespace SpiceSharp.Algebra
                 _values[i] = vector._values[i];
         }
 
-
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>

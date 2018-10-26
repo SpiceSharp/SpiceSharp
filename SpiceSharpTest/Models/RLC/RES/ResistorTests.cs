@@ -63,7 +63,6 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-
         /// <summary>
         /// Create a voltage divider circuit
         /// </summary>

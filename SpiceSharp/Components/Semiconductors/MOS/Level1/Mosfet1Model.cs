@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
-            ParameterSets.Add(new ModelNoiseParameters());
+            ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
 
             // Add factories
             Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));

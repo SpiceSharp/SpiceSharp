@@ -116,7 +116,6 @@ namespace SpiceSharp.Algebra
             }
         }
 
-
         /// <summary>
         /// Get an element in the matrix. This method creates a new element if it doesn't exist.
         /// </summary>

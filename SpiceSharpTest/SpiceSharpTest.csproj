@@ -60,6 +60,8 @@
     <Compile Include="Models\Currentsources\CCCS\CurrentControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\VCCS\VoltageControlledCurrentSourceTests.cs" />
+    <Compile Include="Models\Distributed\DelayTests.cs" />
+    <Compile Include="Models\Distributed\TransmissionLineTests.cs" />
     <Compile Include="Models\RLC\CAP\CapacitorTests.cs" />
     <Compile Include="Models\RLC\IND\InductorTests.cs" />
     <Compile Include="Models\RLC\MUT\MutualInductanceTests.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Models\Framework.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\BJTTests.cs" />
     <Compile Include="Models\Semiconductors\DIO\DiodeTests.cs" />
+    <Compile Include="Models\Semiconductors\JFET\JFETTests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Tests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Tests.cs" />
     <Compile Include="Algebra\NewSparseMatrixTest.cs" />

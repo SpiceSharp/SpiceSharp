@@ -82,7 +82,6 @@ namespace SpiceSharp.Simulations
             NegNode = negNode;
         }
 
-
         /// <summary>
         /// Initializes the export.
         /// </summary>

@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        private BaseParameters _bp;
+        private CommonBehaviors.IndependentBaseParameters _bp;
 
         /// <summary>
         /// Gets voltage across the voltage source
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
+            _bp = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
 
             // Give some warnings if no value is given
             if (!_bp.DcValue.Given)
@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
                 // Use the waveform if possible
                 if (_bp.Waveform != null)
-                    value = _bp.Waveform.At(time);
+                    value = _bp.Waveform.Value;
                 else
                     value = _bp.DcValue * state.SourceFactor;
             }

@@ -87,9 +87,15 @@ namespace SpiceSharpTest.Simulations
             var dcExportV1 = new RealPropertyExport(dc, "V1", "i");
             var dcExportV12 = new RealPropertyExport(dc, "V1", "i");
             dc.ExportSimulationData += (sender, args) =>
-                Console.WriteLine(dcExportV1.Value + @" vs " + dcExportV12.Value);
+            {
+                var v1 = dcExportV1.Value;
+                var v12 = dcExportV12.Value;
+            };
             var opExportV1 = new RealPropertyExport(op, "V1", "i");
-            op.ExportSimulationData += (sender, args) => Console.WriteLine(opExportV1.Value);
+            op.ExportSimulationData += (sender, args) =>
+            {
+                var v1 = opExportV1.Value;
+            };
 
             // Run DC and op
             dc.Run(ckt);

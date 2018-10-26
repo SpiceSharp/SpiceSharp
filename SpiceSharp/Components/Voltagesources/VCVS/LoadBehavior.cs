@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _contPosourceNode, _contNegateNode;
+        private int _posNode, _negNode, _contPosNode, _contNegNode;
         public int BranchEq { get; private set; }
         protected MatrixElement<double> PosBranchPtr { get; private set; }
         protected MatrixElement<double> NegBranchPtr { get; private set; }
@@ -88,8 +88,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
                 throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _posNode = pins[0];
             _negNode = pins[1];
-            _contPosourceNode = pins[2];
-            _contNegateNode = pins[3];
+            _contPosNode = pins[2];
+            _contNegNode = pins[3];
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
             BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
-            BranchControlPosPtr = solver.GetMatrixElement(BranchEq, _contPosourceNode);
-            BranchControlNegPtr = solver.GetMatrixElement(BranchEq, _contNegateNode);
+            BranchControlPosPtr = solver.GetMatrixElement(BranchEq, _contPosNode);
+            BranchControlNegPtr = solver.GetMatrixElement(BranchEq, _contNegNode);
         }
 
         /// <summary>
