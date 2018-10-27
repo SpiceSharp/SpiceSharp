@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -15,6 +17,78 @@ namespace SpiceSharpTest.Examples
     [TestFixture]
     public class Changing
     {
+        // <example_change_parameter_entity>        
+        /// <summary>
+        /// The entity that will allow us to change the resistor parameters.
+        /// </summary>
+        /// <seealso cref="SpiceSharp.Circuits.Entity" />
+        public class ParameterChanger : Entity
+        {
+            /// <summary>
+            /// The load behavior that will allow us to change the resistor parameters.
+            /// </summary>
+            /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
+            private class LoadBehavior : BaseLoadBehavior
+            {
+                // Necessary behaviors and parameters
+                private SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior _temp;
+                private SpiceSharp.Components.ResistorBehaviors.BaseParameters _bp;
+
+                /// <summary>
+                /// Initializes a new instance of the <see cref="LoadBehavior"/> class.
+                /// </summary>
+                public LoadBehavior()
+                    : base("parameter changer")
+                {
+                }
+
+                /// <summary>
+                /// Setup the behavior.
+                /// </summary>
+                /// <param name="simulation">The simulation.</param>
+                /// <param name="provider">The data provider.</param>
+                public override void Setup(Simulation simulation, SetupDataProvider provider)
+                {
+                    _temp = simulation.EntityBehaviors["R2"]
+                        .Get<SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior>();
+                    _bp = simulation.EntityParameters["R2"]
+                        .Get<SpiceSharp.Components.ResistorBehaviors.BaseParameters>();
+                }
+
+                /// <summary>
+                /// Loads the Y-matrix and Rhs-vector.
+                /// </summary>
+                /// <param name="simulation">The base simulation.</param>
+                public override void Load(BaseSimulation simulation)
+                {
+                    var time = 0.0;
+                    if (simulation is TimeSimulation ts)
+                        time = ts.Method.Time;
+
+                    // Then we need to calculate the resistance for "R2"
+                    var resistance = 1.0e3 * (1 + time * 1.0e5);
+
+                    // Change the value
+                    _bp.Resistance.Value = resistance;
+                    _temp.Temperature(simulation);
+                }
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ParameterChanger"/> class.
+            /// </summary>
+            public ParameterChanger()
+                : base("parameter changer")
+            {
+                // Make sure the parameter changer executes before any other component
+                Priority = 100;
+
+                // Add the behavior that will change
+                Behaviors.Add(typeof(BaseLoadBehavior), () => new LoadBehavior());
+            }
+        }
+        // </example_change_parameter_entity>
+
         [Test]
         public void When_ChangeParameterInTransient_Expect_NoException()
         {
@@ -37,40 +111,10 @@ namespace SpiceSharpTest.Examples
                 var time = args.Time;
                 var output = outputExport.Value;
             };
-            // </example_change_parameter_transient>
-
-            // <example_change_parameter_setup>
-            // Now we need to make sure we have a reference to both the base parameters and temperature behavior
-            // of the resistor
-            SpiceSharp.Components.ResistorBehaviors.BaseParameters bp = null;
-            SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior tb = null;
-            tran.AfterSetup += (sender, args) =>
-            {
-                tran.EntityParameters["R2"].TryGet(out bp);
-                tran.EntityBehaviors["R2"].TryGet(out tb);
-            };
-            // </example_change_parameter_setup>
-
-            // <example_change_parameter_load>
-            // Before loading the resistor, let's change its value first!
-            tran.BeforeLoad += (sender, args) =>
-            {
-                // First we need to figure out the timepoint that will be loaded
-                var time = tran.Method.Time;
-
-                // Then we need to calculate the resistance for "R2"
-                var resistance = 1.0e3 * (1 + time * 1.0e5);
-
-                // Now let's update the parameter
-                if (bp == null || tb == null)
-                    return;
-                bp.Resistance.Value = resistance;
-                tb.Temperature(tran);
-            };
 
             // Run the simulation
             tran.Run(ckt);
-            // </example_change_parameter_load>
+            // </example_change_parameter_transient>
         }
     }
 }

@@ -23,7 +23,10 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="variables">The variable set.</param>
         /// <param name="solver">The solver.</param>
-        public abstract void GetEquationPointers(VariableSet variables, Solver<double> solver);
+        public virtual void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        {
+            // No equation pointers needed by default
+        }
 
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.

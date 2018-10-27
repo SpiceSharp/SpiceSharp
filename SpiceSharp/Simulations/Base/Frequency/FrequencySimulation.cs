@@ -20,11 +20,21 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
+        /// <remarks>
+        /// Create an entity that returns a <see cref="BaseFrequencyBehavior" /> and with a high priority (eg. 100). This will allow
+        /// you advanced control before all components start loading the Y-matrix and Rhs-vector.
+        /// </remarks>
+        [Obsolete]
         public event EventHandler<LoadStateEventArgs> BeforeFrequencyLoad;
 
         /// <summary>
         /// Occurs after loading the matrix and right-hand side vector.
         /// </summary>
+        /// <remarks>
+        /// Create an entity that returns a <see cref="BaseFrequencyBehavior" /> and with a low priority (eg. -100). This will allow
+        /// you advanced control after all components have loaded the Y-matrix and Rhs-vector.
+        /// </remarks>
+        [Obsolete]
         public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad;
 
         /// <summary>
@@ -167,12 +177,14 @@ namespace SpiceSharp.Simulations
         /// Raises the <see cref="E:BeforeFrequencyLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
+        [Obsolete]
         protected virtual void OnBeforeFrequencyLoad(LoadStateEventArgs args) => BeforeFrequencyLoad?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="E:AfterFrequencyLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
+        [Obsolete]
         protected virtual void OnAfterFrequencyLoad(LoadStateEventArgs args) => AfterFrequencyLoad?.Invoke(this, args);
 
         /// <summary>
