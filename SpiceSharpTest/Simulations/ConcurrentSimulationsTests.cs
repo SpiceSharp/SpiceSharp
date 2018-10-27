@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Simulations
             // Do a DC sweep where one of the sweeps is a parameter
             var cconfig = new CollectionConfiguration() {CloneParameters = true};
             var dcSimulations = new List<DC>();
-            var n = 20000;
+            var n = 4;
             for (var i = 0; i < n; i++)
             {
                 var dc = new DC("DC " + i);
@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Simulations
 
                 dcSimulations.Add(dc);
             }
-            var maxConcurrentSimulations = 8;
+            var maxConcurrentSimulations = 2;
 
             Parallel.ForEach(
                 dcSimulations,
