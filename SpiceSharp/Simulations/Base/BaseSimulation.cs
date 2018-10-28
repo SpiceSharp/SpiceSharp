@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -48,40 +47,36 @@ namespace SpiceSharp.Simulations
         /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
         /// <remarks>
-        /// Create an entity that returns a <see cref="BaseLoadBehavior" /> and with a high priority (eg. 100). This will allow
-        /// you advanced control before all components start loading the Y-matrix and Rhs-vector.
+        /// For better performance, you can also create an entity with a high priority that
+        /// generates a load behavior.
         /// </remarks>
-        [Obsolete]
         public event EventHandler<LoadStateEventArgs> BeforeLoad;
 
         /// <summary>
         /// Occurs after loading the matrix and right-hand side vector.
         /// </summary>
         /// <remarks>
-        /// Create an entity that returns a <see cref="BaseLoadBehavior" /> and with a low priority (eg. -100). This will allow
-        /// you advanced control after all components have loaded the Y-matrix and Rhs-vector.
+        /// For better performance, you can also create an entity with a low priority that
+        /// generates a load behavior.
         /// </remarks>
-        [Obsolete]
         public event EventHandler<LoadStateEventArgs> AfterLoad;
 
         /// <summary>
         /// Occurs before performing temperature-dependent calculations.
         /// </summary>
         /// <remarks>
-        /// Create an entity that returns a <see cref="BaseTemperatureBehavior" /> and with a high priority (eg. 100). This will allow
-        /// you advanced control before all components start loading the Y-matrix and Rhs-vector.
+        /// For better performance, you can also create an entity with a high priority that
+        /// creates a temperature behavior.
         /// </remarks>
-        [Obsolete]
         public event EventHandler<LoadStateEventArgs> BeforeTemperature;
 
         /// <summary>
         /// Occurs after performing temperature-dependent calculations.
         /// </summary>
         /// <remarks>
-        /// Create an entity that returns a <see cref="BaseTemperatureBehavior" /> and with a low priority (eg. -100). This will allow
-        /// you advanced control after all components have loaded the Y-matrix and Rhs-vector.
+        /// For better performance, you can also create an entity with a low priority that
+        /// creates a temperature behavior.
         /// </remarks>
-        [Obsolete]
         public event EventHandler<LoadStateEventArgs> AfterTemperature;
         #endregion
 
@@ -562,28 +557,24 @@ namespace SpiceSharp.Simulations
         /// Raises the <see cref="E:BeforeLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        [Obsolete]
         protected virtual void OnBeforeLoad(LoadStateEventArgs args) => BeforeLoad?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="E:AfterLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        [Obsolete]
         protected virtual void OnAfterLoad(LoadStateEventArgs args) => AfterLoad?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="E:BeforeTemperature" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        [Obsolete]
         protected virtual void OnBeforeTemperature(LoadStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="E:AfterTemperature" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        [Obsolete]
         protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class that implements the operating point analysis.

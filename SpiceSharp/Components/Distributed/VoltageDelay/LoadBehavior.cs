@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
