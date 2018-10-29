@@ -86,6 +86,9 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
+      <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Value">Waveform.Value</a>
+    </div>
+    <div>
       <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Clone">Waveform.Clone()</a>
     </div>
     <div>
@@ -220,6 +223,63 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Components_Sine__ctor_" data-uid="SpiceSharp.Components.Sine.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Sine__ctor_System_Double_System_Double_System_Double_System_Double_System_Double_System_Double_" data-uid="SpiceSharp.Components.Sine.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">Sine(Double, Double, Double, Double, Double, Double)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Sine(double offset, double amplitude, double frequency, double delay, double theta, double phase)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>The offset.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">amplitude</span></td>
+        <td><p>The amplitude.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">frequency</span></td>
+        <td><p>The frequency.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">delay</span></td>
+        <td><p>The delay.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">theta</span></td>
+        <td><p>The theta.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">phase</span></td>
+        <td><p>The phase.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_Components_Sine_Amplitude_" data-uid="SpiceSharp.Components.Sine.Amplitude*"></a>
@@ -330,6 +390,33 @@ public GivenParameter&lt;double&gt; Offset { get; }</code></pre>
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Components_Sine_Phase_" data-uid="SpiceSharp.Components.Sine.Phase*"></a>
+  <h4 id="SpiceSharp_Components_Sine_Phase" data-uid="SpiceSharp.Components.Sine.Phase">Phase</h4>
+  <div class="markdown level1 summary"><p>Gets the phase of the sinewave.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;phase&quot;)]
+[ParameterInfo(&quot;The phase&quot;)]
+public GivenParameter&lt;double&gt; Phase { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>The phase.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_Sine_Theta_" data-uid="SpiceSharp.Components.Sine.Theta*"></a>
   <h4 id="SpiceSharp_Components_Sine_Theta" data-uid="SpiceSharp.Components.Sine.Theta">Theta</h4>
   <div class="markdown level1 summary"><p>Gets the damping factor theta of the sinewave.</p>
@@ -388,14 +475,14 @@ public GivenParameter&lt;double&gt; Theta { get; }</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Accept_SpiceSharp_Simulations_TimeSimulation_">Waveform.Accept(TimeSimulation)</a></div>
-  <a id="SpiceSharp_Components_Sine_At_" data-uid="SpiceSharp.Components.Sine.At*"></a>
-  <h4 id="SpiceSharp_Components_Sine_At_System_Double_" data-uid="SpiceSharp.Components.Sine.At(System.Double)">At(Double)</h4>
-  <div class="markdown level1 summary"><p>Calculates the value of the waveform at a specific timepoint.</p>
+  <a id="SpiceSharp_Components_Sine_Probe_" data-uid="SpiceSharp.Components.Sine.Probe*"></a>
+  <h4 id="SpiceSharp_Components_Sine_Probe_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.Sine.Probe(SpiceSharp.Simulations.TimeSimulation)">Probe(TimeSimulation)</h4>
+  <div class="markdown level1 summary"><p>Indicates a new timepoint is being probed.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override double At(double time)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Probe(TimeSimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -408,31 +495,15 @@ public GivenParameter&lt;double&gt; Theta { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td><span class="parametername">time</span></td>
-        <td><p>The time point.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td><p>The value of the waveform.</p>
+        <td><a class="xref" href="SpiceSharp.Simulations.TimeSimulation.html">TimeSimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The time-based simulation.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_At_System_Double_">Waveform.At(Double)</a></div>
+  <div><a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Probe_SpiceSharp_Simulations_TimeSimulation_">Waveform.Probe(TimeSimulation)</a></div>
   <a id="SpiceSharp_Components_Sine_Setup_" data-uid="SpiceSharp.Components.Sine.Setup*"></a>
   <h4 id="SpiceSharp_Components_Sine_Setup" data-uid="SpiceSharp.Components.Sine.Setup">Setup()</h4>
   <div class="markdown level1 summary"><p>Sets up the waveform.</p>

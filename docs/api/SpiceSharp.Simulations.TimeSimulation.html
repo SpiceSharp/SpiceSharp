@@ -388,6 +388,15 @@
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="SpiceSharp_Simulations_TimeSimulation_Accept_" data-uid="SpiceSharp.Simulations.TimeSimulation.Accept*"></a>
+  <h4 id="SpiceSharp_Simulations_TimeSimulation_Accept" data-uid="SpiceSharp.Simulations.TimeSimulation.Accept">Accept()</h4>
+  <div class="markdown level1 summary"><p>Accepts the current simulation state as a valid timepoint.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Accept()</code></pre>
+  </div>
   <a id="SpiceSharp_Simulations_TimeSimulation_Execute_" data-uid="SpiceSharp.Simulations.TimeSimulation.Execute*"></a>
   <h4 id="SpiceSharp_Simulations_TimeSimulation_Execute" data-uid="SpiceSharp.Simulations.TimeSimulation.Execute">Execute()</h4>
   <div class="markdown level1 summary"><p>Executes the simulation.</p>
@@ -421,7 +430,7 @@
   <div><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_LoadBehaviors">BaseSimulation.LoadBehaviors()</a></div>
   <a id="SpiceSharp_Simulations_TimeSimulation_LoadInitialConditions_" data-uid="SpiceSharp.Simulations.TimeSimulation.LoadInitialConditions*"></a>
   <h4 id="SpiceSharp_Simulations_TimeSimulation_LoadInitialConditions_System_Object_SpiceSharp_Simulations_LoadStateEventArgs_" data-uid="SpiceSharp.Simulations.TimeSimulation.LoadInitialConditions(System.Object,SpiceSharp.Simulations.LoadStateEventArgs)">LoadInitialConditions(Object, LoadStateEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Applies nodesets.</p>
+  <div class="markdown level1 summary"><p>Applies initial conditions.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -448,6 +457,33 @@
         <td><a class="xref" href="SpiceSharp.Simulations.LoadStateEventArgs.html">LoadStateEventArgs</a></td>
         <td><span class="parametername">e</span></td>
         <td><p>Arguments</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_TimeSimulation_Probe_" data-uid="SpiceSharp.Simulations.TimeSimulation.Probe*"></a>
+  <h4 id="SpiceSharp_Simulations_TimeSimulation_Probe_System_Double_" data-uid="SpiceSharp.Simulations.TimeSimulation.Probe(System.Double)">Probe(Double)</h4>
+  <div class="markdown level1 summary"><p>Probe for a new time point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Probe(double delta)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">delta</span></td>
+        <td><p>The timestep.</p>
 </td>
       </tr>
     </tbody>

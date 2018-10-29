@@ -99,7 +99,6 @@ dc.ExportSimulationData += (sender, args) =&gt;
 {
     var input = args.GetVoltage(&quot;in&quot;);
     var output = args.GetVoltage(&quot;out&quot;);
-    Console.WriteLine($@&quot;{input:G3} V : {output:G3} V&quot;);
 };
 dc.Run(ckt);
 </code></pre><p>The output will yield as expected:</p>
@@ -127,7 +126,9 @@ Export&lt;double&gt; currentExport = new RealPropertyExport(dc, &quot;V1&quot;, 
 // Catch exported data
 dc.ExportSimulationData += (sender, args) =&gt;
 {
-    Console.WriteLine($@&quot;{inputExport.Value:G3} V : {outputExport.Value:G3} V, {currentExport.Value:G3} A&quot;);
+    var input = inputExport.Value;
+    var output = outputExport.Value;
+    var current = currentExport.Value;
 };
 dc.Run(ckt);
 </code></pre><p>Yielding the output:</p>

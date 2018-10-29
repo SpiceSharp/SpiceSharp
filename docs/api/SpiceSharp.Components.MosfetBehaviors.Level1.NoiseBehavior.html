@@ -83,7 +83,8 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
     <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html">BaseNoiseBehavior</a></div>
-    <div class="level5"><span class="xref">NoiseBehavior</span></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html">NoiseBehavior</a></div>
+    <div class="level6"><span class="xref">NoiseBehavior</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -92,10 +93,31 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_RdNoise">NoiseBehavior.RdNoise</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_RsNoise">NoiseBehavior.RsNoise</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_IdNoise">NoiseBehavior.IdNoise</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_FlickerNoise">NoiseBehavior.FlickerNoise</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_MosfetNoise">NoiseBehavior.MosfetNoise</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_Connect_System_Int32___">NoiseBehavior.Connect(Int32[])</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_ConnectNoise">NoiseBehavior.ConnectNoise()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_Noise_SpiceSharp_Simulations_Noise_">NoiseBehavior.Noise(Noise)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
@@ -165,7 +187,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class NoiseBehavior : NoiseBehavior, IConnectedBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -198,14 +220,14 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Mosfet1Noise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Mosfet1Noise*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Mosfet1Noise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Mosfet1Noise">Mosfet1Noise</h4>
-  <div class="markdown level1 summary"><p>Noise generators</p>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_OxideCapSquared_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.OxideCapSquared*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_OxideCapSquared" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.OxideCapSquared">OxideCapSquared</h4>
+  <div class="markdown level1 summary"><p>Gets the oxide capacitance factor squared.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ComponentNoise Mosfet1Noise { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected override double OxideCapSquared { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -217,80 +239,16 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.ComponentNoise.html">ComponentNoise</a></td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The oxide capacitance factor squared.</p>
+</td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_OxideCapSquared">NoiseBehavior.OxideCapSquared</a></div>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Connect_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_ConnectNoise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.ConnectNoise*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_ConnectNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.ConnectNoise">ConnectNoise()</h4>
-  <div class="markdown level1 summary"><p>Connect the noise sources</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ConnectNoise()</code></pre>
-  </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html#SpiceSharp_Behaviors_BaseNoiseBehavior_ConnectNoise">BaseNoiseBehavior.ConnectNoise()</a></div>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Noise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Noise*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Noise_SpiceSharp_Simulations_Noise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Noise(SpiceSharp.Simulations.Noise)">Noise(Noise)</h4>
-  <div class="markdown level1 summary"><p>Noise calculations</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Noise(Noise simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Noise simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html#SpiceSharp_Behaviors_BaseNoiseBehavior_Noise_SpiceSharp_Simulations_Noise_">BaseNoiseBehavior.Noise(Noise)</a></div>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Setup_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Setup*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
   <div class="markdown level1 summary"><p>Setup behavior</p>
@@ -325,7 +283,36 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
+  <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.NoiseBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_NoiseBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">NoiseBehavior.Setup(Simulation, SetupDataProvider)</a></div>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Unsetup_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Unsetup*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_NoiseBehavior_Unsetup_SpiceSharp_Simulations_Simulation_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.NoiseBehavior.Unsetup(SpiceSharp.Simulations.Simulation)">Unsetup(Simulation)</h4>
+  <div class="markdown level1 summary"><p>Destroy the behavior.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Unsetup(Simulation simulation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>

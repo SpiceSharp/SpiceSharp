@@ -318,7 +318,7 @@ dependent on the timestep.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double Time { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual double Time { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -860,14 +860,32 @@ want the derivative to participate in these features, set <code data-dev-comment
     </tbody>
   </table>
   <a id="SpiceSharp_IntegrationMethods_IntegrationMethod_Unsetup_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Unsetup*"></a>
-  <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_Unsetup" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Unsetup">Unsetup()</h4>
+  <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_Unsetup_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Unsetup(SpiceSharp.Simulations.TimeSimulation)">Unsetup(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Destroys the integration method.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Unsetup()</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void Unsetup(TimeSimulation simulation)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.TimeSimulation.html">TimeSimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="events">Events
   </h3>
   <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_AcceptSolution" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.AcceptSolution">AcceptSolution</h4>
