@@ -108,7 +108,7 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary elements
             Diagonal = Solver.GetMatrixElement(node.Index, node.Index);
-            Rhs = Value.Equals(0.0) ? null : Solver.GetRhsElement(node.Index);
+            Rhs = !Value.Equals(0.0) ? Solver.GetRhsElement(node.Index) : Solver.FindRhsElement(node.Index);
 
             // Update the current solution to reflect our convergence aid value
             state.Solution[node.Index] = Value;

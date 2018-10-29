@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -47,21 +46,37 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
+        /// <remarks>
+        /// For better performance, you can also create an entity with a high priority that
+        /// generates a load behavior.
+        /// </remarks>
         public event EventHandler<LoadStateEventArgs> BeforeLoad;
 
         /// <summary>
         /// Occurs after loading the matrix and right-hand side vector.
         /// </summary>
+        /// <remarks>
+        /// For better performance, you can also create an entity with a low priority that
+        /// generates a load behavior.
+        /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterLoad;
 
         /// <summary>
         /// Occurs before performing temperature-dependent calculations.
         /// </summary>
+        /// <remarks>
+        /// For better performance, you can also create an entity with a high priority that
+        /// creates a temperature behavior.
+        /// </remarks>
         public event EventHandler<LoadStateEventArgs> BeforeTemperature;
 
         /// <summary>
         /// Occurs after performing temperature-dependent calculations.
         /// </summary>
+        /// <remarks>
+        /// For better performance, you can also create an entity with a low priority that
+        /// creates a temperature behavior.
+        /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterTemperature;
         #endregion
 

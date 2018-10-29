@@ -83,11 +83,12 @@ var ckt = new Circuit(
 </code></pre><p>We also create our transient simulation as we normally would.</p>
 <pre><code class="lang-csharp" name="Circuit">// Create the transient analysis and exports
 var tran = new Transient(&quot;tran&quot;, 1e-6, 10e-5);
-var output = new RealVoltageExport(tran, &quot;out&quot;);
-tran.ExportSimulationData += (sender, args) =&gt; 
-    Console.Write(
-        args.Time.ToString(CultureInfo.InvariantCulture) + @&quot;, &quot; + 
-        output.Value.ToString(CultureInfo.InvariantCulture) + @&quot;; &quot;);
+var outputExport = new RealVoltageExport(tran, &quot;out&quot;);
+tran.ExportSimulationData += (sender, args) =&gt;
+{
+    var time = args.Time;
+    var output = outputExport.Value;
+};
 </code></pre><p>So far so good. Nothing has really changed from before. We will now subscribe to the necessary events to modify the value of <em>R2</em>. We want it to change linearly with time from <img src="https://latex.codecogs.com/svg.latex?\inline&space;1k\Omega" alt="1kOhm"> to <img src="https://latex.codecogs.com/svg.latex?\inline&space;11k\Omega" alt="11kOhm">.</p>
 <h2 id="to-the-loading-behavior-of-a-resistor">To the loading behavior of a resistor</h2>
 <p>The resistance of a resistor can be changed using the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">BaseParameters</a></strong> of that resistor. But we cannot change the base parameters directly from the entity stored in the circuit! In other words, the following will fail to change the resistance for the simulation.</p>

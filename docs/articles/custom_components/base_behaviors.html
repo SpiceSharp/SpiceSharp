@@ -304,8 +304,11 @@ ckt.Entities[&quot;RNL1&quot;].SetParameter(&quot;b&quot;, 0.5);
 
 // Setup the simulation and export our current
 var dc = new DC(&quot;DC&quot;, &quot;V1&quot;, -2.0, 2.0, 1e-2);
-var current = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
-dc.ExportSimulationData += (sender, args) =&gt; Console.WriteLine(-current.Value);
+var currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
+dc.ExportSimulationData += (sender, args) =&gt;
+{
+    var current = -currentExport.Value;
+};
 dc.Run(ckt);
 </code></pre><p>The resulting waveform is as expected:</p>
 <p align="center"><img src="images/example_custommodel_nlres_graph.svg" alt="I-V curve"></p>

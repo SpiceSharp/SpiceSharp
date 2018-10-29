@@ -83,15 +83,28 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
     <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseTemperatureBehavior.html">BaseTemperatureBehavior</a></div>
-    <div class="level5"><span class="xref">ModelTemperatureBehavior</span></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
+    <div class="level6"><span class="xref">ModelTemperatureBehavior</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_EpsilonSilicon">ModelTemperatureBehavior.EpsilonSilicon</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_Factor1">ModelTemperatureBehavior.Factor1</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_VtNominal">ModelTemperatureBehavior.VtNominal</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_EgFet1">ModelTemperatureBehavior.EgFet1</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_PbFactor1">ModelTemperatureBehavior.PbFactor1</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
@@ -161,7 +174,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ModelTemperatureBehavior : BaseTemperatureBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class ModelTemperatureBehavior : ModelTemperatureBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -189,124 +202,6 @@
         <td><span class="parametername">name</span></td>
         <td><p>Name</p>
 </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
-  </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_EgFet1_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.EgFet1*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_EgFet1" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.EgFet1">EgFet1</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double EgFet1 { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_Fact1_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.Fact1*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_Fact1" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.Fact1">Fact1</h4>
-  <div class="markdown level1 summary"><p>Extra variables</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double Fact1 { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_OxideCapFactor_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.OxideCapFactor*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_OxideCapFactor" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.OxideCapFactor">OxideCapFactor</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double OxideCapFactor { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_PbFactor1_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.PbFactor1*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_PbFactor1" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.PbFactor1">PbFactor1</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double PbFactor1 { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_VtNominal_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.VtNominal*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_VtNominal" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.VtNominal">VtNominal</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double VtNominal { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
       </tr>
     </tbody>
   </table>
@@ -346,7 +241,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
+  <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">ModelTemperatureBehavior.Setup(Simulation, SetupDataProvider)</a></div>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_Temperature_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.Temperature*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.Temperature(SpiceSharp.Simulations.BaseSimulation)">Temperature(BaseSimulation)</h4>
   <div class="markdown level1 summary"><p>Do temperature-dependent calculations</p>
@@ -375,7 +270,36 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTemperatureBehavior.html#SpiceSharp_Behaviors_BaseTemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">BaseTemperatureBehavior.Temperature(BaseSimulation)</a></div>
+  <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">ModelTemperatureBehavior.Temperature(BaseSimulation)</a></div>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_Unsetup_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.Unsetup*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_ModelTemperatureBehavior_Unsetup_SpiceSharp_Simulations_Simulation_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.Unsetup(SpiceSharp.Simulations.Simulation)">Unsetup(Simulation)</h4>
+  <div class="markdown level1 summary"><p>Destroy the behavior.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Unsetup(Simulation simulation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelTemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Common_ModelTemperatureBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ModelTemperatureBehavior.Unsetup(Simulation)</a></div>
 </article>
           </div>
           

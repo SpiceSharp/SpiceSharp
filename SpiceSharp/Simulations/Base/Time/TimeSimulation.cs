@@ -321,7 +321,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Applies nodesets.
+        /// Applies initial conditions.
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>

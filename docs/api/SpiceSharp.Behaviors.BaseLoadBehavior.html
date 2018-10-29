@@ -89,11 +89,12 @@
       <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.ModelLoadBehavior.html">ModelLoadBehavior</a></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.InductorBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level2.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.LoadBehavior.html">LoadBehavior</a></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.JFETBehaviors.LoadBehavior.html">LoadBehavior</a></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLineBehaviors.LoadBehavior.html">LoadBehavior</a></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.ResistorBehaviors.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
@@ -224,7 +225,7 @@ equations can also be allocated here.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract void GetEquationPointers(VariableSet variables, Solver&lt;double&gt; solver)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void GetEquationPointers(VariableSet variables, Solver&lt;double&gt; solver)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">

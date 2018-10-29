@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -20,11 +19,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
+        /// <remarks>
+        /// For better performance you can also create an entity with a high priority that
+        /// generates a frequency behavior.
+        /// </remarks>
         public event EventHandler<LoadStateEventArgs> BeforeFrequencyLoad;
 
         /// <summary>
         /// Occurs after loading the matrix and right-hand side vector.
         /// </summary>
+        /// <remarks>
+        /// For better performance you can also create an entity with a low priority that
+        /// generates a frequency behavior.
+        /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad;
 
         /// <summary>

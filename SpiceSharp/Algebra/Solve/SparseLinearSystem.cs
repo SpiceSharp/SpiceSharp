@@ -109,7 +109,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Get the right-hand side element.
+        /// Get the right-hand side vector element.
         /// </summary>
         /// <param name="index">The index of the element.</param>
         /// <returns>The vector element.</returns>
@@ -123,6 +123,17 @@ namespace SpiceSharp.Algebra
             }
             Order = Math.Max(index, Order);
             return Rhs.GetElement(index);
+        }
+
+        /// <summary>
+        /// Finds a right-hand side vector element.
+        /// </summary>
+        /// <param name="index">The index of the element.</param>
+        /// <returns>The vector element or null if there is none.</returns>
+        public VectorElement<T> FindRhsElement(int index)
+        {
+            index = Row[index];
+            return Rhs.FindElement(index);
         }
 
         /// <summary>
