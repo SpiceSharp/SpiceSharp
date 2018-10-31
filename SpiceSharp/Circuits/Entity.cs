@@ -61,7 +61,7 @@ namespace SpiceSharp.Circuits
         /// <param name="simulation">The simulation that will use the behavior.</param>
         /// <returns>A behavior of the requested type, or null if it doesn't apply to this entity.</returns>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual T CreateBehavior<T>(Simulation simulation) where T : Behavior
+        public virtual T CreateBehavior<T>(Simulation simulation) where T : IBehavior
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
@@ -79,7 +79,7 @@ namespace SpiceSharp.Circuits
             }
 
             // None found
-            return null;
+            return default(T);
         }
 
         /// <summary>

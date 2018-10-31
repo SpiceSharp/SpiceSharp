@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors
     /// Class representing an ordered list of behaviors.
     /// </summary>
     /// <typeparam name="T">The base behavior type.</typeparam>
-    public class BehaviorList<T> where T : Behavior
+    public class BehaviorList<T> where T : IBehavior
     {
         /// <summary>
         /// Behaviors

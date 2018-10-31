@@ -12,5 +12,5 @@
     /// Delegate
     /// </summary>
     /// <returns>The behavior created by the factory.</returns>
-    public delegate Behavior BehaviorFactoryMethod();
+    public delegate IBehavior BehaviorFactoryMethod();
 }

@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Template for a behavior.
     /// </summary>
-    public abstract class Behavior : NamedParameterized
+    public abstract class Behavior : NamedParameterized, IBehavior, IPropertyExporter<double>
     {
         /// <summary>
         /// Gets the identifier of the behavior.
@@ -61,9 +61,22 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
+        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName, IEqualityComparer<string> comparer)
         {
             return CreateGetter<double>(simulation, propertyName, comparer);
+        }
+
+        /// <summary>
+        /// Creates a getter for extracting data from the specified simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation</param>
+        /// <param name="propertyName">The name of the parameter.</param>
+        /// <returns>
+        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// </returns>
+        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName)
+        {
+            return CreateGetter<double>(simulation, propertyName, null);
         }
 
         /// <summary>
@@ -76,7 +89,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
         /// </returns>
-        protected Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null) where T : struct 
+        protected Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer) where T : struct 
         {
             // Find methods to create the export
             Func<T> result = null;

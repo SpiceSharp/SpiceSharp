@@ -69,21 +69,26 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
-            if (eb.TryGetValue(typeof(BaseTransientBehavior), out var behavior))
-                Extractor = behavior.CreateGetter(Simulation, PropertyName, Comparer);
+            {
+                if (eb.TryGetValue(typeof(BaseTransientBehavior), out var behavior) &&
+                    behavior is IPropertyExporter<double> exporter)
+                    Extractor = exporter.CreateGetter(Simulation, PropertyName, Comparer);
+            }
 
             // 2) Second, try the load behavior
             if (Extractor == null)
             {
-                if (eb.TryGetValue(typeof(BaseLoadBehavior), out behavior))
-                    Extractor = behavior.CreateGetter(Simulation, PropertyName, Comparer);
+                if (eb.TryGetValue(typeof(BaseLoadBehavior), out var behavior) &&
+                    behavior is IPropertyExporter<double> exporter)
+                    Extractor = exporter.CreateGetter(Simulation, PropertyName, Comparer);
             }
 
             // 3) Thirdly, check temperature behavior
             if (Extractor == null)
             {
-                if (eb.TryGetValue(typeof(BaseTemperatureBehavior), out behavior))
-                    Extractor = behavior.CreateGetter(Simulation, PropertyName, Comparer);
+                if (eb.TryGetValue(typeof(BaseTemperatureBehavior), out var behavior) &&
+                    behavior is IPropertyExporter<double> exporter)
+                    Extractor = exporter.CreateGetter(Simulation, PropertyName, Comparer);
             }
 
             // 4) Check parameter sets
