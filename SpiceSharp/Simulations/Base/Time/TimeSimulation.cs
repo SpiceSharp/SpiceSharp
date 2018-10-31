@@ -22,8 +22,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors.
         /// </summary>
-        private BehaviorList<BaseTransientBehavior> _transientBehaviors;
-        private BehaviorList<BaseAcceptBehavior> _acceptBehaviors;
+        private BehaviorList<ITimeBehavior> _transientBehaviors;
+        private BehaviorList<IAcceptBehavior> _acceptBehaviors;
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
         private bool _shouldReorder = true, _useIc = false;
 
@@ -83,8 +83,8 @@ namespace SpiceSharp.Simulations
             var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             _useIc = config.UseIc;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
-            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Entities);
+            _transientBehaviors = SetupBehaviors<ITimeBehavior>(circuit.Entities);
+            _acceptBehaviors = SetupBehaviors<IAcceptBehavior>(circuit.Entities);
 
             // Allow all transient behaviors to allocate equation elements and create states
             for (var i = 0; i < _transientBehaviors.Count; i++)
