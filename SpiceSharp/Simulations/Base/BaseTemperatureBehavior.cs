@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// A template that describes temperature-dependent behavior.
     /// </summary>
-    public abstract class BaseTemperatureBehavior : Behavior
+    public abstract class BaseTemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseTemperatureBehavior"/> class.
