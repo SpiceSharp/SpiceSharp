@@ -84,9 +84,9 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
-        private BehaviorList<BaseLoadBehavior> _loadBehaviors;
-        private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
-        private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
+        private BehaviorList<IBaseBehavior> _loadBehaviors;
+        private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
+        private BehaviorList<IInitialConditionBehavior> _initialConditionBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
@@ -123,9 +123,9 @@ namespace SpiceSharp.Simulations
             RelTol = config.RelativeTolerance;
 
             // Setup behaviors, configurations and states
-            _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
-            _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
-            _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
+            _temperatureBehaviors = SetupBehaviors<ITemperatureBehavior>(circuit.Entities);
+            _loadBehaviors = SetupBehaviors<IBaseBehavior>(circuit.Entities);
+            _initialConditionBehaviors = SetupBehaviors<IInitialConditionBehavior>(circuit.Entities);
 
             // Create the state for this simulation
             RealState = new BaseSimulationState();
