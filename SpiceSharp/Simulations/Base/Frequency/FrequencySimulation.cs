@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private BehaviorList<BaseFrequencyBehavior> _frequencyBehaviors;
+        private BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
 
@@ -97,7 +97,7 @@ namespace SpiceSharp.Simulations
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
             // Setup behaviors
-            _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Entities);
+            _frequencyBehaviors = SetupBehaviors<IFrequencyBehavior>(circuit.Entities);
             var solver = ComplexState.Solver;
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
