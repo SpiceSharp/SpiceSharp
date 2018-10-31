@@ -300,10 +300,11 @@ namespace SpiceSharp.Simulations
         /// A list of behaviors.
         /// </returns>
         /// <exception cref="ArgumentNullException">entities</exception>
-        protected BehaviorList<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
+        protected BehaviorList<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : IBehavior
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
+            EntityBehaviors.ListenTo(typeof(T));
 
             // Register all behaviors
             foreach (var entity in entities)

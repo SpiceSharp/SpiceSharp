@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Lists of behaviors.
         /// </summary>
-        private readonly Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
+        private readonly Dictionary<Type, List<IBehavior>> _behaviors = new Dictionary<Type, List<IBehavior>>();
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
@@ -56,12 +56,22 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
+        /// Listen to a type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        public void ListenTo(Type type)
+        {
+            if (!_behaviors.ContainsKey(type))
+                _behaviors.Add(type, new List<IBehavior>());
+        }
+
+        /// <summary>
         /// Adds the specified behavior to the pool.
         /// </summary>
         /// <param name="creator">The entity identifier to which the .</param>
         /// <param name="behavior">The behavior.</param>
         /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
-        public void Add(string creator, Behavior behavior)
+        public void Add(string creator, IBehavior behavior)
         {
             if (!_entityBehaviors.TryGetValue(creator, out var eb))
             {
@@ -70,22 +80,20 @@ namespace SpiceSharp.Behaviors
             }
             eb.Register(behavior);
 
-            // Find the parent behavior
-            var behaviorType = behavior.GetType();
-            var baseType = behaviorType.GetTypeInfo().BaseType;
-            while (baseType != null && baseType != typeof(Behavior))
+            // Add when listened to
+            var currentType = behavior.GetType();
+            while (currentType != null)
             {
-                behaviorType = baseType;
-                baseType = behaviorType.GetTypeInfo().BaseType;
+                if (_behaviors.TryGetValue(currentType, out var l))
+                    l.Add(behavior);
+                currentType = currentType.GetTypeInfo().BaseType;
             }
 
-            // Add
-            if (!_behaviors.TryGetValue(behaviorType, out var list))
+            foreach (var i in behavior.GetType().GetTypeInfo().GetInterfaces())
             {
-                list = new List<Behavior>();
-                _behaviors.Add(behaviorType, list);
+                if (_behaviors.TryGetValue(i, out var l))
+                    l.Add(behavior);
             }
-            list.Add(behavior);
         }
 
         /// <summary>
@@ -95,11 +103,10 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A <see cref="BehaviorList{T}" /> with all behaviors of the specified type.
         /// </returns>
-        public BehaviorList<T> GetBehaviorList<T>() where T : Behavior
+        public BehaviorList<T> GetBehaviorList<T>() where T : IBehavior
         {
             if (_behaviors.TryGetValue(typeof(T), out var list))
                 return new BehaviorList<T>(list.Cast<T>());
-
             return new BehaviorList<T>(new T[0]);
         }
 
