@@ -10,14 +10,6 @@ namespace SpiceSharp
     public class ParameterSetDictionary : TypeDictionary<ParameterSet>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
-        /// </summary>
-        public ParameterSetDictionary()
-            : base(typeof(ParameterSet))
-        {
-        }
-
-        /// <summary>
         /// Adds a parameter set to the dictionary.
         /// </summary>
         /// <param name="set">The parameter set.</param>

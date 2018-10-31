@@ -22,7 +22,6 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
         public EntityBehaviorDictionary(string source)
-            : base(typeof(Behavior))
         {
             Source = source;
         }

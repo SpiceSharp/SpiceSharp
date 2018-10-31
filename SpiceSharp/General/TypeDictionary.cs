@@ -11,7 +11,7 @@ namespace SpiceSharp
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="IDictionary{Type, T}" />
-    public abstract class TypeDictionary<T> : IDictionary<Type, T> where T : class
+    public abstract class TypeDictionary<T> : IDictionary<Type, T>
     {
         /// <summary>
         /// Gets the dictionary to look up using types.
@@ -28,17 +28,6 @@ namespace SpiceSharp
         /// The unique values.
         /// </value>
         protected HashSet<T> UniqueValues { get; }
-
-        /// <summary>
-        /// Gets the base class type.
-        /// </summary>
-        /// <value>
-        /// The base class type.
-        /// </value>
-        /// <remarks>
-        /// This type allows us to apply constraints to the types of classes that can be added to the dictionary.
-        /// </remarks>
-        protected Type BaseClass { get; }
 
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="TypeDictionary{T}" />.
@@ -68,32 +57,17 @@ namespace SpiceSharp
         /// </value>
         /// <param name="key">The type.</param>
         /// <returns>The object of the specified type.</returns>
-        /// <exception cref="ArgumentException">Type {0} is not derived from {1}".FormatString(key, BaseClass)</exception>
         public T this[Type key]
         {
             get => Dictionary[key];
-            set
-            {
-                var currentType = key;
-                while (currentType != BaseClass)
-                {
-                    Dictionary[currentType] = value;
-                    if (currentType == typeof(object))
-                        throw new ArgumentException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
-                }
-            }
+            set => throw new ArgumentException("Cannot set a value for a type dictionary using the indexer.");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
         /// </summary>
-        /// <param name="baseClass">The base class type.</param>
-        /// <remarks>
-        /// Only objects that implement the <paramref name="baseClass" /> type are allowed in the dictionary.
-        /// </remarks>
-        protected TypeDictionary(Type baseClass)
+        protected TypeDictionary()
         {
-            BaseClass = baseClass;
             Dictionary = new Dictionary<Type, T>();
             UniqueValues = new HashSet<T>();
         }
@@ -110,14 +84,17 @@ namespace SpiceSharp
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             
+            // Add the regular class hierarchy
             var currentType = key;
-            while (currentType != null && currentType != BaseClass)
+            while (currentType != null)
             {
-                Dictionary.Add(currentType, value);
+                Dictionary[currentType] = value;
                 currentType = currentType.GetTypeInfo().BaseType;
-                if (currentType == typeof(object))
-                    throw new CircuitException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
             }
+
+            // Also add interfaces
+            foreach (var i in key.GetTypeInfo().GetInterfaces())
+                Dictionary[i] = value;
 
             // Keep it in our set of unique instances
             UniqueValues.Add(value);
@@ -176,7 +153,7 @@ namespace SpiceSharp
                 // Remove the key and all references to the same value
                 foreach (var entry in Dictionary)
                 {
-                    if (entry.Value == value)
+                    if (entry.Value.Equals(value))
                         Dictionary.Remove(entry.Key);
                 }
 

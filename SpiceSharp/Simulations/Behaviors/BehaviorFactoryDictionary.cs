@@ -6,13 +6,6 @@
     /// <seealso cref="TypeDictionary{BehaviorFactoryMethod}" />
     public class BehaviorFactoryDictionary : TypeDictionary<BehaviorFactoryMethod>
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public BehaviorFactoryDictionary()
-            : base(typeof(Behavior))
-        {
-        }
     }
 
     /// <summary>
