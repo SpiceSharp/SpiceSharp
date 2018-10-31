@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors
     /// A template that describes frequency-dependent behavior.
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.Behavior" />
-    public abstract class BaseFrequencyBehavior : Behavior
+    public abstract class BaseFrequencyBehavior : Behavior, IFrequencyBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseFrequencyBehavior"/> class.
