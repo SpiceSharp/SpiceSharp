@@ -54,16 +54,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             base.Temperature(simulation);
 
-            if (_mbp.OxideThickness.Given)
+            if (_mbp.OxideThickness.Given && _mbp.OxideThickness > 0.0)
             {
-                // Now model parameter preprocessing
-                if (!_mbp.Transconductance.Given)
-                {
-                    if (!_mbp.SurfaceMobility.Given)
-                        _mbp.SurfaceMobility.RawValue = 600;
-                    _mbp.Transconductance.RawValue = _mbp.SurfaceMobility * _mbp.OxideCapFactor * 1e-4;
-                }
-
                 if (_mbp.SubstrateDoping.Given)
                 {
                     if (_mbp.SubstrateDoping * 1e6 > 1.45e16)

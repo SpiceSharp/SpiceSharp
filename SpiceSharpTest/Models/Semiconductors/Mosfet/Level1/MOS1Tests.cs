@@ -303,5 +303,26 @@ namespace SpiceSharpTest.Models
             // Run test
             AnalyzeNoise(noise, ckt, exports, references);
         }
+
+        [Test]
+        public void When_MOS1OPExample_Expect_Convergence()
+        {
+            // Found by Marcin Golebiowski
+            var ckt = new Circuit(
+                new VoltageSource("V1", "g", "0", 10),
+                new VoltageSource("V2", "d", "0", 10),
+                CreateMOS1("Md", "d", "g", "0", "0", "my-nmos", "is=1e-32")
+            );
+
+            // Create the simulation
+            var op = new OP("op");
+            var export = new RealPropertyExport(op, "my-nmos", "is");
+            op.ExportSimulationData += (sender, args) =>
+            {
+                var current = export.Value;
+            };
+
+            op.Run(ckt);
+        }
     }
 }
