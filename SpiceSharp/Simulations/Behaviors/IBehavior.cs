@@ -8,6 +8,14 @@ namespace SpiceSharp.Behaviors
     public interface IBehavior
     {
         /// <summary>
+        /// Gets the name of the behavior.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        string Name { get; }
+
+        /// <summary>
         /// Setup the behavior for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
