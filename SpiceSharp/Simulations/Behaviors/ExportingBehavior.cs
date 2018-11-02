@@ -4,54 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors
+namespace SpiceSharp.Simulations.Behaviors
 {
     /// <summary>
-    /// Template for a behavior.
+    /// Base class for a behavior that exports properties by using attributes on properties and reflection.
     /// </summary>
-    public abstract class Behavior : NamedParameterized, IBehavior, IPropertyExporter
+    /// <seealso cref="SpiceSharp.Attributes.NamedParameterized" />
+    /// <seealso cref="SpiceSharp.Behaviors.IPropertyExporter" />
+    public abstract class ExportingBehavior : NamedParameterized, IPropertyExporter
     {
-        /// <summary>
-        /// Gets the identifier of the behavior.
-        /// </summary>
-        /// <remarks>
-        /// This should be the same identifier as the entity that created it.
-        /// </remarks>
-        public string Name { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Behavior"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        protected Behavior(string name)
-        {
-            Name = name;
-        }
-
-        /// <summary>
-        /// Setup the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public virtual void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public virtual void Unsetup(Simulation simulation)
-        {
-            // Do nothing
-        }
-
         /// <summary>
         /// Creates a getter for a property.
         /// </summary>

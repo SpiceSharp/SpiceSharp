@@ -66,43 +66,46 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(e));
             var simulation = (Simulation) sender;
             var eb = simulation.EntityBehaviors[EntityName];
+            Func<double> extractor = null;
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
             {
-                if (eb.TryGetValue(typeof(BaseTransientBehavior), out var behavior) &&
-                    behavior is IPropertyExporter<double> exporter)
-                    Extractor = exporter.CreateGetter(Simulation, PropertyName, Comparer);
+                if (eb.TryGetValue(typeof(ITimeBehavior), out var behavior) &&
+                    behavior is IPropertyExporter exporter)
+                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
             }
 
             // 2) Second, try the load behavior
-            if (Extractor == null)
+            if (extractor == null)
             {
-                if (eb.TryGetValue(typeof(BaseLoadBehavior), out var behavior) &&
-                    behavior is IPropertyExporter<double> exporter)
-                    Extractor = exporter.CreateGetter(Simulation, PropertyName, Comparer);
+                if (eb.TryGetValue(typeof(IBaseBehavior), out var behavior) &&
+                    behavior is IPropertyExporter exporter)
+                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
             }
 
             // 3) Thirdly, check temperature behavior
-            if (Extractor == null)
+            if (extractor == null)
             {
-                if (eb.TryGetValue(typeof(BaseTemperatureBehavior), out var behavior) &&
-                    behavior is IPropertyExporter<double> exporter)
-                    Extractor = exporter.CreateGetter(Simulation, PropertyName, Comparer);
+                if (eb.TryGetValue(typeof(ITemperatureBehavior), out var behavior) &&
+                    behavior is IPropertyExporter exporter)
+                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
             }
 
             // 4) Check parameter sets
-            if (Extractor == null)
+            if (extractor == null)
             {
                 // Get all parameter sets associated with the entity
                 var ps = simulation.EntityParameters[EntityName];
                 foreach (var p in ps.Values)
                 {
-                    Extractor = p.CreateGetter<double>(PropertyName, Comparer);
-                    if (Extractor != null)
+                    extractor = p.CreateGetter<double>(PropertyName, Comparer);
+                    if (extractor != null)
                         break;
                 }
             }
+
+            Extractor = extractor;
         }
     }
 }

@@ -78,9 +78,10 @@ namespace SpiceSharp.Behaviors
                 eb = new EntityBehaviorDictionary(creator);
                 _entityBehaviors.Add(creator, eb);
             }
-            eb.Register(behavior);
+            // eb.Register(behavior);
+            eb.Add(behavior.GetType(), behavior);
 
-            // Add when listened to
+            // Add to the list when listened to
             var currentType = behavior.GetType();
             while (currentType != null)
             {
@@ -88,7 +89,6 @@ namespace SpiceSharp.Behaviors
                     l.Add(behavior);
                 currentType = currentType.GetTypeInfo().BaseType;
             }
-
             foreach (var i in behavior.GetType().GetTypeInfo().GetInterfaces())
             {
                 if (_behaviors.TryGetValue(i, out var l))
