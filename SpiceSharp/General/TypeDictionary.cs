@@ -22,14 +22,6 @@ namespace SpiceSharp
         protected Dictionary<Type, T> Dictionary { get; }
 
         /// <summary>
-        /// Inheritance can cause instances to appear multiple times, cache a set of unique values this way.
-        /// </summary>
-        /// <value>
-        /// The unique values.
-        /// </value>
-        protected HashSet<T> UniqueValues { get; }
-
-        /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="TypeDictionary{T}" />.
         /// </summary>
         public ICollection<Type> Keys => Dictionary.Keys;
@@ -37,7 +29,16 @@ namespace SpiceSharp
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the values in the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public ICollection<T> Values => UniqueValues;
+        public ICollection<T> Values
+        {
+            get
+            {
+                HashSet<T> values = new HashSet<T>();
+                foreach (var v in Dictionary.Values)
+                    values.Add(v);
+                return values;
+            }
+        }
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="TypeDictionary{T}" />.
@@ -60,7 +61,20 @@ namespace SpiceSharp
         public T this[Type key]
         {
             get => Dictionary[key];
-            set => throw new ArgumentException("Cannot set a value for a type dictionary using the indexer.");
+            set
+            {
+                // Add the regular class hierarchy that this instance implements.
+                var currentType = key;
+                while (currentType != null && currentType != typeof(object))
+                {
+                    Dictionary[currentType] = value;
+                    currentType = currentType.GetTypeInfo().BaseType;
+                }
+
+                // Also add all interfaces this instance implements.
+                foreach (var itf in key.GetTypeInfo().GetInterfaces())
+                    Dictionary[itf] = value;
+            }
         }
 
         /// <summary>
@@ -69,7 +83,6 @@ namespace SpiceSharp
         protected TypeDictionary()
         {
             Dictionary = new Dictionary<Type, T>();
-            UniqueValues = new HashSet<T>();
         }
 
         /// <summary>
@@ -84,20 +97,17 @@ namespace SpiceSharp
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             
-            // Add the regular class hierarchy
+            // Add the regular class hierarchy that this instance implements.
             var currentType = key;
-            while (currentType != null)
+            while (currentType != null && currentType != typeof(object))
             {
                 Dictionary[currentType] = value;
                 currentType = currentType.GetTypeInfo().BaseType;
             }
 
-            // Also add interfaces
-            foreach (var i in key.GetTypeInfo().GetInterfaces())
-                Dictionary[i] = value;
-
-            // Keep it in our set of unique instances
-            UniqueValues.Add(value);
+            // Also add all interfaces this instance implements.
+            foreach (var itf in key.GetTypeInfo().GetInterfaces())
+                Dictionary[itf] = value;
         }
 
         /// <summary>
@@ -147,9 +157,6 @@ namespace SpiceSharp
         {
             if (Dictionary.TryGetValue(key, out T value))
             {
-                // Remove from the set
-                UniqueValues.Remove(value);
-
                 // Remove the key and all references to the same value
                 foreach (var entry in Dictionary)
                 {
@@ -186,7 +193,6 @@ namespace SpiceSharp
         /// </summary>
         public void Clear()
         {
-            UniqueValues.Clear();
             Dictionary.Clear();
         }
 
