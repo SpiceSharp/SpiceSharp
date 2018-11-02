@@ -73,12 +73,12 @@ namespace SpiceSharp.Behaviors
         /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
         public void Add(string creator, IBehavior behavior)
         {
+            // Create entity behaviors if necessary and add our behavior to it.
             if (!_entityBehaviors.TryGetValue(creator, out var eb))
             {
                 eb = new EntityBehaviorDictionary(creator);
                 _entityBehaviors.Add(creator, eb);
             }
-            // eb.Register(behavior);
             eb.Add(behavior.GetType(), behavior);
 
             // Add to the list when listened to
