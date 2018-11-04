@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
-        private LoadBehavior _load;
+        private BaseBehavior _base;
 
         /// <summary>
         /// Nodes
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             _bp = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
+            _base = provider.GetBehavior<BaseBehavior>();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get current equation
-            _branchEq = _load.BranchEq;
+            _branchEq = _base.BranchEq;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);

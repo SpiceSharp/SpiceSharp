@@ -3,7 +3,7 @@ using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using LoadBehavior = SpiceSharp.Components.InductorBehaviors.LoadBehavior;
+using LoadBehavior = SpiceSharp.Components.InductorBehaviors.BaseBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {

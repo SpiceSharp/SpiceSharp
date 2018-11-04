@@ -2,13 +2,14 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
     /// Load behavior for a <see cref="Inductor"/>
     /// </summary>
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public partial class BaseBehavior : ExportingBehavior, IBaseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Nodes
@@ -28,17 +29,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Setup behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            // We don't need anything, acts like a short circuit
-        }
+        public BaseBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Connect
@@ -59,7 +50,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (variables == null)
                 throw new ArgumentNullException(nameof(variables));
@@ -77,28 +68,32 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Unsetup
+        /// Destroy the behavior.
         /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
+        /// <param name="simulation">The simulation.</param>
+        public void Unsetup(Simulation simulation)
         {
-            // Remove references
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchNegPtr = null;
-            BranchPosPtr = null;
         }
 
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
             PosBranchPtr.Value += 1;
             NegBranchPtr.Value -= 1;
             BranchPosPtr.Value += 1;
             BranchNegPtr.Value -= 1;
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }
