@@ -65,6 +65,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             // Get parameters
             _bp = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
 
+            // Setup the waveform
+            _bp.Waveform?.Setup();
+
             // Give some warnings if no value is given
             if (!_bp.DcValue.Given)
             {

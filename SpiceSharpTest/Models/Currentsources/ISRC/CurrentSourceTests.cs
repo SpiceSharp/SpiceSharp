@@ -99,5 +99,18 @@ namespace SpiceSharpTest.Models
             // Run test
             AnalyzeOp(op, ckt, exports, references);
         }
+
+        [Test]
+        public void When_CurrentSourceResistorTransient_Expect_NoException()
+        {
+            // Found by Marcin Golebiowski
+            var ckt = new Circuit(
+                new CurrentSource("I1", "1", "0", new Pulse(0, 6, 3.69e-6, 41e-9, 41e-9, 3.256e-6, 6.52e-6)),
+                new Resistor("R1", "1", "0", 10.0)
+            );
+
+            var tran = new Transient("tran", 1e-8, 1e-5);
+            tran.Run(ckt);
+        }
     }
 }

@@ -86,6 +86,20 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
+        public void When_DelayTransient02_Expect_NoException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "1", "0", new Sine(0, 5, 50, 0, 0, 90)),
+                new VoltageDelay("BVD1", "2", "0", "1", "0", 1e-2),
+                new Resistor("R1", "1", "0", 10),
+                new Resistor("R2", "2", "0", 10)
+            );
+
+            var tran = new Transient("tran", 1e-8, 1e-5);
+            tran.Run(ckt);
+        }
+
+        [Test]
         public void When_DelayTransientBreakpoints_Expect_Reference()
         {
             // Build the circuit
