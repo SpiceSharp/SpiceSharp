@@ -3,7 +3,7 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
-using LoadBehavior = SpiceSharp.Components.InductorBehaviors.LoadBehavior;
+using LoadBehavior = SpiceSharp.Components.InductorBehaviors.BaseBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -17,7 +17,6 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         private BaseParameters _bp;
         private LoadBehavior _load1, _load2;
-        private InductorBehaviors.TransientBehavior _tran1, _tran2;
 
         /// <summary>
         /// The factor
@@ -60,15 +59,13 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             // Get behaviors
             _load1 = provider.GetBehavior<LoadBehavior>("inductor1");
             _load2 = provider.GetBehavior<LoadBehavior>("inductor2");
-            _tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
-            _tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
 
             // Calculate coupling factor
             Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
 
             // Register events for modifying the flux through the inductors
-            _tran1.UpdateFlux += UpdateFlux1;
-            _tran2.UpdateFlux += UpdateFlux2;
+            _load1.UpdateFlux += UpdateFlux1;
+            _load2.UpdateFlux += UpdateFlux2;
         }
 
         /// <summary>
@@ -118,12 +115,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="simulation"></param>
         public override void Unsetup(Simulation simulation)
         {
-            Branch1Branch2 = null;
-            Branch2Branch1 = null;
-
             // Remove events
-            _tran1.UpdateFlux -= UpdateFlux1;
-            _tran2.UpdateFlux -= UpdateFlux2;
+            _load1.UpdateFlux -= UpdateFlux1;
+            _load2.UpdateFlux -= UpdateFlux2;
         }
 
         /// <summary>

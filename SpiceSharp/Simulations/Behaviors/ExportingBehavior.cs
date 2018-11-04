@@ -16,6 +16,23 @@ namespace SpiceSharp.Simulations.Behaviors
     public abstract class ExportingBehavior : NamedParameterized, IPropertyExporter
     {
         /// <summary>
+        /// Gets the name of the behavior.
+        /// </summary>
+        /// <value>
+        /// The name of the behavior.
+        /// </value>
+        public string Name { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportingBehavior"/> class.
+        /// </summary>
+        /// <param name="name">The name of the behavior.</param>
+        protected ExportingBehavior(string name)
+        {
+            Name = name;
+        }
+
+        /// <summary>
         /// Creates a getter for a property.
         /// </summary>
         /// <typeparam name="T">The expected type.</typeparam>
