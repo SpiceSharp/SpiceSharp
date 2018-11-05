@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -78,9 +80,24 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, parameters and states
             NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
-            _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
             NoiseState = new NoiseState();
             NoiseState.Setup(Variables);
+        }
+
+        /// <summary>
+        /// Set up all behaviors previously created.
+        /// </summary>
+        /// <param name="entities">The circuit entities.</param>
+        protected override void SetupBehaviors(IEnumerable<Entity> entities)
+        {
+            // Create the behaviors in reverse order to allow for inheritance
+            _noiseBehaviors = CreateBehaviorList<BaseNoiseBehavior>(entities);
+
+            // Allow the base simulation to set up behaviors
+            base.SetupBehaviors(entities);
+
+            // Set up the behaviors in regular order
+            SetupBehaviorList<BaseNoiseBehavior>(entities);
         }
 
         /// <summary>

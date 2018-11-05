@@ -62,6 +62,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -119,19 +120,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             // Get rhs elements
             BranchPtr = solver.GetRhsElement(BranchEq);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosBranchPtr = null;
-            BranchPosPtr = null;
-            NegBranchPtr = null;
-            BranchNegPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>

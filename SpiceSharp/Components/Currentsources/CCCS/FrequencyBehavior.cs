@@ -67,6 +67,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -103,17 +104,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             _contBranch = _vsrcload.BranchEq;
             PosControlBranchPtr = solver.GetMatrixElement(_posNode, _contBranch);
             NegControlBranchPtr = solver.GetMatrixElement(_negNode, _contBranch);
-        }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            // Remove references
-            PosControlBranchPtr = null;
-            NegControlBranchPtr = null;
         }
 
         /// <summary>

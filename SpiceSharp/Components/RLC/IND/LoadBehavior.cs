@@ -46,6 +46,28 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        {
+            base.Setup(simulation, provider);
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            // Get parameters
+            _bp = provider.GetParameterSet<BaseParameters>();
+
+            // Clear all events
+            if (UpdateFlux != null)
+            {
+                foreach (var inv in UpdateFlux.GetInvocationList())
+                    UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
+            }
+        }
+
+        /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="variables">Variables</param>
@@ -65,14 +87,6 @@ namespace SpiceSharp.Components.InductorBehaviors
             NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
             BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public void Unsetup(Simulation simulation)
-        {
         }
 
         /// <summary>

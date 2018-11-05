@@ -34,18 +34,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             // Get parameters
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _mbp = null;
-
-            base.Unsetup(simulation);
-        }
-
+        
         /// <summary>
         /// Gets the oxide capacitance factor squared.
         /// </summary>

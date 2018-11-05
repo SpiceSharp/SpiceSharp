@@ -48,6 +48,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+			base.Setup(simulation, provider);
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
@@ -115,6 +116,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="simulation"></param>
         public override void Unsetup(Simulation simulation)
         {
+            base.Unsetup(simulation);
+
             // Remove events
             _load1.UpdateFlux -= UpdateFlux1;
             _load2.UpdateFlux -= UpdateFlux2;

@@ -32,21 +32,15 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
+            if (provider == null)
+                throw new ArgumentNullException(nameof(simulation));
+
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
             _tran = provider.GetBehavior<TransientBehavior>();
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _tran = null;
         }
 
         /// <summary>

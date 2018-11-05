@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Algebra;
+﻿using System;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
 using SpiceSharp.IntegrationMethods;
@@ -62,18 +63,15 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _load = provider.GetBehavior<LoadBehavior>();
-        }
+            base.Setup(simulation, provider);
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
 
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _load = null;
+            // Get parameters
+            _bp = provider.GetParameterSet<BaseParameters>();
+
+            // Get behaviors
+            _load = provider.GetBehavior<LoadBehavior>();
         }
 
         /// <summary>

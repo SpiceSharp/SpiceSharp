@@ -73,6 +73,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -130,22 +131,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             NegPtr = solver.GetRhsElement(_negNode);
             PosPrimePtr = solver.GetRhsElement(PosPrimeNode);
         }
-
-        /// <summary>
-        /// Unsetup the device
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosPosPrimePtr = null;
-            NegPosPrimePtr = null;
-            PosPrimePosPtr = null;
-            PosPrimeNegPtr = null;
-            PosPosPtr = null;
-            NegNegPtr = null;
-            PosPrimePosPrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>

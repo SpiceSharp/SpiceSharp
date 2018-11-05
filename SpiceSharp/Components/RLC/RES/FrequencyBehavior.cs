@@ -68,6 +68,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+			base.Setup(simulation, provider);
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
@@ -90,20 +91,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
             NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            // Remove references
-            PosPosPtr = null;
-            NegNegPtr = null;
-            PosNegPtr = null;
-            NegPosPtr = null;
-        }
-
+        
         /// <summary>
         /// Connect behavior
         /// </summary>

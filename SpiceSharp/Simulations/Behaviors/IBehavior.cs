@@ -16,6 +16,14 @@ namespace SpiceSharp.Behaviors
         string Name { get; }
 
         /// <summary>
+        /// Gets a flag indicating whether this behavior has been setup.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this behavior is setup; otherwise, <c>false</c>.
+        /// </value>
+        bool IsSetup { get; }
+
+        /// <summary>
         /// Setup the behavior for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>

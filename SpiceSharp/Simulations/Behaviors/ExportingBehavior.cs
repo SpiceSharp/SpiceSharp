@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations.Behaviors
     /// </summary>
     /// <seealso cref="SpiceSharp.Attributes.NamedParameterized" />
     /// <seealso cref="SpiceSharp.Behaviors.IPropertyExporter" />
-    public abstract class ExportingBehavior : NamedParameterized, IPropertyExporter
+    public abstract class ExportingBehavior : NamedParameterized, IBehavior, IPropertyExporter
     {
         /// <summary>
         /// Gets the name of the behavior.
@@ -24,12 +24,39 @@ namespace SpiceSharp.Simulations.Behaviors
         public string Name { get; }
 
         /// <summary>
+        /// Gets a flag indicating whether this behavior has been setup.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this behavior is setup; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSetup { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ExportingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         protected ExportingBehavior(string name)
         {
             Name = name;
+        }
+
+        /// <summary>
+        /// Setup the behavior for the specified simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="provider">The provider.</param>
+        public virtual void Setup(Simulation simulation, SetupDataProvider provider)
+        {
+            IsSetup = true;
+        }
+
+        /// <summary>
+        /// Destroy the behavior.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        public virtual void Unsetup(Simulation simulation)
+        {
+            IsSetup = false;
         }
 
         /// <summary>

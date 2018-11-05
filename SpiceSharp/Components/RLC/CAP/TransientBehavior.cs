@@ -63,6 +63,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -132,19 +133,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             else
                 QCap.Current = _bp.Capacitance * (sol[_posNode] - sol[_negNode]);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosPosPtr = null;
-            NegNegPtr = null;
-            NegPosPtr = null;
-            PosNegPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior for DC and Transient analysis
         /// </summary>

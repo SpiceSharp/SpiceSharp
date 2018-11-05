@@ -81,6 +81,11 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
         }
 
@@ -122,40 +127,6 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Ibr1Neg2Ptr = solver.GetMatrixElement(BranchEq1, _neg2);
             Ibr2Ibr1Ptr = solver.GetMatrixElement(BranchEq2, BranchEq1);
             Ibr2Ibr2Ptr = solver.GetMatrixElement(BranchEq2, BranchEq2);
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            Internal1 = 0;
-            Internal2 = 0;
-            BranchEq1 = 0;
-            BranchEq2 = 0;
-
-            Pos1Pos1Ptr = null;
-            Pos1Int1Ptr = null;
-            Int1Pos1Ptr = null;
-            Int1Int1Ptr = null;
-            Int1Ibr1Ptr = null;
-            Ibr1Int1Ptr = null;
-            Neg1Ibr1Ptr = null;
-            Ibr1Neg1Ptr = null;
-            Pos2Pos2Ptr = null;
-            Pos2Int2Ptr = null;
-            Int2Pos2Ptr = null;
-            Int2Int2Ptr = null;
-            Int2Ibr2Ptr = null;
-            Ibr2Int2Ptr = null;
-            Neg2Ibr2Ptr = null;
-            Ibr2Neg2Ptr = null;
-            Ibr1Pos1Ptr = null;
-            Ibr1Pos2Ptr = null;
-            Ibr1Neg2Ptr = null;
-            Ibr2Ibr1Ptr = null;
-            Ibr2Ibr2Ptr = null;
         }
 
         /// <summary>
