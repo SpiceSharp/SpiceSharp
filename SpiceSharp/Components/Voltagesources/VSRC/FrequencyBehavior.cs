@@ -12,10 +12,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
     /// </summary>
     public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
-        /// <summary>
-        /// AC excitation vector
-        /// </summary>
-        public Complex Ac { get; protected set; }
+        // Necessary behaviors and parameters
+        private CommonBehaviors.IndependentFrequencyParameters _ap;
 
         /// <summary>
         /// Nodes
@@ -35,7 +33,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex Voltage => Ac;
+        public Complex Voltage => _ap.Phasor;
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
@@ -71,12 +69,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            var ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
-
-            // Calculate AC vector
-            var radians = ap.AcPhase * Math.PI / 180.0;
-            Ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
-
+            _ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
+            
             // Get behaviors
             var load = provider.GetBehavior<LoadBehavior>();
             _branchEq = load.BranchEq;
@@ -143,7 +137,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             BranchNegPtr.Value -= 1.0;
 
             // Load Rhs-vector
-            BranchPtr.Value += Ac;
+            BranchPtr.Value += _ap.Phasor;
         }
     }
 }

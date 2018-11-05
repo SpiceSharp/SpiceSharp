@@ -22,7 +22,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Nodes
         /// </summary>
         private int _posNode, _negNode;
-        private Complex _ac;
         protected VectorElement<Complex> PosPtr { get; private set; }
         protected VectorElement<Complex> NegPtr { get; private set; }
 
@@ -43,7 +42,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             var v = state.Solution[_posNode] - state.Solution[_negNode];
-            return -v * Complex.Conjugate(_ac);
+            return -v * Complex.Conjugate(_ap.Phasor);
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
             if (comparer.Equals("c", propertyName))
-                return () => _ac;
+                return () => _ap.Phasor;
             return base.CreateAcExport(simulation, propertyName, comparer);
         }
 
@@ -81,10 +80,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             // Get parameters
             _ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
-
-            // Calculate the AC vector
-            var radians = _ap.AcPhase * Math.PI / 180.0;
-            _ac = new Complex(_ap.AcMagnitude * Math.Cos(radians), _ap.AcMagnitude * Math.Sin(radians));
         }
         
         /// <summary>
@@ -125,8 +120,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            PosPtr.Value -= _ac;
-            NegPtr.Value += _ac;
+            PosPtr.Value -= _ap.Phasor;
+            NegPtr.Value += _ap.Phasor;
         }
     }
 }
