@@ -51,6 +51,9 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(string name) : base(name)
         {
             Configurations.Add(new FrequencyConfiguration());
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(IFrequencyBehavior));
         }
 
         /// <summary>
@@ -69,6 +72,9 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(string name, Sweep<double> frequencySweep) : base(name)
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(IFrequencyBehavior));
         }
 
         /// <summary>
@@ -89,6 +95,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, configurations and states
             var config = Configurations.Get<FrequencyConfiguration>();
+            _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
             FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
 
             // Create the state for complex numbers
@@ -103,22 +110,6 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
             ComplexState.Setup(Variables);
-        }
-
-        /// <summary>
-        /// Set up all behaviors previously created.
-        /// </summary>
-        /// <param name="entities">The circuit entities.</param>
-        protected override void SetupBehaviors(IEnumerable<Entity> entities)
-        {
-            // Create behaviors in reverse order to allow for inherited classes
-            _frequencyBehaviors = CreateBehaviorList<IFrequencyBehavior>(entities);
-
-            // Allow the base simulation to setup behaviors
-            base.SetupBehaviors(entities);
-
-            // Setup in regular order
-            SetupBehaviorList<IFrequencyBehavior>(entities);
         }
 
         /// <summary>

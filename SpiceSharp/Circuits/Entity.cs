@@ -57,17 +57,17 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Creates a behavior of the specified type.
         /// </summary>
-        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <param name="type">The type of the behavior</param>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual IBehavior CreateBehavior<T>(Simulation simulation) where T : IBehavior
+        public virtual IBehavior CreateBehavior(Type type, Simulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
             // Get the factory and generate it
-            if (Behaviors.TryGetValue(typeof(T), out var behavior))
+            if (Behaviors.TryGetValue(type, out var behavior))
                 return behavior();
             return null;
         }
@@ -75,17 +75,17 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Sets up the behavior.
         /// </summary>
-        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <param name="type">The type of the behavior that needs to be set up.</param>
         /// <param name="simulation">The simulation.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual void SetupBehavior<T>(Simulation simulation) where T : IBehavior
+        public virtual void SetupBehavior(Type type, Simulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
             // Get the behavior that needs to be set up
             var eb = simulation.EntityBehaviors[Name];
-            if (eb.TryGetValue(typeof(T), out var behavior))
+            if (eb.TryGetValue(type, out var behavior))
             {
                 // Don't set up the behavior twice!
                 if (behavior.IsSetup)

@@ -104,6 +104,14 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new BaseConfiguration());
+
+            // Add the necessary behaviors in the order that they are (usually) called
+            BehaviorTypes.AddRange(new []
+            {
+                typeof(ITemperatureBehavior),
+                typeof(IBaseBehavior),
+                typeof(IInitialConditionBehavior)
+            });
         }
 
         /// <summary>
@@ -117,11 +125,14 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
-            // Copy configuration
+            // Get behaviors and configuration data
             var config = Configurations.Get<BaseConfiguration>();
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
+            _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
+            _loadBehaviors = EntityBehaviors.GetBehaviorList<IBaseBehavior>();
+            _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
 
             // Create the state for this simulation
             RealState = new BaseSimulationState();
@@ -147,23 +158,6 @@ namespace SpiceSharp.Simulations
             // Set up nodesets
             foreach (var ns in config.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
-        }
-
-        /// <summary>
-        /// Set up all behaviors previously created.
-        /// </summary>
-        /// <param name="entities">The circuit entities.</param>
-        protected override void SetupBehaviors(IEnumerable<Entity> entities)
-        {
-            // Create the behaviors in reverse order to allow inherited objects to be loaded correctly
-            _initialConditionBehaviors = CreateBehaviorList<IInitialConditionBehavior>(entities);
-            _loadBehaviors = CreateBehaviorList<IBaseBehavior>(entities);
-            _temperatureBehaviors = CreateBehaviorList<ITemperatureBehavior>(entities);
-
-            // Setup the behaviors in regular order
-            SetupBehaviorList<ITemperatureBehavior>(entities);
-            SetupBehaviorList<IBaseBehavior>(entities);
-            SetupBehaviorList<IInitialConditionBehavior>(entities);
         }
 
         /// <summary>

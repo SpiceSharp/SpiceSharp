@@ -72,12 +72,12 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Creates a behavior of the specified type.
         /// </summary>
-        /// <typeparam name="T">The base behavior type.</typeparam>
+        /// <param name="type">The type of the behavior</param>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        public override IBehavior CreateBehavior<T>(Simulation simulation)
+        public override IBehavior CreateBehavior(Type type, Simulation simulation)
         {
-            var behavior = base.CreateBehavior<T>(simulation);
+            var behavior = base.CreateBehavior(type, simulation);
 
             // Apply our connections if necessary
             if (behavior is IConnectedBehavior conn)
