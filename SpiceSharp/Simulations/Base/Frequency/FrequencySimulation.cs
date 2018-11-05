@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -97,11 +99,26 @@ namespace SpiceSharp.Simulations
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
             // Setup behaviors
-            _frequencyBehaviors = SetupBehaviors<IFrequencyBehavior>(circuit.Entities);
             var solver = ComplexState.Solver;
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
             ComplexState.Setup(Variables);
+        }
+
+        /// <summary>
+        /// Set up all behaviors previously created.
+        /// </summary>
+        /// <param name="entities">The circuit entities.</param>
+        protected override void SetupBehaviors(IEnumerable<Entity> entities)
+        {
+            // Create behaviors in reverse order to allow for inherited classes
+            _frequencyBehaviors = CreateBehaviorList<IFrequencyBehavior>(entities);
+
+            // Allow the base simulation to setup behaviors
+            base.SetupBehaviors(entities);
+
+            // Setup in regular order
+            SetupBehaviorList<IFrequencyBehavior>(entities);
         }
 
         /// <summary>
@@ -191,7 +208,7 @@ namespace SpiceSharp.Simulations
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {
-                _frequencyBehaviors[i].Load(this);
+                // _frequencyBehaviors[i].Load(this);
                 _frequencyBehaviors[i].InitializeParameters(this);
             }
         }

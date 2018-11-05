@@ -42,6 +42,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -52,18 +53,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             // Get behaviors
             _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-            _modeltemp = null;
-        }
-
+        
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>

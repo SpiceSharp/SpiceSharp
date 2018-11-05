@@ -33,6 +33,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="provider">The setup data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+			base.Setup(simulation, provider);
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
@@ -40,20 +41,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             _bp = provider.GetParameterSet<BaseParameters>();
             provider.TryGetParameterSet("model", out _mbp);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            base.Unsetup(simulation);
-
-            // Clear references
-            _bp = null;
-            _mbp = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>

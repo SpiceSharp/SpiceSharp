@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
@@ -61,6 +60,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 

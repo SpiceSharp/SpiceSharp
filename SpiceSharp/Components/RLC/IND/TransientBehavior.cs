@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -32,27 +33,6 @@ namespace SpiceSharp.Components.InductorBehaviors
 
         [ParameterName("flux"), ParameterInfo("The flux through the inductor.")]
         public double Flux => _flux.Current;
-
-        /// <summary>
-        /// Setup behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-
-            // Clear all events
-            if (UpdateFlux != null)
-            {
-                foreach (var inv in UpdateFlux.GetInvocationList())
-                    UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
-            }
-        }
 
         /// <summary>
         /// Gets matrix pointer

@@ -68,6 +68,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -104,19 +105,6 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             PosControlNegPtr = solver.GetMatrixElement(_posNode, _contNegNode);
             NegControlPosPtr = solver.GetMatrixElement(_negNode, _contPosNode);
             NegControlNegPtr = solver.GetMatrixElement(_negNode, _contNegNode);
-        }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            // Remove references
-            PosControlPosPtr = null;
-            PosControlNegPtr = null;
-            NegControlPosPtr = null;
-            NegControlNegPtr = null;
         }
 
         /// <summary>

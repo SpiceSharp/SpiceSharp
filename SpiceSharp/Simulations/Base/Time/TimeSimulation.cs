@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
@@ -83,8 +84,6 @@ namespace SpiceSharp.Simulations
             var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             _useIc = config.UseIc;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            _transientBehaviors = SetupBehaviors<ITimeBehavior>(circuit.Entities);
-            _acceptBehaviors = SetupBehaviors<IAcceptBehavior>(circuit.Entities);
 
             // Allow all transient behaviors to allocate equation elements and create states
             for (var i = 0; i < _transientBehaviors.Count; i++)
@@ -104,6 +103,24 @@ namespace SpiceSharp.Simulations
             // Set up initial conditions
             foreach (var ic in config.InitialConditions)
                 _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
+        }
+
+        /// <summary>
+        /// Set up all behaviors previously created.
+        /// </summary>
+        /// <param name="entities">The circuit entities.</param>
+        protected override void SetupBehaviors(IEnumerable<Entity> entities)
+        {
+            // Create behaviors in reverse order to allow for inherited classes
+            _acceptBehaviors = CreateBehaviorList<IAcceptBehavior>(entities);
+            _transientBehaviors = CreateBehaviorList<ITimeBehavior>(entities);
+
+            // Allow the base simulation to set up behaviors
+            base.SetupBehaviors(entities);
+
+            // Set up in regular order
+            SetupBehaviorList<ITimeBehavior>(entities);
+            SetupBehaviorList<IAcceptBehavior>(entities);
         }
 
         /// <summary>

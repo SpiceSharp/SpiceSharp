@@ -22,6 +22,14 @@ namespace SpiceSharp.Behaviors
         public string Name { get; }
 
         /// <summary>
+        /// Gets a flag indicating whether this behavior has been setup.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is setup; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSetup { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
@@ -40,7 +48,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="provider">The data provider.</param>
         public virtual void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            // Do nothing
+            IsSetup = true;
         }
 
         /// <summary>
@@ -49,7 +57,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="simulation">The simulation.</param>
         public virtual void Unsetup(Simulation simulation)
         {
-            // Do nothing
+            IsSetup = false;
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
     {
         // Necessary behaviors and parameters
         private CommonBehaviors.IndependentFrequencyParameters _ap;
+        private LoadBehavior _load;
 
         /// <summary>
         /// Nodes
@@ -65,15 +66,15 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
             _ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
-            
+
             // Get behaviors
-            var load = provider.GetBehavior<LoadBehavior>();
-            _branchEq = load.BranchEq;
+            _load = provider.GetBehavior<LoadBehavior>();
         }
         
         /// <summary>
@@ -99,6 +100,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
+            // Get behaviors
+            _branchEq = _load.BranchEq;
+
             // Get matrix elements
             PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
             BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
@@ -108,19 +112,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             // Get rhs elements
             BranchPtr = solver.GetRhsElement(_branchEq);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosBranchPtr = null;
-            BranchPosPtr = null;
-            NegBranchPtr = null;
-            BranchNegPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>

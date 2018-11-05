@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
@@ -224,6 +225,9 @@ namespace SpiceSharp.Simulations
 
             // Get all parameters
             SetupParameters(circuit.Entities);
+
+            // Get all behaviors
+            SetupBehaviors(circuit.Entities);
         }
 
         /// <summary>
@@ -292,28 +296,50 @@ namespace SpiceSharp.Simulations
         #endregion
 
         /// <summary>
-        /// Collect and set up the behaviors of all circuit entities.
+        /// Set up all behaviors previously created.
         /// </summary>
-        /// <typeparam name="T">The base behavior type.</typeparam>
-        /// <param name="entities">The entities for which behaviors need to be collected.</param>
-        /// <returns>
-        /// A list of behaviors.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">entities</exception>
-        protected BehaviorList<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : IBehavior
-        {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-            EntityBehaviors.ListenTo(typeof(T));
+        /// <param name="entities">The circuit entities.</param>
+        protected abstract void SetupBehaviors(IEnumerable<Entity> entities);
 
-            // Register all behaviors
+        /// <summary>
+        /// Creates a list of behaviors.
+        /// </summary>
+        /// <typeparam name="T">The base type of behaviors.</typeparam>
+        /// <param name="entities">The entities in the circuit.</param>
+        protected BehaviorList<T> CreateBehaviorList<T>(IEnumerable<Entity> entities) where T : IBehavior
+        {
             foreach (var entity in entities)
             {
-                var behavior = entity.CreateBehavior<T>(this);
+                // Try to reuse a behavior first
+                IBehavior behavior = null;
+                if (EntityBehaviors.TryGetBehaviors(entity.Name, out var ebd))
+                {
+                    // If the entity behaviors already contains the type, reuse that object
+                    if (!ebd.TryGetValue(typeof(T), out behavior))
+                        behavior = null;
+                }
+
+                // If it doesn't exist, request a new behavior
+                if (behavior == null)
+                    behavior = entity.CreateBehavior<T>(this);
+
+                // Add the behavior to the pool
                 if (behavior != null)
-                    EntityBehaviors.Add(entity.Name, behavior);
+                    EntityBehaviors.Add<T>(entity.Name, behavior);
             }
+
             return EntityBehaviors.GetBehaviorList<T>();
+        }
+
+        /// <summary>
+        /// Set up a behavior list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entities">The entities.</param>
+        protected void SetupBehaviorList<T>(IEnumerable<Entity> entities) where T : IBehavior
+        {
+            foreach (var entity in entities)
+                entity.SetupBehavior<T>(this);
         }
 
         /// <summary>

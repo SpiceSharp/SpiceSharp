@@ -134,22 +134,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+
+            // Get behaviors
             _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-            _modeltemp = null;
-        }
-
+        
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>

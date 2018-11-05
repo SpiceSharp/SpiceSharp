@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -122,11 +123,6 @@ namespace SpiceSharp.Simulations
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
 
-            // Setup behaviors, configurations and states
-            _temperatureBehaviors = SetupBehaviors<ITemperatureBehavior>(circuit.Entities);
-            _loadBehaviors = SetupBehaviors<IBaseBehavior>(circuit.Entities);
-            _initialConditionBehaviors = SetupBehaviors<IInitialConditionBehavior>(circuit.Entities);
-
             // Create the state for this simulation
             RealState = new BaseSimulationState();
             _isPreordered = false;
@@ -151,6 +147,23 @@ namespace SpiceSharp.Simulations
             // Set up nodesets
             foreach (var ns in config.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
+        }
+
+        /// <summary>
+        /// Set up all behaviors previously created.
+        /// </summary>
+        /// <param name="entities">The circuit entities.</param>
+        protected override void SetupBehaviors(IEnumerable<Entity> entities)
+        {
+            // Create the behaviors in reverse order to allow inherited objects to be loaded correctly
+            _initialConditionBehaviors = CreateBehaviorList<IInitialConditionBehavior>(entities);
+            _loadBehaviors = CreateBehaviorList<IBaseBehavior>(entities);
+            _temperatureBehaviors = CreateBehaviorList<ITemperatureBehavior>(entities);
+
+            // Setup the behaviors in regular order
+            SetupBehaviorList<ITemperatureBehavior>(entities);
+            SetupBehaviorList<IBaseBehavior>(entities);
+            SetupBehaviorList<IInitialConditionBehavior>(entities);
         }
 
         /// <summary>

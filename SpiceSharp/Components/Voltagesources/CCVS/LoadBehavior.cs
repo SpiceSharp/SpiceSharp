@@ -69,6 +69,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -116,20 +117,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
             BranchControlBranchPtr = solver.GetMatrixElement(BranchEq, _contBranchEq);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchPosPtr = null;
-            BranchNegPtr = null;
-            BranchControlBranchPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
