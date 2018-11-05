@@ -58,16 +58,17 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Adds the specified behavior to the pool.
         /// </summary>
+        /// <param name="type">The type of the requested behavior.</param>
         /// <param name="creator">The entity identifier to which the .</param>
         /// <param name="behavior">The behavior to be added.</param>
         /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
-        public void Add<T>(string creator, IBehavior behavior) where T : IBehavior
+        public void Add(Type type, string creator, IBehavior behavior)
         {
             // Create the list entry if necessary
-            if (!_behaviors.TryGetValue(typeof(T), out var behaviorList))
+            if (!_behaviors.TryGetValue(type, out var behaviorList))
             {
                 behaviorList = new List<IBehavior>();
-                _behaviors.Add(typeof(T), behaviorList);
+                _behaviors.Add(type, behaviorList);
             }
 
             // Find the entity behaviors

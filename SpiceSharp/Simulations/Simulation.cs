@@ -130,6 +130,18 @@ namespace SpiceSharp.Simulations
         private bool _cloneParameters;
 
         /// <summary>
+        /// Gets the behavior types in the order that they are called.
+        /// </summary>
+        /// <value>
+        /// The behavior types.
+        /// </value>
+        /// <remarks>
+        /// The order is important for establishing dependencies. A behavior that is called first should
+        /// not depend on any other behaviors!
+        /// </remarks>
+        protected List<Type> BehaviorTypes { get; } = new List<Type>(10);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
@@ -299,14 +311,31 @@ namespace SpiceSharp.Simulations
         /// Set up all behaviors previously created.
         /// </summary>
         /// <param name="entities">The circuit entities.</param>
-        protected abstract void SetupBehaviors(IEnumerable<Entity> entities);
+        private void SetupBehaviors(IEnumerable<Entity> entities)
+        {
+            // First create all the behaviors in reverse order to account for inheritance and stuff
+            for (var i = BehaviorTypes.Count - 1; i >= 0; i--)
+            {
+                var type = BehaviorTypes[i];
+                CreateBehaviorList(type, entities);
+            }
+
+            // Then set up all the behavior in the regular order to allow them to resolve
+            // other behaviors
+            foreach (var type in BehaviorTypes)
+            {
+                foreach (var entity in entities)
+                    entity.SetupBehavior(type, this);
+            }
+        }
 
         /// <summary>
         /// Creates a list of behaviors.
         /// </summary>
         /// <typeparam name="T">The base type of behaviors.</typeparam>
+        /// <param name="type">The type to be created</param>
         /// <param name="entities">The entities in the circuit.</param>
-        protected BehaviorList<T> CreateBehaviorList<T>(IEnumerable<Entity> entities) where T : IBehavior
+        private void CreateBehaviorList(Type type, IEnumerable<Entity> entities)
         {
             foreach (var entity in entities)
             {
@@ -315,31 +344,17 @@ namespace SpiceSharp.Simulations
                 if (EntityBehaviors.TryGetBehaviors(entity.Name, out var ebd))
                 {
                     // If the entity behaviors already contains the type, reuse that object
-                    if (!ebd.TryGetValue(typeof(T), out behavior))
-                        behavior = null;
+                    ebd.TryGetValue(type, out behavior);
                 }
 
                 // If it doesn't exist, request a new behavior
                 if (behavior == null)
-                    behavior = entity.CreateBehavior<T>(this);
+                    behavior = entity.CreateBehavior(type, this);
 
                 // Add the behavior to the pool
                 if (behavior != null)
-                    EntityBehaviors.Add<T>(entity.Name, behavior);
+                    EntityBehaviors.Add(type, entity.Name, behavior);
             }
-
-            return EntityBehaviors.GetBehaviorList<T>();
-        }
-
-        /// <summary>
-        /// Set up a behavior list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entities">The entities.</param>
-        protected void SetupBehaviorList<T>(IEnumerable<Entity> entities) where T : IBehavior
-        {
-            foreach (var entity in entities)
-                entity.SetupBehavior<T>(this);
         }
 
         /// <summary>
