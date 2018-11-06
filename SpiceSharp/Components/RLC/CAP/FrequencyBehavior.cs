@@ -10,17 +10,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <summary>
     /// AC behavior for <see cref="Capacitor"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Necessary paramters and behaviors
-        /// </summary>
-        private BaseParameters _bp;
-
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode;
         protected MatrixElement<Complex> PosPosPtr { get; private set; }
         protected MatrixElement<Complex> NegNegPtr { get; private set; }
         protected MatrixElement<Complex> PosNegPtr { get; private set; }
@@ -31,23 +25,23 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            var conductance = state.Laplace * _bp.Capacitance.Value;
-            return (state.Solution[_posNode] - state.Solution[_negNode]) * conductance;
+            var conductance = state.Laplace * Capacitance;
+            return (state.Solution[PosNode] - state.Solution[NegNode]) * conductance;
         }
         [ParameterName("p"), ParameterInfo("Capacitor power")]
         public Complex GetPower(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            var conductance = state.Laplace * _bp.Capacitance.Value;
-            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
+            var conductance = state.Laplace * Capacitance;
+            var voltage = state.Solution[PosNode] - state.Solution[NegNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
 
@@ -58,61 +52,41 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Initializes the parameters.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The frequency simulation.</param>
+        public void InitializeParameters(FrequencySimulation simulation)
         {
-            base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-        }
-        
-        /// <summary>
-        /// Connect behavior
-        /// </summary>
-        /// <param name="pins"></param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
+            // Not needed
         }
 
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">The matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
             // Get matrix pointers
-            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
-            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
-            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
-            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
+            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
+            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
+            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
         }
         
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            var val = state.Laplace * _bp.Capacitance.Value;
+            var val = state.Laplace * Capacitance;
 
             // Load the Y-matrix
             PosPosPtr.Value += val;

@@ -10,50 +10,59 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// AC behavior for <see cref="Resistor"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : LoadBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the (complex) voltage across the capacitor.
         /// </summary>
-        private TemperatureBehavior _temp;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [ParameterName("v"), ParameterInfo("Voltage")]
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        [ParameterName("v"), ParameterInfo("Complex voltage across the capacitor.")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
-        [ParameterName("i"), ParameterInfo("Current")]
+
+        /// <summary>
+        /// Gets the (complex) current.
+        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
+        [ParameterName("i"), ParameterInfo("Complex current through the capacitor.")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
-            return voltage * _temp.Conductance;
+            var voltage = state.Solution[PosNode] - state.Solution[NegNode];
+            return voltage * Conductance;
         }
+
+        /// <summary>
+        /// Gets the (complex) power dissipated by the capacitor.
+        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
-            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
-            return voltage * Complex.Conjugate(voltage) * _temp.Conductance;
+            var voltage = state.Solution[PosNode] - state.Solution[NegNode];
+            return voltage * Complex.Conjugate(voltage) * Conductance;
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode;
-        protected MatrixElement<Complex> PosPosPtr { get; private set; }
-        protected MatrixElement<Complex> NegNegPtr { get; private set; }
-        protected MatrixElement<Complex> PosNegPtr { get; private set; }
-        protected MatrixElement<Complex> NegPosPtr { get; private set; }
+        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+        protected MatrixElement<Complex> CPosNegPtr { get; private set; }
+        protected MatrixElement<Complex> CNegPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -62,65 +71,42 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Initializes the parameters.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The frequency simulation.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void InitializeParameters(FrequencySimulation simulation)
         {
-			base.Setup(simulation, provider);
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
-            // Get behaviors
-            _temp = provider.GetBehavior<TemperatureBehavior>();
+            // Not needed
         }
 
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
             // Get matrix pointers
-            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
-            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
-            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
-            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
-        }
-        
-        /// <summary>
-        /// Connect behavior
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
+            CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
+            CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
+            CNegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
         }
 
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
-
-            // Load Y-matrix
-            var conductance = _temp.Conductance;
-            PosPosPtr.Value += conductance;
-            NegNegPtr.Value += conductance;
-            PosNegPtr.Value -= conductance;
-            NegPosPtr.Value -= conductance;
+            var conductance = Conductance;
+            CPosPosPtr.Value += conductance;
+            CNegNegPtr.Value += conductance;
+            CPosNegPtr.Value -= conductance;
+            CNegPosPtr.Value -= conductance;
         }
     }
 }

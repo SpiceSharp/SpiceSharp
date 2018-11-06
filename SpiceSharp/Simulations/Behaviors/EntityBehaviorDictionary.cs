@@ -25,25 +25,5 @@ namespace SpiceSharp.Behaviors
         {
             Source = source;
         }
-
-        /// <summary>
-        /// Register a behavior.
-        /// </summary>
-        /// <param name="behavior">Behavior</param>
-        /// <exception cref="ArgumentNullException">behavior</exception>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
-        public void Register(IBehavior behavior)
-        {
-            if (behavior == null)
-                throw new ArgumentNullException(nameof(behavior));
-
-            // Get types
-            var mytype = behavior.GetType();
-            var basetype = mytype.GetTypeInfo().BaseType ?? throw new CircuitException("Invalid behavior");
-
-            // Register types
-            Dictionary[mytype] = behavior;
-            Dictionary[basetype] = behavior;
-        }
     }
 }
