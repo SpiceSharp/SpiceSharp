@@ -71,7 +71,7 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
-            if (eb.TryGet<BaseFrequencyBehavior>(out var behavior) && behavior is IPropertyExporter exporter)
+            if (eb.TryGet<IFrequencyBehavior>(out var behavior) && behavior is IPropertyExporter exporter)
                 exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
 
             Extractor = extractor;

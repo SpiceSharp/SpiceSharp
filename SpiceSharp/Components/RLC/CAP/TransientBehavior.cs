@@ -8,40 +8,53 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Capacitor"/>
+    /// Transient behavior for a <see cref="Capacitor" />.
     /// </summary>
-    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
+    /// <seealso cref="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior" />
+    /// <seealso cref="SpiceSharp.Behaviors.ITimeBehavior" />
+    public class TransientBehavior : TemperatureBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the current through the capacitor.
         /// </summary>
-        private BaseParameters _bp;
-
-        /// <summary>
-        /// Methods
-        /// </summary>
+        /// <value>
+        /// The current.
+        /// </value>
         [ParameterName("i"), ParameterInfo("Device current")]
         public double Current => QCap.Derivative;
+
+        /// <summary>
+        /// Gets the instantaneous power dissipated by the capacitor.
+        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Instantaneous device power")]
         public double GetPower(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return QCap.Derivative * (state.Solution[_posNode] - state.Solution[_negNode]);
+            return QCap.Derivative * (state.Solution[PosNode] - state.Solution[NegNode]);
         }
+
+        /// <summary>
+        /// Gets the voltage across the capacitor.
+        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
         /// <summary>
         /// Nodes and states
         /// </summary>
-        private int _posNode, _negNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
@@ -55,45 +68,15 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <param name="name">Name of the behavior</param>
         public TransientBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Setup behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-        }
         
-        /// <summary>
-        /// Connect the behavior
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-        }
-
         /// <summary>
         /// Create states
         /// </summary>
         /// <param name="method"></param>
-        public override void CreateStates(IntegrationMethod method)
+        public void CreateStates(IntegrationMethod method)
         {
 			if (method == null)
 				throw new ArgumentNullException(nameof(method));
-
             QCap = method.CreateDerivative();
         }
 
@@ -101,55 +84,55 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<double> solver)
+        public void GetEquationPointers(Solver<double> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
             // Get matrix elements
-            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
-            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
-            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
-            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
+            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
+            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
+            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
 
             // Get rhs elements
-            PosPtr = solver.GetRhsElement(_posNode);
-            NegPtr = solver.GetRhsElement(_negNode);
+            PosPtr = solver.GetRhsElement(PosNode);
+            NegPtr = solver.GetRhsElement(NegNode);
         }
 
         /// <summary>
         /// Calculate the state for DC
         /// </summary>
         /// <param name="simulation"></param>
-        public override void GetDcState(TimeSimulation simulation)
+        public void GetDcState(TimeSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
             // Calculate the state for DC
             var sol = simulation.RealState.Solution;
-            if (_bp.InitialCondition.Given)
-                QCap.Current = _bp.InitialCondition;
+            if (BaseParameters.InitialCondition.Given)
+                QCap.Current = BaseParameters.InitialCondition;
             else
-                QCap.Current = _bp.Capacitance * (sol[_posNode] - sol[_negNode]);
+                QCap.Current = Capacitance * (sol[PosNode] - sol[NegNode]);
         }
         
         /// <summary>
         /// Execute behavior for DC and Transient analysis
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void Transient(TimeSimulation simulation)
+        public void Transient(TimeSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var vcap = state.Solution[_posNode] - state.Solution[_negNode];
+            var vcap = state.Solution[PosNode] - state.Solution[NegNode];
 
             // Integrate
-            QCap.Current = _bp.Capacitance * vcap;
+            QCap.Current = Capacitance * vcap;
             QCap.Integrate();
-            var geq = QCap.Jacobian(_bp.Capacitance);
+            var geq = QCap.Jacobian(Capacitance);
             var ceq = QCap.RhsCurrent();
 
             // Load matrix
@@ -162,11 +145,5 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             PosPtr.Value -= ceq;
             NegPtr.Value += ceq;
         }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <returns>The timestep that satisfies the LTE</returns>
-        // public override double Truncate() => QCap.LocalTruncationError();
     }
 }
