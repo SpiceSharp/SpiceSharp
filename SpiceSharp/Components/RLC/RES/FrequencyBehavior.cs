@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class FrequencyBehavior : LoadBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (complex) voltage across the capacitor.
+        /// Gets the (complex) voltage across the resistor.
         /// </summary>
         /// <param name="state">The simulation state.</param>
         /// <returns></returns>
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the (complex) current.
+        /// Gets the (complex) current through the resistor.
         /// </summary>
         /// <param name="state">The simulation state.</param>
         /// <returns></returns>
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the (complex) power dissipated by the capacitor.
+        /// Gets the (complex) power dissipated by the resistor.
         /// </summary>
         /// <param name="state">The simulation state.</param>
         /// <returns></returns>
