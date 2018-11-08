@@ -138,7 +138,7 @@ namespace SpiceSharp.Simulations
         /// The order is important for establishing dependencies. A behavior that is called first should
         /// not depend on any other behaviors!
         /// </remarks>
-        protected List<Type> BehaviorTypes { get; } = new List<Type>(10);
+        protected List<Type> BehaviorTypes { get; } = new List<Type>(6);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
