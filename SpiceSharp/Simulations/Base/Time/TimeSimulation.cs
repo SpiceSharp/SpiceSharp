@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
@@ -26,7 +25,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<ITimeBehavior> _transientBehaviors;
         private BehaviorList<IAcceptBehavior> _acceptBehaviors;
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
-        private bool _shouldReorder = true, _useIc = false;
+        private bool _shouldReorder = true, _useIc;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -291,14 +290,6 @@ namespace SpiceSharp.Simulations
                     switch (state.Init)
                     {
                         case InitializationModes.Float:
-                            // TimeIterate is only used during simulation, so the next part is never reached
-                            /* if (state.UseDc && state.HadNodeSet)
-                            {
-                                if (pass)
-                                    state.IsConvergent = false;
-                                pass = false;
-                            } */
-
                             if (state.IsConvergent)
                             {
                                 Statistics.Iterations += iterno;
