@@ -4,10 +4,11 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// An interface that describes behaviors for a <see cref="SpiceSharp.Simulations.BaseSimulation" />.
+    /// An interface that describes behaviors for biasing in a <see cref="SpiceSharp.Simulations.BaseSimulation" />.
+    /// This behavior is responsible for calculating the DC equivalent behavior of an entity.
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.IBehavior" />
-    public interface IBaseBehavior : IBehavior
+    public interface IBiasingBehavior : IBehavior
     {
         /// <summary>
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional

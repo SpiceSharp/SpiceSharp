@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// General behavior for <see cref="Resistor"/>
     /// </summary>
-    public class LoadBehavior : TemperatureBehavior, IBaseBehavior
+    public class LoadBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the voltage across the resistor.
