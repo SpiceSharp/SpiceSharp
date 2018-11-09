@@ -5,33 +5,53 @@ using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.Waveforms
 {
+    /// <summary>
+    /// Piecewise linear waveform.
+    /// </summary>
     public class Pwl : Waveform
     {
-        public Pwl(double[] times, double[] voltages, double initialVoltage = 0.0)
+        private LineDefinition lineDefinition = null;
+        private bool breakPointsAdded = false;
+        private long currentLineIndex = 0;
+        private long pwlPoints = 0;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="times">Array of times.</param>
+        /// <param name="voltages">Array of voltages.</param>
+        public Pwl(double[] times, double[] voltages)
         {
-            if (times == null)
-            {
-                throw new NullReferenceException(nameof(times));
-            }
+            Times = times ?? throw new NullReferenceException(nameof(times));
+            Voltages = voltages ?? throw new NullReferenceException(nameof(voltages));
 
-            if (voltages == null)
-            {
-                throw new NullReferenceException(nameof(voltages));
-            }
-
-            if (times.Length != voltages.Length)
+            if (Times.Length != Voltages.Length)
             {
                 throw new InvalidOperationException("PWL - times array has different length than voltages array");
             }
 
-            Points = CreatePoints(times, voltages, initialVoltage);
-            LineParameters = CreateLineParameters(Points);
+            pwlPoints = Times.Length;
+
+            if (pwlPoints == 0)
+            {
+                throw new InvalidOperationException("PWL - times array has zero points");
+            }
         }
 
-        public List<Point> Points { get; }
+        /// <summary>
+        /// Array of times.
+        /// </summary>
+        public double[] Times { get; private set; }
 
-        protected LineDefinition[] LineParameters { get; }
+        /// <summary>
+        /// Array of voltages.
+        /// </summary>
+        public double[] Voltages { get; private set; }
 
+        /// <summary>
+        /// Accepts the current timepoint.
+        /// </summary>
+        /// <param name="simulation">The time-based simulation</param>
         public override void Accept(TimeSimulation simulation)
         {
             if (simulation == null)
@@ -40,109 +60,106 @@ namespace SpiceSharp.Components.Waveforms
             }
 
             double time = simulation.Method.Time;
-            if (time.Equals(0.0))
-                Value = Points[0].Y;
+
+            if (simulation.Method.Time.Equals(0.0))
+                Value = Voltages[0];
 
             if (simulation.Method is IBreakpoints method)
             {
                 var breaks = method.Breakpoints;
-                if (!method.Break)
-                    return;
 
-                for (int i = 0; i < Points.Count; i++)
+                if (!breakPointsAdded)
                 {
-                    breaks.SetBreakpoint(Points[i].X);
+                    for (var i = 0; i < Times.Length; i++)
+                    {
+                        breaks.SetBreakpoint(Times[i]);
+                    }
+
+                    breakPointsAdded = true;
                 }
-                   
             }
         }
 
+        /// <summary>
+        /// Indicates a new timepoint is being probed.
+        /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
         public override void Probe(TimeSimulation simulation)
         {
             var time = simulation.Method.Time;
-
-            Value = GetLineValue(Points, LineParameters, time);
+            Value = GetLineValue(time);
         }
 
+        /// <summary>
+        /// Resets the waveform.
+        /// </summary>
+        public void Reset()
+        {
+            breakPointsAdded = false;
+            currentLineIndex = 0;
+        }
+
+        /// <summary>
+        /// Sets up the waveform.
+        /// </summary>
         public override void Setup()
         {
+            Value = Voltages[0];
         }
 
-        protected List<Point> CreatePoints(double[] times, double[] voltages, double initialVoltage)
+        /// <summary>
+        /// Gets the value of PWL for given time.
+        /// </summary>
+        /// <param name="time">Time.</param>
+        /// <returns>
+        /// PWL's value for given time.
+        /// </returns>
+        protected double GetLineValue(double time)
         {
-            var result = new List<Point>();
-
-            for (var i = 0; i < times.Length; i++)
+            if (currentLineIndex == pwlPoints)
             {
-                result.Add(new Point(times[i], voltages[i]));
+                return Voltages[pwlPoints - 1];
             }
 
-            if (times[0] != 0.0)
+            while (true)
             {
-                result.Insert(0, new Point(0.0, initialVoltage));
-            }
-
-            return result;
-        }
-
-        protected static double GetLineValue(List<Point> points, LineDefinition[] lines, double x)
-        {
-            int index = 0;
-
-            while (index < points.Count && points[index].X < x)
-            {
-                index++;
-            }
-
-            if (index == points.Count)
-            {
-                return points[points.Count - 1].Y;
-            }
-
-            if (index == 0 && points[0].X > x)
-            {
-                return points[0].Y;
-            }
-
-            return (lines[index].A * x) + lines[index].B;
-        }
-
-        protected static LineDefinition[] CreateLineParameters(List<Point> points)
-        {
-            var result = new List<LineDefinition>();
-
-            for (var i = 0; i < points.Count - 1; i++)
-            {
-                double x1 = points[i].X;
-                double x2 = points[i + 1].X;
-                double y1 = points[i].Y;
-                double y2 = points[i + 1].Y;
-
-                double a = (y2 - y1) / (x2 - x1);
-
-                result.Add(new LineDefinition()
+                if (Times[currentLineIndex] >= time)
                 {
-                    A = a,
-                    B = y1 - (a * x1),
-                });
+                    long prevLineIndex = currentLineIndex - 1;
+                    if (prevLineIndex >= 0)
+                    {
+                        if (lineDefinition == null)
+                        {
+                            lineDefinition = CreateLineParameters(Times[prevLineIndex], Times[currentLineIndex], Voltages[prevLineIndex], Voltages[currentLineIndex]);
+                        }
+                        return (lineDefinition.A * time) + lineDefinition.B;
+                    }
+                    else
+                    {
+                        return Voltages[0];
+                    }
+                }
+
+                lineDefinition = null;
+                currentLineIndex++;
+
+                if (currentLineIndex == pwlPoints)
+                {
+                    break;
+                }
             }
-            result.Insert(0, result[0]);
-            result.Add(result[result.Count - 1]);
-            return result.ToArray();
+
+            return Voltages[pwlPoints - 1];
         }
 
-       
-        public class Point
+        protected static LineDefinition CreateLineParameters(double x1, double x2, double y1, double y2)
         {
-            public Point(double x, double y)
+            double a = (y2 - y1) / (x2 - x1);
+            return new LineDefinition()
             {
-                X = x;
-                Y = y;
-            }
-
-            public double X { get; set; }
-
-            public double Y { get; set; }
+                A = a,
+                B = y1 - (a * x1),
+            };
         }
 
         protected class LineDefinition
