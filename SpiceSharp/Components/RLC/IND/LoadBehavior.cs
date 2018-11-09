@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// Load behavior for a <see cref="Inductor"/>
     /// </summary>
-    public partial class BaseBehavior : ExportingBehavior, IBaseBehavior, IConnectedBehavior
+    public partial class BaseBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Nodes

@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
             // 2) Second, try the load behavior
             if (extractor == null)
             {
-                if (eb.TryGetValue(typeof(IBaseBehavior), out var behavior) &&
+                if (eb.TryGetValue(typeof(IBiasingBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
                     exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
             }

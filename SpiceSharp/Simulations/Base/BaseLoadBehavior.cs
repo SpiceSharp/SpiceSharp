@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// A template that describes the loading behavior.
     /// </summary>
-    public abstract class BaseLoadBehavior : Behavior, IBaseBehavior
+    public abstract class BaseLoadBehavior : Behavior, IBiasingBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseLoadBehavior"/> class.

@@ -85,7 +85,7 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
-        private BehaviorList<IBaseBehavior> _loadBehaviors;
+        private BehaviorList<IBiasingBehavior> _loadBehaviors;
         private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<IInitialConditionBehavior> _initialConditionBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
             BehaviorTypes.AddRange(new []
             {
                 typeof(ITemperatureBehavior),
-                typeof(IBaseBehavior),
+                typeof(IBiasingBehavior),
                 typeof(IInitialConditionBehavior)
             });
         }
@@ -131,7 +131,7 @@ namespace SpiceSharp.Simulations
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
-            _loadBehaviors = EntityBehaviors.GetBehaviorList<IBaseBehavior>();
+            _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
 
             // Create the state for this simulation
