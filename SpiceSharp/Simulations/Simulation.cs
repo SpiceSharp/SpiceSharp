@@ -232,13 +232,9 @@ namespace SpiceSharp.Simulations
                 _cloneParameters = false;
             }
 
-            // Setup all objects
+            // Setup all entity parameters and behaviors
             circuit.Entities.BuildOrderedComponentList();
-
-            // Get all parameters
             SetupParameters(circuit.Entities);
-
-            // Get all behaviors
             SetupBehaviors(circuit.Entities);
         }
 
@@ -313,58 +309,40 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The circuit entities.</param>
         private void SetupBehaviors(IEnumerable<Entity> entities)
         {
-            // First create all the behaviors in reverse order to account for inheritance and stuff
-            var enumerable = entities as Entity[] ?? entities.ToArray();
-            for (var i = BehaviorTypes.Count - 1; i >= 0; i--)
-            {
-                var type = BehaviorTypes[i];
-                CreateBehaviorList(type, enumerable);
-            }
+            var behaviors = new HashSet<IBehavior>();
 
-            // Then set up all the behavior in the regular order to allow them to resolve other behaviors
-            // We only set up behaviors once, so we'll keep track of which ones have already been set up
-            var setup = new HashSet<IBehavior>();
-            foreach (var entity in enumerable)
-            {
-                // Changed entities, so we don't need the behaviors anymore
-                setup.Clear();
-                var eb = EntityBehaviors[entity.Name];
-                foreach (var type in BehaviorTypes)
-                {
-                    if (eb.TryGetValue(type, out var behavior) && !setup.Contains(behavior))
-                    {
-                        entity.SetupBehavior(behavior, this);
-                        setup.Add(behavior);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates a list of behaviors.
-        /// </summary>
-        /// <typeparam name="T">The base type of behaviors.</typeparam>
-        /// <param name="type">The type to be created</param>
-        /// <param name="entities">The entities in the circuit.</param>
-        private void CreateBehaviorList(Type type, IEnumerable<Entity> entities)
-        {
             foreach (var entity in entities)
             {
-                // Try to reuse a behavior first
-                IBehavior behavior = null;
-                if (EntityBehaviors.TryGetBehaviors(entity.Name, out var ebd))
+                behaviors.Clear();
+
+                // Create the behaviors in the reverse order to allow inheritance
+                for (var i = BehaviorTypes.Count - 1; i >= 0; i--)
                 {
-                    // If the entity behaviors already contains the type, reuse that object
-                    ebd.TryGetValue(type, out behavior);
+                    IBehavior behavior = null;
+                    var type = BehaviorTypes[i];
+
+                    // Try to reuse a behavior first
+                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var ebd))
+                    {
+                        // If the entity behaviors already contains the type, reuse that object
+                        ebd.TryGetValue(type, out behavior);
+                    }
+
+                    // If it doesn't exist, request a new behavior
+                    if (behavior == null)
+                        behavior = entity.CreateBehavior(type, this);
+
+                    // Add the behavior to the pool
+                    if (behavior != null)
+                    {
+                        EntityBehaviors.Add(type, entity.Name, behavior);
+                        behaviors.Add(behavior);
+                    }
                 }
-
-                // If it doesn't exist, request a new behavior
-                if (behavior == null)
-                    behavior = entity.CreateBehavior(type, this);
-
-                // Add the behavior to the pool
-                if (behavior != null)
-                    EntityBehaviors.Add(type, entity.Name, behavior);
+                
+                // Setup the distinct behaviors
+                foreach (var behavior in behaviors)
+                    entity.SetupBehavior(behavior, this);
             }
         }
 
