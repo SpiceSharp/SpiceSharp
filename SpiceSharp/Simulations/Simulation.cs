@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
@@ -313,18 +314,29 @@ namespace SpiceSharp.Simulations
         private void SetupBehaviors(IEnumerable<Entity> entities)
         {
             // First create all the behaviors in reverse order to account for inheritance and stuff
+            var enumerable = entities as Entity[] ?? entities.ToArray();
             for (var i = BehaviorTypes.Count - 1; i >= 0; i--)
             {
                 var type = BehaviorTypes[i];
-                CreateBehaviorList(type, entities);
+                CreateBehaviorList(type, enumerable);
             }
 
-            // Then set up all the behavior in the regular order to allow them to resolve
-            // other behaviors
-            foreach (var type in BehaviorTypes)
+            // Then set up all the behavior in the regular order to allow them to resolve other behaviors
+            // We only set up behaviors once, so we'll keep track of which ones have already been set up
+            var setup = new HashSet<IBehavior>();
+            foreach (var entity in enumerable)
             {
-                foreach (var entity in entities)
-                    entity.SetupBehavior(type, this);
+                // Changed entities, so we don't need the behaviors anymore
+                setup.Clear();
+                var eb = EntityBehaviors[entity.Name];
+                foreach (var type in BehaviorTypes)
+                {
+                    if (eb.TryGetValue(type, out var behavior) && !setup.Contains(behavior))
+                    {
+                        entity.SetupBehavior(behavior, this);
+                        setup.Add(behavior);
+                    }
+                }
             }
         }
 

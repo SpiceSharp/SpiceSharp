@@ -78,23 +78,14 @@ namespace SpiceSharp.Circuits
         /// <param name="type">The type of the behavior that needs to be set up.</param>
         /// <param name="simulation">The simulation.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual void SetupBehavior(Type type, Simulation simulation)
+        public virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            // Get the behavior that needs to be set up
-            var eb = simulation.EntityBehaviors[Name];
-            if (eb.TryGetValue(type, out var behavior))
-            {
-                // Don't set up the behavior twice!
-                if (behavior.IsSetup)
-                    return;
-
-                // Build the setup behavior
-                var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
-                behavior.Setup(simulation, provider);
-            }
+            // Build the setup behavior
+            var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
+            behavior.Setup(simulation, provider);
         }
 
         /// <summary>
