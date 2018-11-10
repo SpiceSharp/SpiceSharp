@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -22,19 +21,19 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="voltages">Array of voltages.</param>
         public Pwl(double[] times, double[] voltages)
         {
-            Times = times ?? throw new NullReferenceException(nameof(times));
-            Voltages = voltages ?? throw new NullReferenceException(nameof(voltages));
+            Times = times ?? throw new ArgumentNullException(nameof(times));
+            Voltages = voltages ?? throw new ArgumentNullException(nameof(voltages));
 
             if (Times.Length != Voltages.Length)
             {
-                throw new InvalidOperationException("PWL - times array has different length than voltages array");
+                throw new ArgumentException("PWL - times array has different length than voltages array");
             }
 
             pwlPoints = Times.Length;
 
             if (pwlPoints == 0)
             {
-                throw new InvalidOperationException("PWL - times array has zero points");
+                throw new ArgumentException("PWL - times array has zero points");
             }
         }
 
@@ -104,7 +103,8 @@ namespace SpiceSharp.Components.Waveforms
         /// </summary>
         public override void Setup()
         {
-            Value = Voltages[0];
+            // Set value for time = 0.0
+            Value = GetLineValue(0.0);
         }
 
         /// <summary>
@@ -116,12 +116,7 @@ namespace SpiceSharp.Components.Waveforms
         /// </returns>
         protected double GetLineValue(double time)
         {
-            if (currentLineIndex == pwlPoints)
-            {
-                return Voltages[pwlPoints - 1];
-            }
-
-            while (true)
+            while (currentLineIndex < pwlPoints)
             {
                 if (Times[currentLineIndex] >= time)
                 {
@@ -142,11 +137,6 @@ namespace SpiceSharp.Components.Waveforms
 
                 lineDefinition = null;
                 currentLineIndex++;
-
-                if (currentLineIndex == pwlPoints)
-                {
-                    break;
-                }
             }
 
             return Voltages[pwlPoints - 1];
