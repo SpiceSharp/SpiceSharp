@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.Waveforms
     public class Pwl : Waveform
     {
         private LineDefinition lineDefinition = null;
-        private bool breakPointsAdded = false;
+        private bool breakPointAdded = false;
         private long currentLineIndex = 0;
         private long pwlPoints = 0;
 
@@ -34,6 +34,14 @@ namespace SpiceSharp.Components.Waveforms
             if (pwlPoints == 0)
             {
                 throw new ArgumentException("PWL - times array has zero points");
+            }
+
+            for (var i = 1; i < pwlPoints; i++)
+            {
+                if (Times[i-1] >= Times[i])
+                {
+                    throw new ArgumentException("PWL - times array should contain monotonously increasing time points");
+                }
             }
         }
 
@@ -61,20 +69,22 @@ namespace SpiceSharp.Components.Waveforms
             double time = simulation.Method.Time;
 
             if (simulation.Method.Time.Equals(0.0))
-                Value = Voltages[0];
+            {
+                Value = GetLineValue(0.0);
+            }
 
             if (simulation.Method is IBreakpoints method)
             {
                 var breaks = method.Breakpoints;
 
-                if (!breakPointsAdded)
+                if (!breakPointAdded && currentLineIndex < pwlPoints)
                 {
-                    for (var i = 0; i < Times.Length; i++)
+                    double breakPointTime = Times[currentLineIndex];
+                    if (breakPointTime >= 0.0)
                     {
-                        breaks.SetBreakpoint(Times[i]);
+                        breaks.SetBreakpoint(breakPointTime);
                     }
-
-                    breakPointsAdded = true;
+                    breakPointAdded = true;
                 }
             }
         }
@@ -94,7 +104,7 @@ namespace SpiceSharp.Components.Waveforms
         /// </summary>
         public void Reset()
         {
-            breakPointsAdded = false;
+            breakPointAdded = false;
             currentLineIndex = 0;
         }
 
@@ -126,6 +136,7 @@ namespace SpiceSharp.Components.Waveforms
                         if (lineDefinition == null)
                         {
                             lineDefinition = CreateLineParameters(Times[prevLineIndex], Times[currentLineIndex], Voltages[prevLineIndex], Voltages[currentLineIndex]);
+                            breakPointAdded = false;
                         }
                         return (lineDefinition.A * time) + lineDefinition.B;
                     }
@@ -135,6 +146,7 @@ namespace SpiceSharp.Components.Waveforms
                     }
                 }
 
+                breakPointAdded = false;
                 lineDefinition = null;
                 currentLineIndex++;
             }
