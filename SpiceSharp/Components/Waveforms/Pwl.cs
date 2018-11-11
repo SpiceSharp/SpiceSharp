@@ -9,10 +9,33 @@ namespace SpiceSharp.Components.Waveforms
     /// </summary>
     public class Pwl : Waveform
     {
-        private LineDefinition lineDefinition = null;
-        private bool breakPointAdded = false;
-        private long currentLineIndex = 0;
-        private long pwlPoints = 0;
+        /// <summary>
+        /// A definition of a line
+        /// </summary>
+        protected class LineDefinition
+        {
+            /// <summary>
+            /// Gets or sets the slope of the line.
+            /// </summary>
+            /// <value>
+            /// The slope.
+            /// </value>
+            public double A { get; set; }
+
+            /// <summary>
+            /// Gets or sets the intercept of the line.
+            /// </summary>
+            /// <value>
+            /// The intercept.
+            /// </value>
+            public double B { get; set; }
+        }
+
+        // Private variables
+        private LineDefinition _lineDefinition;
+        private bool _breakPointAdded;
+        private long _currentLineIndex;
+        private readonly long _pwlPoints;
 
         /// <summary>
         /// Constructor.
@@ -29,14 +52,14 @@ namespace SpiceSharp.Components.Waveforms
                 throw new ArgumentException("PWL - times array has different length than voltages array");
             }
 
-            pwlPoints = Times.Length;
+            _pwlPoints = Times.Length;
 
-            if (pwlPoints == 0)
+            if (_pwlPoints == 0)
             {
                 throw new ArgumentException("PWL - times array has zero points");
             }
 
-            for (var i = 1; i < pwlPoints; i++)
+            for (var i = 1; i < _pwlPoints; i++)
             {
                 if (Times[i-1] >= Times[i])
                 {
@@ -48,12 +71,12 @@ namespace SpiceSharp.Components.Waveforms
         /// <summary>
         /// Array of times.
         /// </summary>
-        public double[] Times { get; private set; }
+        public double[] Times { get; }
 
         /// <summary>
         /// Array of voltages.
         /// </summary>
-        public double[] Voltages { get; private set; }
+        public double[] Voltages { get; }
 
         /// <summary>
         /// Accepts the current timepoint.
@@ -66,8 +89,6 @@ namespace SpiceSharp.Components.Waveforms
                 throw new ArgumentNullException(nameof(simulation));
             }
 
-            double time = simulation.Method.Time;
-
             if (simulation.Method.Time.Equals(0.0))
             {
                 Value = GetLineValue(0.0);
@@ -77,14 +98,14 @@ namespace SpiceSharp.Components.Waveforms
             {
                 var breaks = method.Breakpoints;
 
-                if (!breakPointAdded && currentLineIndex < pwlPoints)
+                if (!_breakPointAdded && _currentLineIndex < _pwlPoints)
                 {
-                    double breakPointTime = Times[currentLineIndex];
+                    double breakPointTime = Times[_currentLineIndex];
                     if (breakPointTime >= 0.0)
                     {
                         breaks.SetBreakpoint(breakPointTime);
                     }
-                    breakPointAdded = true;
+                    _breakPointAdded = true;
                 }
             }
         }
@@ -104,8 +125,8 @@ namespace SpiceSharp.Components.Waveforms
         /// </summary>
         public void Reset()
         {
-            breakPointAdded = false;
-            currentLineIndex = 0;
+            _breakPointAdded = false;
+            _currentLineIndex = 0;
         }
 
         /// <summary>
@@ -126,19 +147,19 @@ namespace SpiceSharp.Components.Waveforms
         /// </returns>
         protected double GetLineValue(double time)
         {
-            while (currentLineIndex < pwlPoints)
+            while (_currentLineIndex < _pwlPoints)
             {
-                if (Times[currentLineIndex] >= time)
+                if (Times[_currentLineIndex] >= time)
                 {
-                    long prevLineIndex = currentLineIndex - 1;
+                    long prevLineIndex = _currentLineIndex - 1;
                     if (prevLineIndex >= 0)
                     {
-                        if (lineDefinition == null)
+                        if (_lineDefinition == null)
                         {
-                            lineDefinition = CreateLineParameters(Times[prevLineIndex], Times[currentLineIndex], Voltages[prevLineIndex], Voltages[currentLineIndex]);
-                            breakPointAdded = false;
+                            _lineDefinition = CreateLineParameters(Times[prevLineIndex], Times[_currentLineIndex], Voltages[prevLineIndex], Voltages[_currentLineIndex]);
+                            _breakPointAdded = false;
                         }
-                        return (lineDefinition.A * time) + lineDefinition.B;
+                        return (_lineDefinition.A * time) + _lineDefinition.B;
                     }
                     else
                     {
@@ -146,14 +167,22 @@ namespace SpiceSharp.Components.Waveforms
                     }
                 }
 
-                breakPointAdded = false;
-                lineDefinition = null;
-                currentLineIndex++;
+                _breakPointAdded = false;
+                _lineDefinition = null;
+                _currentLineIndex++;
             }
 
-            return Voltages[pwlPoints - 1];
+            return Voltages[_pwlPoints - 1];
         }
 
+        /// <summary>
+        /// Calculate the slope and intercept of the line between two given points.
+        /// </summary>
+        /// <param name="x1">The first x-coordinate.</param>
+        /// <param name="x2">The second x-coordinate.</param>
+        /// <param name="y1">The first y-coordinate.</param>
+        /// <param name="y2">The second y-coordinate.</param>
+        /// <returns></returns>
         protected static LineDefinition CreateLineParameters(double x1, double x2, double y1, double y2)
         {
             double a = (y2 - y1) / (x2 - x1);
@@ -162,13 +191,6 @@ namespace SpiceSharp.Components.Waveforms
                 A = a,
                 B = y1 - (a * x1),
             };
-        }
-
-        protected class LineDefinition
-        {
-            public double A { get; set; }
-
-            public double B { get; set; }
         }
     }
 }
