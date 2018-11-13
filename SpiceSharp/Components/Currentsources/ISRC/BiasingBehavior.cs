@@ -3,18 +3,23 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
     /// <summary>
-    /// General behavior for a <see cref="CurrentSource"/>
+    /// DC biasing behavior for a <see cref="CurrentSource" />.
     /// </summary>
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    /// <remarks>
+    /// This behavior also includes transient behavior logic. When transient analysis is
+    /// performed, then waveforms need to be used to calculate the operating point anyway.
+    /// </remarks>
+    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        private CommonBehaviors.IndependentBaseParameters _bp;
+        protected CommonBehaviors.IndependentBaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets voltage across the voltage source
@@ -22,20 +27,20 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="state"></param>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
-        public double GetV(BaseSimulationState state)
+        public double GetVoltage(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
-        public double GetP(BaseSimulationState state)
+        public double GetPower(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[_posNode] - state.Solution[_posNode]) * -Current;
+            return (state.Solution[PosNode] - state.Solution[PosNode]) * -Current;
         }
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
@@ -43,14 +48,16 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode;
-        private VectorElement<double> _posPtr, _negPtr;
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
+        protected VectorElement<double> PosPtr { get; private set; }
+        protected VectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -59,22 +66,21 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
+            BaseParameters = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
 
             // Setup the waveform
-            _bp.Waveform?.Setup();
+            BaseParameters.Waveform?.Setup();
 
             // Give some warnings if no value is given
-            if (!_bp.DcValue.Given)
+            if (!BaseParameters.DcValue.Given)
             {
                 // no DC value - either have a transient value or none
                 CircuitWarning.Warning(this,
-                    _bp.Waveform != null
+                    BaseParameters.Waveform != null
                         ? "{0} has no DC value, transient time 0 value used".FormatString(Name)
                         : "{0} has no value, DC 0 assumed".FormatString(Name));
             }
@@ -90,8 +96,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
+            PosNode = pins[0];
+            NegNode = pins[1];
         }
 
         /// <summary>
@@ -99,20 +105,20 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            _posPtr = solver.GetRhsElement(_posNode);
-            _negPtr = solver.GetRhsElement(_negNode);
+            PosPtr = solver.GetRhsElement(PosNode);
+            NegPtr = solver.GetRhsElement(NegNode);
         }
 
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
@@ -121,27 +127,34 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             double value;
 
             // Time domain analysis
-            if (simulation is TimeSimulation ts)
+            if (simulation is TimeSimulation)
             {
-                var time = ts.Method.Time;
-
                 // Use the waveform if possible
-                if (_bp.Waveform != null)
-                    value = _bp.Waveform.Value;
+                if (BaseParameters.Waveform != null)
+                    value = BaseParameters.Waveform.Value;
                 else
-                    value = _bp.DcValue * state.SourceFactor;
+                    value = BaseParameters.DcValue * state.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = _bp.DcValue * state.SourceFactor;
+                value = BaseParameters.DcValue * state.SourceFactor;
             }
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            _posPtr.Value -= value;
-            _negPtr.Value += value;
+            PosPtr.Value -= value;
+            NegPtr.Value += value;
             Current = value;
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

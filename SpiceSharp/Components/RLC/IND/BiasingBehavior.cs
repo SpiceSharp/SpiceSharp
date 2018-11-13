@@ -7,19 +7,23 @@ using SpiceSharp.Simulations.Behaviors;
 namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="Inductor"/>
+    /// DC biasing behavior for a <see cref="Inductor"/>
     /// </summary>
-    public partial class BaseBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
+        /// <summary>
+        /// Gets the branch equation index.
+        /// </summary>
+        /// <value>
+        /// The branch equation index.
+        /// </value>
+        public int BranchEq { get; private set; }
+        
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode;
-        public int BranchEq { get; protected set; }
-        
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
         protected MatrixElement<double> PosBranchPtr { get; private set; }
         protected MatrixElement<double> NegBranchPtr { get; private set; }
         protected MatrixElement<double> BranchNegPtr { get; private set; }
@@ -29,7 +33,16 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public BaseBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name) { }
+
+        /// <summary>
+        /// Setup the behavior for the specified simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="provider">The provider.</param>
+        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        {
+        }
 
         /// <summary>
         /// Connect
@@ -41,29 +54,8 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-        }
-
-        /// <summary>
-        /// Setup behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-
-            // Clear all events
-            if (UpdateFlux != null)
-            {
-                foreach (var inv in UpdateFlux.GetInvocationList())
-                    UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
-            }
+            PosNode = pins[0];
+            NegNode = pins[1];
         }
 
         /// <summary>
@@ -82,10 +74,10 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
+            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
+            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
         }
 
         /// <summary>

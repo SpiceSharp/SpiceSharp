@@ -3,23 +3,27 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 {
     /// <summary>
-    /// General behavior for a <see cref="VoltageControlledCurrentSource"/>
+    /// DC biasing behavior for a <see cref="VoltageControlledCurrentSource" />.
     /// </summary>
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
-        private BaseParameters _bp;
+        protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _contPosNode, _contNegNode;
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
+        protected int ContPosNode { get; private set; }
+        protected int ContNegNode { get; private set; }
         protected MatrixElement<double> PosControlPosPtr { get; private set; }
         protected MatrixElement<double> PosControlNegPtr { get; private set; }
         protected MatrixElement<double> NegControlPosPtr { get; private set; }
@@ -34,7 +38,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
         public double GetCurrent(BaseSimulationState state)
@@ -42,7 +46,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[_contPosNode] - state.Solution[_contNegNode]) * _bp.Coefficient;
+            return (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient;
         }
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
@@ -50,8 +54,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var v = state.Solution[_posNode] - state.Solution[_negNode];
-            var i = (state.Solution[_contPosNode] - state.Solution[_contNegNode]) * _bp.Coefficient;
+            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            var i = (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient;
             return -v * i;
         }
 
@@ -59,7 +63,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -68,12 +72,11 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
+            BaseParameters = provider.GetParameterSet<BaseParameters>();
         }
 
         /// <summary>
@@ -86,10 +89,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-            _contPosNode = pins[2];
-            _contNegNode = pins[3];
+            PosNode = pins[0];
+            NegNode = pins[1];
+            ContPosNode = pins[2];
+            ContNegNode = pins[3];
         }
 
         /// <summary>
@@ -97,26 +100,36 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// </summary>
         /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
-            PosControlPosPtr = solver.GetMatrixElement(_posNode, _contPosNode);
-            PosControlNegPtr = solver.GetMatrixElement(_posNode, _contNegNode);
-            NegControlPosPtr = solver.GetMatrixElement(_negNode, _contPosNode);
-            NegControlNegPtr = solver.GetMatrixElement(_negNode, _contNegNode);
+            PosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
+            PosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);
+            NegControlPosPtr = solver.GetMatrixElement(NegNode, ContPosNode);
+            NegControlNegPtr = solver.GetMatrixElement(NegNode, ContNegNode);
         }
 
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
-            PosControlPosPtr.Value += _bp.Coefficient;
-            PosControlNegPtr.Value -= _bp.Coefficient;
-            NegControlPosPtr.Value -= _bp.Coefficient;
-            NegControlNegPtr.Value += _bp.Coefficient;
+            var value = BaseParameters.Coefficient.Value;
+            PosControlPosPtr.Value += value;
+            PosControlNegPtr.Value -= value;
+            NegControlPosPtr.Value -= value;
+            NegControlNegPtr.Value += value;
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

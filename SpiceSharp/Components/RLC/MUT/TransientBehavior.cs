@@ -3,7 +3,6 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
-using LoadBehavior = SpiceSharp.Components.InductorBehaviors.BaseBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -16,7 +15,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
-        private LoadBehavior _load1, _load2;
+        private InductorBehaviors.TransientBehavior _load1, _load2;
 
         /// <summary>
         /// The factor
@@ -58,8 +57,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
 
             // Get behaviors
-            _load1 = provider.GetBehavior<LoadBehavior>("inductor1");
-            _load2 = provider.GetBehavior<LoadBehavior>("inductor2");
+            _load1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
+            _load2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
 
             // Calculate coupling factor
             Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);

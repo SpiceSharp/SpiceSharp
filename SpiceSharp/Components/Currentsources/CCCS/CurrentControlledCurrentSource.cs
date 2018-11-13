@@ -6,7 +6,7 @@ using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A current-controlled current source
+    /// A current-controlled current source.
     /// </summary>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
     public class CurrentControlledCurrentSource : Component
@@ -31,13 +31,13 @@ namespace SpiceSharp.Components
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
             // Make sure the current controlled current source happens after voltage sources
-            Priority = -1;
-
+            Priority = ComponentPriority - 1;
+            
             // Add parameters
             ParameterSets.Add(new BaseParameters());
 
-            // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            // Add behaviors
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
@@ -50,18 +50,10 @@ namespace SpiceSharp.Components
         /// <param name="voltageSource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
         public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
-            : base(name, CurrentControlledCurrentSourcePinCount)
+            : this(name)
         {
-            // Register behaviors
-            Priority = -1;
-
-            // Add parameters
-            ParameterSets.Add(new BaseParameters(gain));
-
-            // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-
+            ParameterSets.Get<BaseParameters>().Coefficient.Value = gain;
+            
             // Connect
             Connect(pos, neg);
             ControllingName = voltageSource;

@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
