@@ -116,12 +116,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             else
                 capacitance = BaseParameters.Capacitance;
 
-            double difference = BaseParameters.Temperature - (ModelParameters?.NominalTemperature.Value ?? Circuit.ReferenceTemperature);
             double factor = 1.0;
 
             if (ModelParameters != null)
             {
-               factor = 1.0 + ModelParameters.TemperatureCoefficient1 * difference + ModelParameters.TemperatureCoefficient2 * difference * difference;
+                double temperatureDiff = BaseParameters.Temperature - ModelParameters.NominalTemperature;
+                factor = 1.0 + ModelParameters.TemperatureCoefficient1 * temperatureDiff + ModelParameters.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
             }
 
             Capacitance = factor * capacitance;
