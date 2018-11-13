@@ -9,44 +9,54 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// General behavior for <see cref="Resistor"/>
     /// </summary>
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public class LoadBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
-        /// Necessary parameters and behaviors
+        /// Gets the voltage across the resistor.
         /// </summary>
-        private TemperatureBehavior _temp;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Gets the current through the resistor.
+        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Current")]
         public double GetCurrent(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return (state.Solution[_posNode] - state.Solution[_negNode]) * _temp.Conductance;
+            return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
         }
+
+        /// <summary>
+        /// Gets the power dissipated by the resistor.
+        /// </summary>
+        /// <param name="state">The simulation state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var v = state.Solution[_posNode] - state.Solution[_negNode];
-            return v * v * _temp.Conductance;
+            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            return v * v * Conductance;
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
@@ -59,74 +69,42 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public LoadBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _temp = provider.GetBehavior<TemperatureBehavior>();
-        }
-
-        /// <summary>
-        /// Connect the behavior to nodes
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-        }
-
-        /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="variables">Nodes</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
             // Get matrix elements
-            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
-            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
-            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
-            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
+            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
+            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
+            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            // Remove references
-            PosPosPtr = null;
-            NegNegPtr = null;
-            PosNegPtr = null;
-            NegPosPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
-            var conductance = _temp.Conductance;
+            var conductance = Conductance;
             PosPosPtr.Value += conductance;
             NegNegPtr.Value += conductance;
             PosNegPtr.Value -= conductance;
             NegPosPtr.Value -= conductance;
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

@@ -84,6 +84,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -133,43 +134,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             SourcePrimeBulkPtr = solver.GetMatrixElement(_sourceNodePrime, _bulkNode);
             SourcePrimeDrainPrimePtr = solver.GetMatrixElement(_sourceNodePrime, _drainNodePrime);
         }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-            _temp = null;
-            _load = null;
-
-            // Remove references
-            DrainDrainPtr = null;
-            GateGatePtr = null;
-            SourceSourcePtr = null;
-            BulkBulkPtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
-            DrainDrainPrimePtr = null;
-            GateBulkPtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            SourceSourcePrimePtr = null;
-            BulkDrainPrimePtr = null;
-            BulkSourcePrimePtr = null;
-            DrainPrimeSourcePrimePtr = null;
-            DrainPrimeDrainPtr = null;
-            BulkGatePtr = null;
-            DrainPrimeGatePtr = null;
-            SourcePrimeGatePtr = null;
-            SourcePrimeSourcePtr = null;
-            DrainPrimeBulkPtr = null;
-            SourcePrimeBulkPtr = null;
-            SourcePrimeDrainPrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Initialize AC parameters
         /// </summary>

@@ -59,6 +59,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -101,19 +102,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
             NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
         }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosPosPtr = null;
-            PosNegPtr = null;
-            NegPosPtr = null;
-            NegNegPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>

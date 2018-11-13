@@ -92,6 +92,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -162,36 +163,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             else
                 CapGd = czgdf2 * (_modeltemp.F3 + vgd / twop);
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-            _temp = null;
-            _modeltemp = null;
-            _load = null;
-
-            DrainDrainPtr = null;
-            GateGatePtr = null;
-            SourceSourcePtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
-            DrainDrainPrimePtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            SourceSourcePrimePtr = null;
-            DrainPrimeDrainPtr = null;
-            DrainPrimeGatePtr = null;
-            DrainPrimeSourcePrimePtr = null;
-            SourcePrimeGatePtr = null;
-            SourcePrimeSourcePtr = null;
-            SourcePrimeDrainPrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>

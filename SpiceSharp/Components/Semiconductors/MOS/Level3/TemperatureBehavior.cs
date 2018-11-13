@@ -28,27 +28,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
-            base.Setup(simulation, provider);
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-
-            base.Unsetup(simulation);
-        }
-
+        
         /// <summary>
         /// Calculates the critical voltages.
         /// </summary>

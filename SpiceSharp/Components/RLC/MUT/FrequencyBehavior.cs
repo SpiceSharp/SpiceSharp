@@ -3,7 +3,7 @@ using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using LoadBehavior = SpiceSharp.Components.InductorBehaviors.LoadBehavior;
+using LoadBehavior = SpiceSharp.Components.InductorBehaviors.BaseBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -42,6 +42,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+			base.Setup(simulation, provider);
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
@@ -74,16 +75,6 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             // Get matrix equations
             Branch1Branch2Ptr = solver.GetMatrixElement(inDbrEq1, inDbrEq2);
             Branch2Branch1Ptr = solver.GetMatrixElement(inDbrEq2, inDbrEq1);
-        }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            Branch1Branch2Ptr = null;
-            Branch2Branch1Ptr = null;
         }
 
         /// <summary>

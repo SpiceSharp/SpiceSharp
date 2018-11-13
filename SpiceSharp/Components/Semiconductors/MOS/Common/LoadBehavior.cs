@@ -198,9 +198,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+            if (provider == null)
+                throw new ArgumentNullException(nameof(simulation));
+
+            // Get configurations
             _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
+
+            // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
             _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+
+            // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
         }
 
@@ -257,41 +268,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             DrainPrimePtr = solver.GetRhsElement(DrainNodePrime);
             SourcePrimePtr = solver.GetRhsElement(SourceNodePrime);
         }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-
-            // Remove references
-            DrainDrainPtr = null;
-            GateGatePtr = null;
-            SourceSourcePtr = null;
-            BulkBulkPtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
-            DrainDrainPrimePtr = null;
-            GateBulkPtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            SourceSourcePrimePtr = null;
-            BulkDrainPrimePtr = null;
-            BulkSourcePrimePtr = null;
-            DrainPrimeSourcePrimePtr = null;
-            DrainPrimeDrainPtr = null;
-            BulkGatePtr = null;
-            DrainPrimeGatePtr = null;
-            SourcePrimeGatePtr = null;
-            SourcePrimeSourcePtr = null;
-            DrainPrimeBulkPtr = null;
-            SourcePrimeBulkPtr = null;
-            SourcePrimeDrainPrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>

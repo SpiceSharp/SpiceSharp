@@ -4,43 +4,40 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors
+namespace SpiceSharp.Simulations.Behaviors
 {
     /// <summary>
-    /// Template for a behavior.
+    /// Base class for a behavior that exports properties by using attributes on properties and reflection.
     /// </summary>
-    public abstract class Behavior : NamedParameterized, IBehavior, IPropertyExporter
+    /// <seealso cref="SpiceSharp.Attributes.NamedParameterized" />
+    /// <seealso cref="SpiceSharp.Behaviors.IPropertyExporter" />
+    public abstract class ExportingBehavior : NamedParameterized, IBehavior, IPropertyExporter
     {
         /// <summary>
-        /// Gets the identifier of the behavior.
+        /// Gets the name of the behavior.
         /// </summary>
-        /// <remarks>
-        /// This should be the same identifier as the entity that created it.
-        /// </remarks>
+        /// <value>
+        /// The name of the behavior.
+        /// </value>
         public string Name { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Behavior"/> class.
+        /// Initializes a new instance of the <see cref="ExportingBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        protected Behavior(string name)
+        /// <param name="name">The name of the behavior.</param>
+        protected ExportingBehavior(string name)
         {
             Name = name;
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Setup the behavior for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public virtual void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-        }
+        /// <param name="provider">The provider.</param>
+        public abstract void Setup(Simulation simulation, SetupDataProvider provider);
 
         /// <summary>
         /// Destroy the behavior.

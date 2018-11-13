@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Template for accepting a timepoint.
     /// </summary>
-    public abstract class BaseAcceptBehavior : Behavior
+    public abstract class BaseAcceptBehavior : Behavior, IAcceptBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseAcceptBehavior"/> class.

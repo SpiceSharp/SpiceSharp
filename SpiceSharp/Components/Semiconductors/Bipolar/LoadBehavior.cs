@@ -105,6 +105,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -188,37 +189,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimePtr = solver.GetRhsElement(EmitterPrimeNode);
         }
 
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            // Remove references
-            CollectorCollectorPrimePtr = null;
-            BaseBasePrimePtr = null;
-            EmitterEmitterPrimePtr = null;
-            CollectorPrimeCollectorPtr = null;
-            CollectorPrimeBasePrimePtr = null;
-            CollectorPrimeEmitterPrimePtr = null;
-            BasePrimeBasePtr = null;
-            BasePrimeCollectorPrimePtr = null;
-            BasePrimeEmitterPrimePtr = null;
-            EmitterPrimeEmitterPtr = null;
-            EmitterPrimeCollectorPrimePtr = null;
-            EmitterPrimeBasePrimePtr = null;
-            CollectorCollectorPtr = null;
-            BaseBasePtr = null;
-            EmitterEmitterPtr = null;
-            CollectorPrimeCollectorPrimePtr = null;
-            BasePrimeBasePrimePtr = null;
-            EmitterPrimeEmitterPrimePtr = null;
-            SubstrateSubstratePtr = null;
-            CollectorPrimeSubstratePtr = null;
-            SubstrateCollectorPrimePtr = null;
-            BaseCollectorPrimePtr = null;
-            CollectorPrimeBasePtr = null;
-        }
 
         /// <summary>
         /// Execute behavior

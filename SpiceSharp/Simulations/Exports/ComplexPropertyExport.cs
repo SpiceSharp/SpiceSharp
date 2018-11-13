@@ -66,13 +66,17 @@ namespace SpiceSharp.Simulations
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
             var simulation = (Simulation) sender;
-
+            Func<Complex> extractor = null;
             var eb = simulation.EntityBehaviors[EntityName];
 
-            // Get the necessary behavior in order:
-            // 1) First try transient analysis
-            if (eb.TryGet<BaseFrequencyBehavior>(out var behavior))
-                Extractor = behavior.CreateAcExport(Simulation, PropertyName, Comparer);
+            // Get the necessary behaviors in order of importance
+            // 1) First the frequency analysis analysis
+            if (eb.TryGet<IFrequencyBehavior>(out var behavior) && behavior is IPropertyExporter exporter)
+                exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+
+            // There are currently no other behaviors that export complex numbers
+
+            Extractor = extractor;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private BehaviorList<BaseFrequencyBehavior> _frequencyBehaviors;
+        private BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
 
@@ -49,6 +49,9 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(string name) : base(name)
         {
             Configurations.Add(new FrequencyConfiguration());
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(IFrequencyBehavior));
         }
 
         /// <summary>
@@ -67,6 +70,9 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(string name, Sweep<double> frequencySweep) : base(name)
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(IFrequencyBehavior));
         }
 
         /// <summary>
@@ -87,6 +93,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, configurations and states
             var config = Configurations.Get<FrequencyConfiguration>();
+            _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
             FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
 
             // Create the state for complex numbers
@@ -97,7 +104,6 @@ namespace SpiceSharp.Simulations
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
             // Setup behaviors
-            _frequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>(circuit.Entities);
             var solver = ComplexState.Solver;
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
                 _frequencyBehaviors[i].GetEquationPointers(solver);
@@ -191,7 +197,7 @@ namespace SpiceSharp.Simulations
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {
-                _frequencyBehaviors[i].Load(this);
+                // _frequencyBehaviors[i].Load(this);
                 _frequencyBehaviors[i].InitializeParameters(this);
             }
         }

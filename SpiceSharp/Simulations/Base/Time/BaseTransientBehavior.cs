@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors
     /// A template that describes transient (time-dependent) behavior.
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.Behavior" />
-    public abstract class BaseTransientBehavior : Behavior
+    public abstract class BaseTransientBehavior : Behavior, ITimeBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseTransientBehavior"/> class.
@@ -34,7 +34,6 @@ namespace SpiceSharp.Behaviors
         /// Calculates the state values from the current DC solution.
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
         /// and the result is stored in each respective <see cref="StateDerivative" /> or <see cref="StateHistory" />.

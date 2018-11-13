@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors
 {
@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Lists of behaviors.
         /// </summary>
-        private readonly Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
+        private readonly Dictionary<Type, List<IBehavior>> _behaviors = new Dictionary<Type, List<IBehavior>>();
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
@@ -58,34 +58,29 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Adds the specified behavior to the pool.
         /// </summary>
+        /// <param name="type">The type of the requested behavior.</param>
         /// <param name="creator">The entity identifier to which the .</param>
-        /// <param name="behavior">The behavior.</param>
+        /// <param name="behavior">The behavior to be added.</param>
         /// <exception cref="SpiceSharp.CircuitException">Invalid behavior</exception>
-        public void Add(string creator, Behavior behavior)
+        public void Add(Type type, string creator, IBehavior behavior)
         {
-            if (!_entityBehaviors.TryGetValue(creator, out var eb))
+            // Create the list entry if necessary
+            if (!_behaviors.TryGetValue(type, out var behaviorList))
             {
-                eb = new EntityBehaviorDictionary(creator);
-                _entityBehaviors.Add(creator, eb);
-            }
-            eb.Register(behavior);
-
-            // Find the parent behavior
-            var behaviorType = behavior.GetType();
-            var baseType = behaviorType.GetTypeInfo().BaseType;
-            while (baseType != null && baseType != typeof(Behavior))
-            {
-                behaviorType = baseType;
-                baseType = behaviorType.GetTypeInfo().BaseType;
+                behaviorList = new List<IBehavior>();
+                _behaviors.Add(type, behaviorList);
             }
 
-            // Add
-            if (!_behaviors.TryGetValue(behaviorType, out var list))
+            // Find the entity behaviors
+            if (!_entityBehaviors.TryGetValue(behavior.Name, out var ebd))
             {
-                list = new List<Behavior>();
-                _behaviors.Add(behaviorType, list);
+                ebd = new EntityBehaviorDictionary(behavior.Name);
+                _entityBehaviors.Add(behavior.Name, ebd);
             }
-            list.Add(behavior);
+
+            // Add the behavior
+            ebd.Add(behavior.GetType(), behavior);
+            behaviorList.Add(behavior);
         }
 
         /// <summary>
@@ -95,11 +90,10 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A <see cref="BehaviorList{T}" /> with all behaviors of the specified type.
         /// </returns>
-        public BehaviorList<T> GetBehaviorList<T>() where T : Behavior
+        public BehaviorList<T> GetBehaviorList<T>() where T : IBehavior
         {
             if (_behaviors.TryGetValue(typeof(T), out var list))
                 return new BehaviorList<T>(list.Cast<T>());
-
             return new BehaviorList<T>(new T[0]);
         }
 
@@ -115,6 +109,15 @@ namespace SpiceSharp.Behaviors
                 return result;
             return null;
         }
+
+        /// <summary>
+        /// Tries to the get the entity behaviors by a specified identifier.
+        /// </summary>
+        /// <param name="name">The identifier.</param>
+        /// <param name="ebd">The dictionary of entity behaviors.</param>
+        /// <returns></returns>
+        public bool TryGetBehaviors(string name, out EntityBehaviorDictionary ebd) =>
+            _entityBehaviors.TryGetValue(name, out ebd);
 
         /// <summary>
         /// Checks if behaviors exist for a specified entity identifier.

@@ -106,6 +106,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
             if (provider == null)
@@ -153,36 +154,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             DrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainPrimeNode, DrainPrimeNode);
             SourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourcePrimeNode, SourcePrimeNode);
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _baseConfig = null;
-            _bp = null;
-            _mbp = null;
-            _temp = null;
-            _modeltemp = null;
-
-            DrainDrainPrimePtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            SourceSourcePrimePtr = null;
-            DrainPrimeDrainPtr = null;
-            DrainPrimeGatePtr = null;
-            DrainPrimeSourcePrimePtr = null;
-            SourcePrimeGatePtr = null;
-            SourcePrimeSourcePtr = null;
-            SourcePrimeDrainPrimePtr = null;
-            DrainDrainPtr = null;
-            GateGatePtr = null;
-            SourceSourcePtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>

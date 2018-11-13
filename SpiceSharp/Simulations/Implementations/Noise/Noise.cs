@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Noise behaviors
         /// </summary>
-        private BehaviorList<BaseNoiseBehavior> _noiseBehaviors;
+        private BehaviorList<INoiseBehavior> _noiseBehaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
@@ -38,6 +38,9 @@ namespace SpiceSharp.Simulations
         public Noise(string name) : base(name)
         {
             Configurations.Add(new NoiseConfiguration());
+            
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(INoiseBehavior));
         }
 
         /// <summary>
@@ -50,6 +53,9 @@ namespace SpiceSharp.Simulations
         public Noise(string name, string output, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, null, input));
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(INoiseBehavior));
         }
 
         /// <summary>
@@ -63,6 +69,9 @@ namespace SpiceSharp.Simulations
         public Noise(string name, string output, string reference, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, reference, input));
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(INoiseBehavior));
         }
 
         /// <summary>
@@ -76,9 +85,11 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
+            // Get behaviors
+            _noiseBehaviors = EntityBehaviors.GetBehaviorList<INoiseBehavior>();
+
             // Get behaviors, parameters and states
             NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
-            _noiseBehaviors = SetupBehaviors<BaseNoiseBehavior>(circuit.Entities);
             NoiseState = new NoiseState();
             NoiseState.Setup(Variables);
         }

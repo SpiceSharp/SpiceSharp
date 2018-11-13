@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// This class describes behavior for initial conditions.
     /// </summary>
     /// <seealso cref="Behavior" />
-    public abstract class BaseInitialConditionBehavior : Behavior
+    public abstract class BaseInitialConditionBehavior : Behavior, IInitialConditionBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseInitialConditionBehavior"/> class.

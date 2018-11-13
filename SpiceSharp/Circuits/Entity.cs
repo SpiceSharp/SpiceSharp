@@ -55,31 +55,37 @@ namespace SpiceSharp.Circuits
         public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
-        /// Create a behavior of a specific base type for a simulation.
+        /// Creates a behavior of the specified type.
         /// </summary>
-        /// <typeparam name="T">The behavior base type.</typeparam>
-        /// <param name="simulation">The simulation that will use the behavior.</param>
-        /// <returns>A behavior of the requested type, or null if it doesn't apply to this entity.</returns>
+        /// <param name="type">The type of the behavior</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <returns></returns>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual T CreateBehavior<T>(Simulation simulation) where T : Behavior
+        public virtual IBehavior CreateBehavior(Type type, Simulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            // Try to extract the right behavior from our behavior factories
-            if (Behaviors.TryGetValue(typeof(T), out var factory))
-            {
-                // Create the behavior
-                var behavior = factory();
-
-                // Setup the behavior
-                var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
-                behavior.Setup(simulation, provider);
-                return (T)behavior;
-            }
-
-            // None found
+            // Get the factory and generate it
+            if (Behaviors.TryGetValue(type, out var behavior))
+                return behavior();
             return null;
+        }
+
+        /// <summary>
+        /// Sets up the behavior.
+        /// </summary>
+        /// <param name="type">The type of the behavior that needs to be set up.</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
+        public virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
+        {
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
+            // Build the setup behavior
+            var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
+            behavior.Setup(simulation, provider);
         }
 
         /// <summary>
@@ -109,7 +115,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Gets the priority of this object.
+        /// Gets the priority of this entity.
         /// </summary>
         public int Priority { get; protected set; } = 0;
     }

@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// A template that describes noise analysis behavior.
     /// </summary>
     /// <seealso cref="Behavior" />
-    public abstract class BaseNoiseBehavior : Behavior
+    public abstract class BaseNoiseBehavior : Behavior, INoiseBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseNoiseBehavior"/> class.

@@ -1,4 +1,7 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using System;
+using System.Collections.Generic;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Factory for behaviors
@@ -7,11 +10,14 @@
     public class BehaviorFactoryDictionary : TypeDictionary<BehaviorFactoryMethod>
     {
         /// <summary>
-        /// Constructor
+        /// Adds the behavior type and automatically create a factory for it.
         /// </summary>
-        public BehaviorFactoryDictionary()
-            : base(typeof(Behavior))
+        /// <param name="type">The behavior type.</param>
+        /// <param name="name">The name.</param>
+        public void Add(Type type, string name)
         {
+            IBehavior Factory() => (IBehavior) Activator.CreateInstance(type, name);
+            base.Add(type, Factory);
         }
     }
 
@@ -19,5 +25,5 @@
     /// Delegate
     /// </summary>
     /// <returns>The behavior created by the factory.</returns>
-    public delegate Behavior BehaviorFactoryMethod();
+    public delegate IBehavior BehaviorFactoryMethod();
 }

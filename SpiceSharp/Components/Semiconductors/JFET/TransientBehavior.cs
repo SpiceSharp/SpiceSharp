@@ -88,6 +88,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -132,33 +133,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
         }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-            _mbp = null;
-            _load = null;
-            _temp = null;
-            _modeltemp = null;
-            Qgs = null;
-            Qgd = null;
-
-            GateNodePtr = null;
-            DrainPrimeNodePtr = null;
-            SourcePrimeNodePtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            DrainPrimeGatePtr = null;
-            SourcePrimeGatePtr = null;
-            GateGatePtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Calculates the state values from the current DC solution.
         /// </summary>
