@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Capacitor_Has_TC1_Zero_TC2_Zero_And_30Degrees_LowpassRCTransient_Expect_Reference()
+        public void When_Capacitor_TemperatureInvariant_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -90,8 +90,7 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 capacitor,
                 new Resistor("R1", "IN", "OUT", resistorResistance),
-                new VoltageSource("V1", "IN", "0", dcVoltage)
-            );
+                new VoltageSource("V1", "IN", "0", dcVoltage));
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
@@ -110,7 +109,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Capacitor_Has_TC1_NonZero_NonTC2_Zero_And_30Degrees_LowpassRCTransient_Expect_Reference()
+        public void When_Capacitor_TemperatureDependent_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -136,8 +135,7 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 capacitor,
                 new Resistor("R1", "IN", "OUT", resistorResistance),
-                new VoltageSource("V1", "IN", "0", dcVoltage)
-            );
+                new VoltageSource("V1", "IN", "0", dcVoltage));
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
