@@ -3,6 +3,7 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -58,6 +59,95 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
             tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+
+            // Run
+            AnalyzeTransient(tran, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_Capacitor_Has_TC1_Zero_TC2_Zero_And_30Degrees_LowpassRCTransient_Expect_Reference()
+        {
+            /*
+             * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
+             * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
+             * TC1 and TC2 of capacitor is 0.
+             * Temperature is 30 degrees.
+             */
+            double dcVoltage = 10;
+            var resistorResistance = 10e3; // 10000;
+            var capacitance = 1e-6; // 0.000001;
+            var tau = resistorResistance * capacitance;
+
+            var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
+            var model = new CapacitorModel("C1");
+            model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient1.Value = 0.0;
+            model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient2.Value = 0.0;
+            capacitor.SetModel(model);
+
+            // Build circuit
+            var ckt = new Circuit(
+                capacitor,
+                new Resistor("R1", "IN", "OUT", resistorResistance),
+                new VoltageSource("V1", "IN", "0", dcVoltage)
+            );
+
+            // Create simulation, exports and references
+            var tran = new Transient("tran", 1e-8, 10e-6);
+            tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+
+            tran.BeforeTemperature += (sender, args) =>
+                {
+                    ((BaseSimulationState)args.State).Temperature = Circuit.CelsiusKelvin + 30.0;
+                };
+
+            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+
+            // Run
+            AnalyzeTransient(tran, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_Capacitor_Has_TC1_NonZero_NonTC2_Zero_And_30Degrees_LowpassRCTransient_Expect_Reference()
+        {
+            /*
+             * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
+             * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
+             * TC1 and TC2 of capacitor is 0.
+             * Temperature is 30 degrees.
+             */
+            double dcVoltage = 10;
+            var resistorResistance = 10e3; // 10000;
+            double factor = (1.0 + 3.0 * 1.1 + 3.0 * 3.0 * 2.1);
+            var capacitance = 1e-6;
+            var capacitanceAfterTemperature = capacitance * factor;
+
+            var tau = resistorResistance * capacitanceAfterTemperature;
+
+            var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
+            var model = new CapacitorModel("C1");
+            model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient1.Value = 1.1;
+            model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient2.Value = 2.1;
+            capacitor.SetModel(model);
+
+            // Build circuit
+            var ckt = new Circuit(
+                capacitor,
+                new Resistor("R1", "IN", "OUT", resistorResistance),
+                new VoltageSource("V1", "IN", "0", dcVoltage)
+            );
+
+            // Create simulation, exports and references
+            var tran = new Transient("tran", 1e-8, 10e-6);
+            tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+
+            tran.BeforeTemperature += (sender, args) =>
+                {
+                    ((BaseSimulationState)args.State).Temperature = Circuit.CelsiusKelvin + 30.0;
+                };
+
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 

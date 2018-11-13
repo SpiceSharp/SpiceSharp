@@ -18,5 +18,16 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public GivenParameter<double> DefaultWidth { get; } = new GivenParameter<double>(10.0e-6);
         [ParameterName("narrow"), ParameterInfo("Width correction factor")]
         public GivenParameter<double> Narrow { get; } = new GivenParameter<double>();
+        [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
+        public GivenParameter<double> TemperatureCoefficient1 { get; } = new GivenParameter<double>();
+        [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient")]
+        public GivenParameter<double> TemperatureCoefficient2 { get; } = new GivenParameter<double>();
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Interesting = false)]
+        public double NominalTemperatureCelsius
+        {
+            get => NominalTemperature - Circuit.CelsiusKelvin;
+            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
+        }
+        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
     }
 }

@@ -19,6 +19,14 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("l"), ParameterInfo("Device length", Interesting = false)]
         public GivenParameter<double> Length { get; } = new GivenParameter<double>();
 
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Interesting = false)]
+        public double TemperatureCelsius
+        {
+            get => Temperature - Circuit.CelsiusKelvin;
+            set => Temperature.Value = value + Circuit.CelsiusKelvin;
+        }
+        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+
         /// <summary>
         /// Constructor
         /// </summary>
