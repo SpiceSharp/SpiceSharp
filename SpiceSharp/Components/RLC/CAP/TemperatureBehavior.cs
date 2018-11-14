@@ -77,8 +77,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
-            if (!BaseParameters.Capacitance.Given)
-                ModelParameters = provider.GetParameterSet<ModelBaseParameters>("model");
+
+            ModelBaseParameters modelParameters;
+            if (provider.TryGetParameterSet<ModelBaseParameters>("model", out modelParameters))
+            {
+                ModelParameters = modelParameters;
+            }
         }
 
         /// <summary>
@@ -90,6 +94,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
+            if (!BaseParameters.Temperature.Given)
+                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+
+            double capacitance;
             if (!BaseParameters.Capacitance.Given)
             {
                 if (ModelParameters == null)
@@ -98,7 +106,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 var width = BaseParameters.Width.Given
                     ? BaseParameters.Width.Value
                     : ModelParameters.DefaultWidth.Value;
-                Capacitance = ModelParameters.JunctionCap *
+                capacitance = ModelParameters.JunctionCap *
                               (width - ModelParameters.Narrow) *
                               (BaseParameters.Length - ModelParameters.Narrow) +
                               ModelParameters.JunctionCapSidewall * 2 * (
@@ -106,7 +114,17 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                                   (width - ModelParameters.Narrow));
             }
             else
-                Capacitance = BaseParameters.Capacitance;
+                capacitance = BaseParameters.Capacitance;
+
+            double factor = 1.0;
+
+            if (ModelParameters != null)
+            {
+                double temperatureDiff = BaseParameters.Temperature - ModelParameters.NominalTemperature;
+                factor = 1.0 + ModelParameters.TemperatureCoefficient1 * temperatureDiff + ModelParameters.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
+            }
+
+            Capacitance = factor * capacitance;
         }
     }
 }
