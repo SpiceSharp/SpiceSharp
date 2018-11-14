@@ -82,6 +82,28 @@ namespace SpiceSharp.Simulations
             });
         }
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        /// <param name="maxStep">The maximum step.</param>
+        /// <param name="initTime">The start time of exporting data.</param>
+        protected TimeSimulation(string name, double step, double final, double maxStep, double initTime)
+            : base(name)
+        {
+            Configurations.Add(new TimeConfiguration(step, final, maxStep, initTime));
+
+            // Add the behavior in the order they are (usually) called
+            BehaviorTypes.AddRange(new[]
+                                       {
+                                           typeof(ITimeBehavior),
+                                           typeof(IAcceptBehavior)
+                                       });
+        }
+
         /// <summary>
         /// Set up the simulation.
         /// </summary>

@@ -39,6 +39,19 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Transient"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        /// <param name="initTime">The start time of exporting data.</param>
+        /// <param name="maxStep">The maximum step.</param>
+        public Transient(string name, double step, double final, double initTime, double maxStep)
+            : base(name, step, final, maxStep, initTime)
+        {
+        }
+
+        /// <summary>
         /// Executes the simulation.
         /// </summary>
         /// <exception cref="SpiceSharp.CircuitException">{0}: transient terminated".FormatString(Name)</exception>

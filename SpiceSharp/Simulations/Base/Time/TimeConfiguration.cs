@@ -137,5 +137,21 @@ namespace SpiceSharp.Simulations
             FinalTime = final;
             MaxStep = max;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
+        /// </summary>
+        /// <param name="step">The step size.</param>
+        /// <param name="final">The final time.</param>
+        /// <param name="max">The maximum timestep.</param>
+        /// <param name="initTime">The start time of exporting data.</param>
+        public TimeConfiguration(double step, double final, double max, double initTime)
+            : this()
+        {
+            Step = step;
+            FinalTime = final;
+            MaxStep = max;
+            InitTime = initTime;
+        }
     }
 }
