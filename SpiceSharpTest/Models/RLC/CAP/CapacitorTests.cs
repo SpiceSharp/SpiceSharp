@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Capacitor_TemperatureInvariant_Expect_Reference()
+        public void When_CapacitorIsTemperatureInvariant_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -109,7 +109,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Capacitor_TemperatureDependent_Expect_Reference()
+        public void When_CapacitorIsTemperatureDependent_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
