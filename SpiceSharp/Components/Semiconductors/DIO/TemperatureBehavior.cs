@@ -1,21 +1,46 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Diode"/>
+    /// Temperature behavior for a <see cref="Diode" />.
     /// </summary>
-    public class TemperatureBehavior : BaseTemperatureBehavior
+    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
     {
         /// <summary>
-        /// Necessary parameters and behaviors
+        /// Gets the base parameters.
         /// </summary>
-        private BaseParameters _bp;
-        private ModelBaseParameters _mbp;
-        private ModelTemperatureBehavior _modeltemp;
-        private BaseConfiguration _baseConfig;
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the model parameters.
+        /// </summary>
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        protected ModelBaseParameters ModelParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the model temperature behavior.
+        /// </summary>
+        /// <value>
+        /// The model temperature behavior.
+        /// </value>
+        protected ModelTemperatureBehavior ModelTemperature { get; private set; }
+
+        /// <summary>
+        /// Gets the base configuration of the simulation.
+        /// </summary>
+        /// <value>
+        /// The base configuration.
+        /// </value>
+        protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Extra variables
@@ -41,26 +66,25 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get base configuration
-            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
+            BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            BaseParameters = provider.GetParameterSet<BaseParameters>();
+            ModelParameters = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            ModelTemperature = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Temperature(BaseSimulation simulation)
+        public void Temperature(BaseSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
@@ -68,60 +92,60 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var xcbv = 0.0;
 
             // loop through all the instances
-            if (!_bp.Temperature.Given)
-                _bp.Temperature.RawValue = simulation.RealState.Temperature;
-            var vt = Circuit.KOverQ * _bp.Temperature;
+            if (!BaseParameters.Temperature.Given)
+                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+            var vt = Circuit.KOverQ * BaseParameters.Temperature;
 
             // this part gets really ugly - I won't even try to explain these equations
-            var fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
-            var egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
-            var arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
+            var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
+            var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
+            var arg = -egfet / (2 * Circuit.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
                                                                                                                 Circuit.ReferenceTemperature));
             var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
-            var egfet1 = 1.16 - 7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature / (_mbp.NominalTemperature + 1108);
-            var arg1 = -egfet1 / (Circuit.Boltzmann * 2 * _mbp.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
-            var fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
-            var pbfact1 = -2 * _modeltemp.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
-            var pbo = (_mbp.JunctionPotential - pbfact1) / fact1;
-            var gmaold = (_mbp.JunctionPotential - pbo) / pbo;
-            TempJunctionCap = _mbp.JunctionCap / (1 + _mbp.GradingCoefficient * (400e-6 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            var egfet1 = 1.16 - 7.02e-4 * ModelParameters.NominalTemperature * ModelParameters.NominalTemperature / (ModelParameters.NominalTemperature + 1108);
+            var arg1 = -egfet1 / (Circuit.Boltzmann * 2 * ModelParameters.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
+            var fact1 = ModelParameters.NominalTemperature / Circuit.ReferenceTemperature;
+            var pbfact1 = -2 * ModelTemperature.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
+            var pbo = (ModelParameters.JunctionPotential - pbfact1) / fact1;
+            var gmaold = (ModelParameters.JunctionPotential - pbo) / pbo;
+            TempJunctionCap = ModelParameters.JunctionCap / (1 + ModelParameters.GradingCoefficient * (400e-6 * (ModelParameters.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempJunctionPot = pbfact + fact2 * pbo;
             var gmanew = (TempJunctionPot - pbo) / pbo;
-            TempJunctionCap *= 1 + _mbp.GradingCoefficient * (400e-6 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TempJunctionCap *= 1 + ModelParameters.GradingCoefficient * (400e-6 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            TempSaturationCurrent = _mbp.SaturationCurrent * Math.Exp((_bp.Temperature / _mbp.NominalTemperature - 1) * _mbp.ActivationEnergy /
-                (_mbp.EmissionCoefficient * vt) + _mbp.SaturationCurrentExp / _mbp.EmissionCoefficient * Math.Log(_bp.Temperature / _mbp.NominalTemperature));
+            TempSaturationCurrent = ModelParameters.SaturationCurrent * Math.Exp((BaseParameters.Temperature / ModelParameters.NominalTemperature - 1) * ModelParameters.ActivationEnergy /
+                (ModelParameters.EmissionCoefficient * vt) + ModelParameters.SaturationCurrentExp / ModelParameters.EmissionCoefficient * Math.Log(BaseParameters.Temperature / ModelParameters.NominalTemperature));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it
-            TempFactor1 = TempJunctionPot * (1 - Math.Exp((1 - _mbp.GradingCoefficient) * _modeltemp.Xfc)) / (1 - _mbp.GradingCoefficient);
+            TempFactor1 = TempJunctionPot * (1 - Math.Exp((1 - ModelParameters.GradingCoefficient) * ModelTemperature.Xfc)) / (1 - ModelParameters.GradingCoefficient);
 
             // same for Depletion Capacitance
-            TempDepletionCap = _mbp.DepletionCapCoefficient * TempJunctionPot;
+            TempDepletionCap = ModelParameters.DepletionCapCoefficient * TempJunctionPot;
 
             // and Vcrit
-            var vte = _mbp.EmissionCoefficient * vt;
+            var vte = ModelParameters.EmissionCoefficient * vt;
             TempVCritical = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
-            if (_mbp.BreakdownVoltage.Given)
+            if (ModelParameters.BreakdownVoltage.Given)
             {
-                double cbv = _mbp.BreakdownCurrent;
+                double cbv = ModelParameters.BreakdownCurrent;
                 double xbv;
-                if (cbv < TempSaturationCurrent * _mbp.BreakdownVoltage / vt)
+                if (cbv < TempSaturationCurrent * ModelParameters.BreakdownVoltage / vt)
                 {
-                    cbv = TempSaturationCurrent * _mbp.BreakdownVoltage / vt;
+                    cbv = TempSaturationCurrent * ModelParameters.BreakdownVoltage / vt;
                     CircuitWarning.Warning(this, "{0}: breakdown current increased to {1:g} to resolve incompatability with specified saturation current".FormatString(Name, cbv));
-                    xbv = _mbp.BreakdownVoltage;
+                    xbv = ModelParameters.BreakdownVoltage;
                 }
                 else
                 {
-                    var tol = _baseConfig.RelativeTolerance * cbv;
-                    xbv = _mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
+                    var tol = BaseConfiguration.RelativeTolerance * cbv;
+                    xbv = ModelParameters.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
                     int iter;
                     for (iter = 0; iter < 25; iter++)
                     {
-                        xbv = _mbp.BreakdownVoltage - vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / vt);
-                        xcbv = TempSaturationCurrent * (Math.Exp((_mbp.BreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
+                        xbv = ModelParameters.BreakdownVoltage - vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / vt);
+                        xcbv = TempSaturationCurrent * (Math.Exp((ModelParameters.BreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
                         if (Math.Abs(xcbv - cbv) <= tol)
                             break;
                     }

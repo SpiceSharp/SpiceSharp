@@ -8,7 +8,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="BipolarJunctionTransistor"/>
+    /// DC biasing behavior for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
     {

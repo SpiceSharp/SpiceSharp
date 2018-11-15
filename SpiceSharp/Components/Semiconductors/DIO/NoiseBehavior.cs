@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior _load;
+        private BiasingBehavior _load;
         private BaseParameters _bp;
         private ModelNoiseParameters _mnp;
         private ModelTemperatureBehavior _modeltemp;
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
+            _load = provider.GetBehavior<BiasingBehavior>();
             _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
