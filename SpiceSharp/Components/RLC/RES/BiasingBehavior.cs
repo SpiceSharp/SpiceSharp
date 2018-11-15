@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// General behavior for <see cref="Resistor"/>
     /// </summary>
-    public class LoadBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the voltage across the resistor.
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Gets matrix pointers

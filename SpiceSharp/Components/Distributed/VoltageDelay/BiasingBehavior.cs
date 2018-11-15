@@ -2,6 +2,7 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
@@ -10,12 +11,23 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
     /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
+        /// <summary>
+        /// Gets the base parameters.
+        /// </summary>
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; private set; }
+
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _contPosNode, _contNegNode;
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
+        protected int ContPosNode { get; private set; }
+        protected int ContNegNode { get; private set; }
         public int BranchEq { get; private set; }
         protected MatrixElement<double> PosBranchPtr { get; private set; }
         protected MatrixElement<double> NegBranchPtr { get; private set; }
@@ -25,13 +37,13 @@ namespace SpiceSharp.Components.DelayBehaviors
         protected MatrixElement<double> BranchControlNegPtr { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        public LoadBehavior(string name)
+        public BiasingBehavior(string name)
             : base(name)
         {
         }
@@ -46,10 +58,25 @@ namespace SpiceSharp.Components.DelayBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-            _contPosNode = pins[2];
-            _contNegNode = pins[3];
+            PosNode = pins[0];
+            NegNode = pins[1];
+            ContPosNode = pins[2];
+            ContNegNode = pins[3];
+        }
+
+        /// <summary>
+        /// Setup the behavior for the specified simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <exception cref="ArgumentNullException">provider</exception>
+        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            // Get parameters
+            BaseParameters = provider.GetParameterSet<BaseParameters>();
         }
 
         /// <summary>
@@ -63,7 +90,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// or
         /// solver
         /// </exception>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (variables == null)
                 throw new ArgumentNullException(nameof(variables));
@@ -71,19 +98,19 @@ namespace SpiceSharp.Components.DelayBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
-            BranchControlPosPtr = solver.GetMatrixElement(BranchEq, _contPosNode);
-            BranchControlNegPtr = solver.GetMatrixElement(BranchEq, _contNegNode);
+            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
+            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
+            BranchControlPosPtr = solver.GetMatrixElement(BranchEq, ContPosNode);
+            BranchControlNegPtr = solver.GetMatrixElement(BranchEq, ContNegNode);
         }
 
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
             PosBranchPtr.Value += 1;
             BranchPosPtr.Value += 1;
@@ -97,5 +124,14 @@ namespace SpiceSharp.Components.DelayBehaviors
                 BranchControlNegPtr.Value += 1.0;
             }
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

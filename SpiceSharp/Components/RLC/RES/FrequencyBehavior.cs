@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// AC behavior for <see cref="Resistor"/>
     /// </summary>
-    public class FrequencyBehavior : LoadBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Gets the (complex) voltage across the resistor.

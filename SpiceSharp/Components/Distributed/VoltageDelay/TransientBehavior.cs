@@ -12,16 +12,11 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.BaseTransientBehavior" />
     /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : BiasingBehavior, ITimeBehavior
     {
-        // Necessary behaviors and parameters
-        private BaseParameters _bp;
-        private LoadBehavior _load;
-
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _contPosNode, _contNegNode, _branch;
         protected VectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
@@ -45,51 +40,22 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Connect the behavior in the circuit
-        /// </summary>
-        /// <param name="pins">Pin indices in order</param>
-        public void Connect(params int[] pins)
-        {
-            _contPosNode = pins[2];
-            _contNegNode = pins[3];
-        }
-
-        /// <summary>
-        /// Setup the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-
-            // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
-        }
-
-        /// <summary>
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
         /// equations can also be allocated here.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public override void GetEquationPointers(Solver<double> solver)
+        public void GetEquationPointers(Solver<double> solver)
         {
-            _branch = _load.BranchEq;
-            BranchPtr = solver.GetRhsElement(_branch);
+            BranchPtr = solver.GetRhsElement(BranchEq);
         }
 
         /// <summary>
         /// Creates all necessary states for the transient behavior.
         /// </summary>
         /// <param name="method">The integration method.</param>
-        public override void CreateStates(IntegrationMethod method)
+        public void CreateStates(IntegrationMethod method)
         {
-            Signal = new DelayedSignal(1, _bp.Delay);
+            Signal = new DelayedSignal(1, BaseParameters.Delay);
         }
 
         /// <summary>
@@ -100,10 +66,10 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// In this method, the initial value is calculated based on the operating point solution,
         /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
         /// </remarks>
-        public override void GetDcState(TimeSimulation simulation)
+        public void GetDcState(TimeSimulation simulation)
         {
             var sol = simulation.RealState.Solution;
-            var input = sol[_contPosNode] - sol[_contNegNode];
+            var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
         }
 
@@ -111,10 +77,10 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// Perform time-dependent calculations.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Transient(TimeSimulation simulation)
+        public void Transient(TimeSimulation simulation)
         {
             var sol = simulation.RealState.Solution;
-            var input = sol[_contPosNode] - sol[_contNegNode];
+            var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
             BranchPtr.Value += Signal.Values[0];
         }

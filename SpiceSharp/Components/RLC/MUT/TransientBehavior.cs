@@ -2,6 +2,7 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
+using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
@@ -9,23 +10,27 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="MutualInductance"/>
     /// </summary>
-    public class TransientBehavior : BaseTransientBehavior
+    public class TransientBehavior : TemperatureBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Gets the transient behavior of inductor 1.
         /// </summary>
-        private BaseParameters _bp;
-        private InductorBehaviors.TransientBehavior _load1, _load2;
+        /// <value>
+        /// The transient behavior.
+        /// </value>
+        protected InductorBehaviors.TransientBehavior Load1 { get; private set; }
 
         /// <summary>
-        /// The factor
+        /// Gets the transient behavior of inductor 2.
         /// </summary>
-        public double Factor { get; protected set; }
-
+        /// <value>
+        /// The transient behavior.
+        /// </value>
+        protected InductorBehaviors.TransientBehavior Load2 { get; private set; }
+        
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _branchEq1, _branchEq2;
         protected MatrixElement<double> Branch1Branch2 { get; private set; }
         protected MatrixElement<double> Branch2Branch1 { get; private set; }
 
@@ -50,22 +55,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 			base.Setup(simulation, provider);
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            var bp1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
-            var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
-
+            
             // Get behaviors
-            _load1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
-            _load2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
-
-            // Calculate coupling factor
-            Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
-
+            Load1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
+            Load2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
+            
             // Register events for modifying the flux through the inductors
-            _load1.UpdateFlux += UpdateFlux1;
-            _load2.UpdateFlux += UpdateFlux2;
+            Load1.UpdateFlux += UpdateFlux1;
+            Load2.UpdateFlux += UpdateFlux2;
         }
 
         /// <summary>
@@ -76,7 +73,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         private void UpdateFlux2(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
-            args.Flux.Current += Factor * state.Solution[_load1.BranchEq];
+            args.Flux.Current += Factor * state.Solution[Load1.BranchEq];
         }
 
         /// <summary>
@@ -88,25 +85,42 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
             var state = args.State;
             Cond = args.Flux.Jacobian(Factor);
-            args.Flux.Current += Factor * state.Solution[_load2.BranchEq];
+            args.Flux.Current += Factor * state.Solution[Load2.BranchEq];
+        }
+
+        /// <summary>
+        /// Creates all necessary states for the transient behavior.
+        /// </summary>
+        /// <param name="method">The integration method.</param>
+        public void CreateStates(IntegrationMethod method)
+        {
+        }
+
+        /// <summary>
+        /// Calculates the state values from the current DC solution.
+        /// </summary>
+        /// <param name="simulation">Time-based simulation</param>
+        /// <exception cref="NotImplementedException"></exception>
+        /// <remarks>
+        /// In this method, the initial value is calculated based on the operating point solution,
+        /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
+        /// </remarks>
+        public void GetDcState(TimeSimulation simulation)
+        {
         }
 
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<double> solver)
+        public void GetEquationPointers(Solver<double> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
-
-            // Get extra equations
-            _branchEq1 = _load1.BranchEq;
-            _branchEq2 = _load2.BranchEq;
-
+            
             // Get matrix pointers
-            Branch1Branch2 = solver.GetMatrixElement(_branchEq1, _branchEq2);
-            Branch2Branch1 = solver.GetMatrixElement(_branchEq2, _branchEq1);
+            Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
+            Branch2Branch1 = solver.GetMatrixElement(Load2.BranchEq, Load1.BranchEq);
         }
 
         /// <summary>
@@ -118,15 +132,15 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             base.Unsetup(simulation);
 
             // Remove events
-            _load1.UpdateFlux -= UpdateFlux1;
-            _load2.UpdateFlux -= UpdateFlux2;
+            Load1.UpdateFlux -= UpdateFlux1;
+            Load2.UpdateFlux -= UpdateFlux2;
         }
 
         /// <summary>
         /// Transient behavior
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void Transient(TimeSimulation simulation)
+        public void Transient(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));

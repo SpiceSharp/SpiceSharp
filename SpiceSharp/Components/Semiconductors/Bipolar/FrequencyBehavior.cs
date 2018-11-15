@@ -10,44 +10,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// AC behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private BaseParameters _bp;
-        private LoadBehavior _load;
-        private TemperatureBehavior _temp;
-        private ModelBaseParameters _mbp;
-        private ModelTemperatureBehavior _modeltemp;
-
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _collectorNode, _baseNode, _emitterNode, _substrateNode, _colPrimeNode, _basePrimeNode, _emitPrimeNode;
-        protected MatrixElement<Complex> CollectorCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> BaseBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> EmitterEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CollectorPrimeCollectorPtr { get; private set; }
-        protected MatrixElement<Complex> CollectorPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CollectorPrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> BasePrimeBasePtr { get; private set; }
-        protected MatrixElement<Complex> BasePrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> BasePrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> EmitterPrimeEmitterPtr { get; private set; }
-        protected MatrixElement<Complex> EmitterPrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> EmitterPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CollectorCollectorPtr { get; private set; }
-        protected MatrixElement<Complex> BaseBasePtr { get; private set; }
-        protected MatrixElement<Complex> EmitterEmitterPtr { get; private set; }
-        protected MatrixElement<Complex> CollectorPrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> BasePrimeBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> EmitterPrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> SubstrateSubstratePtr { get; private set; }
-        protected MatrixElement<Complex> CollectorPrimeSubstratePtr { get; private set; }
-        protected MatrixElement<Complex> SubstrateCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> BaseCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CollectorPrimeBasePtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorCollectorPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CBaseBasePrimePtr { get; private set; }
+        protected MatrixElement<Complex> CEmitterEmitterPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorPrimeCollectorPtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CBasePrimeBasePtr { get; private set; }
+        protected MatrixElement<Complex> CBasePrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CBasePrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CEmitterPrimeEmitterPtr { get; private set; }
+        protected MatrixElement<Complex> CEmitterPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CEmitterPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorCollectorPtr { get; private set; }
+        protected MatrixElement<Complex> CBaseBasePtr { get; private set; }
+        protected MatrixElement<Complex> CEmitterEmitterPtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CBasePrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<Complex> CEmitterPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CSubstrateSubstratePtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorPrimeSubstratePtr { get; private set; }
+        protected MatrixElement<Complex> CSubstrateCollectorPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CBaseCollectorPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CCollectorPrimeBasePtr { get; private set; }
         
         /// <summary>
         /// Device methods and properties
@@ -70,87 +60,45 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            _temp = provider.GetBehavior<TemperatureBehavior>();
-            _load = provider.GetBehavior<LoadBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
-        }
-
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _collectorNode = pins[0];
-            _baseNode = pins[1];
-            _emitterNode = pins[2];
-            _substrateNode = pins[3];
-        }
-
-        /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
-            // Get extra equations
-            _colPrimeNode = _load.CollectorPrimeNode;
-            _basePrimeNode = _load.BasePrimeNode;
-            _emitPrimeNode = _load.EmitterPrimeNode;
-
-            // Get matrix pointers
-            CollectorCollectorPrimePtr = solver.GetMatrixElement(_collectorNode, _colPrimeNode);
-            BaseBasePrimePtr = solver.GetMatrixElement(_baseNode, _basePrimeNode);
-            EmitterEmitterPrimePtr = solver.GetMatrixElement(_emitterNode, _emitPrimeNode);
-            CollectorPrimeCollectorPtr = solver.GetMatrixElement(_colPrimeNode, _collectorNode);
-            CollectorPrimeBasePrimePtr = solver.GetMatrixElement(_colPrimeNode, _basePrimeNode);
-            CollectorPrimeEmitterPrimePtr = solver.GetMatrixElement(_colPrimeNode, _emitPrimeNode);
-            BasePrimeBasePtr = solver.GetMatrixElement(_basePrimeNode, _baseNode);
-            BasePrimeCollectorPrimePtr = solver.GetMatrixElement(_basePrimeNode, _colPrimeNode);
-            BasePrimeEmitterPrimePtr = solver.GetMatrixElement(_basePrimeNode, _emitPrimeNode);
-            EmitterPrimeEmitterPtr = solver.GetMatrixElement(_emitPrimeNode, _emitterNode);
-            EmitterPrimeCollectorPrimePtr = solver.GetMatrixElement(_emitPrimeNode, _colPrimeNode);
-            EmitterPrimeBasePrimePtr = solver.GetMatrixElement(_emitPrimeNode, _basePrimeNode);
-            CollectorCollectorPtr = solver.GetMatrixElement(_collectorNode, _collectorNode);
-            BaseBasePtr = solver.GetMatrixElement(_baseNode, _baseNode);
-            EmitterEmitterPtr = solver.GetMatrixElement(_emitterNode, _emitterNode);
-            CollectorPrimeCollectorPrimePtr = solver.GetMatrixElement(_colPrimeNode, _colPrimeNode);
-            BasePrimeBasePrimePtr = solver.GetMatrixElement(_basePrimeNode, _basePrimeNode);
-            EmitterPrimeEmitterPrimePtr = solver.GetMatrixElement(_emitPrimeNode, _emitPrimeNode);
-            SubstrateSubstratePtr = solver.GetMatrixElement(_substrateNode, _substrateNode);
-            CollectorPrimeSubstratePtr = solver.GetMatrixElement(_colPrimeNode, _substrateNode);
-            SubstrateCollectorPrimePtr = solver.GetMatrixElement(_substrateNode, _colPrimeNode);
-            BaseCollectorPrimePtr = solver.GetMatrixElement(_baseNode, _colPrimeNode);
-            CollectorPrimeBasePtr = solver.GetMatrixElement(_colPrimeNode, _baseNode);
+            // CGet matrix pointers
+            CCollectorCollectorPrimePtr = solver.GetMatrixElement(CollectorNode, CollectorPrimeNode);
+            CBaseBasePrimePtr = solver.GetMatrixElement(BaseNode, BasePrimeNode);
+            CEmitterEmitterPrimePtr = solver.GetMatrixElement(EmitterNode, EmitterPrimeNode);
+            CCollectorPrimeCollectorPtr = solver.GetMatrixElement(CollectorPrimeNode, CollectorNode);
+            CCollectorPrimeBasePrimePtr = solver.GetMatrixElement(CollectorPrimeNode, BasePrimeNode);
+            CCollectorPrimeEmitterPrimePtr = solver.GetMatrixElement(CollectorPrimeNode, EmitterPrimeNode);
+            CBasePrimeBasePtr = solver.GetMatrixElement(BasePrimeNode, BaseNode);
+            CBasePrimeCollectorPrimePtr = solver.GetMatrixElement(BasePrimeNode, CollectorPrimeNode);
+            CBasePrimeEmitterPrimePtr = solver.GetMatrixElement(BasePrimeNode, EmitterPrimeNode);
+            CEmitterPrimeEmitterPtr = solver.GetMatrixElement(EmitterPrimeNode, EmitterNode);
+            CEmitterPrimeCollectorPrimePtr = solver.GetMatrixElement(EmitterPrimeNode, CollectorPrimeNode);
+            CEmitterPrimeBasePrimePtr = solver.GetMatrixElement(EmitterPrimeNode, BasePrimeNode);
+            CCollectorCollectorPtr = solver.GetMatrixElement(CollectorNode, CollectorNode);
+            CBaseBasePtr = solver.GetMatrixElement(BaseNode, BaseNode);
+            CEmitterEmitterPtr = solver.GetMatrixElement(EmitterNode, EmitterNode);
+            CCollectorPrimeCollectorPrimePtr = solver.GetMatrixElement(CollectorPrimeNode, CollectorPrimeNode);
+            CBasePrimeBasePrimePtr = solver.GetMatrixElement(BasePrimeNode, BasePrimeNode);
+            CEmitterPrimeEmitterPrimePtr = solver.GetMatrixElement(EmitterPrimeNode, EmitterPrimeNode);
+            CSubstrateSubstratePtr = solver.GetMatrixElement(SubstrateNode, SubstrateNode);
+            CCollectorPrimeSubstratePtr = solver.GetMatrixElement(CollectorPrimeNode, SubstrateNode);
+            CSubstrateCollectorPrimePtr = solver.GetMatrixElement(SubstrateNode, CollectorPrimeNode);
+            CBaseCollectorPrimePtr = solver.GetMatrixElement(BaseNode, CollectorPrimeNode);
+            CCollectorPrimeBasePtr = solver.GetMatrixElement(CollectorPrimeNode, BaseNode);
         }
 
         /// <summary>
         /// Initialize AC parameters
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void InitializeParameters(FrequencySimulation simulation)
+        public void InitializeParameters(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -160,38 +108,38 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Get voltages
             var state = simulation.RealState;
-            var vbe = _load.VoltageBe;
-            var vbc = _load.VoltageBc;
-            var vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
-            var vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
+            var vbe = VoltageBe;
+            var vbc = VoltageBc;
+            var vbx = ModelParameters.BipolarType * (state.Solution[BaseNode] - state.Solution[CollectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (state.Solution[SubstrateNode] - state.Solution[CollectorPrimeNode]);
 
             // Get shared parameters
-            var cbe = _load.CurrentBe;
-            var gbe = _load.CondBe;
-            var gbc = _load.CondBc;
-            var qb = _load.BaseCharge;
-            var dqbdve = _load.Dqbdve;
-            var dqbdvc = _load.Dqbdvc;
+            var cbe = CurrentBe;
+            var gbe = CondBe;
+            var gbc = CondBc;
+            var qb = BaseCharge;
+            var dqbdve = Dqbdve;
+            var dqbdvc = Dqbdvc;
 
             // Charge storage elements
-            double tf = _mbp.TransitTimeForward;
-            double tr = _mbp.TransitTimeReverse;
-            var czbe = _temp.TempBeCap * _bp.Area;
-            var pe = _temp.TempBePotential;
-            double xme = _mbp.JunctionExpBe;
-            double cdis = _mbp.BaseFractionBcCap;
-            var ctot = _temp.TempBcCap * _bp.Area;
+            double tf = ModelParameters.TransitTimeForward;
+            double tr = ModelParameters.TransitTimeReverse;
+            var czbe = TempBeCap * BaseParameters.Area;
+            var pe = TempBePotential;
+            double xme = ModelParameters.JunctionExpBe;
+            double cdis = ModelParameters.BaseFractionBcCap;
+            var ctot = TempBcCap * BaseParameters.Area;
             var czbc = ctot * cdis;
             var czbx = ctot - czbc;
-            var pc = _temp.TempBcPotential;
-            double xmc = _mbp.JunctionExpBc;
-            var fcpe = _temp.TempDepletionCap;
-            var czcs = _mbp.CapCs * _bp.Area;
-            double ps = _mbp.PotentialSubstrate;
-            double xms = _mbp.ExponentialSubstrate;
-            double xtf = _mbp.TransitTimeBiasCoefficientForward;
-            var ovtf = _modeltemp.TransitTimeVoltageBcFactor;
-            var xjtf = _mbp.TransitTimeHighCurrentForward * _bp.Area;
+            var pc = TempBcPotential;
+            double xmc = ModelParameters.JunctionExpBc;
+            var fcpe = TempDepletionCap;
+            var czcs = ModelParameters.CapCs * BaseParameters.Area;
+            double ps = ModelParameters.PotentialSubstrate;
+            double xms = ModelParameters.ExponentialSubstrate;
+            double xtf = ModelParameters.TransitTimeBiasCoefficientForward;
+            var ovtf = ModelTemperature.TransitTimeVoltageBcFactor;
+            var xjtf = ModelParameters.TransitTimeHighCurrentForward * BaseParameters.Area;
             if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
                 double argtf = 0;
@@ -225,15 +173,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                f2 = _modeltemp.F2;
-                f3 = _modeltemp.F3;
+                f2 = ModelTemperature.F2;
+                f3 = ModelTemperature.F3;
                 var czbef2 = czbe / f2;
                 CapBe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
 
-            var fcpc = _temp.TempFactor4;
-            f2 = _modeltemp.F6;
-            f3 = _modeltemp.F7;
+            var fcpc = TempFactor4;
+            f2 = ModelTemperature.F6;
+            f3 = ModelTemperature.F7;
             if (vbc < fcpc)
             {
                 arg = 1 - vbc / pc;
@@ -272,19 +220,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var cstate = simulation.ComplexState;
-            var gcpr = _modeltemp.CollectorConduct * _bp.Area;
-            var gepr = _modeltemp.EmitterConduct * _bp.Area;
-            var gpi = _load.ConductancePi;
-            var gmu = _load.ConductanceMu;
-            Complex gm = _load.Transconductance;
-            var go = _load.OutputConductance;
-            var td = _modeltemp.ExcessPhaseFactor;
+            var gcpr = ModelTemperature.CollectorConduct * BaseParameters.Area;
+            var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
+            var gpi = ConductancePi;
+            var gmu = ConductanceMu;
+            Complex gm = Transconductance;
+            var go = OutputConductance;
+            var td = ModelTemperature.ExcessPhaseFactor;
             if (!td.Equals(0)) // Avoid computations
             {
                 var arg = td * cstate.Laplace;
@@ -293,36 +241,36 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 gm = gm * Complex.Exp(-arg);
                 gm = gm - go;
             }
-            var gx = _load.ConductanceX;
+            var gx = ConductanceX;
             var xcpi = CapBe * cstate.Laplace;
             var xcmu = CapBc * cstate.Laplace;
             var xcbx = CapBx * cstate.Laplace;
             var xccs = CapCs * cstate.Laplace;
             var xcmcb = CondCb * cstate.Laplace;
 
-            CollectorCollectorPtr.Value += gcpr;
-            BaseBasePtr.Value += gx + xcbx;
-            EmitterEmitterPtr.Value += gepr;
-            CollectorPrimeCollectorPrimePtr.Value += gmu + go + gcpr + xcmu + xccs + xcbx;
-            BasePrimeBasePrimePtr.Value += gx + gpi + gmu + xcpi + xcmu + xcmcb;
-            EmitterPrimeEmitterPrimePtr.Value += gpi + gepr + gm + go + xcpi;
-            CollectorCollectorPrimePtr.Value += -gcpr;
-            BaseBasePrimePtr.Value += -gx;
-            EmitterEmitterPrimePtr.Value += -gepr;
-            CollectorPrimeCollectorPtr.Value += -gcpr;
-            CollectorPrimeBasePrimePtr.Value += -gmu + gm - xcmu;
-            CollectorPrimeEmitterPrimePtr.Value += -gm - go;
-            BasePrimeBasePtr.Value += -gx;
-            BasePrimeCollectorPrimePtr.Value += -gmu - xcmu - xcmcb;
-            BasePrimeEmitterPrimePtr.Value += -gpi - xcpi;
-            EmitterPrimeEmitterPtr.Value += -gepr;
-            EmitterPrimeCollectorPrimePtr.Value += -go + xcmcb;
-            EmitterPrimeBasePrimePtr.Value += -gpi - gm - xcpi - xcmcb;
-            SubstrateSubstratePtr.Value += xccs;
-            CollectorPrimeSubstratePtr.Value += -xccs;
-            SubstrateCollectorPrimePtr.Value += -xccs;
-            BaseCollectorPrimePtr.Value += -xcbx;
-            CollectorPrimeBasePtr.Value += -xcbx;
+            CCollectorCollectorPtr.Value += gcpr;
+            CBaseBasePtr.Value += gx + xcbx;
+            CEmitterEmitterPtr.Value += gepr;
+            CCollectorPrimeCollectorPrimePtr.Value += gmu + go + gcpr + xcmu + xccs + xcbx;
+            CBasePrimeBasePrimePtr.Value += gx + gpi + gmu + xcpi + xcmu + xcmcb;
+            CEmitterPrimeEmitterPrimePtr.Value += gpi + gepr + gm + go + xcpi;
+            CCollectorCollectorPrimePtr.Value += -gcpr;
+            CBaseBasePrimePtr.Value += -gx;
+            CEmitterEmitterPrimePtr.Value += -gepr;
+            CCollectorPrimeCollectorPtr.Value += -gcpr;
+            CCollectorPrimeBasePrimePtr.Value += -gmu + gm - xcmu;
+            CCollectorPrimeEmitterPrimePtr.Value += -gm - go;
+            CBasePrimeBasePtr.Value += -gx;
+            CBasePrimeCollectorPrimePtr.Value += -gmu - xcmu - xcmcb;
+            CBasePrimeEmitterPrimePtr.Value += -gpi - xcpi;
+            CEmitterPrimeEmitterPtr.Value += -gepr;
+            CEmitterPrimeCollectorPrimePtr.Value += -go + xcmcb;
+            CEmitterPrimeBasePrimePtr.Value += -gpi - gm - xcpi - xcmcb;
+            CSubstrateSubstratePtr.Value += xccs;
+            CCollectorPrimeSubstratePtr.Value += -xccs;
+            CSubstrateCollectorPrimePtr.Value += -xccs;
+            CBaseCollectorPrimePtr.Value += -xcbx;
+            CCollectorPrimeBasePtr.Value += -xcbx;
         }
     }
 }
