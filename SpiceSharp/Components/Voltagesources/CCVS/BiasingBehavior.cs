@@ -3,23 +3,37 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 {
     /// <summary>
     /// General behavior for <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the base parameters.
         /// </summary>
-        private BaseParameters _bp;
-        private VoltageSourceBehaviors.LoadBehavior _vsrcload;
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Device methods and properties
+        /// Gets the voltage biasing behavior.
         /// </summary>
+        /// <value>
+        /// The voltage biasing behavior.
+        /// </value>
+        protected VoltageSourceBehaviors.BiasingBehavior VoltageLoad { get; private set; }
+
+        /// <summary>
+        /// Gets the current through the source.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Output current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -28,27 +42,43 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 
             return state.Solution[BranchEq];
         }
+
+        /// <summary>
+        /// Gets the voltage applied by the source.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Output voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Gets the power dissipated by the source.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[BranchEq] * (state.Solution[_posNode] - state.Solution[_negNode]);
+            return state.Solution[BranchEq] * (state.Solution[PosNode] - state.Solution[NegNode]);
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _contBranchEq;
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
+        protected int ContBranchEq { get; private set; }
         public int BranchEq { get; private set; }
         protected MatrixElement<double> PosBranchPtr { get; private set; }
         protected MatrixElement<double> NegBranchPtr { get; private set; }
@@ -60,7 +90,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -69,15 +99,14 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
+            BaseParameters = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _vsrcload = provider.GetBehavior<VoltageSourceBehaviors.LoadBehavior>("control");
+            VoltageLoad = provider.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
         }
 
         /// <summary>
@@ -90,8 +119,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
+            PosNode = pins[0];
+            NegNode = pins[1];
         }
 
         /// <summary>
@@ -99,7 +128,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="variables">Variables</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (variables == null)
                 throw new ArgumentNullException(nameof(variables));
@@ -107,28 +136,37 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create/get nodes
-            _contBranchEq = _vsrcload.BranchEq;
+            ContBranchEq = VoltageLoad.BranchEq;
             BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
-            BranchControlBranchPtr = solver.GetMatrixElement(BranchEq, _contBranchEq);
+            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
+            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
+            BranchControlBranchPtr = solver.GetMatrixElement(BranchEq, ContBranchEq);
         }
         
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
             PosBranchPtr.Value += 1.0;
             BranchPosPtr.Value += 1.0;
             NegBranchPtr.Value -= 1.0;
             BranchNegPtr.Value -= 1.0;
-            BranchControlBranchPtr.Value -= _bp.Coefficient;
+            BranchControlBranchPtr.Value -= BaseParameters.Coefficient;
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

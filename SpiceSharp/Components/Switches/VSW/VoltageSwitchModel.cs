@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Components.VoltageSwitchBehaviors;
+﻿using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -15,10 +15,7 @@ namespace SpiceSharp.Components
             : base(name)
         {
             // Add parameters
-            ParameterSets.Add(new ModelBaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(ModelLoadBehavior), () => new ModelLoadBehavior(Name));
+            ParameterSets.Add(new VoltageModelParameters());
         }
     }
 }

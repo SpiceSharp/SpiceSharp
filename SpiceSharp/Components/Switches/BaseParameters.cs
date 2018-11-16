@@ -1,10 +1,11 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CurrentSwitchBehaviors
+namespace SpiceSharp.Components.SwitchBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="CurrentSwitch"/>
+    /// Base parameters for a switch.
     /// </summary>
+    /// <seealso cref="SpiceSharp.ParameterSet" />
     public class BaseParameters : ParameterSet
     {
         /// <summary>

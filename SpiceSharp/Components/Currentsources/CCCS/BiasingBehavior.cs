@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Necessary parameters and behaviors
         /// </summary>
         protected BaseParameters BaseParameters { get; private set; }
-        protected VoltageSourceBehaviors.LoadBehavior VoltageLoad { get; private set; }
+        protected VoltageSourceBehaviors.BiasingBehavior VoltageLoad { get; private set; }
 
         /// <summary>
         /// Nodes
@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             BaseParameters = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors (0 = CCCS behaviors, 1 = VSRC behaviors)
-            VoltageLoad = provider.GetBehavior<VoltageSourceBehaviors.LoadBehavior>("control");
+            VoltageLoad = provider.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
         }
 
         /// <summary>

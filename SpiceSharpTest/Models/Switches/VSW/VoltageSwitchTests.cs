@@ -285,7 +285,7 @@ namespace SpiceSharpTest.Models
         {
             // Create voltage source
             var s = new VoltageSwitch("SW 1");
-            var p = s.ParameterSets.Get<SpiceSharp.Components.VoltageSwitchBehaviors.BaseParameters>();
+            var p = s.ParameterSets.Get<SpiceSharp.Components.SwitchBehaviors.BaseParameters>();
 
             // Check on
             s.ParameterSets.SetParameter("on");

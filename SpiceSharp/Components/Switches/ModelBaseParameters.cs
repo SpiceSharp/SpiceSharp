@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CurrentSwitchBehaviors
+namespace SpiceSharp.Components.SwitchBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="CurrentSwitchModel"/>
@@ -15,10 +15,25 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         public GivenParameter<double> OnResistance { get; } = new GivenParameter<double>(1.0);
         [ParameterName("roff"), ParameterInfo("Open resistance")]
         public GivenParameter<double> OffResistance { get; } = new GivenParameter<double>(1.0e12);
-        [ParameterName("it"), ParameterInfo("Threshold current")]
-        public GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
-        [ParameterName("ih"), ParameterInfo("Hysteresis current")]
-        public GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
+
+        public virtual GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
+        public virtual GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Gets the on conductance.
+        /// </summary>
+        /// <value>
+        /// The on conductance.
+        /// </value>
+        public double OnConductance { get; private set; }
+
+        /// <summary>
+        /// Gets the off conductance.
+        /// </summary>
+        /// <value>
+        /// The off conductance.
+        /// </value>
+        public double OffConductance { get; private set; }
 
         /// <summary>
         /// Method for calculating the default values of derived parameters.
@@ -30,6 +45,9 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         {
             // Only positive hysteresis values!
             Hysteresis.RawValue = Math.Abs(Hysteresis.RawValue);
+
+            OnConductance = 1.0 / OnResistance;
+            OffConductance = 1.0 / OffResistance;
         }
     }
 }
