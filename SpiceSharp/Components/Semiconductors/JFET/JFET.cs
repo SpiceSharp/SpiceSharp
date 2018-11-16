@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
 
             // Add behavior factories
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
         }

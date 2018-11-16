@@ -9,22 +9,24 @@ using Transistor = SpiceSharp.Components.MosfetBehaviors.Common.Transistor;
 namespace SpiceSharp.Components.JFETBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="JFET" />.
+    /// DC biasing behavior for a <see cref="JFET" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
     {
-        private BaseConfiguration _baseConfig;
-        private BaseParameters _bp;
-        private ModelBaseParameters _mbp;
-        private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
+        /// <summary>
+        /// Gets the base configuration.
+        /// </summary>
+        /// <value>
+        /// The base configuration.
+        /// </value>
+        protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _drain, _gate, _source;
+        protected int DrainNode { get; private set; }
+        protected int GateNode { get; private set; }
+        protected int SourceNode { get; private set; }
         public int DrainPrimeNode { get; private set; }
         public int SourcePrimeNode { get; private set; }
         protected VectorElement<double> GateNodePtr { get; private set; }
@@ -74,13 +76,13 @@ namespace SpiceSharp.Components.JFETBehaviors
         public double Ggd { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        public LoadBehavior(string name) : base(name)
+        public BiasingBehavior(string name) : base(name)
         {
         }
 
@@ -93,9 +95,9 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
-            _drain = pins[0];
-            _gate = pins[1];
-            _source = pins[2];
+            DrainNode = pins[0];
+            GateNode = pins[1];
+            SourceNode = pins[2];
         }
 
         /// <summary>
@@ -109,19 +111,9 @@ namespace SpiceSharp.Components.JFETBehaviors
             base.Setup(simulation, provider);
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
 
             // Get configuration
-            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            _temp = provider.GetBehavior<TemperatureBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
         }
 
         /// <summary>
@@ -130,27 +122,27 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <param name="variables">The variable set.</param>
         /// <param name="solver">The solver.</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            SourcePrimeNode = _mbp.SourceResistance > 0 ? variables.Create(Name.Combine("source")).Index : _source;
-            DrainPrimeNode = _mbp.DrainResistance > 0 ? variables.Create(Name.Combine("drain")).Index : _drain;
+            SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source")).Index : SourceNode;
+            DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain")).Index : DrainNode;
 
-            GateNodePtr = solver.GetRhsElement(_gate);
+            GateNodePtr = solver.GetRhsElement(GateNode);
             DrainPrimeNodePtr = solver.GetRhsElement(DrainPrimeNode);
             SourcePrimeNodePtr = solver.GetRhsElement(SourcePrimeNode);
-            DrainDrainPrimePtr = solver.GetMatrixElement(_drain, DrainPrimeNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(_gate, DrainPrimeNode);
-            GateSourcePrimePtr = solver.GetMatrixElement(_gate, SourcePrimeNode);
-            SourceSourcePrimePtr = solver.GetMatrixElement(_source, SourcePrimeNode);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(DrainPrimeNode, _drain);
-            DrainPrimeGatePtr = solver.GetMatrixElement(DrainPrimeNode, _gate);
+            DrainDrainPrimePtr = solver.GetMatrixElement(DrainNode, DrainPrimeNode);
+            GateDrainPrimePtr = solver.GetMatrixElement(GateNode, DrainPrimeNode);
+            GateSourcePrimePtr = solver.GetMatrixElement(GateNode, SourcePrimeNode);
+            SourceSourcePrimePtr = solver.GetMatrixElement(SourceNode, SourcePrimeNode);
+            DrainPrimeDrainPtr = solver.GetMatrixElement(DrainPrimeNode, DrainNode);
+            DrainPrimeGatePtr = solver.GetMatrixElement(DrainPrimeNode, GateNode);
             DrainPrimeSourcePrimePtr = solver.GetMatrixElement(DrainPrimeNode, SourcePrimeNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(SourcePrimeNode, _gate);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(SourcePrimeNode, _source);
+            SourcePrimeGatePtr = solver.GetMatrixElement(SourcePrimeNode, GateNode);
+            SourcePrimeSourcePtr = solver.GetMatrixElement(SourcePrimeNode, SourceNode);
             SourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourcePrimeNode, DrainPrimeNode);
-            DrainDrainPtr = solver.GetMatrixElement(_drain, _drain);
-            GateGatePtr = solver.GetMatrixElement(_gate, _gate);
-            SourceSourcePtr = solver.GetMatrixElement(_source, _source);
+            DrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
+            GateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
+            SourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
             DrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainPrimeNode, DrainPrimeNode);
             SourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourcePrimeNode, SourcePrimeNode);
         }
@@ -159,15 +151,15 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
             var state = simulation.RealState;
 
             // DC model parameters
-            var beta = _mbp.Beta * _bp.Area;
-            var gdpr = _mbp.DrainConductance * _bp.Area;
-            var gspr = _mbp.SourceConductance * _bp.Area;
-            var csat = _temp.TempSaturationCurrent * _bp.Area;
+            var beta = ModelParameters.Beta * BaseParameters.Area;
+            var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;
+            var gspr = ModelParameters.SourceConductance * BaseParameters.Area;
+            var csat = TempSaturationCurrent * BaseParameters.Area;
 
             double vgs, vgd, vds;
             double ggs, cg;
@@ -178,16 +170,16 @@ namespace SpiceSharp.Components.JFETBehaviors
             var check = true;
             if (state.Init == InitializationModes.Junction && simulation is TimeSimulation && state.UseDc && state.UseIc)
             {
-                vds = _mbp.JFETType * _bp.InitialVds;
-                vgs = _mbp.JFETType * _bp.InitialVgs;
+                vds = ModelParameters.JFETType * BaseParameters.InitialVds;
+                vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;
                 vgd = vgs - vds;
             }
-            else if (state.Init == InitializationModes.Junction && !_bp.Off)
+            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
             {
                 vgs = -1;
                 vgd = -1;
             }
-            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && _bp.Off)
+            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
             {
                 vgs = 0;
                 vgd = 0;
@@ -195,49 +187,49 @@ namespace SpiceSharp.Components.JFETBehaviors
             else
             {
                 // Compute new nonlinear branch voltages
-                vgs = _mbp.JFETType * (state.Solution[_gate] - state.Solution[SourcePrimeNode]);
-                vgd = _mbp.JFETType * (state.Solution[_gate] - state.Solution[DrainPrimeNode]);
+                vgs = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[SourcePrimeNode]);
+                vgd = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[DrainPrimeNode]);
 
                 // Limit nonlinear branch voltages
                 check = false;
                 vgs = Semiconductor.LimitJunction(vgs, Vgs,
-                    _bp.Temperature * Circuit.KOverQ, _temp.Vcrit, ref check);
+                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
                 vgd = Semiconductor.LimitJunction(vgd, Vgd,
-                    _bp.Temperature * Circuit.KOverQ, _temp.Vcrit, ref check);
-                vgs = Transistor.LimitFet(vgs, Vgs, _mbp.Threshold);
-                vgd = Transistor.LimitFet(vgd, Vgd, _mbp.Threshold);
+                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                vgs = Transistor.LimitFet(vgs, Vgs, ModelParameters.Threshold);
+                vgd = Transistor.LimitFet(vgd, Vgd, ModelParameters.Threshold);
             }
 
             // Determine dc current and derivatives 
             vds = vgs - vgd;
-            if (vgs <= -5 * _bp.Temperature * Circuit.KOverQ)
+            if (vgs <= -5 * BaseParameters.Temperature * Circuit.KOverQ)
             {
-                ggs = -csat / vgs + _baseConfig.Gmin;
+                ggs = -csat / vgs + BaseConfiguration.Gmin;
                 cg = ggs * vgs;
             }
             else
             {
-                var evgs = Math.Exp(vgs / (_bp.Temperature * Circuit.KOverQ));
-                ggs = csat * evgs / (_bp.Temperature * Circuit.KOverQ) + _baseConfig.Gmin;
-                cg = csat * (evgs - 1) + _baseConfig.Gmin * vgs;
+                var evgs = Math.Exp(vgs / (BaseParameters.Temperature * Circuit.KOverQ));
+                ggs = csat * evgs / (BaseParameters.Temperature * Circuit.KOverQ) + BaseConfiguration.Gmin;
+                cg = csat * (evgs - 1) + BaseConfiguration.Gmin * vgs;
             }
 
-            if (vgd <= -5 * (_bp.Temperature * Circuit.KOverQ))
+            if (vgd <= -5 * (BaseParameters.Temperature * Circuit.KOverQ))
             {
-                ggd = -csat / vgd + _baseConfig.Gmin;
+                ggd = -csat / vgd + BaseConfiguration.Gmin;
                 cgd = ggd * vgd;
             }
             else
             {
-                var evgd = Math.Exp(vgd / (_bp.Temperature * Circuit.KOverQ));
-                ggd = csat * evgd / (_bp.Temperature * Circuit.KOverQ) + _baseConfig.Gmin;
-                cgd = csat * (evgd - 1) + _baseConfig.Gmin * vgd;
+                var evgd = Math.Exp(vgd / (BaseParameters.Temperature * Circuit.KOverQ));
+                ggd = csat * evgd / (BaseParameters.Temperature * Circuit.KOverQ) + BaseConfiguration.Gmin;
+                cgd = csat * (evgd - 1) + BaseConfiguration.Gmin * vgd;
             }
 
             cg = cg + cgd;
 
             // Modification for Sydney University JFET model
-            var vto = _mbp.Threshold;
+            var vto = ModelParameters.Threshold;
             if (vds >= 0)
             {
                 var vgst = vgs - vto;
@@ -252,27 +244,27 @@ namespace SpiceSharp.Components.JFETBehaviors
                 }
                 else
                 {
-                    betap = beta * (1 + _mbp.LModulation * vds);
-                    bfac = _modeltemp.BFactor;
+                    betap = beta * (1 + ModelParameters.LModulation * vds);
+                    bfac = ModelTemperature.BFactor;
                     if (vgst >= vds)
                     {
                         // Normal mode, linear region
-                        var apart = 2 * _mbp.B + 3 * bfac * (vgst - vds);
-                        var cpart = vds * (vds * (bfac * vds - _mbp.B) + vgst * apart);
+                        var apart = 2 * ModelParameters.B + 3 * bfac * (vgst - vds);
+                        var cpart = vds * (vds * (bfac * vds - ModelParameters.B) + vgst * apart);
                         cdrain = betap * cpart;
                         gm = betap * vds * (apart + 3 * bfac * vgst);
                         gds = betap * (vgst - vds) * apart
-                              + beta * _mbp.LModulation * cpart;
+                              + beta * ModelParameters.LModulation * cpart;
                     }
                     else
                     {
                         bfac = vgst * bfac;
-                        gm = betap * vgst * (2 * _mbp.B + 3 * bfac);
+                        gm = betap * vgst * (2 * ModelParameters.B + 3 * bfac);
 
                         // Normal mode, saturation region
-                        var cpart = vgst * vgst * (_mbp.B + bfac);
+                        var cpart = vgst * vgst * (ModelParameters.B + bfac);
                         cdrain = betap * cpart;
-                        gds = _mbp.LModulation * beta * cpart;
+                        gds = ModelParameters.LModulation * beta * cpart;
                     }
                 }
             }
@@ -290,27 +282,27 @@ namespace SpiceSharp.Components.JFETBehaviors
                 }
                 else
                 {
-                    betap = beta * (1 - _mbp.LModulation * vds);
-                    bfac = _modeltemp.BFactor;
+                    betap = beta * (1 - ModelParameters.LModulation * vds);
+                    bfac = ModelTemperature.BFactor;
                     if (vgdt + vds >= 0)
                     {
                         // Inverse mode, linear region
-                        var apart = 2 * _mbp.B + 3 * bfac * (vgdt + vds);
-                        var cpart = vds * (-vds * (-bfac * vds - _mbp.B) + vgdt * apart);
+                        var apart = 2 * ModelParameters.B + 3 * bfac * (vgdt + vds);
+                        var cpart = vds * (-vds * (-bfac * vds - ModelParameters.B) + vgdt * apart);
                         cdrain = betap * cpart;
                         gm = betap * vds * (apart + 3 * bfac * vgdt);
                         gds = betap * (vgdt + vds) * apart
-                              - beta * _mbp.LModulation * cpart - gm;
+                              - beta * ModelParameters.LModulation * cpart - gm;
                     }
                     else
                     {
                         bfac = vgdt * bfac;
-                        gm = -betap * vgdt * (2 * _mbp.B + 3 * bfac);
+                        gm = -betap * vgdt * (2 * ModelParameters.B + 3 * bfac);
 
                         // Inverse mode, saturation region
-                        var cpart = vgdt * vgdt * (_mbp.B + bfac);
+                        var cpart = vgdt * vgdt * (ModelParameters.B + bfac);
                         cdrain = -betap * cpart;
-                        gds = _mbp.LModulation * beta * cpart - gm;
+                        gds = ModelParameters.LModulation * beta * cpart - gm;
                     }
                 }
             }
@@ -335,9 +327,9 @@ namespace SpiceSharp.Components.JFETBehaviors
             Ggd = ggd;
 
             // Load current vector
-            var ceqgd = _mbp.JFETType * (cgd - ggd * vgd);
-            var ceqgs = _mbp.JFETType * (cg - cgd - ggs * vgs);
-            var cdreq = _mbp.JFETType * (cd + cgd - gds * vds - gm * vgs);
+            var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
+            var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
+            var cdreq = ModelParameters.JFETType * (cd + cgd - gds * vds - gm * vgs);
             GateNodePtr.Value += -ceqgs - ceqgd;
             DrainPrimeNodePtr.Value += -cdreq + ceqgd;
             SourcePrimeNodePtr.Value += cdreq + ceqgs;
@@ -359,5 +351,14 @@ namespace SpiceSharp.Components.JFETBehaviors
             DrainPrimeDrainPrimePtr.Value += gdpr + gds + ggd;
             SourcePrimeSourcePrimePtr.Value += gspr + gds + gm + ggs;
         }
+
+        /// <summary>
+        /// Tests convergence at the device-level.
+        /// </summary>
+        /// <param name="simulation">The base simulation.</param>
+        /// <returns>
+        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

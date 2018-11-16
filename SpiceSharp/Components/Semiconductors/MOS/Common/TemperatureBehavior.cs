@@ -114,7 +114,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         public double TempTransconductance { get; protected set; }
         public double TempVt0 { get; protected set; }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
