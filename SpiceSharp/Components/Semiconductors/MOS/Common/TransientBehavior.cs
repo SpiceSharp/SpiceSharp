@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
@@ -12,14 +13,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.BaseTransientBehavior" />
     /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : ExportingBehavior, ITimeBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
         private BaseParameters _bp;
         private ModelBaseParameters _mbp;
-        private LoadBehavior _load;
+        private BiasingBehavior _load;
         private TemperatureBehavior _temp;
 
         /// <summary>
@@ -41,37 +42,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         public double CapBs { get; protected set; }
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
-        protected MatrixElement<double> DrainDrainPtr { get; private set; }
-        protected MatrixElement<double> GateGatePtr { get; private set; }
-        protected MatrixElement<double> SourceSourcePtr { get; private set; }
-        protected MatrixElement<double> BulkBulkPtr { get; private set; }
-        protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
-        protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<double> DrainDrainPrimePtr { get; private set; }
-        protected MatrixElement<double> GateBulkPtr { get; private set; }
-        protected MatrixElement<double> GateDrainPrimePtr { get; private set; }
-        protected MatrixElement<double> GateSourcePrimePtr { get; private set; }
-        protected MatrixElement<double> SourceSourcePrimePtr { get; private set; }
-        protected MatrixElement<double> BulkDrainPrimePtr { get; private set; }
-        protected MatrixElement<double> BulkSourcePrimePtr { get; private set; }
-        protected MatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<double> DrainPrimeDrainPtr { get; private set; }
-        protected MatrixElement<double> BulkGatePtr { get; private set; }
-        protected MatrixElement<double> DrainPrimeGatePtr { get; private set; }
-        protected MatrixElement<double> SourcePrimeGatePtr { get; private set; }
-        protected MatrixElement<double> SourcePrimeSourcePtr { get; private set; }
-        protected MatrixElement<double> DrainPrimeBulkPtr { get; private set; }
-        protected MatrixElement<double> SourcePrimeBulkPtr { get; private set; }
-        protected MatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
-        protected VectorElement<double> GatePtr { get; private set; }
-        protected VectorElement<double> BulkPtr { get; private set; }
-        protected VectorElement<double> DrainPrimePtr { get; private set; }
-        protected VectorElement<double> SourcePrimePtr { get; private set; }
-
-        /// <summary>
         /// State variables
         /// </summary>
         protected StateHistory VoltageGs { get; private set; }
@@ -87,6 +57,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         protected StateDerivative ChargeBs { get; private set; }
 
         /// <summary>
+        /// Elements needed for transient behavior
+        /// </summary>
+        protected VectorElement<double> GatePtr { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
@@ -96,23 +71,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         public TransientBehavior(string name) : base(name)
         {
         }
-
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _drainNode = pins[0];
-            _gateNode = pins[1];
-            _sourceNode = pins[2];
-            _bulkNode = pins[3];
-        }
-
+        
         /// <summary>
         /// Setup behavior
         /// </summary>
@@ -120,7 +79,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -130,58 +88,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
-            _load = provider.GetBehavior<LoadBehavior>();
-        }
-
-        /// <summary>
-        /// Gets matrix pointers
-        /// </summary>
-        /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<double> solver)
-        {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
-
-            // Get extra equations
-            _sourceNodePrime = _load.SourceNodePrime;
-            _drainNodePrime = _load.DrainNodePrime;
-
-            // Get matrix elements
-            DrainDrainPtr = solver.GetMatrixElement(_drainNode, _drainNode);
-            GateGatePtr = solver.GetMatrixElement(_gateNode, _gateNode);
-            SourceSourcePtr = solver.GetMatrixElement(_sourceNode, _sourceNode);
-            BulkBulkPtr = solver.GetMatrixElement(_bulkNode, _bulkNode);
-            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(_drainNodePrime, _drainNodePrime);
-            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNodePrime);
-            DrainDrainPrimePtr = solver.GetMatrixElement(_drainNode, _drainNodePrime);
-            GateBulkPtr = solver.GetMatrixElement(_gateNode, _bulkNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(_gateNode, _drainNodePrime);
-            GateSourcePrimePtr = solver.GetMatrixElement(_gateNode, _sourceNodePrime);
-            SourceSourcePrimePtr = solver.GetMatrixElement(_sourceNode, _sourceNodePrime);
-            BulkDrainPrimePtr = solver.GetMatrixElement(_bulkNode, _drainNodePrime);
-            BulkSourcePrimePtr = solver.GetMatrixElement(_bulkNode, _sourceNodePrime);
-            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(_drainNodePrime, _sourceNodePrime);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(_drainNodePrime, _drainNode);
-            BulkGatePtr = solver.GetMatrixElement(_bulkNode, _gateNode);
-            DrainPrimeGatePtr = solver.GetMatrixElement(_drainNodePrime, _gateNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(_sourceNodePrime, _gateNode);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNode);
-            DrainPrimeBulkPtr = solver.GetMatrixElement(_drainNodePrime, _bulkNode);
-            SourcePrimeBulkPtr = solver.GetMatrixElement(_sourceNodePrime, _bulkNode);
-            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(_sourceNodePrime, _drainNodePrime);
-
-            // Get rhs elements
-            GatePtr = solver.GetRhsElement(_gateNode);
-            BulkPtr = solver.GetRhsElement(_bulkNode);
-            DrainPrimePtr = solver.GetRhsElement(_drainNodePrime);
-            SourcePrimePtr = solver.GetRhsElement(_sourceNodePrime);
+            _load = provider.GetBehavior<BiasingBehavior>();
         }
         
         /// <summary>
         /// Create states
         /// </summary>
         /// <param name="method"></param>
-        public override void CreateStates(IntegrationMethod method)
+        public void CreateStates(IntegrationMethod method)
         {
 			if (method == null)
 				throw new ArgumentNullException(nameof(method));
@@ -203,7 +117,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets DC states
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void GetDcState(TimeSimulation simulation)
+        public void GetDcState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -307,10 +221,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         }
 
         /// <summary>
+        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
+        /// equations can also be allocated here.
+        /// </summary>
+        /// <param name="solver">The solver.</param>
+        public void GetEquationPointers(Solver<double> solver)
+        {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+            GatePtr = solver.GetRhsElement(_load.GateNode);
+        }
+
+        /// <summary>
         /// Transient behavior
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void Transient(TimeSimulation simulation)
+        public void Transient(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -504,26 +430,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             // Load current vector
             var ceqbs = _mbp.MosfetType * (cbs - gbs * vbs);
             var ceqbd = _mbp.MosfetType * (cbd - gbd * vbd);
+            var ptrs = _load.Pointers;
             GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
-            BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
-            DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;
-            SourcePrimePtr.Value += ceqbs + _mbp.MosfetType * ceqgs;
+            ptrs.BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
+            ptrs.DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;
+            ptrs.SourcePrimePtr.Value += ceqbs + _mbp.MosfetType * ceqgs;
 
             // Load Y-matrix
-            GateGatePtr.Value += gcgd + gcgs + gcgb;
-            BulkBulkPtr.Value += gbd + gbs + gcgb;
-            DrainPrimeDrainPrimePtr.Value += gbd + gcgd;
-            SourcePrimeSourcePrimePtr.Value += gbs + gcgs;
-            GateBulkPtr.Value -= gcgb;
-            GateDrainPrimePtr.Value -= gcgd;
-            GateSourcePrimePtr.Value -= gcgs;
-            BulkGatePtr.Value -= gcgb;
-            BulkDrainPrimePtr.Value -= gbd;
-            BulkSourcePrimePtr.Value -= gbs;
-            DrainPrimeGatePtr.Value -= gcgd;
-            DrainPrimeBulkPtr.Value -= gbd;
-            SourcePrimeGatePtr.Value -= gcgs;
-            SourcePrimeBulkPtr.Value -= gbs;
+            ptrs.GateGatePtr.Value += gcgd + gcgs + gcgb;
+            ptrs.BulkBulkPtr.Value += gbd + gbs + gcgb;
+            ptrs.DrainPrimeDrainPrimePtr.Value += gbd + gcgd;
+            ptrs.SourcePrimeSourcePrimePtr.Value += gbs + gcgs;
+            ptrs.GateBulkPtr.Value -= gcgb;
+            ptrs.GateDrainPrimePtr.Value -= gcgd;
+            ptrs.GateSourcePrimePtr.Value -= gcgs;
+            ptrs.BulkGatePtr.Value -= gcgb;
+            ptrs.BulkDrainPrimePtr.Value -= gbd;
+            ptrs.BulkSourcePrimePtr.Value -= gbs;
+            ptrs.DrainPrimeGatePtr.Value -= gcgd;
+            ptrs.DrainPrimeBulkPtr.Value -= gbd;
+            ptrs.SourcePrimeGatePtr.Value -= gcgs;
+            ptrs.SourcePrimeBulkPtr.Value -= gbs;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// <summary>
     /// General behavior for a <see cref="Mosfet3"/>
     /// </summary>
-    public class LoadBehavior : Common.LoadBehavior
+    public class BiasingBehavior : Common.BiasingBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

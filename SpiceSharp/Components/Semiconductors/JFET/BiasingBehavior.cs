@@ -4,7 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
-using Transistor = SpiceSharp.Components.MosfetBehaviors.Common.Transistor;
+using Transistor = SpiceSharp.Components.MosfetBehaviors.Transistor;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {

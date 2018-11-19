@@ -6,7 +6,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.Model"/>
+    /// Temperature behavior for a <see cref="Mosfet3Model" />.
     /// </summary>
     public class ModelTemperatureBehavior : Common.ModelTemperatureBehavior
     {

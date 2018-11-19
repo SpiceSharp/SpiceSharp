@@ -2,13 +2,14 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
     /// <summary>
     /// Common noise behavior for MOS transistors.
     /// </summary>
-    public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior
+    public class NoiseBehavior : ExportingBehavior, INoiseBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -16,13 +17,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         private BaseParameters _bp;
         private ModelBaseParameters _mbp;
         private ModelNoiseParameters _mnp;
-        private LoadBehavior _load;
+        private BiasingBehavior _load;
         private TemperatureBehavior _temp;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
         /// Noise generators by their index
@@ -55,7 +51,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -66,43 +61,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
-            _load = provider.GetBehavior<LoadBehavior>();
-        }
-
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _drainNode = pins[0];
-            _gateNode = pins[1];
-            _sourceNode = pins[2];
-            _bulkNode = pins[3];
+            _load = provider.GetBehavior<BiasingBehavior>();
         }
 
         /// <summary>
         /// Connect noise
         /// </summary>
-        public override void ConnectNoise()
+        public void ConnectNoise()
         {
-            // Get extra equations
-            _drainNodePrime = _load.DrainNodePrime;
-            _sourceNodePrime = _load.SourceNodePrime;
-
             // Connect noise sources
-            MosfetNoise.Setup(_drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime);
+            MosfetNoise.Setup(
+                _load.DrainNode,
+                _load.GateNode,
+                _load.SourceNode, 
+                _load.BulkNode, 
+                _load.DrainNodePrime,
+                _load.SourceNodePrime);
         }
 
         /// <summary>
         /// Noise calculations
         /// </summary>
         /// <param name="simulation">Noise simulation</param>
-        public override void Noise(Noise simulation)
+        public void Noise(Noise simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));

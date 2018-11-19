@@ -3,20 +3,21 @@ using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
     /// <summary>
     /// Common small-signal behavior for a MOS transistor.
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : ExportingBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
         private ModelBaseParameters _mbp;
-        private LoadBehavior _load;
+        private BiasingBehavior _load;
         private TemperatureBehavior _temp;
 
         /// <summary>
@@ -31,7 +32,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
         protected MatrixElement<Complex> DrainDrainPtr { get; private set; }
         protected MatrixElement<Complex> GateGatePtr { get; private set; }
         protected MatrixElement<Complex> SourceSourcePtr { get; private set; }
@@ -60,22 +60,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }
-        
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            _drainNode = pins[0];
-            _gateNode = pins[1];
-            _sourceNode = pins[2];
-            _bulkNode = pins[3];
-        }
 
         /// <summary>
         /// Setup behavior
@@ -84,7 +68,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -94,52 +77,48 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 
             // Get behaviors
             _temp = provider.GetBehavior<TemperatureBehavior>();
-            _load = provider.GetBehavior<LoadBehavior>();
+            _load = provider.GetBehavior<BiasingBehavior>();
         }
 
         /// <summary>
         /// Gets matrix pionters
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
-            // Get extra equations
-            _drainNodePrime = _load.DrainNodePrime;
-            _sourceNodePrime = _load.SourceNodePrime;
-
             // Get matrix pointers
-            DrainDrainPtr = solver.GetMatrixElement(_drainNode, _drainNode);
-            GateGatePtr = solver.GetMatrixElement(_gateNode, _gateNode);
-            SourceSourcePtr = solver.GetMatrixElement(_sourceNode, _sourceNode);
-            BulkBulkPtr = solver.GetMatrixElement(_bulkNode, _bulkNode);
-            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(_drainNodePrime, _drainNodePrime);
-            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNodePrime);
-            DrainDrainPrimePtr = solver.GetMatrixElement(_drainNode, _drainNodePrime);
-            GateBulkPtr = solver.GetMatrixElement(_gateNode, _bulkNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(_gateNode, _drainNodePrime);
-            GateSourcePrimePtr = solver.GetMatrixElement(_gateNode, _sourceNodePrime);
-            SourceSourcePrimePtr = solver.GetMatrixElement(_sourceNode, _sourceNodePrime);
-            BulkDrainPrimePtr = solver.GetMatrixElement(_bulkNode, _drainNodePrime);
-            BulkSourcePrimePtr = solver.GetMatrixElement(_bulkNode, _sourceNodePrime);
-            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(_drainNodePrime, _sourceNodePrime);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(_drainNodePrime, _drainNode);
-            BulkGatePtr = solver.GetMatrixElement(_bulkNode, _gateNode);
-            DrainPrimeGatePtr = solver.GetMatrixElement(_drainNodePrime, _gateNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(_sourceNodePrime, _gateNode);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNode);
-            DrainPrimeBulkPtr = solver.GetMatrixElement(_drainNodePrime, _bulkNode);
-            SourcePrimeBulkPtr = solver.GetMatrixElement(_sourceNodePrime, _bulkNode);
-            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(_sourceNodePrime, _drainNodePrime);
+            DrainDrainPtr = solver.GetMatrixElement(_load.DrainNode, _load.DrainNode);
+            GateGatePtr = solver.GetMatrixElement(_load.GateNode, _load.GateNode);
+            SourceSourcePtr = solver.GetMatrixElement(_load.SourceNode, _load.SourceNode);
+            BulkBulkPtr = solver.GetMatrixElement(_load.BulkNode, _load.BulkNode);
+            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(_load.DrainNodePrime, _load.DrainNodePrime);
+            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(_load.SourceNodePrime, _load.SourceNodePrime);
+            DrainDrainPrimePtr = solver.GetMatrixElement(_load.DrainNode, _load.DrainNodePrime);
+            GateBulkPtr = solver.GetMatrixElement(_load.GateNode, _load.BulkNode);
+            GateDrainPrimePtr = solver.GetMatrixElement(_load.GateNode, _load.DrainNodePrime);
+            GateSourcePrimePtr = solver.GetMatrixElement(_load.GateNode, _load.SourceNodePrime);
+            SourceSourcePrimePtr = solver.GetMatrixElement(_load.SourceNode, _load.SourceNodePrime);
+            BulkDrainPrimePtr = solver.GetMatrixElement(_load.BulkNode, _load.DrainNodePrime);
+            BulkSourcePrimePtr = solver.GetMatrixElement(_load.BulkNode, _load.SourceNodePrime);
+            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(_load.DrainNodePrime, _load.SourceNodePrime);
+            DrainPrimeDrainPtr = solver.GetMatrixElement(_load.DrainNodePrime, _load.DrainNode);
+            BulkGatePtr = solver.GetMatrixElement(_load.BulkNode, _load.GateNode);
+            DrainPrimeGatePtr = solver.GetMatrixElement(_load.DrainNodePrime, _load.GateNode);
+            SourcePrimeGatePtr = solver.GetMatrixElement(_load.SourceNodePrime, _load.GateNode);
+            SourcePrimeSourcePtr = solver.GetMatrixElement(_load.SourceNodePrime, _load.SourceNode);
+            DrainPrimeBulkPtr = solver.GetMatrixElement(_load.DrainNodePrime, _load.BulkNode);
+            SourcePrimeBulkPtr = solver.GetMatrixElement(_load.SourceNodePrime, _load.BulkNode);
+            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(_load.SourceNodePrime, _load.DrainNodePrime);
         }
         
         /// <summary>
         /// Initialize AC parameters
         /// </summary>
         /// <param name="simulation"></param>
-        public override void InitializeParameters(FrequencySimulation simulation)
+        public void InitializeParameters(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -247,7 +226,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));

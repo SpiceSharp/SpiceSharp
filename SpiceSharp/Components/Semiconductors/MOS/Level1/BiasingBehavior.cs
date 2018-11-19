@@ -2,37 +2,40 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
-using Semiconductor = SpiceSharp.Components.Semiconductors.Semiconductor;
 
-namespace SpiceSharp.Components.MosfetBehaviors.Common
+namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// A common loading behavior for mosfets
+    /// DC biasing behavior for a <see cref="Mosfet1" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
-    public abstract class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    /// <seealso cref="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior" />
+    /// <seealso cref="SpiceSharp.Behaviors.IBiasingBehavior" />
+    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// The permittivity of silicon
+        /// The maximum exponent argument
         /// </summary>
-        protected const double EpsilonSilicon = 11.7 * 8.854214871e-12;
         protected const double MaximumExponentArgument = 709.0;
 
-        // Necessary behaviors and parameters
-        private BaseConfiguration _baseConfig;
-        private ModelBaseParameters _mbp;
-        private BaseParameters _bp;
-        private TemperatureBehavior _temp;
-
         /// <summary>
-        /// Gets or sets the drain current.
+        /// Gets the base configuration.
         /// </summary>
         /// <value>
-        /// The drain current.
+        /// The base configuration.
+        /// </value>
+        protected BaseConfiguration BaseConfiguration { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the DrainNode current.
+        /// </summary>
+        /// <value>
+        /// The DrainNode current.
         /// </value>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
-        public double DrainCurrent { get; protected set; }
+        public double DrainCurrent { get; private set; }
 
         /// <summary>
         /// Gets or sets the bulk-source current.
@@ -41,16 +44,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// The bulk-source current.
         /// </value>
         [ParameterName("ibs"), ParameterInfo("B-S junction current")]
-        public double BsCurrent { get; protected set; }
+        public double BsCurrent { get; private set; }
 
         /// <summary>
-        /// Gets or sets the bulk-drain current.
+        /// Gets or sets the bulk-DrainNode current.
         /// </summary>
         /// <value>
-        /// The bulk-drain current.
+        /// The bulk-DrainNode current.
         /// </value>
         [ParameterName("ibd"), ParameterInfo("B-D junction current")]
-        public double BdCurrent { get; protected set; }
+        public double BdCurrent { get; private set; }
 
         /// <summary>
         /// Gets or sets the transconductance.
@@ -59,7 +62,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// The transconductance.
         /// </value>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
-        public double Transconductance { get; protected set; }
+        public double Transconductance { get; private set; }
 
         /// <summary>
         /// Gets or sets the bulk transconductance.
@@ -68,7 +71,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// The bulk transconductance.
         /// </value>
         [ParameterName("gmb"), ParameterName("gmbs"), ParameterInfo("Bulk-Source transconductance")]
-        public double TransconductanceBs { get; protected set; }
+        public double TransconductanceBs { get; private set; }
 
         /// <summary>
         /// Gets or sets the output conductance.
@@ -77,7 +80,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// The output conductance.
         /// </value>
         [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
-        public double CondDs { get; protected set; }
+        public double CondDs { get; private set; }
 
         /// <summary>
         /// Gets or sets the bulk-source conductance.
@@ -86,16 +89,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// The bulk-source conductance.
         /// </value>
         [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
-        public double CondBs { get; protected set; }
+        public double CondBs { get; private set; }
 
         /// <summary>
-        /// Gets or sets the bulk-drain conductance.
+        /// Gets or sets the bulk-DrainNode conductance.
         /// </summary>
         /// <value>
-        /// The bulk-drain conductance.
+        /// The bulk-DrainNode conductance.
         /// </value>
         [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
-        public double CondBd { get; protected set; }
+        public double CondBd { get; private set; }
 
         /// <summary>
         /// Gets or sets the turn-on voltage.
@@ -104,7 +107,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// The turn-on voltage.
         /// </value>
         [ParameterName("von"), ParameterInfo("Turn-on voltage")]
-        public double Von { get; protected set; }
+        public double Von { get; private set; }
 
         /// <summary>
         /// Gets or sets the saturation voltage.
@@ -112,17 +115,52 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <value>
         /// The saturation voltage.
         /// </value>
-        [ParameterName("vdsat"), ParameterInfo("Saturation drain voltage")]
-        public double SaturationVoltageDs { get; protected set; }
+        [ParameterName("vdsat"), ParameterInfo("Saturation DrainNode voltage")]
+        public double SaturationVoltageDs { get; private set; }
 
         /// <summary>
-        /// Extra variables
+        /// Gets the current mode of operation. +1.0 if vds is positive, -1 if it is negative.
         /// </summary>
-        public double Mode { get; protected set; }
-        public double VoltageGs { get; protected set; }
-        public double VoltageDs { get; protected set; }
-        public double VoltageBs { get; protected set; }
-        public double VoltageBd { get; protected set; }
+        /// <value>
+        /// The mode.
+        /// </value>
+        public double Mode { get; private set; }
+
+        /// <summary>
+        /// Gets the gate-source voltage.
+        /// </summary>
+        /// <value>
+        /// The gate-source voltage.
+        /// </value>
+        [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
+        public virtual double VoltageGs { get; protected set; }
+
+        /// <summary>
+        /// Gets the drain-source voltage.
+        /// </summary>
+        /// <value>
+        /// The drain-source voltage.
+        /// </value>
+        [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
+        public virtual double VoltageDs { get; protected set; }
+
+        /// <summary>
+        /// Gets the bulk-source voltage.
+        /// </summary>
+        /// <value>
+        /// The bulk-source voltage.
+        /// </value>
+        [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
+        public virtual double VoltageBs { get; protected set; }
+
+        /// <summary>
+        /// Gets the bulk-drain voltage.
+        /// </summary>
+        /// <value>
+        /// The bulk-drain voltage.
+        /// </value>
+        [ParameterName("vbd"), ParameterInfo("Bulk-Drain voltage")]
+        public virtual double VoltageBd { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -131,12 +169,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         protected int GateNode { get; private set; }
         protected int SourceNode { get; private set; }
         protected int BulkNode { get; private set; }
-        public int DrainNodePrime { get; private set; }
-        public int SourceNodePrime { get; private set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        protected int DrainNodePrime { get; private set; }
+        protected int SourceNodePrime { get; private set; }
         protected MatrixElement<double> DrainDrainPtr { get; private set; }
         protected MatrixElement<double> GateGatePtr { get; private set; }
         protected MatrixElement<double> SourceSourcePtr { get; private set; }
@@ -164,15 +198,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         protected VectorElement<double> SourcePrimePtr { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBehavior"/> class.
+        /// Constructor
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        protected LoadBehavior(string name) : base(name)
-        {
-        }
+        /// <param name="name">Name</param>
+        public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
         /// Connect
@@ -192,27 +221,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Setup behavior
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
+        /// <param name="simulation">Simulation</param>
+        /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
-            if (provider == null)
-                throw new ArgumentNullException(nameof(simulation));
 
             // Get configurations
-            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
+            BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
 
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            _temp = provider.GetBehavior<TemperatureBehavior>();
+            // Reset
+            SaturationVoltageDs = 0;
+            Von = 0;
+            Mode = 1;
         }
 
         /// <summary>
@@ -220,7 +245,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// </summary>
         /// <param name="variables">Nodes</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             if (variables == null)
                 throw new ArgumentNullException(nameof(variables));
@@ -228,13 +253,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
                 throw new ArgumentNullException(nameof(solver));
 
             // Add series drain node if necessary
-            if (_mbp.DrainResistance > 0 || _mbp.SheetResistance > 0 && _bp.DrainSquares > 0)
-                DrainNodePrime = variables.Create(Name.Combine("drain")).Index;
+            if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
+                DrainNodePrime = variables.Create(Name.Combine("DrainNode")).Index;
             else
                 DrainNodePrime = DrainNode;
 
             // Add series source node if necessary
-            if (_mbp.SourceResistance > 0 || _mbp.SheetResistance > 0 && _bp.SourceSquares > 0)
+            if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.SourceSquares > 0)
                 SourceNodePrime = variables.Create(Name.Combine("source")).Index;
             else
                 SourceNodePrime = SourceNode;
@@ -268,12 +293,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             DrainPrimePtr = solver.GetRhsElement(DrainNodePrime);
             SourcePrimePtr = solver.GetRhsElement(SourceNodePrime);
         }
-        
-        /// <summary>
+
+                /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        public override void Load(BaseSimulation simulation)
+        public void Load(BaseSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
@@ -283,32 +308,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             double drainSatCur, sourceSatCur;
             bool check = true;
 
-            if (_temp.TempSaturationCurrentDensity.Equals(0) || _bp.DrainArea.Value <= 0 || _bp.SourceArea.Value <= 0)
+            if (TempSaturationCurrentDensity.Equals(0) || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
             {
-                drainSatCur = _temp.TempSaturationCurrent;
-                sourceSatCur = _temp.TempSaturationCurrent;
+                drainSatCur = TempSaturationCurrent;
+                sourceSatCur = TempSaturationCurrent;
             }
             else
             {
-                drainSatCur = _temp.TempSaturationCurrentDensity * _bp.DrainArea;
-                sourceSatCur = _temp.TempSaturationCurrentDensity * _bp.SourceArea;
+                drainSatCur = TempSaturationCurrentDensity * BaseParameters.DrainArea;
+                sourceSatCur = TempSaturationCurrentDensity * BaseParameters.SourceArea;
             }
 
-            var vt = Circuit.KOverQ * _bp.Temperature;
+            var vt = Circuit.KOverQ * BaseParameters.Temperature;
 
             if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
-                state.Init == InitializationModes.Fix && !_bp.Off)
+                state.Init == InitializationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration
-                vbs = _mbp.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
-                vgs = _mbp.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
-                vds = _mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+                vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
+                vgs = ModelParameters.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
+                vds = ModelParameters.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
 
                 // now some common crunching for some more useful quantities
                 vbd = vbs - vds;
                 vgd = vgs - vds;
                 var vgdo = VoltageGs - VoltageDs;
-                var von = _mbp.MosfetType * Von;
+                var von = ModelParameters.MosfetType * Von;
 
                 /*
 				 * limiting
@@ -333,10 +358,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 
                 check = false;
                 if (vds >= 0)
-                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, vt, _temp.SourceVCritical, ref check);
+                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, vt, SourceVCritical, ref check);
                 else
                 {
-                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, vt, _temp.DrainVCritical, ref check);
+                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, vt, DrainVCritical, ref check);
                     vbs = vbd + vds;
                 }
             }
@@ -346,17 +371,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 				 * look at all of the possibilities for why we were
 				 * called.  We still just initialize the three voltages
 				 */
-                if (state.Init == InitializationModes.Junction && !_bp.Off)
+                if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
                 {
-                    vds = _mbp.MosfetType * _bp.InitialVoltageDs;
-                    vgs = _mbp.MosfetType * _bp.InitialVoltageGs;
-                    vbs = _mbp.MosfetType * _bp.InitialVoltageBs;
+                    vds = ModelParameters.MosfetType * BaseParameters.InitialVoltageDs;
+                    vgs = ModelParameters.MosfetType * BaseParameters.InitialVoltageGs;
+                    vbs = ModelParameters.MosfetType * BaseParameters.InitialVoltageBs;
 
                     // TODO: At some point, check what this is supposed to do
                     if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (state.UseDc || !state.UseIc))
                     {
                         vbs = -1;
-                        vgs = _mbp.MosfetType * _temp.TempVt0;
+                        vgs = ModelParameters.MosfetType * TempVt0;
                         vds = 0;
                     }
                 }
@@ -382,24 +407,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             {
                 CondBs = sourceSatCur / vt;
                 BsCurrent = CondBs * vbs;
-                CondBs += _baseConfig.Gmin;
+                CondBs += BaseConfiguration.Gmin;
             }
             else
             {
                 var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / vt));
-                CondBs = sourceSatCur * evbs / vt + _baseConfig.Gmin;
+                CondBs = sourceSatCur * evbs / vt + BaseConfiguration.Gmin;
                 BsCurrent = sourceSatCur * (evbs - 1);
             }
             if (vbd <= 0)
             {
                 CondBd = drainSatCur / vt;
                 BdCurrent = CondBd * vbd;
-                CondBd += _baseConfig.Gmin;
+                CondBd += BaseConfiguration.Gmin;
             }
             else
             {
                 var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / vt));
-                CondBd = drainSatCur * evbd / vt + _baseConfig.Gmin;
+                CondBd = drainSatCur * evbd / vt + BaseConfiguration.Gmin;
                 BdCurrent = drainSatCur * (evbd - 1);
             }
 
@@ -429,7 +454,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             DrainCurrent = Mode * cdrain - BdCurrent;
 
             // Check convergence
-            if (!_bp.Off || state.Init != InitializationModes.Fix)
+            if (!BaseParameters.Off || state.Init != InitializationModes.Fix)
             {
                 if (check)
                     state.IsConvergent = false;
@@ -437,51 +462,135 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 
             // Load current vector
             double xnrm, xrev, cdreq;
-            var ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - _baseConfig.Gmin) * vbs);
-            var ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - _baseConfig.Gmin) * vbd);
+            var ceqbs = ModelParameters.MosfetType * (BsCurrent - (CondBs - BaseConfiguration.Gmin) * vbs);
+            var ceqbd = ModelParameters.MosfetType * (BdCurrent - (CondBd - BaseConfiguration.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = _mbp.MosfetType * (cdrain - CondDs * vds - Transconductance * vgs - TransconductanceBs * vbs);
+                cdreq = ModelParameters.MosfetType * (cdrain - CondDs * vds - Transconductance * vgs - TransconductanceBs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -_mbp.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
+                cdreq = -ModelParameters.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
             }
             BulkPtr.Value -= ceqbs + ceqbd;
             DrainPrimePtr.Value += ceqbd - cdreq;
             SourcePrimePtr.Value += cdreq + ceqbs;
 
             // Load Y-matrix
-            DrainDrainPtr.Value += _temp.DrainConductance;
-            SourceSourcePtr.Value += _temp.SourceConductance;
+            DrainDrainPtr.Value += DrainConductance;
+            SourceSourcePtr.Value += SourceConductance;
             BulkBulkPtr.Value += CondBd + CondBs;
-            DrainPrimeDrainPrimePtr.Value += _temp.DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs);
-            SourcePrimeSourcePrimePtr.Value += _temp.SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs);
-            DrainDrainPrimePtr.Value += -_temp.DrainConductance;
-            SourceSourcePrimePtr.Value += -_temp.SourceConductance;
+            DrainPrimeDrainPrimePtr.Value += DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs);
+            SourcePrimeSourcePrimePtr.Value += SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs);
+            DrainDrainPrimePtr.Value += -DrainConductance;
+            SourceSourcePrimePtr.Value += -SourceConductance;
             BulkDrainPrimePtr.Value -= CondBd;
             BulkSourcePrimePtr.Value -= CondBs;
-            DrainPrimeDrainPtr.Value += -_temp.DrainConductance;
+            DrainPrimeDrainPtr.Value += -DrainConductance;
             DrainPrimeGatePtr.Value += (xnrm - xrev) * Transconductance;
             DrainPrimeBulkPtr.Value += -CondBd + (xnrm - xrev) * TransconductanceBs;
             DrainPrimeSourcePrimePtr.Value += -CondDs - xnrm * (Transconductance + TransconductanceBs);
             SourcePrimeGatePtr.Value += -(xnrm - xrev) * Transconductance;
-            SourcePrimeSourcePtr.Value += -_temp.SourceConductance;
+            SourcePrimeSourcePtr.Value += -SourceConductance;
             SourcePrimeBulkPtr.Value += -CondBs - (xnrm - xrev) * TransconductanceBs;
             SourcePrimeDrainPrimePtr.Value += -CondDs - xrev * (Transconductance + TransconductanceBs);
         }
 
         /// <summary>
-        /// This routine evaluates the drain current and its derivatives. It also returns the calculated
-        /// drain current.
+        /// Execute behavior
         /// </summary>
-        protected abstract double Evaluate(double vgs, double vds, double vbs);
+        protected double Evaluate(double vgs, double vds, double vbs)
+        {
+            double von;
+            double vdsat, cDrainNode;
+            var effectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
+            var beta = TempTransconductance * BaseParameters.Width / effectiveLength;
+            
+            {
+                /*
+				 * this block of code evaluates the DrainNode current and its
+				 * derivatives using the shichman - hodges model and the
+				 * charges associated with the gate, channel and bulk for
+				 * mosfets
+				 */
 
-        /// <summary>
+                /* the following 4 variables are local to this code block until
+				 * it is obvious that they can be made global
+				 */
+                double arg;
+                double sarg;
+
+                if (vbs <= 0)
+                {
+                    sarg = Math.Sqrt(TempPhi - vbs);
+                }
+                else
+                {
+                    sarg = Math.Sqrt(TempPhi);
+                    sarg = sarg - vbs / (sarg + sarg);
+                    sarg = Math.Max(0, sarg);
+                }
+                von = TempVoltageBi * ModelParameters.MosfetType + ModelParameters.Gamma * sarg;
+                var vgst = vgs - von;
+                vdsat = Math.Max(vgst, 0);
+                if (sarg <= 0)
+                {
+                    arg = 0;
+                }
+                else
+                {
+                    arg = ModelParameters.Gamma / (sarg + sarg);
+                }
+                if (vgst <= 0)
+                {
+                    /*
+					 * cutoff region
+					 */
+                    cDrainNode = 0;
+                    Transconductance = 0;
+                    CondDs = 0;
+                    TransconductanceBs = 0;
+                }
+                else
+                {
+                    /*
+					 * saturation region
+					 */
+                    var betap = beta * (1 + ModelParameters.Lambda * vds);
+                    if (vgst <= vds)
+                    {
+                        cDrainNode = betap * vgst * vgst * .5;
+                        Transconductance = betap * vgst;
+                        CondDs = ModelParameters.Lambda * beta * vgst * vgst * .5;
+                        TransconductanceBs = Transconductance * arg;
+                    }
+                    else
+                    {
+                        /*
+						* linear region
+						*/
+                        cDrainNode = betap * vds * (vgst - .5 * vds);
+                        Transconductance = betap * vds;
+                        CondDs = betap * (vgst - vds) + ModelParameters.Lambda * beta * vds * (vgst - .5 * vds);
+                        TransconductanceBs = Transconductance * arg;
+                    }
+                }
+                /*
+				 * finished
+				 */
+            }
+
+            /* now deal with n vs p polarity */
+            Von = ModelParameters.MosfetType * von;
+            SaturationVoltageDs = ModelParameters.MosfetType * vdsat;
+            return cDrainNode;
+        }
+
+                /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
@@ -489,7 +598,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public override bool IsConvergent(BaseSimulation simulation)
+        public bool IsConvergent(BaseSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -497,9 +606,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             var state = simulation.RealState;
             double cdhat;
 
-            var vbs = _mbp.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
-            var vgs = _mbp.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
-            var vds = _mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+            var vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
+            var vgs = ModelParameters.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
+            var vds = ModelParameters.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
             var vgdo = VoltageGs - VoltageDs;
@@ -526,14 +635,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             /*
              *  check convergence
              */
-            var tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + _baseConfig.AbsoluteTolerance;
+            var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsConvergent = false;
                 return false;
             }
 
-            tol = _baseConfig.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + _baseConfig.AbsoluteTolerance;
+            tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cbhat - (BsCurrent + BdCurrent)) > tol)
             {
                 state.IsConvergent = false;

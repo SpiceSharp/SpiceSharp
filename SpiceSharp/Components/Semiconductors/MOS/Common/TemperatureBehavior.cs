@@ -2,10 +2,16 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
-    public abstract class TemperatureBehavior : BaseTemperatureBehavior
+    /// <summary>
+    /// Common mosfet temperature behavior.
+    /// </summary>
+    /// <seealso cref="SpiceSharp.Simulations.Behaviors.ExportingBehavior" />
+    /// <seealso cref="SpiceSharp.Behaviors.ITemperatureBehavior" />
+    public abstract class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
     {
         private BaseParameters _bp;
         private ModelBaseParameters _mbp;
@@ -133,7 +139,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -149,7 +154,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Perform temperature-dependent calculations.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        public override void Temperature(BaseSimulation simulation)
+        public void Temperature(BaseSimulation simulation)
         {
             if (!_bp.Temperature.Given)
                 _bp.Temperature.RawValue = simulation.RealState.Temperature;
