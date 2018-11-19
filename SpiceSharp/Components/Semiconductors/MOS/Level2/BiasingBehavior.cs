@@ -251,7 +251,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             BulkNode = pins[3];
         }
 
-                /// <summary>
+        /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="variables">Nodes</param>

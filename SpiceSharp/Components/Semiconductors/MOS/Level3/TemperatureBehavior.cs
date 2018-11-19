@@ -1,19 +1,121 @@
 ﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Mosfet3"/>
     /// </summary>
-    public class TemperatureBehavior : Common.TemperatureBehavior
+    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
     {
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the base parameters.
         /// </summary>
-        private BaseParameters _bp;
-        private ModelBaseParameters _mbp;
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the model parameters.
+        /// </summary>
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        protected ModelBaseParameters ModelParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the model temperature behavior.
+        /// </summary>
+        /// <value>
+        /// The model temperature behavior.
+        /// </value>
+        protected ModelTemperatureBehavior ModelTemperature { get; private set; }
+
+        /// <summary>
+        /// Gets the source conductance.
+        /// </summary>
+        /// <value>
+        /// The source conductance.
+        /// </value>
+        [ParameterName("sourceconductance"), ParameterInfo("Conductance at the source")]
+        public double SourceConductance { get; private set; }
+
+        /// <summary>
+        /// Gets the drain conductance.
+        /// </summary>
+        /// <value>
+        /// The drain conductance.
+        /// </value>
+        [ParameterName("drainconductance"), ParameterInfo("Conductance at the drain")]
+        public double DrainConductance { get; private set; }
+
+        /// <summary>
+        /// Gets the source resistance.
+        /// </summary>
+        /// <value>
+        /// The source resistance.
+        /// </value>
+        [ParameterName("rs"), ParameterInfo("Source resistance")]
+        public double SourceResistance
+        {
+            get
+            {
+                if (SourceConductance > 0.0)
+                    return 1.0 / SourceConductance;
+                return 0.0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the drain resistance.
+        /// </summary>
+        /// <value>
+        /// The drain resistance.
+        /// </value>
+        [ParameterName("rd"), ParameterInfo("Drain conductance")]
+        public double DrainResistance
+        {
+            get
+            {
+                if (DrainConductance > 0.0)
+                    return 1.0 / DrainConductance;
+                return 0.0;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the critical source voltage.
+        /// </summary>
+        /// <value>
+        /// The critical source voltage.
+        /// </value>
+        [ParameterName("sourcevcrit"), ParameterInfo("Critical source voltage")]
+        public double SourceVCritical { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the critical drain voltage.
+        /// </summary>
+        /// <value>
+        /// The drain drain voltage.
+        /// </value>
+        [ParameterName("drainvcrit"), ParameterInfo("Critical drain voltage")]
+        public double DrainVCritical { get; protected set; }
+
+        /// <summary>
+        /// Shared values
+        /// </summary>
+        protected double TempSurfaceMobility { get; private set; }
+        protected double TempPhi { get; private set; }
+        protected double TempVoltageBi { get; private set; }
+        protected double TempBulkPotential { get; private set; }
+        protected double TempSaturationCurrent { get; private set; }
+        protected double TempSaturationCurrentDensity { get; private set; }
+        protected double TempTransconductance { get; private set; }
+        protected double TempVt0 { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -22,65 +124,116 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Setup the behavior for the specified simulation.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            BaseParameters = provider.GetParameterSet<BaseParameters>();
+            ModelParameters = provider.GetParameterSet<ModelBaseParameters>("model");
+
+            // Get behaviors
+            ModelTemperature = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
-        
+
         /// <summary>
-        /// Calculates the critical voltages.
+        /// Perform temperature-dependent calculations.
         /// </summary>
-        protected override void CalculateCriticalVoltages()
+        /// <param name="simulation">The base simulation.</param>
+        public void Temperature(BaseSimulation simulation)
         {
-            var vt = _bp.Temperature * Circuit.KOverQ;
-            if (_mbp.JunctionSatCurDensity.Value <= 0 || _bp.DrainArea.Value <= 0 || _bp.SourceArea.Value <= 0)
+            if (!BaseParameters.Temperature.Given)
+                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+            var vt = BaseParameters.Temperature * Circuit.KOverQ;
+            var ratio = BaseParameters.Temperature / ModelParameters.NominalTemperature;
+            var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
+            var kt = BaseParameters.Temperature * Circuit.Boltzmann;
+            var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
+            var arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+
+            if (ModelParameters.DrainResistance.Given)
             {
-                SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * _mbp.JunctionSatCur));
+                if (!ModelParameters.DrainResistance.Value.Equals(0.0))
+                {
+                    DrainConductance = 1 / ModelParameters.DrainResistance;
+                }
+                else
+                {
+                    DrainConductance = 0;
+                }
+            }
+            else if (ModelParameters.SheetResistance.Given)
+            {
+                if (!ModelParameters.SheetResistance.Value.Equals(0.0))
+                {
+                    DrainConductance = 1 / (ModelParameters.SheetResistance * BaseParameters.DrainSquares);
+                }
+                else
+                {
+                    DrainConductance = 0;
+                }
             }
             else
             {
-                DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * _mbp.JunctionSatCurDensity * _bp.DrainArea));
-                SourceVCritical = vt * Math.Log(vt / (Circuit.Root2 * _mbp.JunctionSatCurDensity * _bp.SourceArea));
+                DrainConductance = 0;
             }
-        }
+            if (ModelParameters.SourceResistance.Given)
+            {
+                if (!ModelParameters.SourceResistance.Value.Equals(0.0))
+                {
+                    SourceConductance = 1 / ModelParameters.SourceResistance;
+                }
+                else
+                {
+                    SourceConductance = 0;
+                }
+            }
+            else if (ModelParameters.SheetResistance.Given)
+            {
+                if (!ModelParameters.SheetResistance.Value.Equals(0.0))
+                {
+                    SourceConductance = 1 / (ModelParameters.SheetResistance * BaseParameters.SourceSquares);
+                }
+                else
+                {
+                    SourceConductance = 0;
+                }
+            }
+            else
+            {
+                SourceConductance = 0;
+            }
+            if (BaseParameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
+                CircuitWarning.Warning(this, "{0}: effective channel length less than zero".FormatString(Name));
+            var ratio4 = ratio * Math.Sqrt(ratio);
+            TempTransconductance = ModelParameters.Transconductance / ratio4;
+            TempSurfaceMobility = ModelParameters.SurfaceMobility / ratio4;
+            var phio = (ModelParameters.Phi - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
+            TempPhi = fact2 * phio + pbfact;
+            TempVoltageBi = ModelParameters.Vt0 - ModelParameters.MosfetType * (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi)) + .5 * (ModelTemperature.EgFet1 - egfet) +
+                ModelParameters.MosfetType * .5 * (TempPhi - ModelParameters.Phi);
+            TempVt0 = TempVoltageBi + ModelParameters.MosfetType * ModelParameters.Gamma * Math.Sqrt(TempPhi);
+            TempSaturationCurrent = ModelParameters.JunctionSatCur * Math.Exp(-egfet / vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
+            TempSaturationCurrentDensity = ModelParameters.JunctionSatCurDensity * Math.Exp(-egfet / vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
+            var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
+            TempBulkPotential = fact2 * pbo + pbfact;
 
-        /// <summary>
-        /// Calculates the capacitances.
-        /// </summary>
-        protected override void CalculateCapacitanceFactors()
-        {
-            var arg = 1 - _mbp.ForwardCapDepletionCoefficient;
-            var sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-            var sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
-            F2D = CapBd * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionBotGradingCoefficient)) *
-                  sarg / arg + CapBdSidewall * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionSideGradingCoefficient)) * sargsw /
-                  arg;
-            F3D = CapBd * _mbp.BulkJunctionBotGradingCoefficient * sarg / arg / _mbp.BulkJunctionPotential + CapBd *
-                  _mbp.BulkJunctionSideGradingCoefficient * sargsw / arg / _mbp.BulkJunctionPotential;
-            F4D = CapBd * _mbp.BulkJunctionPotential * (1 - arg * sarg) / (1 - _mbp.BulkJunctionBotGradingCoefficient) +
-                  CapBdSidewall * _mbp.BulkJunctionPotential * (1 - arg * sargsw) / (1 - _mbp.BulkJunctionSideGradingCoefficient) -
-                  F3D / 2 * (TempDepletionCap * TempDepletionCap) - TempDepletionCap * F2D;
-
-            arg = 1 - _mbp.ForwardCapDepletionCoefficient;
-            sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-            sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
-            F2S = CapBs * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionBotGradingCoefficient)) *
-                  sarg / arg + CapBsSidewall * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionSideGradingCoefficient)) * sargsw / arg;
-            F3S = CapBs * _mbp.BulkJunctionBotGradingCoefficient * sarg / arg / _mbp.BulkJunctionPotential +
-                  CapBsSidewall * _mbp.BulkJunctionSideGradingCoefficient * sargsw / arg / _mbp.BulkJunctionPotential;
-            F4S = CapBs * _mbp.BulkJunctionPotential * (1 - arg * sarg) / (1 - _mbp.BulkJunctionBotGradingCoefficient) +
-                  CapBsSidewall * _mbp.BulkJunctionPotential * (1 - arg * sargsw) / (1 - _mbp.BulkJunctionSideGradingCoefficient) -
-                  F3S / 2 * (TempBulkPotential * TempBulkPotential) - TempBulkPotential * F2S;
+            if (ModelParameters.JunctionSatCurDensity.Value <= 0 || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
+            {
+                SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.JunctionSatCur));
+            }
+            else
+            {
+                DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.JunctionSatCurDensity * BaseParameters.DrainArea));
+                SourceVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.JunctionSatCurDensity * BaseParameters.SourceArea));
+            }
         }
     }
 }
