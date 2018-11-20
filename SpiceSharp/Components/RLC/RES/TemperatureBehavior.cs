@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior, IConnectedBehavior
+    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
     {
         /// <summary>
         /// The minimum resistance for any resistor.
@@ -39,30 +39,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double Conductance { get; private set; }
 
         /// <summary>
-        /// Nodes.
-        /// </summary>
-        protected int PosNode { get; private set; }
-        protected int NegNode { get; private set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Connect the behavior to nodes
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            PosNode = pins[0];
-            NegNode = pins[1];
-        }
 
         /// <summary>
         /// Setup the behavior

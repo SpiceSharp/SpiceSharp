@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// General behavior for <see cref="Resistor"/>
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Gets the voltage across the resistor.
@@ -56,6 +56,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
@@ -65,7 +67,23 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name)
+        {
+        }
+
+        /// <summary>
+        /// Connect the behavior to nodes
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+            PosNode = pins[0];
+            NegNode = pins[1];
+        }
 
         /// <summary>
         /// Gets matrix pointers
