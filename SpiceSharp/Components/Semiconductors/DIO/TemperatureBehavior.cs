@@ -52,6 +52,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public double TempDepletionCap { get; protected set; }
         public double TempVCritical { get; protected set; }
         public double TempBreakdownVoltage { get; protected set; }
+        protected double Vt { get; private set; }
+        protected double Vte { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -94,14 +96,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
             // loop through all the instances
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            var vt = Circuit.KOverQ * BaseParameters.Temperature;
+            Vt = Circuit.KOverQ * BaseParameters.Temperature;
+            Vte = ModelParameters.EmissionCoefficient * Vt;
 
             // this part gets really ugly - I won't even try to explain these equations
             var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
             var arg = -egfet / (2 * Circuit.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
                                                                                                                 Circuit.ReferenceTemperature));
-            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
             var egfet1 = 1.16 - 7.02e-4 * ModelParameters.NominalTemperature * ModelParameters.NominalTemperature / (ModelParameters.NominalTemperature + 1108);
             var arg1 = -egfet1 / (Circuit.Boltzmann * 2 * ModelParameters.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
             var fact1 = ModelParameters.NominalTemperature / Circuit.ReferenceTemperature;
@@ -114,7 +117,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             TempJunctionCap *= 1 + ModelParameters.GradingCoefficient * (400e-6 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             TempSaturationCurrent = ModelParameters.SaturationCurrent * Math.Exp((BaseParameters.Temperature / ModelParameters.NominalTemperature - 1) * ModelParameters.ActivationEnergy /
-                (ModelParameters.EmissionCoefficient * vt) + ModelParameters.SaturationCurrentExp / ModelParameters.EmissionCoefficient * Math.Log(BaseParameters.Temperature / ModelParameters.NominalTemperature));
+                (ModelParameters.EmissionCoefficient * Vt) + ModelParameters.SaturationCurrentExp / ModelParameters.EmissionCoefficient * Math.Log(BaseParameters.Temperature / ModelParameters.NominalTemperature));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it
             TempFactor1 = TempJunctionPot * (1 - Math.Exp((1 - ModelParameters.GradingCoefficient) * ModelTemperature.Xfc)) / (1 - ModelParameters.GradingCoefficient);
@@ -123,7 +126,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             TempDepletionCap = ModelParameters.DepletionCapCoefficient * TempJunctionPot;
 
             // and Vcrit
-            var vte = ModelParameters.EmissionCoefficient * vt;
+            var vte = ModelParameters.EmissionCoefficient * Vt;
             TempVCritical = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
@@ -131,21 +134,21 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 double cbv = ModelParameters.BreakdownCurrent;
                 double xbv;
-                if (cbv < TempSaturationCurrent * ModelParameters.BreakdownVoltage / vt)
+                if (cbv < TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt)
                 {
-                    cbv = TempSaturationCurrent * ModelParameters.BreakdownVoltage / vt;
+                    cbv = TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt;
                     CircuitWarning.Warning(this, "{0}: breakdown current increased to {1:g} to resolve incompatability with specified saturation current".FormatString(Name, cbv));
                     xbv = ModelParameters.BreakdownVoltage;
                 }
                 else
                 {
                     var tol = BaseConfiguration.RelativeTolerance * cbv;
-                    xbv = ModelParameters.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
+                    xbv = ModelParameters.BreakdownVoltage - Vt * Math.Log(1 + cbv / TempSaturationCurrent);
                     int iter;
                     for (iter = 0; iter < 25; iter++)
                     {
-                        xbv = ModelParameters.BreakdownVoltage - vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / vt);
-                        xcbv = TempSaturationCurrent * (Math.Exp((ModelParameters.BreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
+                        xbv = ModelParameters.BreakdownVoltage - Vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / Vt);
+                        xcbv = TempSaturationCurrent * (Math.Exp((ModelParameters.BreakdownVoltage - xbv) / Vt) - 1 + xbv / Vt);
                         if (Math.Abs(xcbv - cbv) <= tol)
                             break;
                     }

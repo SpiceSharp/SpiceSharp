@@ -118,57 +118,29 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vd;
             double cd, gd;
+
+            // Get the current voltages
+            Initialize(simulation, out double vd, out bool check);
 
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
             var csat = TempSaturationCurrent * BaseParameters.Area;
             var gspr = ModelTemperature.Conductance * BaseParameters.Area;
-            var vt = Circuit.KOverQ * BaseParameters.Temperature;
-            var vte = ModelParameters.EmissionCoefficient * vt;
-
-            // Initialization
-            var check = false;
-            if (state.Init == InitializationModes.Junction)
-            {
-                vd = BaseParameters.Off ? 0.0 : TempVCritical;
-            }
-            else if (state.Init == InitializationModes.Fix && BaseParameters.Off)
-            {
-                vd = 0.0;
-            }
-            else
-            {
-                // Get voltage over the diode (without series resistance)
-                vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
-
-                // limit new junction voltage
-                if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * vte))
-                {
-                    var vdtemp = -(vd + TempBreakdownVoltage);
-                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + TempBreakdownVoltage), vte, TempVCritical, ref check);
-                    vd = -(vdtemp + TempBreakdownVoltage);
-                }
-                else
-                {
-                    vd = Semiconductor.LimitJunction(vd, InternalVoltage, vte, TempVCritical, ref check);
-                }
-            }
 
             // compute dc current and derivatives
-            if (vd >= -3 * vte)
+            if (vd >= -3 * Vte)
             {
                 // Forward bias
-                var evd = Math.Exp(vd / vte);
+                var evd = Math.Exp(vd / Vte);
                 cd = csat * (evd - 1) + BaseConfiguration.Gmin * vd;
-                gd = csat * evd / vte + BaseConfiguration.Gmin;
+                gd = csat * evd / Vte + BaseConfiguration.Gmin;
             }
             else if (!ModelParameters.BreakdownVoltage.Given || vd >= -TempBreakdownVoltage)
             {
                 // Reverse bias
-                var arg = 3 * vte / (vd * Math.E);
+                var arg = 3 * Vte / (vd * Math.E);
                 arg = arg * arg * arg;
                 cd = -csat * (1 + arg) + BaseConfiguration.Gmin * vd;
                 gd = csat * 3 * arg / vd + BaseConfiguration.Gmin;
@@ -176,9 +148,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Reverse breakdown
-                var evrev = Math.Exp(-(TempBreakdownVoltage + vd) / vte);
+                var evrev = Math.Exp(-(TempBreakdownVoltage + vd) / Vte);
                 cd = -csat * evrev + BaseConfiguration.Gmin * vd;
-                gd = csat * evrev / vte + BaseConfiguration.Gmin;
+                gd = csat * evrev / Vte + BaseConfiguration.Gmin;
             }
 
             // Check convergence
@@ -206,6 +178,37 @@ namespace SpiceSharp.Components.DiodeBehaviors
             PosPrimePosPtr.Value -= gspr;
             NegPosPrimePtr.Value -= gd;
             PosPrimeNegPtr.Value -= gd;
+        }
+
+        protected void Initialize(BaseSimulation simulation, out double vd, out bool check)
+        {
+            var state = simulation.RealState;
+            check = false;
+            if (state.Init == InitializationModes.Junction)
+            {
+                vd = BaseParameters.Off ? 0.0 : TempVCritical;
+            }
+            else if (state.Init == InitializationModes.Fix && BaseParameters.Off)
+            {
+                vd = 0.0;
+            }
+            else
+            {
+                // Get voltage over the diode (without series resistance)
+                vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+
+                // limit new junction voltage
+                if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
+                {
+                    var vdtemp = -(vd + TempBreakdownVoltage);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);
+                    vd = -(vdtemp + TempBreakdownVoltage);
+                }
+                else
+                {
+                    vd = Semiconductor.LimitJunction(vd, InternalVoltage, Vte, TempVCritical, ref check);
+                }
+            }
         }
 
         /// <summary>
