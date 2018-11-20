@@ -83,24 +83,13 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
     <div class="level4"><span class="xref">BaseFrequencyBehavior</span></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSourceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
       <div class="level5"><a class="xref" href="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.JFETBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLineBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.ResistorBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageSourceBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageSwitchBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -114,10 +103,10 @@
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -181,7 +170,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Behaviors_BaseFrequencyBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class BaseFrequencyBehavior : Behavior</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class BaseFrequencyBehavior : Behavior, IPropertyExporter, IFrequencyBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -217,61 +206,6 @@
 </div>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Behaviors_BaseFrequencyBehavior_CreateAcExport_" data-uid="SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport*"></a>
-  <h4 id="SpiceSharp_Behaviors_BaseFrequencyBehavior_CreateAcExport_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.BaseFrequencyBehavior.CreateAcExport(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})">CreateAcExport(Simulation, String, IEqualityComparer&lt;String&gt;)</h4>
-  <div class="markdown level1 summary"><p>Creates a getter for a complex parameter.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual Func&lt;Complex&gt; CreateAcExport(Simulation simulation, string propertyName, IEqualityComparer&lt;string&gt; comparer = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
-        <td><p>The name of the property.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td><span class="parametername">comparer</span></td>
-        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</td>
-        <td><p>A function get return the value of the specified parameter, or <code>null</code> if no parameter was found.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Behaviors_BaseFrequencyBehavior_GetEquationPointers_" data-uid="SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers*"></a>
   <h4 id="SpiceSharp_Behaviors_BaseFrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__" data-uid="SpiceSharp.Behaviors.BaseFrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})">GetEquationPointers(Solver&lt;Complex&gt;)</h4>
   <div class="markdown level1 summary"><p>Allocate elements in the Y-matrix and Rhs-vector to populate during loading.</p>
@@ -369,6 +303,16 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>

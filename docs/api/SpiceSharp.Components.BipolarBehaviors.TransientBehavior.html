@@ -81,27 +81,255 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html">BaseTransientBehavior</a></div>
-    <div class="level5"><span class="xref">TransientBehavior</span></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level6"><span class="xref">TransientBehavior</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_Truncate">BaseTransientBehavior.Truncate()</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseConfiguration">BiasingBehavior.BaseConfiguration</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_VoltageBe">BiasingBehavior.VoltageBe</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_VoltageBc">BiasingBehavior.VoltageBc</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorCurrent">BiasingBehavior.CollectorCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseCurrent">BiasingBehavior.BaseCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ConductancePi">BiasingBehavior.ConductancePi</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ConductanceMu">BiasingBehavior.ConductanceMu</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Transconductance">BiasingBehavior.Transconductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_OutputConductance">BiasingBehavior.OutputConductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ConductanceX">BiasingBehavior.ConductanceX</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeNode">BiasingBehavior.CollectorPrimeNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BasePrimeNode">BiasingBehavior.BasePrimeNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterPrimeNode">BiasingBehavior.EmitterPrimeNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorNode">BiasingBehavior.CollectorNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseNode">BiasingBehavior.BaseNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterNode">BiasingBehavior.EmitterNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_SubstrateNode">BiasingBehavior.SubstrateNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorCollectorPrimePtr">BiasingBehavior.CollectorCollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseBasePrimePtr">BiasingBehavior.BaseBasePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterEmitterPrimePtr">BiasingBehavior.EmitterEmitterPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeCollectorPtr">BiasingBehavior.CollectorPrimeCollectorPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeBasePrimePtr">BiasingBehavior.CollectorPrimeBasePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeEmitterPrimePtr">BiasingBehavior.CollectorPrimeEmitterPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BasePrimeBasePtr">BiasingBehavior.BasePrimeBasePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BasePrimeCollectorPrimePtr">BiasingBehavior.BasePrimeCollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BasePrimeEmitterPrimePtr">BiasingBehavior.BasePrimeEmitterPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterPrimeEmitterPtr">BiasingBehavior.EmitterPrimeEmitterPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterPrimeCollectorPrimePtr">BiasingBehavior.EmitterPrimeCollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterPrimeBasePrimePtr">BiasingBehavior.EmitterPrimeBasePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorCollectorPtr">BiasingBehavior.CollectorCollectorPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseBasePtr">BiasingBehavior.BaseBasePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterEmitterPtr">BiasingBehavior.EmitterEmitterPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeCollectorPrimePtr">BiasingBehavior.CollectorPrimeCollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BasePrimeBasePrimePtr">BiasingBehavior.BasePrimeBasePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterPrimeEmitterPrimePtr">BiasingBehavior.EmitterPrimeEmitterPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_SubstrateSubstratePtr">BiasingBehavior.SubstrateSubstratePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeSubstratePtr">BiasingBehavior.CollectorPrimeSubstratePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_SubstrateCollectorPrimePtr">BiasingBehavior.SubstrateCollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseCollectorPrimePtr">BiasingBehavior.BaseCollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeBasePtr">BiasingBehavior.CollectorPrimeBasePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimePtr">BiasingBehavior.CollectorPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BasePrimePtr">BiasingBehavior.BasePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_EmitterPrimePtr">BiasingBehavior.EmitterPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CondBe">BiasingBehavior.CondBe</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CondBc">BiasingBehavior.CondBc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_BaseCharge">BiasingBehavior.BaseCharge</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Dqbdvc">BiasingBehavior.Dqbdvc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Dqbdve">BiasingBehavior.Dqbdve</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ExcessPhaseCalculation">BiasingBehavior.ExcessPhaseCalculation</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">BiasingBehavior.Setup(Simulation, SetupDataProvider)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Connect_System_Int32___">BiasingBehavior.Connect(Int32[])</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__">BiasingBehavior.GetEquationPointers(VariableSet, Solver&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Load_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.Load(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Initialize_SpiceSharp_Simulations_BaseSimulation_System_Double__System_Double__">BiasingBehavior.Initialize(BaseSimulation, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_IsConvergent_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.IsConvergent(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_BaseParameters">TemperatureBehavior.BaseParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_ModelParameters">TemperatureBehavior.ModelParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_ModelTemperature">TemperatureBehavior.ModelTemperature</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempSaturationCurrent">TemperatureBehavior.TempSaturationCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBetaForward">TemperatureBehavior.TempBetaForward</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBetaReverse">TemperatureBehavior.TempBetaReverse</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBeLeakageCurrent">TemperatureBehavior.TempBeLeakageCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBcLeakageCurrent">TemperatureBehavior.TempBcLeakageCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBeCap">TemperatureBehavior.TempBeCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBePotential">TemperatureBehavior.TempBePotential</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBcCap">TemperatureBehavior.TempBcCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempBcPotential">TemperatureBehavior.TempBcPotential</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempDepletionCap">TemperatureBehavior.TempDepletionCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempFactor1">TemperatureBehavior.TempFactor1</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempFactor4">TemperatureBehavior.TempFactor4</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempFactor5">TemperatureBehavior.TempFactor5</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_TempVCritical">TemperatureBehavior.TempVCritical</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_Vt">TemperatureBehavior.Vt</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -165,7 +393,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class TransientBehavior : BiasingBehavior, IPropertyExporter, ITemperatureBehavior, IBiasingBehavior, IConnectedBehavior, ITimeBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -198,193 +426,10 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BaseBasePrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BaseBasePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BaseBasePrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BaseBasePrimePtr">BaseBasePrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BaseBasePrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BaseBasePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BaseBasePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BaseBasePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BaseBasePtr">BaseBasePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BaseBasePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BaseCollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BaseCollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BaseCollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BaseCollectorPrimePtr">BaseCollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BaseCollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeBasePrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeBasePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeBasePrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeBasePrimePtr">BasePrimeBasePrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BasePrimeBasePrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeBasePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeBasePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeBasePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeBasePtr">BasePrimeBasePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BasePrimeBasePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeCollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeCollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeCollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeCollectorPrimePtr">BasePrimeCollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BasePrimeCollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeEmitterPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeEmitterPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimeEmitterPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimeEmitterPrimePtr">BasePrimeEmitterPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; BasePrimeEmitterPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePrimePtr">BasePrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected VectorElement&lt;double&gt; BasePrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePtr*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_BasePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.BasePtr">BasePtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Nodes</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -606,213 +651,6 @@ public double ChargeCs { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorCollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorCollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorCollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorCollectorPrimePtr">CollectorCollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorCollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorCollectorPtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorCollectorPtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorCollectorPtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorCollectorPtr">CollectorCollectorPtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorCollectorPtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeBasePrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeBasePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeBasePrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeBasePrimePtr">CollectorPrimeBasePrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorPrimeBasePrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeBasePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeBasePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeBasePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeBasePtr">CollectorPrimeBasePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorPrimeBasePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeCollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeCollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeCollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeCollectorPrimePtr">CollectorPrimeCollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorPrimeCollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeCollectorPtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeCollectorPtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeCollectorPtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeCollectorPtr">CollectorPrimeCollectorPtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorPrimeCollectorPtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeEmitterPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeEmitterPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeEmitterPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeEmitterPrimePtr">CollectorPrimeEmitterPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorPrimeEmitterPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimePtr">CollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected VectorElement&lt;double&gt; CollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeSubstratePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeSubstratePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CollectorPrimeSubstratePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CollectorPrimeSubstratePtr">CollectorPrimeSubstratePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; CollectorPrimeSubstratePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CurrentBc_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CurrentBc*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CurrentBc" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CurrentBc">CurrentBc</h4>
   <div class="markdown level1 summary"></div>
@@ -938,167 +776,6 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterEmitterPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterEmitterPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterEmitterPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterEmitterPrimePtr">EmitterEmitterPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; EmitterEmitterPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterEmitterPtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterEmitterPtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterEmitterPtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterEmitterPtr">EmitterEmitterPtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; EmitterEmitterPtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeBasePrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeBasePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeBasePrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeBasePrimePtr">EmitterPrimeBasePrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; EmitterPrimeBasePrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeCollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeCollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeCollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeCollectorPrimePtr">EmitterPrimeCollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; EmitterPrimeCollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeEmitterPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeEmitterPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeEmitterPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeEmitterPrimePtr">EmitterPrimeEmitterPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; EmitterPrimeEmitterPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeEmitterPtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeEmitterPtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimeEmitterPtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimeEmitterPtr">EmitterPrimeEmitterPtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; EmitterPrimeEmitterPtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_EmitterPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.EmitterPrimePtr">EmitterPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected VectorElement&lt;double&gt; EmitterPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_StateChargeBc_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.StateChargeBc*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_StateChargeBc" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.StateChargeBc">StateChargeBc</h4>
   <div class="markdown level1 summary"></div>
@@ -1215,29 +892,6 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_SubstrateCollectorPrimePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.SubstrateCollectorPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_SubstrateCollectorPrimePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.SubstrateCollectorPrimePtr">SubstrateCollectorPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; SubstrateCollectorPrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_SubstratePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.SubstratePtr*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_SubstratePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.SubstratePtr">SubstratePtr</h4>
   <div class="markdown level1 summary"></div>
@@ -1257,29 +911,6 @@ public double CurrentExBc { get; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_SubstrateSubstratePtr_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.SubstrateSubstratePtr*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_SubstrateSubstratePtr" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.SubstrateSubstratePtr">SubstrateSubstratePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; SubstrateSubstratePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1319,33 +950,6 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Connect_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CreateStates_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CreateStates*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_CreateStates_SpiceSharp_IntegrationMethods_IntegrationMethod_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.CreateStates(SpiceSharp.IntegrationMethods.IntegrationMethod)">CreateStates(IntegrationMethod)</h4>
   <div class="markdown level1 summary"><p>Create states</p>
@@ -1353,7 +957,7 @@ public double CurrentExBc { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateStates(IntegrationMethod method)</code></pre>
+    <pre><code class="lang-csharp hljs">public void CreateStates(IntegrationMethod method)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1372,8 +976,6 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_CreateStates_SpiceSharp_IntegrationMethods_IntegrationMethod_">BaseTransientBehavior.CreateStates(IntegrationMethod)</a></div>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_GetDcState_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.GetDcState*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_GetDcState_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.GetDcState(SpiceSharp.Simulations.TimeSimulation)">GetDcState(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Calculate state variables</p>
@@ -1381,7 +983,7 @@ public double CurrentExBc { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetDcState(TimeSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void GetDcState(TimeSimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1401,8 +1003,6 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_GetDcState_SpiceSharp_Simulations_TimeSimulation_">BaseTransientBehavior.GetDcState(TimeSimulation)</a></div>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_GetEquationPointers_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.GetEquationPointers*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Double__" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Double})">GetEquationPointers(Solver&lt;Double&gt;)</h4>
   <div class="markdown level1 summary"><p>Gets matrix pointers</p>
@@ -1410,7 +1010,7 @@ public double CurrentExBc { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetEquationPointers(Solver&lt;double&gt; solver)</code></pre>
+    <pre><code class="lang-csharp hljs">public void GetEquationPointers(Solver&lt;double&gt; solver)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1430,43 +1030,6 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Double__">BaseTransientBehavior.GetEquationPointers(Solver&lt;Double&gt;)</a></div>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Setup_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Setup*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
-  <div class="markdown level1 summary"><p>Setup behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup(Simulation simulation, SetupDataProvider provider)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Simulation</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.SetupDataProvider.html">SetupDataProvider</a></td>
-        <td><span class="parametername">provider</span></td>
-        <td><p>Data provider</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
   <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Transient_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Transient*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Transient_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Transient(SpiceSharp.Simulations.TimeSimulation)">Transient(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Transient behavior</p>
@@ -1474,7 +1037,7 @@ public double CurrentExBc { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Transient(TimeSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Transient(TimeSimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1494,39 +1057,24 @@ public double CurrentExBc { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_Transient_SpiceSharp_Simulations_TimeSimulation_">BaseTransientBehavior.Transient(TimeSimulation)</a></div>
-  <a id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Unsetup_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Unsetup*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_TransientBehavior_Unsetup_SpiceSharp_Simulations_Simulation_" data-uid="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.Unsetup(SpiceSharp.Simulations.Simulation)">Unsetup(Simulation)</h4>
-  <div class="markdown level1 summary"><p>Unsetup</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Unsetup(Simulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
+  </div>
+  <div>
       <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
   </div>
 </article>
           </div>

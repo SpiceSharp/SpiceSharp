@@ -73,7 +73,7 @@
   
   <h1 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior" class="text-break">Class NoiseBehavior
   </h1>
-  <div class="markdown level0 summary"><p>Noise behavior for <a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a></p>
+  <div class="markdown level0 summary"><p>Noise behavior for a <a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a></p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -81,27 +81,405 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html">BaseNoiseBehavior</a></div>
-    <div class="level5"><span class="xref">NoiseBehavior</span></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html">TemperatureBehavior</a></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level6"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html">DynamicParameterBehavior</a></div>
+    <div class="level7"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html">FrequencyBehavior</a></div>
+    <div class="level8"><span class="xref">NoiseBehavior</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainDrainPtr">FrequencyBehavior.CDrainDrainPtr</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateGatePtr">FrequencyBehavior.CGateGatePtr</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourceSourcePtr">FrequencyBehavior.CSourceSourcePtr</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkBulkPtr">FrequencyBehavior.CBulkBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeDrainPrimePtr">FrequencyBehavior.CDrainPrimeDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeSourcePrimePtr">FrequencyBehavior.CSourcePrimeSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainDrainPrimePtr">FrequencyBehavior.CDrainDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateBulkPtr">FrequencyBehavior.CGateBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateDrainPrimePtr">FrequencyBehavior.CGateDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateSourcePrimePtr">FrequencyBehavior.CGateSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourceSourcePrimePtr">FrequencyBehavior.CSourceSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkDrainPrimePtr">FrequencyBehavior.CBulkDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkSourcePrimePtr">FrequencyBehavior.CBulkSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeSourcePrimePtr">FrequencyBehavior.CDrainPrimeSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeDrainPtr">FrequencyBehavior.CDrainPrimeDrainPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkGatePtr">FrequencyBehavior.CBulkGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeGatePtr">FrequencyBehavior.CDrainPrimeGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeGatePtr">FrequencyBehavior.CSourcePrimeGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeSourcePtr">FrequencyBehavior.CSourcePrimeSourcePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeBulkPtr">FrequencyBehavior.CDrainPrimeBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeBulkPtr">FrequencyBehavior.CSourcePrimeBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeDrainPrimePtr">FrequencyBehavior.CSourcePrimeDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_InitializeParameters_SpiceSharp_Simulations_FrequencySimulation_">FrequencyBehavior.InitializeParameters(FrequencySimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__">FrequencyBehavior.GetEquationPointers(Solver&lt;Complex&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Load_SpiceSharp_Simulations_FrequencySimulation_">FrequencyBehavior.Load(FrequencySimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBd">DynamicParameterBehavior.CapBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBdSidewall">DynamicParameterBehavior.CapBdSidewall</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBs">DynamicParameterBehavior.CapBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBsSidewall">DynamicParameterBehavior.CapBsSidewall</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_ChargeBs">DynamicParameterBehavior.ChargeBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_ChargeBd">DynamicParameterBehavior.ChargeBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapGs">DynamicParameterBehavior.CapGs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapGd">DynamicParameterBehavior.CapGd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapGb">DynamicParameterBehavior.CapGb</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempCapBd">DynamicParameterBehavior.TempCapBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempCapBs">DynamicParameterBehavior.TempCapBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempJunctionCap">DynamicParameterBehavior.TempJunctionCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempJunctionCapSidewall">DynamicParameterBehavior.TempJunctionCapSidewall</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempDepletionCap">DynamicParameterBehavior.TempDepletionCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F2D">DynamicParameterBehavior.F2D</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F3D">DynamicParameterBehavior.F3D</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F4D">DynamicParameterBehavior.F4D</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F2S">DynamicParameterBehavior.F2S</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F3S">DynamicParameterBehavior.F3S</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F4S">DynamicParameterBehavior.F4S</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_EffectiveLength">DynamicParameterBehavior.EffectiveLength</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CalculateBaseCapacitances">DynamicParameterBehavior.CalculateBaseCapacitances()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CalculateCapacitances_System_Double_System_Double_System_Double_">DynamicParameterBehavior.CalculateCapacitances(Double, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CalculateMeyerCharges_System_Double_System_Double_">DynamicParameterBehavior.CalculateMeyerCharges(Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_EpsilonSilicon">BiasingBehavior.EpsilonSilicon</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_MaximumExponentArgument">BiasingBehavior.MaximumExponentArgument</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BaseConfiguration">BiasingBehavior.BaseConfiguration</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainCurrent">BiasingBehavior.DrainCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BsCurrent">BiasingBehavior.BsCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BdCurrent">BiasingBehavior.BdCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Transconductance">BiasingBehavior.Transconductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_TransconductanceBs">BiasingBehavior.TransconductanceBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_CondDs">BiasingBehavior.CondDs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_CondBs">BiasingBehavior.CondBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_CondBd">BiasingBehavior.CondBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Von">BiasingBehavior.Von</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SaturationVoltageDs">BiasingBehavior.SaturationVoltageDs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Mode">BiasingBehavior.Mode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageGs">BiasingBehavior.VoltageGs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageDs">BiasingBehavior.VoltageDs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageBs">BiasingBehavior.VoltageBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageBd">BiasingBehavior.VoltageBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainNode">BiasingBehavior.DrainNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateNode">BiasingBehavior.GateNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceNode">BiasingBehavior.SourceNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkNode">BiasingBehavior.BulkNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainNodePrime">BiasingBehavior.DrainNodePrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceNodePrime">BiasingBehavior.SourceNodePrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainDrainPtr">BiasingBehavior.DrainDrainPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateGatePtr">BiasingBehavior.GateGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceSourcePtr">BiasingBehavior.SourceSourcePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkBulkPtr">BiasingBehavior.BulkBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeDrainPrimePtr">BiasingBehavior.DrainPrimeDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeSourcePrimePtr">BiasingBehavior.SourcePrimeSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainDrainPrimePtr">BiasingBehavior.DrainDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateBulkPtr">BiasingBehavior.GateBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateDrainPrimePtr">BiasingBehavior.GateDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateSourcePrimePtr">BiasingBehavior.GateSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceSourcePrimePtr">BiasingBehavior.SourceSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkDrainPrimePtr">BiasingBehavior.BulkDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkSourcePrimePtr">BiasingBehavior.BulkSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeSourcePrimePtr">BiasingBehavior.DrainPrimeSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeDrainPtr">BiasingBehavior.DrainPrimeDrainPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkGatePtr">BiasingBehavior.BulkGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeGatePtr">BiasingBehavior.DrainPrimeGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeGatePtr">BiasingBehavior.SourcePrimeGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeSourcePtr">BiasingBehavior.SourcePrimeSourcePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeBulkPtr">BiasingBehavior.DrainPrimeBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeBulkPtr">BiasingBehavior.SourcePrimeBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeDrainPrimePtr">BiasingBehavior.SourcePrimeDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkPtr">BiasingBehavior.BulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimePtr">BiasingBehavior.DrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimePtr">BiasingBehavior.SourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Connect_System_Int32___">BiasingBehavior.Connect(Int32[])</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__">BiasingBehavior.GetEquationPointers(VariableSet, Solver&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Load_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.Load(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Initialize_SpiceSharp_Simulations_BaseSimulation_System_Double__System_Double__System_Double__System_Boolean__">BiasingBehavior.Initialize(BaseSimulation, Double, Double, Double, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Evaluate_System_Double_System_Double_System_Double_">BiasingBehavior.Evaluate(Double, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_IsConvergent_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.IsConvergent(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_BaseParameters">TemperatureBehavior.BaseParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_ModelParameters">TemperatureBehavior.ModelParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_ModelTemperature">TemperatureBehavior.ModelTemperature</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceConductance">TemperatureBehavior.SourceConductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainConductance">TemperatureBehavior.DrainConductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceResistance">TemperatureBehavior.SourceResistance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainResistance">TemperatureBehavior.DrainResistance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceVCritical">TemperatureBehavior.SourceVCritical</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainVCritical">TemperatureBehavior.DrainVCritical</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempSurfaceMobility">TemperatureBehavior.TempSurfaceMobility</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempPhi">TemperatureBehavior.TempPhi</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempVoltageBi">TemperatureBehavior.TempVoltageBi</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempBulkPotential">TemperatureBehavior.TempBulkPotential</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempTransconductance">TemperatureBehavior.TempTransconductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempVt0">TemperatureBehavior.TempVt0</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_Vt">TemperatureBehavior.Vt</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainSatCurrent">TemperatureBehavior.DrainSatCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceSatCurrent">TemperatureBehavior.SourceSatCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -165,7 +543,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class NoiseBehavior : FrequencyBehavior, IPropertyExporter, ITemperatureBehavior, IBiasingBehavior, IConnectedBehavior, IFrequencyBehavior, INoiseBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -196,16 +574,107 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="fields">Fields
+  </h3>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_FlickerNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.FlickerNoise">FlickerNoise</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected const int FlickerNoise = 3</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_IdNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.IdNoise">IdNoise</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected const int IdNoise = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_RdNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.RdNoise">RdNoise</h4>
+  <div class="markdown level1 summary"><p>Noise generators by their index</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected const int RdNoise = 0</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_RsNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.RsNoise">RsNoise</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected const int RsNoise = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Mosfet3Noise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Mosfet3Noise*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Mosfet3Noise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Mosfet3Noise">Mosfet3Noise</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_MosfetNoise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.MosfetNoise*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_MosfetNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.MosfetNoise">MosfetNoise</h4>
   <div class="markdown level1 summary"><p>Noise generators</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ComponentNoise Mosfet3Noise { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public ComponentNoise MosfetNoise { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -222,35 +691,33 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Connect_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect</p>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_NoiseParameters_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.NoiseParameters*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_NoiseParameters" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.NoiseParameters">NoiseParameters</h4>
+  <div class="markdown level1 summary"><p>Gets the noise parameters.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
+    <pre><code class="lang-csharp hljs">protected ModelNoiseParameters NoiseParameters { get; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
+        <td><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.ModelNoiseParameters.html">ModelNoiseParameters</a></td>
+        <td><p>The noise parameters.</p>
 </td>
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+  </h3>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_ConnectNoise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.ConnectNoise*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_ConnectNoise" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.ConnectNoise">ConnectNoise()</h4>
   <div class="markdown level1 summary"><p>Connect noise</p>
@@ -258,18 +725,16 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ConnectNoise()</code></pre>
+    <pre><code class="lang-csharp hljs">public void ConnectNoise()</code></pre>
   </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html#SpiceSharp_Behaviors_BaseNoiseBehavior_ConnectNoise">BaseNoiseBehavior.ConnectNoise()</a></div>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Noise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Noise*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Noise_SpiceSharp_Simulations_Noise_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Noise(SpiceSharp.Simulations.Noise)">Noise(Noise)</h4>
-  <div class="markdown level1 summary"><p>Noise calculations</p>
+  <div class="markdown level1 summary"><p>Calculate the noise contributions.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Noise(Noise simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Noise(Noise simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -284,13 +749,27 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a></td>
         <td><span class="parametername">simulation</span></td>
-        <td><p>Noise simulation</p>
+        <td><p>The noise simulation.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html#SpiceSharp_Behaviors_BaseNoiseBehavior_Noise_SpiceSharp_Simulations_Noise_">BaseNoiseBehavior.Noise(Noise)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>simulation</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Setup_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Setup*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_NoiseBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
   <div class="markdown level1 summary"><p>Setup behavior</p>
@@ -325,10 +804,28 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
+  <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">BiasingBehavior.Setup(Simulation, SetupDataProvider)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
+  </div>
+  <div>
       <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
   </div>
 </article>
           </div>

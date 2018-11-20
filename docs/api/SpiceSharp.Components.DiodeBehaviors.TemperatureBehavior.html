@@ -73,7 +73,7 @@
   
   <h1 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior" class="text-break">Class TemperatureBehavior
   </h1>
-  <div class="markdown level0 summary"><p>Temperature behavior for a <a class="xref" href="SpiceSharp.Components.Diode.html">Diode</a></p>
+  <div class="markdown level0 summary"><p>Temperature behavior for a <a class="xref" href="SpiceSharp.Components.Diode.html">Diode</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -81,23 +81,29 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseTemperatureBehavior.html">BaseTemperatureBehavior</a></div>
-    <div class="level5"><span class="xref">TemperatureBehavior</span></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
+    <div class="level4"><span class="xref">TemperatureBehavior</span></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -161,7 +167,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TemperatureBehavior : BaseTemperatureBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class TemperatureBehavior : ExportingBehavior, IPropertyExporter, ITemperatureBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -194,6 +200,106 @@
   </table>
   <h3 id="properties">Properties
   </h3>
+  <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_BaseConfiguration_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.BaseConfiguration*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_BaseConfiguration" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.BaseConfiguration">BaseConfiguration</h4>
+  <div class="markdown level1 summary"><p>Gets the base configuration of the simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BaseConfiguration BaseConfiguration { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.BaseConfiguration.html">BaseConfiguration</a></td>
+        <td><p>The base configuration.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_BaseParameters_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.BaseParameters*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_BaseParameters" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.BaseParameters">BaseParameters</h4>
+  <div class="markdown level1 summary"><p>Gets the base parameters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BaseParameters BaseParameters { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.BaseParameters.html">BaseParameters</a></td>
+        <td><p>The base parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_ModelParameters_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.ModelParameters*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_ModelParameters" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.ModelParameters">ModelParameters</h4>
+  <div class="markdown level1 summary"><p>Gets the model parameters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ModelBaseParameters ModelParameters { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.ModelBaseParameters.html">ModelBaseParameters</a></td>
+        <td><p>The model parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_ModelTemperature_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.ModelTemperature*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_ModelTemperature" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.ModelTemperature">ModelTemperature</h4>
+  <div class="markdown level1 summary"><p>Gets the model temperature behavior.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ModelTemperatureBehavior ModelTemperature { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></td>
+        <td><p>The model temperature behavior.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_TempBreakdownVoltage_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.TempBreakdownVoltage*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_TempBreakdownVoltage" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.TempBreakdownVoltage">TempBreakdownVoltage</h4>
   <div class="markdown level1 summary"></div>
@@ -356,6 +462,52 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Vt_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Vt*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Vt" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Vt">Vt</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected double Vt { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Vte_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Vte*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Vte" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Vte">Vte</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected double Vte { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Setup_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Setup*"></a>
@@ -392,7 +544,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
+  <div><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">ExportingBehavior.Setup(Simulation, SetupDataProvider)</a></div>
   <a id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Temperature_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Temperature*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_" data-uid="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.Temperature(SpiceSharp.Simulations.BaseSimulation)">Temperature(BaseSimulation)</h4>
   <div class="markdown level1 summary"><p>Do temperature-dependent calculations</p>
@@ -400,7 +552,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Temperature(BaseSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Temperature(BaseSimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -420,8 +572,16 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTemperatureBehavior.html#SpiceSharp_Behaviors_BaseTemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">BaseTemperatureBehavior.Temperature(BaseSimulation)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
 </article>
           </div>
           

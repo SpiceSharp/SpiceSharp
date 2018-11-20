@@ -73,7 +73,7 @@
   
   <h1 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior" class="text-break">Class FrequencyBehavior
   </h1>
-  <div class="markdown level0 summary"><p>AC behavior for <a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a></p>
+  <div class="markdown level0 summary"><p>Frequency behavior for a <a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -81,27 +81,332 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html">BaseFrequencyBehavior</a></div>
-    <div class="level5"><span class="xref">FrequencyBehavior</span></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html">TemperatureBehavior</a></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level6"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html">DynamicParameterBehavior</a></div>
+    <div class="level7"><span class="xref">FrequencyBehavior</span></div>
+      <div class="level8"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.NoiseBehavior.html">NoiseBehavior</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_CreateAcExport_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">BaseFrequencyBehavior.CreateAcExport(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBd">DynamicParameterBehavior.CapBd</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBdSidewall">DynamicParameterBehavior.CapBdSidewall</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBs">DynamicParameterBehavior.CapBs</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapBsSidewall">DynamicParameterBehavior.CapBsSidewall</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_ChargeBs">DynamicParameterBehavior.ChargeBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_ChargeBd">DynamicParameterBehavior.ChargeBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapGs">DynamicParameterBehavior.CapGs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapGd">DynamicParameterBehavior.CapGd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CapGb">DynamicParameterBehavior.CapGb</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempCapBd">DynamicParameterBehavior.TempCapBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempCapBs">DynamicParameterBehavior.TempCapBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempJunctionCap">DynamicParameterBehavior.TempJunctionCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempJunctionCapSidewall">DynamicParameterBehavior.TempJunctionCapSidewall</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_TempDepletionCap">DynamicParameterBehavior.TempDepletionCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F2D">DynamicParameterBehavior.F2D</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F3D">DynamicParameterBehavior.F3D</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F4D">DynamicParameterBehavior.F4D</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F2S">DynamicParameterBehavior.F2S</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F3S">DynamicParameterBehavior.F3S</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_F4S">DynamicParameterBehavior.F4S</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_EffectiveLength">DynamicParameterBehavior.EffectiveLength</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CalculateBaseCapacitances">DynamicParameterBehavior.CalculateBaseCapacitances()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CalculateCapacitances_System_Double_System_Double_System_Double_">DynamicParameterBehavior.CalculateCapacitances(Double, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_DynamicParameterBehavior_CalculateMeyerCharges_System_Double_System_Double_">DynamicParameterBehavior.CalculateMeyerCharges(Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_EpsilonSilicon">BiasingBehavior.EpsilonSilicon</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_MaximumExponentArgument">BiasingBehavior.MaximumExponentArgument</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BaseConfiguration">BiasingBehavior.BaseConfiguration</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainCurrent">BiasingBehavior.DrainCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BsCurrent">BiasingBehavior.BsCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BdCurrent">BiasingBehavior.BdCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Transconductance">BiasingBehavior.Transconductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_TransconductanceBs">BiasingBehavior.TransconductanceBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_CondDs">BiasingBehavior.CondDs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_CondBs">BiasingBehavior.CondBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_CondBd">BiasingBehavior.CondBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Von">BiasingBehavior.Von</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SaturationVoltageDs">BiasingBehavior.SaturationVoltageDs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Mode">BiasingBehavior.Mode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageGs">BiasingBehavior.VoltageGs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageDs">BiasingBehavior.VoltageDs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageBs">BiasingBehavior.VoltageBs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_VoltageBd">BiasingBehavior.VoltageBd</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainNode">BiasingBehavior.DrainNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateNode">BiasingBehavior.GateNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceNode">BiasingBehavior.SourceNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkNode">BiasingBehavior.BulkNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainNodePrime">BiasingBehavior.DrainNodePrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceNodePrime">BiasingBehavior.SourceNodePrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainDrainPtr">BiasingBehavior.DrainDrainPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateGatePtr">BiasingBehavior.GateGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceSourcePtr">BiasingBehavior.SourceSourcePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkBulkPtr">BiasingBehavior.BulkBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeDrainPrimePtr">BiasingBehavior.DrainPrimeDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeSourcePrimePtr">BiasingBehavior.SourcePrimeSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainDrainPrimePtr">BiasingBehavior.DrainDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateBulkPtr">BiasingBehavior.GateBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateDrainPrimePtr">BiasingBehavior.GateDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GateSourcePrimePtr">BiasingBehavior.GateSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourceSourcePrimePtr">BiasingBehavior.SourceSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkDrainPrimePtr">BiasingBehavior.BulkDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkSourcePrimePtr">BiasingBehavior.BulkSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeSourcePrimePtr">BiasingBehavior.DrainPrimeSourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeDrainPtr">BiasingBehavior.DrainPrimeDrainPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkGatePtr">BiasingBehavior.BulkGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeGatePtr">BiasingBehavior.DrainPrimeGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeGatePtr">BiasingBehavior.SourcePrimeGatePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeSourcePtr">BiasingBehavior.SourcePrimeSourcePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimeBulkPtr">BiasingBehavior.DrainPrimeBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeBulkPtr">BiasingBehavior.SourcePrimeBulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimeDrainPrimePtr">BiasingBehavior.SourcePrimeDrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_BulkPtr">BiasingBehavior.BulkPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_DrainPrimePtr">BiasingBehavior.DrainPrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_SourcePrimePtr">BiasingBehavior.SourcePrimePtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">BiasingBehavior.Setup(Simulation, SetupDataProvider)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Connect_System_Int32___">BiasingBehavior.Connect(Int32[])</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__">BiasingBehavior.GetEquationPointers(VariableSet, Solver&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Load_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.Load(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Initialize_SpiceSharp_Simulations_BaseSimulation_System_Double__System_Double__System_Double__System_Boolean__">BiasingBehavior.Initialize(BaseSimulation, Double, Double, Double, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_Evaluate_System_Double_System_Double_System_Double_">BiasingBehavior.Evaluate(Double, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_BiasingBehavior_IsConvergent_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.IsConvergent(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_BaseParameters">TemperatureBehavior.BaseParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_ModelParameters">TemperatureBehavior.ModelParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_ModelTemperature">TemperatureBehavior.ModelTemperature</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceConductance">TemperatureBehavior.SourceConductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainConductance">TemperatureBehavior.DrainConductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceResistance">TemperatureBehavior.SourceResistance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainResistance">TemperatureBehavior.DrainResistance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceVCritical">TemperatureBehavior.SourceVCritical</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainVCritical">TemperatureBehavior.DrainVCritical</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempSurfaceMobility">TemperatureBehavior.TempSurfaceMobility</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempPhi">TemperatureBehavior.TempPhi</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempVoltageBi">TemperatureBehavior.TempVoltageBi</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempBulkPotential">TemperatureBehavior.TempBulkPotential</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempTransconductance">TemperatureBehavior.TempTransconductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_TempVt0">TemperatureBehavior.TempVt0</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_Vt">TemperatureBehavior.Vt</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_DrainSatCurrent">TemperatureBehavior.DrainSatCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_SourceSatCurrent">TemperatureBehavior.SourceSatCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level3_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -165,7 +470,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class FrequencyBehavior : DynamicParameterBehavior, IPropertyExporter, ITemperatureBehavior, IBiasingBehavior, IConnectedBehavior, IFrequencyBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -198,13 +503,13 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkBulkPtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkBulkPtr">BulkBulkPtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkBulkPtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkBulkPtr">CBulkBulkPtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BulkBulkPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBulkBulkPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -221,13 +526,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkDrainPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkDrainPrimePtr">BulkDrainPrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkDrainPrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkDrainPrimePtr">CBulkDrainPrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BulkDrainPrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBulkDrainPrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -244,13 +549,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkGatePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkGatePtr">BulkGatePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkGatePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkGatePtr">CBulkGatePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BulkGatePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBulkGatePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -267,13 +572,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkSourcePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_BulkSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.BulkSourcePrimePtr">BulkSourcePrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkSourcePrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CBulkSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CBulkSourcePrimePtr">CBulkSourcePrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BulkSourcePrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBulkSourcePrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -290,13 +595,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapBd_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapBd*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapBd" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapBd">CapBd</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainDrainPrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainDrainPrimePtr">CDrainDrainPrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapBd { get; protected set; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainDrainPrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -308,111 +613,19 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapBs_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapBs*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapBs" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapBs">CapBs</h4>
-  <div class="markdown level1 summary"><p>Shared variables</p>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainDrainPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainDrainPtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainDrainPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainDrainPtr">CDrainDrainPtr</h4>
+  <div class="markdown level1 summary"><p>Nodes</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapBs { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapGb_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapGb*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapGb" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapGb">CapGb</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapGb { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapGd_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapGd*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapGd" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapGd">CapGd</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapGd { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapGs_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapGs*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CapGs" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CapGs">CapGs</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double CapGs { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainDrainPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainDrainPrimePtr">DrainDrainPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainDrainPrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainDrainPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -429,13 +642,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainDrainPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainDrainPtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainDrainPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainDrainPtr">DrainDrainPtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeBulkPtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeBulkPtr">CDrainPrimeBulkPtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainDrainPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainPrimeBulkPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -452,13 +665,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeBulkPtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeBulkPtr">DrainPrimeBulkPtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeDrainPrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeDrainPrimePtr">CDrainPrimeDrainPrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainPrimeBulkPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainPrimeDrainPrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -475,13 +688,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeDrainPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeDrainPrimePtr">DrainPrimeDrainPrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeDrainPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeDrainPtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeDrainPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeDrainPtr">CDrainPrimeDrainPtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainPrimeDrainPrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainPrimeDrainPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -498,13 +711,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeDrainPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeDrainPtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeDrainPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeDrainPtr">DrainPrimeDrainPtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeGatePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeGatePtr">CDrainPrimeGatePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainPrimeDrainPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainPrimeGatePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -521,13 +734,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeGatePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeGatePtr">DrainPrimeGatePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeSourcePrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CDrainPrimeSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CDrainPrimeSourcePrimePtr">CDrainPrimeSourcePrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainPrimeGatePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CDrainPrimeSourcePrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -544,13 +757,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeSourcePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_DrainPrimeSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.DrainPrimeSourcePrimePtr">DrainPrimeSourcePrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateBulkPtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateBulkPtr">CGateBulkPtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; DrainPrimeSourcePrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CGateBulkPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -567,13 +780,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateBulkPtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateBulkPtr">GateBulkPtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateDrainPrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateDrainPrimePtr">CGateDrainPrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; GateBulkPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CGateDrainPrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -590,13 +803,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateDrainPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateDrainPrimePtr">GateDrainPrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateGatePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateGatePtr">CGateGatePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; GateDrainPrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CGateGatePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -613,13 +826,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateGatePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateGatePtr">GateGatePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateSourcePrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CGateSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CGateSourcePrimePtr">CGateSourcePrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; GateGatePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CGateSourcePrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -636,13 +849,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateSourcePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GateSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GateSourcePrimePtr">GateSourcePrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeBulkPtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeBulkPtr">CSourcePrimeBulkPtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; GateSourcePrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourcePrimeBulkPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -659,13 +872,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeBulkPtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeBulkPtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeBulkPtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeBulkPtr">SourcePrimeBulkPtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeDrainPrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeDrainPrimePtr">CSourcePrimeDrainPrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourcePrimeBulkPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourcePrimeDrainPrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -682,13 +895,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeDrainPrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeDrainPrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeDrainPrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeDrainPrimePtr">SourcePrimeDrainPrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeGatePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeGatePtr">CSourcePrimeGatePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourcePrimeDrainPrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourcePrimeGatePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -705,13 +918,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeGatePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeGatePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeGatePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeGatePtr">SourcePrimeGatePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeSourcePrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeSourcePrimePtr">CSourcePrimeSourcePrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourcePrimeGatePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourcePrimeSourcePrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -728,13 +941,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeSourcePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeSourcePrimePtr">SourcePrimeSourcePrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeSourcePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeSourcePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourcePrimeSourcePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourcePrimeSourcePtr">CSourcePrimeSourcePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourcePrimeSourcePrimePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourcePrimeSourcePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -751,13 +964,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeSourcePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeSourcePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourcePrimeSourcePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourcePrimeSourcePtr">SourcePrimeSourcePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourceSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourceSourcePrimePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourceSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourceSourcePrimePtr">CSourceSourcePrimePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourcePrimeSourcePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourceSourcePrimePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -774,36 +987,13 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourceSourcePrimePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourceSourcePrimePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourceSourcePrimePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourceSourcePrimePtr">SourceSourcePrimePtr</h4>
+  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourceSourcePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourceSourcePtr*"></a>
+  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_CSourceSourcePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.CSourceSourcePtr">CSourceSourcePtr</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourceSourcePrimePtr { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourceSourcePtr_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourceSourcePtr*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_SourceSourcePtr" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.SourceSourcePtr">SourceSourcePtr</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; SourceSourcePtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CSourceSourcePtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -822,33 +1012,6 @@
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Connect_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GetEquationPointers_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})">GetEquationPointers(Solver&lt;Complex&gt;)</h4>
   <div class="markdown level1 summary"><p>Gets matrix pionters</p>
@@ -856,7 +1019,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetEquationPointers(Solver&lt;Complex&gt; solver)</code></pre>
+    <pre><code class="lang-csharp hljs">public void GetEquationPointers(Solver&lt;Complex&gt; solver)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -876,16 +1039,14 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__">BaseFrequencyBehavior.GetEquationPointers(Solver&lt;Complex&gt;)</a></div>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_InitializeParameters_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.InitializeParameters*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_InitializeParameters_SpiceSharp_Simulations_FrequencySimulation_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.InitializeParameters(SpiceSharp.Simulations.FrequencySimulation)">InitializeParameters(FrequencySimulation)</h4>
-  <div class="markdown level1 summary"><p>Initialize AC parameters</p>
+  <div class="markdown level1 summary"><p>Initializes the parameters.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void InitializeParameters(FrequencySimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void InitializeParameters(FrequencySimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -900,20 +1061,19 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a></td>
         <td><span class="parametername">simulation</span></td>
-        <td></td>
+        <td><p>The frequency simulation.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_InitializeParameters_SpiceSharp_Simulations_FrequencySimulation_">BaseFrequencyBehavior.InitializeParameters(FrequencySimulation)</a></div>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Load_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Load*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Load_SpiceSharp_Simulations_FrequencySimulation_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Load(SpiceSharp.Simulations.FrequencySimulation)">Load(FrequencySimulation)</h4>
-  <div class="markdown level1 summary"><p>Execute behavior for AC analysis</p>
+  <div class="markdown level1 summary"><p>Load the Y-matrix and right-hand side vector for frequency domain analysis.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Load(FrequencySimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Load(FrequencySimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -928,79 +1088,50 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a></td>
         <td><span class="parametername">simulation</span></td>
-        <td><p>Frequency-based simulation</p>
+        <td><p>The frequency simulation.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_Load_SpiceSharp_Simulations_FrequencySimulation_">BaseFrequencyBehavior.Load(FrequencySimulation)</a></div>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Setup_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Setup*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
-  <div class="markdown level1 summary"><p>Setup behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup(Simulation simulation, SetupDataProvider provider)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
+        <th>Condition</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Simulation</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.SetupDataProvider.html">SetupDataProvider</a></td>
-        <td><span class="parametername">provider</span></td>
-        <td><p>Data provider</p>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>simulation</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
-  <a id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Unsetup_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Unsetup*"></a>
-  <h4 id="SpiceSharp_Components_MosfetBehaviors_Level3_FrequencyBehavior_Unsetup_SpiceSharp_Simulations_Simulation_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level3.FrequencyBehavior.Unsetup(SpiceSharp.Simulations.Simulation)">Unsetup(Simulation)</h4>
-  <div class="markdown level1 summary"><p>Unsetup</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Unsetup(Simulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
+  </div>
+  <div>
       <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior.html">BiasingBehavior</a></div>
+      <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
   </div>
 </article>
           </div>

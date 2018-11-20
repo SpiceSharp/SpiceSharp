@@ -249,7 +249,8 @@ under &quot;model&quot;, or other entities can be invoked where needed.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public T GetBehavior&lt;T&gt;(string name = &quot;entity&quot;)
-    where T : Behavior</code></pre>
+
+    where T : IBehavior</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -309,6 +310,7 @@ under &quot;model&quot;, or other entities can be invoked where needed.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public T GetParameterSet&lt;T&gt;(string name = &quot;entity&quot;)
+
     where T : ParameterSet</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -369,7 +371,8 @@ under &quot;model&quot;, or other entities can be invoked where needed.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool TryGetBehavior&lt;T&gt;(string name, out T value)
-    where T : Behavior</code></pre>
+
+    where T : IBehavior</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -435,6 +438,7 @@ under &quot;model&quot;, or other entities can be invoked where needed.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool TryGetParameterSet&lt;T&gt;(string name, out T value)
+
     where T : ParameterSet</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>

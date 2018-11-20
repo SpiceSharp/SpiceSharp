@@ -98,7 +98,7 @@
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_Connect_System_String___">Component.Connect(String[])</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_CreateBehavior__1_SpiceSharp_Simulations_Simulation_">Component.CreateBehavior&lt;T&gt;(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_CreateBehavior_System_Type_SpiceSharp_Simulations_Simulation_">Component.CreateBehavior(Type, Simulation)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_BuildSetupDataProvider_SpiceSharp_ParameterPool_SpiceSharp_Behaviors_BehaviorPool_">Component.BuildSetupDataProvider(ParameterPool, BehaviorPool)</a>
@@ -126,6 +126,9 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__">Entity.SetParameter(String, Object, IEqualityComparer&lt;String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetupBehavior_SpiceSharp_Behaviors_IBehavior_SpiceSharp_Simulations_Simulation_">Entity.SetupBehavior(IBehavior, Simulation)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Priority">Entity.Priority</a>
@@ -160,6 +163,7 @@
 [Pin(1, &quot;V-&quot;)]
 [Pin(2, &quot;VC+&quot;)]
 [Pin(3, &quot;VC-&quot;)]
+[VoltageDriver(0, 1)]
 public class VoltageDelay : Component</code></pre>
   </div>
   <h3 id="constructors">Constructors
