@@ -204,7 +204,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimePtr = solver.GetRhsElement(EmitterPrimeNode);
         }
 
-
         /// <summary>
         /// Execute behavior
         /// </summary>

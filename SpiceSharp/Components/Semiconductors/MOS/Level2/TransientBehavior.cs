@@ -234,6 +234,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             GatePtr = solver.GetRhsElement(GateNode);
         }
 
+        /// <summary>
+        /// Perform time-dependent calculations.
+        /// </summary>
+        /// <param name="simulation">The time-based simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
         public void Transient(TimeSimulation simulation)
         {
             if (simulation == null)
@@ -306,7 +311,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             DrainPrimeBulkPtr.Value -= gbd;
             SourcePrimeGatePtr.Value -= gcgs;
             SourcePrimeBulkPtr.Value -= gbs;
-
         }
     }
 }
