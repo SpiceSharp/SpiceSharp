@@ -161,47 +161,15 @@ namespace SpiceSharp.Components.JFETBehaviors
             var gspr = ModelParameters.SourceConductance * BaseParameters.Area;
             var csat = TempSaturationCurrent * BaseParameters.Area;
 
-            double vgs, vgd, vds;
             double ggs, cg;
             double ggd, cgd;
             double cdrain, gm, gds, betap, bfac;
 
-            // Initialization
-            var check = true;
-            if (state.Init == InitializationModes.Junction && simulation is TimeSimulation && state.UseDc && state.UseIc)
-            {
-                vds = ModelParameters.JFETType * BaseParameters.InitialVds;
-                vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;
-                vgd = vgs - vds;
-            }
-            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
-            {
-                vgs = -1;
-                vgd = -1;
-            }
-            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
-            {
-                vgs = 0;
-                vgd = 0;
-            }
-            else
-            {
-                // Compute new nonlinear branch voltages
-                vgs = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[SourcePrimeNode]);
-                vgd = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[DrainPrimeNode]);
-
-                // Limit nonlinear branch voltages
-                check = false;
-                vgs = Semiconductor.LimitJunction(vgs, Vgs,
-                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
-                vgd = Semiconductor.LimitJunction(vgd, Vgd,
-                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
-                vgs = Transistor.LimitFet(vgs, Vgs, ModelParameters.Threshold);
-                vgd = Transistor.LimitFet(vgd, Vgd, ModelParameters.Threshold);
-            }
+            // Get the current voltages
+            Initialize(simulation, out double vgs, out double vgd, out bool check);
+            var vds = vgs - vgd;
 
             // Determine dc current and derivatives 
-            vds = vgs - vgd;
             if (vgs <= -5 * BaseParameters.Temperature * Circuit.KOverQ)
             {
                 ggs = -csat / vgs + BaseConfiguration.Gmin;
@@ -308,14 +276,6 @@ namespace SpiceSharp.Components.JFETBehaviors
             }
 
             var cd = cdrain - cgd;
-
-            // Check convergence
-            if (state.Init != InitializationModes.Fix || !state.UseIc)
-            {
-                if (check)
-                    state.IsConvergent = false;
-            }
-
             Vgs = vgs;
             Vgd = vgd;
             Cg = cg;
@@ -325,6 +285,13 @@ namespace SpiceSharp.Components.JFETBehaviors
             Gds = gds;
             Ggs = ggs;
             Ggd = ggd;
+
+            // Check convergence
+            if (state.Init != InitializationModes.Fix || !state.UseIc)
+            {
+                if (check)
+                    state.IsConvergent = false;
+            }
 
             // Load current vector
             var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
@@ -350,6 +317,52 @@ namespace SpiceSharp.Components.JFETBehaviors
             SourceSourcePtr.Value += gspr;
             DrainPrimeDrainPrimePtr.Value += gdpr + gds + ggd;
             SourcePrimeSourcePrimePtr.Value += gspr + gds + gm + ggs;
+        }
+
+        /// <summary>
+        /// Initializes the voltages for the current iteration.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="vgs">The VGS.</param>
+        /// <param name="vgd">The VGD.</param>
+        /// <param name="check">if set to <c>true</c> [check].</param>
+        protected void Initialize(BaseSimulation simulation, out double vgs, out double vgd, out bool check)
+        {
+            var state = simulation.RealState;
+
+            // Initialization
+            check = true;
+            if (state.Init == InitializationModes.Junction && simulation is TimeSimulation && state.UseDc && state.UseIc)
+            {
+                var vds = ModelParameters.JFETType * BaseParameters.InitialVds;
+                vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;
+                vgd = vgs - vds;
+            }
+            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
+            {
+                vgs = -1;
+                vgd = -1;
+            }
+            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
+            {
+                vgs = 0;
+                vgd = 0;
+            }
+            else
+            {
+                // Compute new nonlinear branch voltages
+                vgs = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[SourcePrimeNode]);
+                vgd = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[DrainPrimeNode]);
+
+                // Limit nonlinear branch voltages
+                check = false;
+                vgs = Semiconductor.LimitJunction(vgs, Vgs,
+                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                vgd = Semiconductor.LimitJunction(vgd, Vgd,
+                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                vgs = Transistor.LimitFet(vgs, Vgs, ModelParameters.Threshold);
+                vgd = Transistor.LimitFet(vgd, Vgd, ModelParameters.Threshold);
+            }
         }
 
         /// <summary>
