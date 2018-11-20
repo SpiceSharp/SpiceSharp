@@ -213,15 +213,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.RealState;
-            double vbe;
-            double vbc;
             double gben;
             double cben;
             double gbcn;
             double cbcn;
-
-            var vt = BaseParameters.Temperature * Circuit.KOverQ;
 
             // DC model parameters
             var csat = TempSaturationCurrent * BaseParameters.Area;
@@ -231,45 +226,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
             var oik = ModelTemperature.InverseRollOffForward / BaseParameters.Area;
             var c2 = TempBeLeakageCurrent * BaseParameters.Area;
-            var vte = ModelParameters.LeakBeEmissionCoefficient * vt;
+            var vte = ModelParameters.LeakBeEmissionCoefficient * Vt;
             var oikr = ModelTemperature.InverseRollOffReverse / BaseParameters.Area;
             var c4 = TempBcLeakageCurrent * BaseParameters.Area;
-            var vtc = ModelParameters.LeakBcEmissionCoefficient * vt;
+            var vtc = ModelParameters.LeakBcEmissionCoefficient * Vt;
             var xjrb = ModelParameters.BaseCurrentHalfResist * BaseParameters.Area;
 
-            // Initialization
-            if (state.Init == InitializationModes.Junction && (simulation is TimeSimulation) && state.UseDc && state.UseIc)
-            {
-                vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
-                var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;
-                vbc = vbe - vce;
-            }
-            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
-            {
-                vbe = TempVCritical;
-                vbc = 0;
-            }
-            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
-            {
-                vbe = 0;
-                vbc = 0;
-            }
-            else
-            {
-                // Compute new nonlinear branch voltages
-                vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
-                vbc = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
-
-                // Limit nonlinear branch voltages
-                var limited = false;
-                vbe = Semiconductor.LimitJunction(vbe, VoltageBe, vt, TempVCritical, ref limited);
-                vbc = Semiconductor.LimitJunction(vbc, VoltageBc, vt, TempVCritical, ref limited);
-                if (limited)
-                    state.IsConvergent = false;
-            }
+            Initialize(simulation, out var vbe, out var vbc);
 
             // Determine dc current and derivitives
-            var vtn = vt * ModelParameters.EmissionCoefficientForward;
+            var vtn = Vt * ModelParameters.EmissionCoefficientForward;
             if (vbe > -5 * vtn)
             {
                 var evbe = Math.Exp(vbe / vtn);
@@ -295,7 +261,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 cben = gben * vbe;
             }
 
-            vtn = vt * ModelParameters.EmissionCoefficientReverse;
+            vtn = Vt * ModelParameters.EmissionCoefficientReverse;
             if (vbc > -5 * vtn)
             {
                 var evbc = Math.Exp(vbc / vtn);
@@ -408,6 +374,48 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimeEmitterPtr.Value += -gepr;
             EmitterPrimeCollectorPrimePtr.Value += -go;
             EmitterPrimeBasePrimePtr.Value += -gpi - gm;
+        }
+
+        /// <summary>
+        /// Initializes the voltages for the current iteration.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="vbe">The VBE.</param>
+        /// <param name="vbc">The VBC.</param>
+        protected void Initialize(BaseSimulation simulation, out double vbe, out double vbc)
+        {
+            var state = simulation.RealState;
+
+            // Initialization
+            if (state.Init == InitializationModes.Junction && (simulation is TimeSimulation) && state.UseDc && state.UseIc)
+            {
+                vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
+                var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;
+                vbc = vbe - vce;
+            }
+            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
+            {
+                vbe = TempVCritical;
+                vbc = 0;
+            }
+            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
+            {
+                vbe = 0;
+                vbc = 0;
+            }
+            else
+            {
+                // Compute new nonlinear branch voltages
+                vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
+                vbc = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
+
+                // Limit nonlinear branch voltages
+                var limited = false;
+                vbe = Semiconductor.LimitJunction(vbe, VoltageBe, Vt, TempVCritical, ref limited);
+                vbc = Semiconductor.LimitJunction(vbc, VoltageBc, Vt, TempVCritical, ref limited);
+                if (limited)
+                    state.IsConvergent = false;
+            }
         }
 
         // TODO: I believe this method of checking convergence can be improved. These calculations seem to be common for multiple behaviors.

@@ -37,20 +37,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double TempSaturationCurrent { get; protected set; }
-        public double TempBetaForward { get; protected set; }
-        public double TempBetaReverse { get; protected set; }
-        public double TempBeLeakageCurrent { get; protected set; }
-        public double TempBcLeakageCurrent { get; protected set; }
-        public double TempBeCap { get; protected set; }
-        public double TempBePotential { get; protected set; }
-        public double TempBcCap { get; protected set; }
-        public double TempBcPotential { get; protected set; }
-        public double TempDepletionCap { get; protected set; }
-        public double TempFactor1 { get; protected set; }
-        public double TempFactor4 { get; protected set; }
-        public double TempFactor5 { get; protected set; }
-        public double TempVCritical { get; protected set; }
+        protected double TempSaturationCurrent { get; private set; }
+        protected double TempBetaForward { get; private set; }
+        protected double TempBetaReverse { get; private set; }
+        protected double TempBeLeakageCurrent { get; private set; }
+        protected double TempBcLeakageCurrent { get; private set; }
+        protected double TempBeCap { get; private set; }
+        protected double TempBePotential { get; private set; }
+        protected double TempBcCap { get; private set; }
+        protected double TempBcPotential { get; private set; }
+        protected double TempDepletionCap { get; private set; }
+        protected double TempFactor1 { get; private set; }
+        protected double TempFactor4 { get; private set; }
+        protected double TempFactor5 { get; private set; }
+        protected double TempVCritical { get; private set; }
+        protected double Vt { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -87,16 +88,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            var vt = BaseParameters.Temperature * Circuit.KOverQ;
+            Vt = BaseParameters.Temperature * Circuit.KOverQ;
             var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
             var arg = -egfet / (2 * Circuit.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
                                                                                                                 Circuit.ReferenceTemperature));
-            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
             var ratlog = Math.Log(BaseParameters.Temperature / ModelParameters.NominalTemperature);
             var ratio1 = BaseParameters.Temperature / ModelParameters.NominalTemperature - 1;
-            var factlog = ratio1 * ModelParameters.EnergyGap / vt + ModelParameters.TempExpIs * ratlog;
+            var factlog = ratio1 * ModelParameters.EnergyGap / Vt + ModelParameters.TempExpIs * ratlog;
             var factor = Math.Exp(factlog);
             TempSaturationCurrent = ModelParameters.SatCur * factor;
             var bfactor = Math.Exp(ratlog * ModelParameters.BetaExponent);
@@ -123,7 +124,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             TempFactor1 = TempBePotential * (1 - Math.Exp((1 - ModelParameters.JunctionExpBe) * ModelTemperature.Xfc)) / (1 - ModelParameters.JunctionExpBe);
             TempFactor4 = ModelParameters.DepletionCapCoefficient * TempBcPotential;
             TempFactor5 = TempBcPotential * (1 - Math.Exp((1 - ModelParameters.JunctionExpBc) * ModelTemperature.Xfc)) / (1 - ModelParameters.JunctionExpBc);
-            TempVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.SatCur));
+            TempVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * ModelParameters.SatCur));
         }
     }
 }
