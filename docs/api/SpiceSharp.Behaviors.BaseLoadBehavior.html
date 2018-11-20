@@ -83,24 +83,12 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
     <div class="level4"><span class="xref">BaseLoadBehavior</span></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.ModelLoadBehavior.html">ModelLoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.InductorBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.JFETBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLineBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.ResistorBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageSourceBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageSwitchBehaviors.LoadBehavior.html">LoadBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.VoltageSwitchBehaviors.ModelLoadBehavior.html">ModelLoadBehavior</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -114,10 +102,10 @@
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -181,7 +169,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Behaviors_BaseLoadBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class BaseLoadBehavior : Behavior</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class BaseLoadBehavior : Behavior, IPropertyExporter, IBiasingBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -321,6 +309,16 @@ equations can also be allocated here.</p>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
 </article>
           </div>
           

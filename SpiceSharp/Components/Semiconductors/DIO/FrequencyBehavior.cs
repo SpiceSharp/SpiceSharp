@@ -10,28 +10,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// AC behavior for <see cref="Diode"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private BaseParameters _bp;
-        private ModelBaseParameters _mbp;
-        private LoadBehavior _load;
-        private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
-
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _posPrimeNode;
-        protected MatrixElement<Complex> PosPosPrimePtr { get; private set; }
-        protected MatrixElement<Complex> NegPosPrimePtr { get; private set; }
-        protected MatrixElement<Complex> PosPrimePosPtr { get; private set; }
-        protected MatrixElement<Complex> PosPrimeNegPtr { get; private set; }
-        protected MatrixElement<Complex> PosPosPtr { get; private set; }
-        protected MatrixElement<Complex> NegNegPtr { get; private set; }
-        protected MatrixElement<Complex> PosPrimePosPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CPosPosPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CNegPosPrimePtr { get; private set; }
+        protected MatrixElement<Complex> CPosPrimePosPtr { get; private set; }
+        protected MatrixElement<Complex> CPosPrimeNegPtr { get; private set; }
+        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+        protected MatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the junction capacitance
@@ -43,14 +33,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            return state.Solution[PosPrimeNode] - state.Solution[NegNode];
         }
         [ParameterName("v"), ParameterInfo("Voltage across the diode")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
         public Complex GetCurrent(ComplexSimulationState state)
@@ -58,8 +48,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            var geq = Capacitance * state.Laplace + _load.Conduct;
-            var voltage = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var geq = Capacitance * state.Laplace + Conduct;
+            var voltage = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             return voltage * geq;
         }
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
@@ -68,9 +58,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            var geq = Capacitance * state.Laplace + _load.Conduct;
-            var current = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) * geq;
-            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
+            var geq = Capacitance * state.Laplace + Conduct;
+            var current = (state.Solution[PosPrimeNode] - state.Solution[NegNode]) * geq;
+            var voltage = state.Solution[PosNode] - state.Solution[NegNode];
             return voltage * -Complex.Conjugate(current);
         }
 
@@ -81,101 +71,49 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
-            _temp = provider.GetBehavior<TemperatureBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
-        }
-        
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-        }
-
-        /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
-            // Get node
-            _posPrimeNode = _load.PosPrimeNode;
-
             // Get matrix pointers
-            PosPosPrimePtr = solver.GetMatrixElement(_posNode, _posPrimeNode);
-            NegPosPrimePtr = solver.GetMatrixElement(_negNode, _posPrimeNode);
-            PosPrimePosPtr = solver.GetMatrixElement(_posPrimeNode, _posNode);
-            PosPrimeNegPtr = solver.GetMatrixElement(_posPrimeNode, _negNode);
-            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
-            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
-            PosPrimePosPrimePtr = solver.GetMatrixElement(_posPrimeNode, _posPrimeNode);
+            CPosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
+            CNegPosPrimePtr = solver.GetMatrixElement(NegNode, PosPrimeNode);
+            CPosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, PosNode);
+            CPosPrimeNegPtr = solver.GetMatrixElement(PosPrimeNode, NegNode);
+            CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
+            CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            CPosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
         }
-
-        /// <summary>
-        /// Unsetup the device
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosPosPrimePtr = null;
-            NegPosPrimePtr = null;
-            PosPrimePosPtr = null;
-            PosPrimeNegPtr = null;
-            PosPosPtr = null;
-            NegNegPtr = null;
-            PosPrimePosPrimePtr = null;
-        }
-
+        
         /// <summary>
         /// Calculate AC parameters
         /// </summary>
         /// <param name="simulation"></param>
-        public override void InitializeParameters(FrequencySimulation simulation)
+        public void InitializeParameters(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
             double capd;
-            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
 
             // charge storage elements
-            var czero = _temp.TempJunctionCap * _bp.Area;
-            if (vd < _temp.TempDepletionCap)
+            var czero = TempJunctionCap * BaseParameters.Area;
+            if (vd < TempDepletionCap)
             {
-                var arg = 1 - vd / _mbp.JunctionPotential;
-                var sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
-                capd = _mbp.TransitTime * _load.Conduct + czero * sarg;
+                var arg = 1 - vd / ModelParameters.JunctionPotential;
+                var sarg = Math.Exp(-ModelParameters.GradingCoefficient * Math.Log(arg));
+                capd = ModelParameters.TransitTime * Conduct + czero * sarg;
             }
             else
             {
-                var czof2 = czero / _modeltemp.F2;
-                capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
+                var czof2 = czero / ModelTemperature.F2;
+                capd = ModelParameters.TransitTime * Conduct + czof2 * (ModelTemperature.F3 + ModelParameters.GradingCoefficient * vd / ModelParameters.JunctionPotential);
             }
             Capacitance = capd;
         }
@@ -184,25 +122,25 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
 
-            var gspr = _modeltemp.Conductance * _bp.Area;
-            var geq = _load.Conduct;
+            var gspr = ModelTemperature.Conductance * BaseParameters.Area;
+            var geq = Conduct;
             var xceq = Capacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix
-            PosPosPtr.Value += gspr;
-            NegNegPtr.Value += new Complex(geq, xceq);
-            PosPrimePosPrimePtr.Value += new Complex(geq + gspr, xceq);
-            PosPosPrimePtr.Value -= gspr;
-            NegPosPrimePtr.Value -= new Complex(geq, xceq);
-            PosPrimePosPtr.Value -= gspr;
-            PosPrimeNegPtr.Value -= new Complex(geq, xceq);
+            CPosPosPtr.Value += gspr;
+            CNegNegPtr.Value += new Complex(geq, xceq);
+            CPosPrimePosPrimePtr.Value += new Complex(geq + gspr, xceq);
+            CPosPosPrimePtr.Value -= gspr;
+            CNegPosPrimePtr.Value -= new Complex(geq, xceq);
+            CPosPrimePosPtr.Value -= gspr;
+            CPosPrimeNegPtr.Value -= new Complex(geq, xceq);
         }
     }
 }

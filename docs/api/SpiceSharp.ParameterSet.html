@@ -91,8 +91,6 @@
       <div class="level4"><a class="xref" href="SpiceSharp.Components.CommonBehaviors.IndependentFrequencyParameters.html">IndependentFrequencyParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.BaseParameters.html">BaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.BaseParameters.html">BaseParameters</a></div>
-      <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.BaseParameters.html">BaseParameters</a></div>
-      <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentSwitchBehaviors.ModelBaseParameters.html">ModelBaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.BaseParameters.html">BaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.BaseParameters.html">BaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.ModelBaseParameters.html">ModelBaseParameters</a></div>
@@ -108,10 +106,10 @@
       <div class="level4"><a class="xref" href="SpiceSharp.Components.MutualInductanceBehaviors.BaseParameters.html">BaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">BaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.ResistorBehaviors.ModelBaseParameters.html">ModelBaseParameters</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.SwitchBehaviors.BaseParameters.html">BaseParameters</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.SwitchBehaviors.ModelBaseParameters.html">ModelBaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.BaseParameters.html">BaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.BaseParameters.html">BaseParameters</a></div>
-      <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageSwitchBehaviors.BaseParameters.html">BaseParameters</a></div>
-      <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageSwitchBehaviors.ModelBaseParameters.html">ModelBaseParameters</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Simulations.BaseConfiguration.html">BaseConfiguration</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Simulations.CollectionConfiguration.html">CollectionConfiguration</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Simulations.DCConfiguration.html">DCConfiguration</a></div>
@@ -237,6 +235,7 @@ the <a class="xref" href="SpiceSharp.Attributes.ParameterNameAttribute.html">Par
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Parameter&lt;T&gt; GetParameter&lt;T&gt;()
+
     where T : struct</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -279,6 +278,7 @@ the <a class="xref" href="SpiceSharp.Attributes.ParameterNameAttribute.html">Par
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Parameter&lt;T&gt; GetParameter&lt;T&gt;(string name, IEqualityComparer&lt;string&gt; comparer = null)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -495,6 +495,7 @@ can be anything but has to match the signature of the parameter.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool SetParameter&lt;T&gt;(T value)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -555,6 +556,7 @@ If multiple parameters have the same name, they will all be set.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool SetParameter&lt;T&gt;(string name, T value, IEqualityComparer&lt;string&gt; comparer = null)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>

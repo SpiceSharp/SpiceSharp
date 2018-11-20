@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components.VoltageSwitchBehaviors;
+using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -31,9 +31,9 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new VoltageControlled()));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new VoltageControlled()));
+            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new VoltageControlled()));
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new VoltageControlled()));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new VoltageControlled()));
+            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new VoltageControlled()));
 
             Connect(pos, neg, controlPos, controlNeg);
         }

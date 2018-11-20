@@ -22,10 +22,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors.
         /// </summary>
-        private BehaviorList<BaseTransientBehavior> _transientBehaviors;
-        private BehaviorList<BaseAcceptBehavior> _acceptBehaviors;
+        private BehaviorList<ITimeBehavior> _transientBehaviors;
+        private BehaviorList<IAcceptBehavior> _acceptBehaviors;
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
-        private bool _shouldReorder = true, _useIc = false;
+        private bool _shouldReorder = true, _useIc;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -34,6 +34,13 @@ namespace SpiceSharp.Simulations
         protected TimeSimulation(string name) : base(name)
         {
             Configurations.Add(new TimeConfiguration());
+
+            // Add the behavior in the order they are (usually) called
+            BehaviorTypes.AddRange(new []
+            {
+                typeof(ITimeBehavior),
+                typeof(IAcceptBehavior)
+            });
         }
 
         /// <summary>
@@ -46,6 +53,13 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final));
+
+            // Add the behavior in the order they are (usually) called
+            BehaviorTypes.AddRange(new []
+            {
+                typeof(ITimeBehavior),
+                typeof(IAcceptBehavior)
+            });
         }
 
         /// <summary>
@@ -59,6 +73,13 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final, maxStep));
+
+            // Add the behavior in the order they are (usually) called
+            BehaviorTypes.AddRange(new []
+            {
+                typeof(ITimeBehavior),
+                typeof(IAcceptBehavior)
+            });
         }
 
         /// <summary>
@@ -75,16 +96,14 @@ namespace SpiceSharp.Simulations
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
-
-            // Get base behaviors
             base.Setup(circuit);
 
             // Get behaviors and configurations
             var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             _useIc = config.UseIc;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            _transientBehaviors = SetupBehaviors<BaseTransientBehavior>(circuit.Entities);
-            _acceptBehaviors = SetupBehaviors<BaseAcceptBehavior>(circuit.Entities);
+            _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
+            _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 
             // Allow all transient behaviors to allocate equation elements and create states
             for (var i = 0; i < _transientBehaviors.Count; i++)
@@ -271,14 +290,6 @@ namespace SpiceSharp.Simulations
                     switch (state.Init)
                     {
                         case InitializationModes.Float:
-                            // TimeIterate is only used during simulation, so the next part is never reached
-                            /* if (state.UseDc && state.HadNodeSet)
-                            {
-                                if (pass)
-                                    state.IsConvergent = false;
-                                pass = false;
-                            } */
-
                             if (state.IsConvergent)
                             {
                                 Statistics.Iterations += iterno;

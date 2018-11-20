@@ -1,5 +1,7 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.MosfetBehaviors.Common;
+using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
@@ -7,12 +9,33 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// Noise behavior for a <see cref="Mosfet1"/>
     /// </summary>
-    public class NoiseBehavior : Common.NoiseBehavior
+    public class NoiseBehavior : FrequencyBehavior, INoiseBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Gets the noise parameters.
         /// </summary>
-        private ModelBaseParameters _mbp;
+        /// <value>
+        /// The noise parameters.
+        /// </value>
+        protected ModelNoiseParameters NoiseParameters { get; private set; }
+
+        /// <summary>
+        /// Noise generators by their index
+        /// </summary>
+        protected const int RdNoise = 0;
+        protected const int RsNoise = 1;
+        protected const int IdNoise = 2;
+        protected const int FlickerNoise = 3;
+
+        /// <summary>
+        /// Noise generators
+        /// </summary>
+        public ComponentNoise MosfetNoise { get; } = new ComponentNoise(
+            new NoiseThermal("rd", 0, 4),
+            new NoiseThermal("rs", 2, 5),
+            new NoiseThermal("id", 4, 5),
+            new NoiseGain("1overf", 4, 5)
+        );
 
         /// <summary>
         /// Constructor
@@ -27,43 +50,60 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
-            base.Setup(simulation, provider);
 
             // Get parameters
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            NoiseParameters = provider.GetParameterSet<ModelNoiseParameters>("model");
         }
 
         /// <summary>
-        /// Destroy the behavior.
+        /// Connect noise
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Unsetup(Simulation simulation)
+        public void ConnectNoise()
         {
-            _mbp = null;
-
-            base.Unsetup(simulation);
+            // Connect noise sources
+            MosfetNoise.Setup(
+                DrainNode,
+                GateNode,
+                SourceNode, 
+                BulkNode, 
+                DrainNodePrime,
+                SourceNodePrime);
         }
 
         /// <summary>
-        /// Gets the oxide capacitance factor squared.
+        /// Calculate the noise contributions.
         /// </summary>
-        /// <value>
-        /// The oxide capacitance factor squared.
-        /// </value>
-        protected override double OxideCapSquared
+        /// <param name="simulation">The noise simulation.</param>
+        /// <exception cref="ArgumentNullException">simulation</exception>
+        public void Noise(Noise simulation)
         {
-            get
-            {
-                double coxSquared;
-                if (_mbp.OxideCapFactor > 0.0)
-                    coxSquared = _mbp.OxideCapFactor;
-                else
-                    coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
-                coxSquared *= coxSquared;
-                return coxSquared;
-            }
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
+            var noise = simulation.NoiseState;
+
+            double coxSquared;
+            if (ModelParameters.OxideCapFactor > 0.0)
+                coxSquared = ModelParameters.OxideCapFactor;
+            else
+                coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
+            coxSquared *= coxSquared;
+
+            // Set noise parameters
+            MosfetNoise.Generators[RdNoise].SetCoefficients(DrainConductance);
+            MosfetNoise.Generators[RsNoise].SetCoefficients(SourceConductance);
+            MosfetNoise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(Transconductance));
+            MosfetNoise.Generators[FlickerNoise].SetCoefficients(
+                NoiseParameters.FlickerNoiseCoefficient *
+                Math.Exp(NoiseParameters.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(DrainCurrent), 1e-38))) /
+                (BaseParameters.Width * (BaseParameters.Length - 2 * ModelParameters.LateralDiffusion) *
+                 coxSquared) / noise.Frequency);
+
+            // Evaluate noise sources
+            MosfetNoise.Evaluate(simulation);
         }
     }
 }

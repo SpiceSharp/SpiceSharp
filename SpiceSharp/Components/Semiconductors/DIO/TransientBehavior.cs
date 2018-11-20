@@ -10,17 +10,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : BiasingBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Necessary behaviors and parameters
-        /// </summary>
-        private LoadBehavior _load;
-        private TemperatureBehavior _temp;
-        private ModelTemperatureBehavior _modeltemp;
-        private BaseParameters _bp;
-        private ModelBaseParameters _mbp;
-
         /// <summary>
         /// Diode capacitance
         /// </summary>
@@ -35,105 +26,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public StateDerivative CapCharge { get; private set; }
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        private int _posNode, _negNode, _posPrimeNode;
-        protected MatrixElement<double> PosPosPrimePtr { get; private set; }
-        protected MatrixElement<double> NegPosPrimePtr { get; private set; }
-        protected MatrixElement<double> PosPrimePosPtr { get; private set; }
-        protected MatrixElement<double> PosPrimeNegPtr { get; private set; }
-        protected MatrixElement<double> PosPosPtr { get; private set; }
-        protected MatrixElement<double> NegNegPtr { get; private set; }
-        protected MatrixElement<double> PosPrimePosPrimePtr { get; private set; }
-        protected VectorElement<double> PosPrimePtr { get; private set; }
-        protected VectorElement<double> NegPtr { get; private set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
-            _temp = provider.GetBehavior<TemperatureBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
-        }
-
-        /// <summary>
-        /// Unsetup the device
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosPosPrimePtr = null;
-            NegPosPrimePtr = null;
-            PosPrimePosPtr = null;
-            PosPrimeNegPtr = null;
-            PosPosPtr = null;
-            NegNegPtr = null;
-            PosPrimePosPrimePtr = null;
-        }
-
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
-        }
-
-        /// <summary>
-        /// Gets equation pointers
-        /// </summary>
-        /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<double> solver)
-        {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
-
-            // Get extra nodes
-            _posPrimeNode = _load.PosPrimeNode;
-
-            // Get matrix elements
-            PosPosPrimePtr = solver.GetMatrixElement(_posNode, _posPrimeNode);
-            NegPosPrimePtr = solver.GetMatrixElement(_negNode, _posPrimeNode);
-            PosPrimePosPtr = solver.GetMatrixElement(_posPrimeNode, _posNode);
-            PosPrimeNegPtr = solver.GetMatrixElement(_posPrimeNode, _negNode);
-            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
-            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
-            PosPrimePosPrimePtr = solver.GetMatrixElement(_posPrimeNode, _posPrimeNode);
-
-            // Get RHS elements
-            PosPrimePtr = solver.GetRhsElement(_posPrimeNode);
-            NegPtr = solver.GetRhsElement(_negNode);
-        }
-
+        
         /// <summary>
         /// Create states
         /// </summary>
         /// <param name="method"></param>
-        public override void CreateStates(IntegrationMethod method)
+        public void CreateStates(IntegrationMethod method)
         {
 			if (method == null)
 				throw new ArgumentNullException(nameof(method));
@@ -145,46 +47,56 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Calculate the state values
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        public override void GetDcState(TimeSimulation simulation)
+        public void GetDcState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
             double capd;
-            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
 
             // charge storage elements
-            var czero = _temp.TempJunctionCap * _bp.Area;
-            if (vd < _temp.TempDepletionCap)
+            var czero = TempJunctionCap * BaseParameters.Area;
+            if (vd < TempDepletionCap)
             {
-                var arg = 1 - vd / _mbp.JunctionPotential;
-                var sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
-                CapCharge.Current = _mbp.TransitTime * _load.Current + _mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
-                        _mbp.GradingCoefficient);
-                capd = _mbp.TransitTime * _load.Conduct + czero * sarg;
+                var arg = 1 - vd / ModelParameters.JunctionPotential;
+                var sarg = Math.Exp(-ModelParameters.GradingCoefficient * Math.Log(arg));
+                CapCharge.Current = ModelParameters.TransitTime * base.Current + ModelParameters.JunctionPotential * czero * (1 - arg * sarg) / (1 -
+                        ModelParameters.GradingCoefficient);
+                capd = ModelParameters.TransitTime * Conduct + czero * sarg;
             }
             else
             {
-                var czof2 = czero / _modeltemp.F2;
-                CapCharge.Current = _mbp.TransitTime * _load.Current + czero * _temp.TempFactor1 + czof2 * (_modeltemp.F3 * (vd -
-                    _temp.TempDepletionCap) + _mbp.GradingCoefficient / (_mbp.JunctionPotential + _mbp.JunctionPotential) * (vd * vd - _temp.TempDepletionCap * _temp.TempDepletionCap));
-                capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
+                var czof2 = czero / ModelTemperature.F2;
+                CapCharge.Current = ModelParameters.TransitTime * base.Current + czero * TempFactor1 + czof2 * (ModelTemperature.F3 * (vd -
+                    TempDepletionCap) + ModelParameters.GradingCoefficient / (ModelParameters.JunctionPotential + ModelParameters.JunctionPotential) * (vd * vd - TempDepletionCap * TempDepletionCap));
+                capd = ModelParameters.TransitTime * Conduct + czof2 * (ModelTemperature.F3 + ModelParameters.GradingCoefficient * vd / ModelParameters.JunctionPotential);
             }
             Capacitance = capd;
+        }
+
+        /// <summary>
+        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
+        /// equations can also be allocated here.
+        /// </summary>
+        /// <param name="solver">The solver.</param>
+        public void GetEquationPointers(Solver<double> solver)
+        {
+            // No extra pointers needed
         }
 
         /// <summary>
         /// Transient behavior
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void Transient(TimeSimulation simulation)
+        public void Transient(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
 
             // This is the same calculation
             GetDcState(simulation);
@@ -195,7 +107,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var ceq = CapCharge.RhsCurrent(geq, vd);
 
             // Store the current
-            Current = _load.Current + CapCharge.Derivative;
+            Current = base.Current + CapCharge.Derivative;
 
             // Load Rhs vector
             NegPtr.Value += ceq;

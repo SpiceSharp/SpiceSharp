@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
@@ -129,6 +130,18 @@ namespace SpiceSharp.Simulations
         private bool _cloneParameters;
 
         /// <summary>
+        /// Gets the behavior types in the order that they are called.
+        /// </summary>
+        /// <value>
+        /// The behavior types.
+        /// </value>
+        /// <remarks>
+        /// The order is important for establishing dependencies. A behavior that is called first should
+        /// not depend on any other behaviors!
+        /// </remarks>
+        protected List<Type> BehaviorTypes { get; } = new List<Type>(6);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
@@ -219,11 +232,10 @@ namespace SpiceSharp.Simulations
                 _cloneParameters = false;
             }
 
-            // Setup all objects
+            // Setup all entity parameters and behaviors
             circuit.Entities.BuildOrderedComponentList();
-
-            // Get all parameters
             SetupParameters(circuit.Entities);
+            SetupBehaviors(circuit.Entities);
         }
 
         /// <summary>
@@ -292,27 +304,46 @@ namespace SpiceSharp.Simulations
         #endregion
 
         /// <summary>
-        /// Collect and set up the behaviors of all circuit entities.
+        /// Set up all behaviors previously created.
         /// </summary>
-        /// <typeparam name="T">The base behavior type.</typeparam>
-        /// <param name="entities">The entities for which behaviors need to be collected.</param>
-        /// <returns>
-        /// A list of behaviors.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">entities</exception>
-        protected BehaviorList<T> SetupBehaviors<T>(IEnumerable<Entity> entities) where T : Behavior
+        /// <param name="entities">The circuit entities.</param>
+        private void SetupBehaviors(IEnumerable<Entity> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            var behaviors = new HashSet<IBehavior>();
 
-            // Register all behaviors
             foreach (var entity in entities)
             {
-                var behavior = entity.CreateBehavior<T>(this);
-                if (behavior != null)
-                    EntityBehaviors.Add(entity.Name, behavior);
+                behaviors.Clear();
+
+                // Create the behaviors in the reverse order to allow inheritance
+                for (var i = BehaviorTypes.Count - 1; i >= 0; i--)
+                {
+                    IBehavior behavior = null;
+                    var type = BehaviorTypes[i];
+
+                    // Try to reuse a behavior first
+                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var ebd))
+                    {
+                        // If the entity behaviors already contains the type, reuse that object
+                        ebd.TryGetValue(type, out behavior);
+                    }
+
+                    // If it doesn't exist, request a new behavior
+                    if (behavior == null)
+                        behavior = entity.CreateBehavior(type, this);
+
+                    // Add the behavior to the pool
+                    if (behavior != null)
+                    {
+                        EntityBehaviors.Add(type, entity.Name, behavior);
+                        behaviors.Add(behavior);
+                    }
+                }
+                
+                // Setup the distinct behaviors
+                foreach (var behavior in behaviors)
+                    entity.SetupBehavior(behavior, this);
             }
-            return EntityBehaviors.GetBehaviorList<T>();
         }
 
         /// <summary>

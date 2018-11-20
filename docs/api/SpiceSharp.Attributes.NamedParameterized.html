@@ -83,6 +83,7 @@
     <div class="level2"><span class="xref">NamedParameterized</span></div>
       <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
       <div class="level3"><a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -162,6 +163,7 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Func&lt;T&gt; CreateGetter&lt;T&gt;()
+
     where T : struct</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -204,6 +206,7 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Func&lt;T&gt; CreateGetter&lt;T&gt;(string name, IEqualityComparer&lt;string&gt; comparer = null)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -270,6 +273,7 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Dictionary&lt;string, Func&lt;T&gt;&gt; CreateGetters&lt;T&gt;(IEqualityComparer&lt;string&gt; comparer = null)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -330,6 +334,7 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Action&lt;T&gt; CreateSetter&lt;T&gt;()
+
     where T : struct</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -372,6 +377,7 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Action&lt;T&gt; CreateSetter&lt;T&gt;(string name, IEqualityComparer&lt;string&gt; comparer = null)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -442,6 +448,7 @@ are ignored.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Dictionary&lt;string, Action&lt;T&gt;&gt; CreateSetters&lt;T&gt;(IEqualityComparer&lt;string&gt; comparer = null)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>

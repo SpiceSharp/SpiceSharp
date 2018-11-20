@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
-        private LoadBehavior _load;
+        private BiasingBehavior _base;
 
         /// <summary>
         /// Nodes
@@ -40,6 +40,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
@@ -47,7 +48,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             _bp = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
+            _base = provider.GetBehavior<BiasingBehavior>();
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get current equation
-            _branchEq = _load.BranchEq;
+            _branchEq = _base.BranchEq;
 
             // Get matrix pointers
             PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
@@ -82,19 +83,6 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchNegPtr = solver.GetMatrixElement(_branchEq, _negNode);
             BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
             BranchBranchPtr = solver.GetMatrixElement(_branchEq, _branchEq);
-        }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchPosPtr = null;
-            BranchNegPtr = null;
-            BranchBranchPtr = null;
         }
 
         /// <summary>

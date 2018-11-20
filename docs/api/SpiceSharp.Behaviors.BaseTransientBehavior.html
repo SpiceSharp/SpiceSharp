@@ -83,15 +83,12 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
     <div class="level4"><span class="xref">BaseTransientBehavior</span></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.InductorBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.JFETBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLineBehaviors.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Common.TransientBehavior.html">TransientBehavior</a></div>
-      <div class="level5"><a class="xref" href="SpiceSharp.Components.MutualInductanceBehaviors.TransientBehavior.html">TransientBehavior</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -105,10 +102,10 @@
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -172,7 +169,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Behaviors_BaseTransientBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class BaseTransientBehavior : Behavior</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class BaseTransientBehavior : Behavior, IPropertyExporter, ITimeBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -282,22 +279,6 @@
   <div class="markdown level1 remarks"><p>In this method, the initial value is calculated based on the operating point solution,
 and the result is stored in each respective <a class="xref" href="SpiceSharp.IntegrationMethods.StateDerivative.html">StateDerivative</a> or <a class="xref" href="SpiceSharp.IntegrationMethods.StateHistory.html">StateHistory</a>.</p>
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Behaviors_BaseTransientBehavior_GetEquationPointers_" data-uid="SpiceSharp.Behaviors.BaseTransientBehavior.GetEquationPointers*"></a>
   <h4 id="SpiceSharp_Behaviors_BaseTransientBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Double__" data-uid="SpiceSharp.Behaviors.BaseTransientBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Double})">GetEquationPointers(Solver&lt;Double&gt;)</h4>
   <div class="markdown level1 summary"><p>Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
@@ -380,6 +361,16 @@ public virtual double Truncate()</code></pre>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>

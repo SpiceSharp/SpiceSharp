@@ -143,6 +143,35 @@
   </table>
   <h3 id="properties">Properties
   </h3>
+  <a id="SpiceSharp_Simulations_Simulation_BehaviorTypes_" data-uid="SpiceSharp.Simulations.Simulation.BehaviorTypes*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_BehaviorTypes" data-uid="SpiceSharp.Simulations.Simulation.BehaviorTypes">BehaviorTypes</h4>
+  <div class="markdown level1 summary"><p>Gets the behavior types in the order that they are called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected List&lt;Type&gt; BehaviorTypes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Type</span>&gt;</td>
+        <td><p>The behavior types.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SpiceSharp_Simulations_Simulation_BehaviorTypes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The order is important for establishing dependencies. A behavior that is called first should
+not depend on any other behaviors!</p>
+</div>
   <a id="SpiceSharp_Simulations_Simulation_Configurations_" data-uid="SpiceSharp.Simulations.Simulation.Configurations*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_Configurations" data-uid="SpiceSharp.Simulations.Simulation.Configurations">Configurations</h4>
   <div class="markdown level1 summary"><p>Gets a set of <a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a> that hold the configurations for the simulation.</p>
@@ -633,82 +662,6 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
       <tr>
         <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
         <td><p>{0}: No circuit objects for simulation&quot;.FormatString(Name)</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_SetupBehaviors_" data-uid="SpiceSharp.Simulations.Simulation.SetupBehaviors*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_SetupBehaviors__1_System_Collections_Generic_IEnumerable_SpiceSharp_Circuits_Entity__" data-uid="SpiceSharp.Simulations.Simulation.SetupBehaviors``1(System.Collections.Generic.IEnumerable{SpiceSharp.Circuits.Entity})">SetupBehaviors&lt;T&gt;(IEnumerable&lt;Entity&gt;)</h4>
-  <div class="markdown level1 summary"><p>Collect and set up the behaviors of all circuit entities.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected BehaviorList&lt;T&gt; SetupBehaviors&lt;T&gt;(IEnumerable&lt;Entity&gt; entities)
-    where T : Behavior</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>&gt;</td>
-        <td><span class="parametername">entities</span></td>
-        <td><p>The entities for which behaviors need to be collected.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.BehaviorList-1.html">BehaviorList</a>&lt;T&gt;</td>
-        <td><p>A list of behaviors.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td><p>The base behavior type.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>entities</p>
 </td>
       </tr>
     </tbody>

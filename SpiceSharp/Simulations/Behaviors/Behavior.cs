@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Template for a behavior.
     /// </summary>
-    public abstract class Behavior : NamedParameterized
+    public abstract class Behavior : NamedParameterized, IBehavior, IPropertyExporter
     {
         /// <summary>
         /// Gets the identifier of the behavior.
@@ -40,7 +40,6 @@ namespace SpiceSharp.Behaviors
         /// <param name="provider">The data provider.</param>
         public virtual void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            // Do nothing
         }
 
         /// <summary>
@@ -49,38 +48,24 @@ namespace SpiceSharp.Behaviors
         /// <param name="simulation">The simulation.</param>
         public virtual void Unsetup(Simulation simulation)
         {
-            // Do nothing
         }
 
         /// <summary>
-        /// Creates a getter for extracting data from the specified simulation.
+        /// Creates a getter for a property.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
-        /// <param name="propertyName">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
-        /// </returns>
-        public virtual Func<double> CreateGetter(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
-        {
-            return CreateGetter<double>(simulation, propertyName, comparer);
-        }
-
-        /// <summary>
-        /// Creates a getter for extracting data from the specified simulation.
-        /// </summary>
-        /// <typeparam name="T">The base value type</typeparam>
+        /// <typeparam name="T">The expected type.</typeparam>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="comparer">The property name comparer.</param>
+        /// <param name="function">The function that will return the value of the property.</param>
         /// <returns>
-        /// A getter that returns the value of the specified parameter, or <c>null</c> if no parameter was found.
+        /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
         /// </returns>
-        protected Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null) where T : struct 
+        public bool CreateGetter<T>(Simulation simulation, string propertyName, IEqualityComparer<string> comparer, out Func<T> function) where T : struct
         {
             // Find methods to create the export
             Func<T> result = null;
-            foreach (var member in Named(name, comparer))
+            foreach (var member in Named(propertyName, comparer))
             {
                 // Use methods
                 if (member is MethodInfo mi)
@@ -92,11 +77,30 @@ namespace SpiceSharp.Behaviors
                 
                 // Return
                 if (result != null)
-                    return result;
+                {
+                    function = result;
+                    return true;
+                }
             }
 
             // Not found
-            return null;
+            function = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Creates a getter for a property.
+        /// </summary>
+        /// <typeparam name="T">The expected type.</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="function">The function that will return the value of the property.</param>
+        /// <returns>
+        /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
+        /// </returns>
+        public bool CreateGetter<T>(Simulation simulation, string propertyName, out Func<T> function) where T : struct
+        {
+            return CreateGetter(simulation, propertyName, EqualityComparer<string>.Default, out function);
         }
 
         /// <summary>

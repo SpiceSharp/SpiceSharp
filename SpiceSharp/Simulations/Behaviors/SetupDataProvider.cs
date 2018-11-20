@@ -88,7 +88,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The requested object.
         /// </returns>
-        public T GetBehavior<T>(string name = "entity") where T : Behavior => _entityBehaviors[name].Get<T>();
+        public T GetBehavior<T>(string name = "entity") where T : IBehavior => _entityBehaviors[name].Get<T>();
 
         /// <summary>
         /// Tries getting the behavior for a specified identifier.
@@ -99,7 +99,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if the object was found; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetBehavior<T>(string name, out T value) where T : Behavior
+        public bool TryGetBehavior<T>(string name, out T value) where T : IBehavior
         {
             if (_entityBehaviors.TryGetValue(name, out var r))
                 return r.TryGet(out value);

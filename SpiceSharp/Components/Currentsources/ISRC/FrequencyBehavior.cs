@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
@@ -11,19 +10,18 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
     /// <summary>
     /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        private CommonBehaviors.IndependentFrequencyParameters _ap;
+        protected CommonBehaviors.IndependentFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode;
-        protected VectorElement<Complex> PosPtr { get; private set; }
-        protected VectorElement<Complex> NegPtr { get; private set; }
+        protected VectorElement<Complex> CPosPtr { get; private set; }
+        protected VectorElement<Complex> CNegPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -33,7 +31,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
@@ -41,9 +39,11 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var v = state.Solution[_posNode] - state.Solution[_negNode];
-            return -v * Complex.Conjugate(_ap.Phasor);
+            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            return -v * Complex.Conjugate(FrequencyParameters.Phasor);
         }
+        [ParameterName("c"), ParameterInfo("Complex current")]
+        public Complex ComplexCurrent => FrequencyParameters.Phasor;
 
         /// <summary>
         /// Constructor
@@ -52,76 +52,53 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Creates a getter for a complex parameter.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="propertyName">The name of the property.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        /// A function get return the value of the specified parameter, or <c>null</c> if no parameter was found.
-        /// </returns>
-        public override Func<Complex> CreateAcExport(Simulation simulation, string propertyName, IEqualityComparer<string> comparer = null)
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-            if (comparer.Equals("c", propertyName))
-                return () => _ap.Phasor;
-            return base.CreateAcExport(simulation, propertyName, comparer);
-        }
-
-        /// <summary>
         /// Setup behavior
         /// </summary>
         /// <param name="simulation">Simulation</param>
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
+            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _ap = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
+            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
         }
-        
+
         /// <summary>
-        /// Connect the behavior
+        /// Initializes the parameters.
         /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
+        /// <param name="simulation">The frequency simulation.</param>
+        public void InitializeParameters(FrequencySimulation simulation)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
         }
 
         /// <summary>
         /// Get equation pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
-
-            PosPtr = solver.GetRhsElement(_posNode);
-            NegPtr = solver.GetRhsElement(_negNode);
+            CPosPtr = solver.GetRhsElement(PosNode);
+            CNegPtr = solver.GetRhsElement(NegNode);
         }
 
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            PosPtr.Value -= _ap.Phasor;
-            NegPtr.Value += _ap.Phasor;
+            CPosPtr.Value -= FrequencyParameters.Phasor;
+            CNegPtr.Value += FrequencyParameters.Phasor;
         }
     }
 }

@@ -80,12 +80,12 @@
 <ul>
 <li><p><strong><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></strong></p>
 <ul>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1">CreateGetter<t>()</t></a></em> creates a delegate that gets the member value of type <em>T</em> tagged by the specified name. Example:</p>
+<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter_">CreateGetter<t>()</t></a></em> creates a delegate that gets the member value of type <em>T</em> tagged by the specified name. Example:</p>
 <pre><code class="lang-csharp" name="CreateGetter example">// Create a getter for the nominal temperature of the mosfet1 model
 var tnomGetter = parameters.CreateGetter&lt;double&gt;(&quot;tnom&quot;);
 double temperature = tnomGetter(); // In degrees Celsius
 </code></pre></li>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1">CreateSetter<t>()</t></a></em> creates a delegate that sets the member value of type <em>T</em> tagged by the specified name. Example:</p>
+<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter_">CreateSetter<t>()</t></a></em> creates a delegate that sets the member value of type <em>T</em> tagged by the specified name. Example:</p>
 <pre><code class="lang-csharp" name="CreateSetter example">// Create a setter for the gate-drain overlap capacitance of the mosfet1 model
 var cgdoSetter = parameters.CreateSetter&lt;double&gt;(&quot;cgdo&quot;);
 cgdoSetter(1e-15); // 1pF
@@ -108,8 +108,7 @@ parameters.SetParameter(&quot;pmos&quot;, true);
 </li>
 <li><p><strong><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html">Behavior</a></strong> (also implements <strong><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></strong>)</p>
 <ul>
-<li><em><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">CreateGetter(Simulation,string)</a></em> creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.</li>
-<li><em><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">CreateSetter<t>(Simulation,string)</t></a></em> creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.</li>
+<li><em><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_">CreateGetter(Simulation,string)</a></em> creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.</li>
 </ul>
 </li>
 </ul>

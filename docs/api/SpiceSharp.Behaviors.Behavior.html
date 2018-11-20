@@ -90,6 +90,11 @@
       <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseTemperatureBehavior.html">BaseTemperatureBehavior</a></div>
       <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html">BaseTransientBehavior</a></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -154,7 +159,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Behaviors_Behavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class Behavior : NamedParameterized</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Behavior : NamedParameterized, IBehavior, IPropertyExporter</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -220,68 +225,14 @@
   <h3 id="methods">Methods
   </h3>
   <a id="SpiceSharp_Behaviors_Behavior_CreateGetter_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})">CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</h4>
-  <div class="markdown level1 summary"><p>Creates a getter for extracting data from the specified simulation.</p>
+  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String},System.Func{``0}@)">CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, out Func&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a getter for a property.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual Func&lt;double&gt; CreateGetter(Simulation simulation, string propertyName, IEqualityComparer&lt;string&gt; comparer = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">propertyName</span></td>
-        <td><p>The name of the parameter.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td><span class="parametername">comparer</span></td>
-        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td><p>A getter that returns the value of the specified parameter, or <code>null</code> if no parameter was found.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Behaviors_Behavior_CreateGetter_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})">CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</h4>
-  <div class="markdown level1 summary"><p>Creates a getter for extracting data from the specified simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Func&lt;T&gt; CreateGetter&lt;T&gt;(Simulation simulation, string name, IEqualityComparer&lt;string&gt; comparer = null)
+    <pre><code class="lang-csharp hljs">public bool CreateGetter&lt;T&gt;(Simulation simulation, string propertyName, IEqualityComparer&lt;string&gt; comparer, out Func&lt;T&gt; function)
+
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -302,14 +253,20 @@
       </tr>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name of the parameter.</p>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>Name of the property.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td><span class="parametername">comparer</span></td>
-        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing parameter names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
+        <td><p>The property name comparer.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;T&gt;</td>
+        <td><span class="parametername">function</span></td>
+        <td><p>The function that will return the value of the property.</p>
 </td>
       </tr>
     </tbody>
@@ -324,8 +281,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Func</span>&lt;T&gt;</td>
-        <td><p>A getter that returns the value of the specified parameter, or <code>null</code> if no parameter was found.</p>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the getter was created successfully; otherwise <code>false</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -341,7 +298,80 @@
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td><p>The base value type</p>
+        <td><p>The expected type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_Behavior_CreateGetter_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter*"></a>
+  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Func{``0}@)">CreateGetter&lt;T&gt;(Simulation, String, out Func&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a getter for a property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CreateGetter&lt;T&gt;(Simulation simulation, string propertyName, out Func&lt;T&gt; function)
+
+    where T : struct</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>Name of the property.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;T&gt;</td>
+        <td><span class="parametername">function</span></td>
+        <td><p>The function that will return the value of the property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the getter was created successfully; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The expected type.</p>
 </td>
       </tr>
     </tbody>
@@ -406,6 +436,13 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
 </article>
           </div>
           

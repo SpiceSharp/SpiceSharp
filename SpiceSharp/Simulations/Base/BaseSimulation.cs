@@ -84,9 +84,9 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
-        private BehaviorList<BaseLoadBehavior> _loadBehaviors;
-        private BehaviorList<BaseTemperatureBehavior> _temperatureBehaviors;
-        private BehaviorList<BaseInitialConditionBehavior> _initialConditionBehaviors;
+        private BehaviorList<IBiasingBehavior> _loadBehaviors;
+        private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
+        private BehaviorList<IInitialConditionBehavior> _initialConditionBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
@@ -103,6 +103,14 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new BaseConfiguration());
+
+            // Add the necessary behaviors in the order that they are (usually) called
+            BehaviorTypes.AddRange(new []
+            {
+                typeof(ITemperatureBehavior),
+                typeof(IBiasingBehavior),
+                typeof(IInitialConditionBehavior)
+            });
         }
 
         /// <summary>
@@ -116,16 +124,14 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(circuit));
             base.Setup(circuit);
 
-            // Copy configuration
+            // Get behaviors and configuration data
             var config = Configurations.Get<BaseConfiguration>();
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
-
-            // Setup behaviors, configurations and states
-            _temperatureBehaviors = SetupBehaviors<BaseTemperatureBehavior>(circuit.Entities);
-            _loadBehaviors = SetupBehaviors<BaseLoadBehavior>(circuit.Entities);
-            _initialConditionBehaviors = SetupBehaviors<BaseInitialConditionBehavior>(circuit.Entities);
+            _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
+            _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
+            _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
 
             // Create the state for this simulation
             RealState = new BaseSimulationState();

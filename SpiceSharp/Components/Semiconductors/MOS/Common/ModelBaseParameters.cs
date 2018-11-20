@@ -9,6 +9,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     public abstract class ModelBaseParameters : ParameterSet
     {
         /// <summary>
+        /// Gets the default width for transistors using this model.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
+        [ParameterName("w"), ParameterInfo("The default width for transistors using this model")]
+        public GivenParameter<double> Width { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Gets the default length for transistors using this model.
+        /// </summary>
+        /// <value>
+        /// The length.
+        /// </value>
+        [ParameterName("l"), ParameterInfo("The default length for transistors using this model")]
+        public GivenParameter<double> Length { get; } = new GivenParameter<double>();
+
+        /// <summary>
         /// Gets or sets the nominal temperature in degrees celsius.
         /// </summary>
         /// <value>

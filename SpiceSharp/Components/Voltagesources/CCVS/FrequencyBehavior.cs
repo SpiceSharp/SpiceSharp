@@ -10,49 +10,61 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     /// <summary>
     /// AC behavior for <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private BaseParameters _bp;
-        private LoadBehavior _load;
-        private VoltageSourceBehaviors.LoadBehavior _vsrcload;
-
         /// <summary>
         /// Nodes
         /// </summary>
-        private int _posNode, _negNode, _branchEq, _contBranchEq;
-        protected MatrixElement<Complex> PosBranchPtr { get; private set; }
-        protected MatrixElement<Complex> NegBranchPtr { get; private set; }
-        protected MatrixElement<Complex> BranchPosPtr { get; private set; }
-        protected MatrixElement<Complex> BranchNegPtr { get; private set; }
-        protected MatrixElement<Complex> BranchControlBranchPtr { get; private set; }
+        protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
+        protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
+        protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
+        protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
+        protected MatrixElement<Complex> CBranchControlBranchPtr { get; private set; }
 
+        /// <summary>
+        /// Gets the voltage applied by the source.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[_posNode] - state.Solution[_negNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Gets the current through the source.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[_branchEq];
+            return state.Solution[BranchEq];
         }
+
+        /// <summary>
+        /// Gets the power dissipated by the source.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var v = state.Solution[_posNode] - state.Solution[_negNode];
-            var i = state.Solution[_branchEq];
+            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            var i = state.Solution[BranchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -63,86 +75,45 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Initializes the parameters.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The frequency simulation.</param>
+        public void InitializeParameters(FrequencySimulation simulation)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-
-            // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>();
-            _vsrcload = provider.GetBehavior<VoltageSourceBehaviors.LoadBehavior>("control");
-        }
-
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            _posNode = pins[0];
-            _negNode = pins[1];
         }
 
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
-            // Get extra nodes
-            _contBranchEq = _vsrcload.BranchEq;
-            _branchEq = _load.BranchEq;
-
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
-            NegBranchPtr = solver.GetMatrixElement(_negNode, _branchEq);
-            BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
-            BranchNegPtr = solver.GetMatrixElement(_branchEq, _negNode);
-            BranchControlBranchPtr = solver.GetMatrixElement(_branchEq, _contBranchEq);
+            CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
+            CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
+            CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
+            CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
+            CBranchControlBranchPtr = solver.GetMatrixElement(BranchEq, ContBranchEq);
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchPosPtr = null;
-            BranchNegPtr = null;
-            BranchControlBranchPtr = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            PosBranchPtr.Value += 1.0;
-            BranchPosPtr.Value += 1.0;
-            NegBranchPtr.Value -= 1.0;
-            BranchNegPtr.Value -= 1.0;
-            BranchControlBranchPtr.Value -= _bp.Coefficient.Value;
+            CPosBranchPtr.Value += 1.0;
+            CBranchPosPtr.Value += 1.0;
+            CNegBranchPtr.Value -= 1.0;
+            CBranchNegPtr.Value -= 1.0;
+            CBranchControlBranchPtr.Value -= BaseParameters.Coefficient.Value;
         }
     }
 }

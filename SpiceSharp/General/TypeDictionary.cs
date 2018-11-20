@@ -11,7 +11,7 @@ namespace SpiceSharp
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="IDictionary{Type, T}" />
-    public abstract class TypeDictionary<T> : IDictionary<Type, T> where T : class
+    public abstract class TypeDictionary<T> : IDictionary<Type, T>
     {
         /// <summary>
         /// Gets the dictionary to look up using types.
@@ -22,25 +22,6 @@ namespace SpiceSharp
         protected Dictionary<Type, T> Dictionary { get; }
 
         /// <summary>
-        /// Inheritance can cause instances to appear multiple times, cache a set of unique values this way.
-        /// </summary>
-        /// <value>
-        /// The unique values.
-        /// </value>
-        protected HashSet<T> UniqueValues { get; }
-
-        /// <summary>
-        /// Gets the base class type.
-        /// </summary>
-        /// <value>
-        /// The base class type.
-        /// </value>
-        /// <remarks>
-        /// This type allows us to apply constraints to the types of classes that can be added to the dictionary.
-        /// </remarks>
-        protected Type BaseClass { get; }
-
-        /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="TypeDictionary{T}" />.
         /// </summary>
         public ICollection<Type> Keys => Dictionary.Keys;
@@ -48,7 +29,16 @@ namespace SpiceSharp
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the values in the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public ICollection<T> Values => UniqueValues;
+        public ICollection<T> Values
+        {
+            get
+            {
+                HashSet<T> values = new HashSet<T>();
+                foreach (var v in Dictionary.Values)
+                    values.Add(v);
+                return values;
+            }
+        }
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="TypeDictionary{T}" />.
@@ -68,18 +58,43 @@ namespace SpiceSharp
         /// </value>
         /// <param name="key">The type.</param>
         /// <returns>The object of the specified type.</returns>
-        /// <exception cref="ArgumentException">Type {0} is not derived from {1}".FormatString(key, BaseClass)</exception>
         public T this[Type key]
         {
             get => Dictionary[key];
             set
             {
+                if (key == null)
+                    throw new ArgumentException("Invalid argument");
+
+                // This may seem a bit tricky:
+                // - If 'isChild' is true, then that means the new added class has not been implemented yet
+                //   by any other class. It will not overwrite any base classes that already have been
+                //   implemented as it may remove references to "simpler" base classes".
+                // - if 'isChild' is false, then a class has been added that already implements the type.
+                //   The new value is considered to be a "simpler" type and it will overwrite the existing
+                //   types.
+                var isChild = !Dictionary.ContainsKey(key);
+
+                // Add the regular class hierarchy that this instance implements.
                 var currentType = key;
-                while (currentType != BaseClass)
+                while (currentType != null && currentType != typeof(object))
                 {
-                    Dictionary[currentType] = value;
-                    if (currentType == typeof(object))
-                        throw new ArgumentException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
+                    if (!isChild)
+                        Dictionary[currentType] = value;
+                    else if (!Dictionary.ContainsKey(currentType))
+                        Dictionary.Add(currentType, value);
+                    else
+                        break;
+                    currentType = currentType.GetTypeInfo().BaseType;
+                }
+
+                // Also add all interfaces this instance implements.
+                foreach (var itf in key.GetTypeInfo().GetInterfaces())
+                {
+                    if (!isChild)
+                        Dictionary[itf] = value;
+                    else if (!Dictionary.ContainsKey(itf))
+                        Dictionary.Add(itf, value);
                 }
             }
         }
@@ -87,15 +102,9 @@ namespace SpiceSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
         /// </summary>
-        /// <param name="baseClass">The base class type.</param>
-        /// <remarks>
-        /// Only objects that implement the <paramref name="baseClass" /> type are allowed in the dictionary.
-        /// </remarks>
-        protected TypeDictionary(Type baseClass)
+        protected TypeDictionary()
         {
-            BaseClass = baseClass;
             Dictionary = new Dictionary<Type, T>();
-            UniqueValues = new HashSet<T>();
         }
 
         /// <summary>
@@ -109,18 +118,37 @@ namespace SpiceSharp
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
+
+            // This may seem a bit tricky:
+            // - If 'isChild' is true, then that means the new added class has not been implemented yet
+            //   by any other class. It will not overwrite any base classes that already have been
+            //   implemented as it may remove references to "simpler" base classes".
+            // - if 'isChild' is false, then a class has been added that already implements the type.
+            //   The new value is considered to be a "simpler" type and it will overwrite the existing
+            //   types.
+            var isChild = !Dictionary.ContainsKey(key);
             
+            // Add the regular class hierarchy that this instance implements.
             var currentType = key;
-            while (currentType != null && currentType != BaseClass)
+            while (currentType != null && currentType != typeof(object))
             {
-                Dictionary.Add(currentType, value);
+                if (!isChild)
+                    Dictionary[currentType] = value;
+                else if (!Dictionary.ContainsKey(currentType))
+                    Dictionary.Add(currentType, value);
+                else
+                    break;
                 currentType = currentType.GetTypeInfo().BaseType;
-                if (currentType == typeof(object))
-                    throw new CircuitException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
             }
 
-            // Keep it in our set of unique instances
-            UniqueValues.Add(value);
+            // Also add all interfaces this instance implements.
+            foreach (var itf in key.GetTypeInfo().GetInterfaces())
+            {
+                if (!isChild)
+                    Dictionary[itf] = value;
+                else if (!Dictionary.ContainsKey(itf))
+                    Dictionary.Add(itf, value);
+            }
         }
 
         /// <summary>
@@ -170,13 +198,10 @@ namespace SpiceSharp
         {
             if (Dictionary.TryGetValue(key, out T value))
             {
-                // Remove from the set
-                UniqueValues.Remove(value);
-
                 // Remove the key and all references to the same value
                 foreach (var entry in Dictionary)
                 {
-                    if (entry.Value == value)
+                    if (entry.Value.Equals(value))
                         Dictionary.Remove(entry.Key);
                 }
 
@@ -209,7 +234,6 @@ namespace SpiceSharp
         /// </summary>
         public void Clear()
         {
-            UniqueValues.Clear();
             Dictionary.Clear();
         }
 

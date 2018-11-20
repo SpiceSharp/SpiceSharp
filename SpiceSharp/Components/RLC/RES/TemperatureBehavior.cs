@@ -1,30 +1,68 @@
 ﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : BaseTemperatureBehavior
+    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Necessary parameters and behaviors
+        /// The minimum resistance for any resistor.
         /// </summary>
-        private ModelBaseParameters _mbp;
-        private BaseParameters _bp;
+        protected const double MinimumResistance = 1e-12;
+
+        /// <summary>
+        /// Gets the model parameters.
+        /// </summary>
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        protected ModelBaseParameters ModelParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the base parameters.
+        /// </summary>
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the default conductance for this model
         /// </summary>
-        public double Conductance { get; protected set; }
+        [ParameterName("g"), ParameterInfo("The conductance of the resistor.")]
+        public double Conductance { get; private set; }
+
+        /// <summary>
+        /// Nodes.
+        /// </summary>
+        protected int PosNode { get; private set; }
+        protected int NegNode { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }
+
+        /// <summary>
+        /// Connect the behavior to nodes
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+            PosNode = pins[0];
+            NegNode = pins[1];
+        }
 
         /// <summary>
         /// Setup the behavior
@@ -37,47 +75,35 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            provider.TryGetParameterSet("model", out _mbp);
+            BaseParameters = provider.GetParameterSet<BaseParameters>();
+            provider.TryGetParameterSet("model", out ModelBaseParameters mbp);
+            ModelParameters = mbp;
         }
-
-        /// <summary>
-        /// Unsetup the behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public override void Unsetup(Simulation simulation)
-        {
-            base.Unsetup(simulation);
-
-            // Clear references
-            _bp = null;
-            _mbp = null;
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Temperature(BaseSimulation simulation)
+        public void Temperature(BaseSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             double factor;
-            double resistance = _bp.Resistance;
+            double resistance = BaseParameters.Resistance;
 
             // Default Value Processing for Resistor Instance
-            if (!_bp.Temperature.Given)
-                _bp.Temperature.RawValue = simulation.RealState.Temperature;
-            if (!_bp.Width.Given)
-                _bp.Width.RawValue = _mbp?.DefaultWidth ?? 0.0;
+            if (!BaseParameters.Temperature.Given)
+                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+            if (!BaseParameters.Width.Given)
+                BaseParameters.Width.RawValue = ModelParameters?.DefaultWidth ?? 0.0;
 
-            if (_mbp != null)
+            if (ModelParameters != null)
             {
-                if (!_bp.Resistance.Given)
+                if (!BaseParameters.Resistance.Given)
                 {
-                    if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && _bp.Length > 0)
-                        resistance = _mbp.SheetResistance * (_bp.Length - _mbp.Narrow) / (_bp.Width - _mbp.Narrow);
+                    if (ModelParameters.SheetResistance.Given && ModelParameters.SheetResistance > 0 && BaseParameters.Length > 0)
+                        resistance = ModelParameters.SheetResistance * (BaseParameters.Length - ModelParameters.Narrow) / (BaseParameters.Width - ModelParameters.Narrow);
                     else
                     {
                         CircuitWarning.Warning(this, "{0}: resistance=0, set to 1000".FormatString(Name));
@@ -85,20 +111,20 @@ namespace SpiceSharp.Components.ResistorBehaviors
                     }
                 }
 
-                var difference = _bp.Temperature - _mbp.NominalTemperature;
+                var difference = BaseParameters.Temperature - ModelParameters.NominalTemperature;
 
-                if (_mbp.ExponentialCoefficient.Given)
-                    factor = Math.Pow(1.01, _mbp.ExponentialCoefficient * difference);
+                if (ModelParameters.ExponentialCoefficient.Given)
+                    factor = Math.Pow(1.01, ModelParameters.ExponentialCoefficient * difference);
                 else
-                    factor = 1.0 + _mbp.TemperatureCoefficient1 * difference + _mbp.TemperatureCoefficient2 * difference * difference;
+                    factor = 1.0 + ModelParameters.TemperatureCoefficient1 * difference + ModelParameters.TemperatureCoefficient2 * difference * difference;
             }
             else
             {
                 factor = 1.0;
             }
 
-            if (resistance < 1e-12)
-                resistance = 1e-12;
+            if (resistance < MinimumResistance)
+                resistance = MinimumResistance;
 
             Conductance = 1.0 / (resistance * factor);
         }

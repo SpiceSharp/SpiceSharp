@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters(gain));
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg, controlPos, controlNeg);

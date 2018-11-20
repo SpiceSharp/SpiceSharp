@@ -98,7 +98,7 @@
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_Connect_System_String___">Component.Connect(String[])</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_CreateBehavior__1_SpiceSharp_Simulations_Simulation_">Component.CreateBehavior&lt;T&gt;(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_CreateBehavior_System_Type_SpiceSharp_Simulations_Simulation_">Component.CreateBehavior(Type, Simulation)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_BuildSetupDataProvider_SpiceSharp_ParameterPool_SpiceSharp_Behaviors_BehaviorPool_">Component.BuildSetupDataProvider(ParameterPool, BehaviorPool)</a>
@@ -126,6 +126,9 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__">Entity.SetParameter(String, Object, IEqualityComparer&lt;String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetupBehavior_SpiceSharp_Behaviors_IBehavior_SpiceSharp_Simulations_Simulation_">Entity.SetupBehavior(IBehavior, Simulation)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Priority">Entity.Priority</a>
@@ -156,7 +159,13 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_LosslessTransmissionLine_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class LosslessTransmissionLine : Component</code></pre>
+    <pre><code class="lang-csharp hljs">[Pin(0, &quot;Pos1&quot;)]
+[Pin(1, &quot;Neg1&quot;)]
+[Pin(2, &quot;Pos2&quot;)]
+[Pin(3, &quot;Neg2&quot;)]
+[Connected(0, 1)]
+[Connected(2, 3)]
+public class LosslessTransmissionLine : Component</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>

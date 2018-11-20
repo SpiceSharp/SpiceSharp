@@ -12,10 +12,10 @@ It is possible to provide parameters with attributes containing more meta-inform
 
 - **[ParameterNameAttribute](xref:SpiceSharp.Attributes.ParameterNameAttribute)**: Tags the property, method or field with a specific name. Multiple names can be specified. Using this attribute enables accessing these members using reflection. These can generally be accessed because of the following classes:
   - **[NamedParameterized](xref:SpiceSharp.Attributes.NamedParameterized)**
-    - *[CreateGetter<T>()](xref:SpiceSharp.Attributes.NamedParameterized#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1)* creates a delegate that gets the member value of type *T* tagged by the specified name. Example:
+    - *[CreateGetter<T>()](xref:SpiceSharp.Attributes.NamedParameterized#SpiceSharp_Attributes_NamedParameterized_CreateGetter_)* creates a delegate that gets the member value of type *T* tagged by the specified name. Example:
 
       [!code-csharp[CreateGetter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_creategetter)]
-    - *[CreateSetter<T>()](xref:SpiceSharp.Attributes.NamedParameterized#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1)* creates a delegate that sets the member value of type *T* tagged by the specified name. Example:
+    - *[CreateSetter<T>()](xref:SpiceSharp.Attributes.NamedParameterized#SpiceSharp_Attributes_NamedParameterized_CreateSetter_)* creates a delegate that sets the member value of type *T* tagged by the specified name. Example:
 
       [!code-csharp[CreateSetter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_createsetter)]
   - **[ParameterSet](xref:SpiceSharp.ParameterSet)** (also implements **[NamedParameterized](xref:SpiceSharp.Attributes.NamedParameterized)**)
@@ -29,8 +29,7 @@ It is possible to provide parameters with attributes containing more meta-inform
       [!code-csharp[SetParameter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_setparameter)]
 
   - **[Behavior](xref:SpiceSharp.Behaviors.Behavior)** (also implements **[NamedParameterized](xref:SpiceSharp.Attributes.NamedParameterized)**)
-    - *[CreateGetter(Simulation,string)](xref:SpiceSharp.Behaviors.Behavior#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__)* creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.
-    - *[CreateSetter<T>(Simulation,string)](xref:SpiceSharp.Behaviors.Behavior#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__)* creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.
+    - *[CreateGetter(Simulation,string)](xref:SpiceSharp.Behaviors.Behavior#SpiceSharp_Behaviors_Behavior_CreateGetter_)* creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.
 - **[ParameterInfoAttribute](xref:SpiceSharp.Attributes.ParameterInfoAttribute)**: Adds more information about the parameter.
   - *[Description](xref:SpiceSharp.Attributes.ParameterInfoAttribute#SpiceSharp_Attributes_ParameterInfoAttribute_Description)* gives more information about the parameter.
   - *[Interesting](xref:SpiceSharp.Attributes.ParameterInfoAttribute#SpiceSharp_Attributes_ParameterInfoAttribute_Interesting)* indicates whether the parameter is interesting to be shown as a parameter (legacy from Spice 3f5).

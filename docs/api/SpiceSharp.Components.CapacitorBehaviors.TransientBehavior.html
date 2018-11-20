@@ -73,7 +73,7 @@
   
   <h1 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior" class="text-break">Class TransientBehavior
   </h1>
-  <div class="markdown level0 summary"><p>General behavior for <a class="xref" href="SpiceSharp.Components.Capacitor.html">Capacitor</a></p>
+  <div class="markdown level0 summary"><p>Transient behavior for a <a class="xref" href="SpiceSharp.Components.Capacitor.html">Capacitor</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -81,27 +81,55 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html">BaseTransientBehavior</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
     <div class="level5"><span class="xref">TransientBehavior</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_Truncate">BaseTransientBehavior.Truncate()</a>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_ModelParameters">TemperatureBehavior.ModelParameters</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_BaseParameters">TemperatureBehavior.BaseParameters</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_Capacitance">TemperatureBehavior.Capacitance</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_PosNode">TemperatureBehavior.PosNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_NegNode">TemperatureBehavior.NegNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_Connect_System_Int32___">TemperatureBehavior.Connect(Int32[])</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">TemperatureBehavior.Setup(Simulation, SetupDataProvider)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html#SpiceSharp_Components_CapacitorBehaviors_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
@@ -165,7 +193,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class TransientBehavior : TemperatureBehavior, IPropertyExporter, ITemperatureBehavior, IConnectedBehavior, ITimeBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -200,7 +228,7 @@
   </h3>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Current_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Current*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Current" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Current">Current</h4>
-  <div class="markdown level1 summary"><p>Methods</p>
+  <div class="markdown level1 summary"><p>Gets the current through the capacitor.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -220,7 +248,8 @@ public double Current { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td></td>
+        <td><p>The current.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -318,7 +347,8 @@ public double Current { get; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_PosPosPtr_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.PosPosPtr*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_PosPosPtr" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.PosPosPtr">PosPosPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Nodes and states</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -387,33 +417,6 @@ public double Current { get; }</code></pre>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Connect_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect the behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_CreateStates_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.CreateStates*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_CreateStates_SpiceSharp_IntegrationMethods_IntegrationMethod_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.CreateStates(SpiceSharp.IntegrationMethods.IntegrationMethod)">CreateStates(IntegrationMethod)</h4>
   <div class="markdown level1 summary"><p>Create states</p>
@@ -421,7 +424,7 @@ public double Current { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateStates(IntegrationMethod method)</code></pre>
+    <pre><code class="lang-csharp hljs">public void CreateStates(IntegrationMethod method)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -440,8 +443,6 @@ public double Current { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_CreateStates_SpiceSharp_IntegrationMethods_IntegrationMethod_">BaseTransientBehavior.CreateStates(IntegrationMethod)</a></div>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetDcState_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetDcState*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetDcState_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetDcState(SpiceSharp.Simulations.TimeSimulation)">GetDcState(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Calculate the state for DC</p>
@@ -449,7 +450,7 @@ public double Current { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetDcState(TimeSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void GetDcState(TimeSimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -468,8 +469,6 @@ public double Current { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_GetDcState_SpiceSharp_Simulations_TimeSimulation_">BaseTransientBehavior.GetDcState(TimeSimulation)</a></div>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetEquationPointers_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetEquationPointers*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Double__" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Double})">GetEquationPointers(Solver&lt;Double&gt;)</h4>
   <div class="markdown level1 summary"><p>Gets matrix pointers</p>
@@ -477,7 +476,7 @@ public double Current { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetEquationPointers(Solver&lt;double&gt; solver)</code></pre>
+    <pre><code class="lang-csharp hljs">public void GetEquationPointers(Solver&lt;double&gt; solver)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -497,11 +496,10 @@ public double Current { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Double__">BaseTransientBehavior.GetEquationPointers(Solver&lt;Double&gt;)</a></div>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetPower_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetPower*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetPower_SpiceSharp_Simulations_BaseSimulationState_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetPower(SpiceSharp.Simulations.BaseSimulationState)">GetPower(BaseSimulationState)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the instantaneous power dissipated by the capacitor.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -522,7 +520,8 @@ public double GetPower(BaseSimulationState state)</code></pre>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulationState.html">BaseSimulationState</a></td>
         <td><span class="parametername">state</span></td>
-        <td></td>
+        <td><p>The simulation state.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -541,9 +540,26 @@ public double GetPower(BaseSimulationState state)</code></pre>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>state</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetVoltage_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetVoltage*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_GetVoltage_SpiceSharp_Simulations_BaseSimulationState_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.GetVoltage(SpiceSharp.Simulations.BaseSimulationState)">GetVoltage(BaseSimulationState)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the voltage across the capacitor.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -564,7 +580,8 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulationState.html">BaseSimulationState</a></td>
         <td><span class="parametername">state</span></td>
-        <td></td>
+        <td><p>The simulation state.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -583,41 +600,22 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Setup_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Setup*"></a>
-  <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
-  <div class="markdown level1 summary"><p>Setup behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup(Simulation simulation, SetupDataProvider provider)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
+        <th>Condition</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Simulation</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.SetupDataProvider.html">SetupDataProvider</a></td>
-        <td><span class="parametername">provider</span></td>
-        <td><p>Data provider</p>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>state</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
   <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Transient_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Transient*"></a>
   <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Transient_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Transient(SpiceSharp.Simulations.TimeSimulation)">Transient(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Execute behavior for DC and Transient analysis</p>
@@ -625,7 +623,7 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Transient(TimeSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Transient(TimeSimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -645,39 +643,26 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html#SpiceSharp_Behaviors_BaseTransientBehavior_Transient_SpiceSharp_Simulations_TimeSimulation_">BaseTransientBehavior.Transient(TimeSimulation)</a></div>
-  <a id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Unsetup_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Unsetup*"></a>
-  <h4 id="SpiceSharp_Components_CapacitorBehaviors_TransientBehavior_Unsetup_SpiceSharp_Simulations_Simulation_" data-uid="SpiceSharp.Components.CapacitorBehaviors.TransientBehavior.Unsetup(SpiceSharp.Simulations.Simulation)">Unsetup(Simulation)</h4>
-  <div class="markdown level1 summary"><p>Unsetup the behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Unsetup(Simulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
       <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
+      <div><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></div>
   </div>
 </article>
           </div>
