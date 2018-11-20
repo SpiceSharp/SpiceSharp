@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Register factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters(res));
 
             // Register factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));

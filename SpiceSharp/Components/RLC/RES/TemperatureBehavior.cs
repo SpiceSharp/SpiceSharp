@@ -12,6 +12,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior, IConnectedBehavior
     {
         /// <summary>
+        /// The minimum resistance for any resistor.
+        /// </summary>
+        protected const double MinimumResistance = 1e-12;
+
+        /// <summary>
         /// Gets the model parameters.
         /// </summary>
         /// <value>
@@ -118,8 +123,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 factor = 1.0;
             }
 
-            if (resistance < 1e-12)
-                resistance = 1e-12;
+            if (resistance < MinimumResistance)
+                resistance = MinimumResistance;
 
             Conductance = 1.0 / (resistance * factor);
         }

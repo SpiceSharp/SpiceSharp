@@ -2,32 +2,27 @@
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
-using LoadBehavior = SpiceSharp.Components.InductorBehaviors.BaseBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
     /// <summary>
     /// AC behavior for <see cref="MutualInductance"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior
+    public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private BaseParameters _bp;
-        private LoadBehavior _load1, _load2;
+        protected BiasingBehavior Bias1 { get; private set; }
+        protected BiasingBehavior Bias2 { get; private set; }
 
         /// <summary>
         /// Matrix elements
         /// </summary>
         protected MatrixElement<Complex> Branch1Branch2Ptr { get; private set; }
         protected MatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
-
-        /// <summary>
-        /// Shared parameters
-        /// </summary>
-        public double Factor { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -46,42 +41,38 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            var bp1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
-            var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
-
             // Get behaviors
-            _load1 = provider.GetBehavior<LoadBehavior>("inductor1");
-            _load2 = provider.GetBehavior<LoadBehavior>("inductor2");
+            Bias1 = provider.GetBehavior<BiasingBehavior>("inductor1");
+            Bias2 = provider.GetBehavior<BiasingBehavior>("inductor2");
+        }
 
-            // Calculate coupling factor
-            Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
+        /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        /// <param name="simulation">The frequency simulation.</param>
+        public void InitializeParameters(FrequencySimulation simulation)
+        {
         }
 
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<Complex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
-            // Get extra equations
-            var inDbrEq1 = _load1.BranchEq;
-            var inDbrEq2 = _load2.BranchEq;
-
             // Get matrix equations
-            Branch1Branch2Ptr = solver.GetMatrixElement(inDbrEq1, inDbrEq2);
-            Branch2Branch1Ptr = solver.GetMatrixElement(inDbrEq2, inDbrEq1);
+            Branch1Branch2Ptr = solver.GetMatrixElement(Bias1.BranchEq, Bias2.BranchEq);
+            Branch2Branch1Ptr = solver.GetMatrixElement(Bias2.BranchEq, Bias1.BranchEq);
         }
 
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        public void Load(FrequencySimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));

@@ -1,9 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CurrentSwitchBehaviors;
-using FrequencyBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior;
-using LoadBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior;
+using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -43,8 +41,9 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new CurrentControlled()));
+            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new CurrentControlled()));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new CurrentControlled()));
         }
 
         /// <summary>
@@ -64,8 +63,11 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Add factories
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            
+            // Add factories
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new CurrentControlled()));
+            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new CurrentControlled()));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new CurrentControlled()));
 
             Connect(pos, neg);
             ControllingName = controllingSource;

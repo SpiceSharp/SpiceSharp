@@ -1,18 +1,27 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Common.ModelTemperatureBehavior
+    public class ModelTemperatureBehavior : ExportingBehavior, ITemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        private ModelBaseParameters _mbp;
+        protected ModelBaseParameters ModelParameters { get; private set; }
+
+        /// <summary>
+        /// Shared parameters
+        /// </summary>
+        public double Factor1 { get; private set; }
+        public double VtNominal { get; private set; }
+        public double EgFet1 { get; private set; }
+        public double PbFactor1 { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -27,63 +36,72 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            base.Setup(simulation, provider);
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
             
             // Get parameters
-            _mbp = provider.GetParameterSet<ModelBaseParameters>();
+            ModelParameters = provider.GetParameterSet<ModelBaseParameters>();
         }
         
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="simulation">Base simulation</param>
-        public override void Temperature(BaseSimulation simulation)
+        public void Temperature(BaseSimulation simulation)
         {
-            base.Temperature(simulation);
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            if (_mbp.OxideThickness.Given && _mbp.OxideThickness > 0.0)
+            // Perform model defaulting
+            if (!ModelParameters.NominalTemperature.Given)
+                ModelParameters.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
+            Factor1 = ModelParameters.NominalTemperature / Circuit.ReferenceTemperature;
+            VtNominal = ModelParameters.NominalTemperature * Circuit.KOverQ;
+            var kt1 = Circuit.Boltzmann * ModelParameters.NominalTemperature;
+            EgFet1 = 1.16 - 7.02e-4 * ModelParameters.NominalTemperature * ModelParameters.NominalTemperature / (ModelParameters.NominalTemperature + 1108);
+            var arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Factor1) + Circuit.Charge * arg1);
+            if (ModelParameters.OxideThickness.Given && ModelParameters.OxideThickness > 0.0)
             {
-                if (_mbp.SubstrateDoping.Given)
+                if (ModelParameters.SubstrateDoping.Given)
                 {
-                    if (_mbp.SubstrateDoping * 1e6 > 1.45e16)
+                    if (ModelParameters.SubstrateDoping * 1e6 > 1.45e16)
                     {
-                        if (!_mbp.Phi.Given)
+                        if (!ModelParameters.Phi.Given)
                         {
-                            _mbp.Phi.RawValue = 2 * VtNominal * Math.Log(_mbp.SubstrateDoping * 1e6 / 1.45e16);
-                            _mbp.Phi.RawValue = Math.Max(.1, _mbp.Phi);
+                            ModelParameters.Phi.RawValue = 2 * VtNominal * Math.Log(ModelParameters.SubstrateDoping * 1e6 / 1.45e16);
+                            ModelParameters.Phi.RawValue = Math.Max(.1, ModelParameters.Phi);
                         }
 
-                        var fermis = _mbp.MosfetType * .5 * _mbp.Phi;
+                        var fermis = ModelParameters.MosfetType * .5 * ModelParameters.Phi;
                         var wkfng = 3.2;
-                        if (!_mbp.GateType.Given)
-                            _mbp.GateType.RawValue = 1;
-                        if (!_mbp.GateType.RawValue.Equals(0))
+                        if (!ModelParameters.GateType.Given)
+                            ModelParameters.GateType.RawValue = 1;
+                        if (!ModelParameters.GateType.RawValue.Equals(0))
                         {
-                            var fermig = _mbp.MosfetType * _mbp.GateType * .5 * EgFet1;
+                            var fermig = ModelParameters.MosfetType * ModelParameters.GateType * .5 * EgFet1;
                             wkfng = 3.25 + .5 * EgFet1 - fermig;
                         }
 
                         var wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
-                        if (!_mbp.Gamma.Given)
+                        if (!ModelParameters.Gamma.Given)
                         {
-                            _mbp.Gamma.RawValue =
-                                Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * _mbp.SubstrateDoping * 1e6) /
-                                _mbp.OxideCapFactor;
+                            ModelParameters.Gamma.RawValue =
+                                Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * ModelParameters.SubstrateDoping * 1e6) /
+                                ModelParameters.OxideCapFactor;
                         }
 
-                        if (!_mbp.Vt0.Given)
+                        if (!ModelParameters.Vt0.Given)
                         {
-                            if (!_mbp.SurfaceStateDensity.Given)
-                                _mbp.SurfaceStateDensity.RawValue = 0;
-                            var vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / _mbp.OxideCapFactor;
-                            _mbp.Vt0.RawValue = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
+                            if (!ModelParameters.SurfaceStateDensity.Given)
+                                ModelParameters.SurfaceStateDensity.RawValue = 0;
+                            var vfb = wkfngs - ModelParameters.SurfaceStateDensity * 1e4 * Circuit.Charge / ModelParameters.OxideCapFactor;
+                            ModelParameters.Vt0.RawValue = vfb + ModelParameters.MosfetType * (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi) + ModelParameters.Phi);
                         }
                     }
                     else
                     {
-                        _mbp.SubstrateDoping.RawValue = 0;
+                        ModelParameters.SubstrateDoping.RawValue = 0;
                         throw new CircuitException("{0}: Nsub < Ni".FormatString(Name));
                     }
                 }

@@ -63,17 +63,39 @@ namespace SpiceSharp
             get => Dictionary[key];
             set
             {
+                if (key == null)
+                    throw new ArgumentException("Invalid argument");
+
+                // This may seem a bit tricky:
+                // - If 'isChild' is true, then that means the new added class has not been implemented yet
+                //   by any other class. It will not overwrite any base classes that already have been
+                //   implemented as it may remove references to "simpler" base classes".
+                // - if 'isChild' is false, then a class has been added that already implements the type.
+                //   The new value is considered to be a "simpler" type and it will overwrite the existing
+                //   types.
+                var isChild = !Dictionary.ContainsKey(key);
+
                 // Add the regular class hierarchy that this instance implements.
                 var currentType = key;
                 while (currentType != null && currentType != typeof(object))
                 {
-                    Dictionary[currentType] = value;
+                    if (!isChild)
+                        Dictionary[currentType] = value;
+                    else if (!Dictionary.ContainsKey(currentType))
+                        Dictionary.Add(currentType, value);
+                    else
+                        break;
                     currentType = currentType.GetTypeInfo().BaseType;
                 }
 
                 // Also add all interfaces this instance implements.
                 foreach (var itf in key.GetTypeInfo().GetInterfaces())
-                    Dictionary[itf] = value;
+                {
+                    if (!isChild)
+                        Dictionary[itf] = value;
+                    else if (!Dictionary.ContainsKey(itf))
+                        Dictionary.Add(itf, value);
+                }
             }
         }
 
@@ -96,18 +118,37 @@ namespace SpiceSharp
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
+
+            // This may seem a bit tricky:
+            // - If 'isChild' is true, then that means the new added class has not been implemented yet
+            //   by any other class. It will not overwrite any base classes that already have been
+            //   implemented as it may remove references to "simpler" base classes".
+            // - if 'isChild' is false, then a class has been added that already implements the type.
+            //   The new value is considered to be a "simpler" type and it will overwrite the existing
+            //   types.
+            var isChild = !Dictionary.ContainsKey(key);
             
             // Add the regular class hierarchy that this instance implements.
             var currentType = key;
             while (currentType != null && currentType != typeof(object))
             {
-                Dictionary[currentType] = value;
+                if (!isChild)
+                    Dictionary[currentType] = value;
+                else if (!Dictionary.ContainsKey(currentType))
+                    Dictionary.Add(currentType, value);
+                else
+                    break;
                 currentType = currentType.GetTypeInfo().BaseType;
             }
 
             // Also add all interfaces this instance implements.
             foreach (var itf in key.GetTypeInfo().GetInterfaces())
-                Dictionary[itf] = value;
+            {
+                if (!isChild)
+                    Dictionary[itf] = value;
+                else if (!Dictionary.ContainsKey(itf))
+                    Dictionary.Add(itf, value);
+            }
         }
 
         /// <summary>

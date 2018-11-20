@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
-        private BaseBehavior _base;
+        private BiasingBehavior _base;
 
         /// <summary>
         /// Nodes
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             _bp = provider.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _base = provider.GetBehavior<BaseBehavior>();
+            _base = provider.GetBehavior<BiasingBehavior>();
         }
 
         /// <summary>

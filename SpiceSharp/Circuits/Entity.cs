@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 

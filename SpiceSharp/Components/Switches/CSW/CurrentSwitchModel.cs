@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Components.CurrentSwitchBehaviors;
+﻿using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -14,10 +14,7 @@ namespace SpiceSharp.Components
         public CurrentSwitchModel(string name) : base(name)
         {
             // Add parameters
-            ParameterSets.Add(new ModelBaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(ModelLoadBehavior), () => new ModelLoadBehavior(Name));
+            ParameterSets.Add(new CurrentModelParameters());
         }
     }
 }

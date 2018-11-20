@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         public MutualInductance(string name) : base(name, 0)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
-            Priority = -1;
+            Priority = ComponentPriority - 1;
 
             // Add parameters
             ParameterSets.Add(new BaseParameters());
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
             : base(name, 0)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
-            Priority = -1;
+            Priority = ComponentPriority - 1;
 
             // Add parameters
             ParameterSets.Add(new BaseParameters(coupling));

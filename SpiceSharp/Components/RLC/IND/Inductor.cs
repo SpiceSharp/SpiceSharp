@@ -26,7 +26,8 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
 
             // Add factories
-            Behaviors.Add(typeof(BaseBehavior), Name);
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
@@ -44,7 +45,8 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters(inductance));
 
             // Add factories
-            Behaviors.Add(typeof(BaseBehavior), Name);
+            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             // Connect
