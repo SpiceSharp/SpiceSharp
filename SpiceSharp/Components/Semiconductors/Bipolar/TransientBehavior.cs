@@ -216,12 +216,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 StateChargeCs.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
             }
-
-            // Register for excess phase calculations
-            if (ModelTemperature.ExcessPhaseFactor > 0.0)
-            {
-                ExcessPhaseCalculation += CalculateExcessPhase;
-            }
         }
 
         /// <summary>
@@ -405,19 +399,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Calculate excess phase
+        /// Excess phase calculation.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="args">Arguments</param>
-        public void CalculateExcessPhase(object sender, ExcessPhaseEventArgs args)
+        /// <param name="cc">The collector current.</param>
+        /// <param name="cex">The excess phase current.</param>
+        /// <param name="gex">The excess phase conductance.</param>
+        protected override void ExcessPhaseCalculation(ref double cc, ref double cex, ref double gex)
         {
-            if (args == null)
-                throw new ArgumentNullException(nameof(args));
-
             var td = ModelTemperature.ExcessPhaseFactor;
             if (td.Equals(0))
             {
-                StateExcessPhaseCurrentBc.Current = args.ExcessPhaseCurrent;
+                StateExcessPhaseCurrentBc.Current = cex;
                 return;
             }
             
@@ -425,8 +417,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
              * weil's approx. for excess phase applied with backward - 
              * euler integration
              */
-            var cbe = args.ExcessPhaseCurrent;
-            var gbe = args.ExcessPhaseConduct;
+            var cbe = cex;
+            var gbe = gex;
 
             var delta = _method.GetTimestep(0);
             var prevdelta = _method.GetTimestep(1);
@@ -441,11 +433,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 state.States[1][State + Cexbc] = cbe / qb;
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
-            args.CollectorCurrent = (StateExcessPhaseCurrentBc[1] * (1 + delta / prevdelta + arg2) 
+            cc = (StateExcessPhaseCurrentBc[1] * (1 + delta / prevdelta + arg2) 
                 - StateExcessPhaseCurrentBc[2] * delta / prevdelta) / denom;
-            args.ExcessPhaseCurrent = cbe * arg3;
-            args.ExcessPhaseConduct = gbe * arg3;
-            StateExcessPhaseCurrentBc.Current = args.CollectorCurrent + args.ExcessPhaseCurrent / args.BaseCharge;
+            cex = cbe * arg3;
+            gex = gbe * arg3;
+            StateExcessPhaseCurrentBc.Current = cc + cex / BaseCharge;
         }
     }
 }

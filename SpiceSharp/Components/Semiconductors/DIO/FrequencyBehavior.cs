@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// AC behavior for <see cref="Diode"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Nodes
@@ -24,41 +24,47 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected MatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
-        /// Gets the junction capacitance
+        /// Gets the voltage.
         /// </summary>
-        [ParameterName("cd"), ParameterInfo("Diode capacitance")]
-        public double Capacitance { get; protected set; }
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetDiodeVoltage(ComplexSimulationState state)
+        public Complex GetVoltage(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[PosPrimeNode] - state.Solution[NegNode];
         }
-        [ParameterName("v"), ParameterInfo("Voltage across the diode")]
-        public Complex GetVoltage(ComplexSimulationState state)
-        {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+
+        /// <summary>
+        /// Gets the current.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-
-            var geq = Capacitance * state.Laplace + Conduct;
+            var geq = Capacitance * state.Laplace + Conductance;
             var voltage = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             return voltage * geq;
         }
+
+        /// <summary>
+        /// Gets the power.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-
-            var geq = Capacitance * state.Laplace + Conduct;
+            var geq = Capacitance * state.Laplace + Conductance;
             var current = (state.Solution[PosPrimeNode] - state.Solution[NegNode]) * geq;
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
             return voltage * -Complex.Conjugate(current);
@@ -97,25 +103,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
-
             var state = simulation.RealState;
-            double capd;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
-
-            // charge storage elements
-            var czero = TempJunctionCap * BaseParameters.Area;
-            if (vd < TempDepletionCap)
-            {
-                var arg = 1 - vd / ModelParameters.JunctionPotential;
-                var sarg = Math.Exp(-ModelParameters.GradingCoefficient * Math.Log(arg));
-                capd = ModelParameters.TransitTime * Conduct + czero * sarg;
-            }
-            else
-            {
-                var czof2 = czero / ModelTemperature.F2;
-                capd = ModelParameters.TransitTime * Conduct + czof2 * (ModelTemperature.F3 + ModelParameters.GradingCoefficient * vd / ModelParameters.JunctionPotential);
-            }
-            Capacitance = capd;
+            CalculateCapacitance(vd);
         }
 
         /// <summary>
@@ -130,7 +120,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = simulation.ComplexState;
 
             var gspr = ModelTemperature.Conductance * BaseParameters.Area;
-            var geq = Conduct;
+            var geq = Conductance;
             var xceq = Capacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix

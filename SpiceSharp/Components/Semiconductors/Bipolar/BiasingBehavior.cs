@@ -27,9 +27,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double VoltageBe { get; protected set; }
         [ParameterName("vbc"), ParameterInfo("B-C voltage")]
         public double VoltageBc { get; protected set; }
-        [ParameterName("cc"), ParameterInfo("Current at collector node")]
+        [ParameterName("cc"), ParameterName("ic"), ParameterInfo("Current at collector node")]
         public double CollectorCurrent { get; protected set; }
-        [ParameterName("cb"), ParameterInfo("Current at base node")]
+        [ParameterName("cb"), ParameterName("ib"), ParameterInfo("Current at base node")]
         public double BaseCurrent { get; protected set; }
         [ParameterName("gpi"), ParameterInfo("Small signal input conductance - pi")]
         public double ConductancePi { get; protected set; }
@@ -99,21 +99,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected VectorElement<double> BasePrimePtr { get; private set; }
         protected VectorElement<double> EmitterPrimePtr { get; private set; }
 
-        /// <summary>
-        /// Shared parameters
-        /// </summary>
         public virtual double CurrentBe { get; protected set; }
-        public double CondBe { get; protected set; }
+
         public virtual double CurrentBc { get; protected set; }
+
+        public double CondBe { get; protected set; }
         public double CondBc { get; protected set; }
         public double BaseCharge { get; protected set; }
         public double Dqbdvc { get; protected set; }
         public double Dqbdve { get; protected set; }
-
-        /// <summary>
-        /// Event called when excess phase calculation is needed
-        /// </summary>
-        public event EventHandler<ExcessPhaseEventArgs> ExcessPhaseCalculation;
 
         /// <summary>
         /// Constructor
@@ -309,17 +303,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
 
             // Excess phase calculation
-            var ep = new ExcessPhaseEventArgs
-            {
-                CollectorCurrent = 0.0,
-                ExcessPhaseCurrent = CurrentBe,
-                ExcessPhaseConduct = CondBe,
-                BaseCharge = BaseCharge
-            };
-            ExcessPhaseCalculation?.Invoke(this, ep);
-            var cc = ep.CollectorCurrent;
-            var cex = ep.ExcessPhaseCurrent;
-            var gex = ep.ExcessPhaseConduct;
+            var cc = 0.0;
+            var cex = CurrentBe;
+            var gex = CondBe;
+            ExcessPhaseCalculation(ref cc, ref cex, ref gex);
 
             // Determine dc incremental conductances
             cc = cc + (cex - CurrentBc) / BaseCharge - CurrentBc / TempBetaReverse - cbcn;
@@ -375,6 +362,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimeEmitterPtr.Value += -gepr;
             EmitterPrimeCollectorPrimePtr.Value += -go;
             EmitterPrimeBasePrimePtr.Value += -gpi - gm;
+        }
+
+        /// <summary>
+        /// Excess phase calculation.
+        /// </summary>
+        /// <param name="cc">The collector current.</param>
+        /// <param name="cex">The excess phase current.</param>
+        /// <param name="gex">The excess phase conductance.</param>
+        protected virtual void ExcessPhaseCalculation(ref double cc, ref double cex, ref double gex)
+        {
+            // This is a time-dependent effect. Not implemented here.
         }
 
         /// <summary>
