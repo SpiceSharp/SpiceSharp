@@ -21,25 +21,94 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
-        /// Methods
+        /// Gets the base-emitter voltage
         /// </summary>
+        /// <value>
+        /// The base-emitter voltage.
+        /// </value>
         [ParameterName("vbe"), ParameterInfo("B-E voltage")]
-        public double VoltageBe { get; protected set; }
+        public double VoltageBe { get; private set; }
+
+        /// <summary>
+        /// Gets the base-collector voltage.
+        /// </summary>
+        /// <value>
+        /// The base-collector voltage.
+        /// </value>
         [ParameterName("vbc"), ParameterInfo("B-C voltage")]
-        public double VoltageBc { get; protected set; }
+        public double VoltageBc { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the collector current.
+        /// </summary>
+        /// <value>
+        /// The collector current.
+        /// </value>
         [ParameterName("cc"), ParameterName("ic"), ParameterInfo("Current at collector node")]
         public double CollectorCurrent { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the base current.
+        /// </summary>
+        /// <value>
+        /// The base current.
+        /// </value>
         [ParameterName("cb"), ParameterName("ib"), ParameterInfo("Current at base node")]
         public double BaseCurrent { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the small signal input conductance - pi
+        /// </summary>
+        /// <value>
+        /// The conductance pi.
+        /// </value>
         [ParameterName("gpi"), ParameterInfo("Small signal input conductance - pi")]
         public double ConductancePi { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the small signal conductance mu.
+        /// </summary>
+        /// <value>
+        /// The conductance mu.
+        /// </value>
         [ParameterName("gmu"), ParameterInfo("Small signal conductance - mu")]
         public double ConductanceMu { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the transconductance.
+        /// </summary>
+        /// <value>
+        /// The transconductance.
+        /// </value>
         [ParameterName("gm"), ParameterInfo("Small signal transconductance")]
         public double Transconductance { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the output conductance.
+        /// </summary>
+        /// <value>
+        /// The output conductance.
+        /// </value>
         [ParameterName("go"), ParameterInfo("Small signal output conductance")]
         public double OutputConductance { get; protected set; }
         public double ConductanceX { get; protected set; }
+
+        /// <summary>
+        /// Gets the dissipated power.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
+        [ParameterName("p"), ParameterInfo("Power dissipation")]
+        public virtual double GetPower(BaseSimulationState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            var value = CollectorCurrent * state.Solution[CollectorNode];
+            value += BaseCurrent * state.Solution[BaseNode];
+            value -= (CollectorCurrent + BaseCurrent) * state.Solution[EmitterNode];
+            return value;
+        }
 
         /// <summary>
         /// Gets the collector prime node index.
