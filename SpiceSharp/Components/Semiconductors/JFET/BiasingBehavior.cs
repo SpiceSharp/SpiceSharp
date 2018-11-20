@@ -48,30 +48,84 @@ namespace SpiceSharp.Components.JFETBehaviors
         protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
         protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
 
+        /// <summary>
+        /// Gets the gate-source voltage.
+        /// </summary>
+        /// <value>
+        /// The gate-source voltage.
+        /// </value>
         [ParameterName("vgs"), ParameterInfo("Voltage G-S")]
         public double Vgs { get; private set; }
 
+        /// <summary>
+        /// Gets the gate-drain voltage.
+        /// </summary>
+        /// <value>
+        /// The gate-drain voltage.
+        /// </value>
         [ParameterName("vgd"), ParameterInfo("Voltage G-D")]
         public double Vgd { get; private set; }
 
+        /// <summary>
+        /// Gets the gate current.
+        /// </summary>
+        /// <value>
+        /// The gate current.
+        /// </value>
         [ParameterName("ig"), ParameterName("cg"), ParameterInfo("Current at gate node")]
         public double Cg { get; private set; }
 
+        /// <summary>
+        /// Gets the drain current.
+        /// </summary>
+        /// <value>
+        /// The drain current.
+        /// </value>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Current at drain node")]
         public double Cd { get; private set; }
 
+        /// <summary>
+        /// Gets the gate-drain current.
+        /// </summary>
+        /// <value>
+        /// The gate-drain current.
+        /// </value>
         [ParameterName("igd"), ParameterInfo("Current G-D")]
         public double Cgd { get; private set; }
 
+        /// <summary>
+        /// Gets the transconductance.
+        /// </summary>
+        /// <value>
+        /// The transconductance.
+        /// </value>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
         public double Gm { get; private set; }
 
+        /// <summary>
+        /// Gets the drain-source conductance.
+        /// </summary>
+        /// <value>
+        /// The drain-source conductance.
+        /// </value>
         [ParameterName("gds"), ParameterInfo("Conductance D-S")]
         public double Gds { get; private set; }
 
+        /// <summary>
+        /// Gets the gate-source conductance.
+        /// </summary>
+        /// <value>
+        /// The GGS.
+        /// </value>
         [ParameterName("ggs"), ParameterName("Conductance G-S")]
         public double Ggs { get; private set; }
 
+        /// <summary>
+        /// Gets the gate-drain conductance.
+        /// </summary>
+        /// <value>
+        /// The gate-drain conductance.
+        /// </value>
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 

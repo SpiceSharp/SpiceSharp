@@ -31,7 +31,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
@@ -39,7 +38,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             return (state.Solution[PosNode] - state.Solution[PosNode]) * -Current;
         }
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Current through current source")]

@@ -39,7 +39,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-
             return state.Solution[BranchEq];
         }
 
@@ -54,7 +53,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
@@ -69,7 +67,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-
             return state.Solution[BranchEq] * (state.Solution[PosNode] - state.Solution[NegNode]);
         }
 

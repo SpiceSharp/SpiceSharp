@@ -232,6 +232,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var vtc = ModelParameters.LeakBcEmissionCoefficient * Vt;
             var xjrb = ModelParameters.BaseCurrentHalfResist * BaseParameters.Area;
 
+            // Get the current voltages
             Initialize(simulation, out var vbe, out var vbc);
 
             // Determine dc current and derivitives

@@ -49,7 +49,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             return v * v * Conductance;
         }
