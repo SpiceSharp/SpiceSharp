@@ -315,99 +315,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(simulation));
             var state = simulation.RealState;
 
-            double vgs, vds, vbs, vbd, vgd;
-            double drainSatCur, sourceSatCur;
-            bool check = true;
-
-            if (TempSaturationCurrentDensity.Equals(0) || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
-            {
-                drainSatCur = TempSaturationCurrent;
-                sourceSatCur = TempSaturationCurrent;
-            }
-            else
-            {
-                drainSatCur = TempSaturationCurrentDensity * BaseParameters.DrainArea;
-                sourceSatCur = TempSaturationCurrentDensity * BaseParameters.SourceArea;
-            }
-
-            var vt = Circuit.KOverQ * BaseParameters.Temperature;
-
-            if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
-                state.Init == InitializationModes.Fix && !BaseParameters.Off)
-            {
-                // General iteration
-                vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
-                vgs = ModelParameters.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
-                vds = ModelParameters.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
-
-                // now some common crunching for some more useful quantities
-                vbd = vbs - vds;
-                vgd = vgs - vds;
-                var vgdo = VoltageGs - VoltageDs;
-                var von = ModelParameters.MosfetType * Von;
-
-                /*
-				 * limiting
-				 * we want to keep device voltages from changing
-				 * so fast that the exponentials churn out overflows
-				 * and similar rudeness
-				 */
-                // NOTE: Spice 3f5 does not write out Vgs during DC analysis, so DEVfetlim may give different results in Spice 3f5
-                if (VoltageDs >= 0)
-                {
-                    vgs = Transistor.LimitFet(vgs, VoltageGs, von);
-                    vds = vgs - vgd;
-                    vds = Transistor.LimitVds(vds, VoltageDs);
-                }
-                else
-                {
-                    vgd = Transistor.LimitFet(vgd, vgdo, von);
-                    vds = vgs - vgd;
-                    vds = -Transistor.LimitVds(-vds, -VoltageDs);
-                    vgs = vgd + vds;
-                }
-
-                check = false;
-                if (vds >= 0)
-                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, vt, SourceVCritical, ref check);
-                else
-                {
-                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, vt, DrainVCritical, ref check);
-                    vbs = vbd + vds;
-                }
-            }
-            else
-            {
-                /* ok - not one of the simple cases, so we have to
-				 * look at all of the possibilities for why we were
-				 * called.  We still just initialize the three voltages
-				 */
-                if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
-                {
-                    vds = ModelParameters.MosfetType * BaseParameters.InitialVoltageDs;
-                    vgs = ModelParameters.MosfetType * BaseParameters.InitialVoltageGs;
-                    vbs = ModelParameters.MosfetType * BaseParameters.InitialVoltageBs;
-
-                    // TODO: At some point, check what this is supposed to do
-                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (state.UseDc || !state.UseIc))
-                    {
-                        vbs = -1;
-                        vgs = ModelParameters.MosfetType * TempVt0;
-                        vds = 0;
-                    }
-                }
-                else
-                {
-                    vbs = vgs = vds = 0;
-                }
-            }
-
-            /*
-             * now all the preliminaries are over - we can start doing the
-             * real work
-             */
-            vbd = vbs - vds;
-            vgd = vgs - vds;
+            // Get the current voltages
+            Initialize(simulation, out var vgs, out var vds, out var vbs, out var check);
+            var vbd = vbs - vds;
+            var vgd = vgs - vds;
 
             /*
 			 * bulk - source and bulk - drain diodes
@@ -416,27 +327,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			 */
             if (vbs <= 0)
             {
-                CondBs = sourceSatCur / vt;
+                CondBs = SourceSatCurrent / Vt;
                 BsCurrent = CondBs * vbs;
                 CondBs += BaseConfiguration.Gmin;
             }
             else
             {
-                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / vt));
-                CondBs = sourceSatCur * evbs / vt + BaseConfiguration.Gmin;
-                BsCurrent = sourceSatCur * (evbs - 1);
+                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Vt));
+                CondBs = SourceSatCurrent * evbs / Vt + BaseConfiguration.Gmin;
+                BsCurrent = SourceSatCurrent * (evbs - 1);
             }
             if (vbd <= 0)
             {
-                CondBd = drainSatCur / vt;
+                CondBd = DrainSatCurrent / Vt;
                 BdCurrent = CondBd * vbd;
                 CondBd += BaseConfiguration.Gmin;
             }
             else
             {
-                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / vt));
-                CondBd = drainSatCur * evbd / vt + BaseConfiguration.Gmin;
-                BdCurrent = drainSatCur * (evbd - 1);
+                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Vt));
+                CondBd = DrainSatCurrent * evbd / Vt + BaseConfiguration.Gmin;
+                BdCurrent = DrainSatCurrent * (evbd - 1);
             }
 
             /*
@@ -512,6 +423,91 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         }
 
         /// <summary>
+        /// Initializes the voltages to be used for the current iteration.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="vgs">The VGS.</param>
+        /// <param name="vds">The VDS.</param>
+        /// <param name="vbs">The VBS.</param>
+        /// <param name="check">if set to <c>true</c> [check].</param>
+        protected void Initialize(BaseSimulation simulation,
+            out double vgs, out double vds, out double vbs, out bool check)
+        {
+            var state = simulation.RealState;
+            check = true;
+
+            if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
+                state.Init == InitializationModes.Fix && !BaseParameters.Off)
+            {
+                // General iteration
+                vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
+                vgs = ModelParameters.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
+                vds = ModelParameters.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+
+                // now some common crunching for some more useful quantities
+                var vbd = vbs - vds;
+                var vgd = vgs - vds;
+                var vgdo = VoltageGs - VoltageDs;
+                var von = ModelParameters.MosfetType * Von;
+
+                /*
+				 * limiting
+				 * we want to keep device voltages from changing
+				 * so fast that the exponentials churn out overflows
+				 * and similar rudeness
+				 */
+                // NOTE: Spice 3f5 does not write out Vgs during DC analysis, so DEVfetlim may give different results in Spice 3f5
+                if (VoltageDs >= 0)
+                {
+                    vgs = Transistor.LimitFet(vgs, VoltageGs, von);
+                    vds = vgs - vgd;
+                    vds = Transistor.LimitVds(vds, VoltageDs);
+                }
+                else
+                {
+                    vgd = Transistor.LimitFet(vgd, vgdo, von);
+                    vds = vgs - vgd;
+                    vds = -Transistor.LimitVds(-vds, -VoltageDs);
+                    vgs = vgd + vds;
+                }
+
+                check = false;
+                if (vds >= 0)
+                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, Vt, SourceVCritical, ref check);
+                else
+                {
+                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, Vt, DrainVCritical, ref check);
+                    vbs = vbd + vds;
+                }
+            }
+            else
+            {
+                /* ok - not one of the simple cases, so we have to
+				 * look at all of the possibilities for why we were
+				 * called.  We still just initialize the three voltages
+				 */
+                if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
+                {
+                    vds = ModelParameters.MosfetType * BaseParameters.InitialVoltageDs;
+                    vgs = ModelParameters.MosfetType * BaseParameters.InitialVoltageGs;
+                    vbs = ModelParameters.MosfetType * BaseParameters.InitialVoltageBs;
+
+                    // TODO: At some point, check what this is supposed to do
+                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (state.UseDc || !state.UseIc))
+                    {
+                        vbs = -1;
+                        vgs = ModelParameters.MosfetType * TempVt0;
+                        vds = 0;
+                    }
+                }
+                else
+                {
+                    vbs = vgs = vds = 0;
+                }
+            }
+        }
+
+        /// <summary>
         /// Execute behavior
         /// </summary>
         protected double Evaluate(double vgs, double vds, double vbs)
@@ -519,7 +515,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             double von;
             double vdsat, cdrain = 0.0;
 
-            var vt = Circuit.KOverQ * BaseParameters.Temperature;
+            var Vt = Circuit.KOverQ * BaseParameters.Temperature;
             var effectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
             var beta = TempTransconductance * BaseParameters.Width / effectiveLength;
             var oxideCap = ModelParameters.OxideCapFactor * effectiveLength * BaseParameters.Width;
@@ -682,7 +678,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 var cfs = Circuit.Charge * ModelParameters.FastSurfaceStateDensity * 1e4;
                 var cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
                 xn = 1.0 + cfs / oxideCap * BaseParameters.Width * effectiveLength + cdonco;
-                tmp = vt * xn;
+                tmp = Vt * xn;
                 von = von + tmp;
                 argg = 1.0 / tmp;
                 vgst = lvgs - von;
@@ -713,9 +709,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (oxideCap.Equals(0.0))
                 goto line410;
             dxndvb = 2.0 * dgdvbs * dsrgdb + gammad * d2Sdb2 + dgddb2 * sarg;
-            dodvbs = dodvbs + vt * dxndvb;
+            dodvbs = dodvbs + Vt * dxndvb;
             dxndvd = dgdvds * dsrgdb;
-            dodvds = dgdvds * sarg + vt * dxndvd;
+            dodvds = dgdvds * sarg + Vt * dxndvd;
 
             // Evaluate effective mobility and its derivatives
             line400:

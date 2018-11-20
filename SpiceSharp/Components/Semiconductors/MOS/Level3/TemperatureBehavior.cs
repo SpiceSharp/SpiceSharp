@@ -116,6 +116,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         protected double TempSaturationCurrentDensity { get; private set; }
         protected double TempTransconductance { get; private set; }
         protected double TempVt0 { get; private set; }
+        protected double Vt { get; private set; }
+        protected double DrainSatCurrent { get; private set; }
+        protected double SourceSatCurrent { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -150,13 +153,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            var vt = BaseParameters.Temperature * Circuit.KOverQ;
+            Vt = BaseParameters.Temperature * Circuit.KOverQ;
             var ratio = BaseParameters.Temperature / ModelParameters.NominalTemperature;
             var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
             var kt = BaseParameters.Temperature * Circuit.Boltzmann;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
             var arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
             if (ModelParameters.DrainResistance.Given)
             {
@@ -220,19 +223,30 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             TempVoltageBi = ModelParameters.Vt0 - ModelParameters.MosfetType * (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi)) + .5 * (ModelTemperature.EgFet1 - egfet) +
                 ModelParameters.MosfetType * .5 * (TempPhi - ModelParameters.Phi);
             TempVt0 = TempVoltageBi + ModelParameters.MosfetType * ModelParameters.Gamma * Math.Sqrt(TempPhi);
-            TempSaturationCurrent = ModelParameters.JunctionSatCur * Math.Exp(-egfet / vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
-            TempSaturationCurrentDensity = ModelParameters.JunctionSatCurDensity * Math.Exp(-egfet / vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
+            TempSaturationCurrent = ModelParameters.JunctionSatCur * Math.Exp(-egfet / Vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
+            TempSaturationCurrentDensity = ModelParameters.JunctionSatCurDensity * Math.Exp(-egfet / Vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
             var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
             TempBulkPotential = fact2 * pbo + pbfact;
 
             if (ModelParameters.JunctionSatCurDensity.Value <= 0 || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
             {
-                SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.JunctionSatCur));
+                SourceVCritical = DrainVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * ModelParameters.JunctionSatCur));
             }
             else
             {
-                DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.JunctionSatCurDensity * BaseParameters.DrainArea));
-                SourceVCritical = vt * Math.Log(vt / (Circuit.Root2 * ModelParameters.JunctionSatCurDensity * BaseParameters.SourceArea));
+                DrainVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * ModelParameters.JunctionSatCurDensity * BaseParameters.DrainArea));
+                SourceVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * ModelParameters.JunctionSatCurDensity * BaseParameters.SourceArea));
+            }
+
+            if (TempSaturationCurrentDensity.Equals(0) || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
+            {
+                DrainSatCurrent = TempSaturationCurrent;
+                SourceSatCurrent = TempSaturationCurrent;
+            }
+            else
+            {
+                DrainSatCurrent = TempSaturationCurrentDensity * BaseParameters.DrainArea;
+                SourceSatCurrent = TempSaturationCurrentDensity * BaseParameters.SourceArea;
             }
         }
     }
