@@ -151,6 +151,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="simulation">The base simulation.</param>
         public void Temperature(BaseSimulation simulation)
         {
+            // Update the width and length if they are not given and if the model specifies them
+            if (!BaseParameters.Width.Given && ModelParameters.Width.Given)
+                BaseParameters.Width.RawValue = ModelParameters.Width.Value;
+            if (!BaseParameters.Length.Given && ModelParameters.Length.Given)
+                BaseParameters.Length.RawValue = ModelParameters.Length.Value;
+
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
             Vt = BaseParameters.Temperature * Circuit.KOverQ;
@@ -164,55 +170,36 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             if (ModelParameters.DrainResistance.Given)
             {
                 if (!ModelParameters.DrainResistance.Value.Equals(0.0))
-                {
                     DrainConductance = 1 / ModelParameters.DrainResistance;
-                }
                 else
-                {
                     DrainConductance = 0;
-                }
             }
             else if (ModelParameters.SheetResistance.Given)
             {
                 if (!ModelParameters.SheetResistance.Value.Equals(0.0))
-                {
                     DrainConductance = 1 / (ModelParameters.SheetResistance * BaseParameters.DrainSquares);
-                }
                 else
-                {
                     DrainConductance = 0;
-                }
             }
             else
-            {
                 DrainConductance = 0;
-            }
             if (ModelParameters.SourceResistance.Given)
             {
                 if (!ModelParameters.SourceResistance.Value.Equals(0.0))
-                {
                     SourceConductance = 1 / ModelParameters.SourceResistance;
-                }
                 else
-                {
                     SourceConductance = 0;
-                }
             }
             else if (ModelParameters.SheetResistance.Given)
             {
                 if (!ModelParameters.SheetResistance.Value.Equals(0.0))
-                {
                     SourceConductance = 1 / (ModelParameters.SheetResistance * BaseParameters.SourceSquares);
-                }
                 else
-                {
                     SourceConductance = 0;
-                }
             }
             else
-            {
                 SourceConductance = 0;
-            }
+
             if (BaseParameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
                 CircuitWarning.Warning(this, "{0}: effective channel length less than zero".FormatString(Name));
             var ratio4 = ratio * Math.Sqrt(ratio);
