@@ -23,11 +23,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Shared parameters
         /// </summary>
-        protected double Factor1 { get; private set; }
-        protected double VtNominal { get; private set; }
-        protected double EgFet1 { get; private set; }
-        protected double PbFactor1 { get; private set; }
-        protected double Xd { get; private set; }
+        public double Factor1 { get; private set; }
+        public double VtNominal { get; private set; }
+        public double EgFet1 { get; private set; }
+        public double PbFactor1 { get; private set; }
+        public double Xd { get; private set; }
 
         /// <summary>
         /// Constructor

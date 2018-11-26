@@ -42,6 +42,10 @@ namespace SpiceSharp.Algebra.Solve
             var ratioOfAccepted = 0.0;
             var ties = 0;
 
+            /* Used for debugging alongside Spice 3f5
+            for (var index = matrix.Size + 1; index > eliminationStep; index--)
+            {
+                var i = index > matrix.Size ? eliminationStep : index; */
             for (var i = eliminationStep; i <= matrix.Size; i++)
             {
                 // Skip the diagonal if we already have a better one

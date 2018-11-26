@@ -93,6 +93,12 @@
     <Compile Include="Waveforms\PwlTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Algebra\Matrices\spice3f5_matrix01.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Algebra\Matrices\spice3f5_vector01.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Algebra\Matrices\fidapm05.mtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

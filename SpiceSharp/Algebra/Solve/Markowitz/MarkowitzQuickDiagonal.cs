@@ -35,6 +35,10 @@ namespace SpiceSharp.Algebra.Solve
             var minMarkowitzProduct = int.MaxValue;
             MatrixElement<T> chosen = null;
 
+            /* Used for debugging along Spice 3f5
+            for (var index = matrix.Size + 1; index > eliminationStep; index--)
+            {
+                int i = index > matrix.Size ? eliminationStep : index; */
             for (var i = eliminationStep; i <= matrix.Size; i++)
             {
                 // Skip diagonal elements with a Markowitz product worse than already found

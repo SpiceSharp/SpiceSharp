@@ -36,5 +36,19 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Diode"/> class.
+        /// </summary>
+        /// <param name="name">The name of the device.</param>
+        /// <param name="anode">The anode.</param>
+        /// <param name="cathode">The cathode.</param>
+        /// <param name="model">The model.</param>
+        public Diode(string name, string anode, string cathode, DiodeModel model)
+            : this(name)
+        {
+            Connect(anode, cathode);
+            Model = model;
+        }
     }
 }

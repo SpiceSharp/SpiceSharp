@@ -341,6 +341,30 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
+        /// Notifies the strategy that a fill-in has been created
+        /// </summary>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="fillin">The fill-in.</param>
+        public override void CreateFillin(SparseMatrix<T> matrix, MatrixElement<T> fillin)
+        {
+            // Update the markowitz row count
+            int index = fillin.Row;
+            _markowitzRow[index]++;
+            _markowitzProduct[index] =
+                Math.Min(_markowitzRow[index] * _markowitzColumn[index], MaxMarkowitzCount);
+            if (_markowitzRow[index] == 1 && _markowitzColumn[index] != 0)
+                Singletons--;
+
+            // Update the markowitz column count
+            index = fillin.Column;
+            _markowitzColumn[index]++;
+            _markowitzProduct[index] =
+                Math.Min(_markowitzRow[index] * _markowitzColumn[index], MaxMarkowitzCount);
+            if (_markowitzRow[index] != 0 && _markowitzColumn[index] == 1)
+                Singletons--;
+        }
+
+        /// <summary>
         /// Find a pivot in the matrix.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
@@ -361,5 +385,48 @@ namespace SpiceSharp.Algebra.Solve
             }
             return null;
         }
+
+        #if DEBUG
+        public void CheckMarkowitzCounts(SparseMatrix<T> matrix, int step)
+        {
+            if (_markowitzProduct == null)
+                return;
+
+            // Recalculate the rows and columns completely and check with the current ones
+            int singletons = 0;
+            for (var i = step; i <= matrix.Size; i++)
+            {
+                // Count the elements in the row
+                int count = -1;
+                var e = matrix.GetLastInRow(i);
+                while (e != null && e.Column >= step)
+                {
+                    count++;
+                    e = e.Left;
+                }
+                if (_markowitzRow[i] != count && _markowitzRow[i] != count + 1)
+                    throw new CircuitException("Invalid row count");
+
+                // Count the elements in the column
+                count = -1;
+                e = matrix.GetLastInColumn(i);
+                while (e != null && e.Row >= step)
+                {
+                    count++;
+                    e = e.Above;
+                }
+                if (_markowitzColumn[i] != count)
+                    throw new CircuitException("Invalid column count");
+
+                if (_markowitzProduct[i] != Math.Min(_markowitzRow[i] * _markowitzColumn[i], MaxMarkowitzCount))
+                    throw new CircuitException("Invalid product");
+                if (_markowitzProduct[i] == 0)
+                    singletons++;
+            }
+
+            if (singletons != Singletons)
+                throw new CircuitException("Invalid singleton count");
+        }
+        #endif
     }
 }

@@ -143,7 +143,9 @@ namespace SpiceSharp.Components
                 throw new CircuitException("Invalid period {0}".FormatString(_per));
             if (_per < _tr + _pw + _tf)
                 throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(_per));
-            Value = _v1;
+
+            // Initialize the value
+            At(0.0);
         }
 
         /// <summary>
@@ -152,8 +154,16 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The time-based simulation.</param>
         public override void Probe(TimeSimulation simulation)
         {
+            At(simulation.Method.Time);
+        }
+
+        /// <summary>
+        /// Calculate the pulse value at the designated timepoint
+        /// </summary>
+        /// <param name="time">The time.</param>
+        private void At(double time)
+        {
             // Get a relative time variable
-            var time = simulation.Method.Time;
             time -= _td;
             if (time > _per)
             {
