@@ -61,6 +61,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             EgFet1 = 1.16 - 7.02e-4 * ModelParameters.NominalTemperature * ModelParameters.NominalTemperature / (ModelParameters.NominalTemperature + 1108);
             var arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
             PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Factor1) + Circuit.Charge * arg1);
+
             if (ModelParameters.OxideThickness.Given && ModelParameters.OxideThickness > 0.0)
             {
                 if (ModelParameters.SubstrateDoping.Given)

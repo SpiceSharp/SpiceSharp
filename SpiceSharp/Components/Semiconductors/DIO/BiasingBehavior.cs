@@ -38,25 +38,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Extra variables
         /// </summary>
-        [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
-        public double InternalVoltage { get; protected set; }
-        [ParameterName("v"), ParameterInfo("Voltage across the diode")]
-        public double GetVoltage(BaseSimulationState state)
-        {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
-        [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
+        [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
+        public double Voltage { get; private set; }
+        [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
         public double Current { get; protected set; }
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
-        public double Conduct { get; protected set; }
+        public double Conductance { get; protected set; }
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return (state.Solution[PosNode] - state.Solution[NegNode]) * -Current;
+            return Current * Voltage;
         }
 
         /// <summary>
@@ -161,9 +154,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Store for next time
-            InternalVoltage = vd;
+            Voltage = vd;
             Current = cd;
-            Conduct = gd;
+            Conductance = gd;
 
             // Load Rhs vector
             var cdeq = cd - gd * vd;
@@ -201,12 +194,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
                 {
                     var vdtemp = -(vd + TempBreakdownVoltage);
-                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(Voltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);
                     vd = -(vdtemp + TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.LimitJunction(vd, InternalVoltage, Vte, TempVCritical, ref check);
+                    vd = Semiconductor.LimitJunction(vd, Voltage, Vte, TempVCritical, ref check);
                 }
             }
         }
@@ -224,8 +217,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = simulation.RealState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
 
-            var delvd = vd - InternalVoltage;
-            var cdhat = Current + Conduct * delvd;
+            var delvd = vd - Voltage;
+            var cdhat = Current + Conductance * delvd;
             var cd = Current;
 
             // check convergence

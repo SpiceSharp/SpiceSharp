@@ -99,6 +99,7 @@ namespace SpiceSharp.Algebra
             if (column != step)
                 SwapColumns(column, step);
 
+            // Update the pivoting strategy
             Strategy.Update(Matrix, pivot, step);
         }
 
@@ -111,6 +112,7 @@ namespace SpiceSharp.Algebra
         protected virtual MatrixElement<T> CreateFillin(int row, int column)
         {
             var result = Matrix.GetElement(row, column);
+            Strategy.CreateFillin(Matrix, result);
             Fillins++;
             return result;
         }

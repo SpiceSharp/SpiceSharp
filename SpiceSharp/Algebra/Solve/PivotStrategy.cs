@@ -22,7 +22,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The pivot absolute threshold.
         /// </value>
-        public double AbsolutePivotThreshold { get; set; }
+        public double AbsolutePivotThreshold { get; set; } = 1e-13;
 
         /// <summary>
         /// This method will check whether or not a pivot element is valid or not.
@@ -60,6 +60,13 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="pivot">The pivot element.</param>
         /// <param name="eliminationStep">The elimination step.</param>
         public abstract void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep);
+
+        /// <summary>
+        /// Notifies the strategy that a fill-in has been created
+        /// </summary>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="fillin">The fill-in.</param>
+        public abstract void CreateFillin(SparseMatrix<T> matrix, MatrixElement<T> fillin);
 
         /// <summary>
         /// Find a pivot in the matrix.

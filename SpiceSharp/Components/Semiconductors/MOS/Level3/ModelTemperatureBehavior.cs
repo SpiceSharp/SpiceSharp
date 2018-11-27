@@ -22,20 +22,30 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
-        /// Shared parameters
+        /// Gets the width of the depletion layer.
         /// </summary>
+        /// <value>
+        /// The width of the depletion layer.
+        /// </value>
         [ParameterName("xd"), ParameterInfo("Depletion layer width")]
-        public double CoefficientDepletionLayerWidth { get; protected set; }
+        public double CoefficientDepletionLayerWidth { get; private set; }
+
+        /// <summary>
+        /// Gets alpha.
+        /// </summary>
+        /// <value>
+        /// Alpha.
+        /// </value>
         [ParameterName("alpha"), ParameterInfo("Alpha")]
-        public double Alpha { get; protected set; }
+        public double Alpha { get; private set; }
         
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double Factor1 { get; protected set; }
-        public double VtNominal { get; protected set; }
-        public double EgFet1 { get; protected set; }
-        public double PbFactor1 { get; protected set; }
+        public double Factor1 { get; private set; }
+        public double VtNominal { get; private set; }
+        public double EgFet1 { get; private set; }
+        public double PbFactor1 { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -63,6 +73,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="simulation">Base simulation</param>
         public void Temperature(BaseSimulation simulation)
         {
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
             // Perform model defaulting
             if (!ModelParameters.NominalTemperature.Given)
                 ModelParameters.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;

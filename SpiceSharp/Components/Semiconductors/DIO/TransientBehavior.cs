@@ -10,20 +10,34 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TransientBehavior : BiasingBehavior, ITimeBehavior
+    public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Diode capacitance
+        /// Gets the capacitance charge.
         /// </summary>
-        [ParameterName("cd"), ParameterInfo("Diode capacitance")]
-        public double Capacitance { get; protected set; }
-        [ParameterName("id"), ParameterName("c"), ParameterInfo("Diode current")]
-        public double Current { get; protected set; }
+        /// <value>
+        /// The capacitance charge.
+        /// </value>
+        [ParameterName("charge"), ParameterInfo("Diode capacitor charge")]
+        public sealed override double CapCharge
+        {
+            get => _capCharge.Current;
+            protected set => _capCharge.Current = value;
+        }
+
+        /// <summary>
+        /// Gets the capacitor current.
+        /// </summary>
+        /// <value>
+        /// The capacitor current.
+        /// </value>
+        [ParameterName("capcur"), ParameterInfo("Diode capacitor current")]
+        public double CapCurrent => _capCharge.Derivative;
 
         /// <summary>
         /// The charge on the junction capacitance
         /// </summary>
-        public StateDerivative CapCharge { get; private set; }
+        private StateDerivative _capCharge;
 
         /// <summary>
         /// Constructor
@@ -39,8 +53,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
 			if (method == null)
 				throw new ArgumentNullException(nameof(method));
-
-            CapCharge = method.CreateDerivative();
+            _capCharge = method.CreateDerivative();
         }
 
         /// <summary>
@@ -53,27 +66,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double capd;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
-
-            // charge storage elements
-            var czero = TempJunctionCap * BaseParameters.Area;
-            if (vd < TempDepletionCap)
-            {
-                var arg = 1 - vd / ModelParameters.JunctionPotential;
-                var sarg = Math.Exp(-ModelParameters.GradingCoefficient * Math.Log(arg));
-                CapCharge.Current = ModelParameters.TransitTime * base.Current + ModelParameters.JunctionPotential * czero * (1 - arg * sarg) / (1 -
-                        ModelParameters.GradingCoefficient);
-                capd = ModelParameters.TransitTime * Conduct + czero * sarg;
-            }
-            else
-            {
-                var czof2 = czero / ModelTemperature.F2;
-                CapCharge.Current = ModelParameters.TransitTime * base.Current + czero * TempFactor1 + czof2 * (ModelTemperature.F3 * (vd -
-                    TempDepletionCap) + ModelParameters.GradingCoefficient / (ModelParameters.JunctionPotential + ModelParameters.JunctionPotential) * (vd * vd - TempDepletionCap * TempDepletionCap));
-                capd = ModelParameters.TransitTime * Conduct + czof2 * (ModelTemperature.F3 + ModelParameters.GradingCoefficient * vd / ModelParameters.JunctionPotential);
-            }
-            Capacitance = capd;
+            CalculateCapacitance(vd);
         }
 
         /// <summary>
@@ -95,19 +89,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
+            // Calculate the capacitance
             var state = simulation.RealState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
-
-            // This is the same calculation
-            GetDcState(simulation);
+            CalculateCapacitance(vd);
 
             // Integrate
-            CapCharge.Integrate();
-            var geq = CapCharge.Jacobian(Capacitance);
-            var ceq = CapCharge.RhsCurrent(geq, vd);
+            _capCharge.Integrate();
+            var geq = _capCharge.Jacobian(Capacitance);
+            var ceq = _capCharge.RhsCurrent(geq, vd);
 
             // Store the current
-            Current = base.Current + CapCharge.Derivative;
+            Current = Current + _capCharge.Derivative;
 
             // Load Rhs vector
             NegPtr.Value += ceq;
@@ -119,11 +112,5 @@ namespace SpiceSharp.Components.DiodeBehaviors
             NegPosPrimePtr.Value -= geq;
             PosPrimeNegPtr.Value -= geq;
         }
-
-        /// <summary>
-        /// Use local truncation error to cut timestep
-        /// </summary>
-        /// <returns>The timestep that satisfies the LTE</returns>
-        // public override double Truncate() => CapCharge.LocalTruncationError();
     }
 }

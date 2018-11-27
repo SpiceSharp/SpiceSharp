@@ -35,7 +35,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             return state.Solution[ControlBranchEq] * BaseParameters.Coefficient;
         }
         [ParameterName("v"), ParameterInfo("Voltage")]
@@ -43,7 +42,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Power")]
@@ -51,7 +49,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             return (state.Solution[PosNode] - state.Solution[NegNode]) * state.Solution[ControlBranchEq] * BaseParameters.Coefficient;
         }
 

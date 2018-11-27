@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// AC behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Nodes
@@ -38,20 +38,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected MatrixElement<Complex> CSubstrateCollectorPrimePtr { get; private set; }
         protected MatrixElement<Complex> CBaseCollectorPrimePtr { get; private set; }
         protected MatrixElement<Complex> CCollectorPrimeBasePtr { get; private set; }
-        
-        /// <summary>
-        /// Device methods and properties
-        /// </summary>
-        [ParameterName("cpi"), ParameterInfo("Internal base to emitter capactance")]
-        public double CapBe { get; protected set; }
-        [ParameterName("cmu"), ParameterInfo("Internal base to collector capactiance")]
-        public double CapBc { get; protected set; }
-        [ParameterName("cbx"), ParameterInfo("Base to collector capacitance")]
-        public double CapBx { get; protected set; }
-        [ParameterName("ccs"), ParameterInfo("Collector to substrate capacitance")]
-        public double CapCs { get; protected set; }
-        [ParameterName("gcb"), ParameterInfo("Conductance of the C-B junction")]
-        public double CondCb { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -102,118 +88,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
-
-            double arg, sarg;
-            double f2, f3;
-
-            // Get voltages
             var state = simulation.RealState;
             var vbe = VoltageBe;
             var vbc = VoltageBc;
             var vbx = ModelParameters.BipolarType * (state.Solution[BaseNode] - state.Solution[CollectorPrimeNode]);
             var vcs = ModelParameters.BipolarType * (state.Solution[SubstrateNode] - state.Solution[CollectorPrimeNode]);
-
-            // Get shared parameters
-            var cbe = CurrentBe;
-            var gbe = CondBe;
-            var gbc = CondBc;
-            var qb = BaseCharge;
-            var dqbdve = Dqbdve;
-            var dqbdvc = Dqbdvc;
-
-            // Charge storage elements
-            double tf = ModelParameters.TransitTimeForward;
-            double tr = ModelParameters.TransitTimeReverse;
-            var czbe = TempBeCap * BaseParameters.Area;
-            var pe = TempBePotential;
-            double xme = ModelParameters.JunctionExpBe;
-            double cdis = ModelParameters.BaseFractionBcCap;
-            var ctot = TempBcCap * BaseParameters.Area;
-            var czbc = ctot * cdis;
-            var czbx = ctot - czbc;
-            var pc = TempBcPotential;
-            double xmc = ModelParameters.JunctionExpBc;
-            var fcpe = TempDepletionCap;
-            var czcs = ModelParameters.CapCs * BaseParameters.Area;
-            double ps = ModelParameters.PotentialSubstrate;
-            double xms = ModelParameters.ExponentialSubstrate;
-            double xtf = ModelParameters.TransitTimeBiasCoefficientForward;
-            var ovtf = ModelTemperature.TransitTimeVoltageBcFactor;
-            var xjtf = ModelParameters.TransitTimeHighCurrentForward * BaseParameters.Area;
-            if (!tf.Equals(0) && vbe > 0) // Avoid computations
-            {
-                double argtf = 0;
-                double arg2 = 0;
-                double arg3 = 0;
-                if (!xtf.Equals(0)) // Avoid computations
-                {
-                    argtf = xtf;
-                    if (!ovtf.Equals(0)) // Avoid expensive Exp()
-                    {
-                        argtf = argtf * Math.Exp(vbc * ovtf);
-                    }
-                    arg2 = argtf;
-                    if (!xjtf.Equals(0)) // Avoid computations
-                    {
-                        var tmp = cbe / (cbe + xjtf);
-                        argtf = argtf * tmp * tmp;
-                        arg2 = argtf * (3 - tmp - tmp);
-                    }
-                    arg3 = cbe * argtf * ovtf;
-                }
-                cbe = cbe * (1 + argtf) / qb;
-                gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
-                CondCb = tf * (arg3 - cbe * dqbdvc) / qb;
-            }
-            if (vbe < fcpe)
-            {
-                arg = 1 - vbe / pe;
-                sarg = Math.Exp(-xme * Math.Log(arg));
-                CapBe = tf * gbe + czbe * sarg;
-            }
-            else
-            {
-                f2 = ModelTemperature.F2;
-                f3 = ModelTemperature.F3;
-                var czbef2 = czbe / f2;
-                CapBe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
-            }
-
-            var fcpc = TempFactor4;
-            f2 = ModelTemperature.F6;
-            f3 = ModelTemperature.F7;
-            if (vbc < fcpc)
-            {
-                arg = 1 - vbc / pc;
-                sarg = Math.Exp(-xmc * Math.Log(arg));
-                CapBc = tr * gbc + czbc * sarg;
-            }
-            else
-            {
-                var czbcf2 = czbc / f2;
-                CapBc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
-            }
-            if (vbx < fcpc)
-            {
-                arg = 1 - vbx / pc;
-                sarg = Math.Exp(-xmc * Math.Log(arg));
-                CapBx = czbx * sarg;
-            }
-            else
-            {
-                var czbxf2 = czbx / f2;
-                CapBx = czbxf2 * (f3 + xmc * vbx / pc);
-            }
-            if (vcs < 0)
-            {
-                arg = 1 - vcs / ps;
-                sarg = Math.Exp(-xms * Math.Log(arg));
-                CapCs = czcs * sarg;
-            }
-            else
-            {
-                CapCs = czcs * (1 + xms * vcs / ps);
-            }
+            CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 
         /// <summary>
@@ -246,7 +126,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var xcmu = CapBc * cstate.Laplace;
             var xcbx = CapBx * cstate.Laplace;
             var xccs = CapCs * cstate.Laplace;
-            var xcmcb = CondCb * cstate.Laplace;
+            var xcmcb = Geqcb * cstate.Laplace;
 
             CCollectorCollectorPtr.Value += gcpr;
             CBaseBasePtr.Value += gx + xcbx;

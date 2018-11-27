@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Behaviors;
@@ -18,7 +19,49 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// The branch equation index.
         /// </value>
         public int BranchEq { get; private set; }
-        
+
+        /// <summary>
+        /// Gets the current.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
+        public double GetCurrent(BaseSimulationState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[BranchEq];
+        }
+
+        /// <summary>
+        /// Gets the voltage.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
+        [ParameterName("v"), ParameterInfo("Voltage")]
+        public double GetVoltage(BaseSimulationState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[PosNode] - state.Solution[NegNode];
+        }
+
+        /// <summary>
+        /// Gets the power dissipated by the inductor.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">state</exception>
+        [ParameterName("p"), ParameterInfo("Power")]
+        public double GetPower(BaseSimulationState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            return v * state.Solution[BranchEq];
+        }
+
         /// <summary>
         /// Nodes
         /// </summary>

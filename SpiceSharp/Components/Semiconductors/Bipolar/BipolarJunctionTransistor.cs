@@ -37,5 +37,22 @@ namespace SpiceSharp.Components
             Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BipolarJunctionTransistor"/> class.
+        /// </summary>
+        /// <param name="name">The name of the device.</param>
+        /// <param name="c">The collector node.</param>
+        /// <param name="b">The base node.</param>
+        /// <param name="e">The emitter node.</param>
+        /// <param name="s">The substrate node.</param>
+        /// <param name="model">The model.</param>
+        public BipolarJunctionTransistor(string name, string c, string b, string e, string s,
+            BipolarJunctionTransistorModel model)
+            : this(name)
+        {
+            Connect(c, b, e, s);
+            Model = model;
+        }
     }
 }

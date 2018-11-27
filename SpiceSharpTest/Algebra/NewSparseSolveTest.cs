@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
 using SpiceSharp.Algebra.Solve;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Sparse
 {
@@ -12,13 +14,27 @@ namespace SpiceSharpTest.Sparse
         [Test]
         public void When_BigMatrix_Expect_NoException()
         {
-            /*
-             * Test factoring a big matrix
-             */
+            // Test factoring a big matrix
             var solver = ReadMtxFile(Path.Combine(TestContext.CurrentContext.TestDirectory, @"Algebra\Matrices\fidapm05.mtx"));
 
             // Order and factor this larger matrix
             solver.OrderAndFactor();
+        }
+
+        [Test]
+        public void When_Spice3f5Reference01_Expect_NoException()
+        {
+            // Load a matrix from Spice 3f5
+            var solver = ReadSpice3f5File(
+                Path.Combine(TestContext.CurrentContext.TestDirectory, @"Algebra\Matrices\spice3f5_matrix01.dat"),
+                Path.Combine(TestContext.CurrentContext.TestDirectory, @"Algebra\Matrices\spice3f5_vector01.dat"));
+
+            // Order and factor
+            solver.PreorderModifiedNodalAnalysis(Math.Abs);
+            solver.OrderAndFactor();
+
+            Vector<double> solution = new DenseVector<double>(solver.Order);
+            solver.Solve(solution);
         }
 
         [Test]
