@@ -278,6 +278,7 @@ namespace SpiceSharp.Simulations
             {
                 state.Init = InitializationModes.Junction;
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
+                bool success = true;
                 for (var i = 0; i <= config.SourceSteps; i++)
                 {
                     state.SourceFactor = i / (double)config.SourceSteps;
@@ -285,11 +286,12 @@ namespace SpiceSharp.Simulations
                     {
                         state.SourceFactor = 1.0;
                         CircuitWarning.Warning(this, Properties.Resources.SourceSteppingFailed);
-                        return;
+                        success = false;
+                        break;
                     }
                 }
-                state.SourceFactor = 1.0;
-                return;
+                if (success)
+                    return;
             }
 
             // Failed
@@ -584,5 +586,16 @@ namespace SpiceSharp.Simulations
         protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
+
+        #if DEBUG
+        /// <summary>
+        /// Lists all variables to the debugger
+        /// </summary>
+        public void ListVariables()
+        {
+            foreach (var variable in Variables)
+                System.Diagnostics.Debug.WriteLine(variable.Name + " (" + variable.Index + ") = " + RealState.Solution[variable.Index]);
+        }
+        #endif
     }
 }

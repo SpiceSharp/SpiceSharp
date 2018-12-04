@@ -255,6 +255,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="newDelta">The next timestep to be probed.</param>
+        /// <exception cref="CircuitException">Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime)</exception>
         public override void NonConvergence(TimeSimulation simulation, out double newDelta)
         {
             base.NonConvergence(simulation, out newDelta);
@@ -262,6 +263,15 @@ namespace SpiceSharp.IntegrationMethods
             // Limit the timestep and cut the order
             newDelta = Math.Min(newDelta, IntegrationStates[0].Delta / 8.0);
             Order = 1;
+
+            // If the timestep is consistently made smaller than the minimum timestep, throw an exception
+            if (newDelta <= MinStep)
+            {
+                // If we already tried
+                if (_oldDelta <= MinStep)
+                    throw new CircuitException("Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime));
+                newDelta = MinStep;
+            }
         }
 
         /// <summary>

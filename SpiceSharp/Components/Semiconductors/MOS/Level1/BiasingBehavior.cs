@@ -254,7 +254,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
-                DrainNodePrime = variables.Create(Name.Combine("DrainNode")).Index;
+                DrainNodePrime = variables.Create(Name.Combine("drain")).Index;
             else
                 DrainNodePrime = DrainNode;
 
@@ -425,7 +425,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var state = simulation.RealState;
             check = true;
 
-            if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
+            if (state.Init == InitializationModes.Float || (!state.UseDc && simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
                 state.Init == InitializationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration
