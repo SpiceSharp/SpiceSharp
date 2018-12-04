@@ -123,6 +123,9 @@
   <data name="SourceSteppingFailed" xml:space="preserve">
     <value>Source stepping failed</value>
   </data>
+  <data name="StartDiagonalGminStepping" xml:space="preserve">
+    <value>Starting diagonal Gmin stepping</value>
+  </data>
   <data name="StartGminStepping" xml:space="preserve">
     <value>Starting Gmin stepping</value>
   </data>

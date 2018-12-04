@@ -241,18 +241,65 @@ namespace SpiceSharp.Simulations
                 }
             }
 
-            // No convergence, try Gmin stepping
+            // Try Gmin stepping
             if (config.GminSteps > 1)
             {
-                // Apply gmin step to AfterLoad event
+                // We will shunt all PN-junctions with a conductance (should be implemented by the components)
+                CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
+
+                // We could've ended up with some crazy value, so let's reset it
+                for (var i = 0; i < RealState.Solution.Length; i++)
+                    RealState.Solution[i] = 0.0;
+
+                // Let's make it a bit easier for our iterations to converge
+                var original = config.Gmin;
+                for (var i = 0; i < config.GminSteps; i++)
+                    config.Gmin *= 10.0;
+
+                // Start GMIN stepping
+                state.Init = InitializationModes.Junction;
+                for (var i = 0; i <= config.GminSteps; i++)
+                {
+                    state.IsConvergent = false;
+                    if (!Iterate(maxIterations))
+                    {
+                        config.Gmin = original;
+                        CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
+                        break;
+                    }
+
+                    // Success! Let's try to get more accurate now
+                    config.Gmin /= 10.0;
+                    state.Init = InitializationModes.Float;
+                }
+
+                // Try one more time with the original gmin
+                config.Gmin = original;
+                if (Iterate(maxIterations))
+                    return;
+            }
+
+            // No convergence..., try GMIN stepping on the diagonal elements
+            if (config.GminSteps > 1)
+            {
+                // We will add a DC path to ground to all nodes to aid convergence
+                CircuitWarning.Warning(this, Properties.Resources.StartDiagonalGminStepping);
+
+                // We'll hack into the loading algorithm to apply our diagonal contributions
                 _diagonalGmin = config.Gmin;
                 void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
                 AfterLoad += ApplyGminStep;
 
-                state.Init = InitializationModes.Junction;
-                CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
+                // We could've ended up with some crazy value, so let's reset it
+                for (var i = 0; i < RealState.Solution.Length; i++)
+                    RealState.Solution[i] = 0.0;
+                
+                // Let's make it a bit easier for our iterations to converge
                 for (var i = 0; i < config.GminSteps; i++)
                     _diagonalGmin *= 10.0;
+
+                // Start GMIN stepping
+                state.Init = InitializationModes.Junction;
                 for (var i = 0; i <= config.GminSteps; i++)
                 {
                     state.IsConvergent = false;
@@ -276,9 +323,16 @@ namespace SpiceSharp.Simulations
             // Nope, still not converging, let's try source stepping
             if (config.SourceSteps > 1)
             {
-                state.Init = InitializationModes.Junction;
+                // We will slowly ramp up voltages starting at 0 to make sure it converges
                 CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
+
+                // We could've ended up with some crazy value, so let's reset it
+                for (var i = 0; i < RealState.Solution.Length; i++)
+                    RealState.Solution[i] = 0.0;
+
+                // Start SRC stepping
                 bool success = true;
+                state.Init = InitializationModes.Junction;
                 for (var i = 0; i <= config.SourceSteps; i++)
                 {
                     state.SourceFactor = i / (double)config.SourceSteps;
