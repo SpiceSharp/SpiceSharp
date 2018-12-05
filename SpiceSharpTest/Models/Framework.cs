@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Numerics;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Simulations;
@@ -436,6 +438,35 @@ namespace SpiceSharpTest.Models
                 }
             };
             sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Writes the exports to the console window.
+        /// Can be used for debugging. The output is in the format:
+        /// v0 = [ ... ];
+        /// v1 = [ ... ];
+        /// ...
+        /// </summary>
+        /// <param name="sim">The simulation.</param>
+        /// <param name="ckt">The circuit.</param>
+        /// <param name="exports">The exports.</param>
+        protected void WriteExportsToConsole(Simulation sim, Circuit ckt, IEnumerable<Export<double>> exports)
+        {
+            var arr = exports.ToArray();
+            var output = new List<string>[arr.Length];
+            for (var i = 0; i < arr.Length; i++)
+                output[i] = new List<string>();
+
+            sim.ExportSimulationData += (sender, args) =>
+            {
+                for (var i = 0; i < arr.Length; i++)
+                    output[i].Add(arr[i].Value.ToString(CultureInfo.InvariantCulture));
+            };
+
+            sim.Run(ckt);
+
+            for (var i = 0; i < arr.Length; i++)
+                Console.WriteLine($"v{i} = [{string.Join(", ", output[i])} ];");
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System.Numerics;
-using System.Resources;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
@@ -294,14 +293,6 @@ namespace SpiceSharpTest.Models
                 6.374704766839011e-04, 1.121520168458326e-03, -1.720170200561121e+01, 4.999968188570249e+00,
                 5.000015800431791e+00, 4.999968190756332e+00, 4.999999991842038e+00, 4.999999998157336e+00,
                 4.999999991842977e+00, 4.999999998156865e+00, 4.999999991843213e+00, 4.999999998156719e+00
-            };
-
-            var oldt = 0.0;
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                var t = args.Time;
-                var output = args.GetVoltage("out");
-                oldt = t;
             };
 
             // Run test

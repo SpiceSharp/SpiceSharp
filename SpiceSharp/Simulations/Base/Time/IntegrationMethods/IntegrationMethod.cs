@@ -203,8 +203,8 @@ namespace SpiceSharp.IntegrationMethods
             newDelta = args.Delta;
 
             // Copy the last accepted solution back into the time simulation
-            // The simulator could have diverged to some crazy value, so we'll start again from the last known one
-            IntegrationStates.Current.Solution.CopyTo(simulation.RealState.Solution);
+            // The simulator could have diverged to some crazy value, so we'll start again from the last known correct solution
+            IntegrationStates[1].Solution.CopyTo(simulation.RealState.Solution);
         }
 
         /// <summary>

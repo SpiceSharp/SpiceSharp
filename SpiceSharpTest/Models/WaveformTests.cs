@@ -1,9 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using SpiceSharp;
-using SpiceSharp.Components;
-using SpiceSharp.IntegrationMethods;
-using SpiceSharp.Simulations;
+﻿using NUnit.Framework;
 
 namespace SpiceSharpTest.Models
 {
