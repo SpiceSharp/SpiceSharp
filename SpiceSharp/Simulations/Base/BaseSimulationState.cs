@@ -45,6 +45,14 @@ namespace SpiceSharp.Simulations
         public double SourceFactor { get; set; } = 1.0;
 
         /// <summary>
+        /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
+        /// </summary>
+        /// <value>
+        /// The conductance.
+        /// </value>
+        public double Gmin { get; set; } = 1e-12;
+
+        /// <summary>
         /// Is the current iteration convergent?
         /// This parameter is used to communicate convergence.
         /// </summary>
