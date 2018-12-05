@@ -10,6 +10,14 @@ namespace SpiceSharp.IntegrationMethods
     public partial class Trapezoidal : SpiceIntegrationMethod
     {
         /// <summary>
+        /// Gets the xmu.
+        /// </summary>
+        /// <value>
+        /// The xmu.
+        /// </value>
+        public double Xmu { get; } = 0.5;
+
+        /// <summary>
         /// Integration coefficients
         /// </summary>
         /// <value>
@@ -115,9 +123,8 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    for (var i = 0; i < nodes.Count; i++)
+                    foreach (var node in nodes)
                     {
-                        var node = nodes[i];
                         if (node.UnknownType != VariableType.Voltage)
                             continue;
                         index = node.Index;
@@ -136,9 +143,8 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 case 2:
-                    for (var i = 0; i < nodes.Count; i++)
+                    foreach (var node in nodes)
                     {
-                        var node = nodes[i];
                         if (node.UnknownType != VariableType.Voltage)
                             continue;
                         index = node.Index;
@@ -183,8 +189,8 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 case 2:
-                    Coefficients[0] = 1.0 / delta / (1.0 - 0.5);
-                    Coefficients[1] = 0.5 / (1.0 - 0.5);
+                    Coefficients[0] = 1.0 / delta / (1.0 - Xmu);
+                    Coefficients[1] = Xmu / (1.0 - Xmu);
                     break;
 
                 default:
