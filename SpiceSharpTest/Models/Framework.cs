@@ -24,7 +24,12 @@ namespace SpiceSharpTest.Models
             private class Mapper : ExportingBehavior, IBiasingBehavior
             {
                 private List<string> _nodes;
-                public Mapper(List<string> nodes) : base("Mapper") => _nodes = nodes;
+
+                public Mapper(List<string> nodes) : base("Mapper")
+                {
+                    _nodes = nodes;
+                }
+
                 public override void Setup(Simulation simulation, SetupDataProvider provider)
                 {
                 }
