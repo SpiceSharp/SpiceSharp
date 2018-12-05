@@ -134,7 +134,10 @@ namespace SpiceSharp.Simulations
             _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
 
             // Create the state for this simulation
-            RealState = new BaseSimulationState();
+            RealState = new BaseSimulationState
+            {
+                Gmin = config.Gmin
+            };
             _isPreordered = false;
             _shouldReorder = true;
             var strategy = RealState.Solver.Strategy;
@@ -236,64 +239,162 @@ namespace SpiceSharp.Simulations
             if (!config.NoOperatingPointIterations)
             {
                 if (Iterate(maxIterations))
-                {
                     return;
-                }
             }
 
-            // No convergence, try Gmin stepping
+            // Try Gmin stepping
             if (config.GminSteps > 1)
             {
-                // Apply gmin step to AfterLoad event
-                _diagonalGmin = config.Gmin;
-                void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
-                AfterLoad += ApplyGminStep;
+                if (IterateGminStepping(maxIterations, config.GminSteps))
+                    return;
+            }
 
-                state.Init = InitializationModes.Junction;
-                CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
-                for (var i = 0; i < config.GminSteps; i++)
-                    _diagonalGmin *= 10.0;
-                for (var i = 0; i <= config.GminSteps; i++)
-                {
-                    state.IsConvergent = false;
-                    if (!Iterate(maxIterations))
-                    {
-                        _diagonalGmin = 0.0;
-                        CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
-                        break;
-                    }
-                    _diagonalGmin /= 10.0;
-                    state.Init = InitializationModes.Float;
-                }
-
-                // Try one more time without the gmin stepping
-                AfterLoad -= ApplyGminStep;
-                _diagonalGmin = 0.0;
-                if (Iterate(maxIterations))
+            // No convergence..., try GMIN stepping on the diagonal elements
+            if (config.GminSteps > 1)
+            {
+                if (IterateDiagonalGminStepping(maxIterations, config.GminSteps))
                     return;
             }
 
             // Nope, still not converging, let's try source stepping
             if (config.SourceSteps > 1)
             {
-                state.Init = InitializationModes.Junction;
-                CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
-                for (var i = 0; i <= config.SourceSteps; i++)
-                {
-                    state.SourceFactor = i / (double)config.SourceSteps;
-                    if (!Iterate(maxIterations))
-                    {
-                        state.SourceFactor = 1.0;
-                        CircuitWarning.Warning(this, Properties.Resources.SourceSteppingFailed);
-                        return;
-                    }
-                }
-                state.SourceFactor = 1.0;
-                return;
+                if (IterateSourceStepping(maxIterations, config.SourceSteps))
+                    return;
             }
 
             // Failed
             throw new CircuitException("Could not determine operating point");
+        }
+
+        /// <summary>
+        /// Iterates to a solution while shunting PN-junctions with a conductance.
+        /// </summary>
+        /// <param name="maxIterations">The maximum number of iterations per step.</param>
+        /// <param name="steps">The number of steps.</param>
+        /// <returns></returns>
+        protected bool IterateGminStepping(int maxIterations, int steps)
+        {
+            var state = RealState;
+
+            // We will shunt all PN-junctions with a conductance (should be implemented by the components)
+            CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
+
+            // We could've ended up with some crazy value, so let's reset it
+            for (var i = 0; i < RealState.Solution.Length; i++)
+                RealState.Solution[i] = 0.0;
+
+            // Let's make it a bit easier for our iterations to converge
+            var original = state.Gmin;
+            if (state.Gmin <= 0)
+                state.Gmin = 1e-12;
+            for (var i = 0; i < steps; i++)
+                state.Gmin *= 10.0;
+
+            // Start GMIN stepping
+            state.Init = InitializationModes.Junction;
+            for (var i = 0; i <= steps; i++)
+            {
+                state.IsConvergent = false;
+                if (!Iterate(maxIterations))
+                {
+                    state.Gmin = original;
+                    CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
+                    break;
+                }
+
+                // Success! Let's try to get more accurate now
+                state.Gmin /= 10.0;
+                state.Init = InitializationModes.Float;
+            }
+
+            // Try one more time with the original gmin
+            state.Gmin = original;
+            return Iterate(maxIterations);
+        }
+
+        /// <summary>
+        /// Iterates to a solution while adding a conductive path to ground on all nodes.
+        /// </summary>
+        /// <param name="maxIterations">The maximum number of iterations per step.</param>
+        /// <param name="steps">The number of steps.</param>
+        /// <returns></returns>
+        protected bool IterateDiagonalGminStepping(int maxIterations, int steps)
+        {
+            var state = RealState;
+
+            // We will add a DC path to ground to all nodes to aid convergence
+            CircuitWarning.Warning(this, Properties.Resources.StartDiagonalGminStepping);
+
+            // We'll hack into the loading algorithm to apply our diagonal contributions
+            _diagonalGmin = state.Gmin;
+            if (_diagonalGmin <= 0)
+                _diagonalGmin = 1e-12;
+            void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
+            AfterLoad += ApplyGminStep;
+
+            // We could've ended up with some crazy value, so let's reset it
+            for (var i = 0; i < RealState.Solution.Length; i++)
+                RealState.Solution[i] = 0.0;
+                
+            // Let's make it a bit easier for our iterations to converge
+            for (var i = 0; i < steps; i++)
+                _diagonalGmin *= 10.0;
+
+            // Start GMIN stepping
+            state.Init = InitializationModes.Junction;
+            for (var i = 0; i <= steps; i++)
+            {
+                state.IsConvergent = false;
+                if (!Iterate(maxIterations))
+                {
+                    _diagonalGmin = 0.0;
+                    CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
+                    break;
+                }
+                _diagonalGmin /= 10.0;
+                state.Init = InitializationModes.Float;
+            }
+
+            // Try one more time without the gmin stepping
+            AfterLoad -= ApplyGminStep;
+            _diagonalGmin = 0.0;
+            return Iterate(maxIterations);
+        }
+
+        /// <summary>
+        /// Iterates to a solution slowly ramping up independent voltages and currents.
+        /// </summary>
+        /// <param name="maxIterations">The maximum number of iterations per step.</param>
+        /// <param name="steps">The number of steps.</param>
+        /// <returns></returns>
+        protected bool IterateSourceStepping(int maxIterations, int steps)
+        {
+            var state = RealState;
+
+            // We will slowly ramp up voltages starting at 0 to make sure it converges
+            CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
+
+            // We could've ended up with some crazy value, so let's reset it
+            for (var i = 0; i < RealState.Solution.Length; i++)
+                RealState.Solution[i] = 0.0;
+
+            // Start SRC stepping
+            bool success = true;
+            state.Init = InitializationModes.Junction;
+            for (var i = 0; i <= steps; i++)
+            {
+                state.SourceFactor = i / (double)steps;
+                if (!Iterate(maxIterations))
+                {
+                    state.SourceFactor = 1.0;
+                    CircuitWarning.Warning(this, Properties.Resources.SourceSteppingFailed);
+                    success = false;
+                    break;
+                }
+            }
+
+            return success;
         }
 
         /// <summary>
@@ -584,5 +685,16 @@ namespace SpiceSharp.Simulations
         protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
+
+        #if DEBUG
+        /// <summary>
+        /// Lists all variables to the debugger
+        /// </summary>
+        public void ListVariables()
+        {
+            foreach (var variable in Variables)
+                System.Diagnostics.Debug.WriteLine(variable.Name + " (" + variable.Index + ") = " + RealState.Solution[variable.Index]);
+        }
+        #endif
     }
 }

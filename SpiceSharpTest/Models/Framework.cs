@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Numerics;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 using NUnit.Framework;
+using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharpTest.Models
 {
@@ -14,6 +19,45 @@ namespace SpiceSharpTest.Models
     /// </summary>
     public class Framework
     {
+        protected class NodeMapper : Entity
+        {
+            private class Mapper : ExportingBehavior, IBiasingBehavior
+            {
+                private List<string> _nodes;
+
+                public Mapper(List<string> nodes) : base("Mapper")
+                {
+                    _nodes = nodes;
+                }
+
+                public override void Setup(Simulation simulation, SetupDataProvider provider)
+                {
+                }
+                public void GetEquationPointers(VariableSet variables, Solver<double> solver)
+                {
+                    foreach (var node in _nodes)
+                        variables.MapNode(node);
+                }
+                public void Load(BaseSimulation simulation)
+                {
+                }
+                public bool IsConvergent(BaseSimulation simulation) => true;
+            }
+            readonly List<string> _nodes = new List<string>();
+            public NodeMapper(params string[] nodes) : base("Mapper")
+            {
+                Priority = 1000;
+                _nodes.AddRange(nodes);
+                Behaviors.Add(typeof(Mapper), () => new Mapper(_nodes));
+            }
+            public NodeMapper(IEnumerable<string> nodes) : base("Mapper")
+            {
+                Priority = 1000;
+                _nodes.AddRange(nodes);
+                Behaviors.Add(typeof(Mapper), () => new Mapper(_nodes));
+            }
+        }
+
         /// <summary>
         /// Absolute tolerance used
         /// </summary>
@@ -399,6 +443,35 @@ namespace SpiceSharpTest.Models
                 }
             };
             sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Writes the exports to the console window.
+        /// Can be used for debugging. The output is in the format:
+        /// v0 = [ ... ];
+        /// v1 = [ ... ];
+        /// ...
+        /// </summary>
+        /// <param name="sim">The simulation.</param>
+        /// <param name="ckt">The circuit.</param>
+        /// <param name="exports">The exports.</param>
+        protected void WriteExportsToConsole(Simulation sim, Circuit ckt, IEnumerable<Export<double>> exports)
+        {
+            var arr = exports.ToArray();
+            var output = new List<string>[arr.Length];
+            for (var i = 0; i < arr.Length; i++)
+                output[i] = new List<string>();
+
+            sim.ExportSimulationData += (sender, args) =>
+            {
+                for (var i = 0; i < arr.Length; i++)
+                    output[i].Add(arr[i].Value.ToString(CultureInfo.InvariantCulture));
+            };
+
+            sim.Run(ckt);
+
+            for (var i = 0; i < arr.Length; i++)
+                Console.WriteLine($"v{i} = [{string.Join(", ", output[i])} ];");
         }
     }
 }

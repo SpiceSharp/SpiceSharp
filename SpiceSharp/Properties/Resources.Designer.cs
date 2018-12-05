@@ -80,6 +80,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Starting diagonal Gmin stepping.
+        /// </summary>
+        internal static string StartDiagonalGminStepping {
+            get {
+                return ResourceManager.GetString("StartDiagonalGminStepping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting Gmin stepping.
         /// </summary>
         internal static string StartGminStepping {

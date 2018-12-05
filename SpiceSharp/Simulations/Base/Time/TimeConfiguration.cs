@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
         /// The delta minimum.
         /// </value>
         [ParameterName("deltamin"), ParameterInfo("The minimum delta for breakpoints")]
-        public double DeltaMin => 1e-13 * MaxStep;
+        public double DeltaMin => 1e-9 * MaxStep;
 
         /// <summary>
         /// Gets or sets the maximum number of iterations allowed for each time point.
