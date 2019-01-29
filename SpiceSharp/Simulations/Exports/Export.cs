@@ -78,6 +78,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Destroys the export.
+        /// </summary>
+        public virtual void Destroy()
+        {
+            Simulation.AfterSetup -= Initialize;
+            Simulation.BeforeUnsetup -= Initialize;
+            Extractor = null;
+        }
+
+        /// <summary>
         /// Load the export extractor if the simulation has already started.
         /// </summary>
         protected void LazyLoad()

@@ -38,8 +38,8 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             var op = new OP("op");
             var exports = new Export<double>[1];
-            exports[0] = new RealPropertyExport(op, "R1", "i");
-            double[] references = { 0.01 };
+            exports[0] = new RealCurrentExport(op, "V1");
+            double[] references = { -0.01 };
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
