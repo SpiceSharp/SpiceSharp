@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CapacitorBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,16 @@ namespace SpiceSharp.Components
     [Pin(0, "C+"), Pin(1, "C-"), Connected]
     public class Capacitor : Component
     {
+        static Capacitor()
+        {
+            RegisterBehaviorFactory(typeof(Capacitor), new BehaviorFactoryDictionary
+            {
+                {typeof(TransientBehavior), n => new TransientBehavior(n)},
+                {typeof(FrequencyBehavior), n => new FrequencyBehavior(n)},
+                {typeof(TemperatureBehavior), n => new TemperatureBehavior(n)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the capacitor
         /// </summary>
@@ -29,11 +40,6 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -48,11 +54,6 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             ParameterSets.Add(new BaseParameters(cap));
-
-            // Register factories
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect
             Connect(pos, neg);

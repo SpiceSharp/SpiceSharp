@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.DelayBehaviors;
 
 namespace SpiceSharp.Components
@@ -10,6 +11,20 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), VoltageDriver(0, 1)]
     public class VoltageDelay : Component
     {
+        static VoltageDelay()
+        {
+            RegisterBehaviorFactory(typeof(VoltageDelay), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), n => new BiasingBehavior(n)},
+                {typeof(FrequencyBehavior), n => new FrequencyBehavior(n)},
+                {typeof(TransientBehavior), n => new TransientBehavior(n)},
+                {typeof(AcceptBehavior), n => new AcceptBehavior(n)}
+            });
+        }
+
+        /// <summary>
+        /// The voltage delay pin count
+        /// </summary>
         private const int VoltageDelayPinCount = 4;
 
         /// <summary>
@@ -21,12 +36,6 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add behaviors
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>

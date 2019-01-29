@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Factory for behaviors
@@ -12,8 +9,9 @@ namespace SpiceSharp.Behaviors
     }
 
     /// <summary>
-    /// Delegate
+    /// Create a behavior for an entity
     /// </summary>
-    /// <returns>The behavior created by the factory.</returns>
-    public delegate IBehavior BehaviorFactoryMethod();
+    /// <param name="name">The name of the entity creating it.</param>
+    /// <returns></returns>
+    public delegate IBehavior BehaviorFactoryMethod(string name);
 }

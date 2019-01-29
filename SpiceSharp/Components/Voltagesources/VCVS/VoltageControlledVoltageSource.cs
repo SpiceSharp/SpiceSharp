@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,15 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), VoltageDriver(0, 1), Connected(0, 1)]
     public class VoltageControlledVoltageSource : Component
     {
+        static VoltageControlledVoltageSource()
+        {
+            RegisterBehaviorFactory(typeof(VoltageControlledVoltageSource), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -22,12 +32,7 @@ namespace SpiceSharp.Components
         public VoltageControlledVoltageSource(string name) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -42,13 +47,7 @@ namespace SpiceSharp.Components
         public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters(gain));
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

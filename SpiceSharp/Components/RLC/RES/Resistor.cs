@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.ResistorBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,17 @@ namespace SpiceSharp.Components
     [Pin(0, "R+"), Pin(1, "R-")]
     public class Resistor : Component
     {
+        static Resistor()
+        {
+            RegisterBehaviorFactory(typeof(Resistor), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
+                {typeof(NoiseBehavior), name => new NoiseBehavior(name)},
+                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the resistor
         /// </summary>
@@ -30,12 +42,6 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -50,12 +56,6 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             ParameterSets.Add(new BaseParameters(res));
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect
             Connect(pos, neg);

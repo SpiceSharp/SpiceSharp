@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.LosslessTransmissionLineBehaviors;
 
 namespace SpiceSharp.Components
@@ -10,6 +11,17 @@ namespace SpiceSharp.Components
     [Pin(0, "Pos1"), Pin(1, "Neg1"), Pin(2, "Pos2"), Pin(3, "Neg2"), Connected(0, 1), Connected(2, 3)]
     public class LosslessTransmissionLine : Component
     {
+        static LosslessTransmissionLine()
+        {
+            RegisterBehaviorFactory(typeof(LosslessTransmissionLine), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), n => new BiasingBehavior(n)},
+                {typeof(FrequencyBehavior), n => new FrequencyBehavior(n)},
+                {typeof(TransientBehavior), n => new TransientBehavior(n)},
+                {typeof(AcceptBehavior), n => new AcceptBehavior(n)}
+            });
+        }
+        
         /// <summary>
         /// The number of pins for a lossless transmission line
         /// </summary>
@@ -24,12 +36,6 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add behavior factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>

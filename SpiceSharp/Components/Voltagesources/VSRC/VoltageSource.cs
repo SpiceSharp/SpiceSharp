@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageSourceBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,16 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
     public class VoltageSource : Component
     {
+        static VoltageSource()
+        {
+            RegisterBehaviorFactory(typeof(VoltageSource), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
+                {typeof(AcceptBehavior), name => new AcceptBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -24,11 +35,6 @@ namespace SpiceSharp.Components
             // Register parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters());
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>
@@ -44,11 +50,6 @@ namespace SpiceSharp.Components
             // Register parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(dc));
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect the device
             Connect(pos, neg);
@@ -67,11 +68,6 @@ namespace SpiceSharp.Components
             // Register parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(waveform));
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect the device
             Connect(pos, neg);

@@ -11,6 +11,15 @@ namespace SpiceSharp.Components
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
     public class CurrentControlledCurrentSource : Component
     {
+        static CurrentControlledCurrentSource()
+        {
+            RegisterBehaviorFactory(typeof(CurrentControlledCurrentSource), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -35,10 +44,6 @@ namespace SpiceSharp.Components
             
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add behaviors
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>

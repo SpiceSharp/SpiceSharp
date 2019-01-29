@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.DiodeBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,18 @@ namespace SpiceSharp.Components
     [Pin(0, "D+"), Pin(1, "D-")]
     public class Diode : Component
     {
+        static Diode()
+        {
+            RegisterBehaviorFactory(typeof(Diode), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(TransientBehavior), name => new TransientBehavior(name)},
+                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
+                {typeof(NoiseBehavior), name => new NoiseBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the diode
         /// </summary>
@@ -28,13 +41,6 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

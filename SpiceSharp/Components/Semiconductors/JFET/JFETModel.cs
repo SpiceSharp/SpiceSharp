@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.JFETBehaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.JFETBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -8,6 +9,14 @@ namespace SpiceSharp.Components
     /// <seealso cref="SpiceSharp.Components.Model" />
     public class JFETModel : Model
     {
+        static JFETModel()
+        {
+            RegisterBehaviorFactory(typeof(JFETModel), new BehaviorFactoryDictionary
+            {
+                {typeof(ModelTemperatureBehavior), name => new ModelTemperatureBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="JFETModel"/> class.
         /// </summary>
@@ -18,9 +27,6 @@ namespace SpiceSharp.Components
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new ModelNoiseParameters());
-
-            // Add behavior factories
-            Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.BipolarBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,18 @@ namespace SpiceSharp.Components
     [Pin(0, "Collector"), Pin(1, "Base"), Pin(2, "Emitter"), Pin(3, "Substrate")]
     public class BipolarJunctionTransistor : Component
     {
+        static BipolarJunctionTransistor()
+        {
+            RegisterBehaviorFactory(typeof(BipolarJunctionTransistor), new BehaviorFactoryDictionary
+            {
+                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)},
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(TransientBehavior), name => new TransientBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
+                {typeof(NoiseBehavior), name => new NoiseBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the BJT
         /// </summary>
@@ -29,13 +42,6 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

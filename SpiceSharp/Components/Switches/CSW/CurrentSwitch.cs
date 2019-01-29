@@ -11,6 +11,17 @@ namespace SpiceSharp.Components
     [Pin(0, "W+"), Pin(1, "W-")]
     public class CurrentSwitch : Component
     {
+        static CurrentSwitch()
+        {
+            RegisterBehaviorFactory(typeof(CurrentSwitch), new BehaviorFactoryDictionary
+            {
+                // Add factories
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name, new CurrentControlled())},
+                {typeof(AcceptBehavior), name => new AcceptBehavior(name, new CurrentControlled())},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name, new CurrentControlled())}
+            });
+        }
+
         /// <summary>
         /// Set the model for the current-controlled switch
         /// </summary>
@@ -39,11 +50,6 @@ namespace SpiceSharp.Components
 
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new CurrentControlled()));
         }
 
         /// <summary>
@@ -62,13 +68,7 @@ namespace SpiceSharp.Components
             // Add parameters
             ParameterSets.Add(new BaseParameters());
 
-            // Add factories
-            
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new CurrentControlled()));
-
+            // Connect the device
             Connect(pos, neg);
             ControllingName = controllingSource;
         }

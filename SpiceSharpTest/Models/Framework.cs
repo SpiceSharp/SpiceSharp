@@ -21,6 +21,13 @@ namespace SpiceSharpTest.Models
     {
         protected class NodeMapper : Entity
         {
+            static NodeMapper()
+            {
+                RegisterBehaviorFactory(typeof(NodeMapper), new BehaviorFactoryDictionary
+                {
+                    // {typeof(Mapper), name => new Mapper(_nodes)}
+                });
+            }
             private class Mapper : ExportingBehavior, IBiasingBehavior
             {
                 private List<string> _nodes;
@@ -48,13 +55,11 @@ namespace SpiceSharpTest.Models
             {
                 Priority = 1000;
                 _nodes.AddRange(nodes);
-                Behaviors.Add(typeof(Mapper), () => new Mapper(_nodes));
             }
             public NodeMapper(IEnumerable<string> nodes) : base("Mapper")
             {
                 Priority = 1000;
                 _nodes.AddRange(nodes);
-                Behaviors.Add(typeof(Mapper), () => new Mapper(_nodes));
             }
         }
 

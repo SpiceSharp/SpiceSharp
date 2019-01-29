@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,16 @@ namespace SpiceSharp.Components
     [Pin(0, "L+"), Pin(1, "L-")]
     public class Inductor : Component
     {
+        static Inductor()
+        {
+            RegisterBehaviorFactory(typeof(Inductor), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
+                {typeof(TransientBehavior), name => new TransientBehavior(name)},
+                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)}
+            });
+        }
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -24,11 +35,6 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -43,11 +49,6 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             ParameterSets.Add(new BaseParameters(inductance));
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             // Connect
             Connect(pos, neg);
