@@ -15,8 +15,8 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(CurrentControlledVoltageSource), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
             });
         }
 
@@ -39,10 +39,7 @@ namespace SpiceSharp.Components
         public CurrentControlledVoltageSource(string name) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
-            // Make sure we are placed behind any voltage sources
             Priority = ComponentPriority - 1;
-
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -57,7 +54,6 @@ namespace SpiceSharp.Components
         public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
-            // Make sure we are placed behind any voltage sources
             Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters(gain));
             Connect(pos, neg);

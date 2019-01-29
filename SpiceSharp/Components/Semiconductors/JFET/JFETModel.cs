@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(JFETModel), new BehaviorFactoryDictionary
             {
-                {typeof(ModelTemperatureBehavior), name => new ModelTemperatureBehavior(name)}
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
             });
         }
 
@@ -24,7 +24,6 @@ namespace SpiceSharp.Components
         public JFETModel(string name)
             : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new ModelNoiseParameters());
         }

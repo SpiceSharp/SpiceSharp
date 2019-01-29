@@ -82,7 +82,7 @@ namespace SpiceSharp.Circuits
             if (!BehaviorFactories.TryGetValue(GetType(), out var behaviors))
                 return null;
             if (behaviors.TryGetValue(type, out var behavior))
-                return behavior(Name);
+                return behavior(this);
             return null;
         }
 

@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Circuits;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Factory for behaviors
@@ -11,7 +13,7 @@
     /// <summary>
     /// Create a behavior for an entity
     /// </summary>
-    /// <param name="name">The name of the entity creating it.</param>
+    /// <param name="entity">The entity creating the behavior.</param>
     /// <returns></returns>
-    public delegate IBehavior BehaviorFactoryMethod(string name);
+    public delegate IBehavior BehaviorFactoryMethod(Entity entity);
 }

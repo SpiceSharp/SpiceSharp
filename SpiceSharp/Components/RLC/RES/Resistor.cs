@@ -14,10 +14,10 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Resistor), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
-                {typeof(NoiseBehavior), name => new NoiseBehavior(name)},
-                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)}
             });
         }
 
@@ -40,7 +40,6 @@ namespace SpiceSharp.Components
         public Resistor(string name) 
             : base(name, ResistorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -54,10 +53,7 @@ namespace SpiceSharp.Components
         public Resistor(string name, string pos, string neg, double res) 
             : base(name, ResistorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters(res));
-
-            // Connect
             Connect(pos, neg);
         }
     }

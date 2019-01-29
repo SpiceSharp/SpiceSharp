@@ -25,13 +25,12 @@ namespace SpiceSharpTest.Models
             {
                 RegisterBehaviorFactory(typeof(NodeMapper), new BehaviorFactoryDictionary
                 {
-                    // {typeof(Mapper), name => new Mapper(_nodes)}
+                    {typeof(Mapper), e => new Mapper(((NodeMapper)e)._nodes)}
                 });
             }
             private class Mapper : ExportingBehavior, IBiasingBehavior
             {
                 private List<string> _nodes;
-
                 public Mapper(List<string> nodes) : base("Mapper")
                 {
                     _nodes = nodes;

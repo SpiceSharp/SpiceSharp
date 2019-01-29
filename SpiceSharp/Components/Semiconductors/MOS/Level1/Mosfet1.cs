@@ -15,11 +15,11 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Mosfet1), new BehaviorFactoryDictionary
             {
-                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)},
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
-                {typeof(TransientBehavior), name => new TransientBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
-                {typeof(NoiseBehavior), name => new NoiseBehavior(name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)},
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)},
             });
         }
 
@@ -40,7 +40,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Mosfet1(string name) : base(name, Mosfet1PinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
 

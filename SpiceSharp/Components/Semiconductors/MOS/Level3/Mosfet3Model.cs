@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Mosfet3Model), new BehaviorFactoryDictionary
             {
-                {typeof(ModelTemperatureBehavior), name => new ModelTemperatureBehavior(name)}
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
             });
         }
 
@@ -22,7 +22,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Mosfet3Model(string name) : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }
@@ -34,7 +33,6 @@ namespace SpiceSharp.Components
         /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>
         public Mosfet3Model(string name, bool nmos) : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters(nmos));
             ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }

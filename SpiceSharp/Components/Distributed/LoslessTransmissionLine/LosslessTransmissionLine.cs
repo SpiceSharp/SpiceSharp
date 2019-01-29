@@ -15,10 +15,10 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(LosslessTransmissionLine), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), n => new BiasingBehavior(n)},
-                {typeof(FrequencyBehavior), n => new FrequencyBehavior(n)},
-                {typeof(TransientBehavior), n => new TransientBehavior(n)},
-                {typeof(AcceptBehavior), n => new AcceptBehavior(n)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name)}
             });
         }
         
@@ -34,7 +34,6 @@ namespace SpiceSharp.Components
         public LosslessTransmissionLine(string name)
             : base(name, LosslessTransmissionLinePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -66,7 +65,6 @@ namespace SpiceSharp.Components
             : this(name)
         {
             Connect(pos1, neg1, pos2, neg2);
-
             var bp = ParameterSets.Get<BaseParameters>();
             bp.Impedance = impedance;
             bp.Delay.Value = delay;

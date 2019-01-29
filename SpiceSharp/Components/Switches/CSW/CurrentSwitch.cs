@@ -16,9 +16,9 @@ namespace SpiceSharp.Components
             RegisterBehaviorFactory(typeof(CurrentSwitch), new BehaviorFactoryDictionary
             {
                 // Add factories
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name, new CurrentControlled())},
-                {typeof(AcceptBehavior), name => new AcceptBehavior(name, new CurrentControlled())},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name, new CurrentControlled())}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name, new CurrentControlled())},
+                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name, new CurrentControlled())},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name, new CurrentControlled())}
             });
         }
 
@@ -45,10 +45,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current-controlled switch</param>
         public CurrentSwitch(string name) : base(name, CurrentSwitchPinCount)
         {
-            // Make sure the current switch is processed after voltage sources
-            Priority = -1;
-
-            // Add parameters
+            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -62,13 +59,8 @@ namespace SpiceSharp.Components
         public CurrentSwitch(string name, string pos, string neg, string controllingSource)
             : base(name, CurrentSwitchPinCount)
         {
-            // Make sure the current switch is processed after voltage sources
-            Priority = -1;
-
-            // Add parameters
+            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
-
-            // Connect the device
             Connect(pos, neg);
             ControllingName = controllingSource;
         }

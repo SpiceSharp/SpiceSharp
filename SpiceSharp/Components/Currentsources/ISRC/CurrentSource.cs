@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(CurrentSource), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), n => new BiasingBehavior(n)},
-                {typeof(FrequencyBehavior), n => new FrequencyBehavior(n)},
-                {typeof(AcceptBehavior), n => new AcceptBehavior(n)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name)}
             });
         }
 
@@ -33,7 +33,6 @@ namespace SpiceSharp.Components
         public CurrentSource(string name) 
             : base(name, CurrentSourcePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters());
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
         }
@@ -48,11 +47,8 @@ namespace SpiceSharp.Components
         public CurrentSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            // Add parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(dc));
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Connect
             Connect(pos, neg);
         }
 
@@ -66,11 +62,8 @@ namespace SpiceSharp.Components
         public CurrentSource(string name, string pos, string neg, Waveform waveform)
             : this(name)
         {
-            // Add parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(waveform));
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Connect
             Connect(pos, neg);
         }
     }

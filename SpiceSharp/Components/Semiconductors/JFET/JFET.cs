@@ -16,10 +16,10 @@ namespace SpiceSharp.Components
             RegisterBehaviorFactory(typeof(JFET), new BehaviorFactoryDictionary
             {
                 // Add behavior factories
-                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)},
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
-                {typeof(TransientBehavior), name => new TransientBehavior(name)}
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)},
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)}
             });
         }
 
@@ -41,7 +41,6 @@ namespace SpiceSharp.Components
         public JFET(string name)
             : base(name, JFETPincount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
     }

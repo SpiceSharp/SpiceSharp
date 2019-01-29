@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Inductor), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
-                {typeof(TransientBehavior), name => new TransientBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
             });
         }
 
@@ -33,7 +33,6 @@ namespace SpiceSharp.Components
         public Inductor(string name)
             : base(name, InductorPinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -47,10 +46,7 @@ namespace SpiceSharp.Components
         public Inductor(string name, string pos, string neg, double inductance) 
             : base(name, InductorPinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters(inductance));
-
-            // Connect
             Connect(pos, neg);
         }
     }

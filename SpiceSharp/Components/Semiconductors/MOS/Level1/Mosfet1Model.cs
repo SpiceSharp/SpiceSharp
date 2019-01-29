@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Mosfet1Model), new BehaviorFactoryDictionary
             {
-                {typeof(ModelTemperatureBehavior), name => new ModelTemperatureBehavior(name)}
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
             });
         }
 
@@ -22,7 +22,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Mosfet1Model(string name) : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }

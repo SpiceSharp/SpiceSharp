@@ -14,11 +14,11 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Diode), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), name => new BiasingBehavior(name)},
-                {typeof(TransientBehavior), name => new TransientBehavior(name)},
-                {typeof(TemperatureBehavior), name => new TemperatureBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)},
-                {typeof(NoiseBehavior), name => new NoiseBehavior(name)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)}
             });
         }
 
@@ -39,7 +39,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Diode(string name) : base(name, DiodePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
 

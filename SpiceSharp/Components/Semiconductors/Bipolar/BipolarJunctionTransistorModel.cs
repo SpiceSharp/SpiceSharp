@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(BipolarJunctionTransistorModel), new BehaviorFactoryDictionary
             {
-                {typeof(ModelTemperatureBehavior), name => new ModelTemperatureBehavior(name)}
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
             });
         }
 

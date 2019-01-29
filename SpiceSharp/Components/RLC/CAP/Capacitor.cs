@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Capacitor), new BehaviorFactoryDictionary
             {
-                {typeof(TransientBehavior), n => new TransientBehavior(n)},
-                {typeof(FrequencyBehavior), n => new FrequencyBehavior(n)},
-                {typeof(TemperatureBehavior), n => new TemperatureBehavior(n)}
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)}
             });
         }
 
@@ -38,7 +38,6 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(string name) : base(name, CapacitorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -52,10 +51,7 @@ namespace SpiceSharp.Components
         public Capacitor(string name, string pos, string neg, double cap) 
             : base(name, CapacitorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters(cap));
-
-            // Connect
             Connect(pos, neg);
         }
     }

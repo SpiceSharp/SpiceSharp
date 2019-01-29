@@ -14,9 +14,8 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(MutualInductance), new BehaviorFactoryDictionary
             {
-
-                {typeof(TransientBehavior), name => new TransientBehavior(name)},
-                {typeof(FrequencyBehavior), name => new FrequencyBehavior(name)}
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
             });
         }
 
@@ -34,10 +33,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the mutual inductance</param>
         public MutualInductance(string name) : base(name, 0)
         {
-            // Make sure mutual inductances are evaluated AFTER inductors
             Priority = ComponentPriority - 1;
-
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -51,13 +47,8 @@ namespace SpiceSharp.Components
         public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
             : base(name, 0)
         {
-            // Make sure mutual inductances are evaluated AFTER inductors
             Priority = ComponentPriority - 1;
-
-            // Add parameters
             ParameterSets.Add(new BaseParameters(coupling));
-
-            // Connect
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
         }
