@@ -11,6 +11,17 @@ namespace SpiceSharp.Components
     [Pin(0, "W+"), Pin(1, "W-")]
     public class CurrentSwitch : Component
     {
+        static CurrentSwitch()
+        {
+            RegisterBehaviorFactory(typeof(CurrentSwitch), new BehaviorFactoryDictionary
+            {
+                // Add factories
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name, new CurrentControlled())},
+                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name, new CurrentControlled())},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name, new CurrentControlled())}
+            });
+        }
+
         /// <summary>
         /// Set the model for the current-controlled switch
         /// </summary>
@@ -34,16 +45,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current-controlled switch</param>
         public CurrentSwitch(string name) : base(name, CurrentSwitchPinCount)
         {
-            // Make sure the current switch is processed after voltage sources
-            Priority = -1;
-
-            // Add parameters
+            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new CurrentControlled()));
         }
 
         /// <summary>
@@ -56,19 +59,8 @@ namespace SpiceSharp.Components
         public CurrentSwitch(string name, string pos, string neg, string controllingSource)
             : base(name, CurrentSwitchPinCount)
         {
-            // Make sure the current switch is processed after voltage sources
-            Priority = -1;
-
-            // Add parameters
+            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new CurrentControlled()));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new CurrentControlled()));
-
             Connect(pos, neg);
             ControllingName = controllingSource;
         }

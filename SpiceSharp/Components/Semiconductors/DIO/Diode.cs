@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.DiodeBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,18 @@ namespace SpiceSharp.Components
     [Pin(0, "D+"), Pin(1, "D-")]
     public class Diode : Component
     {
+        static Diode()
+        {
+            RegisterBehaviorFactory(typeof(Diode), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the diode
         /// </summary>
@@ -26,15 +39,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Diode(string name) : base(name, DiodePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

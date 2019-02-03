@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,15 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected(0, 1)]
     public class VoltageControlledCurrentSource : Component
     {
+        static VoltageControlledCurrentSource()
+        {
+            RegisterBehaviorFactory(typeof(VoltageControlledCurrentSource), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Private constants
         /// </summary>
@@ -22,12 +32,7 @@ namespace SpiceSharp.Components
         public VoltageControlledCurrentSource(string name)
             : base(name, VoltageControlledCurrentSourcePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -40,16 +45,9 @@ namespace SpiceSharp.Components
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The transconductance gain</param>
         public VoltageControlledCurrentSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain)
-            : base(name, VoltageControlledCurrentSourcePinCount)
+            : this(name)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters(gain));
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-
-            // Connect
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.ResistorBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,17 @@ namespace SpiceSharp.Components
     [Pin(0, "R+"), Pin(1, "R-")]
     public class Resistor : Component
     {
+        static Resistor()
+        {
+            RegisterBehaviorFactory(typeof(Resistor), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the resistor
         /// </summary>
@@ -28,14 +40,7 @@ namespace SpiceSharp.Components
         public Resistor(string name) 
             : base(name, ResistorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -48,16 +53,7 @@ namespace SpiceSharp.Components
         public Resistor(string name, string pos, string neg, double res) 
             : base(name, ResistorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters(res));
-
-            // Register factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-
-            // Connect
             Connect(pos, neg);
         }
     }

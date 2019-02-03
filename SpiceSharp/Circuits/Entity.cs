@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -12,9 +11,21 @@ namespace SpiceSharp.Circuits
     public abstract class Entity
     {
         /// <summary>
-        /// Factories for behaviors.
+        /// Factories for behaviors by type.
         /// </summary>
-        protected BehaviorFactoryDictionary Behaviors { get; } = new BehaviorFactoryDictionary();
+        private static Dictionary<Type, BehaviorFactoryDictionary> BehaviorFactories { get; } =
+            new Dictionary<Type, BehaviorFactoryDictionary>();
+
+        /// <summary>
+        /// Registers a behavior factory for an entity type.
+        /// </summary>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <param name="dictionary">The dictionary.</param>
+        protected static void RegisterBehaviorFactory(Type entityType, BehaviorFactoryDictionary dictionary)
+        {
+            // We do this to avoid anyone unregistering factories!
+            BehaviorFactories.Add(entityType, dictionary);
+        }
 
         /// <summary>
         /// Gets a collection of parameters.
@@ -68,15 +79,17 @@ namespace SpiceSharp.Circuits
                 throw new ArgumentNullException(nameof(simulation));
 
             // Get the factory and generate it
-            if (Behaviors.TryGetValue(type, out var behavior))
-                return behavior();
+            if (!BehaviorFactories.TryGetValue(GetType(), out var behaviors))
+                return null;
+            if (behaviors.TryGetValue(type, out var behavior))
+                return behavior(this);
             return null;
         }
 
         /// <summary>
         /// Sets up the behavior.
         /// </summary>
-        /// <param name="type">The type of the behavior that needs to be set up.</param>
+        /// <param name="behavior">The behavior that needs to be set up.</param>
         /// <param name="simulation">The simulation.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
@@ -119,5 +132,17 @@ namespace SpiceSharp.Circuits
         /// Gets the priority of this entity.
         /// </summary>
         public int Priority { get; protected set; } = 0;
+
+        /// <summary>
+        /// Clones the entity with a new name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public virtual Entity Clone(string name)
+        {
+            var e = (Entity) Activator.CreateInstance(GetType(), name);
+
+            return e;
+        }
     }
 }

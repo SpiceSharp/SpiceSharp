@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MosfetBehaviors.Level3;
 
 namespace SpiceSharp.Components
@@ -10,6 +11,18 @@ namespace SpiceSharp.Components
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
     public class Mosfet3 : Component
     {
+        static Mosfet3()
+        {
+            RegisterBehaviorFactory(typeof(Mosfet3), new BehaviorFactoryDictionary
+            {
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)},
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the MOS3 model
         /// </summary>
@@ -27,15 +40,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Mosfet3(string name) : base(name, Mosfet3PinCount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CapacitorBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,16 @@ namespace SpiceSharp.Components
     [Pin(0, "C+"), Pin(1, "C-"), Connected]
     public class Capacitor : Component
     {
+        static Capacitor()
+        {
+            RegisterBehaviorFactory(typeof(Capacitor), new BehaviorFactoryDictionary
+            {
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Set the model for the capacitor
         /// </summary>
@@ -27,13 +38,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(string name) : base(name, CapacitorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Register factories
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -46,15 +51,7 @@ namespace SpiceSharp.Components
         public Capacitor(string name, string pos, string neg, double cap) 
             : base(name, CapacitorPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters(cap));
-
-            // Register factories
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-
-            // Connect
             Connect(pos, neg);
         }
     }

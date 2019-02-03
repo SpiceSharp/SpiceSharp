@@ -13,7 +13,6 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public CapacitorModel(string name) : base(name)
         {
-            // Register parameters
             ParameterSets.Add(new ModelBaseParameters());
         }
     }

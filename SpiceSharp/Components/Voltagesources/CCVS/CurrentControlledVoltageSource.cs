@@ -11,6 +11,15 @@ namespace SpiceSharp.Components
     [Pin(0, "H+"), Pin(1, "H-"), VoltageDriver(0, 1)]
     public class CurrentControlledVoltageSource : Component
     {
+        static CurrentControlledVoltageSource()
+        {
+            RegisterBehaviorFactory(typeof(CurrentControlledVoltageSource), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Controlling source name
         /// </summary>
@@ -30,15 +39,8 @@ namespace SpiceSharp.Components
         public CurrentControlledVoltageSource(string name) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
-            // Make sure we are placed behind any voltage sources
             Priority = ComponentPriority - 1;
-
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -52,16 +54,8 @@ namespace SpiceSharp.Components
         public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
-            // Make sure we are placed behind any voltage sources
             Priority = ComponentPriority - 1;
-
-            // Add parameters
             ParameterSets.Add(new BaseParameters(gain));
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-
             Connect(pos, neg);
             ControllingName = controllingSource;
         }

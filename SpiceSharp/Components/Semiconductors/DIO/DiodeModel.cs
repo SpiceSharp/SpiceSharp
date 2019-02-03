@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.DiodeBehaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.DiodeBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -7,18 +8,22 @@ namespace SpiceSharp.Components
     /// </summary>
     public class DiodeModel : Model
     {
+        static DiodeModel()
+        {
+            RegisterBehaviorFactory(typeof(DiodeModel), new BehaviorFactoryDictionary
+            {
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
         public DiodeModel(string name) : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new ModelNoiseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
     }
 }

@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public ComplexVoltageExport(FrequencySimulation simulation, string posNode, string negNode)
+        public ComplexVoltageExport(Simulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));

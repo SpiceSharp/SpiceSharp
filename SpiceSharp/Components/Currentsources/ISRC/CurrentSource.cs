@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSourceBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,16 @@ namespace SpiceSharp.Components
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
     public class CurrentSource : Component
     {
+        static CurrentSource()
+        {
+            RegisterBehaviorFactory(typeof(CurrentSource), new BehaviorFactoryDictionary
+            {
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -22,14 +33,8 @@ namespace SpiceSharp.Components
         public CurrentSource(string name) 
             : base(name, CurrentSourcePinCount)
         {
-            // Add parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters());
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>
@@ -40,18 +45,10 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
         public CurrentSource(string name, string pos, string neg, double dc)
-            : base(name, CurrentSourcePinCount)
+            : this(name)
         {
-            // Add parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(dc));
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
-
-            // Connect
             Connect(pos, neg);
         }
 
@@ -63,18 +60,10 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The Waveform-object</param>
         public CurrentSource(string name, string pos, string neg, Waveform waveform)
-            : base(name, CurrentSourcePinCount)
+            : this(name)
         {
-            // Add parameters
             ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(waveform));
             ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
-
-            // Connect
             Connect(pos, neg);
         }
     }

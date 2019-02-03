@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.MosfetBehaviors.Level3;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.MosfetBehaviors.Level3;
 
 namespace SpiceSharp.Components
 {
@@ -7,18 +8,22 @@ namespace SpiceSharp.Components
     /// </summary>
     public class Mosfet3Model : Model
     {
+        static Mosfet3Model()
+        {
+            RegisterBehaviorFactory(typeof(Mosfet3Model), new BehaviorFactoryDictionary
+            {
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
         public Mosfet3Model(string name) : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -28,12 +33,8 @@ namespace SpiceSharp.Components
         /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>
         public Mosfet3Model(string name, bool nmos) : base(name)
         {
-            // Add parameters
             ParameterSets.Add(new ModelBaseParameters(nmos));
             ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
     }
 }

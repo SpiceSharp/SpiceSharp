@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors
 {
@@ -12,8 +11,9 @@ namespace SpiceSharp.Behaviors
     }
 
     /// <summary>
-    /// Delegate
+    /// Create a behavior for an entity
     /// </summary>
-    /// <returns>The behavior created by the factory.</returns>
-    public delegate IBehavior BehaviorFactoryMethod();
+    /// <param name="entity">The entity creating the behavior.</param>
+    /// <returns></returns>
+    public delegate IBehavior BehaviorFactoryMethod(Entity entity);
 }

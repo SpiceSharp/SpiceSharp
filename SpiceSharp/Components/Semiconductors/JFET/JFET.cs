@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.JFETBehaviors;
 
 namespace SpiceSharp.Components
@@ -10,6 +11,18 @@ namespace SpiceSharp.Components
     [Pin(0, "drain"), Pin(1, "gate"), Pin(2, "source")]
     public class JFET : Component
     {
+        static JFET()
+        {
+            RegisterBehaviorFactory(typeof(JFET), new BehaviorFactoryDictionary
+            {
+                // Add behavior factories
+                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)},
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Sets the model.
         /// </summary>
@@ -28,14 +41,7 @@ namespace SpiceSharp.Components
         public JFET(string name)
             : base(name, JFETPincount)
         {
-            // Add parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add behavior factories
-            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
         }
     }
 }

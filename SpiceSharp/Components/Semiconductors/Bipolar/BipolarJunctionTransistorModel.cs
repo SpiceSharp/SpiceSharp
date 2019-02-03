@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.BipolarBehaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.BipolarBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -7,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class BipolarJunctionTransistorModel : Model
     {
+        static BipolarJunctionTransistorModel()
+        {
+            RegisterBehaviorFactory(typeof(BipolarJunctionTransistorModel), new BehaviorFactoryDictionary
+            {
+                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -16,9 +25,6 @@ namespace SpiceSharp.Components
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
             ParameterSets.Add(new ModelNoiseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
     }
 }

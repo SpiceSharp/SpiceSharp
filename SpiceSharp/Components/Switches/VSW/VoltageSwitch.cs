@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
@@ -9,6 +10,17 @@ namespace SpiceSharp.Components
     [Pin(0, "S+"), Pin(1, "S-"), Pin(2, "SC+"), Pin(3, "SC-"), Connected(0, 1)]
     public class VoltageSwitch : Component
     {
+        static VoltageSwitch()
+        {
+            RegisterBehaviorFactory(typeof(VoltageSwitch), new BehaviorFactoryDictionary
+            {
+                // Add factories
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name, new VoltageControlled())},
+                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name, new VoltageControlled())},
+                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name, new VoltageControlled())}
+            });
+        }
+
         /// <summary>
         /// Set the model for the voltage-controlled switch
         /// </summary>
@@ -27,13 +39,7 @@ namespace SpiceSharp.Components
         public VoltageSwitch(string name) 
             : base(name, VoltageSwitchPinCount)
         {
-            // Register parameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new VoltageControlled()));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new VoltageControlled()));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new VoltageControlled()));
         }
 
         /// <summary>
@@ -45,16 +51,8 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg) 
-            : base(name, VoltageSwitchPinCount)
+            : this(name)
         {
-            // Register parameters
-            ParameterSets.Add(new BaseParameters());
-
-            // Add factories
-            Behaviors.Add(typeof(BiasingBehavior), () => new BiasingBehavior(Name, new VoltageControlled()));
-            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name, new VoltageControlled()));
-            Behaviors.Add(typeof(AcceptBehavior), () => new AcceptBehavior(Name, new VoltageControlled()));
-
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

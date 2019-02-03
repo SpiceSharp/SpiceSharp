@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.NonlinearResistorBehaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.NonlinearResistorBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -8,6 +9,14 @@ namespace SpiceSharp.Components
     /// <seealso cref="Component" />
     public class NonlinearResistor : Component
     {
+        static NonlinearResistor()
+        {
+            RegisterBehaviorFactory(typeof(NonlinearResistor), new BehaviorFactoryDictionary
+            {
+                {typeof(LoadBehavior), e => new LoadBehavior(e.Name)}
+            });
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NonlinearResistor"/> class.
         /// </summary>
@@ -18,9 +27,6 @@ namespace SpiceSharp.Components
         {
             // Add a NonlinearResistorBehaviors.BaseParameters
             ParameterSets.Add(new BaseParameters());
-
-            // Add a NonlinearResistorBehaviors.LoadBehavior factory
-            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
 
             // Connect the entity
             Connect(nodeA, nodeB);
