@@ -294,8 +294,16 @@ namespace SpiceSharp.Circuits
             {
                 _lock.EnterReadLock();
 
-                foreach (var t in _ordered)
-                    yield return t;
+                if (_isOrdered)
+                {
+                    foreach (var t in _ordered)
+                        yield return t;
+                }
+                else
+                {
+                    foreach (var t in _objects.Values)
+                        yield return t;
+                }
             }
             finally
             {

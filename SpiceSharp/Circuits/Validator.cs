@@ -66,11 +66,11 @@ namespace SpiceSharp.Circuits
             if (unconnected.Count > 0)
             {
                 var un = new List<string>();
-                for (var i = 0; i < _nodes.Count; i++)
+                foreach (var n in _nodes)
                 {
-                    var index = _nodes[i].Index;
+                    var index = n.Index;
                     if (unconnected.Contains(index))
-                        un.Add(_nodes[i].Name);
+                        un.Add(n.Name);
                 }
                 throw new CircuitException("{0}: Floating nodes found".FormatString(string.Join(",", un)));
             }
@@ -123,19 +123,20 @@ namespace SpiceSharp.Circuits
                 foreach (var attr in attributes)
                 {
                     // Voltage driven nodes are checked for voltage loops
-                    if (attr is VoltageDriverAttribute vd)
-                        _voltageDriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
-
-                    // At least one source needs to be available
-                    if (attr is IndependentSourceAttribute)
-                        _hasSource = true;
-
-                    if (attr is ConnectedAttribute conn)
+                    switch (attr)
                     {
-                        // Add connection between pins
-                        if (conn.Pin1 >= 0 && conn.Pin2 >= 0)
-                            AddConnections(new[] { nodes[conn.Pin1], nodes[conn.Pin2] });
-                        hasconnections = true;
+                        case VoltageDriverAttribute vd:
+                            _voltageDriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
+                            break;
+                        case IndependentSourceAttribute _:
+                            _hasSource = true;
+                            break;
+                        case ConnectedAttribute conn:
+                            // Add connection between pins
+                            if (conn.Pin1 >= 0 && conn.Pin2 >= 0)
+                                AddConnections(new[] { nodes[conn.Pin1], nodes[conn.Pin2] });
+                            hasconnections = true;
+                            break;
                     }
                 }
 

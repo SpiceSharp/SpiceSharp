@@ -78,13 +78,6 @@ namespace SpiceSharp
             };
         }
 
-        public void Instantiate(Circuit subcircuit, string name)
-        {
-            foreach (var entity in subcircuit.Entities)
-            {
-            }
-        }
-
         /// <summary>
         /// Clear all entities in the circuit.
         /// </summary>
