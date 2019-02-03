@@ -85,36 +85,17 @@ namespace SpiceSharp.Circuits
             // Circuit components
             if (c is Component icc)
             {
-                // Check for ground node and for short-circuited components
-                var n = -1;
-                var isShortcircuit = false;
-                var nodes = new int[icc.PinCount];
                 var i = 0;
+                var nodes = new int[icc.PinCount];
                 foreach (var index in icc.GetNodeIndexes(_nodes))
                 {
-                    // Check for a connection to ground
-                    if (index == 0)
-                        _hasGround = true;
-
-                    // Check for short-circuited devices
-                    if (n < 0)
-                    {
-                        // We have at least one node, so we potentially have a short-circuited component
-                        n = index;
-                        isShortcircuit = true;
-                    }
-                    else if (n != index)
-                    {
-                        // Is not short-circuited, so OK!
-                        isShortcircuit = false;
-                    }
-
                     // Group indices
                     nodes[i++] = index;
                     if (!_connectedGroups.ContainsKey(index))
                         _connectedGroups.Add(index, _cgroup++);
                 }
-                if (isShortcircuit)
+
+                if (IsShortCircuited(icc))
                     throw new CircuitException("{0}: All pins are short-circuited".FormatString(icc.Name));
                 
                 // Use attributes for checking properties
@@ -144,6 +125,41 @@ namespace SpiceSharp.Circuits
                 if (!hasconnections)
                     AddConnections(nodes);
             }
+        }
+
+        /// <summary>
+        /// Determines if all pins of the component are short-circuited together.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        /// <returns>
+        ///   <c>true</c> if all component pins are short-circuited; otherwise, <c>false</c>.
+        /// </returns>
+        private bool IsShortCircuited(Component component)
+        {
+            // Check for ground node and for short-circuited components
+            var n = -1;
+            var isShortcircuit = false;
+            foreach (var index in component.GetNodeIndexes(_nodes))
+            {
+                // Check for a connection to ground
+                if (index == 0)
+                    _hasGround = true;
+
+                // Check for short-circuited devices
+                if (n < 0)
+                {
+                    // We have at least one node, so we potentially have a short-circuited component
+                    n = index;
+                    isShortcircuit = true;
+                }
+                else if (n != index)
+                {
+                    // Is not short-circuited, so OK!
+                    isShortcircuit = false;
+                }
+            }
+
+            return isShortcircuit;
         }
 
         /// <summary>
