@@ -150,16 +150,16 @@ namespace SpiceSharpTest
         {
             // <example_DC>
             // Make the bipolar junction transistor
-            var nmos = new Mosfet1("M1");
+            var nmos = new Mosfet1("M1") {Model = "example"};
             nmos.Connect("d", "g", "0", "0");
             var nmosmodel = new Mosfet1Model("example");
             nmosmodel.SetParameter("kp", 150.0e-3);
-            nmos.SetModel(nmosmodel);
 
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("Vgs", "g", "0", 0),
                 new VoltageSource("Vds", "d", "0", 0),
+                nmosmodel,
                 nmos
                 );
 

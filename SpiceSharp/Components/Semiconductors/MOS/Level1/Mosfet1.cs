@@ -24,11 +24,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the MOS1 Mosfet
-        /// </summary>
-        public void SetModel(Mosfet1Model model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -52,7 +47,7 @@ namespace SpiceSharp.Components
         /// <param name="s">The source node.</param>
         /// <param name="b">The bulk node.</param>
         /// <param name="model">The mosfet model.</param>
-        public Mosfet1(string name, string d, string g, string s, string b, Mosfet1Model model)
+        public Mosfet1(string name, string d, string g, string s, string b, string model)
             : this(name)
         {
             Connect(d, g, s, b);

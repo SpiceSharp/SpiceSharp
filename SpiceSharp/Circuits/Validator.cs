@@ -33,9 +33,6 @@ namespace SpiceSharp.Circuits
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
 
-            // Connect all entities in the circuit, we need this information to find connectivity issues
-            circuit.Entities.BuildOrderedComponentList();
-
             // Initialize
             _hasSource = false;
             _voltageDriven.Clear();

@@ -7,31 +7,24 @@ using SpiceSharp.Components;
 namespace SpiceSharpTest.Models
 {
     [TestFixture]
-    public class BJTTests : Framework
+    public class BipolarJunctionTransistorTests : Framework
     {
-        /// <summary>
-        /// Create a BJT with a model
-        /// </summary>
-        /// <param name="name">Device name</param>
-        /// <param name="c">Collector</param>
-        /// <param name="b">Base</param>
-        /// <param name="e">Emitter</param>
-        /// <param name="subst">Substrate</param>
-        /// <param name="model">Model name</param>
-        /// <param name="modelparams">Model parameters</param>
         BipolarJunctionTransistor CreateBJT(string name, 
             string c, string b, string e, string subst, 
-            string model, string modelparams)
+            string model)
         {
-            // Create the model
-            var bjtmodel = new BipolarJunctionTransistorModel(model);
-            ApplyParameters(bjtmodel, modelparams);
-
             // Create the transistor
             var bjt = new BipolarJunctionTransistor(name);
             bjt.Connect(c, b, e, subst);
-            bjt.SetModel(bjtmodel);
+            bjt.Model = model;
             return bjt;
+        }
+        
+        BipolarJunctionTransistorModel CreateBJTModel(string name, string parameters)
+        {
+            var bjtmodel = new BipolarJunctionTransistorModel(name);
+            ApplyParameters(bjtmodel, parameters);
+            return bjtmodel;
         }
 
         [Test]
@@ -46,7 +39,8 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "b", "0", 0),
                 new VoltageSource("V2", "c", "0", 0),
-                CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11", string.Join(" ",
+                CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11"),
+                CreateBJTModel("mjd44h11", string.Join(" ",
                     "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
                     "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
                     "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
@@ -89,7 +83,8 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "vdd", "out", 1.0e3),
                 new Resistor("R2", "out", "b", 10.0e3),
                 new Capacitor("Cin", "in", "b", 1e-6),
-                CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11", string.Join(" ",
+                CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11"),
+                CreateBJTModel("mjd44h11", string.Join(" ",
                     "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
                     "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
                     "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
@@ -135,7 +130,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "in", "b", 1.0e3),
-                CreateBJT("Q1", "out", "b", "0", "0", "mjd44h11", string.Join(" ",
+                CreateBJT("Q1", "out", "b", "0", "0", "mjd44h11"),
+                CreateBJTModel("mjd44h11", string.Join(" ",
                     "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
                     "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
                     "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
@@ -243,8 +239,9 @@ namespace SpiceSharpTest.Models
                 new Resistor("rb", "5", "3", 465e3),
                 new Resistor("rc", "5", "4", 3e3),
                 new VoltageSource("vcc", "5", "0", 10.0),
-                CreateBJT("q1", "4", "3", "0", "0", "npn-trans", "is=2e-15 bf=100 vaf=200")
-                );
+                CreateBJT("q1", "4", "3", "0", "0", "npn-trans"),
+                CreateBJTModel("npn-trans", "is=2e-15 bf=100 vaf=200")
+            );
 
             // Create the simulation
             var op = new OP("OP 1");

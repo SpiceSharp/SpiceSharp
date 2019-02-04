@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
@@ -204,19 +203,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">The circuit that will be used.</param>
+        /// <param name="circuit">The circuit containing the entities that are included in the simulation.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
         /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
         protected virtual void Setup(Circuit circuit)
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
-
-            // No use simulating an empty circuit
             if (circuit.Entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
-            // Use the same comparer as the circuit. This is crucial because they use the same identifiers!
+            // Use the same comparers as the circuit. This is crucial because they use the same identifiers!
             EntityParameters = new ParameterPool(circuit.Entities.Comparer);
             EntityBehaviors = new BehaviorPool(circuit.Entities.Comparer);
 
@@ -233,7 +230,6 @@ namespace SpiceSharp.Simulations
             }
 
             // Setup all entity parameters and behaviors
-            circuit.Entities.BuildOrderedComponentList();
             SetupParameters(circuit.Entities);
             SetupBehaviors(circuit.Entities);
         }

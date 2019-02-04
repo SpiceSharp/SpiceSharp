@@ -8,26 +8,19 @@ namespace SpiceSharpTest.Models
     [TestFixture]
     public class VoltageSwitchTests : Framework
     {
-        /// <summary>
-        /// Create a voltage switch
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="pos">Positive node</param>
-        /// <param name="neg">Negative node</param>
-        /// <param name="contPos">Controlling positive node</param>
-        /// <param name="contNeg">Controlling negative node</param>
-        /// <param name="modelName">Model name</param>
-        /// <param name="modelParameters">Model parameters</param>
-        /// <returns></returns>
-        VoltageSwitch CreateVoltageSwitch(string name, string pos, string neg, string contPos, string contNeg, string modelName, string modelParameters)
+        private VoltageSwitch CreateVoltageSwitch(string name, string pos, string neg, string contPos, string contNeg, string model)
         {
-            var model = new VoltageSwitchModel(modelName);
-            ApplyParameters(model, modelParameters);
-
-            var vsw = new VoltageSwitch(name, pos, neg, contPos, contNeg);
-            vsw.SetModel(model);
+            var vsw = new VoltageSwitch(name, pos, neg, contPos, contNeg) {Model = model};
             return vsw;
         }
+
+        private VoltageSwitchModel CreateVoltageSwitchModel(string name, string parameters)
+        {
+            var model = new VoltageSwitchModel(name);
+            ApplyParameters(model, parameters);
+            return model;
+        }
+
 
         [Test]
         public void When_VSWSwitchDC_Expect_Spice3f5Reference()
@@ -37,7 +30,8 @@ namespace SpiceSharpTest.Models
 
             // Build the circuit
             var ckt = new Circuit(
-                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001"),
+                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch"),
+                CreateVoltageSwitchModel("myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001"),
                 new VoltageSource("V1", "in", "0", 0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 1e3)
@@ -211,7 +205,8 @@ namespace SpiceSharpTest.Models
         {
             // Build the switch
             var ckt = new Circuit(
-                CreateVoltageSwitch("S1", "0", "OUT", "IN", "0", "MYSW", "Ron=1 Roff=1e6 Vt=0.5 Vh=-0.4"),
+                CreateVoltageSwitch("S1", "0", "OUT", "IN", "0", "MYSW"),
+                CreateVoltageSwitchModel("MYSW", "Ron=1 Roff=1e6 Vt=0.5 Vh=-0.4"),
                 new VoltageSource("V1", "IN", "0", new Pulse(0, 1, 0.0, 0.4e-3, 0.4e-3, 0.1e-3, 1e-3)),
                 new VoltageSource("V2", "N001", "0", 3.3),
                 new Resistor("R1", "N001", "OUT", 1e3)

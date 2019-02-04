@@ -23,11 +23,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the current-controlled switch
-        /// </summary>
-        public void SetModel(CurrentSwitchModel model) => Model = model;
-        
-        /// <summary>
         /// Controlling source name
         /// </summary>
         [ParameterName("control"), ParameterInfo("Name of the controlling source")]

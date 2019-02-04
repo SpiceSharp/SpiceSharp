@@ -88,7 +88,13 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The requested object.
         /// </returns>
-        public T GetBehavior<T>(string name = "entity") where T : IBehavior => _entityBehaviors[name].Get<T>();
+        public T GetBehavior<T>(string name = "entity") where T : IBehavior
+        {
+            if (_entityBehaviors.TryGetValue(name, out var ebd))
+                return ebd.Get<T>();
+            throw new CircuitException(
+                "Cannot find behavior for {0} of type '{1}'".FormatString(name, typeof(T).FullName));
+        }
 
         /// <summary>
         /// Tries getting the behavior for a specified identifier.

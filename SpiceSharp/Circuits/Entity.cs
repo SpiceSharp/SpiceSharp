@@ -132,17 +132,5 @@ namespace SpiceSharp.Circuits
         /// Gets the priority of this entity.
         /// </summary>
         public int Priority { get; protected set; } = 0;
-
-        /// <summary>
-        /// Clones the entity with a new name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
-        public virtual Entity Clone(string name)
-        {
-            var e = (Entity) Activator.CreateInstance(GetType(), name);
-
-            return e;
-        }
     }
 }

@@ -81,13 +81,14 @@ namespace SpiceSharpTest.Models
             var tau = resistorResistance * capacitance;
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
-            var model = new CapacitorModel("C1");
+            var model = new CapacitorModel("model C1");
             model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient1.Value = 0.0;
             model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient2.Value = 0.0;
-            capacitor.SetModel(model);
+            capacitor.Model = model.Name;
 
             // Build circuit
             var ckt = new Circuit(
+                model,
                 capacitor,
                 new Resistor("R1", "IN", "OUT", resistorResistance),
                 new VoltageSource("V1", "IN", "0", dcVoltage));
@@ -126,13 +127,14 @@ namespace SpiceSharpTest.Models
             var tau = resistorResistance * capacitanceAfterTemperature;
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
-            var model = new CapacitorModel("C1");
+            var model = new CapacitorModel("model C1");
             model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient1.Value = 1.1;
             model.ParameterSets.Get<ModelBaseParameters>().TemperatureCoefficient2.Value = 2.1;
-            capacitor.SetModel(model);
+            capacitor.Model = model.Name;
 
             // Build circuit
             var ckt = new Circuit(
+                model,
                 capacitor,
                 new Resistor("R1", "IN", "OUT", resistorResistance),
                 new VoltageSource("V1", "IN", "0", dcVoltage));

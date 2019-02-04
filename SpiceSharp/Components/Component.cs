@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets the model of the circuit component (if any).
         /// </summary>
-        public Entity Model { get; protected set; } = null;
+        public string Model { get; set; }
 
         /// <summary>
         /// Connects the component in the circuit.
@@ -103,10 +103,10 @@ namespace SpiceSharp.Components
             var provider = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Add our model parameters and behaviors
-            if (Model != null)
+            if (!string.IsNullOrEmpty(Model))
             {
-                provider.Add("model", parameters[Model.Name]);
-                provider.Add("model", behaviors[Model.Name]);
+                provider.Add("model", parameters[Model]);
+                provider.Add("model", behaviors[Model]);
             }
 
             return provider;

@@ -13,29 +13,19 @@ namespace SpiceSharpTest.Models
     [TestFixture]
     public class MOS2Tests : Framework
     {
-        /// <summary>
-        /// Create a MOS2 transistor
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="d">Drain</param>
-        /// <param name="g">Gate</param>
-        /// <param name="s">Source</param>
-        /// <param name="b">Bulk</param>
-        /// <param name="modelname">Model name</param>
-        /// <param name="modelparams">Model parameters</param>
-        /// <returns></returns>
-        protected Mosfet2 CreateMOS2(string name, string d, string g, string s, string b,
-            string modelname, string modelparams)
+        private Mosfet2 CreateMOS2(string name, string d, string g, string s, string b, string model)
         {
-            // Create model
-            var model = new Mosfet2Model(modelname);
-            ApplyParameters(model, modelparams);
-
             // Create transistor
-            var mos = new Mosfet2(name);
+            var mos = new Mosfet2(name) {Model = model};
             mos.Connect(d, g, s, b);
-            mos.SetModel(model);
             return mos;
+        }
+
+        private Mosfet2Model CreateMOS2Model(string name, string parameters)
+        {
+            var model = new Mosfet2Model(name);
+            ApplyParameters(model, parameters);
+            return model;
         }
 
         [Test]
@@ -49,9 +39,9 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0),
                 new VoltageSource("V2", "out", "0", 0.0),
-                CreateMOS2("M1", "out", "in", "0", "0",
-                    "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
-                );
+                CreateMOS2("M1", "out", "in", "0", "0", "NFET"),
+                CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
+            );
             ckt.Entities["M1"].SetParameter("l", 6e-6);
             ckt.Entities["M1"].SetParameter("w", 1e-6);
 
@@ -124,8 +114,8 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("C1", "in", "g", 1e-6),
-                CreateMOS2("M1", "out", "g", "0", "0",
-                    "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
+                CreateMOS2("M1", "out", "g", "0", "0", "NFET"),
+                CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
             ckt.Entities["V1"].SetParameter("acmag", 1.0);
             ckt.Entities["M1"].SetParameter("l", 6e-6);
@@ -185,8 +175,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
                 new VoltageSource("Vsupply", "vdd", "0", 3.3),
                 new Resistor("R1", "out", "vdd", 100e3),
-                CreateMOS2("M1", "out", "in", "0", "0",
-                    "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
+                CreateMOS2("M1", "out", "in", "0", "0", "NFET"),
+                CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
             ckt.Entities["M1"].SetParameter("l", 6e-6);
             ckt.Entities["M1"].SetParameter("w", 1e-6);
@@ -286,8 +276,8 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("C1", "in", "g", 1e-6),
-                CreateMOS2("M1", "out", "g", "0", "0",
-                    "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9 KF = 0.5e-25")
+                CreateMOS2("M1", "out", "g", "0", "0", "NFET"),
+                CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9 KF = 0.5e-25")
                 );
             ckt.Entities["V1"].SetParameter("acmag", 1.0);
             ckt.Entities["M1"].SetParameter("l", 6e-6);

@@ -8,24 +8,17 @@ namespace SpiceSharpTest.Models
     [TestFixture]
     public class CurrentSwitchTests : Framework
     {
-        /// <summary>
-        /// Create a voltage switch
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="pos">Positive node</param>
-        /// <param name="neg">Negative node</param>
-        /// <param name="contSource">Controlling source</param>
-        /// <param name="modelName">Model name</param>
-        /// <param name="modelParameters">Model parameters</param>
-        /// <returns></returns>
-        CurrentSwitch CreateCurrentSwitch(string name, string pos, string neg, string contSource, string modelName, string modelParameters)
+        private CurrentSwitch CreateCurrentSwitch(string name, string pos, string neg, string contSource, string model)
         {
-            var model = new CurrentSwitchModel(modelName);
-            ApplyParameters(model, modelParameters);
-
-            var vsw = new CurrentSwitch(name, pos, neg, contSource);
-            vsw.SetModel(model);
+            var vsw = new CurrentSwitch(name, pos, neg, contSource) {Model = model};
             return vsw;
+        }
+
+        private CurrentSwitchModel CreateCurrentSwitchModel(string name, string parameters)
+        {
+            var model = new CurrentSwitchModel(name);
+            ApplyParameters(model, parameters);
+            return model;
         }
 
         [Test]
@@ -36,7 +29,8 @@ namespace SpiceSharpTest.Models
 
             // Build the circuit
             var ckt = new Circuit(
-                CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001"),
+                CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch"),
+                CreateCurrentSwitchModel("myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001"),
                 new CurrentSource("I1", "0", "in", 0.0),
                 new VoltageSource("V1", "in", "0", 0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
