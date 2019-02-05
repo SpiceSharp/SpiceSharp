@@ -11,8 +11,25 @@ namespace SpiceSharp.Circuits
     /// </summary>
     public class EntityCollection : IEnumerable<Entity>
     {
+        /// <summary>
+        /// Compares entities by their priority.
+        /// </summary>
+        /// <seealso cref="System.Collections.Generic.IComparer{Entity}" />
         private class EntityPriorityComparer : IComparer<Entity>
         {
+            /// <summary>
+            /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+            /// </summary>
+            /// <param name="x">The first object to compare.</param>
+            /// <param name="y">The second object to compare.</param>
+            /// <returns>
+            /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+            /// </returns>
+            /// <exception cref="ArgumentNullException">
+            /// x
+            /// or
+            /// y
+            /// </exception>
             public int Compare(Entity x, Entity y)
             {
                 if (x == null)
@@ -47,6 +64,16 @@ namespace SpiceSharp.Circuits
         private readonly Dictionary<string, Entity> _entities;
         private readonly SortedSet<Entity> _ordered;
         private readonly ReaderWriterLockSlim _lock;
+
+        /// <summary>
+        /// Occurs when an entity is about to be added to the collection.
+        /// </summary>
+        public event EventHandler<EntityEventArgs> EntityAdded;
+
+        /// <summary>
+        /// Occurs when an entity has been removed from the collection.
+        /// </summary>
+        public event EventHandler<EntityEventArgs> EntityRemoved; 
 
         /// <summary>
         /// Gets the comparer for entity identifiers.
@@ -143,24 +170,25 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Add one or more entities.
         /// </summary>
-        /// <param name="cs">The entities that need to be added.</param>
-        public void Add(params Entity[] cs)
+        /// <param name="entities">The entities that need to be added.</param>
+        public void Add(params Entity[] entities)
         {
             try
             {
                 _lock.EnterWriteLock();
 
-                if (cs == null)
+                if (entities == null)
                     return;
-                foreach (var c in cs)
+                foreach (var entity in entities)
                 {
-                    if (c == null)
+                    if (entity == null)
                         throw new ArgumentNullException();
-                    if (_entities.ContainsKey(c.Name))
+                    if (_entities.ContainsKey(entity.Name))
                         throw new CircuitException(
-                            "An entity by the name of '{0}' already exists".FormatString(c.Name));
-                    _entities.Add(c.Name, c);
-                    _ordered.Add(c);
+                            "An entity by the name of '{0}' already exists".FormatString(entity.Name));
+                    OnEntityAdded(new EntityEventArgs(entity));
+                    _entities.Add(entity.Name, entity);
+                    _ordered.Add(entity);
                 }
             }
             finally
@@ -170,7 +198,12 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Remove specific entities from the collection.
+        /// Raises the <seealso cref="EntityAdded"/> event.
+        /// </summary>
+        protected virtual void OnEntityAdded(EntityEventArgs args) => EntityAdded?.Invoke(this, args);
+
+        /// <summary>
+        /// Removes the specified entities from the collection.
         /// </summary>
         /// <param name="names">strings of the entities that need to be deleted.</param>
         public void Remove(params string[] names)
@@ -189,6 +222,7 @@ namespace SpiceSharp.Circuits
                     {
                         _entities.Remove(name);
                         _ordered.Remove(entity);
+                        OnEntityRemoved(new EntityEventArgs(entity));
                     }
                 }
             }
@@ -197,6 +231,38 @@ namespace SpiceSharp.Circuits
                 _lock.ExitWriteLock();
             }
         }
+
+        /// <summary>
+        /// Removes the specified entities from the collection.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        public void Remove(params Entity[] entities)
+        {
+            try
+            {
+                _lock.EnterWriteLock();
+                if (entities == null)
+                    return;
+                foreach (var entity in entities)
+                {
+                    if (_entities.ContainsKey(entity.Name))
+                    {
+                        _entities.Remove(entity.Name);
+                        _ordered.Remove(entity);
+                        OnEntityRemoved(new EntityEventArgs(entity));
+                    }
+                }
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
+        }
+
+        /// <summary>
+        /// Raises the <seealso cref="EntityRemoved"/> event.
+        /// </summary>
+        protected virtual void OnEntityRemoved(EntityEventArgs args) => EntityRemoved?.Invoke(this, args);
 
         /// <summary>
         /// This method checks if a component exists with a specified string.
