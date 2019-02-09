@@ -36,7 +36,7 @@ namespace SpiceSharp.Circuits
                     throw new ArgumentNullException(nameof(x));
                 if (y == null)
                     throw new ArgumentNullException(nameof(y));
-                if (x == y)
+                if (ReferenceEquals(x, y))
                     return 0;
 
                 // Put the highest priority first!

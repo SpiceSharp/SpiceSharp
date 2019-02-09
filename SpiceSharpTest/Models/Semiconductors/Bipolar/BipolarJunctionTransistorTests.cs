@@ -14,9 +14,7 @@ namespace SpiceSharpTest.Models
             string model)
         {
             // Create the transistor
-            var bjt = new BipolarJunctionTransistor(name);
-            bjt.Connect(c, b, e, subst);
-            bjt.Model = model;
+            var bjt = new BipolarJunctionTransistor(name, c, b, e, subst, model);
             return bjt;
         }
         

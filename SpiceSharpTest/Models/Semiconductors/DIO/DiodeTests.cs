@@ -15,8 +15,7 @@ namespace SpiceSharpTest.Models
     {
         private Diode CreateDiode(string name, string anode, string cathode, string model)
         {
-            var d = new Diode(name) {Model = model};
-            d.Connect(anode, cathode);
+            var d = new Diode(name, anode, cathode, model);
             return d;
         }
 
