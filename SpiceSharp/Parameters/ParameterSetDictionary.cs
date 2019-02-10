@@ -44,6 +44,21 @@ namespace SpiceSharp
             return null;
         }
 
+        public IEnumerable<Tuple<Parameter<T>, List<string>>> GetParameters<T>() where T : struct
+        {
+            foreach (var ps in Values)
+            {
+                var p = ps.GetParameters<T>();
+                if (p != null)
+                {
+                    foreach (var keyValuePair in p)
+                    {
+                        yield return keyValuePair;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Gets the principal parameter from any parameter set in the dictionary.
         /// </summary>

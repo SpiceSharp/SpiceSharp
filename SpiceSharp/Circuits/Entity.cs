@@ -24,7 +24,10 @@ namespace SpiceSharp.Circuits
         protected static void RegisterBehaviorFactory(Type entityType, BehaviorFactoryDictionary dictionary)
         {
             // We do this to avoid anyone unregistering factories!
-            BehaviorFactories.Add(entityType, dictionary);
+            lock (BehaviorFactories)
+            {
+                BehaviorFactories.Add(entityType, dictionary);
+            }
         }
 
         /// <summary>

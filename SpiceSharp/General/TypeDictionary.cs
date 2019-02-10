@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 
 namespace SpiceSharp
 {
@@ -21,10 +22,27 @@ namespace SpiceSharp
         /// </value>
         protected Dictionary<Type, T> Dictionary { get; }
 
+        // Private variables
+        protected ReaderWriterLockSlim Lock { get; }
+
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public ICollection<Type> Keys => Dictionary.Keys;
+        public ICollection<Type> Keys
+        {
+            get
+            {
+                Lock.EnterReadLock();
+                try
+                {
+                    return Dictionary.Keys;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the values in the <see cref="TypeDictionary{T}" />.
@@ -33,17 +51,39 @@ namespace SpiceSharp
         {
             get
             {
-                HashSet<T> values = new HashSet<T>();
-                foreach (var v in Dictionary.Values)
-                    values.Add(v);
-                return values;
+                Lock.EnterReadLock();
+                try
+                {
+                    var values = new HashSet<T>();
+                    foreach (var v in Dictionary.Values)
+                        values.Add(v);
+                    return values;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
             }
         }
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public int Count => Dictionary.Count;
+        public int Count
+        {
+            get
+            {
+                Lock.EnterReadLock();
+                try
+                {
+                    return Dictionary.Count;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="TypeDictionary{T}" /> is read-only.
@@ -60,12 +100,96 @@ namespace SpiceSharp
         /// <returns>The object of the specified type.</returns>
         public T this[Type key]
         {
-            get => Dictionary[key];
+            get
+            {
+                Lock.EnterReadLock();
+                try
+                {
+                    return Dictionary[key];
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
+            }
             set
             {
                 if (key == null)
                     throw new ArgumentException("Invalid argument");
+                Lock.EnterWriteLock();
 
+                try
+                {
+                    // This may seem a bit tricky:
+                    // - If 'isChild' is true, then that means the new added class has not been implemented yet
+                    //   by any other class. It will not overwrite any base classes that already have been
+                    //   implemented as it may remove references to "simpler" base classes".
+                    // - if 'isChild' is false, then a class has been added that already implements the type.
+                    //   The new value is considered to be a "simpler" type and it will overwrite the existing
+                    //   types.
+                    var isChild = !Dictionary.ContainsKey(key);
+
+                    // Add the regular class hierarchy that this instance implements.
+                    var currentType = key;
+                    while (currentType != null && currentType != typeof(object))
+                    {
+                        if (!isChild)
+                            Dictionary[currentType] = value;
+                        else if (!Dictionary.ContainsKey(currentType))
+                            Dictionary.Add(currentType, value);
+                        else
+                            break;
+                        currentType = currentType.GetTypeInfo().BaseType;
+                    }
+
+                    // Also add all interfaces this instance implements.
+                    foreach (var itf in key.GetTypeInfo().GetInterfaces())
+                    {
+                        if (!isChild)
+                            Dictionary[itf] = value;
+                        else if (!Dictionary.ContainsKey(itf))
+                            Dictionary.Add(itf, value);
+                    }
+                }
+                finally
+                {
+                    Lock.ExitWriteLock();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
+        /// </summary>
+        protected TypeDictionary()
+        {
+            Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            Dictionary = new Dictionary<Type, T>();
+        }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="TypeDictionary{T}"/> class.
+        /// </summary>
+        ~TypeDictionary()
+        {
+            Lock?.Dispose();
+        }
+
+        /// <summary>
+        /// Adds an element with the provided key and value to the <see cref="TypeDictionary{T}"/>.
+        /// </summary>
+        /// <param name="key">The type of the added value.</param>
+        /// <param name="value">The added value.</param>
+        /// <exception cref="ArgumentNullException">key</exception>
+        /// <exception cref="CircuitException">Type {0} is not derived from {1}".FormatString(key, BaseClass)</exception>
+        public virtual void Add(Type key, T value)
+        {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+
+            Lock.EnterWriteLock();
+            try
+            {
                 // This may seem a bit tricky:
                 // - If 'isChild' is true, then that means the new added class has not been implemented yet
                 //   by any other class. It will not overwrite any base classes that already have been
@@ -97,57 +221,9 @@ namespace SpiceSharp
                         Dictionary.Add(itf, value);
                 }
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
-        /// </summary>
-        protected TypeDictionary()
-        {
-            Dictionary = new Dictionary<Type, T>();
-        }
-
-        /// <summary>
-        /// Adds an element with the provided key and value to the <see cref="TypeDictionary{T}"/>.
-        /// </summary>
-        /// <param name="key">The type of the added value.</param>
-        /// <param name="value">The added value.</param>
-        /// <exception cref="ArgumentNullException">key</exception>
-        /// <exception cref="CircuitException">Type {0} is not derived from {1}".FormatString(key, BaseClass)</exception>
-        public virtual void Add(Type key, T value)
-        {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key));
-
-            // This may seem a bit tricky:
-            // - If 'isChild' is true, then that means the new added class has not been implemented yet
-            //   by any other class. It will not overwrite any base classes that already have been
-            //   implemented as it may remove references to "simpler" base classes".
-            // - if 'isChild' is false, then a class has been added that already implements the type.
-            //   The new value is considered to be a "simpler" type and it will overwrite the existing
-            //   types.
-            var isChild = !Dictionary.ContainsKey(key);
-            
-            // Add the regular class hierarchy that this instance implements.
-            var currentType = key;
-            while (currentType != null && currentType != typeof(object))
+            finally
             {
-                if (!isChild)
-                    Dictionary[currentType] = value;
-                else if (!Dictionary.ContainsKey(currentType))
-                    Dictionary.Add(currentType, value);
-                else
-                    break;
-                currentType = currentType.GetTypeInfo().BaseType;
-            }
-
-            // Also add all interfaces this instance implements.
-            foreach (var itf in key.GetTypeInfo().GetInterfaces())
-            {
-                if (!isChild)
-                    Dictionary[itf] = value;
-                else if (!Dictionary.ContainsKey(itf))
-                    Dictionary.Add(itf, value);
+                Lock.ExitWriteLock();
             }
         }
 
@@ -156,7 +232,18 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <returns>The requested object.</returns>
-        public TResult Get<TResult>() where TResult : T => (TResult) Dictionary[typeof(TResult)];
+        public TResult Get<TResult>() where TResult : T
+        {
+            Lock.EnterReadLock();
+            try
+            {
+                return (TResult)Dictionary[typeof(TResult)];
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Tries to get a strongly typed object from the dictionary.
@@ -168,14 +255,23 @@ namespace SpiceSharp
         /// </returns>
         public bool TryGet<TResult>(out TResult value) where TResult : T
         {
-            if (Dictionary.TryGetValue(typeof(TResult), out var result))
-            {
-                value = (TResult) result;
-                return true;
-            }
+            Lock.EnterReadLock();
 
-            value = default(TResult);
-            return false;
+            try
+            {
+                if (Dictionary.TryGetValue(typeof(TResult), out var result))
+                {
+                    value = (TResult)result;
+                    return true;
+                }
+
+                value = default(TResult);
+                return false;
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -185,7 +281,18 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the <see cref="TypeDictionary{T}" /> contains an element with the key; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsKey(Type key) => Dictionary.ContainsKey(key);
+        public bool ContainsKey(Type key)
+        {
+            Lock.EnterReadLock();
+            try
+            {
+                return Dictionary.ContainsKey(key);
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Removes the element with the specified key from the <see cref="TypeDictionary{T}" />.
@@ -196,19 +303,27 @@ namespace SpiceSharp
         /// </returns>
         public bool Remove(Type key)
         {
-            if (Dictionary.TryGetValue(key, out T value))
+            Lock.EnterWriteLock();
+            try
             {
-                // Remove the key and all references to the same value
-                foreach (var entry in Dictionary)
+                if (Dictionary.TryGetValue(key, out T value))
                 {
-                    if (entry.Value.Equals(value))
-                        Dictionary.Remove(entry.Key);
+                    // Remove the key and all references to the same value
+                    foreach (var entry in Dictionary)
+                    {
+                        if (entry.Value.Equals(value))
+                            Dictionary.Remove(entry.Key);
+                    }
+
+                    return true;
                 }
 
-                return true;
+                return false;
             }
-
-            return false;
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -221,7 +336,18 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the object that implements <see cref="TypeDictionary{T}" /> contains an element with the specified key; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetValue(Type key, out T value) => Dictionary.TryGetValue(key, out value);
+        public bool TryGetValue(Type key, out T value)
+        {
+            Lock.EnterReadLock();
+            try
+            {
+                return Dictionary.TryGetValue(key, out value);
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Adds an item to the <see cref="TypeDictionary{T}"/>.
@@ -234,7 +360,15 @@ namespace SpiceSharp
         /// </summary>
         public void Clear()
         {
-            Dictionary.Clear();
+            Lock.EnterWriteLock();
+            try
+            {
+                Dictionary.Clear();
+            }
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
