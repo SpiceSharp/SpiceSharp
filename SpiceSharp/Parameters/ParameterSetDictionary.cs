@@ -45,6 +45,25 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Gets a parameters and their names
+        /// </summary>
+        /// <typeparam name="T">The base value type.</typeparam>
+        public IEnumerable<Tuple<Parameter<T>, List<string>>> GetParameters<T>() where T : struct
+        {
+            foreach (var ps in Values)
+            {
+                var types = ps.GetParameters<T>();
+                if (types != null)
+                {
+                    foreach (var tuple in types)
+                    {
+                        yield return tuple;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the principal parameter from any parameter set in the dictionary.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>

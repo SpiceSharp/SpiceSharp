@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using SpiceSharp.Attributes;
 
@@ -26,26 +27,52 @@ namespace SpiceSharp
         /// </returns>
         public Parameter<T> GetParameter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
+            var parameters = GetParameters<T>();
+
+            if (comparer != null)
+            {
+                return parameters.FirstOrDefault(p => p.Item2.Any(r => comparer.Equals(name, r)))?.Item1;
+            }
+            else
+            {
+                return parameters.FirstOrDefault(p => p.Item2.Any(r => r == name))?.Item1;
+            }
+        }
+
+        /// <summary>
+        /// Gets a parameter with a specified name.
+        /// </summary>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <returns>
+        /// The parameter with the specified name.
+        /// </returns>
+        public IEnumerable<Tuple<Parameter<T>, List<string>>> GetParameters<T>() where T : struct
+        {
             // Get the property by name
-            foreach (var member in Named(name, comparer))
+            foreach (var member in Named())
             {
                 // Check for methods
-                if (member is MethodInfo mi)
+                if (member.Item1 is MethodInfo mi)
                 {
-                    if ((mi.ReturnType == typeof(Parameter<T>) || mi.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Parameter<T>))) && mi.GetParameters().Length == 0)
-                        return (Parameter<T>) mi.Invoke(this, null);
+                    if ((mi.ReturnType == typeof(Parameter<T>) ||
+                         mi.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Parameter<T>))) &&
+                        mi.GetParameters().Length == 0)
+                        yield return new Tuple<Parameter<T>, List<string>>(
+                            (Parameter<T>) mi.Invoke(this, null),
+                            member.Item2
+                        );
                 }
 
                 // Check for properties
-                if (member is PropertyInfo pi)
+                if (member.Item1 is PropertyInfo pi)
                 {
-                    if ((pi.PropertyType == typeof(Parameter<T>) || pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter<T>))) && pi.CanRead)
-                        return (Parameter<T>) pi.GetValue(this);
+                    if ((pi.PropertyType == typeof(Parameter<T>) ||
+                         pi.PropertyType.GetTypeInfo().IsSubclassOf(typeof(Parameter<T>))) && pi.CanRead)
+                        yield return new Tuple<Parameter<T>, List<string>>(
+                            (Parameter<T>) pi.GetValue(this),
+                            member.Item2);
                 }
             }
-
-            // Not found
-            return null;
         }
 
         /// <summary>

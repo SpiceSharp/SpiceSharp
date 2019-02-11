@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
@@ -149,8 +148,7 @@ namespace SpiceSharp.Behaviors
                     var state = (SimulationState) stateMember.GetValue(simulation);
 
                     // Create the expression
-                    var expression = Expression.Call(Expression.Constant(this), method, Expression.Constant(state));
-                    return Expression.Lambda<Func<T>>(expression).Compile();
+                    return () => (T)method.Invoke(this, new[] {state});
                 }
             }
 
