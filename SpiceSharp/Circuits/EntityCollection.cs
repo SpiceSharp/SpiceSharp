@@ -45,7 +45,7 @@ namespace SpiceSharp.Circuits
                 if (x.Priority > y.Priority)
                     return -1;
 
-                // Then check the hash
+                // Use the hash code to determine the order then
                 var hx = x.GetHashCode();
                 var hy = y.GetHashCode();
                 if (hx < hy)
@@ -333,10 +333,10 @@ namespace SpiceSharp.Circuits
         /// </returns>
         public IEnumerator<Entity> GetEnumerator()
         {
+            _lock.EnterReadLock();
+
             try
             {
-                _lock.EnterReadLock();
-
                 foreach (var t in _ordered)
                     yield return t;
             }

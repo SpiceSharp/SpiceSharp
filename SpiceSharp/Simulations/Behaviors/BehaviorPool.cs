@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -19,6 +20,31 @@ namespace SpiceSharp.Behaviors
         /// Lists of behaviors.
         /// </summary>
         private readonly Dictionary<Type, List<IBehavior>> _behaviors = new Dictionary<Type, List<IBehavior>>();
+
+        /// <summary>
+        /// Gets the number of behaviors in the pool.
+        /// </summary>
+        /// <value>
+        /// The number of behaviors.
+        /// </value>
+        public int Count
+        {
+            get
+            {
+                var count = 0;
+                foreach (var pair in _behaviors)
+                    count += pair.Value.Count;
+                return count;
+            }
+        }
+
+        /// <summary>
+        /// Gets the behavior keys.
+        /// </summary>
+        /// <value>
+        /// The keys.
+        /// </value>
+        public IEnumerable<string> Keys => _entityBehaviors.Keys;
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.

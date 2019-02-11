@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Behaviors;
@@ -308,8 +309,19 @@ namespace SpiceSharpTest.Simulations
 
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
-
-            tran.Run(ckt);
+            try
+            {
+                tran.Run(ckt);
+            }
+            catch (Exception)
+            {
+                using (StreamWriter sw = new StreamWriter(@"C:\Temp\data.txt"))
+                {
+                    foreach (var e in ckt.Entities)
+                        sw.WriteLine(e.Name + "  P: " + e.Priority);
+                }
+                throw;
+            }
         }
     }
 }

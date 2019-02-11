@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -15,11 +16,9 @@ namespace SpiceSharp.Circuits
     /// </remarks>
     public abstract class Entity
     {
-        /// <summary>
-        /// Factories for behaviors by type.
-        /// </summary>
         private static Dictionary<Type, BehaviorFactoryDictionary> BehaviorFactories { get; } =
             new Dictionary<Type, BehaviorFactoryDictionary>();
+        private static ReaderWriterLockSlim Lock { get; } = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
         /// Registers a behavior factory for an entity type.
@@ -28,8 +27,15 @@ namespace SpiceSharp.Circuits
         /// <param name="dictionary">The dictionary.</param>
         protected static void RegisterBehaviorFactory(Type entityType, BehaviorFactoryDictionary dictionary)
         {
-            // We do this to avoid anyone unregistering factories!
-            BehaviorFactories.Add(entityType, dictionary);
+            Lock.EnterWriteLock();
+            try
+            {
+                BehaviorFactories.Add(entityType, dictionary);
+            }
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -84,11 +90,19 @@ namespace SpiceSharp.Circuits
                 throw new ArgumentNullException(nameof(simulation));
 
             // Get the factory and generate it
-            if (!BehaviorFactories.TryGetValue(GetType(), out var behaviors))
+            Lock.EnterReadLock();
+            try
+            {
+                if (!BehaviorFactories.TryGetValue(GetType(), out var behaviors))
+                    return null;
+                if (behaviors.TryGetValue(type, out var behavior))
+                    return behavior(this);
                 return null;
-            if (behaviors.TryGetValue(type, out var behavior))
-                return behavior(this);
-            return null;
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
         }
 
         /// <summary>
