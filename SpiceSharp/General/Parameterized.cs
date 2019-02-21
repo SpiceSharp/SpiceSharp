@@ -31,10 +31,10 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Gets all members in the class.
+        /// Gets all members in the class with theirs attributes.
         /// </summary>
         /// <value>
-        /// The members.
+        /// The members with theirs attributes.
         /// </value>
         protected IEnumerable<Tuple<MemberInfo, List<Attribute>>> MembersExt
         {
