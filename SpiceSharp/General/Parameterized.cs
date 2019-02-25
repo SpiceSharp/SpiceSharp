@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
+using SpiceSharp.General;
 
 namespace SpiceSharp
 {
@@ -12,7 +13,7 @@ namespace SpiceSharp
     /// </summary>
     public abstract class Parameterized
     {
-        private static readonly Dictionary<Type, List<Tuple<MemberInfo, List<Attribute>>>> _membersDict = new Dictionary<Type, List<Tuple<MemberInfo, List<Attribute>>>>();
+        private static readonly Dictionary<Type, List<CachedMemberInfo>> _membersDict = new Dictionary<Type, List<CachedMemberInfo>>();
         private static readonly ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
 
@@ -26,17 +27,17 @@ namespace SpiceSharp
         {
             get
             {
-                return MembersExt.Select(m => m.Item1);
+                return CachedMembers.Select(m => m.Member);
             }
         }
 
         /// <summary>
-        /// Gets all members in the class with theirs attributes.
+        /// Gets all members in the class with their attributes.
         /// </summary>
         /// <value>
-        /// The members with theirs attributes.
+        /// The members with their attributes.
         /// </value>
-        protected IEnumerable<Tuple<MemberInfo, List<Attribute>>> MembersExt
+        protected IEnumerable<CachedMemberInfo> CachedMembers
         {
             get
             {
@@ -49,9 +50,7 @@ namespace SpiceSharp
                         var members = type
                             .GetTypeInfo()
                             .GetMembers(BindingFlags.Public | BindingFlags.Instance)
-                            .Select(m =>
-                                new Tuple<MemberInfo, List<Attribute>>(m,
-                                    m.GetCustomAttributes().ToList())).ToList();
+                            .Select(m => new CachedMemberInfo(m, m.GetCustomAttributes().ToList())).ToList();
 
                         cacheLock.EnterWriteLock();
                         try

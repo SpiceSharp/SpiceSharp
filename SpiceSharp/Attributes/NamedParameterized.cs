@@ -21,7 +21,7 @@ namespace SpiceSharp.Attributes
         {
             // Make sure we always have a default
             comparer = comparer ?? EqualityComparer<string>.Default;
-            return MembersExt.Where(m => m.Item2.Any(r => r is ParameterNameAttribute p && comparer.Equals(p.Name, name))).Select(a => a.Item1);
+            return CachedMembers.Where(m => m.Attributes.Any(r => r is ParameterNameAttribute p && comparer.Equals(p.Name, name))).Select(a => a.Member);
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace SpiceSharp.Attributes
         protected IEnumerable<Tuple<MemberInfo, List<string>>> Named()
         {
             // Make sure we always have a default
-            return MembersExt.Select(m =>
-                new Tuple<MemberInfo, List<string>>(m.Item1, m.Item2.Where(a => a is ParameterNameAttribute).Select(p => ((ParameterNameAttribute)p).Name).ToList()));
+            return CachedMembers.Select(m =>
+                new Tuple<MemberInfo, List<string>>(m.Member, m.Attributes.Where(a => a is ParameterNameAttribute).Select(p => ((ParameterNameAttribute)p).Name).ToList()));
 
         }
         /// <summary>
@@ -42,10 +42,10 @@ namespace SpiceSharp.Attributes
         {
             get
             {
-                return MembersExt.FirstOrDefault(m =>
+                return CachedMembers.FirstOrDefault(m =>
                     {
-                        return m.Item2.Any(i => i is ParameterInfoAttribute pi && pi.IsPrincipal);
-                    })?.Item1;
+                        return m.Attributes.Any(i => i is ParameterInfoAttribute pi && pi.IsPrincipal);
+                    })?.Member;
             }
         }
 
