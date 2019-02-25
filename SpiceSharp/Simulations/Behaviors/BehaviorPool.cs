@@ -17,7 +17,7 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<string, EntityBehaviorDictionary> _entityBehaviors;
 
         /// <summary>
-        /// Lists of behaviors.
+        /// Lists of behaviors indexed by type of behavior.
         /// </summary>
         private readonly Dictionary<Type, List<IBehavior>> _behaviors = new Dictionary<Type, List<IBehavior>>();
 

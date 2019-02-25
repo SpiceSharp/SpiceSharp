@@ -21,12 +21,20 @@ namespace SpiceSharp.Attributes
         {
             // Make sure we always have a default
             comparer = comparer ?? EqualityComparer<string>.Default;
-            return Members.Where(m =>
-                {
-                    return m.GetCustomAttributes<ParameterNameAttribute>().Any(pn => comparer.Equals(pn.Name, name));
-                });
+            return CachedMembers.Where(m => m.Attributes.Any(r => r is ParameterNameAttribute p && comparer.Equals(p.Name, name))).Select(a => a.Member);
         }
 
+        /// <summary>
+        /// Returns all members with names.
+        /// </summary>
+        /// <returns>An enumerable with all member info containing at least one name.</returns>
+        protected IEnumerable<Tuple<MemberInfo, List<string>>> Named()
+        {
+            // Make sure we always have a default
+            return CachedMembers.Select(m =>
+                new Tuple<MemberInfo, List<string>>(m.Member, m.Attributes.Where(a => a is ParameterNameAttribute).Select(p => ((ParameterNameAttribute)p).Name).ToList()));
+
+        }
         /// <summary>
         /// Returns the first principal member of the class.
         /// </summary>
@@ -34,10 +42,10 @@ namespace SpiceSharp.Attributes
         {
             get
             {
-                return Members.FirstOrDefault(m =>
+                return CachedMembers.FirstOrDefault(m =>
                     {
-                        return m.GetCustomAttributes<ParameterInfoAttribute>().Any(pi => pi.IsPrincipal);
-                    });
+                        return m.Attributes.Any(i => i is ParameterInfoAttribute pi && pi.IsPrincipal);
+                    })?.Member;
             }
         }
 
