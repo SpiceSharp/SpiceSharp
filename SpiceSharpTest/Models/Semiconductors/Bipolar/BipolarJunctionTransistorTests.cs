@@ -8,7 +8,6 @@ using SpiceSharp.Algebra.Numerics;
 namespace SpiceSharpTest.Models
 {
     [TestFixture]
-    [SingleThreaded]
     public class BipolarJunctionTransistorTests : Framework
     {
         BipolarJunctionTransistor CreateBJT(string name, 
