@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
@@ -21,8 +22,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement<Complex> Branch1Branch2Ptr { get; private set; }
-        protected MatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> Branch1Branch2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> Branch2Branch1Ptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -58,7 +59,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));

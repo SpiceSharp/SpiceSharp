@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -23,11 +24,11 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
-        protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
-        protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
-        protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
-        protected VectorElement<Complex> CBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBranchPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBranchNegPtr { get; private set; }
+        protected VectorElement<PreciseComplex> CBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the complex voltage applied by the source.
@@ -36,7 +37,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// The complex voltage.
         /// </value>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex ComplexVoltage => FrequencyParameters.Phasor;
+        public PreciseComplex ComplexVoltage => FrequencyParameters.Phasor;
 
         /// <summary>
         /// Gets the current through the source.
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public PreciseComplex GetCurrent(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -59,14 +60,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Complex power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = state.Solution[BranchEq];
-            return -v * Complex.Conjugate(i);
+            return -v * PreciseComplex.Conjugate(i);
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -16,10 +17,10 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
-        protected MatrixElement<Complex> CNegPosPtr { get; private set; }
-        protected MatrixElement<Complex> CPosNegPtr { get; private set; }
-        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegNegPtr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -40,7 +41,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <exception cref="ArgumentNullException">solver</exception>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

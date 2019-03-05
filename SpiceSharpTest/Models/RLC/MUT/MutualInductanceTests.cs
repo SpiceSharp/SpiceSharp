@@ -2,6 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -84,7 +85,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(1, 1e8, 10));
 
             // Create exports
-            var exports = new Export<Complex>[1];
+            var exports = new Export<PreciseComplex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
@@ -93,10 +94,10 @@ namespace SpiceSharpTest.Models
             var b = r1 * l2 + r2 * l1;
             var c = r1 * r2;
             var num = mut * r2;
-            Func<double, Complex>[] references = {
+            Func<double, PreciseComplex>[] references = {
                 f =>
                 {
-                    var s = new Complex(0.0, 2.0 * Math.PI * f);
+                    var s = new PreciseComplex(0.0, 2.0 * Math.PI * f);
                     var denom = (a * s + b) * s + c;
                     return num * s / denom;
                 }

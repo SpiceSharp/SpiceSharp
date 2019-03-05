@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -69,7 +70,7 @@ namespace SpiceSharp.Simulations
             foreach (var freq in FrequencySweep.Points)
             {
                 // Calculate the current frequency
-                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                cstate.Laplace = new PreciseComplex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
                 AcIterate();

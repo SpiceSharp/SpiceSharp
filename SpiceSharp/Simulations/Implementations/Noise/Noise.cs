@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -146,11 +147,11 @@ namespace SpiceSharp.Simulations
             foreach (var freq in FrequencySweep.Points)
             {
                 nstate.Frequency = freq;
-                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                cstate.Laplace = new PreciseComplex(0.0, 2.0 * Math.PI * freq);
                 AcIterate();
 
                 var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                nstate.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                nstate.GainInverseSquared = (double) 1.0 / (double)Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary,(decimal)1e-20);
 
                 // Solve the adjoint system
                 NzIterate(posOutNode, negOutNode);

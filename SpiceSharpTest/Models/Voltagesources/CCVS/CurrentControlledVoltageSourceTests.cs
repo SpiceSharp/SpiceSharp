@@ -2,6 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 
@@ -45,8 +46,8 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1.0, 10e3, 4));
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
-            Func<double, Complex>[] references = { sweep => transimpedance * magnitude };
+            Export<PreciseComplex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            Func<double, PreciseComplex>[] references = { sweep => transimpedance * magnitude };
             AnalyzeAC(ac, ckt, exports, references);
         }
     }

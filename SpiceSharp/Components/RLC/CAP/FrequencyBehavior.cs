@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -15,20 +16,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> PosPosPtr { get; private set; }
-        protected MatrixElement<Complex> NegNegPtr { get; private set; }
-        protected MatrixElement<Complex> PosNegPtr { get; private set; }
-        protected MatrixElement<Complex> NegPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> PosPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> NegNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> PosNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> NegPosPtr { get; private set; }
 
         [ParameterName("v"), ParameterInfo("Capacitor voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
+        public PreciseComplex GetVoltage(PreciseComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public PreciseComplex GetCurrent(PreciseComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -36,13 +37,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             return (state.Solution[PosNode] - state.Solution[NegNode]) * conductance;
         }
         [ParameterName("p"), ParameterInfo("Capacitor power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             var conductance = state.Laplace * Capacitance;
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
-            return voltage * Complex.Conjugate(voltage * conductance);
+            return voltage * PreciseComplex.Conjugate(voltage * conductance);
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">The matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));

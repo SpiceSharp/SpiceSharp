@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -43,9 +44,9 @@ namespace SpiceSharp.Simulations
             {
                 if (_simulation is FrequencySimulation frequencySimulation && frequencySimulation.ComplexState != null)
                 {
-                    if (!frequencySimulation.ComplexState.Laplace.Real.Equals(0.0))
+                    if (!frequencySimulation.ComplexState.Laplace.Real.Equals(0.0m))
                         return double.NaN;
-                    return frequencySimulation.ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
+                    return (double)frequencySimulation.ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
                 }
 
                 return double.NaN;
@@ -58,12 +59,12 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The laplace variable or NaN if the simulation does not use the laplace variable.
         /// </value>
-        public Complex Laplace
+        public PreciseComplex Laplace
         {
             get
             {
                 if (_simulation is FrequencySimulation frequencySimulation && frequencySimulation.ComplexState != null)
-                    return frequencySimulation.ComplexState.Laplace;
+                    return (PreciseComplex)frequencySimulation.ComplexState.Laplace;
                 return double.NaN;
             }
         }
@@ -145,7 +146,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, consider using <see cref="ComplexVoltageExport"/>
         /// </remarks>
         /// <seealso cref="ComplexVoltageExport"/>
-        public Complex GetComplexVoltage(string node) => GetComplexVoltage(node, null);
+        public PreciseComplex GetComplexVoltage(string node) => GetComplexVoltage(node, null);
 
         /// <summary>
         /// Gets the differential complex voltage between two specified nodes.
@@ -157,7 +158,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         /// <exception cref="ArgumentNullException">positive</exception>
         /// <exception cref="CircuitException">Simulation does not support complex voltages</exception>
-        public Complex GetComplexVoltage(string positive, string negative)
+        public PreciseComplex GetComplexVoltage(string positive, string negative)
         {
             if (positive == null)
                 throw new ArgumentNullException(nameof(positive));

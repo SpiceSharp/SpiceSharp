@@ -3,6 +3,7 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -50,8 +51,8 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1, 1e4, 3));
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
-            Func<double, Complex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
+            Export<PreciseComplex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
+            Func<double, PreciseComplex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
             AnalyzeAC(ac, ckt, exports, references);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -20,30 +21,30 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected VectorElement<Complex> CPosPtr { get; private set; }
-        protected VectorElement<Complex> CNegPtr { get; private set; }
+        protected VectorElement<PreciseComplex> CPosPtr { get; private set; }
+        protected VectorElement<PreciseComplex> CNegPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
+        public PreciseComplex GetVoltage(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Complex power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
             var v = state.Solution[PosNode] - state.Solution[NegNode];
-            return -v * Complex.Conjugate(FrequencyParameters.Phasor);
+            return -v * PreciseComplex.Conjugate(FrequencyParameters.Phasor);
         }
         [ParameterName("c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => FrequencyParameters.Phasor;
+        public PreciseComplex ComplexCurrent => FrequencyParameters.Phasor;
 
         /// <summary>
         /// Constructor
@@ -78,7 +79,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Get equation pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

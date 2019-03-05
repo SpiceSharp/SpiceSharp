@@ -2,6 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -319,24 +320,24 @@ namespace SpiceSharpTest.Models
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(0.1, 1e8, 5));
-            var exports = new Export<Complex>[]
+            var exports = new Export<PreciseComplex>[]
             {
                 new ComplexVoltageExport(ac, "a"),
                 new ComplexVoltageExport(ac, "b"), 
             };
 
             double rsnorm = rsource / impedance, rlnorm = rload / impedance;
-            var references = new Func<double, Complex>[]
+            var references = new Func<double, PreciseComplex>[]
             {
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.ComplexState.Laplace * delay);
+                    var k = PreciseComplex.Exp(-ac.ComplexState.Laplace * delay);
                     k = (k * k - 1) / (k * k + 1);
                     return (k - rlnorm) / ((1 + rlnorm * rsnorm) * k - rsnorm - rlnorm);
                 },
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.ComplexState.Laplace * delay);
+                    var k = PreciseComplex.Exp(-ac.ComplexState.Laplace * delay);
                     return -2 * rlnorm * k / (k * k + 1) /
                            ((1 + rlnorm * rsnorm) * (k * k - 1) / (k * k + 1) - rsnorm - rlnorm);
                 }

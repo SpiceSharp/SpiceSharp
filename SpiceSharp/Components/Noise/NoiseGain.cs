@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components.NoiseSources
             var state = simulation.ComplexState;
             var val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return gain * Gain;
+            return (double)gain * Gain;
         }
     }
 }

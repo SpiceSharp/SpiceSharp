@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -15,16 +16,16 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPosControlPosPtr { get; private set; }
-        protected MatrixElement<Complex> CPosControlNegPtr { get; private set; }
-        protected MatrixElement<Complex> CNegControlPosPtr { get; private set; }
-        protected MatrixElement<Complex> CNegControlNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosControlPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosControlNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegControlPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
+        public PreciseComplex GetVoltage(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -32,7 +33,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Complex current")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public PreciseComplex GetCurrent(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -40,14 +41,14 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             return (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
         }
         [ParameterName("p"), ParameterInfo("Power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
-            return -v * Complex.Conjugate(i);
+            return -v * PreciseComplex.Conjugate(i);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

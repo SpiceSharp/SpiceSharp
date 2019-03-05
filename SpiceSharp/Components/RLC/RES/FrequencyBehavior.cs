@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -18,7 +19,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="state">The simulation state.</param>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Complex voltage across the capacitor.")]
-        public Complex GetVoltage(ComplexSimulationState state)
+        public PreciseComplex GetVoltage(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -32,7 +33,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Complex current through the capacitor.")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public PreciseComplex GetCurrent(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -48,21 +49,21 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
-            return voltage * Complex.Conjugate(voltage) * Conductance;
+            return voltage * PreciseComplex.Conjugate(voltage) * Conductance;
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
-        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
-        protected MatrixElement<Complex> CPosNegPtr { get; private set; }
-        protected MatrixElement<Complex> CNegPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -84,7 +85,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

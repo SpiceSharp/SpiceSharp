@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,6 +10,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations.Behaviors;
 
@@ -258,11 +260,12 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Complex[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<PreciseComplex>> exports, IEnumerable<PreciseComplex[]> references)
         {
             var index = 0;
             sim.ExportSimulationData += (sender, data) =>
             {
+                var sim2 = sim;
                 using (var exportsIt = exports.GetEnumerator())
                 using (var referencesIt = references.GetEnumerator())
                 {
@@ -273,17 +276,18 @@ namespace SpiceSharpTest.Models
                         var expected = referencesIt.Current?[index] ?? throw new ArgumentNullException();
 
                         // Test real part
-                        var rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
-                        var itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol +
+                        var rtol = Math.Max(Math.Abs((double)actual.Real), Math.Abs((double)expected.Real)) * RelTol + AbsTol;
+                        var itol = Math.Max(Math.Abs((double)actual.Imaginary), Math.Abs((double)expected.Imaginary)) * RelTol +
                                       AbsTol;
 
                         try
                         {
-                            Assert.AreEqual(expected.Real, actual.Real, rtol);
-                            Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                            Assert.AreEqual((double)expected.Real, (double)actual.Real, rtol);
+                            Assert.AreEqual((double)expected.Imaginary, (double)actual.Imaginary, itol);
                         }
                         catch (Exception ex)
                         {
+                            Debugger.Launch();
                             var msg = $"{ex.Message} at {data.Frequency} Hz";
                             throw new Exception(msg, ex);
                         }
@@ -302,7 +306,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Func<double, Complex>> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<PreciseComplex>> exports, IEnumerable<Func<double, PreciseComplex>> references)
         {
             sim.ExportSimulationData += (sender, data) =>
             {
@@ -316,14 +320,14 @@ namespace SpiceSharpTest.Models
                         var expected = referencesIt.Current?.Invoke(data.Frequency) ?? throw new ArgumentNullException();
 
                         // Test real part
-                        var rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
-                        var itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol +
+                        var rtol = Math.Max(Math.Abs((double)actual.Real), Math.Abs((double)expected.Real)) * RelTol + AbsTol;
+                        var itol = Math.Max(Math.Abs((double)actual.Imaginary), Math.Abs((double)expected.Imaginary)) * RelTol +
                                       AbsTol;
 
                         try
                         {
-                            Assert.AreEqual(expected.Real, actual.Real, rtol);
-                            Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                            Assert.AreEqual((double)expected.Real, (double)actual.Real, rtol);
+                            Assert.AreEqual((double)expected.Imaginary, (double)actual.Imaginary, itol);
                         }
                         catch (Exception ex)
                         {

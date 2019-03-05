@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -7,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// This class can export complex voltages.
     /// </summary>
     /// <seealso cref="Export{T}" />
-    public class ComplexVoltageExport : Export<Complex>
+    public class ComplexVoltageExport : Export<PreciseComplex>
     {
         /// <summary>
         /// Gets the identifier of the positive node.
@@ -36,7 +37,7 @@ namespace SpiceSharp.Simulations
             get
             {
                 var result = Value;
-                return 10.0 * Math.Log10(result.Real * result.Real + result.Imaginary * result.Imaginary);
+                return 10.0 * Math.Log10((double)result.Real * (double)result.Real + (double)result.Imaginary * (double)result.Imaginary);
             }
         }
 
@@ -51,7 +52,7 @@ namespace SpiceSharp.Simulations
             get
             {
                 var result = Value;
-                return Math.Atan2(result.Imaginary, result.Real);
+                return Math.Atan2((double)result.Imaginary, (double)result.Real);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -15,13 +16,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPosPosPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CNegPosPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CPosPrimePosPtr { get; private set; }
-        protected MatrixElement<Complex> CPosPrimeNegPtr { get; private set; }
-        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
-        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
-        protected MatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPosPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegPosPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPrimePosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPrimeNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the voltage.
@@ -30,7 +31,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetVoltage(ComplexSimulationState state)
+        public PreciseComplex GetVoltage(PreciseComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -44,7 +45,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public PreciseComplex GetCurrent(PreciseComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -60,14 +61,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             var geq = Capacitance * state.Laplace + Conductance;
             var current = (state.Solution[PosPrimeNode] - state.Solution[NegNode]) * geq;
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
-            return voltage * -Complex.Conjugate(current);
+            return voltage * -PreciseComplex.Conjugate(current);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
@@ -121,16 +122,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var gspr = ModelTemperature.Conductance * BaseParameters.Area;
             var geq = Conductance;
-            var xceq = Capacitance * state.Laplace.Imaginary;
+            var xceq = Capacitance * (double)state.Laplace.Imaginary;
 
             // Load Y-matrix
             CPosPosPtr.Value += gspr;
-            CNegNegPtr.Value += new Complex(geq, xceq);
-            CPosPrimePosPrimePtr.Value += new Complex(geq + gspr, xceq);
+            CNegNegPtr.Value += new PreciseComplex(geq, xceq);
+            CPosPrimePosPrimePtr.Value += new PreciseComplex(geq + gspr, xceq);
             CPosPosPrimePtr.Value -= gspr;
-            CNegPosPrimePtr.Value -= new Complex(geq, xceq);
+            CNegPosPrimePtr.Value -= new PreciseComplex(geq, xceq);
             CPosPrimePosPtr.Value -= gspr;
-            CPosPrimeNegPtr.Value -= new Complex(geq, xceq);
+            CPosPrimeNegPtr.Value -= new PreciseComplex(geq, xceq);
         }
     }
 }

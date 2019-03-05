@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -15,28 +16,28 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPos1Pos1Ptr { get; private set; }
-        protected MatrixElement<Complex> CPos1Int1Ptr { get; private set; }
-        protected MatrixElement<Complex> CNeg1Ibr1Ptr { get; private set; }
-        protected MatrixElement<Complex> CPos2Pos2Ptr { get; private set; }
-        protected MatrixElement<Complex> CNeg2Ibr2Ptr { get; private set; }
-        protected MatrixElement<Complex> CInt1Pos1Ptr { get; private set; }
-        protected MatrixElement<Complex> CInt1Int1Ptr { get; private set; }
-        protected MatrixElement<Complex> CInt1Ibr1Ptr { get; private set; }
-        protected MatrixElement<Complex> CInt2Int2Ptr { get; private set; }
-        protected MatrixElement<Complex> CInt2Ibr2Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr1Neg1Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr1Pos2Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr1Neg2Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr1Int1Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr1Ibr2Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr2Pos1Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr2Neg1Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr2Neg2Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr2Int2Ptr { get; private set; }
-        protected MatrixElement<Complex> CIbr2Ibr1Ptr { get; private set; }
-        protected MatrixElement<Complex> CPos2Int2Ptr { get; private set; }
-        protected MatrixElement<Complex> CInt2Pos2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPos1Pos1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPos1Int1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNeg1Ibr1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPos2Pos2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNeg2Ibr2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CInt1Pos1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CInt1Int1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CInt1Ibr1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CInt2Int2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CInt2Ibr2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr1Neg1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr1Pos2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr1Neg2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr1Int1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr1Ibr2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr2Pos1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr2Neg1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr2Neg2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr2Int2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CIbr2Ibr1Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPos2Int2Ptr { get; private set; }
+        protected MatrixElement<PreciseComplex> CInt2Pos2Ptr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -62,7 +63,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             CPos1Pos1Ptr = solver.GetMatrixElement(Pos1, Pos1);
             CPos1Int1Ptr = solver.GetMatrixElement(Pos1, Internal1);
@@ -95,7 +96,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public void Load(FrequencySimulation simulation)
         {
             var laplace = simulation.ComplexState.Laplace;
-            var factor = Complex.Exp(-laplace * BaseParameters.Delay.Value);
+            var factor = PreciseComplex.Exp(-laplace * BaseParameters.Delay.Value);
 
             var admittance = BaseParameters.Admittance;
             CPos1Pos1Ptr.Value += admittance;

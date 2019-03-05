@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -58,8 +59,8 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var ac = new AC("ac", new LinearSweep(1.0, 10001, 10));
-            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
-            Func<double, Complex>[] references = { f => 1e-3 };
+            Export<PreciseComplex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
+            Func<double, PreciseComplex>[] references = { f => 1e-3 };
             AnalyzeAC(ac, ckt, exports, references);
         }
 

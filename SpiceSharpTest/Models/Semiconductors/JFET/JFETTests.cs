@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -311,7 +312,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 10e9, 10));
 
             // Create exports
-            var exports = new Export<Complex>[]
+            var exports = new Export<PreciseComplex>[]
             {
                 new ComplexPropertyExport(ac, "V1", "i"),
                 new ComplexPropertyExport(ac, "V2", "i"),
@@ -438,13 +439,13 @@ namespace SpiceSharpTest.Models
             };
             var references = new[]
             {
-                new Complex[r1.Length / 2],
-                new Complex[r2.Length / 2]
+                new PreciseComplex[r1.Length / 2],
+                new PreciseComplex[r2.Length / 2]
             };
             for (var i = 0; i < r1.Length / 2; i++)
             {
-                references[0][i] = new Complex(r1[i * 2], r1[i * 2 + 1]);
-                references[1][i] = new Complex(r2[i * 2], r2[i * 2 + 1]);
+                references[0][i] = new PreciseComplex(r1[i * 2], r1[i * 2 + 1]);
+                references[1][i] = new PreciseComplex(r2[i * 2], r2[i * 2 + 1]);
             }
 
             // Analyze

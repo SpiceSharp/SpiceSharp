@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.CommonBehaviors
@@ -43,7 +44,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <value>
         /// The phasor.
         /// </value>
-        public Complex Phasor { get; private set; }
+        public PreciseComplex Phasor { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -85,7 +86,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         public override void CalculateDefaults()
         {
             var phase = AcPhase * Math.PI / 180.0;
-            Phasor = new Complex(
+            Phasor = new PreciseComplex(
                 AcMagnitude * Math.Cos(phase),
                 AcMagnitude * Math.Sin(phase));
         }

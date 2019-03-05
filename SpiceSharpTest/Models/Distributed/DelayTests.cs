@@ -2,6 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -218,13 +219,13 @@ namespace SpiceSharpTest.Models
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(1e-3, 1e5, 5));
-            var exports = new Export<Complex>[]
+            var exports = new Export<PreciseComplex>[]
             {
                 new ComplexVoltageExport(ac, "out")
             };
-            var references = new Func<double, Complex>[]
+            var references = new Func<double, PreciseComplex>[]
             {
-                frequency => Complex.Exp(-ac.ComplexState.Laplace * delay)
+                frequency => PreciseComplex.Exp(-ac.ComplexState.Laplace * delay)
             };
 
             // Analyze the AC behavior

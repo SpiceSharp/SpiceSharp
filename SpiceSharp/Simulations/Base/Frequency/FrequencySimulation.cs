@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The state of the complex.
         /// </value>
-        public ComplexSimulationState ComplexState { get; protected set; }
+        public PreciseComplexSimulationState ComplexState { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
@@ -97,7 +97,7 @@ namespace SpiceSharp.Simulations
             FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
 
             // Create the state for complex numbers
-            ComplexState = new ComplexSimulationState();
+            ComplexState = new PreciseComplexSimulationState();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
             var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;

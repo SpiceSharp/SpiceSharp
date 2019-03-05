@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -15,29 +16,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CCollectorCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBaseBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CEmitterEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorPrimeCollectorPtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorPrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBasePrimeBasePtr { get; private set; }
-        protected MatrixElement<Complex> CBasePrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBasePrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CEmitterPrimeEmitterPtr { get; private set; }
-        protected MatrixElement<Complex> CEmitterPrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CEmitterPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorCollectorPtr { get; private set; }
-        protected MatrixElement<Complex> CBaseBasePtr { get; private set; }
-        protected MatrixElement<Complex> CEmitterEmitterPtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorPrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBasePrimeBasePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CEmitterPrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSubstrateSubstratePtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorPrimeSubstratePtr { get; private set; }
-        protected MatrixElement<Complex> CSubstrateCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBaseCollectorPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CCollectorPrimeBasePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorCollectorPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBaseBasePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CEmitterEmitterPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorPrimeCollectorPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBasePrimeBasePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBasePrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBasePrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CEmitterPrimeEmitterPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CEmitterPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CEmitterPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorCollectorPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBaseBasePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CEmitterEmitterPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBasePrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CEmitterPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSubstrateSubstratePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorPrimeSubstratePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSubstrateCollectorPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBaseCollectorPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CCollectorPrimeBasePtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
@@ -110,7 +111,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
             var gpi = ConductancePi;
             var gmu = ConductanceMu;
-            Complex gm = Transconductance;
+            PreciseComplex gm = Transconductance;
             var go = OutputConductance;
             var td = ModelTemperature.ExcessPhaseFactor;
             if (!td.Equals(0)) // Avoid computations
@@ -118,7 +119,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 var arg = td * cstate.Laplace;
 
                 gm = gm + go;
-                gm = gm * Complex.Exp(-arg);
+                gm = gm * PreciseComplex.Exp(-arg);
                 gm = gm - go;
             }
             var gx = ConductanceX;

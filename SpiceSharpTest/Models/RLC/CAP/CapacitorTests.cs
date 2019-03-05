@@ -2,6 +2,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Simulations;
@@ -205,10 +206,10 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 1.0e6, 10));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
+            Export<PreciseComplex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
 
             // Create references
-            Func<double, Complex>[] references = { f => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };
+            Func<double, PreciseComplex>[] references = { f => 1.0 / new PreciseComplex(1.0, resistance * capacitance * 2 * Math.PI * f) };
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);

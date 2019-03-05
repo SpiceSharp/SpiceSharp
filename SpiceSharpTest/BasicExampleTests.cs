@@ -206,7 +206,7 @@ namespace SpiceSharpTest
             ac.ExportSimulationData += (sender, args) =>
             {
                 var output = exportVoltage.Value;
-                var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
+                var decibels = 10.0 * Math.Log10((double)output.Real * (double)output.Real + (double)output.Imaginary * (double)output.Imaginary);
             };
             ac.Run(ckt);
             // </example_AC>

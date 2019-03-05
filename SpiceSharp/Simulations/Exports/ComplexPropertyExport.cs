@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -9,7 +10,7 @@ namespace SpiceSharp.Simulations
     /// This class can export complex property values.
     /// </summary>
     /// <seealso cref="Export{T}" />
-    public class ComplexPropertyExport : Export<Complex>
+    public class ComplexPropertyExport : Export<PreciseComplex>
     {
         /// <summary>
         /// Gets the identifier of the entity.
@@ -66,7 +67,7 @@ namespace SpiceSharp.Simulations
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
             var simulation = (Simulation) sender;
-            Func<Complex> extractor = null;
+            Func<PreciseComplex> extractor = null;
             var eb = simulation.EntityBehaviors[EntityName];
 
             // Get the necessary behaviors in order of importance

@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
@@ -125,7 +126,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            Export<PreciseComplex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref =
@@ -154,10 +155,10 @@ namespace SpiceSharpTest.Models
                 4.655466740158771e-01, 1.576496962856537e-09, 4.655466740158772e-01, 9.947023372650507e-10,
                 4.655466740158772e-01, 6.276147452689978e-10, 4.655466740158771e-01, 3.959981330315396e-10
             };
-            var references = new Complex[1][];
-            references[0] = new Complex[riref.Length / 2];
+            var references = new PreciseComplex[1][];
+            references[0] = new PreciseComplex[riref.Length / 2];
             for (var i = 0; i < riref.Length; i += 2)
-                references[0][i / 2] = new Complex(riref[i], riref[i + 1]);
+                references[0][i / 2] = new PreciseComplex(riref[i], riref[i + 1]);
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);

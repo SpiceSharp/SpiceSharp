@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -16,14 +17,14 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Device methods and properties 
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
+        public PreciseComplex GetVoltage(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterInfo("Complex current")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public PreciseComplex GetCurrent(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -31,21 +32,21 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             return state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
         }
         [ParameterName("p"), ParameterInfo("Complex power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public PreciseComplex GetPower(PreciseComplexSimulationState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
-            return -v * Complex.Conjugate(i);
+            return -v * PreciseComplex.Conjugate(i);
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPosControlBranchPtr { get; private set; }
-        protected MatrixElement<Complex> CNegControlBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosControlBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -65,7 +66,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

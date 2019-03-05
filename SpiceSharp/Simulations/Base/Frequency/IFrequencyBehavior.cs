@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
@@ -22,7 +23,7 @@ namespace SpiceSharp.Behaviors
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        void GetEquationPointers(Solver<Complex> solver);
+        void GetEquationPointers(Solver<PreciseComplex> solver);
 
         /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.

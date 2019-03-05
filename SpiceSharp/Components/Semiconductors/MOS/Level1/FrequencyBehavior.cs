@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -16,28 +17,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CDrainDrainPtr { get; private set; }
-        protected MatrixElement<Complex> CGateGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourceSourcePtr { get; private set; }
-        protected MatrixElement<Complex> CBulkBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CGateBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBulkDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBulkSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
-        protected MatrixElement<Complex> CBulkGatePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainDrainPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourceSourcePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBulkBulkPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateBulkPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourceSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBulkDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBulkSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeDrainPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBulkGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeSourcePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeBulkPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeBulkPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeDrainPrimePtr { get; private set; }
         
         /// <summary>
         /// Constructor
@@ -62,7 +63,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Gets matrix pionters
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
@@ -126,27 +127,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var capgs = CapGs + CapGs + gateSourceOverlapCap;
             var capgd = CapGd + CapGd + gateDrainOverlapCap;
             var capgb = CapGb + CapGb + gateBulkOverlapCap;
-            var xgs = capgs * cstate.Laplace.Imaginary;
-            var xgd = capgd * cstate.Laplace.Imaginary;
-            var xgb = capgb * cstate.Laplace.Imaginary;
-            var xbd = CapBd * cstate.Laplace.Imaginary;
-            var xbs = CapBs * cstate.Laplace.Imaginary;
+            var xgs = (decimal)(capgs) * cstate.Laplace.Imaginary;
+            var xgd = (decimal)(capgd) * cstate.Laplace.Imaginary;
+            var xgb = (decimal)(capgb) * cstate.Laplace.Imaginary;
+            var xbd = (decimal)(CapBd) * cstate.Laplace.Imaginary;
+            var xbs = (decimal)(CapBs) * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
-            CGateGatePtr.Value += new Complex(0.0, xgd + xgs + xgb);
-            CBulkBulkPtr.Value += new Complex(CondBd + CondBs, xgb + xbd + xbs);
-            CDrainPrimeDrainPrimePtr.Value += new Complex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd);
-            CSourcePrimeSourcePrimePtr.Value += new Complex(SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs), xgs + xbs);
-            CGateBulkPtr.Value -= new Complex(0.0, xgb);
-            CGateDrainPrimePtr.Value -= new Complex(0.0, xgd);
-            CGateSourcePrimePtr.Value -= new Complex(0.0, xgs);
-            CBulkGatePtr.Value -= new Complex(0.0, xgb);
-            CBulkDrainPrimePtr.Value -= new Complex(CondBd, xbd);
-            CBulkSourcePrimePtr.Value -= new Complex(CondBs, xbs);
-            CDrainPrimeGatePtr.Value += new Complex((xnrm - xrev) * Transconductance, -xgd);
-            CDrainPrimeBulkPtr.Value += new Complex(-CondBd + (xnrm - xrev) * TransconductanceBs, -xbd);
-            CSourcePrimeGatePtr.Value -= new Complex((xnrm - xrev) * Transconductance, xgs);
-            CSourcePrimeBulkPtr.Value -= new Complex(CondBs + (xnrm - xrev) * TransconductanceBs, xbs);
+            CGateGatePtr.Value += new PreciseComplex(0.0, xgd + xgs + xgb);
+            CBulkBulkPtr.Value += new PreciseComplex(CondBd + CondBs, xgb + xbd + xbs);
+            CDrainPrimeDrainPrimePtr.Value += new PreciseComplex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd);
+            CSourcePrimeSourcePrimePtr.Value += new PreciseComplex(SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs), xgs + xbs);
+            CGateBulkPtr.Value -= new PreciseComplex(0.0, xgb);
+            CGateDrainPrimePtr.Value -= new PreciseComplex(0.0, xgd);
+            CGateSourcePrimePtr.Value -= new PreciseComplex(0.0, xgs);
+            CBulkGatePtr.Value -= new PreciseComplex(0.0, xgb);
+            CBulkDrainPrimePtr.Value -= new PreciseComplex(CondBd, xbd);
+            CBulkSourcePrimePtr.Value -= new PreciseComplex(CondBs, xbs);
+            CDrainPrimeGatePtr.Value += new PreciseComplex((xnrm - xrev) * Transconductance, -xgd);
+            CDrainPrimeBulkPtr.Value += new PreciseComplex(-CondBd + (xnrm - xrev) * TransconductanceBs, -xbd);
+            CSourcePrimeGatePtr.Value -= new PreciseComplex((xnrm - xrev) * Transconductance, xgs);
+            CSourcePrimeBulkPtr.Value -= new PreciseComplex(CondBs + (xnrm - xrev) * TransconductanceBs, xbs);
             CDrainDrainPtr.Value += DrainConductance;
             CSourceSourcePtr.Value += SourceConductance;
             CDrainDrainPrimePtr.Value -= DrainConductance;

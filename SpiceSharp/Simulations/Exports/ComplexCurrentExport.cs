@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -7,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// This class can export complex currents.
     /// </summary>
     /// <seealso cref="Export{T}" />
-    public class ComplexCurrentExport : Export<Complex>
+    public class ComplexCurrentExport : Export<PreciseComplex>
     {
         /// <summary>
         /// Gets the identifier of the voltage source.

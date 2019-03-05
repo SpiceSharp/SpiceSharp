@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -103,7 +104,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            Export<PreciseComplex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref =
@@ -132,10 +133,10 @@ namespace SpiceSharpTest.Models
                 -2.704744460047443e+02, -4.652381575070101e-04, -2.704744460052259e+02, -2.935454324120037e-04,
                 -2.704744460054176e+02, -1.852146465190992e-04, -2.704744460054940e+02, -1.168625415265614e-04
             };
-            var references = new Complex[1][];
-            references[0] = new Complex[riref.Length / 2];
+            var references = new PreciseComplex[1][];
+            references[0] = new PreciseComplex[riref.Length / 2];
             for (var i = 0; i < riref.Length; i += 2)
-                references[0][i / 2] = new Complex(riref[i], riref[i + 1]);
+                references[0][i / 2] = new PreciseComplex(riref[i], riref[i + 1]);
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);

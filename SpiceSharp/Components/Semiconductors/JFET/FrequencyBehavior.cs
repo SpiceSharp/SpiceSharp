@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -35,21 +36,21 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CDrainDrainPtr { get; private set; }
-        protected MatrixElement<Complex> CGateGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourceSourcePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainDrainPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourceSourcePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateDrainPrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CGateSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourceSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeDrainPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CDrainPrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeGatePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeSourcePtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CSourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -66,7 +67,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
@@ -130,23 +131,23 @@ namespace SpiceSharp.Components.JFETBehaviors
             var gm = Gm;
             var gds = Gds;
             var ggs = Ggs;
-            var xgs = CapGs * omega;
+            var xgs = (decimal)CapGs * omega;
             var ggd = Ggd;
-            var xgd = CapGd * omega;
+            var xgd = (decimal)CapGd * omega;
 
             CDrainDrainPtr.Value += gdpr;
-            CGateGatePtr.Value += new Complex(ggd + ggs, xgd + xgs);
+            CGateGatePtr.Value += new PreciseComplex(ggd + ggs, xgd + xgs);
             CSourceSourcePtr.Value += gspr;
-            CDrainPrimeDrainPrimePtr.Value += new Complex(gdpr + gds + ggd, xgd);
-            CSourcePrimeSourcePrimePtr.Value += new Complex(gspr + gds + gm + ggs, xgs);
+            CDrainPrimeDrainPrimePtr.Value += new PreciseComplex(gdpr + gds + ggd, xgd);
+            CSourcePrimeSourcePrimePtr.Value += new PreciseComplex(gspr + gds + gm + ggs, xgs);
             CDrainDrainPrimePtr.Value -= gdpr;
-            CGateDrainPrimePtr.Value -= new Complex(ggd, xgd);
-            CGateSourcePrimePtr.Value -= new Complex(ggs, xgs);
+            CGateDrainPrimePtr.Value -= new PreciseComplex(ggd, xgd);
+            CGateSourcePrimePtr.Value -= new PreciseComplex(ggs, xgs);
             CSourceSourcePrimePtr.Value -= gspr;
             CDrainPrimeDrainPtr.Value -= gdpr;
-            CDrainPrimeGatePtr.Value += new Complex(-ggd + gm, -xgd);
+            CDrainPrimeGatePtr.Value += new PreciseComplex(-ggd + gm, -xgd);
             CDrainPrimeSourcePrimePtr.Value += (-gds - gm);
-            CSourcePrimeGatePtr.Value -= new Complex(ggs + gm, xgs);
+            CSourcePrimeGatePtr.Value -= new PreciseComplex(ggs + gm, xgs);
             CSourcePrimeSourcePtr.Value -= gspr;
             CSourcePrimeDrainPrimePtr.Value -= gds;
         }

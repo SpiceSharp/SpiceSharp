@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -21,11 +22,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         private int _posNode, _negNode, _branchEq;
-        protected MatrixElement<Complex> PosBranchPtr { get; private set; }
-        protected MatrixElement<Complex> NegBranchPtr { get; private set; }
-        protected MatrixElement<Complex> BranchNegPtr { get; private set; }
-        protected MatrixElement<Complex> BranchPosPtr { get; private set; }
-        protected MatrixElement<Complex> BranchBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> PosBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> NegBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> BranchNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> BranchPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -69,7 +70,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        public override void GetEquationPointers(Solver<PreciseComplex> solver)
         {
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));

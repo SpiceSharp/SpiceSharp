@@ -4,6 +4,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using NUnit.Framework;
+using SpiceSharp.Algebra.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -55,11 +56,11 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
 
             // Create exports
-            var exports = new Export<Complex>[1];
+            var exports = new Export<PreciseComplex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
-            Func<double, Complex>[] references = { f => 1.0 / new Complex(1.0, inductance / resistance * 2 * Math.PI * f) };
+            Func<double, PreciseComplex>[] references = { f => 1.0 / new PreciseComplex(1.0, inductance / resistance * 2 * Math.PI * f) };
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);

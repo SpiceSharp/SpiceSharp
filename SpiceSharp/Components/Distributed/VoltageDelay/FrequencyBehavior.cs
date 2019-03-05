@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -15,12 +16,12 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
-        protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
-        protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
-        protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
-        protected MatrixElement<Complex> CBranchControlNegPtr { get; private set; }
-        protected MatrixElement<Complex> CBranchControlPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CPosBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CNegBranchPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBranchPosPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBranchNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBranchControlNegPtr { get; private set; }
+        protected MatrixElement<PreciseComplex> CBranchControlPosPtr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -46,7 +47,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        public void GetEquationPointers(Solver<PreciseComplex> solver)
         {
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
@@ -63,7 +64,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         public void Load(FrequencySimulation simulation)
         {
             var laplace = simulation.ComplexState.Laplace;
-            var factor = Complex.Exp(-laplace * BaseParameters.Delay);
+            var factor = PreciseComplex.Exp(-laplace * BaseParameters.Delay);
 
             // Load the Y-matrix and RHS-vector
             CPosBranchPtr.Value += 1.0;
