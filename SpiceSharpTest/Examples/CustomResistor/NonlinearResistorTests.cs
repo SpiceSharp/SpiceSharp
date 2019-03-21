@@ -17,8 +17,8 @@ namespace SpiceSharpTest.Examples
                 new VoltageSource("V1", "out", "0", 0.0),
                 new NonlinearResistor("RNL1", "out", "0")
             );
-            ckt.Entities["RNL1"].SetParameter("a", 2.0e3);
-            ckt.Entities["RNL1"].SetParameter("b", 0.5);
+            ckt["RNL1"].SetParameter("a", 2.0e3);
+            ckt["RNL1"].SetParameter("b", 0.5);
 
             // Setup the simulation and export our current
             var dc = new DC("DC", "V1", -2.0, 2.0, 1e-2);

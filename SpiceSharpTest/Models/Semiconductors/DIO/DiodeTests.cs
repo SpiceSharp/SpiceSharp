@@ -36,7 +36,7 @@ namespace SpiceSharpTest.Models
 
             // Build circuit
             var ckt = new Circuit();
-            ckt.Entities.Add(
+            ckt.Add(
                 CreateDiode("D1", "OUT", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 0.0)
@@ -67,12 +67,12 @@ namespace SpiceSharpTest.Models
              */
             // Build circuit
             var ckt = new Circuit();
-            ckt.Entities.Add(
+            ckt.Add(
                 CreateDiode("D1", "0", "OUT", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 1.0)
                 );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(1e3, 10e6, 5));
@@ -102,7 +102,7 @@ namespace SpiceSharpTest.Models
              */
             // Build circuit
             var ckt = new Circuit();
-            ckt.Entities.Add(
+            ckt.Add(
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
                 new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
@@ -137,7 +137,7 @@ namespace SpiceSharpTest.Models
                 CreateDiode("D1", "out", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-14 Af=0.9")
             );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create the noise, exports and reference values
             var noise = new Noise("Noise", "out", "V1", new DecadeSweep(10, 10e9, 10));

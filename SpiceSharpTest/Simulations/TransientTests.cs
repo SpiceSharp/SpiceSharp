@@ -136,8 +136,8 @@ namespace SpiceSharpTest.Simulations
                 new NonlinearResistor("NLR1", "in", "out"),
                 new Capacitor("C1", "out", "0", 1.0e-9)
                 );
-            ckt.Entities["NLR1"].SetParameter("a", 100.0);
-            ckt.Entities["NLR1"].SetParameter("b", 0.7);
+            ckt["NLR1"].SetParameter("a", 100.0);
+            ckt["NLR1"].SetParameter("b", 0.7);
 
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", 1e-7, 10e-5);

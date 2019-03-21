@@ -155,15 +155,15 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">The circuit to simulate.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
         /// <exception cref="CircuitException">{0}: No circuit nodes for simulation".FormatString(Name)</exception>
-        public virtual void Run(Circuit circuit)
+        public virtual void Run(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
             Status = Statuses.Setup;
-            Setup(circuit);
+            Setup(entities);
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -206,16 +206,16 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">The circuit containing the entities that are included in the simulation.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
         /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
-        protected virtual void Setup(Circuit circuit)
+        protected virtual void Setup(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
-            if (circuit.Entities.Count == 0)
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+            if (entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
             // Use the same comparers as the circuit. This is crucial because they use the same identifiers!
-            EntityParameters = new ParameterPool(circuit.Entities.Comparer);
-            EntityBehaviors = new BehaviorPool(circuit.Entities.Comparer, BehaviorTypes.ToArray());
+            EntityParameters = new ParameterPool(entities.Comparer);
+            EntityBehaviors = new BehaviorPool(entities.Comparer, BehaviorTypes.ToArray());
 
             // Create the variables that will need solving
             if (Configurations.TryGet(out CollectionConfiguration cconfig))
@@ -230,8 +230,8 @@ namespace SpiceSharp.Simulations
             }
 
             // Setup all entity parameters and behaviors
-            SetupParameters(circuit.Entities);
-            SetupBehaviors(circuit.Entities);
+            SetupParameters(entities);
+            SetupBehaviors(entities);
         }
 
         /// <summary>

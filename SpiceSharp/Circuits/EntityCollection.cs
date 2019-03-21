@@ -274,7 +274,7 @@ namespace SpiceSharp.Circuits
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Entity> GetEnumerator()
+        public virtual IEnumerator<Entity> GetEnumerator()
         {
             Entity[] result;
             _lock.EnterReadLock();
