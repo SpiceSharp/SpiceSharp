@@ -34,8 +34,6 @@ namespace SpiceSharp.Components
         protected Component(string name, int nodeCount)
             : base(name)
         {
-            Priority = ComponentPriority;
-
             // Initialize
             _connections = nodeCount > 0 ? new string[nodeCount] : null;
         }

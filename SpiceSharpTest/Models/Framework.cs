@@ -41,6 +41,7 @@ namespace SpiceSharpTest.Models
                 }
                 public void GetEquationPointers(VariableSet variables, Solver<double> solver)
                 {
+                    // TODO: Revise this for keeping it in first place
                     foreach (var node in _nodes)
                         variables.MapNode(node);
                 }
@@ -52,12 +53,10 @@ namespace SpiceSharpTest.Models
             readonly List<string> _nodes = new List<string>();
             public NodeMapper(params string[] nodes) : base("Mapper")
             {
-                Priority = 1000;
                 _nodes.AddRange(nodes);
             }
             public NodeMapper(IEnumerable<string> nodes) : base("Mapper")
             {
-                Priority = 1000;
                 _nodes.AddRange(nodes);
             }
         }

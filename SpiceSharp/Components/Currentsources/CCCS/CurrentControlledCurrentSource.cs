@@ -41,7 +41,6 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name) 
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
-            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
         }
 

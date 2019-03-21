@@ -180,10 +180,5 @@ namespace SpiceSharp.Circuits
             result.Add("entity", behaviors[Name]);
             return result;
         }
-
-        /// <summary>
-        /// Gets the priority of this entity.
-        /// </summary>
-        public int Priority { get; protected set; } = 0;
     }
 }

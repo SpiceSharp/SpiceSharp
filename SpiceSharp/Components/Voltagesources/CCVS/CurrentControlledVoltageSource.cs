@@ -41,7 +41,6 @@ namespace SpiceSharp.Components
         public CurrentControlledVoltageSource(string name) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
-            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -56,7 +55,6 @@ namespace SpiceSharp.Components
         public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
-            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters(gain));
             Connect(pos, neg);
             ControllingName = controllingSource;

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.IntegrationMethods;
@@ -20,11 +18,11 @@ namespace SpiceSharpTest.Simulations
             private IEnumerable<string> _names;
             public NodeEntity(IEnumerable<string> names) : base("ne")
             {
-                Priority = 100;
                 _names = names;
             }
             public override void CreateBehaviors(Type[] type, Simulation simulation, EntityCollection entities)
             {
+                // TODO: Revise this method of keeping this entity first in the row
                 // Apply the node mapping
                 foreach (var name in _names)
                     simulation.Variables.MapNode(name);
@@ -308,19 +306,7 @@ namespace SpiceSharpTest.Simulations
 
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
-            try
-            {
-                tran.Run(ckt);
-            }
-            catch (Exception)
-            {
-                using (StreamWriter sw = new StreamWriter(@"C:\Temp\data.txt"))
-                {
-                    foreach (var e in ckt.Entities)
-                        sw.WriteLine(e.Name + "  P: " + e.Priority);
-                }
-                throw;
-            }
+            tran.Run(ckt);
         }
     }
 }
