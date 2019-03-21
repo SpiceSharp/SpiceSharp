@@ -70,23 +70,31 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a behavior of the specified type.
+        /// Creates behaviors of the specified type.
         /// </summary>
-        /// <param name="type">The type of the behavior</param>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        public override IBehavior CreateBehavior(Type type, Simulation simulation)
+        /// <param name="types"></param>
+        /// <param name="simulation">The simulation requesting the behaviors.</param>
+        /// <param name="entities">The entities being processed.</param>
+        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
         {
-            var behavior = base.CreateBehavior(type, simulation);
+            if (Model != null)
+                entities[Model].CreateBehaviors(types, simulation, entities);
+            base.CreateBehaviors(types, simulation, entities);
+        }
 
-            // Apply our connections if necessary
+        /// <summary>
+        /// Sets up the behavior.
+        /// </summary>
+        /// <param name="behavior">The behavior that needs to be set up.</param>
+        /// <param name="simulation">The simulation.</param>
+        protected override void SetupBehavior(IBehavior behavior, Simulation simulation)
+        {
+            base.SetupBehavior(behavior, simulation);
             if (behavior is IConnectedBehavior conn)
             {
                 var pins = ApplyConnections(simulation.Variables);
                 conn.Connect(pins);
             }
-
-            return behavior;
         }
 
         /// <summary>

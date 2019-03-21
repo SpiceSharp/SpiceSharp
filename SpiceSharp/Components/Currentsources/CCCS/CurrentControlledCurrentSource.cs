@@ -1,7 +1,9 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -57,6 +59,19 @@ namespace SpiceSharp.Components
             ParameterSets.Get<BaseParameters>().Coefficient.Value = gain;
             Connect(pos, neg);
             ControllingName = voltageSource;
+        }
+
+        /// <summary>
+        /// Creates behaviors of the specified type.
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="simulation">The simulation requesting the behaviors.</param>
+        /// <param name="entities">The entities being processed.</param>
+        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        {
+            if (ControllingName != null)
+                entities[ControllingName].CreateBehaviors(types, simulation, entities);
+            base.CreateBehaviors(types, simulation, entities);
         }
 
         /// <summary>

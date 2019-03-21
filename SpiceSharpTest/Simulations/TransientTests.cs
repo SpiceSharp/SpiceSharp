@@ -23,12 +23,11 @@ namespace SpiceSharpTest.Simulations
                 Priority = 100;
                 _names = names;
             }
-            public override IBehavior CreateBehavior(Type type, Simulation simulation)
+            public override void CreateBehaviors(Type[] type, Simulation simulation, EntityCollection entities)
             {
                 // Apply the node mapping
                 foreach (var name in _names)
                     simulation.Variables.MapNode(name);
-                return null;
             }
         }
 

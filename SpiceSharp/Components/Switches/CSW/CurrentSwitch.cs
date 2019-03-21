@@ -1,7 +1,9 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.SwitchBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -58,6 +60,13 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters());
             Connect(pos, neg);
             ControllingName = controllingSource;
+        }
+
+        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        {
+            if (ControllingName != null)
+                entities[ControllingName].CreateBehaviors(types, simulation, entities);
+            base.CreateBehaviors(types, simulation, entities);
         }
 
         /// <summary>
