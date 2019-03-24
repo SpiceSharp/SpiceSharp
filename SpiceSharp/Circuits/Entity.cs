@@ -78,40 +78,74 @@ namespace SpiceSharp.Circuits
         public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
-        /// Creates a behavior of the specified type.
+        /// Creates behaviors of the specified type.
         /// </summary>
-        /// <param name="type">The type of the behavior</param>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
+        /// <param name="type">The types of behaviors that the simulation wants, in the order that they will be called.</param>
+        /// <param name="simulation">The simulation requesting the behaviors.</param>
+        /// <param name="entities">The entities being processed.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual IBehavior CreateBehavior(Type type, Simulation simulation)
-        {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+        public virtual void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        {            
+            // Skip creating behaviors if the entity is already defined in the pool
+            var pool = simulation.EntityBehaviors;
+            if (pool.ContainsKey(Name))
+                return;
 
-            // Get the factory and generate it
+            // Get the behavior factories for this entity
+            BehaviorFactoryDictionary factories;
             Lock.EnterReadLock();
             try
             {
-                if (!BehaviorFactories.TryGetValue(GetType(), out var behaviors))
-                    return null;
-                if (behaviors.TryGetValue(type, out var behavior))
-                    return behavior(this);
-                return null;
+                if (!BehaviorFactories.TryGetValue(GetType(), out factories))
+                    return;
             }
             finally
             {
                 Lock.ExitReadLock();
             }
-        }
 
+            // By default, go through the types in reverse order (to account for inheritance) and create
+            // the behaviors
+            EntityBehaviorDictionary ebd = null;
+            var newBehaviors = new List<IBehavior>(types.Length);
+            for (var i = types.Length - 1; i >= 0; i--)
+            {
+                // Skip creating behaviors that aren't needed
+                if (ebd != null && ebd.ContainsKey(types[i]))
+                    continue;
+                Lock.EnterReadLock();
+                try
+                {
+                    if (factories.TryGetValue(types[i], out var factory))
+                    {
+                        // Create the behavior
+                        var behavior = factory(this);
+                        pool.Add(behavior);
+                        newBehaviors.Add(behavior);
+
+                        // Get the dictionary if necessary
+                        if (ebd == null)
+                            ebd = pool[Name];
+                    }
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
+            }
+
+            // Now set them up in the order they appear
+            for (var i = newBehaviors.Count - 1; i >= 0; i--)
+                SetupBehavior(newBehaviors[i], simulation);
+        }
+        
         /// <summary>
         /// Sets up the behavior.
         /// </summary>
         /// <param name="behavior">The behavior that needs to be set up.</param>
         /// <param name="simulation">The simulation.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
-        public virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
+        protected virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
@@ -146,10 +180,5 @@ namespace SpiceSharp.Circuits
             result.Add("entity", behaviors[Name]);
             return result;
         }
-
-        /// <summary>
-        /// Gets the priority of this entity.
-        /// </summary>
-        public int Priority { get; protected set; } = 0;
     }
 }

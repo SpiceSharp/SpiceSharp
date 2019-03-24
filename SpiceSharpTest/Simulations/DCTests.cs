@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Simulations
              */
 
             var ckt = new Circuit();
-            ckt.Entities.Add(
+            ckt.Add(
                 CreateDiode("D1", "OUT", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 0.0)

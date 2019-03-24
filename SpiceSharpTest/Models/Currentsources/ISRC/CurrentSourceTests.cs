@@ -64,7 +64,7 @@ namespace SpiceSharpTest.Models
                 );
             for (var i = 2; i <= count - 1; i++)
             {
-                ckt.Entities.Add(new Resistor($"R{i}", $"B{i - 1}", $"B{i}", resistance));
+                ckt.Add(new Resistor($"R{i}", $"B{i - 1}", $"B{i}", resistance));
             }
             return ckt;
         }

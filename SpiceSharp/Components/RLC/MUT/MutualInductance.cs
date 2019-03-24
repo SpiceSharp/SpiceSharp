@@ -33,7 +33,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the mutual inductance</param>
         public MutualInductance(string name) : base(name, 0)
         {
-            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters());
         }
 
@@ -47,7 +46,6 @@ namespace SpiceSharp.Components
         public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
             : base(name, 0)
         {
-            Priority = ComponentPriority - 1;
             ParameterSets.Add(new BaseParameters(coupling));
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;

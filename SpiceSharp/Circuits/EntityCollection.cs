@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -12,57 +13,9 @@ namespace SpiceSharp.Circuits
     public class EntityCollection : IEnumerable<Entity>
     {
         /// <summary>
-        /// Compares entities by their priority.
-        /// </summary>
-        /// <seealso cref="System.Collections.Generic.IComparer{Entity}" />
-        private class EntityPriorityComparer : IComparer<Entity>
-        {
-            /// <summary>
-            /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-            /// </summary>
-            /// <param name="x">The first object to compare.</param>
-            /// <param name="y">The second object to compare.</param>
-            /// <returns>
-            /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
-            /// </returns>
-            /// <exception cref="ArgumentNullException">
-            /// x
-            /// or
-            /// y
-            /// </exception>
-            public int Compare(Entity x, Entity y)
-            {
-                if (x == null)
-                    throw new ArgumentNullException(nameof(x));
-                if (y == null)
-                    throw new ArgumentNullException(nameof(y));
-                if (ReferenceEquals(x, y))
-                    return 0;
-
-                // Put the highest priority first!
-                if (x.Priority < y.Priority)
-                    return 1;
-                if (x.Priority > y.Priority)
-                    return -1;
-
-                // Use the hash code to determine the order then
-                var hx = x.GetHashCode();
-                var hy = y.GetHashCode();
-                if (hx < hy)
-                    return -1;
-                if (hx > hy)
-                    return 1;
-
-                // If STILL equal, then we will just use the name of the entity
-                return StringComparer.Ordinal.Compare(x.Name, y.Name);
-            }
-        }
-
-        /// <summary>
         /// Private variables
         /// </summary>
         private readonly Dictionary<string, Entity> _entities;
-        private readonly SortedSet<Entity> _ordered;
         private readonly ReaderWriterLockSlim _lock;
 
         /// <summary>
@@ -73,7 +26,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Occurs when an entity has been removed from the collection.
         /// </summary>
-        public event EventHandler<EntityEventArgs> EntityRemoved; 
+        public event EventHandler<EntityEventArgs> EntityRemoved;
 
         /// <summary>
         /// Gets the comparer for entity identifiers.
@@ -90,7 +43,6 @@ namespace SpiceSharp.Circuits
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
             _entities = new Dictionary<string, Entity>();
-            _ordered = new SortedSet<Entity>(new EntityPriorityComparer());
         }
 
         /// <summary>
@@ -101,7 +53,6 @@ namespace SpiceSharp.Circuits
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
             _entities = new Dictionary<string, Entity>(comparer);
-            _ordered = new SortedSet<Entity>(new EntityPriorityComparer());
         }
 
         /// <summary>
@@ -119,9 +70,9 @@ namespace SpiceSharp.Circuits
         {
             get
             {
+                _lock.EnterReadLock();
                 try
                 {
-                    _lock.EnterReadLock();
                     return _entities[name];
                 }
                 finally
@@ -130,7 +81,7 @@ namespace SpiceSharp.Circuits
                 }
             }
         }
-        
+
         /// <summary>
         /// The number of entities.
         /// </summary>
@@ -138,9 +89,9 @@ namespace SpiceSharp.Circuits
         {
             get
             {
+                _lock.EnterReadLock();
                 try
                 {
-                    _lock.EnterReadLock();
                     return _entities.Count;
                 }
                 finally
@@ -155,11 +106,10 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void Clear()
         {
+            _lock.EnterWriteLock();
             try
             {
-                _lock.EnterWriteLock();
                 _entities.Clear();
-                _ordered.Clear();
             }
             finally
             {
@@ -173,27 +123,23 @@ namespace SpiceSharp.Circuits
         /// <param name="entities">The entities that need to be added.</param>
         public void Add(params Entity[] entities)
         {
-            try
+            if (entities == null)
+                return;
+            foreach (var entity in entities)
             {
-                _lock.EnterWriteLock();
+                if (entity == null)
+                    throw new ArgumentNullException();
+                OnEntityAdded(new EntityEventArgs(entity));
 
-                if (entities == null)
-                    return;
-                foreach (var entity in entities)
+                _lock.EnterWriteLock();
+                try
                 {
-                    if (entity == null)
-                        throw new ArgumentNullException();
-                    if (_entities.ContainsKey(entity.Name))
-                        throw new CircuitException(
-                            "An entity by the name of '{0}' already exists".FormatString(entity.Name));
-                    OnEntityAdded(new EntityEventArgs(entity));
                     _entities.Add(entity.Name, entity);
-                    _ordered.Add(entity);
                 }
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
             }
         }
 
@@ -208,27 +154,25 @@ namespace SpiceSharp.Circuits
         /// <param name="names">strings of the entities that need to be deleted.</param>
         public void Remove(params string[] names)
         {
-            try
+            if (names == null)
+                return;
+            foreach (var name in names)
             {
-                _lock.EnterWriteLock();
-
-                if (names == null)
-                    return;
-                foreach (var name in names)
+                if (name == null)
+                    throw new ArgumentNullException();
+                if (_entities.TryGetValue(name, out var entity))
                 {
-                    if (name == null)
-                        throw new ArgumentNullException();
-                    if (_entities.TryGetValue(name, out var entity))
+                    _lock.EnterWriteLock();
+                    try
                     {
                         _entities.Remove(name);
-                        _ordered.Remove(entity);
-                        OnEntityRemoved(new EntityEventArgs(entity));
                     }
+                    finally
+                    {
+                        _lock.ExitWriteLock();
+                    }
+                    OnEntityRemoved(new EntityEventArgs(entity));
                 }
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
             }
         }
 
@@ -238,24 +182,23 @@ namespace SpiceSharp.Circuits
         /// <param name="entities">The entities.</param>
         public void Remove(params Entity[] entities)
         {
-            try
+            if (entities == null)
+                return;
+            foreach (var entity in entities)
             {
-                _lock.EnterWriteLock();
-                if (entities == null)
-                    return;
-                foreach (var entity in entities)
+                if (Contains(entity.Name))
                 {
-                    if (_entities.ContainsKey(entity.Name))
+                    _lock.EnterWriteLock();
+                    try
                     {
                         _entities.Remove(entity.Name);
-                        _ordered.Remove(entity);
-                        OnEntityRemoved(new EntityEventArgs(entity));
                     }
+                    finally
+                    {
+                        _lock.ExitWriteLock();
+                    }
+                    OnEntityRemoved(new EntityEventArgs(entity));
                 }
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
             }
         }
 
@@ -271,9 +214,9 @@ namespace SpiceSharp.Circuits
         /// <returns>True if the collection contains an entity with a certain string.</returns>
         public bool Contains(string name)
         {
+            _lock.EnterReadLock();
             try
-            {
-                _lock.EnterReadLock();
+            {   
                 return _entities.ContainsKey(name);
             }
             finally
@@ -290,9 +233,9 @@ namespace SpiceSharp.Circuits
         /// <returns>True if the entity was found.</returns>
         public bool TryGetEntity(string name, out Entity entity)
         {
+            _lock.EnterReadLock();
             try
-            {
-                _lock.EnterReadLock();
+            {   
                 return _entities.TryGetValue(name, out entity);
             }
             finally
@@ -308,11 +251,11 @@ namespace SpiceSharp.Circuits
         /// <returns>An array with entities of the specified type.</returns>
         public Entity[] ByType(Type type)
         {
+            var result = new List<Entity>();
+            _lock.EnterReadLock();
             try
-            {
-                _lock.EnterReadLock();
-                var result = new List<Entity>();
-                foreach (var c in _ordered)
+            {   
+                foreach (var c in _entities.Values)
                 {
                     if (c.GetType() == type)
                         result.Add(c);
@@ -324,26 +267,29 @@ namespace SpiceSharp.Circuits
                 _lock.ExitReadLock();
             }
         }
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Entity> GetEnumerator()
+        public virtual IEnumerator<Entity> GetEnumerator()
         {
+            Entity[] result;
             _lock.EnterReadLock();
-
             try
             {
-                foreach (var t in _ordered)
-                    yield return t;
+                result = _entities.Values.ToArray();
             }
             finally
             {
                 _lock.ExitReadLock();
             }
+
+            // Enumerate
+            foreach (var entity in result)
+                yield return entity;
         }
 
         /// <summary>

@@ -155,15 +155,15 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">The circuit to simulate.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
         /// <exception cref="CircuitException">{0}: No circuit nodes for simulation".FormatString(Name)</exception>
-        public virtual void Run(Circuit circuit)
+        public virtual void Run(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
             Status = Statuses.Setup;
-            Setup(circuit);
+            Setup(entities);
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -206,16 +206,16 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">The circuit containing the entities that are included in the simulation.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
         /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
-        protected virtual void Setup(Circuit circuit)
+        protected virtual void Setup(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
-            if (circuit.Entities.Count == 0)
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+            if (entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
             // Use the same comparers as the circuit. This is crucial because they use the same identifiers!
-            EntityParameters = new ParameterPool(circuit.Entities.Comparer);
-            EntityBehaviors = new BehaviorPool(circuit.Entities.Comparer);
+            EntityParameters = new ParameterPool(entities.Comparer);
+            EntityBehaviors = new BehaviorPool(entities.Comparer, BehaviorTypes.ToArray());
 
             // Create the variables that will need solving
             if (Configurations.TryGet(out CollectionConfiguration cconfig))
@@ -230,8 +230,8 @@ namespace SpiceSharp.Simulations
             }
 
             // Setup all entity parameters and behaviors
-            SetupParameters(circuit.Entities);
-            SetupBehaviors(circuit.Entities);
+            SetupParameters(entities);
+            SetupBehaviors(entities);
         }
 
         /// <summary>
@@ -303,43 +303,11 @@ namespace SpiceSharp.Simulations
         /// Set up all behaviors previously created.
         /// </summary>
         /// <param name="entities">The circuit entities.</param>
-        private void SetupBehaviors(IEnumerable<Entity> entities)
+        private void SetupBehaviors(EntityCollection entities)
         {
-            var behaviors = new HashSet<IBehavior>();
-
+            var types = BehaviorTypes.ToArray();
             foreach (var entity in entities)
-            {
-                behaviors.Clear();
-
-                // Create the behaviors in the reverse order to allow inheritance
-                for (var i = BehaviorTypes.Count - 1; i >= 0; i--)
-                {
-                    IBehavior behavior = null;
-                    var type = BehaviorTypes[i];
-
-                    // Try to reuse a behavior first
-                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var ebd))
-                    {
-                        // If the entity behaviors already contains the type, reuse that object
-                        ebd.TryGetValue(type, out behavior);
-                    }
-
-                    // If it doesn't exist, request a new behavior
-                    if (behavior == null)
-                        behavior = entity.CreateBehavior(type, this);
-
-                    // Add the behavior to the pool
-                    if (behavior != null)
-                    {
-                        EntityBehaviors.Add(type, entity.Name, behavior);
-                        behaviors.Add(behavior);
-                    }
-                }
-                
-                // Setup the distinct behaviors
-                foreach (var behavior in behaviors)
-                    entity.SetupBehavior(behavior, this);
-            }
+                entity.CreateBehaviors(types, this, entities);
         }
 
         /// <summary>

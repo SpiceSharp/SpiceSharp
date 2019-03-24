@@ -187,7 +187,7 @@ namespace SpiceSharpTest.Models
                 CreateMOS1("M1", "out", "g", "0", "0", "MM"),
                 CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
@@ -301,9 +301,9 @@ namespace SpiceSharpTest.Models
                 CreateMOS1("M1", "out", "g", "0", "0", "MM"),
                 CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
-            ckt.Entities["M1"].SetParameter("w", 100e-6);
-            ckt.Entities["M1"].SetParameter("l", 100e-6);
+            ckt["V1"].SetParameter("acmag", 1.0);
+            ckt["M1"].SetParameter("w", 100e-6);
+            ckt["M1"].SetParameter("l", 100e-6);
 
             // Create simulation, exports and references
             var noise = new Noise("noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
@@ -397,6 +397,7 @@ namespace SpiceSharpTest.Models
             model.SetParameter("kp", 12.57e-4);
 
             var ckt = new Circuit(
+                new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH"),
                 model,
                 new VoltageSource("Vsupply", "VDD", "0", 5.0),
                 new CurrentSource("IBBIAS", "VDD", "B12", 10e-6),
@@ -410,8 +411,7 @@ namespace SpiceSharpTest.Models
                 // new Resistor("Racc2", "B12", "B14", 1e6),
 
                 new VoltageSource("INA", "CTRL", "0", 3.333333333),
-                new VoltageSource("INB", "TH", "0", 1.6631),
-                new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH")
+                new VoltageSource("INB", "TH", "0", 1.6631)
                 );
 
             // Calculate the operating point

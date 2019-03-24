@@ -52,12 +52,10 @@ namespace SpiceSharpTest.Models
             readonly List<string> _nodes = new List<string>();
             public NodeMapper(params string[] nodes) : base("Mapper")
             {
-                Priority = 1000;
                 _nodes.AddRange(nodes);
             }
             public NodeMapper(IEnumerable<string> nodes) : base("Mapper")
             {
-                Priority = 1000;
                 _nodes.AddRange(nodes);
             }
         }
