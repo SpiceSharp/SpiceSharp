@@ -13,22 +13,6 @@ namespace SpiceSharpTest.Simulations
     [TestFixture]
     public class TransientTests : Framework
     {
-        protected class NodeEntity : Entity
-        {
-            private IEnumerable<string> _names;
-            public NodeEntity(IEnumerable<string> names) : base("ne")
-            {
-                _names = names;
-            }
-            public override void CreateBehaviors(Type[] type, Simulation simulation, EntityCollection entities)
-            {
-                // TODO: Revise this method of keeping this entity first in the row
-                // Apply the node mapping
-                foreach (var name in _names)
-                    simulation.Variables.MapNode(name);
-            }
-        }
-
         [Test]
         public void When_RCFilterConstantTransient_Expect_Reference()
         {
@@ -194,6 +178,18 @@ namespace SpiceSharpTest.Simulations
             bjtModelQp2.SetParameter("bf", 1610.5);
 
             var ckt = new Circuit(
+                new NodeMapper(new[]
+                {
+                    "VDD", "test:11", "test:12", "VEE", "test:91", "test:92", "test:13",
+                    "test:15", "test:14", "test:16", "test:20", "test:32", "test:111",
+                    "test:17", "test:112", "test:113", "test:114", "test:115", "INP",
+                    "INN", "test:21", "test:22", "test:23", "test:110", "test:33",
+                    "test:59", "test:34", "test:60", "test:61", "test:63", "test:62",
+                    "test:65", "test:66", "test:64", "test:67", "test:68", "test:69",
+                    "test:70", "OUT", "test:77", "test:78", "test:79", "test:80",
+                    "test:81", "test:83", "test:84", "test:85", "test:86", "test:87",
+                    "test:88", "test:89", "test:90"
+                }),
                 diodeModelA,
                 diodeModelB,
                 bjtModelQp1,
@@ -288,20 +284,7 @@ namespace SpiceSharpTest.Simulations
                 new Resistor("RF", "OUT", "INN", 10),
                 new VoltageSource("VSIG", "INP", "0", new Pulse(-1.5, 1.5, 1e-6, 10e-9, 10e-9, 5e-6, 10e-6)),
                 new VoltageSource("VSUP", "VDD", "VEE", 5),
-                new VoltageControlledVoltageSource("EG1", "0", "VEE", "VDD", "VEE", 0.2),
-
-                new NodeEntity(new[]
-                {
-                    "VDD", "test:11", "test:12", "VEE", "test:91", "test:92", "test:13",
-                    "test:15", "test:14", "test:16", "test:20", "test:32", "test:111",
-                    "test:17", "test:112", "test:113", "test:114", "test:115", "INP",
-                    "INN", "test:21", "test:22", "test:23", "test:110", "test:33",
-                    "test:59", "test:34", "test:60", "test:61", "test:63", "test:62",
-                    "test:65", "test:66", "test:64", "test:67", "test:68", "test:69",
-                    "test:70", "OUT", "test:77", "test:78", "test:79", "test:80",
-                    "test:81", "test:83", "test:84", "test:85", "test:86", "test:87",
-                    "test:88", "test:89", "test:90"
-                })
+                new VoltageControlledVoltageSource("EG1", "0", "VEE", "VDD", "VEE", 0.2)
             );
 
             // Calculate the operating point

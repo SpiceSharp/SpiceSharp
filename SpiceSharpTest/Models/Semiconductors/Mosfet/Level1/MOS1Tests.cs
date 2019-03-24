@@ -397,6 +397,7 @@ namespace SpiceSharpTest.Models
             model.SetParameter("kp", 12.57e-4);
 
             var ckt = new Circuit(
+                new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH"),
                 model,
                 new VoltageSource("Vsupply", "VDD", "0", 5.0),
                 new CurrentSource("IBBIAS", "VDD", "B12", 10e-6),
@@ -410,8 +411,7 @@ namespace SpiceSharpTest.Models
                 // new Resistor("Racc2", "B12", "B14", 1e6),
 
                 new VoltageSource("INA", "CTRL", "0", 3.333333333),
-                new VoltageSource("INB", "TH", "0", 1.6631),
-                new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH")
+                new VoltageSource("INB", "TH", "0", 1.6631)
                 );
 
             // Calculate the operating point

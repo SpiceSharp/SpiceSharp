@@ -41,7 +41,6 @@ namespace SpiceSharpTest.Models
                 }
                 public void GetEquationPointers(VariableSet variables, Solver<double> solver)
                 {
-                    // TODO: Revise this for keeping it in first place
                     foreach (var node in _nodes)
                         variables.MapNode(node);
                 }
