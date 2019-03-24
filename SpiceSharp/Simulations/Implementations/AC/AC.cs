@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Circuits;
+using System;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -31,10 +32,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">The circuit that will be used.</param>
-        protected override void Setup(Circuit circuit)
+        /// <param name="entities">The circuit that will be used.</param>
+        protected override void Setup(EntityCollection entities)
         {
-            base.Setup(circuit);
+            base.Setup(entities);
 
             var config = Configurations.Get<FrequencyConfiguration>();
             _keepOpInfo = config.KeepOpInfo;

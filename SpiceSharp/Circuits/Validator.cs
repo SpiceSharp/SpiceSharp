@@ -27,14 +27,11 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Validate a circuit.
         /// </summary>
-        /// <param name="circuit">The circuit to be validated.</param>
-        public void Validate(Circuit circuit)
+        /// <param name="entities">The circuit to be validated.</param>
+        public void Validate(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
-
-            // Connect all entities in the circuit, we need this information to find connectivity issues
-            circuit.Entities.BuildOrderedComponentList();
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
 
             // Initialize
             _hasSource = false;
@@ -45,7 +42,7 @@ namespace SpiceSharp.Circuits
             _nodes.Clear();
 
             // Check all entities
-            foreach (var c in circuit.Entities)
+            foreach (var c in entities)
                 CheckEntity(c);
 
             // Check if a voltage source is available

@@ -23,11 +23,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the BJT
-        /// </summary>
-        public void SetModel(BipolarJunctionTransistorModel model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -52,8 +47,7 @@ namespace SpiceSharp.Components
         /// <param name="e">The emitter node.</param>
         /// <param name="s">The substrate node.</param>
         /// <param name="model">The model.</param>
-        public BipolarJunctionTransistor(string name, string c, string b, string e, string s,
-            BipolarJunctionTransistorModel model)
+        public BipolarJunctionTransistor(string name, string c, string b, string e, string s, string model)
             : this(name)
         {
             Connect(c, b, e, s);

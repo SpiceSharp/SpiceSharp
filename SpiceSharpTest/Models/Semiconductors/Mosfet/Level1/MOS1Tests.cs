@@ -9,29 +9,18 @@ namespace SpiceSharpTest.Models
     [TestFixture]
     public class MOS1Tests : Framework
     {
-        /// <summary>
-        /// Create a MOSFET
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="d">Drain</param>
-        /// <param name="g">Gate</param>
-        /// <param name="s">Source</param>
-        /// <param name="b">Bulk</param>
-        /// <param name="modelname">Model name</param>
-        /// <param name="modelparams">Model parameters</param>
-        /// <returns></returns>
-        protected Mosfet1 CreateMOS1(string name, string d, string g, string s, string b,
-            string modelname, string modelparams)
+        private Mosfet1 CreateMOS1(string name, string d, string g, string s, string b, string model)
         {
-            // Create model
-            var model = new Mosfet1Model(modelname);
-            ApplyParameters(model, modelparams);
-
-            // Create mosfet
-            var mos = new Mosfet1(name);
-            mos.SetModel(model);
+            var mos = new Mosfet1(name) {Model = model};
             mos.Connect(d, g, s, b);
             return mos;
+        }
+
+        private Mosfet1Model CreateMOS1Model(string name, string parameters)
+        {
+            var model = new Mosfet1Model(name);
+            ApplyParameters(model, parameters);
+            return model;
         }
 
         [Test]
@@ -47,8 +36,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "g", "0", 0.0),
                 new VoltageSource("V2", "d", "0", 0),
                 new VoltageSource("V3", "b", "0", -5.0),
-                CreateMOS1("M1", "d", "g", "0", "b",
-                    "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                CreateMOS1("M1", "d", "g", "0", "b", "MM"),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
 
             // Create simulation
@@ -195,10 +184,10 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "g", 10.0e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
-                CreateMOS1("M1", "out", "g", "0", "0",
-                    "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                CreateMOS1("M1", "out", "g", "0", "0", "MM"),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
@@ -250,8 +239,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
                 new VoltageSource("Vsupply", "vdd", "0", 5),
                 new Resistor("R1", "out", "vdd", 1.0e3),
-                CreateMOS1("M1", "out", "in", "0", "0",
-                    "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                CreateMOS1("M1", "out", "in", "0", "0", "MM"),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
 
             // Create simulation
@@ -309,12 +298,12 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
-                CreateMOS1("M1", "out", "g", "0", "0",
-                    "MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
+                CreateMOS1("M1", "out", "g", "0", "0", "MM"),
+                CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
-            ckt.Entities["M1"].SetParameter("w", 100e-6);
-            ckt.Entities["M1"].SetParameter("l", 100e-6);
+            ckt["V1"].SetParameter("acmag", 1.0);
+            ckt["M1"].SetParameter("w", 100e-6);
+            ckt["M1"].SetParameter("l", 100e-6);
 
             // Create simulation, exports and references
             var noise = new Noise("noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
@@ -384,7 +373,8 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "g", "0", 10),
                 new VoltageSource("V2", "d", "0", 10),
-                CreateMOS1("Md", "d", "g", "0", "0", "my-nmos", "is=1e-32")
+                CreateMOS1("Md", "d", "g", "0", "0", "my-nmos"),
+                CreateMOS1Model("my-nmos", "is=1e-32")
             );
 
             // Create the simulation
@@ -407,10 +397,12 @@ namespace SpiceSharpTest.Models
             model.SetParameter("kp", 12.57e-4);
 
             var ckt = new Circuit(
+                new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH"),
+                model,
                 new VoltageSource("Vsupply", "VDD", "0", 5.0),
                 new CurrentSource("IBBIAS", "VDD", "B12", 10e-6),
-                new Mosfet1("MB1", "B13", "CTRL", "B12", "VDD", model),
-                new Mosfet1("MB2", "B14", "TH", "B12", "VDD", model),
+                new Mosfet1("MB1", "B13", "CTRL", "B12", "VDD", "Model"),
+                new Mosfet1("MB2", "B14", "TH", "B12", "VDD", "Model"),
                 new Resistor("RBD1", "B13", "0", 10e3),
                 new Resistor("RBD2", "B14", "0", 10e3),
 
@@ -419,8 +411,7 @@ namespace SpiceSharpTest.Models
                 // new Resistor("Racc2", "B12", "B14", 1e6),
 
                 new VoltageSource("INA", "CTRL", "0", 3.333333333),
-                new VoltageSource("INB", "TH", "0", 1.6631),
-                new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH")
+                new VoltageSource("INB", "TH", "0", 1.6631)
                 );
 
             // Calculate the operating point

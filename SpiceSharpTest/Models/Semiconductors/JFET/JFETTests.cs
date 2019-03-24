@@ -12,16 +12,18 @@ namespace SpiceSharpTest.Models
         /// <summary>
         /// Creates the specified JFET.
         /// </summary>
-        private JFET Create(string name, string d, string g, string s,
-            string modelname, string modelparameters)
+        private JFET CreateJFET(string name, string d, string g, string s, string model)
         {
-            var model = new JFETModel(modelname);
-            ApplyParameters(model, modelparameters);
-
-            var fet = new JFET(name);
+            var fet = new JFET(name) {Model = model};
             fet.Connect(d, g, s);
-            fet.SetModel(model);
             return fet;
+        }
+
+        private JFETModel CreateJFETModel(string name, string parameters)
+        {
+            var model = new JFETModel(name);
+            ApplyParameters(model, parameters);
+            return model;
         }
 
         [Test]
@@ -31,7 +33,8 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "g", "0", 0.0),
                 new VoltageSource("V2", "d", "0", 0.0),
-                Create("J1", "d", "g", "0", "JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241")
+                CreateJFET("J1", "d", "g", "0", "JX"),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241")
             );
 
             // Build the simulation
@@ -299,9 +302,10 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "g", "0", 0.5),
                 new VoltageSource("V2", "d", "0", 2.0),
-                Create("J1", "d", "g", "0", "JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
+                CreateJFET("J1", "d", "g", "0", "JX"),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
             );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create the simulation
             var ac = new AC("ac", new DecadeSweep(0.1, 10e9, 10));
@@ -454,7 +458,8 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "g", "0", new Pulse(0, 0.7, 1e-9, 1e-7, 1e-7, 1e-6, 2e-6)),
                 new VoltageSource("V2", "d", "0", 2.0),
-                Create("J1", "d", "g", "0", "JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
+                CreateJFET("J1", "d", "g", "0", "JX"),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
             );
 
             // Build the simulation

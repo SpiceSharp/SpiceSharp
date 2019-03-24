@@ -20,7 +20,7 @@ namespace SpiceSharpTest.Models
                 new LosslessTransmissionLine("T1", "a", "0", "b", "0", 50.0, 1e-6),
                 new Resistor("Rload", "b", "0", 25)
             );
-            ckt.Entities["T1"].SetParameter("reltol", 0.5);
+            ckt["T1"].SetParameter("reltol", 0.5);
 
             // Build the simulation
             var tran = new Transient("tran", 1e-6, 20e-6);
@@ -315,7 +315,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("Rsource", "in", "a", rsource),
                 new LosslessTransmissionLine("T1", "a", "0", "b", "0", impedance, delay),
                 new Resistor("Rload", "b", "0", rload));
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(0.1, 1e8, 5));

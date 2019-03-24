@@ -24,12 +24,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Sets the model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        public void SetModel(JFETModel model) => Model = model;
-
-        /// <summary>
         /// The number of pins on a JFET.
         /// </summary>
         public const int JFETPincount = 3;

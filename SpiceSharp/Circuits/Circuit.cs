@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Circuits;
 
 namespace SpiceSharp
@@ -7,7 +6,7 @@ namespace SpiceSharp
     /// <summary>
     /// Represents an electronic circuit.
     /// </summary>
-    public class Circuit
+    public class Circuit : EntityCollection
     {
         /// <summary>
         /// Common constants
@@ -21,36 +20,20 @@ namespace SpiceSharp
         public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>
-        /// Gets a collection of all entities in the circuit.
-        /// </summary>
-        /// <value>
-        /// The entities.
-        /// </value>
-        public EntityCollection Entities { get; }
-
-        /// <summary>
-        /// Gets a collection of all circuit objects. Obsolete, use <see cref="Entities" /> instead.
-        /// </summary>
-        /// <value>
-        /// The objects.
-        /// </value>
-        [Obsolete] public EntityCollection Objects => Entities;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         public Circuit()
-        {
-            Entities = new EntityCollection();
+            : base()
+        { 
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer`1" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="T:System.Collections.Generic.EqualityComparer`1" />.</param>
         public Circuit(IEqualityComparer<string> comparer)
+            : base(comparer)
         {
-            Entities = new EntityCollection(comparer);
         }
 
         /// <summary>
@@ -58,12 +41,12 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(IEnumerable<Entity> entities)
+            : base()
         {
-            Entities = new EntityCollection();
             if (entities == null)
                 return;
             foreach (var entity in entities)
-                Entities.Add(entity);
+                Add(entity);
         }
 
         /// <summary>
@@ -71,20 +54,12 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="entities">The entities describing the circuit.</param>
         public Circuit(params Entity[] entities)
+            : base()
         {
-            Entities = new EntityCollection
-            {
-                entities
-            };
-        }
-
-        /// <summary>
-        /// Clear all entities in the circuit.
-        /// </summary>
-        public void Clear()
-        {
-            // Clear all values
-            Entities.Clear();
+            if (entities == null)
+                return;
+            foreach (var entity in entities)
+                Add(entity);
         }
 
         /// <summary>

@@ -21,12 +21,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the capacitor
-        /// </summary>
-        /// <param name="model"></param>
-        public void SetModel(CapacitorModel model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]

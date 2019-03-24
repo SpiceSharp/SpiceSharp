@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
+using SpiceSharp.General;
 
 namespace SpiceSharp
 {
@@ -10,6 +13,10 @@ namespace SpiceSharp
     /// </summary>
     public abstract class Parameterized
     {
+        private static readonly Dictionary<Type, List<CachedMemberInfo>> _membersDict = new Dictionary<Type, List<CachedMemberInfo>>();
+        private static readonly ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+
         /// <summary>
         /// Gets all members in the class.
         /// </summary>
@@ -20,8 +27,53 @@ namespace SpiceSharp
         {
             get
             {
-                var members = GetType().GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Instance);
-                return members;
+                return CachedMembers.Select(m => m.Member);
+            }
+        }
+
+        /// <summary>
+        /// Gets all members in the class with their attributes.
+        /// </summary>
+        /// <value>
+        /// The members with their attributes.
+        /// </value>
+        protected IEnumerable<CachedMemberInfo> CachedMembers
+        {
+            get
+            {
+                var type = GetType();
+                cacheLock.EnterUpgradeableReadLock();
+                try
+                {
+                    if (!_membersDict.ContainsKey(type))
+                    {
+                        var members = type
+                            .GetTypeInfo()
+                            .GetMembers(BindingFlags.Public | BindingFlags.Instance)
+                            .Select(m => new CachedMemberInfo(m, m.GetCustomAttributes().ToList())).ToList();
+
+                        cacheLock.EnterWriteLock();
+                        try
+                        {
+                            if (!_membersDict.ContainsKey(type))
+                            {
+                                _membersDict.Add(type, members);
+                            }
+
+                            return _membersDict[type];
+                        }
+                        finally
+                        {
+                            cacheLock.ExitWriteLock();
+                        }
+                    }
+
+                    return _membersDict[type];
+                }
+                finally
+                {
+                    cacheLock.ExitUpgradeableReadLock();
+                }
             }
         }
 

@@ -24,11 +24,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the MOS2 Mosfet.
-        /// </summary>
-        public void SetModel(Model model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]

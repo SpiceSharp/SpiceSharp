@@ -24,11 +24,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the MOS3 model
-        /// </summary>
-        public void SetModel(Mosfet3Model model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]

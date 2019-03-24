@@ -19,17 +19,17 @@ namespace SpiceSharpTest
             );
 
             // Change the value of the resistor
-            var resParameters = ckt.Entities["R1"].ParameterSets;
+            var resParameters = ckt["R1"].ParameterSets;
             resParameters.Get<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
             // </example_structure_resistor>
 
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
-            ckt.Entities["R1"].SetParameter("resistance", 2.0e3);
-            ckt.Entities["R1"].ParameterSets.SetParameter("resistance", 2.0e3);
+            ckt["R1"].SetParameter("resistance", 2.0e3);
+            ckt["R1"].ParameterSets.SetParameter("resistance", 2.0e3);
 
             // Using the ParameterInfoAttributes IsPrincipal=true
-            ckt.Entities["R1"].ParameterSets.SetParameter(2.0e3);
+            ckt["R1"].ParameterSets.SetParameter(2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -150,16 +150,16 @@ namespace SpiceSharpTest
         {
             // <example_DC>
             // Make the bipolar junction transistor
-            var nmos = new Mosfet1("M1");
+            var nmos = new Mosfet1("M1") {Model = "example"};
             nmos.Connect("d", "g", "0", "0");
             var nmosmodel = new Mosfet1Model("example");
             nmosmodel.SetParameter("kp", 150.0e-3);
-            nmos.SetModel(nmosmodel);
 
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("Vgs", "g", "0", 0),
                 new VoltageSource("Vds", "d", "0", 0),
+                nmosmodel,
                 nmos
                 );
 
@@ -194,7 +194,7 @@ namespace SpiceSharpTest
                 new Resistor("R1", "in", "out", 10.0e3),
                 new Capacitor("C1", "out", "0", 1e-6)
                 );
-            ckt.Entities["V1"].SetParameter("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create the simulation
             var ac = new AC("AC 1", new DecadeSweep(1e-2, 1.0e3, 5));

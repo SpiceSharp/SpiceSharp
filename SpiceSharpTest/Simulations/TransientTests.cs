@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.IntegrationMethods;
@@ -14,23 +13,6 @@ namespace SpiceSharpTest.Simulations
     [TestFixture]
     public class TransientTests : Framework
     {
-        protected class NodeEntity : Entity
-        {
-            private IEnumerable<string> _names;
-            public NodeEntity(IEnumerable<string> names) : base("ne")
-            {
-                Priority = 100;
-                _names = names;
-            }
-            public override IBehavior CreateBehavior(Type type, Simulation simulation)
-            {
-                // Apply the node mapping
-                foreach (var name in _names)
-                    simulation.Variables.MapNode(name);
-                return null;
-            }
-        }
-
         [Test]
         public void When_RCFilterConstantTransient_Expect_Reference()
         {
@@ -138,8 +120,8 @@ namespace SpiceSharpTest.Simulations
                 new NonlinearResistor("NLR1", "in", "out"),
                 new Capacitor("C1", "out", "0", 1.0e-9)
                 );
-            ckt.Entities["NLR1"].SetParameter("a", 100.0);
-            ckt.Entities["NLR1"].SetParameter("b", 0.7);
+            ckt["NLR1"].SetParameter("a", 100.0);
+            ckt["NLR1"].SetParameter("b", 0.7);
 
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", 1e-7, 10e-5);
@@ -196,27 +178,43 @@ namespace SpiceSharpTest.Simulations
             bjtModelQp2.SetParameter("bf", 1610.5);
 
             var ckt = new Circuit(
+                new NodeMapper(new[]
+                {
+                    "VDD", "test:11", "test:12", "VEE", "test:91", "test:92", "test:13",
+                    "test:15", "test:14", "test:16", "test:20", "test:32", "test:111",
+                    "test:17", "test:112", "test:113", "test:114", "test:115", "INP",
+                    "INN", "test:21", "test:22", "test:23", "test:110", "test:33",
+                    "test:59", "test:34", "test:60", "test:61", "test:63", "test:62",
+                    "test:65", "test:66", "test:64", "test:67", "test:68", "test:69",
+                    "test:70", "OUT", "test:77", "test:78", "test:79", "test:80",
+                    "test:81", "test:83", "test:84", "test:85", "test:86", "test:87",
+                    "test:88", "test:89", "test:90"
+                }),
+                diodeModelA,
+                diodeModelB,
+                bjtModelQp1,
+                bjtModelQp2,
                 new VoltageSource("test:VS1", "VDD", "test:11", 0),
                 new CurrentSource("test:IBIAS", "test:11", "test:12", 61.3e-6),
-                new Diode("test:DBIAS", "VEE", "test:12", diodeModelA),
+                new Diode("test:DBIAS", "VEE", "test:12", "DA"),
                 new Resistor("test:RE1", "test:12", "test:91", 1.005e3),
                 new Resistor("test:RE2", "test:12", "test:92", 1.005e3),
-                new BipolarJunctionTransistor("test:QI1", "test:13", "test:15", "test:91", "test:91", bjtModelQp1),
-                new BipolarJunctionTransistor("test:QI2", "test:14", "test:16", "test:92", "test:92", bjtModelQp2),
+                new BipolarJunctionTransistor("test:QI1", "test:13", "test:15", "test:91", "test:91", "QP1"),
+                new BipolarJunctionTransistor("test:QI2", "test:14", "test:16", "test:92", "test:92", "QP2"),
                 new Resistor("test:RIN1", "test:15", "test:20", 3e6),
                 new Resistor("test:RIN2", "test:16", "test:20", 3e6),
-                new Diode("test:DIN1", "test:15", "VDD", diodeModelB),
-                new Diode("test:DIN2", "VEE", "test:15", diodeModelB),
-                new Diode("test:DIN3", "test:16", "VDD", diodeModelB),
-                new Diode("test:DIN4", "VEE", "test:16", diodeModelB),
+                new Diode("test:DIN1", "test:15", "VDD", "DB"),
+                new Diode("test:DIN2", "VEE", "test:15", "DB"),
+                new Diode("test:DIN3", "test:16", "VDD", "DB"),
+                new Diode("test:DIN4", "VEE", "test:16", "DB"),
                 new VoltageControlledVoltageSource("test:ECR1", "test:15", "test:32", "test:111", "test:20", 1),
                 new VoltageSource("test:VOS", "test:17", "test:32", 1e-3),
-                new Diode("test:DP1", "test:17", "test:112", diodeModelB),
-                new Diode("test:DP2", "test:112", "test:113", diodeModelB),
-                new Diode("test:DP3", "test:113", "test:16", diodeModelB),
-                new Diode("test:DP4", "test:16", "test:114", diodeModelB),
-                new Diode("test:DP5", "test:114", "test:115", diodeModelB),
-                new Diode("test:DP6", "test:115", "test:17", diodeModelB),
+                new Diode("test:DP1", "test:17", "test:112", "DB"),
+                new Diode("test:DP2", "test:112", "test:113", "DB"),
+                new Diode("test:DP3", "test:113", "test:16", "DB"),
+                new Diode("test:DP4", "test:16", "test:114", "DB"),
+                new Diode("test:DP5", "test:114", "test:115", "DB"),
+                new Diode("test:DP6", "test:115", "test:17", "DB"),
                 new Resistor("test:RP1", "test:17", "INP", 3.5e3),
                 new Resistor("test:RP2", "test:16", "INN", 3.5e3),
                 new Resistor("test:RC1", "test:13", "VEE", 1.856e3),
@@ -232,9 +230,9 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("test:CC", "test:23", "test:21", 36.8e-12),
                 new VoltageControlledVoltageSource("test:EG", "test:20", "VEE", "VDD", "VEE", 0.5),
                 new VoltageControlledCurrentSource("test:GCP", "test:22", "test:20", "test:110", "test:20", 10),
-                new Diode("test:DVL1", "test:22", "test:33", diodeModelA),
+                new Diode("test:DVL1", "test:22", "test:33", "DA"),
                 new VoltageSource("test:VMIN1", "test:59", "test:33", 6.85e-3),
-                new Diode("test:DVL2", "test:34", "test:22", diodeModelA),
+                new Diode("test:DVL2", "test:34", "test:22", "DA"),
                 new VoltageSource("test:VMIN2", "test:34", "test:60", 4e-3),
                 new VoltageControlledVoltageSource("test:ELIM2", "test:59", "test:61", "VDD", "VEE", 0.5),
                 new VoltageControlledVoltageSource("test:ELIM1", "test:63", "test:60", "VDD", "VEE", 0.5),
@@ -243,21 +241,21 @@ namespace SpiceSharpTest.Simulations
                 new VoltageControlledVoltageSource("test:EOUT", "test:65", "test:20", "test:22", "test:20", 1),
                 new Resistor("test:ROUT1", "test:65", "test:66", 150),
                 new VoltageSource("test:VIS3", "test:66", "test:67", 0),
-                new Diode("test:DSC1", "test:67", "test:68", diodeModelA),
-                new Diode("test:DSC2", "test:69", "test:67", diodeModelA),
-                new Diode("test:DSC3", "test:69", "test:70", diodeModelA),
-                new Diode("test:DSC4", "test:70", "test:68", diodeModelA),
+                new Diode("test:DSC1", "test:67", "test:68", "DA"),
+                new Diode("test:DSC2", "test:69", "test:67", "DA"),
+                new Diode("test:DSC3", "test:69", "test:70", "DA"),
+                new Diode("test:DSC4", "test:70", "test:68", "DA"),
                 new CurrentSource("test:ISC1", "test:68", "test:69", 25e-3),
                 new Resistor("test:RSC", "test:68", "test:69", 10e6),
                 new Resistor("test:ROUT2", "test:70", "OUT", 0.1e-3),
                 new Resistor("test:RLOAD", "OUT", "test:20", 10e6),
-                new Diode("test:DSUP", "VEE", "VDD", diodeModelB),
+                new Diode("test:DSUP", "VEE", "VDD", "DB"),
                 new Resistor("test:RSUP", "VDD", "VEE", 200e3),
                 new CurrentSource("test:ISUP", "VDD", "VEE", 95e-6),
                 new CurrentControlledCurrentSource("test:FSUP1", "test:20", "test:77", "test:VIS3", 1),
                 new Capacitor("test:CSUP", "test:77", "test:20", 1e-12),
-                new Diode("test:DSUP1", "test:20", "test:77", diodeModelB),
-                new Diode("test:DSUP2", "test:77", "test:78", diodeModelB),
+                new Diode("test:DSUP1", "test:20", "test:77", "DB"),
+                new Diode("test:DSUP2", "test:77", "test:78", "DB"),
                 new VoltageSource("test:VIS4", "test:78", "test:20", 0),
                 new CurrentControlledCurrentSource("test:FSUP2", "VDD", "VEE", "test:VIS4", 1),
                 new VoltageControlledVoltageSource("test:ESUP1", "test:79", "test:20", "VDD", "VEE", 1),
@@ -271,40 +269,26 @@ namespace SpiceSharpTest.Simulations
                 new Resistor("test:RRR", "test:110", "test:20", 1),
                 new VoltageControlledVoltageSource("test:ECM1", "test:81", "test:20", "test:12", "VEE", 1),
                 new VoltageControlledCurrentSource("test:GCM2", "test:20", "test:111", "test:81", "test:20", 10e-6),
-                new Diode("test:DIL", "test:12", "test:83", diodeModelA),
+                new Diode("test:DIL", "test:12", "test:83", "DA"),
                 new Resistor("test:RIL", "test:83", "test:84", 50),
                 new VoltageSource("test:VIL", "test:85", "test:84", 0.9),
                 new VoltageControlledVoltageSource("test:EIL", "test:85", "VEE", "VDD", "VEE", 1),
-                new Diode("test:DVL3", "VEE", "test:12", diodeModelA),
-                new Diode("test:DVL4", "test:12", "test:86", diodeModelA),
+                new Diode("test:DVL3", "VEE", "test:12", "DA"),
+                new Diode("test:DVL4", "test:12", "test:86", "DA"),
                 new CurrentControlledCurrentSource("test:FVL", "test:86", "VEE", "test:VIS5", 1),
                 new VoltageSource("test:VVL", "test:87", "VEE", 2.3),
                 new VoltageSource("test:VIS5", "test:87", "test:88", 0),
-                new Diode("test:DVL5", "test:88", "test:89", diodeModelA),
+                new Diode("test:DVL5", "test:88", "test:89", "DA"),
                 new Resistor("test:RVL", "test:89", "test:90", 300),
                 new VoltageControlledVoltageSource("test:EVL1", "test:90", "VEE", "VDD", "VEE", 1),
                 new Resistor("RF", "OUT", "INN", 10),
                 new VoltageSource("VSIG", "INP", "0", new Pulse(-1.5, 1.5, 1e-6, 10e-9, 10e-9, 5e-6, 10e-6)),
                 new VoltageSource("VSUP", "VDD", "VEE", 5),
-                new VoltageControlledVoltageSource("EG1", "0", "VEE", "VDD", "VEE", 0.2),
-
-                new NodeEntity(new[]
-                {
-                    "VDD", "test:11", "test:12", "VEE", "test:91", "test:92", "test:13",
-                    "test:15", "test:14", "test:16", "test:20", "test:32", "test:111",
-                    "test:17", "test:112", "test:113", "test:114", "test:115", "INP",
-                    "INN", "test:21", "test:22", "test:23", "test:110", "test:33",
-                    "test:59", "test:34", "test:60", "test:61", "test:63", "test:62",
-                    "test:65", "test:66", "test:64", "test:67", "test:68", "test:69",
-                    "test:70", "OUT", "test:77", "test:78", "test:79", "test:80",
-                    "test:81", "test:83", "test:84", "test:85", "test:86", "test:87",
-                    "test:88", "test:89", "test:90"
-                })
+                new VoltageControlledVoltageSource("EG1", "0", "VEE", "VDD", "VEE", 0.2)
             );
 
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
-
             tran.Run(ckt);
         }
     }

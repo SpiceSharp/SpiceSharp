@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -78,18 +79,18 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">The circuit that will be used.</param>
+        /// <param name="entities">The circuit that will be used.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
         /// <exception cref="SpiceSharp.CircuitException">
         /// No frequency configuration found
         /// or
         /// No frequency sweep found
         /// </exception>
-        protected override void Setup(Circuit circuit)
+        protected override void Setup(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
-            base.Setup(circuit);
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+            base.Setup(entities);
 
             // Get behaviors, configurations and states
             var config = Configurations.Get<FrequencyConfiguration>();

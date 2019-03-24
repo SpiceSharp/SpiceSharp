@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -77,13 +78,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">The circuit that will be used.</param>
+        /// <param name="entities">The circuit that will be used.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
-        protected override void Setup(Circuit circuit)
+        protected override void Setup(EntityCollection entities)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
-            base.Setup(circuit);
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+            base.Setup(entities);
 
             // Get behaviors
             _noiseBehaviors = EntityBehaviors.GetBehaviorList<INoiseBehavior>();

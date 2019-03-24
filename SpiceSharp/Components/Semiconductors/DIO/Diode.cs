@@ -23,11 +23,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the diode
-        /// </summary>
-        public void SetModel(DiodeModel model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
@@ -49,7 +44,7 @@ namespace SpiceSharp.Components
         /// <param name="anode">The anode.</param>
         /// <param name="cathode">The cathode.</param>
         /// <param name="model">The model.</param>
-        public Diode(string name, string anode, string cathode, DiodeModel model)
+        public Diode(string name, string anode, string cathode, string model)
             : this(name)
         {
             Connect(anode, cathode);

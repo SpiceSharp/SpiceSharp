@@ -22,11 +22,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the model for the voltage-controlled switch
-        /// </summary>
-        public void SetModel(VoltageSwitchModel model) => Model = model;
-
-        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]

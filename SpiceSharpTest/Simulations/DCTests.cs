@@ -9,23 +9,18 @@ namespace SpiceSharpTest.Simulations
     [TestFixture]
     public class DCTests : Framework
     {
-        /// <summary>
-        /// Create a diode with a model
-        /// </summary>
-        /// <param name="name">Diode name</param>
-        /// <param name="anode">Anode</param>
-        /// <param name="cathode">Cathode</param>
-        /// <param name="model">Model</param>
-        /// <param name="modelparams">Model parameters</param>
-        /// <returns></returns>
-        Diode CreateDiode(string name, string anode, string cathode, string model, string modelparams)
+        private Diode CreateDiode(string name, string anode, string cathode, string model)
         {
-            var d = new Diode(name);
-            var dm = new DiodeModel(model);
-            ApplyParameters(dm, modelparams);
-            d.SetModel(dm);
+            var d = new Diode(name) {Model = model};
             d.Connect(anode, cathode);
             return d;
+        }
+
+        private DiodeModel CreateDiodeModel(string name, string parameters)
+        {
+            var model = new DiodeModel(name);
+            ApplyParameters(model, parameters);
+            return model;
         }
 
         [Test]
@@ -73,8 +68,9 @@ namespace SpiceSharpTest.Simulations
              */
 
             var ckt = new Circuit();
-            ckt.Entities.Add(
-                CreateDiode("D1", "OUT", "0", "1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
+            ckt.Add(
+                CreateDiode("D1", "OUT", "0", "1N914"),
+                CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 0.0)
             );
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -118,7 +119,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="circuit">The circuit that will be used.</param>
         /// <exception cref="ArgumentNullException">circuit</exception>
-        protected override void Setup(Circuit circuit)
+        protected override void Setup(EntityCollection circuit)
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
