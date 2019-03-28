@@ -89,7 +89,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="types">The types.</param>
         public BehaviorPool(IEqualityComparer<string> comparer, Type[] types)
         {
-            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
+            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>(comparer);
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
         }
