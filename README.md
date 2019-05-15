@@ -8,23 +8,37 @@ You can find documentation at [https://spicesharp.github.io/SpiceSharp/](https:/
 - A tutorial on how to implement your own *custom* model equations (prerequisite knowledge needed).
 
 ## Quickstart
-
 Simulating a circuit is relatively straightforward. For example:
 
 ```csharp
-// Build the circuit
-var ckt = new Circuit(
-    new VoltageSource("V1", "in", "0", 0.0),
-    new Resistor("R1", "in", "out", 1.0e3),
-    new Resistor("R2", "out", "0", 2.0e3)
-);
+using System;
+using SpiceSharp;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
-// Create a DC sweep and register to the event for exporting simulation data
-var dc = new DC("dc", "V1", 0.0, 5.0, 0.001);
-dc.ExportSimulationData += (sender, args) => Console.WriteLine(args.GetVoltage("out"));
-
-// Run the simulation
-dc.Run(ckt);
+namespace SpiceSimu
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Build the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0),
+                new Resistor("R1", "in", "out", 1.0e3),
+                new Resistor("R2", "out", "0", 2.0e3)
+                );
+            // Create a DC sweep and register to the event for exporting simulation data
+            var dc = new DC("dc", "V1", 0.0, 5.0, 0.001);
+            dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+            {
+                Console.WriteLine(exportDataEventArgs.GetVoltage("out"));
+            };
+            // Run the simulation
+            dc.Run(ckt);
+        }
+    }
+}
 ```
 
 Most standard Spice-components are available, and building your own custom components is also possible!
