@@ -65,7 +65,7 @@
         /// <returns>
         /// The cloned parameter.
         /// </returns>
-        public override BaseParameter Clone()
+        public override IDeepCloneable Clone()
         {
             var clone = new GivenParameter<T>
             {
@@ -79,7 +79,7 @@
         /// Copies the contents of a parameter to this parameter.
         /// </summary>
         /// <param name="source">The source parameter.</param>
-        public override void CopyFrom(BaseParameter source)
+        public override void CopyFrom(IDeepCloneable source)
         {
             if (source is GivenParameter<T> gp)
             {

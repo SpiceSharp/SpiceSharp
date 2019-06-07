@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CommonBehaviors.IndependentBaseParameters _bp;
+        private CommonBehaviors.IndependentSourceParameters _bp;
 
         /// <summary>
         /// Constructor
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
             
             // Get parameters
-            _bp = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
+            _bp = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
         }
 
         /// <summary>

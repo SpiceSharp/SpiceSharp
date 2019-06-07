@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
     /// <seealso cref="BaseParameter" />
-    public abstract class Parameter<T> : BaseParameter where T : struct
+    public abstract class Parameter<T> : IDeepCloneable where T : struct
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
@@ -23,15 +23,23 @@ namespace SpiceSharp
         /// <param name="source">The source parameter.</param>
         /// <exception cref="ArgumentNullException">source</exception>
         /// <exception cref="CircuitException">Cannot copy: source is not a Parameter</exception>
-        public override void CopyFrom(BaseParameter source)
+        public virtual void CopyFrom(IDeepCloneable source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (source is Parameter<T> p)
+            if (source.GetType() == this.GetType())
+                ParameterHelper.CopyPropertiesAndFields(source, this);
+            else if (source is Parameter<T> p)
                 Value = p.Value;
             else
                 throw new CircuitException("Cannot copy: source is not a Parameter");
         }
+
+        /// <summary>
+        /// Clone the current parameter.
+        /// </summary>
+        /// <returns>A clone of the parameter.</returns>
+        public abstract IDeepCloneable Clone();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Parameter{T}"/> to <typeparamref name="T"/>.

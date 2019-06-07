@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
             {
                 if (eb.TryGetValue(typeof(ITimeBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
-                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
             }
 
             // 2) Second, try the load behavior
@@ -81,7 +81,7 @@ namespace SpiceSharp.Simulations
             {
                 if (eb.TryGetValue(typeof(IBiasingBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
-                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
             }
 
             // 3) Thirdly, check temperature behavior
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
             {
                 if (eb.TryGetValue(typeof(ITemperatureBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
-                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
             }
 
             // 4) Check parameter sets

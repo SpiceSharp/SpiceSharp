@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        protected CommonBehaviors.IndependentFrequencyParameters FrequencyParameters { get; private set; }
+        protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
         /// Nodes
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
+            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
         }
 
         /// <summary>

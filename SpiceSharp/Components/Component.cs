@@ -12,11 +12,6 @@ namespace SpiceSharp.Components
     public abstract class Component : Entity
     {
         /// <summary>
-        /// The default priority for components.
-        /// </summary>
-        public const int ComponentPriority = 0;
-
-        /// <summary>
         /// Private variables
         /// </summary>
         private readonly string[] _connections;

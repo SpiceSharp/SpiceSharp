@@ -75,14 +75,14 @@ namespace SpiceSharp.Circuits
         /// <param name="value">The parameter value.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>False if the parameter could not be found.</returns>
-        public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
+        public bool SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
         /// Creates behaviors of the specified type.
         /// </summary>
         /// <param name="type">The types of behaviors that the simulation wants, in the order that they will be called.</param>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed.</param>
+        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
         {            

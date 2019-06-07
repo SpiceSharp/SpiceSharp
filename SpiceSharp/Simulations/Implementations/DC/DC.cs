@@ -137,7 +137,7 @@ namespace SpiceSharp.Simulations
                     var eb = EntityParameters[sweep.Parameter];
 
                     // Check for a Voltage source or Current source parameters
-                    if (eb.TryGet<Components.CommonBehaviors.IndependentBaseParameters>(out var ibp))
+                    if (eb.TryGet<Components.CommonBehaviors.IndependentSourceParameters>(out var ibp))
                         swept[i] = ibp.DcValue;
                     else
                         throw new CircuitException("Invalid sweep object");

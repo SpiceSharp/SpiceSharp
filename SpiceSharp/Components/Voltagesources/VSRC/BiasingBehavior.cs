@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The base parameters.
         /// </value>
-        protected CommonBehaviors.IndependentBaseParameters BaseParameters { get; private set; }
+        protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the current through the source.
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
+            BaseParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
 
             // Setup the waveform
             BaseParameters.Waveform?.Setup();

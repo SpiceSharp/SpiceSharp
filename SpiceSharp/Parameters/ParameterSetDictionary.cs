@@ -33,34 +33,16 @@ namespace SpiceSharp
         public Parameter<T> GetParameter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
-
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter<T>(name, comparer);
-                if (p != null)
-                    return p;
+                foreach (var member in ParameterHelper.GetNamedMembers(ps, name, comparer))
+                {
+                    if (Reflection.GetMember<Parameter<T>>(ps, member, out var p))
+                        return p;
+                }
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets a parameters and their names
-        /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        public IEnumerable<Tuple<Parameter<T>, List<string>>> GetParameters<T>() where T : struct
-        {
-            foreach (var ps in Values)
-            {
-                var types = ps.GetParameters<T>();
-                if (types != null)
-                {
-                    foreach (var tuple in types)
-                    {
-                        yield return tuple;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -74,9 +56,11 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter<T>();
-                if (p != null)
-                    return p;
+                foreach (var member in ParameterHelper.GetPrincipalMembers(ps))
+                {
+                    if (Reflection.GetMember<Parameter<T>>(ps, member, out var p))
+                        return p;
+                }
             }
 
             return null;
@@ -91,7 +75,7 @@ namespace SpiceSharp
         /// <returns>
         /// An action for setting the parameter with the specified type and name, or <c>null</c> if no parameter was found.
         /// </returns>
-        public Action<T> GetSetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
+        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -115,7 +99,7 @@ namespace SpiceSharp
         /// <remarks>
         /// Only the first encountered principal parameter will be set using the setter returned from this method.
         /// </remarks>
-        public Action<T> GetSetter<T>() where T : struct
+        public Action<T> CreateSetter<T>() where T : struct
         {
             foreach (var ps in Values)
             {
@@ -162,11 +146,11 @@ namespace SpiceSharp
         /// <remarks>
         /// Only the first encountered principal parameter will be set.
         /// </remarks>
-        public bool SetParameter<T>(T value) where T : struct
+        public bool SetPrincipalParameter<T>(T value) where T : struct
         {
             foreach (var ps in Values)
             {
-                if (ps.SetParameter(value))
+                if (ps.SetPrincipalParameter(value))
                     return true;
             }
 
@@ -213,28 +197,6 @@ namespace SpiceSharp
                     isset = true;
             }
 
-            return isset;
-        }
-
-        /// <summary>
-        /// Sets all parameter with a specified name in any parameter set in the dictionary.
-        /// </summary>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///   <c>true</c> if a parameter was set with the specified name; otherwise <c>false</c>.
-        /// </returns>
-        public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null)
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
-            var isset = false;
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(name, value, comparer))
-                    isset = true;
-            }
             return isset;
         }
     }

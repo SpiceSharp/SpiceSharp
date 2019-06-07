@@ -32,7 +32,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solution.
         /// </value>
-        public Vector<Complex> Solution { get; private set; }
+        public SpiceSharp.Algebra.Vector<Complex> Solution { get; private set; }
 
         /// <summary>
         /// Gets or sets the current laplace variable.

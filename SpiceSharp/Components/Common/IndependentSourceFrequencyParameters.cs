@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// <summary>
     /// AC parameters for an independent source.
     /// </summary>
-    public class IndependentFrequencyParameters : ParameterSet
+    public class IndependentSourceFrequencyParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        public IndependentFrequencyParameters()
+        public IndependentSourceFrequencyParameters()
         {
         }
 
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </summary>
         /// <param name="magnitude">Magnitude</param>
         /// <param name="phase">Phase</param>
-        public IndependentFrequencyParameters(double magnitude, double phase)
+        public IndependentSourceFrequencyParameters(double magnitude, double phase)
         {
             AcMagnitude.Value = magnitude;
             AcPhase.Value = phase;
@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </returns>
         public override ParameterSet DeepClone()
         {
-            var result = (IndependentFrequencyParameters) base.DeepClone();
+            var result = (IndependentSourceFrequencyParameters) base.DeepClone();
             result.Phasor = Phasor;
             return result;
         }

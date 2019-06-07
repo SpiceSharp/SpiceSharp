@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// Template for a waveform that can change value over time.
     /// </summary>
     /// <seealso cref="BaseParameter" />
-    public abstract class Waveform : BaseParameter
+    public abstract class Waveform : IDeepCloneable
     {
         /// <summary>
         /// Gets the current waveform value at the last probed timepoint.
@@ -40,13 +40,13 @@ namespace SpiceSharp.Components
         /// <returns>
         /// The cloned parameter.
         /// </returns>
-        public override BaseParameter Clone()
+        public IDeepCloneable Clone()
         {
             // 1. Make new object
             var destinationObject = (Waveform)Activator.CreateInstance(this.GetType());
 
             // 2. Copy properties of the current object
-            Utility.CopyPropertiesAndFields(this, destinationObject);
+            ParameterHelper.CopyPropertiesAndFields(this, destinationObject);
             return destinationObject;
         }
 
@@ -54,9 +54,10 @@ namespace SpiceSharp.Components
         /// Copies the contents of a parameter to this parameter.
         /// </summary>
         /// <param name="source">The source parameter.</param>
-        public override void CopyFrom(BaseParameter source)
+        public void CopyFrom(IDeepCloneable source)
         {
-            Utility.CopyPropertiesAndFields(source, this);
+            // Will throw an exception if the types do not match
+            ParameterHelper.CopyPropertiesAndFields(source, this);
         }
     }
 }

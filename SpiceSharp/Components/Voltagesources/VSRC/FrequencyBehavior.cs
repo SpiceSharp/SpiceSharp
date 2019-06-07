@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The frequency parameters.
         /// </value>
-        protected CommonBehaviors.IndependentFrequencyParameters FrequencyParameters { get; private set; }
+        protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
         /// Matrix elements
@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
+            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
         }
         
         /// <summary>
