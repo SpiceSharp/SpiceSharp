@@ -19,7 +19,6 @@ namespace SpiceSharp
     {
         private static Dictionary<Type, MethodInfo> _setValue = new Dictionary<Type, MethodInfo>();
         private static Dictionary<Type, MethodInfo> _getValue = new Dictionary<Type, MethodInfo>();
-        private static Dictionary<Type, MethodInfo> _copyValue = new Dictionary<Type, MethodInfo>();
 
         /// <summary>
         /// Get all members with a specified name.
@@ -78,35 +77,49 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets the value of the principal parameter. Only the first principal parameter is changed.
+        /// Sets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
         /// <param name="value">The value.</param>
         /// <returns>
         ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public static bool SetPrincipalParameter<T>(this object source, T value)
+        public static bool TrySetPrincipalParameter<T>(this object source, T value)
         {
-            var isset = false;
             foreach (var member in GetPrincipalMembers(source))
             {
                 if (SetMember(source, member, value))
-                    isset = true;
+                    return true;
             }
-            return isset;
+            return false;
         }
 
         /// <summary>
-        /// Sets a parameter with a specified name.
+        /// Sets the value of the principal parameters.
+        /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="value">The value.</param>
+        public static void SetPrincipalParameter<T>(this object source, T value)
+        {
+            if (!TrySetPrincipalParameter(source, value))
+                throw new CircuitException("No principal parameter found of type {0}".FormatString(typeof(T).Name));
+        }
+
+        /// <summary>
+        /// Tries setting a parameter with a specified name.
         /// If multiple parameters have the same name, they will all be set.
         /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
         /// </returns>
-        public static bool SetParameter<T>(this object source, string name, T value, IEqualityComparer<string> comparer = null)
+        public static bool TrySetParameter<T>(this object source, string name, T value, IEqualityComparer<string> comparer = null)
         {
             // Set the property if any
             var isset = false;
@@ -120,6 +133,20 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Sets a parameter with a specified name. If multiple parameters have the same name, they will all be set.
+        /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public static void SetParameter<T>(this object source, string name, T value, IEqualityComparer<string> comparer = null)
+        {
+            if (!TrySetParameter(source, name, value, comparer))
+                throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
+        }
+
+        /// <summary>
         /// Calls a method by name without arguments.
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
@@ -129,7 +156,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
         /// </returns>
-        public static bool SetParameter(this object source, string name, IEqualityComparer<string> comparer = null)
+        public static bool TrySetParameter(this object source, string name, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -152,6 +179,19 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Calls a method by name without arguments.
+        /// If multiple parameters by this name exist, all of them will be called.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the method.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public static void SetParameter(this object source, string name, IEqualityComparer<string> comparer = null)
+        {
+            if (!TrySetParameter(source, name, comparer))
+                throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
+        }
+
+        /// <summary>
         /// Get a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
         /// <typeparam name="T">The value type.</typeparam>
@@ -162,7 +202,7 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
         /// </returns>
-        public static bool GetParameter<T>(this object source, string name, out T value, IEqualityComparer<string> comparer = null)
+        public static bool TryGetParameter<T>(this object source, string name, out T value, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -188,7 +228,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public static T GetParameter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
         {
-            if (GetParameter<T>(source, name, out var result, comparer))
+            if (TryGetParameter<T>(source, name, out var result, comparer))
                 return result;
             throw new CircuitException("Parameter '{0}' does not exist for type '{1}'".FormatString(name, typeof(T).Name));
         }
@@ -200,7 +240,7 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool GetParameter<T>(this object source, out T value)
+        public static bool TryGetParameter<T>(this object source, out T value)
         {
             // Get the first principal parameter
             var member = GetPrincipalMembers(source).FirstOrDefault();
@@ -222,7 +262,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public static T GetParameter<T>(this object source)
         {
-            if (GetParameter<T>(source, out var result))
+            if (TryGetParameter<T>(source, out var result))
                 return result;
             throw new CircuitException("Principal parameter does not exist for type '{1}'".FormatString(typeof(T).Name));
         }
@@ -363,7 +403,7 @@ namespace SpiceSharp
         /// <param name="name">The name of the parameter.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.</returns>
-        public static Action<T> CreateSetter<T>(this object source, string name, IEqualityComparer<string> comparer = null) where T : struct
+        public static Action<T> CreateSetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
         {
             foreach (var member in GetNamedMembers(source, name, comparer))
             {

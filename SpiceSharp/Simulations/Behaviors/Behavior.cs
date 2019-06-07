@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using SpiceSharp;
 using System.Reflection;
 using System.Linq;
 
@@ -57,7 +56,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="simulation">The simulation.</param>
         /// <param name="name">The parameter name.</param>
         /// <returns></returns>
-        public Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null) where T : struct
+        public Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null)
         {
             // First find the method
             comparer = comparer ?? EqualityComparer<string>.Default;

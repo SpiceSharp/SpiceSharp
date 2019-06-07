@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -37,6 +38,17 @@ namespace SpiceSharp
             /// Gets the cached list of attributes for the member.
             /// </summary>
             public List<Attribute> Attributes { get; private set; }
+
+            public override string ToString()
+            {
+                if (Member == null)
+                    return "null";
+                string result = Member.Name;
+                string[] names = Attributes.Where(m => m is ParameterNameAttribute).Select(m => ((ParameterNameAttribute)m).Name).ToArray();
+                if (names.Length > 0)
+                    result += " (" + string.Join(", ", names) + ")";
+                return result;
+            }
         }
 
         private static readonly Dictionary<Type, List<CachedMemberInfo>> _membersDict = new Dictionary<Type, List<CachedMemberInfo>>();

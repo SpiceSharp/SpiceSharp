@@ -17,32 +17,7 @@ namespace SpiceSharp
         {
             if (set == null)
                 throw new ArgumentNullException(nameof(set));
-
             Add(set.GetType(), set);
-        }
-
-        /// <summary>
-        /// Gets a parameter from any parameter set in the dictionary.
-        /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        /// The parameter of the specified type and with the specified name, or <c>null</c> if no parameter was found.
-        /// </returns>
-        public Parameter<T> GetParameter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-            foreach (var ps in Values)
-            {
-                foreach (var member in ParameterHelper.GetNamedMembers(ps, name, comparer))
-                {
-                    if (Reflection.GetMember<Parameter<T>>(ps, member, out var p))
-                        return p;
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -50,20 +25,41 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <returns>
-        /// The principal parameter of the specified type, or <c>null</c> if no principal parameter was found.
+        /// The principal parameter of the specified type.
         /// </returns>
-        public Parameter<T> GetParameter<T>() where T : struct
+        public T GetParameter<T>()
         {
             foreach (var ps in Values)
             {
                 foreach (var member in ParameterHelper.GetPrincipalMembers(ps))
                 {
-                    if (Reflection.GetMember<Parameter<T>>(ps, member, out var p))
+                    if (ParameterHelper.GetMember<T>(ps, member, out var p))
                         return p;
                 }
             }
 
-            return null;
+            throw new CircuitException("No principal parameter found of type {1}".FormatString(typeof(T).Name));
+        }
+
+        /// <summary>
+        /// Gets a named parameter from any parameter set in the dictionary.
+        /// </summary>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns></returns>
+        public T GetParameter<T>(string name, IEqualityComparer<string> comparer = null)
+        {
+            foreach (var ps in Values)
+            {
+                foreach (var member in ParameterHelper.GetNamedMembers(ps, name, comparer))
+                {
+                    if (ParameterHelper.GetMember<T>(ps, member, out var p))
+                        return p;
+                }
+            }
+
+            throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
         }
 
         /// <summary>
@@ -75,7 +71,7 @@ namespace SpiceSharp
         /// <returns>
         /// An action for setting the parameter with the specified type and name, or <c>null</c> if no parameter was found.
         /// </returns>
-        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
+        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -99,7 +95,7 @@ namespace SpiceSharp
         /// <remarks>
         /// Only the first encountered principal parameter will be set using the setter returned from this method.
         /// </remarks>
-        public Action<T> CreateSetter<T>() where T : struct
+        public Action<T> CreateSetter<T>()
         {
             foreach (var ps in Values)
             {
@@ -121,18 +117,20 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if one or more parameters were set, otherwise <c>false</c>.
         /// </returns>
-        public bool SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) where T : struct
+        public void SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
             var isset = false;
             foreach (var ps in Values)
             {
-                if (ps.SetParameter(name, value, comparer))
+                if (ps.TrySetParameter(name, value, comparer))
                     isset = true;
             }
 
-            return isset;
+
+            if (!isset)
+                throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
         }
 
         /// <summary>
@@ -146,35 +144,15 @@ namespace SpiceSharp
         /// <remarks>
         /// Only the first encountered principal parameter will be set.
         /// </remarks>
-        public bool SetPrincipalParameter<T>(T value) where T : struct
+        public bool SetPrincipalParameter<T>(T value)
         {
             foreach (var ps in Values)
             {
-                if (ps.SetPrincipalParameter(value))
+                if (ps.TrySetPrincipalParameter(value))
                     return true;
             }
 
-            return false;
-        }
-
-        /// <summary>
-        /// Calls a parameter method with a specified name. If multiple methods exist,
-        /// all of them will be called.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <returns>
-        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
-        /// </returns>
-        public bool SetParameter(string name)
-        {
-            var isset = false;
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(name))
-                    isset = true;
-            }
-
-            return isset;
+            throw new CircuitException("No principal parameter found of type {1}".FormatString(typeof(T).Name));
         }
 
         /// <summary>
@@ -186,18 +164,19 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
         /// </returns>
-        public bool SetParameter(string name, IEqualityComparer<string> comparer)
+        public void SetParameter(string name, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
             var isset = false;
             foreach (var ps in Values)
             {
-                if (ps.SetParameter(name, comparer))
+                if (ps.TrySetParameter(name, comparer))
                     isset = true;
             }
 
-            return isset;
+            if (!isset)
+                throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
         }
     }
 }

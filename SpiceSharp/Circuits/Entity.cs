@@ -66,7 +66,7 @@ namespace SpiceSharp.Circuits
         /// <param name="value">The parameter value.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>False if the parameter could not be found.</returns>
-        public bool SetParameter(string name, double value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
+        public void SetParameter(string name, double value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
         /// Sets a parameter with a specific name.
@@ -75,7 +75,7 @@ namespace SpiceSharp.Circuits
         /// <param name="value">The parameter value.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>False if the parameter could not be found.</returns>
-        public bool SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
+        public void SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) => ParameterSets.SetParameter(name, value, comparer);
 
         /// <summary>
         /// Creates behaviors of the specified type.
