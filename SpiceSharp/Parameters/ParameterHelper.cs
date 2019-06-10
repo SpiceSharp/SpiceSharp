@@ -17,40 +17,8 @@ namespace SpiceSharp
     /// </remarks>
     public static class ParameterHelper
     {
-        private static Dictionary<Type, MethodInfo> _setValue = new Dictionary<Type, MethodInfo>();
-        private static Dictionary<Type, MethodInfo> _getValue = new Dictionary<Type, MethodInfo>();
-
-        /// <summary>
-        /// Get all members with a specified name.
-        /// </summary>
-        /// <remarks>
-        /// You can specify a parameter name using the <seealso cref="ParameterNameAttribute" /> attribute.</remarks>
-        /// <param name="source">The source object.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns></returns>
-        public static IEnumerable<MemberInfo> GetNamedMembers(object source, string name, IEqualityComparer<string> comparer = null)
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-            return Reflection.GetMembers(source)
-                .Where(m => m.Attributes.Any(r => r is ParameterNameAttribute p && comparer.Equals(p.Name, name)))
-                .Select(m => m.Member);
-        }
-
-        /// <summary>
-        /// Get all principal members.
-        /// </summary>
-        /// <remarks>
-        /// You can specify a parameter as principal using the <seealso cref="ParameterInfoAttribute" /> attribute, using the "IsPrincipal" flag.
-        /// </remarks>
-        /// <param name="source">The source object.</param>
-        /// <returns></returns>
-        public static IEnumerable<MemberInfo> GetPrincipalMembers(object source)
-        {
-            return Reflection.GetMembers(source)
-                .Where(m => m.Attributes.Any(r => r is ParameterInfoAttribute p && p.IsPrincipal))
-                .Select(m => m.Member);
-        }
+        private static readonly Dictionary<Type, MethodInfo> _setvalue = new Dictionary<Type, MethodInfo>();
+        private static readonly Dictionary<Type, MethodInfo> _getvalue = new Dictionary<Type, MethodInfo>();
 
         /// <summary>
         /// This method will check whether or not a type is a parameter (implements <seealso cref="Parameter{T}"/>).
@@ -87,7 +55,7 @@ namespace SpiceSharp
         /// </returns>
         public static bool TrySetPrincipalParameter<T>(this object source, T value)
         {
-            foreach (var member in GetPrincipalMembers(source))
+            foreach (var member in Reflection.GetPrincipalMembers(source))
             {
                 if (SetMember(source, member, value))
                     return true;
@@ -123,7 +91,7 @@ namespace SpiceSharp
         {
             // Set the property if any
             var isset = false;
-            foreach (var member in GetNamedMembers(source, name, comparer))
+            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
             {
                 // Set the member
                 if (SetMember(source, member, value))
@@ -162,7 +130,7 @@ namespace SpiceSharp
 
             // Set the property if any
             var isset = false;
-            foreach (var member in GetNamedMembers(source, name, comparer))
+            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
             {
                 // Set the member
                 if (member is MethodInfo mi)
@@ -207,7 +175,7 @@ namespace SpiceSharp
             comparer = comparer ?? EqualityComparer<string>.Default;
 
             // Get the associated member
-            var member = GetNamedMembers(source, name, comparer).FirstOrDefault();
+            var member = Reflection.GetNamedMembers(source, name, comparer).FirstOrDefault();
             if (member == null)
             {
                 value = default;
@@ -243,7 +211,7 @@ namespace SpiceSharp
         public static bool TryGetParameter<T>(this object source, out T value)
         {
             // Get the first principal parameter
-            var member = GetPrincipalMembers(source).FirstOrDefault();
+            var member = Reflection.GetPrincipalMembers(source).FirstOrDefault();
             if (member == null)
             {
                 value = default;
@@ -268,7 +236,8 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets the value of a member.
+        /// Sets the value of a member. If the member is a property that implements <seealso cref="Parameter{T}" />
+        /// then the parameter value is set.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="source">The source object.</param>
@@ -286,10 +255,10 @@ namespace SpiceSharp
                 if (parameterType != null)
                 {
                     // This is a parameter! Instead of getting
-                    if (!_setValue.TryGetValue(parameterType, out var method))
+                    if (!_setvalue.TryGetValue(parameterType, out var method))
                     {
                         method = parameterType.GetTypeInfo().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetSetMethod();
-                        _setValue.Add(parameterType, method);
+                        _setvalue.Add(parameterType, method);
                     }
                     method.Invoke(pi.GetValue(source), new object[] { value });
                     return true;
@@ -300,7 +269,8 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Gets a value of a member.
+        /// Gets a value of a member. If the member is a property that implements <seealso cref="Parameter{T}" />
+        /// then the parameter value is returned.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="source">The source object.</param>
@@ -318,17 +288,17 @@ namespace SpiceSharp
                 if (parameterType != null)
                 {
                     // This is a parameter! Instead of getting
-                    if (!_getValue.TryGetValue(parameterType, out var method))
+                    if (!_getvalue.TryGetValue(parameterType, out var method))
                     {
                         method = parameterType.GetTypeInfo().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
-                        _getValue.Add(parameterType, method);
+                        _getvalue.Add(parameterType, method);
                     }
                     value = (T)method.Invoke(pi.GetValue(source), null);
                     return true;
                 }
             }
 
-            return Reflection.GetMember<T>(source, member, out value);
+            return Reflection.GetMember(source, member, out value);
         }
 
         /// <summary>
@@ -344,7 +314,7 @@ namespace SpiceSharp
         /// <returns>A function returning the value of the principal parameter, or <c>null</c> if there is no principal parameter.</returns>
         public static Func<T> CreateGetter<T>(this object source)
         {
-            foreach (var member in GetPrincipalMembers(source))
+            foreach (var member in Reflection.GetPrincipalMembers(source))
             {
                 var result = CreateGetterForMember<T>(source, member);
                 if (result != null)
@@ -363,7 +333,7 @@ namespace SpiceSharp
         /// <returns>A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.</returns>
         public static Func<T> CreateGetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
         {
-            foreach (var member in GetNamedMembers(source, name, comparer))
+            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
             {
                 var result = CreateGetterForMember<T>(source, member);
                 if (result != null)
@@ -386,7 +356,7 @@ namespace SpiceSharp
         /// <returns>An action that can set the value of the principal parameter, or <c>null</c> if there is no principal parameter.</returns>
         public static Action<T> CreateSetter<T>(this object source)
         {
-            foreach (var member in GetPrincipalMembers(source))
+            foreach (var member in Reflection.GetPrincipalMembers(source))
             {
                 var result = CreateSetterForMember<T>(source, member);
                 if (result != null)
@@ -405,7 +375,7 @@ namespace SpiceSharp
         /// <returns>A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.</returns>
         public static Action<T> CreateSetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
         {
-            foreach (var member in GetNamedMembers(source, name, comparer))
+            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
             {
                 var result = CreateSetterForMember<T>(source, member);
                 if (result != null)
@@ -413,91 +383,6 @@ namespace SpiceSharp
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Copies all properties and fields from a source object to a destination object.
-        /// </summary>
-        /// <remarks>
-        /// This method heavily uses reflection to find valid properties and methods. It supports properties and fields
-        /// of types <see cref="double"/>, <see cref="int"/>, <see cref="string"/>, <see cref="bool"/> and
-        /// <see cref="BaseParameter"/>.
-        /// </remarks>
-        /// <param name="source">The source object.</param>
-        /// <param name="destination">The destination object</param>
-        public static void CopyPropertiesAndFields(object source, object destination)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (destination == null)
-                throw new ArgumentNullException(nameof(destination));
-            if (source.GetType() != destination.GetType())
-                throw new ArgumentException(@"Source and target are not of the same type.");
-
-            var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
-            foreach (var member in members)
-            {
-                if (member is PropertyInfo pi)
-                {
-                    if (pi.GetCustomAttribute(typeof(DerivedPropertyAttribute)) != null)
-                    {
-                        // skip properties with DerivedPropertyAttribute because their value will be set elsewhere
-                        continue;
-                    }
-
-                    if (pi.CanWrite)
-                    {
-                        if (pi.PropertyType == typeof(double))
-                            pi.SetValue(destination, (double)pi.GetValue(source));
-                        else if (pi.PropertyType == typeof(int))
-                            pi.SetValue(destination, (int)pi.GetValue(source));
-                        else if (pi.PropertyType == typeof(string))
-                            pi.SetValue(destination, (string)pi.GetValue(source));
-                        else if (pi.PropertyType == typeof(bool))
-                            pi.SetValue(destination, (bool)pi.GetValue(source));
-                        else if (pi.PropertyType.GetTypeInfo().GetInterfaces().Contains(typeof(IDeepCloneable)))
-                        {
-                            var target = (IDeepCloneable)pi.GetValue(destination);
-                            var from = (IDeepCloneable)pi.GetValue(source);
-                            if (target != null && from != null)
-                                target.CopyFrom(from);
-                            else
-                                pi.SetValue(destination, from?.Clone());
-                        }
-                    }
-                    else
-                    {
-                        // We can't write ourself, but maybe we can just copy
-                        if (pi.PropertyType.GetTypeInfo().GetInterfaces().Contains(typeof(IDeepCloneable)))
-                        {
-                            var target = (IDeepCloneable)pi.GetValue(destination);
-                            var from = (IDeepCloneable)pi.GetValue(source);
-                            if (target != null && from != null)
-                                target.CopyFrom(from);
-                        }
-                    }
-                }
-                else if (member is FieldInfo fi)
-                {
-                    if (fi.FieldType == typeof(double))
-                        fi.SetValue(destination, (double)fi.GetValue(source));
-                    else if (fi.FieldType == typeof(int))
-                        fi.SetValue(destination, (int)fi.GetValue(source));
-                    else if (fi.FieldType == typeof(string))
-                        fi.SetValue(destination, (string)fi.GetValue(source));
-                    else if (fi.FieldType == typeof(bool))
-                        fi.SetValue(destination, (bool)fi.GetValue(source));
-                    else if (fi.FieldType.GetTypeInfo().GetInterfaces().Contains(typeof(IDeepCloneable)))
-                    {
-                        var target = (IDeepCloneable)fi.GetValue(destination);
-                        var from = (IDeepCloneable)fi.GetValue(source);
-                        if (target != null && from != null)
-                            target.CopyFrom(from);
-                        else
-                            fi.SetValue(destination, from?.Clone());
-                    }
-                }
-            }
         }
 
         /// <summary>

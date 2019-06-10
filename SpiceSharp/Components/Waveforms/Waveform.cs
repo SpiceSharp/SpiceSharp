@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// Template for a waveform that can change value over time.
     /// </summary>
     /// <seealso cref="BaseParameter" />
-    public abstract class Waveform : IDeepCloneable
+    public abstract class Waveform : ICloneable, ICloneable<Waveform>
     {
         /// <summary>
         /// Gets the current waveform value at the last probed timepoint.
@@ -35,29 +35,37 @@ namespace SpiceSharp.Components
         public abstract void Accept(TimeSimulation simulation);
 
         /// <summary>
-        /// Clones the parameter.
+        /// Clones the waveform.
         /// </summary>
         /// <returns>
-        /// The cloned parameter.
+        /// The cloned waveform.
         /// </returns>
-        public IDeepCloneable Clone()
+        public virtual Waveform Clone()
         {
-            // 1. Make new object
             var destinationObject = (Waveform)Activator.CreateInstance(this.GetType());
-
-            // 2. Copy properties of the current object
-            ParameterHelper.CopyPropertiesAndFields(this, destinationObject);
+            Reflection.CopyPropertiesAndFields(this, destinationObject);
             return destinationObject;
         }
 
         /// <summary>
-        /// Copies the contents of a parameter to this parameter.
+        /// Clones the object.
+        /// </summary>
+        /// <returns></returns>
+        ICloneable ICloneable.Clone() => Clone();
+
+        /// <summary>
+        /// Copies the contents of another waveform to this one.
         /// </summary>
         /// <param name="source">The source parameter.</param>
-        public void CopyFrom(IDeepCloneable source)
+        public virtual void CopyFrom(Waveform source)
         {
-            // Will throw an exception if the types do not match
-            ParameterHelper.CopyPropertiesAndFields(source, this);
+            Reflection.CopyPropertiesAndFields(source, this);
         }
+
+        /// <summary>
+        /// Copy the contents of another object to this one.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((Waveform)source);
     }
 }

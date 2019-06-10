@@ -329,7 +329,7 @@ namespace SpiceSharp.Simulations
             {
                 foreach (var p in entity.ParameterSets.Values)
                 {
-                    var parameterset = _cloneParameters ? p.DeepClone() : p;
+                    var parameterset = (ParameterSet)(_cloneParameters ? p.Clone() : p);
                     parameterset.CalculateDefaults();
                     EntityParameters.Add(entity.Name, parameterset);
                 }

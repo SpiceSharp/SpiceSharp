@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
     /// <seealso cref="BaseParameter" />
-    public abstract class Parameter<T> : IDeepCloneable where T : struct
+    public abstract class Parameter<T> : ICloneable, ICloneable<Parameter<T>>
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
@@ -23,12 +23,12 @@ namespace SpiceSharp
         /// <param name="source">The source parameter.</param>
         /// <exception cref="ArgumentNullException">source</exception>
         /// <exception cref="CircuitException">Cannot copy: source is not a Parameter</exception>
-        public virtual void CopyFrom(IDeepCloneable source)
+        public virtual void CopyFrom(Parameter<T> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (source.GetType() == this.GetType())
-                ParameterHelper.CopyPropertiesAndFields(source, this);
+                Reflection.CopyPropertiesAndFields(source, this);
             else if (source is Parameter<T> p)
                 Value = p.Value;
             else
@@ -36,10 +36,27 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Copies the contents of an object to this object.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((Parameter<T>)source);
+
+        /// <summary>
         /// Clone the current parameter.
         /// </summary>
         /// <returns>A clone of the parameter.</returns>
-        public abstract IDeepCloneable Clone();
+        public virtual Parameter<T> Clone()
+        {
+            var clone = Activator.CreateInstance(GetType());
+            Reflection.CopyPropertiesAndFields(this, clone);
+            return (Parameter<T>)clone;
+        }
+
+        /// <summary>
+        /// Clone the current object.
+        /// </summary>
+        /// <returns>A clone of the object.</returns>
+        ICloneable ICloneable.Clone() => Clone();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Parameter{T}"/> to <typeparamref name="T"/>.
@@ -48,7 +65,12 @@ namespace SpiceSharp
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static implicit operator T(Parameter<T> parameter) => parameter?.Value ?? default(T);
+        public static implicit operator T(Parameter<T> parameter)
+        {
+            if (parameter == null)
+                return default;
+            return parameter.Value;
+        }
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

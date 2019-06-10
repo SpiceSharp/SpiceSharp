@@ -60,7 +60,7 @@ namespace SpiceSharp.Simulations.Behaviors
         {
             // Find methods to create the export
             Func<T> result = null;
-            foreach (var member in ParameterHelper.GetNamedMembers(this, propertyName, comparer))
+            foreach (var member in Reflection.GetNamedMembers(this, propertyName, comparer))
             {
                 // Use methods
                 if (member is MethodInfo mi)

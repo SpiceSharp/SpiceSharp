@@ -11,7 +11,7 @@ namespace SpiceSharp
     /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
     /// </remarks>
     /// <seealso cref="NamedParameterized" />
-    public abstract class ParameterSet
+    public abstract class ParameterSet : ICloneable, ICloneable<ParameterSet>
     {
         /// <summary>
         /// Method for calculating the default values of derived parameters.
@@ -25,19 +25,39 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Creates a deep clone of the parameter set.
+        /// Creates a clone of the parameter set.
         /// </summary>
         /// <returns>
-        /// A deep clone of the parameter set.
+        /// A clone of the parameter set.
         /// </returns>
-        public virtual ParameterSet DeepClone()
+        public virtual ParameterSet Clone()
         {
-            // 1. Make new object
             var destinationObject = (ParameterSet) Activator.CreateInstance(GetType());
-
-            // 2. Copy properties of the current object
-            ParameterHelper.CopyPropertiesAndFields(this, destinationObject);
+            Reflection.CopyPropertiesAndFields(this, destinationObject);
             return destinationObject;
         }
+
+        /// <summary>
+        /// Creates a clone of the parameter set.
+        /// </summary>
+        /// <returns>
+        /// A clone of the parameter set.
+        /// </returns>
+        ICloneable ICloneable.Clone() => Clone();
+
+        /// <summary>
+        /// Copy properties and fields from another parameter set.
+        /// </summary>
+        /// <param name="source">The source parameter set.</param>
+        public virtual void CopyFrom(ParameterSet source)
+        {
+            Reflection.CopyPropertiesAndFields(source, this);
+        }
+
+        /// <summary>
+        /// Copy parameters from another object.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((ParameterSet)source);
     }
 }

@@ -60,7 +60,7 @@ namespace SpiceSharp.Behaviors
         {
             // First find the method
             comparer = comparer ?? EqualityComparer<string>.Default;
-            var method = ParameterHelper.GetNamedMembers(this, name, comparer).FirstOrDefault(m => m is MethodInfo) as MethodInfo;
+            var method = Reflection.GetNamedMembers(this, name, comparer).FirstOrDefault(m => m is MethodInfo) as MethodInfo;
             if (method == null || method.ReturnType != typeof(T))
             {
                 // Fall back to any member

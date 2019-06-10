@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// A dictionary of <see cref="ParameterSet" />. Only one instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{ParameterSet}" />
-    public class ParameterSetDictionary : TypeDictionary<ParameterSet>
+    public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>
     {
         /// <summary>
         /// Adds a parameter set to the dictionary.
@@ -31,7 +31,7 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                foreach (var member in ParameterHelper.GetPrincipalMembers(ps))
+                foreach (var member in Reflection.GetPrincipalMembers(ps))
                 {
                     if (ParameterHelper.GetMember<T>(ps, member, out var p))
                         return p;
@@ -52,7 +52,7 @@ namespace SpiceSharp
         {
             foreach (var ps in Values)
             {
-                foreach (var member in ParameterHelper.GetNamedMembers(ps, name, comparer))
+                foreach (var member in Reflection.GetNamedMembers(ps, name, comparer))
                 {
                     if (ParameterHelper.GetMember<T>(ps, member, out var p))
                         return p;
@@ -178,5 +178,45 @@ namespace SpiceSharp
             if (!isset)
                 throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
         }
+
+        /// <summary>
+        /// Clone the dictionary.
+        /// </summary>
+        /// <returns></returns>
+        public virtual ParameterSetDictionary Clone()
+        {
+            var clone = Activator.CreateInstance(GetType());
+            Reflection.CopyPropertiesAndFields(this, clone);
+            return (ParameterSetDictionary)clone;
+        }
+
+        /// <summary>
+        /// Clone the object.
+        /// </summary>
+        /// <returns></returns>
+        ICloneable ICloneable.Clone() => Clone();
+
+        /// <summary>
+        /// Copy all parameter sets.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        public virtual void CopyFrom(ParameterSetDictionary source)
+        {
+            var d = source as ParameterSetDictionary ?? throw new CircuitException("Cannot copy, type mismatch");
+            foreach (var ps in d.Values)
+            {
+                // If the parameter set doesn't exist, then we will simply clone it, else copy them
+                if (!TryGetValue(ps.GetType(), out var myps))
+                    Add(ps.Clone());
+                else
+                    Reflection.CopyPropertiesAndFields(ps, myps);
+            }
+        }
+
+        /// <summary>
+        /// Copy all properties from another object to this one.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((ParameterSetDictionary)source);
     }
 }

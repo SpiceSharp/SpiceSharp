@@ -69,11 +69,21 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         /// A deep clone of the parameter set.
         /// </returns>
-        public override ParameterSet DeepClone()
+        public override ParameterSet Clone()
         {
-            var result = (IndependentSourceFrequencyParameters) base.DeepClone();
+            var result = (IndependentSourceFrequencyParameters) base.Clone();
             result.Phasor = Phasor;
             return result;
+        }
+
+        /// <summary>
+        /// Copy parameters.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        public override void CopyFrom(ParameterSet source)
+        {
+            base.CopyFrom(source);
+            Phasor = ((IndependentSourceFrequencyParameters)source).Phasor;
         }
 
         /// <summary>
