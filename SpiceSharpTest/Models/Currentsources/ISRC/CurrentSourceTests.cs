@@ -112,5 +112,29 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-8, 1e-5);
             tran.Run(ckt);
         }
+
+        [Test]
+        public void When_CurrentSourceCloned_Expect_Reference()
+        {
+            // Let's check cloning of entities here.
+            var isrc = new CurrentSource("I1", "A", "B", 1.0);
+            isrc.SetParameter("waveform", new Pulse(0.0, 1.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5));
+            isrc.SetParameter("ac", new double[] { 1.0, 2.0 });
+
+            // Clone the entity
+            var clone = (CurrentSource)isrc.Clone();
+
+            // Change some stuff (should not be reflected in the clone)
+            isrc.GetParameter<Waveform>("waveform").SetParameter("v2", 2.0);
+
+            // Check
+            Assert.AreEqual(isrc.Name, clone.Name);
+            Assert.AreEqual(isrc.GetNode(0), clone.GetNode(0));
+            Assert.AreEqual(isrc.GetNode(1), clone.GetNode(1));
+            var waveform = (Pulse) clone.GetParameter<Waveform>("waveform");
+            Assert.AreEqual(0.0, waveform.InitialValue.Value, 1e-12);
+            Assert.AreEqual(1.0, waveform.PulsedValue.Value, 1e-12);
+            Assert.AreEqual(1e-5, waveform.GetParameter<double>("per"), 1e-12);
+        }
     }
 }

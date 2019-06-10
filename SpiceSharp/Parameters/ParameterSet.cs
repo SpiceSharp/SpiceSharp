@@ -32,9 +32,9 @@ namespace SpiceSharp
         /// </returns>
         public virtual ParameterSet Clone()
         {
-            var destinationObject = (ParameterSet) Activator.CreateInstance(GetType());
-            Reflection.CopyPropertiesAndFields(this, destinationObject);
-            return destinationObject;
+            var clone = (ParameterSet) Activator.CreateInstance(GetType());
+            clone.CopyFrom(this);
+            return clone;
         }
 
         /// <summary>

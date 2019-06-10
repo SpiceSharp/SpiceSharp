@@ -47,9 +47,9 @@ namespace SpiceSharp
         /// <returns>A clone of the parameter.</returns>
         public virtual Parameter<T> Clone()
         {
-            var clone = Activator.CreateInstance(GetType());
-            Reflection.CopyPropertiesAndFields(this, clone);
-            return (Parameter<T>)clone;
+            var clone = (Parameter<T>)Activator.CreateInstance(GetType());
+            clone.CopyFrom(this);
+            return clone;
         }
 
         /// <summary>

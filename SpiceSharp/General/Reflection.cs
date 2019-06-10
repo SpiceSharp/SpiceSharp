@@ -139,7 +139,7 @@ namespace SpiceSharp
         {
             if (member is PropertyInfo pi)
             {
-                if (pi.PropertyType == typeof(T) && pi.CanWrite)
+                if (pi.CanWrite && pi.PropertyType.GetTypeInfo().IsAssignableFrom(typeof(T)))
                 {
                     pi.SetValue(source, value);
                     return true;
@@ -147,7 +147,7 @@ namespace SpiceSharp
             }
             else if (member is FieldInfo fi)
             {
-                if (fi.FieldType == typeof(T))
+                if (fi.FieldType.GetTypeInfo().IsAssignableFrom(typeof(T)))
                 {
                     fi.SetValue(source, value);
                     return true;
@@ -159,7 +159,7 @@ namespace SpiceSharp
                 if (mi.ReturnType == typeof(void))
                 {
                     var paraminfo = mi.GetParameters();
-                    if (paraminfo.Length == 1 && paraminfo[0].ParameterType == typeof(T))
+                    if (paraminfo.Length == 1 && paraminfo[0].ParameterType.GetTypeInfo().IsAssignableFrom(typeof(T)))
                     {
                         mi.Invoke(source, new object[] { value });
                         return true;
@@ -182,9 +182,10 @@ namespace SpiceSharp
         /// </returns>
         public static bool GetMember<T>(object source, MemberInfo member, out T value)
         {
+            var info = typeof(T).GetTypeInfo();
             if (member is PropertyInfo pi)
             {
-                if (pi.CanRead)
+                if (pi.CanRead && info.IsAssignableFrom(pi.PropertyType))
                 {
                     value = (T)pi.GetValue(source);
                     return true;
@@ -192,17 +193,23 @@ namespace SpiceSharp
             }
             else if (member is FieldInfo fi)
             {
-                value = (T)fi.GetValue(source);
-                return true;
+                if (info.IsAssignableFrom(fi.FieldType))
+                {
+                    value = (T)fi.GetValue(source);
+                    return true;
+                }
             }
             else if (member is MethodInfo mi)
             {
-                // Methods
-                var paraminfo = mi.GetParameters();
-                if (paraminfo.Length == 0)
+                if (info.IsAssignableFrom(mi.ReturnType))
                 {
-                    value = (T)mi.Invoke(source, new object[] { });
-                    return true;
+                    // Methods
+                    var paraminfo = mi.GetParameters();
+                    if (paraminfo.Length == 0)
+                    {
+                        value = (T)mi.Invoke(source, new object[] { });
+                        return true;
+                    }
                 }
             }
 

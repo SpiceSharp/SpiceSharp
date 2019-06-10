@@ -163,5 +163,17 @@ namespace SpiceSharp.Components
                 yield return index;
             }
         }
+
+        /// <summary>
+        /// Copy from another component.
+        /// </summary>
+        /// <param name="source">The source component.</param>
+        public override void CopyFrom(Entity source)
+        {
+            base.CopyFrom(source);
+            var c = (Component)source;
+            for (var i = 0; i < PinCount; i++)
+                _connections[i] = c._connections[i];
+        }
     }
 }
