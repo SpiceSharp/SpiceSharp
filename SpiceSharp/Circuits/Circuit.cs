@@ -71,5 +71,28 @@ namespace SpiceSharp
             var validator = new Validator();
             validator.Validate(this);
         }
+
+        /// <summary>
+        /// Merge a circuit with this one. Entities are merged by reference!
+        /// </summary>
+        /// <param name="ckt"></param>
+        public void Merge(Circuit ckt)
+        {
+            foreach (var entity in ckt)
+                Add(entity);
+        }
+
+        /// <summary>
+        /// Instantiate another circuit as a subcircuit.
+        /// </summary>
+        /// <param name="data">The instance data.</param>
+        public void Instantiate(InstanceData data)
+        {
+            foreach (var entity in data.Subcircuit)
+            {
+                var clone = entity.Clone(data);
+                Add(clone);
+            }
+        }
     }
 }

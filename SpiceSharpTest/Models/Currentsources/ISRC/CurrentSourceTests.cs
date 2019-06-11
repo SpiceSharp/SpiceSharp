@@ -134,6 +134,7 @@ namespace SpiceSharpTest.Models
             var waveform = (Pulse) clone.GetParameter<Waveform>("waveform");
             Assert.AreEqual(0.0, waveform.InitialValue.Value, 1e-12);
             Assert.AreEqual(1.0, waveform.PulsedValue.Value, 1e-12);
+            Assert.AreEqual(2.0, isrc.GetParameter<Waveform>("waveform").GetParameter<double>("v2"));
             Assert.AreEqual(1e-5, waveform.GetParameter<double>("per"), 1e-12);
         }
     }

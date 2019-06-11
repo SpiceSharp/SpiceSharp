@@ -34,6 +34,8 @@ namespace SpiceSharp
         /// <returns></returns>
         public static string Combine(this string name, string appendix)
         {
+            if (name == null)
+                return appendix;
             return name + Separator + appendix;
         }
     }

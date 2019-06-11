@@ -2,7 +2,7 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 
-namespace SpiceSharpTest.Validation
+namespace SpiceSharpTest.Circuits
 {
     [TestFixture]
     public class ValidatorTests

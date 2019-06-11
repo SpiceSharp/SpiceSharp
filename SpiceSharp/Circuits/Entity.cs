@@ -220,13 +220,13 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Clone the entity.
+        /// Clone the entity for instancing a circuit as a subcircuit.
         /// </summary>
-        /// <param name="name">The name of the cloned entity.</param>
+        /// <param name="data">The instancing data.</param>
         /// <returns></returns>
-        public Entity Clone(string name)
+        public virtual Entity Clone(InstanceData data)
         {
-            var clone = (Entity)Activator.CreateInstance(GetType(), name);
+            var clone = (Entity)Activator.CreateInstance(GetType(), data.GenerateIdentifier(Name));
             clone.CopyFrom(this);
             return clone;
         }
