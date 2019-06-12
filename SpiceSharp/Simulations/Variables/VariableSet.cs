@@ -18,33 +18,6 @@ namespace SpiceSharp.Simulations
         private bool _locked;
 
         /// <summary>
-        /// The initial conditions. Obsolete, use initial conditions in the <see cref="TimeConfiguration" /> of a <see cref="TimeSimulation" /> instead.
-        /// </summary>
-        /// <value>
-        /// The initial conditions by their variable identifier name.
-        /// </value>
-        /// <remarks>
-        /// Initial conditions specify at which value a <see cref="TimeSimulation" /> should start.
-        /// </remarks>
-        /// <seealso cref="TimeSimulation" />
-        [Obsolete]
-        public Dictionary<string, double> InitialConditions { get; } = new Dictionary<string, double>();
-
-        /// <summary>
-        /// The nodeset values by their variable identifier name. Obsolete, use nodesets in the <see cref="BaseConfiguration" /> of a <see cref="BaseSimulation" /> instead.
-        /// </summary>
-        /// <value>
-        /// The node sets.
-        /// </value>
-        /// <remarks>
-        /// Nodeset values can help convergence. Specifying values here will allow the simulator
-        /// to find a starting point while iterating to a solution. Choosing some values close to the
-        /// final solution will usually speed up convergence greatly.
-        /// </remarks>
-        [Obsolete]
-        public Dictionary<string, double> NodeSets { get; } = new Dictionary<string, double>();
-
-        /// <summary>
         /// Gets the ground node.
         /// </summary>
         public Variable Ground { get; }

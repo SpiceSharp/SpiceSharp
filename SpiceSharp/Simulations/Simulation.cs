@@ -58,28 +58,12 @@ namespace SpiceSharp.Simulations
         public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
 
         /// <summary>
-        /// Gets the configuration parameter sets. Obsolete, use <see cref="Configurations" /> instead.
-        /// </summary>
-        /// <value>
-        /// The parameter sets.
-        /// </value>
-        [Obsolete] public ParameterSetDictionary ParameterSets => Configurations;
-
-        /// <summary>
         /// Gets the set of variables (unknowns).
         /// </summary>
         /// <value>
         /// The set of variables.
         /// </value>
         public VariableSet Variables { get; private set; }
-
-        /// <summary>
-        /// Gets the nodes. Obsolete, use <see cref="Variables" /> instead.
-        /// </summary>
-        /// <value>
-        /// The nodes.
-        /// </value>
-        [Obsolete] public VariableSet Nodes => Variables;
 
         #region Events
         /// <summary>

@@ -146,13 +146,6 @@ namespace SpiceSharp.Simulations
                 _loadBehaviors[i].GetEquationPointers(Variables, RealState.Solver);
             RealState.Setup(Variables);
 
-            // TODO: Compatibility - nodesets from nodes instead of configuration should be removed eventually
-            if (config.Nodesets.Count == 0)
-            {
-                foreach (var ns in Variables.NodeSets)
-                    _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
-            }
-
             // Set up nodesets
             foreach (var ns in config.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
