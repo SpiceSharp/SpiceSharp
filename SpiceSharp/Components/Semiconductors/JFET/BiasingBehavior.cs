@@ -224,27 +224,27 @@ namespace SpiceSharp.Components.JFETBehaviors
             var vds = vgs - vgd;
 
             // Determine dc current and derivatives 
-            if (vgs <= -5 * BaseParameters.Temperature * Circuit.KOverQ)
+            if (vgs <= -5 * BaseParameters.Temperature * Constants.KOverQ)
             {
                 ggs = -csat / vgs + BaseConfiguration.Gmin;
                 cg = ggs * vgs;
             }
             else
             {
-                var evgs = Math.Exp(vgs / (BaseParameters.Temperature * Circuit.KOverQ));
-                ggs = csat * evgs / (BaseParameters.Temperature * Circuit.KOverQ) + BaseConfiguration.Gmin;
+                var evgs = Math.Exp(vgs / (BaseParameters.Temperature * Constants.KOverQ));
+                ggs = csat * evgs / (BaseParameters.Temperature * Constants.KOverQ) + BaseConfiguration.Gmin;
                 cg = csat * (evgs - 1) + BaseConfiguration.Gmin * vgs;
             }
 
-            if (vgd <= -5 * (BaseParameters.Temperature * Circuit.KOverQ))
+            if (vgd <= -5 * (BaseParameters.Temperature * Constants.KOverQ))
             {
                 ggd = -csat / vgd + BaseConfiguration.Gmin;
                 cgd = ggd * vgd;
             }
             else
             {
-                var evgd = Math.Exp(vgd / (BaseParameters.Temperature * Circuit.KOverQ));
-                ggd = csat * evgd / (BaseParameters.Temperature * Circuit.KOverQ) + BaseConfiguration.Gmin;
+                var evgd = Math.Exp(vgd / (BaseParameters.Temperature * Constants.KOverQ));
+                ggd = csat * evgd / (BaseParameters.Temperature * Constants.KOverQ) + BaseConfiguration.Gmin;
                 cgd = csat * (evgd - 1) + BaseConfiguration.Gmin * vgd;
             }
 
@@ -411,9 +411,9 @@ namespace SpiceSharp.Components.JFETBehaviors
                 // Limit nonlinear branch voltages
                 check = false;
                 vgs = Semiconductor.LimitJunction(vgs, Vgs,
-                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                    BaseParameters.Temperature * Constants.KOverQ, Vcrit, ref check);
                 vgd = Semiconductor.LimitJunction(vgd, Vgd,
-                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                    BaseParameters.Temperature * Constants.KOverQ, Vcrit, ref check);
                 vgs = Transistor.LimitFet(vgs, Vgs, ModelParameters.Threshold);
                 vgd = Transistor.LimitFet(vgd, Vgd, ModelParameters.Threshold);
             }

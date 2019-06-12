@@ -67,25 +67,25 @@ namespace SpiceSharp.Components.JFETBehaviors
 
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            var vt = BaseParameters.Temperature * Circuit.KOverQ;
-            var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
+            var vt = BaseParameters.Temperature * Constants.KOverQ;
+            var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
             var ratio1 = BaseParameters.Temperature / ModelParameters.NominalTemperature - 1;
             TempSaturationCurrent = ModelParameters.GateSaturationCurrent * Math.Exp(ratio1 * 1.11 / vt);
             TempCapGs = ModelParameters.CapGs * ModelTemperature.Cjfact;
             TempCapGd = ModelParameters.CapGd * ModelTemperature.Cjfact;
-            var kt = Circuit.Boltzmann * BaseParameters.Temperature;
+            var kt = Constants.Boltzmann * BaseParameters.Temperature;
             var egfet = 1.16 - (7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature) / (BaseParameters.Temperature + 1108);
-            var arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * 2 * Circuit.ReferenceTemperature);
-            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * 2 * Constants.ReferenceTemperature);
+            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
             TempGatePotential = fact2 * ModelTemperature.Pbo + pbfact;
             var gmanew = (TempGatePotential - ModelTemperature.Pbo) / ModelTemperature.Pbo;
-            var cjfact1 = 1 + .5 * (4e-4 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            var cjfact1 = 1 + .5 * (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
             TempCapGs *= cjfact1;
             TempCapGd *= cjfact1;
 
             CorDepCap = ModelParameters.DepletionCapCoefficient * TempGatePotential;
             F1 = TempGatePotential * (1 - Math.Exp((1 - .5) * ModelTemperature.Xfc)) / (1 - .5);
-            Vcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
+            Vcrit = vt * Math.Log(vt / (Constants.Root2 * TempSaturationCurrent));
 
             if (TempGatePotential.Equals(0.0))
                 throw new CircuitException("Invalid parameter " + nameof(TempGatePotential));

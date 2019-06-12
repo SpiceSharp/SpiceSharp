@@ -35,8 +35,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         [ParameterName("tnom"), DerivedProperty, ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
-            get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
+            get => NominalTemperature - Constants.CelsiusKelvin;
+            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <value>
         /// The nominal temperature.
         /// </value>
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
 
         /// <summary>
         /// Gets or sets the mosfet type.

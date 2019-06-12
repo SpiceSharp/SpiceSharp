@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.NoiseSources
             var state = simulation.ComplexState;
             var val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 2.0 * Circuit.Charge * Math.Abs(Current) * gain;
+            return 2.0 * Constants.Charge * Math.Abs(Current) * gain;
         }
     }
 }

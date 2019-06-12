@@ -16,8 +16,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </value>
         public double NominalTemperatureCelsius
         {
-            get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
+            get => NominalTemperature - Constants.CelsiusKelvin;
+            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>

@@ -18,8 +18,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("temp"), ParameterInfo("Instance temperature")]
         public double TemperatureCelsius
         {
-            get => Temperature - Circuit.CelsiusKelvin;
-            set => Temperature.Value = value + Circuit.CelsiusKelvin;
+            get => Temperature - Constants.CelsiusKelvin;
+            set => Temperature.Value = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>

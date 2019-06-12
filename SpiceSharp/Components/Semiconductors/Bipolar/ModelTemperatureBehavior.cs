@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             if (!_mbp.NominalTemperature.Given)
                 _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
-            Factor1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            Factor1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;
 
             if (!_mbp.LeakBeCurrent.Given)
             {

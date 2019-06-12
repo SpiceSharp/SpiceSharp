@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
             }
-            VtNominal = Circuit.KOverQ * _mbp.NominalTemperature;
+            VtNominal = Constants.KOverQ * _mbp.NominalTemperature;
 
             // limit grading coeff to max of 0.9
             if (_mbp.GradingCoefficient > 0.9)

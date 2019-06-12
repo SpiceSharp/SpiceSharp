@@ -18,8 +18,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature")]
         public double TemperatureCelsius
         {
-            get => Temperature - Circuit.CelsiusKelvin;
-            set => Temperature.Value = value + Circuit.CelsiusKelvin;
+            get => Temperature - Constants.CelsiusKelvin;
+            set => Temperature.Value = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <value>
         /// The temperature.
         /// </value>
-        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
 
         /// <summary>
         /// Gets the mosfet width.

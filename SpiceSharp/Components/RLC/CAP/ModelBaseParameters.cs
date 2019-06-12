@@ -25,9 +25,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Interesting = false)]
         public double NominalTemperatureCelsius
         {
-            get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
+            get => NominalTemperature - Constants.CelsiusKelvin;
+            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
         }
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
     }
 }

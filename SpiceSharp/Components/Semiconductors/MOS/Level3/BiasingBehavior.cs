@@ -504,7 +504,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         protected double Evaluate(double vgs, double vds, double vbs)
         {
             double vdsat, cdrain;
-            var Vt = Circuit.KOverQ * BaseParameters.Temperature;
+            var Vt = Constants.KOverQ * BaseParameters.Temperature;
             var effectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
             var beta = TempTransconductance * BaseParameters.Width / effectiveLength;
             var oxideCap = ModelParameters.OxideCapFactor * effectiveLength * BaseParameters.Width;
@@ -605,7 +605,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 von = vth;
                 if (ModelParameters.FastSurfaceStateDensity > 0.0)
                 {
-                    var csonco = Circuit.Charge * ModelParameters.FastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */  * effectiveLength * BaseParameters.Width /
+                    var csonco = Constants.Charge * ModelParameters.FastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */  * effectiveLength * BaseParameters.Width /
                                     oxideCap;
                     var cdonco = qbonco / (phibs + phibs);
                     xn = 1.0 + csonco + cdonco;
