@@ -68,7 +68,7 @@ namespace SpiceSharp
         public static implicit operator T(Parameter<T> parameter)
         {
             if (parameter == null)
-                return default;
+                return default(T);
             return parameter.Value;
         }
 

@@ -213,7 +213,7 @@ namespace SpiceSharp
                 }
             }
 
-            value = default;
+            value = default(T);
             return false;
         }
 
