@@ -50,6 +50,14 @@ namespace SpiceSharp.Simulations
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
 
         /// <summary>
+        /// Gets a set of <see cref="ParameterSet" /> that holds the statistics for the simulation.
+        /// </summary>
+        /// <value>
+        /// The dictionary with statistics.
+        /// </value>
+        public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
+
+        /// <summary>
         /// Gets the configuration parameter sets. Obsolete, use <see cref="Configurations" /> instead.
         /// </summary>
         /// <value>
@@ -127,6 +135,8 @@ namespace SpiceSharp.Simulations
 
         // Private parameters
         private bool _cloneParameters;
+        
+        protected SimulationStatistics SimulationStatistics { get; }
 
         /// <summary>
         /// Gets the behavior types in the order that they are called.
@@ -147,6 +157,8 @@ namespace SpiceSharp.Simulations
         protected Simulation(string name)
         {
             Name = name;
+            SimulationStatistics = new SimulationStatistics();
+            Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
         }
 
         /// <summary>
@@ -162,8 +174,10 @@ namespace SpiceSharp.Simulations
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
+            SimulationStatistics.SetupTime.Start();
             Status = Statuses.Setup;
             Setup(entities);
+            SimulationStatistics.SetupTime.Stop();
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -180,7 +194,9 @@ namespace SpiceSharp.Simulations
                 OnBeforeExecute(beforeArgs);
 
                 // Execute simulation
+                SimulationStatistics.ExecutionTime.Start();
                 Execute();
+                SimulationStatistics.ExecutionTime.Stop();
 
                 // Reset
                 afterArgs.Repeat = false;
@@ -193,8 +209,10 @@ namespace SpiceSharp.Simulations
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
+            SimulationStatistics.UnsetupTime.Start();
             Status = Statuses.Unsetup;
             Unsetup();
+            SimulationStatistics.UnsetupTime.Stop();
             OnAfterUnsetup(EventArgs.Empty);
 
             Status = Statuses.None;
@@ -305,9 +323,11 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The circuit entities.</param>
         private void SetupBehaviors(EntityCollection entities)
         {
+            SimulationStatistics.BehaviorCreationTime.Start();
             var types = BehaviorTypes.ToArray();
             foreach (var entity in entities)
                 entity.CreateBehaviors(types, this, entities);
+            SimulationStatistics.BehaviorCreationTime.Stop();
         }
 
         /// <summary>
@@ -329,7 +349,7 @@ namespace SpiceSharp.Simulations
             {
                 foreach (var p in entity.ParameterSets.Values)
                 {
-                    var parameterset = (ParameterSet)(_cloneParameters ? p.Clone() : p);
+                    var parameterset = _cloneParameters ? p.Clone() : p;
                     parameterset.CalculateDefaults();
                     EntityParameters.Add(entity.Name, parameterset);
                 }

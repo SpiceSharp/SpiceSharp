@@ -22,15 +22,7 @@ namespace SpiceSharp.Simulations
         /// The real state.
         /// </value>
         public BaseSimulationState RealState { get; protected set; }
-
-        /// <summary>
-        /// Gets the statistics.
-        /// </summary>
-        /// <value>
-        /// The statistics.
-        /// </value>
-        public Statistics Statistics { get; } = new Statistics();
-
+        
         /// <summary>
         /// Gets the variable that caused issues.
         /// </summary>
@@ -95,6 +87,7 @@ namespace SpiceSharp.Simulations
         protected int DcMaxIterations { get; private set; }
         protected double AbsTol { get; private set; }
         protected double RelTol { get; private set; }
+        protected BaseSimulationStatistics BaseSimulationStatistics { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
@@ -104,6 +97,8 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new BaseConfiguration());
+            BaseSimulationStatistics = new BaseSimulationStatistics();
+            Statistics.Add(typeof(BaseSimulationStatistics), BaseSimulationStatistics);
 
             // Add the necessary behaviors in the order that they are (usually) called
             BehaviorTypes.AddRange(new []
@@ -438,7 +433,7 @@ namespace SpiceSharp.Simulations
                 catch (CircuitException)
                 {
                     iterno++;
-                    Statistics.Iterations = iterno;
+                    BaseSimulationStatistics.Iterations = iterno;
                     throw;
                 }
 
@@ -454,17 +449,17 @@ namespace SpiceSharp.Simulations
                 // Reorder
                 if (_shouldReorder)
                 {
-                    Statistics.ReorderTime.Start();
+                    BaseSimulationStatistics.ReorderTime.Start();
                     solver.OrderAndFactor();
-                    Statistics.ReorderTime.Stop();
+                    BaseSimulationStatistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }
                 else
                 {
                     // Decompose
-                    Statistics.DecompositionTime.Start();
+                    BaseSimulationStatistics.DecompositionTime.Start();
                     var success = solver.Factor();
-                    Statistics.DecompositionTime.Stop();
+                    BaseSimulationStatistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
@@ -477,9 +472,9 @@ namespace SpiceSharp.Simulations
                 state.StoreSolution();
 
                 // Solve the equation
-                Statistics.SolveTime.Start();
+                BaseSimulationStatistics.SolveTime.Start();
                 solver.Solve(state.Solution);
-                Statistics.SolveTime.Stop();
+                BaseSimulationStatistics.SolveTime.Stop();
 
                 // Reset ground nodes
                 solver.GetRhsElement(0).Value = 0.0;
@@ -489,7 +484,7 @@ namespace SpiceSharp.Simulations
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
                 {
-                    Statistics.Iterations += iterno;
+                    BaseSimulationStatistics.Iterations += iterno;
                     return false;
                 }
 
@@ -509,7 +504,7 @@ namespace SpiceSharp.Simulations
                         }
                         if (state.IsConvergent)
                         {
-                            Statistics.Iterations += iterno;
+                            BaseSimulationStatistics.Iterations += iterno;
                             return true;
                         }
                         break;
@@ -530,7 +525,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     default:
-                        Statistics.Iterations += iterno;
+                        BaseSimulationStatistics.Iterations += iterno;
                         throw new CircuitException("Could not find flag");
                 }
             }
@@ -544,7 +539,7 @@ namespace SpiceSharp.Simulations
             var state = RealState;
 
             // Start the stopwatch
-            Statistics.LoadTime.Start();
+            BaseSimulationStatistics.LoadTime.Start();
             OnBeforeLoad(_realStateLoadArgs);
 
             // Clear rhs and matrix
@@ -553,7 +548,7 @@ namespace SpiceSharp.Simulations
 
             // Keep statistics
             OnAfterLoad(_realStateLoadArgs);
-            Statistics.LoadTime.Stop();
+            BaseSimulationStatistics.LoadTime.Stop();
         }
 
         /// <summary>

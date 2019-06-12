@@ -59,24 +59,35 @@ namespace SpiceSharp.Simulations
             Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
-            InitializeAcParameters();
-
-            // Export operating point if requested
-            var exportargs = new ExportDataEventArgs(this);
-            if (_keepOpInfo)
-                OnExport(exportargs);
-
-            // Sweep the frequency
-            foreach (var freq in FrequencySweep.Points)
+            FrequencySimulationStatistics.ComplexTime.Start();
+            try
             {
-                // Calculate the current frequency
-                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                InitializeAcParameters();
 
-                // Solve
-                AcIterate();
+                // Export operating point if requested
+                var exportargs = new ExportDataEventArgs(this);
+                if (_keepOpInfo)
+                    OnExport(exportargs);
 
-                // Export the timepoint
-                OnExport(exportargs);
+                // Sweep the frequency
+                foreach (var freq in FrequencySweep.Points)
+                {
+                    // Calculate the current frequency
+                    cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+
+                    // Solve
+                    AcIterate();
+
+                    // Export the timepoint
+                    OnExport(exportargs);
+                }
+
+                FrequencySimulationStatistics.ComplexTime.Stop();
+            }
+            catch (Exception)
+            {
+                FrequencySimulationStatistics.ComplexTime.Stop();
+                throw;
             }
         }
     }

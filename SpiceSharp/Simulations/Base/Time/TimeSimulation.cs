@@ -29,12 +29,19 @@ namespace SpiceSharp.Simulations
         private bool _shouldReorder = true, _useIc;
 
         /// <summary>
+        /// Time simulation statistics.
+        /// </summary>
+        protected TimeSimulationStatistics TimeSimulationStatistics { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         protected TimeSimulation(string name) : base(name)
         {
             Configurations.Add(new TimeConfiguration());
+            TimeSimulationStatistics = new TimeSimulationStatistics();
+            Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
             BehaviorTypes.AddRange(new []
@@ -54,6 +61,8 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final));
+            TimeSimulationStatistics = new TimeSimulationStatistics();
+            Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
             BehaviorTypes.AddRange(new []
@@ -74,6 +83,8 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final, maxStep));
+            TimeSimulationStatistics = new TimeSimulationStatistics();
+            Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
             BehaviorTypes.AddRange(new []
@@ -147,7 +158,7 @@ namespace SpiceSharp.Simulations
             state.UseIc = _useIc;
             state.UseDc = true;
             Op(DcMaxIterations);
-            Statistics.TimePoints++;
+            TimeSimulationStatistics.TimePoints++;
 
             // Stop calculating the operating point
             state.UseIc = false;
@@ -224,7 +235,7 @@ namespace SpiceSharp.Simulations
                 catch (CircuitException)
                 {
                     iterno++;
-                    Statistics.Iterations = iterno;
+                    BaseSimulationStatistics.Iterations = iterno;
                     throw;
                 }
 
@@ -236,17 +247,17 @@ namespace SpiceSharp.Simulations
                 // Reorder
                 if (_shouldReorder)
                 {
-                    Statistics.ReorderTime.Start();
+                    BaseSimulationStatistics.ReorderTime.Start();
                     solver.OrderAndFactor();
-                    Statistics.ReorderTime.Stop();
+                    BaseSimulationStatistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }
                 else
                 {
                     // Decompose
-                    Statistics.DecompositionTime.Start();
+                    BaseSimulationStatistics.DecompositionTime.Start();
                     var success = solver.Factor();
-                    Statistics.DecompositionTime.Stop();
+                    BaseSimulationStatistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
@@ -259,9 +270,9 @@ namespace SpiceSharp.Simulations
                 state.StoreSolution();
 
                 // Solve the equation
-                Statistics.SolveTime.Start();
+                BaseSimulationStatistics.SolveTime.Start();
                 solver.Solve(state.Solution);
-                Statistics.SolveTime.Stop();
+                BaseSimulationStatistics.SolveTime.Stop();
 
                 // Reset ground nodes
                 state.Solution[0] = 0.0;
@@ -270,7 +281,7 @@ namespace SpiceSharp.Simulations
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
                 {
-                    Statistics.Iterations += iterno;
+                    BaseSimulationStatistics.Iterations += iterno;
                     return false;
                 }
 
@@ -293,7 +304,7 @@ namespace SpiceSharp.Simulations
                         case InitializationModes.Float:
                             if (state.IsConvergent)
                             {
-                                Statistics.Iterations += iterno;
+                                BaseSimulationStatistics.Iterations += iterno;
                                 return true;
                             }
 
@@ -315,7 +326,7 @@ namespace SpiceSharp.Simulations
                             break;
 
                         default:
-                            Statistics.Iterations += iterno;
+                            BaseSimulationStatistics.Iterations += iterno;
                             throw new CircuitException("Could not find flag");
                     }
                 }
@@ -366,7 +377,7 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _acceptBehaviors.Count; i++)
                 _acceptBehaviors[i].Accept(this);
             Method.Accept(this);
-            Statistics.Accepted++;
+            TimeSimulationStatistics.Accepted++;
         }
 
         /// <summary>

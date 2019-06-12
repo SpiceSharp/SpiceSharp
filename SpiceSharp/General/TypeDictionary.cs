@@ -12,7 +12,7 @@ namespace SpiceSharp
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="IDictionary{Type, T}" />
-    public abstract class TypeDictionary<T> : IDictionary<Type, T>
+    public class TypeDictionary<T> : IDictionary<Type, T>
     {
         /// <summary>
         /// Gets the dictionary to look up using types.
@@ -161,7 +161,7 @@ namespace SpiceSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
         /// </summary>
-        protected TypeDictionary()
+        public TypeDictionary()
         {
             Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
             Dictionary = new Dictionary<Type, T>();
