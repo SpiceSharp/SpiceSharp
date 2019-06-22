@@ -146,8 +146,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         [ParameterName("ic"), ParameterInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIc(double[] value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            value.ThrowIfNull(nameof(value));
 
             switch (value.Length)
             {

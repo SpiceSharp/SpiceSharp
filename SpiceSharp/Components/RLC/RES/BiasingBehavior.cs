@@ -19,8 +19,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
@@ -33,8 +32,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("i"), ParameterInfo("Current")]
         public double GetCurrent(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
         }
 
@@ -47,8 +45,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             return v * v * Conductance;
         }
@@ -77,10 +74,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 2);
             PosNode = pins[0];
             NegNode = pins[1];
         }
@@ -92,8 +86,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             // Get matrix elements
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);

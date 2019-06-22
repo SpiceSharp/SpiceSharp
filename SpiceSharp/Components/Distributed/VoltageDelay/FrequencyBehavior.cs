@@ -48,6 +48,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
+            solver.ThrowIfNull(nameof(solver));
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
@@ -62,6 +63,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="simulation">The frequency simulation.</param>
         public void Load(FrequencySimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var laplace = simulation.ComplexState.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay);
 

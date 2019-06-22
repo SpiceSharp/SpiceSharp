@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
             // First do temperature-dependent calculations and IC
             base.Execute();
             var exportargs = new ExportDataEventArgs(this);
-            var timeConfig = Configurations.Get<TimeConfiguration>();
+            var timeConfig = Configurations.Get<TimeConfiguration>().ThrowIfNull("time configuration");
 
             // Start our statistics
             TimeSimulationStatistics.TransientTime.Start();

@@ -87,8 +87,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="ArgumentNullException">generator</exception>
         public ArrayHistory(int length, Func<int, T> generator)
         {
-            if (generator == null)
-                throw new ArgumentNullException(nameof(generator));
+            generator.ThrowIfNull(nameof(generator));
 
             Length = length;
             for (var i = 0; i < length; i++)
@@ -147,8 +146,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="ArgumentNullException">generator</exception>
         public override void Clear(Func<int, T> generator)
         {
-            if (generator == null)
-                throw new ArgumentNullException(nameof(generator));
+            generator.ThrowIfNull(nameof(generator));
 
             for (var i = 0; i < Length; i++)
                 _history[i] = generator(i);

@@ -25,9 +25,9 @@ namespace SpiceSharp
         /// <exception cref="CircuitException">Cannot copy: source is not a Parameter</exception>
         public virtual void CopyFrom(Parameter<T> source)
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (source.GetType() == this.GetType())
+            source.ThrowIfNull(nameof(source));
+
+            if (source.GetType() == GetType())
                 Reflection.CopyPropertiesAndFields(source, this);
             else if (source is Parameter<T> p)
                 Value = p.Value;

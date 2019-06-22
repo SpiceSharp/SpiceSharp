@@ -94,14 +94,13 @@ namespace SpiceSharp.Simulations
         /// </exception>
         protected override void Setup(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             base.Setup(entities);
 
             // Get behaviors, configurations and states
             var config = Configurations.Get<FrequencyConfiguration>();
             _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
-            FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
+            FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
             // Create the state for complex numbers
             ComplexState = new ComplexSimulationState();

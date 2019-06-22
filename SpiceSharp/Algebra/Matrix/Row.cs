@@ -59,7 +59,6 @@ namespace SpiceSharp.Algebra
             /// <returns>True if the element was found, false if it was created.</returns>
             public bool CreateGetElement(int row, int column, out SparseMatrixElement result)
             {
-                result = null;
                 SparseMatrixElement element = FirstInRow, lastElement = null;
                 while (element != null)
                 {

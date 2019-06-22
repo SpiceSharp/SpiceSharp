@@ -61,6 +61,8 @@ namespace SpiceSharp
         /// <returns></returns>
         public static IEnumerable<CachedMemberInfo> GetMembers(object source)
         {
+            source.ThrowIfNull(nameof(source));
+
             cacheLock.EnterUpgradeableReadLock();
             try
             {
@@ -137,6 +139,8 @@ namespace SpiceSharp
         /// </returns>
         public static bool SetMember<T>(object source, MemberInfo member, T value)
         {
+            member.ThrowIfNull(nameof(member));
+
             if (member is PropertyInfo pi)
             {
                 if (pi.CanWrite && pi.PropertyType.GetTypeInfo().IsAssignableFrom(typeof(T)))
@@ -182,6 +186,8 @@ namespace SpiceSharp
         /// </returns>
         public static bool GetMember<T>(object source, MemberInfo member, out T value)
         {
+            member.ThrowIfNull(nameof(member));
+
             var info = typeof(T).GetTypeInfo();
             if (member is PropertyInfo pi)
             {
@@ -229,10 +235,8 @@ namespace SpiceSharp
         /// <param name="destination">The destination object</param>
         public static void CopyPropertiesAndFields(object source, object destination)
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (destination == null)
-                throw new ArgumentNullException(nameof(destination));
+            source.ThrowIfNull(nameof(source));
+            destination.ThrowIfNull(nameof(destination));
             if (source.GetType() != destination.GetType())
                 throw new ArgumentException(@"Source and target are not of the same type.");
 
@@ -311,8 +315,8 @@ namespace SpiceSharp
         /// <exception cref="ArgumentNullException">member</exception>
         public static Action<T> CreateSetterForMember<T>(object source, MemberInfo member)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            member.ThrowIfNull(nameof(member));
+
             switch (member)
             {
                 case MethodInfo mi:
@@ -335,8 +339,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentNullException">member</exception>
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            member.ThrowIfNull(nameof(member));
 
             switch (member)
             {
@@ -361,6 +364,8 @@ namespace SpiceSharp
         /// </returns>
         public static Action<T> CreateSetterForMethod<T>(object source, MethodInfo method)
         {
+            method.ThrowIfNull(nameof(method));
+
             // Match the return type
             if (method.ReturnType != typeof(void))
                 return null;
@@ -384,6 +389,8 @@ namespace SpiceSharp
         /// </returns>
         public static Func<T> CreateGetterForMethod<T>(object source, MethodInfo method)
         {
+            method.ThrowIfNull(nameof(method));
+
             // Match the return type
             if (method.ReturnType != typeof(T))
                 return null;
@@ -407,6 +414,8 @@ namespace SpiceSharp
         /// </returns>
         public static Action<T> CreateSetterForProperty<T>(object source, PropertyInfo property)
         {
+            property.ThrowIfNull(nameof(property));
+
             // Double properties are supported
             if (property.PropertyType == typeof(T))
                 return (Action<T>)property.GetSetMethod()?.CreateDelegate(typeof(Action<T>), source);
@@ -425,6 +434,8 @@ namespace SpiceSharp
         /// </returns>
         public static Func<T> CreateGetterForProperty<T>(object source, PropertyInfo property)
         {
+            property.ThrowIfNull(nameof(property));
+
             // Double properties are supported
             if (property.PropertyType == typeof(T))
                 return (Func<T>)property.GetGetMethod()?.CreateDelegate(typeof(Func<T>), source);
@@ -443,6 +454,8 @@ namespace SpiceSharp
         /// </returns>
         public static Action<T> CreateSetterForField<T>(object source, FieldInfo field)
         {
+            field.ThrowIfNull(nameof(field));
+
             if (field.FieldType == typeof(T))
             {
                 var constThis = Expression.Constant(source);
@@ -466,6 +479,8 @@ namespace SpiceSharp
         /// </returns>
         public static Func<T> CreateGetterForField<T>(object source, FieldInfo field)
         {
+            field.ThrowIfNull(nameof(field));
+
             if (field.FieldType == typeof(T))
             {
                 var constThis = Expression.Constant(source);

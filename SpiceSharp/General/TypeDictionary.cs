@@ -102,6 +102,8 @@ namespace SpiceSharp
         {
             get
             {
+                key.ThrowIfNull(nameof(key));
+
                 Lock.EnterReadLock();
                 try
                 {
@@ -114,10 +116,9 @@ namespace SpiceSharp
             }
             set
             {
-                if (key == null)
-                    throw new ArgumentException("Invalid argument");
-                Lock.EnterWriteLock();
+                key.ThrowIfNull(nameof(key));
 
+                Lock.EnterWriteLock();
                 try
                 {
                     // This may seem a bit tricky:
@@ -184,8 +185,7 @@ namespace SpiceSharp
         /// <exception cref="CircuitException">Type {0} is not derived from {1}".FormatString(key, BaseClass)</exception>
         public virtual void Add(Type key, T value)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key));
+            key.ThrowIfNull(nameof(key));
 
             Lock.EnterWriteLock();
             try
@@ -283,6 +283,8 @@ namespace SpiceSharp
         /// </returns>
         public bool ContainsKey(Type key)
         {
+            key.ThrowIfNull(nameof(key));
+
             Lock.EnterReadLock();
             try
             {
@@ -303,6 +305,8 @@ namespace SpiceSharp
         /// </returns>
         public bool Remove(Type key)
         {
+            key.ThrowIfNull(nameof(key));
+
             Lock.EnterWriteLock();
             try
             {
@@ -338,6 +342,8 @@ namespace SpiceSharp
         /// </returns>
         public bool TryGetValue(Type key, out T value)
         {
+            key.ThrowIfNull(nameof(key));
+
             Lock.EnterReadLock();
             try
             {

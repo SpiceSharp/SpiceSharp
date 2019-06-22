@@ -28,8 +28,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _bp = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();

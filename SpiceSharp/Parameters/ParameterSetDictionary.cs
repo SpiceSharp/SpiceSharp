@@ -15,8 +15,7 @@ namespace SpiceSharp
         /// <param name="set">The parameter set.</param>
         public void Add(ParameterSet set)
         {
-            if (set == null)
-                throw new ArgumentNullException(nameof(set));
+            set.ThrowIfNull(nameof(set));
             Add(set.GetType(), set);
         }
 

@@ -51,8 +51,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="provider">The setup data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
+			provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -66,8 +65,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Base simulation</param>
         public void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             double factor;
             double resistance = BaseParameters.Resistance;

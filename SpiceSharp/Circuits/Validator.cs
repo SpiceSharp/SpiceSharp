@@ -30,8 +30,7 @@ namespace SpiceSharp.Circuits
         /// <param name="entities">The circuit to be validated.</param>
         public void Validate(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
 
             // Initialize
             _hasSource = false;

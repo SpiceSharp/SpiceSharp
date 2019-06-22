@@ -153,8 +153,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="CircuitException">{0}: No circuit nodes for simulation".FormatString(Name)</exception>
         public virtual void Run(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
@@ -210,8 +209,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
         protected virtual void Setup(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
@@ -325,8 +323,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">entities</exception>
         private void SetupParameters(IEnumerable<Entity> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
 
             // Register all parameters
             foreach (var entity in entities)

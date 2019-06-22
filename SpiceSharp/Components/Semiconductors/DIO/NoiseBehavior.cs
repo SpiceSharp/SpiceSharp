@@ -52,8 +52,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -82,10 +81,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 2);
             _posNode = pins[0];
             _negNode = pins[1];
         }
@@ -96,8 +92,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Noise simulation</param>
         public override void Noise(Noise simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
             var noise = simulation.NoiseState;
 
             // Set noise parameters

@@ -50,14 +50,10 @@ namespace SpiceSharp.Components
         /// <exception cref="CircuitException">{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length)</exception>
         public void Connect(params string[] nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
-            if (nodes.Length != _connections.Length)
-                throw new CircuitException("{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length));
+            nodes.ThrowIfNot(nameof(nodes), _connections.Length);
             for (var i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i] == null)
-                    throw new ArgumentNullException("node " + (i + 1));
+                nodes[i].ThrowIfNull("node{0}".FormatString(i + 1));
                 _connections[i] = nodes[i];
             }
         }
@@ -135,8 +131,7 @@ namespace SpiceSharp.Components
         /// <returns>The node indices.</returns>
         protected int[] ApplyConnections(VariableSet nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
 
             // Map connected nodes
             var indexes = new int[_connections.Length];
@@ -153,8 +148,7 @@ namespace SpiceSharp.Components
         /// <exception cref="ArgumentNullException">nodes</exception>
         public IEnumerable<int> GetNodeIndexes(VariableSet nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
 
             // Map connected nodes
             foreach (var node in _connections)

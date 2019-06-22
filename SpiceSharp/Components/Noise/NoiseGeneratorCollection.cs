@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="generators">Generators</param>
         public NoiseGeneratorCollection(IEnumerable<NoiseGenerator> generators)
         {
-            if (generators == null)
-                throw new ArgumentNullException(nameof(generators));
+            generators.ThrowIfNull(nameof(generators));
 
             foreach (var generator in generators)
                 _generators.Add(generator);

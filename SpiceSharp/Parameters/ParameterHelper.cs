@@ -248,6 +248,8 @@ namespace SpiceSharp
         /// </returns>
         public static bool SetMember<T>(object source, MemberInfo member, T value)
         {
+            member.ThrowIfNull(nameof(member));
+
             if (member is PropertyInfo pi)
             {
                 // Find out if the property implements a parameter
@@ -281,6 +283,8 @@ namespace SpiceSharp
         /// </returns>
         public static bool GetMember<T>(object source, MemberInfo member, out T value)
         {
+            member.ThrowIfNull(nameof(member));
+
             if (member is PropertyInfo pi)
             {
                 // Find out if the property implements a parameter
@@ -394,8 +398,8 @@ namespace SpiceSharp
         /// <exception cref="ArgumentNullException">member</exception>
         public static Action<T> CreateSetterForMember<T>(object source, MemberInfo member)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            member.ThrowIfNull(nameof(member));
+
             switch (member)
             {
                 case PropertyInfo pi:
@@ -414,8 +418,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentNullException">member</exception>
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            member.ThrowIfNull(nameof(member));
 
             switch (member)
             {
@@ -436,6 +439,8 @@ namespace SpiceSharp
         /// </returns>
         public static Action<T> CreateSetterForProperty<T>(object source, PropertyInfo property)
         {
+            property.ThrowIfNull(nameof(property));
+
             // Find out if the property implements a parameter
             var parameterType = IsParameter(property.PropertyType, typeof(T));
             if (parameterType != null)
@@ -463,6 +468,8 @@ namespace SpiceSharp
         /// </returns>
         public static Func<T> CreateGetterForProperty<T>(object source, PropertyInfo property)
         {
+            property.ThrowIfNull(nameof(property));
+
             // Find out if the property implements a parameter
             var parameterType = IsParameter(property.PropertyType, typeof(T));
             if (parameterType != null)

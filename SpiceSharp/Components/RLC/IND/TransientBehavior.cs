@@ -55,8 +55,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -75,8 +74,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="solver">Matrix</param>
         public void GetEquationPointers(Solver<double> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get vector elements
             BranchPtr = solver.GetRhsElement(BranchEq);
@@ -91,8 +89,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="method"></param>
         public void CreateStates(IntegrationMethod method)
         {
-			if (method == null)
-				throw new ArgumentNullException(nameof(method));
+			method.ThrowIfNull(nameof(method));
             _flux = method.CreateDerivative();
         }
 
@@ -102,8 +99,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void GetDcState(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             // Get the current through
             if (BaseParameters.InitialCondition.Given)
@@ -118,8 +114,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void Transient(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
 

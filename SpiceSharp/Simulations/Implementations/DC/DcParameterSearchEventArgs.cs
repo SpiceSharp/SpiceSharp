@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">name</exception>
         public DCParameterSearchEventArgs(string name, int level)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Name = name.ThrowIfNull(nameof(name));
             Level = level;
         }
     }

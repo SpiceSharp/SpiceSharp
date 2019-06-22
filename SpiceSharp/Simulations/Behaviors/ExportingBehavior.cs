@@ -58,6 +58,8 @@ namespace SpiceSharp.Simulations.Behaviors
         /// </returns>
         public bool CreateExportMethod<T>(Simulation simulation, string propertyName, out Func<T> function, IEqualityComparer<string> comparer = null)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Find methods to create the export
             Func<T> result = null;
             foreach (var member in Reflection.GetNamedMembers(this, propertyName, comparer))
@@ -94,6 +96,8 @@ namespace SpiceSharp.Simulations.Behaviors
         /// </returns>
         private Func<T> CreateGetterForMethod<T>(Simulation simulation, MethodInfo method)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // First make sure it is the right return type
             if (method.ReturnType != typeof(T))
                 return null;

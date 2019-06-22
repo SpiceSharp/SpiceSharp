@@ -30,8 +30,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
 
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
@@ -45,8 +44,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
 
             return state.Solution[BranchEq];
         }
@@ -60,8 +58,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
 
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = state.Solution[BranchEq];
@@ -88,8 +85,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <param name="solver">Matrix</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get matrix pointers
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
@@ -105,8 +101,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             // Load Y-matrix
             CPosBranchPtr.Value += 1.0;

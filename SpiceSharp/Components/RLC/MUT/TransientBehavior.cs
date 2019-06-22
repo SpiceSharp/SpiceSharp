@@ -53,8 +53,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
 			base.Setup(simulation, provider);
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
+			provider.ThrowIfNull(nameof(provider));
             
             // Get behaviors
             Load1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
@@ -115,8 +114,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<double> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
             
             // Get matrix pointers
             Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
@@ -142,8 +140,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void Transient(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             // Load Y-matrix
             Branch1Branch2.Value -= Cond;

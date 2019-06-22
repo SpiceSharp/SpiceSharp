@@ -76,8 +76,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <exception cref="ArgumentNullException">pivot</exception>
         public override bool IsValidPivot(MatrixElement<T> pivot)
         {
-            if (pivot == null)
-                throw new ArgumentNullException(nameof(pivot));
+            pivot.ThrowIfNull(nameof(pivot));
 
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(pivot.Value);
@@ -104,8 +103,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <exception cref="ArgumentNullException">matrix</exception>
         public void Initialize(Matrix<T> matrix)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            matrix.ThrowIfNull(nameof(matrix));
 
             // Allocate arrays
             _markowitzRow = new int[matrix.Size + 1];
@@ -194,8 +192,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <exception cref="ArgumentNullException">matrix</exception>
         public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            matrix.ThrowIfNull(nameof(matrix));
+            rhs.ThrowIfNull(nameof(rhs));
 
             Magnitude = magnitude;
 
@@ -220,11 +218,13 @@ namespace SpiceSharp.Algebra.Solve
         /// </remarks>
         public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int eliminationStep)
         {
+            matrix.ThrowIfNull(nameof(matrix));
+            rhs.ThrowIfNull(nameof(rhs));
+            pivot.ThrowIfNull(nameof(pivot));
+
             // If we haven't setup, just skip
             if (_markowitzProduct == null)
                 return;
-            if (pivot == null)
-                throw new ArgumentNullException(nameof(pivot));
             int oldProduct;
 
             var row = pivot.Row;
@@ -304,11 +304,12 @@ namespace SpiceSharp.Algebra.Solve
         /// <exception cref="ArgumentNullException">pivot</exception>
         public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep)
         {
+            matrix.ThrowIfNull(nameof(matrix));
+            pivot.ThrowIfNull(nameof(pivot));
+
             // If we haven't setup, just skip
             if (_markowitzProduct == null)
                 return;
-            if (pivot == null)
-                throw new ArgumentNullException(nameof(pivot));
 
             // Go through all elements below the pivot. If they exist, then we can subtract 1 from the Markowitz row vector!
             for (var column = pivot.Below; column != null; column = column.Below)
@@ -347,6 +348,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="fillin">The fill-in.</param>
         public override void CreateFillin(SparseMatrix<T> matrix, MatrixElement<T> fillin)
         {
+            matrix.ThrowIfNull(nameof(matrix));
+            fillin.ThrowIfNull(nameof(fillin));
+
             // Update the markowitz row count
             int index = fillin.Row;
             _markowitzRow[index]++;
@@ -377,6 +381,8 @@ namespace SpiceSharp.Algebra.Solve
         /// </remarks>
         public override MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int eliminationStep)
         {
+            matrix.ThrowIfNull(nameof(matrix));
+
             foreach (var strategy in Strategies)
             {
                 var chosen = strategy.FindPivot(this, matrix, eliminationStep);

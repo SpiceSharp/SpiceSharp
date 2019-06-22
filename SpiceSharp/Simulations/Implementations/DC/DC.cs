@@ -61,8 +61,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">sweeps</exception>
         public DC(string name, IEnumerable<SweepConfiguration> sweeps) : base(name)
         {
-            if (sweeps == null)
-                throw new ArgumentNullException(nameof(sweeps));
+            sweeps.ThrowIfNull(nameof(sweeps));
 
             var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
@@ -100,7 +99,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = RealState;
-            var dcconfig = Configurations.Get<DCConfiguration>();
+            var dcconfig = Configurations.Get<DCConfiguration>().ThrowIfNull("dc configuration");
             state.Init = InitializationModes.Junction;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;

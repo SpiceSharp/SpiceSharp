@@ -42,7 +42,7 @@ namespace SpiceSharp.Algebra
         protected Solver(PivotStrategy<T> strategy)
         {
             NeedsReordering = true;
-            Strategy = strategy;
+            Strategy = strategy.ThrowIfNull(nameof(strategy));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SpiceSharp.Algebra
             : base(size)
         {
             NeedsReordering = true;
-            Strategy = strategy;
+            Strategy = strategy.ThrowIfNull(nameof(strategy));
         }
 
         /// <summary>
@@ -87,8 +87,7 @@ namespace SpiceSharp.Algebra
         /// <param name="step">The current step of factoring.</param>
         public void MovePivot(MatrixElement<T> pivot, int step)
         {
-            if (pivot == null)
-                throw new ArgumentNullException(nameof(pivot));
+            pivot.ThrowIfNull(nameof(pivot));
             Strategy.MovePivot(Matrix, Rhs, pivot, step);
 
             // Move the pivot in the matrix

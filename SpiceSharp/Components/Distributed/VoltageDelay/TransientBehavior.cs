@@ -46,6 +46,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(Solver<double> solver)
         {
+            solver.ThrowIfNull(nameof(solver));
             BranchPtr = solver.GetRhsElement(BranchEq);
         }
 
@@ -68,6 +69,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </remarks>
         public void GetDcState(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             var sol = simulation.RealState.Solution;
             var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
@@ -79,6 +82,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="simulation">The time-based simulation.</param>
         public void Transient(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             var sol = simulation.RealState.Solution;
             var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);

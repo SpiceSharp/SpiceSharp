@@ -114,10 +114,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <exception cref="ArgumentException">Length of inputs does not match</exception>
         public void Scramble<T>(Vector<T> source, Vector<T> target) where T : IFormattable
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
+            source.ThrowIfNull(nameof(source));
+            target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length)
                 throw new ArgumentException("Length of inputs does not match");
 
@@ -137,10 +135,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="target">The target vector.</param>
         public void Unscramble<T>(T[] source, Vector<T> target) where T : IFormattable
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
+            source.ThrowIfNull(nameof(source));
+            target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length + 1)
                 throw new ArgumentException("Length of inputs does not match");
 

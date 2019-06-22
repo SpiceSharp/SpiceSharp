@@ -113,7 +113,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="SpiceSharp.CircuitException">Could not extract solver</exception>
         public virtual void Setup(TimeSimulation simulation)
         {
-            var solver = simulation?.RealState?.Solver;
+            simulation.ThrowIfNull(nameof(simulation));
+            var solver = simulation.RealState?.Solver;
             if (solver == null)
                 throw new CircuitException("Could not extract solver");
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
@@ -158,6 +159,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="simulation">The time-based simulation.</param>
         public virtual void Initialize(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Initialize variables
             Slope = 0.0;
             Order = 1;
@@ -179,6 +182,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="delta">The timestep to be probed.</param>
         public virtual void Probe(TimeSimulation simulation, double delta)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Allow an additional truncation if necessary
             var args = new TruncateTimestepEventArgs(simulation, delta);
             OnTruncateProbe(args);
@@ -195,6 +200,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="newDelta">The next timestep to be probed.</param>
         public virtual void NonConvergence(TimeSimulation simulation, out double newDelta)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Call event
             var args = new TruncateEvaluateEventArgs(simulation, MaxOrder);
             OnTruncateNonConvergence(args);
@@ -217,6 +224,8 @@ namespace SpiceSharp.IntegrationMethods
         /// </returns>
         public virtual bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Call event
             var args = new TruncateEvaluateEventArgs(simulation, MaxOrder)
             {
@@ -236,6 +245,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="simulation">The time-based simulation.</param>
         public virtual void Accept(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Store the current solution
             simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
             OnAcceptSolution(EventArgs.Empty);
@@ -248,6 +259,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="delta">The initial probing timestep.</param>
         public virtual void Continue(TimeSimulation simulation, ref double delta)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Allow registered methods to modify the timestep
             var args = new ModifyTimestepEventArgs(simulation, delta);
             OnContinue(args);

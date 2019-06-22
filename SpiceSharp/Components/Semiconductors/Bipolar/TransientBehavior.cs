@@ -137,8 +137,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="solver">Matrix</param>
         public void GetEquationPointers(Solver<double> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             // Get rhs pointers
             BasePtr = solver.GetRhsElement(BaseNode);
@@ -167,8 +166,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void GetDcState(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             
@@ -187,8 +185,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void Transient(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             var gpi = 0.0;

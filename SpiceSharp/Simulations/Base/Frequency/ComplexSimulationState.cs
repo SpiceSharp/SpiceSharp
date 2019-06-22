@@ -49,8 +49,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">nodes</exception>
         public override void Setup(VariableSet nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
             Solution = new DenseVector<Complex>(Solver.Order);
             base.Setup(nodes);
         }

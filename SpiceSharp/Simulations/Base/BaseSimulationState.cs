@@ -112,8 +112,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">nodes</exception>
         public override void Setup(VariableSet nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
 
             // Initialize all matrices
             Solution = new DenseVector<double>(Solver.Order);

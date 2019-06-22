@@ -137,8 +137,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="SparseException">Solver is not factored yet</exception>
         public override void Solve(Vector<Complex> solution)
         {
-            if (solution == null)
-                throw new ArgumentNullException(nameof(solution));
+            solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new SparseException("Solver is not factored yet");
 
@@ -206,8 +205,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="SparseException">Solver is not factored yet</exception>
         public override void SolveTransposed(Vector<Complex> solution)
         {
-            if (solution == null)
-                throw new ArgumentNullException(nameof(solution));
+            solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new SparseException("Solver is not factored yet");
 

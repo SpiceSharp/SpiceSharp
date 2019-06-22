@@ -79,10 +79,8 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            if (parameters == null)
-                throw new ArgumentNullException(nameof(parameters));
-            if (behaviors == null)
-                throw new ArgumentNullException(nameof(behaviors));
+            parameters.ThrowIfNull(nameof(parameters));
+            behaviors.ThrowIfNull(nameof(behaviors));
             var provider = base.BuildSetupDataProvider(parameters, behaviors);
 
             // Add the controlling source

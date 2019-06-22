@@ -64,9 +64,10 @@ namespace SpiceSharp
         /// <summary>
         /// Merge a circuit with this one. Entities are merged by reference!
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">The circuit to merge with.</param>
         public void Merge(Circuit ckt)
         {
+            ckt.ThrowIfNull(nameof(ckt));
             foreach (var entity in ckt)
                 Add(entity);
         }
@@ -77,6 +78,7 @@ namespace SpiceSharp
         /// <param name="data">The instance data.</param>
         public void Instantiate(InstanceData data)
         {
+            data.ThrowIfNull(nameof(data));
             foreach (var entity in data.Subcircuit)
             {
                 var clone = entity.Clone(data);

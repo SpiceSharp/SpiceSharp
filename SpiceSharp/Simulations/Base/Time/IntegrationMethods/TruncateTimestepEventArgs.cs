@@ -59,7 +59,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="delta">The maximum timestep.</param>
         public TruncateTimestepEventArgs(TimeSimulation simulation, double delta)
         {
-            Simulation = simulation;
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
             _delta = delta;
         }
     }

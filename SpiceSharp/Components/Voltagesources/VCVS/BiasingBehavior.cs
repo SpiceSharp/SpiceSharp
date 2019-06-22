@@ -29,8 +29,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         [ParameterName("i"), ParameterInfo("Output current")]
         public double GetCurrent(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[BranchEq];
         }
 
@@ -43,8 +42,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         [ParameterName("v"), ParameterInfo("Output current")]
         public double GetVoltage(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
@@ -57,8 +55,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         { 
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[BranchEq] * (state.Solution[PosNode] - state.Solution[NegNode]);
         }
 
@@ -90,8 +87,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -103,10 +99,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 4);
             PosNode = pins[0];
             NegNode = pins[1];
             ContPosNode = pins[2];
@@ -120,10 +113,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (variables == null)
-                throw new ArgumentNullException(nameof(variables));
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            variables.ThrowIfNull(nameof(variables));
+            solver.ThrowIfNull(nameof(solver));
 
             BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);

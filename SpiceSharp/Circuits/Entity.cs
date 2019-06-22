@@ -112,7 +112,11 @@ namespace SpiceSharp.Circuits
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
-        {            
+        {
+            types.ThrowIfNull(nameof(types));
+            simulation.ThrowIfNull(nameof(simulation));
+            entities.ThrowIfNull(nameof(entities));
+
             // Skip creating behaviors if the entity is already defined in the pool
             var pool = simulation.EntityBehaviors;
             if (pool.ContainsKey(Name))
@@ -174,8 +178,7 @@ namespace SpiceSharp.Circuits
         /// <exception cref="ArgumentNullException">simulation</exception>
         protected virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Build the setup behavior
             var provider = BuildSetupDataProvider(simulation.EntityParameters, simulation.EntityBehaviors);
@@ -196,10 +199,8 @@ namespace SpiceSharp.Circuits
         /// </exception>
         protected virtual SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            if (parameters == null)
-                throw new ArgumentNullException(nameof(parameters));
-            if (behaviors == null)
-                throw new ArgumentNullException(nameof(behaviors));
+            parameters.ThrowIfNull(nameof(parameters));
+            behaviors.ThrowIfNull(nameof(behaviors));
 
             // By default, we include the parameters of this entity
             var result = new SetupDataProvider();
@@ -226,6 +227,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public virtual Entity Clone(InstanceData data)
         {
+            data.ThrowIfNull(nameof(data));
             var clone = (Entity)Activator.CreateInstance(GetType(), data.GenerateIdentifier(Name));
             clone.CopyFrom(this);
             return clone;
@@ -242,6 +244,7 @@ namespace SpiceSharp.Circuits
         /// <param name="source">The source entity.</param>
         public virtual void CopyFrom(Entity source)
         {
+            source.ThrowIfNull(nameof(source));
             Reflection.CopyPropertiesAndFields(source, this);
         }
 

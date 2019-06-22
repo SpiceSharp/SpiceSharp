@@ -75,8 +75,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ic"), ParameterInfo("Initial VDS,VGS vector")]
         public void SetIc(double[] values)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
+            values.ThrowIfNull(nameof(values));
             switch (values.Length)
             {
                 case 2:

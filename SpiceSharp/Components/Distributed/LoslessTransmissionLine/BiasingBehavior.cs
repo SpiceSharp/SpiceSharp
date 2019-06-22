@@ -74,10 +74,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="pins">Pin indices in order</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 4);
             Pos1 = pins[0];
             Neg1 = pins[1];
             Pos2 = pins[2];
@@ -91,8 +88,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="provider">The data provider.</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -106,6 +102,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
+            variables.ThrowIfNull(nameof(variables));
+            solver.ThrowIfNull(nameof(solver));
+
             // Allocate branch equations first
             Internal1 = variables.Create(Name.Combine("int1")).Index;
             Internal2 = variables.Create(Name.Combine("int2")).Index;
@@ -144,6 +143,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="simulation">The base simulation.</param>
         public void Load(BaseSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var state = simulation.RealState;
 
             // Admittance between POS1 and INT1

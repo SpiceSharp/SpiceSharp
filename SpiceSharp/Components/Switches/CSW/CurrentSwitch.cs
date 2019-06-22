@@ -60,6 +60,12 @@ namespace SpiceSharp.Components
             ControllingName = controllingSource;
         }
 
+        /// <summary>
+        /// Create the behaviors for the <see cref="CurrentSwitch" />.
+        /// </summary>
+        /// <param name="types">The behavior types.</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entities">The entities.</param>
         public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
         {
             if (ControllingName != null)
@@ -73,10 +79,8 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            if (parameters == null)
-                throw new ArgumentNullException(nameof(parameters));
-            if (behaviors == null)
-                throw new ArgumentNullException(nameof(behaviors));
+            parameters.ThrowIfNull(nameof(parameters));
+            behaviors.ThrowIfNull(nameof(behaviors));
 
             var provider = base.BuildSetupDataProvider(parameters, behaviors);
 

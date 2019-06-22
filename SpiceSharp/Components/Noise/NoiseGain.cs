@@ -27,8 +27,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="coefficients">Values</param>
         public override void SetCoefficients(params double[] coefficients)
         {
-            if (coefficients == null)
-                throw new ArgumentNullException(nameof(coefficients));
+            coefficients.ThrowIfNot(nameof(coefficients), 1);
             Gain = coefficients[0];
         }
 
@@ -39,9 +38,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <returns></returns>
         protected override double CalculateNoise(Noise simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
-            
+            simulation.ThrowIfNull(nameof(simulation));
+
             var state = simulation.ComplexState;
             var val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;

@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations
         public RealVoltageExport(Simulation simulation, string posNode)
             : base(simulation)
         {
-            PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));
+            PosNode = posNode.ThrowIfNull(nameof(posNode));
             NegNode = null;
         }
 
@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         public RealVoltageExport(Simulation simulation, string posNode, string negNode)
             : base(simulation)
         {
-            PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));
+            PosNode = posNode.ThrowIfNull(nameof(posNode));
             NegNode = negNode;
         }
 
@@ -59,7 +59,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((BaseSimulation) Simulation).RealState;
+            var state = ((BaseSimulation) Simulation).RealState.ThrowIfNull("real state");
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 var posNodeIndex = posNode.Index;

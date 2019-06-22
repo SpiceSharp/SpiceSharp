@@ -51,8 +51,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="simulation">The frequency simulation.</param>
         public void InitializeParameters(FrequencySimulation simulation)
         {
-            if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
             CalculateBaseCapacitances();
             CalculateCapacitances(VoltageGs, VoltageDs, VoltageBs);
             CalculateMeyerCharges(VoltageGs, VoltageGs - VoltageDs);
@@ -64,8 +63,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="solver">Matrix</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get matrix pointers
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
@@ -99,8 +97,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <exception cref="ArgumentNullException">simulation</exception>
         public void Load(FrequencySimulation simulation)
         {
-            if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var cstate = simulation.ComplexState;
             int xnrm, xrev;

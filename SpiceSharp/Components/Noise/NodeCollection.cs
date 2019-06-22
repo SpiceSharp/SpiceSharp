@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components.NoiseSources
@@ -32,8 +31,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="nodes">Nodes</param>
         public NodeCollection(IEnumerable<int> nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
 
             foreach (var node in nodes)
                 _nodes.Add(node);

@@ -87,8 +87,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="SparseException">Vector lengths do not match</exception>
         public void CopyTo(DenseVector<T> vector)
         {
-            if (vector == null)
-                throw new ArgumentNullException(nameof(vector));
+            vector.ThrowIfNull(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
             for (var i = 0; i < Length; i++)
@@ -103,8 +102,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="SparseException">Vector lengths do not match</exception>
         public void CopyFrom(DenseVector<T> vector)
         {
-            if (vector == null)
-                throw new ArgumentNullException(nameof(vector));
+            vector.ThrowIfNull(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
             for (var i = 0; i < Length; i++)

@@ -51,8 +51,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // CGet matrix pointers
             CCollectorCollectorPrimePtr = solver.GetMatrixElement(CollectorNode, CollectorPrimeNode);
@@ -86,8 +85,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void InitializeParameters(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
             var state = simulation.RealState;
             var vbe = VoltageBe;
             var vbc = VoltageBc;
@@ -102,8 +100,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var cstate = simulation.ComplexState;
             var gcpr = ModelTemperature.CollectorConduct * BaseParameters.Area;

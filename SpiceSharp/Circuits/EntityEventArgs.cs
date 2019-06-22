@@ -22,7 +22,7 @@ namespace SpiceSharp.Circuits
         /// <param name="entity">The entity.</param>
         public EntityEventArgs(Entity entity)
         {
-            Entity = entity;
+            Entity = entity.ThrowIfNull(nameof(entity));
         }
     }
 }

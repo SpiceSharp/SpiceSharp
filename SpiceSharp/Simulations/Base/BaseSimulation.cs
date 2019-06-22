@@ -116,12 +116,11 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(EntityCollection circuit)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            circuit.ThrowIfNull(nameof(circuit));
             base.Setup(circuit);
 
             // Get behaviors and configuration data
-            var config = Configurations.Get<BaseConfiguration>();
+            var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
@@ -221,7 +220,7 @@ namespace SpiceSharp.Simulations
         protected void Op(int maxIterations)
         {
             var state = RealState;
-            var config = Configurations.Get<BaseConfiguration>();
+            var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
             state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations

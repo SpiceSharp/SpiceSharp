@@ -68,6 +68,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
+            solver.ThrowIfNull(nameof(solver));
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
             CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
@@ -91,6 +92,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="simulation">The frequency simulation.</param>
         public void InitializeParameters(FrequencySimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var vgs = Vgs;
             var vgd = Vgd;
 
@@ -123,6 +125,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="simulation">The frequency simulation.</param>
         public void Load(FrequencySimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var omega = simulation.ComplexState.Laplace.Imaginary;
 
             var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;

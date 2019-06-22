@@ -41,8 +41,7 @@ namespace SpiceSharp.Components
         /// <param name="generators">Names of the generators</param>
         public ComponentNoise(params NoiseGenerator[] generators)
         {
-            if (generators == null)
-                throw new ArgumentNullException(nameof(generators));
+            generators.ThrowIfNull(nameof(generators));
             Generators = new NoiseGeneratorCollection(generators);
         }
 
@@ -52,8 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="generators"></param>
         public ComponentNoise(IEnumerable<NoiseGenerator> generators)
         {
-            if (generators == null)
-                throw new ArgumentNullException(nameof(generators));
+            generators.ThrowIfNull(nameof(generators));
             Generators = new NoiseGeneratorCollection(generators);
         }
 
@@ -73,8 +71,7 @@ namespace SpiceSharp.Components
         /// <param name="simulation">Noise simulation</param>
         public void Evaluate(Noise simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
             var noise = simulation.NoiseState;
 
             // Calculate the output noise density

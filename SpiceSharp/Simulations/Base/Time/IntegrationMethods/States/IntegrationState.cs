@@ -40,8 +40,8 @@ namespace SpiceSharp.IntegrationMethods
         public IntegrationState(double delta, Vector<double> solution, Vector<double> state)
         {
             Delta = delta;
-            Solution = solution;
-            State = state;
+            Solution = solution.ThrowIfNull(nameof(solution));
+            State = state.ThrowIfNull(nameof(state));
         }
     }
 }

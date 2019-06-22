@@ -64,6 +64,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
+            solver.ThrowIfNull(nameof(solver));
             CPos1Pos1Ptr = solver.GetMatrixElement(Pos1, Pos1);
             CPos1Int1Ptr = solver.GetMatrixElement(Pos1, Internal1);
             CNeg1Ibr1Ptr = solver.GetMatrixElement(Neg1, BranchEq1);
@@ -94,6 +95,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="simulation">The frequency simulation.</param>
         public void Load(FrequencySimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var laplace = simulation.ComplexState.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay.Value);
 

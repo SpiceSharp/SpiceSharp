@@ -85,8 +85,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="ArgumentNullException">simulation</exception>
         protected override void Predict(TimeSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Use the previous solutions to predict a new one
             for (var i = 0; i <= Prediction.Length; i++)
@@ -106,6 +105,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="args">The <see cref="T:SpiceSharp.IntegrationMethods.TruncateEvaluateEventArgs" /> instance containing the event data.</param>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
+            args.ThrowIfNull(nameof(args));
+
             // Get the state
             var state = args.Simulation.RealState;
             var timetmp = double.PositiveInfinity;

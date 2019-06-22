@@ -186,8 +186,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         public Variable GetNode(string id)
         {
-            if (id == null)
-                throw new ArgumentNullException(nameof(id));
+            id.ThrowIfNull(nameof(id));
             if (_map.TryGetValue(id, out var result))
                 return result;
             throw new CircuitException("Could not find node {0}".FormatString(id));

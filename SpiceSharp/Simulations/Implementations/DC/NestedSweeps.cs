@@ -47,8 +47,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">sweeps</exception>
         public NestedSweeps(IEnumerable<SweepConfiguration> sweeps)
         {
-            if (sweeps == null)
-                throw new ArgumentNullException(nameof(sweeps));
+            sweeps.ThrowIfNull(nameof(sweeps));
 
             foreach (var sweep in sweeps)
                 Add(sweep);

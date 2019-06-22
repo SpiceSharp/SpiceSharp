@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -18,24 +17,19 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
-
+            state.ThrowIfNull(nameof(state));
             return state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
         }
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
-
+            state.ThrowIfNull(nameof(state));
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
             return -v * Complex.Conjugate(i);
@@ -67,8 +61,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
             CPosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
             CNegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);
         }
@@ -79,8 +72,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Load the Y-matrix
             CPosControlBranchPtr.Value += BaseParameters.Coefficient.Value;

@@ -23,7 +23,7 @@ namespace SpiceSharp.Circuits
         /// <param name="name">Instance name.</param>
         public InstanceData(Circuit subcircuit)
         {
-            Subcircuit = subcircuit ?? throw new ArgumentNullException(nameof(subcircuit));
+            Subcircuit = subcircuit.ThrowIfNull(nameof(subcircuit));
         }
 
         /// <summary>

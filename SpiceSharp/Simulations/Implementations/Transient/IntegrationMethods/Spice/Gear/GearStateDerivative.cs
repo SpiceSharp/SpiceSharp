@@ -52,7 +52,7 @@ namespace SpiceSharp.IntegrationMethods
             /// <param name="method">The Gear integration method.</param>
             public GearStateDerivative(Gear method)
             {
-                _method = method;
+                _method = method.ThrowIfNull(nameof(method));
                 _index = method.StateManager.AllocateState(1);
                 _states = method.IntegrationStates;
             }

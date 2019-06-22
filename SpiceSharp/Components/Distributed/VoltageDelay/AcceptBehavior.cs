@@ -33,8 +33,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(simulation));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -63,6 +62,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="simulation">The time-based simulation</param>
         public override void Accept(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             if (simulation.Method is IBreakpoints method)
             {
                 // The integration method supports breakpoints, let's see if we need to add one

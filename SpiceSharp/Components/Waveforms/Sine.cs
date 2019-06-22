@@ -65,6 +65,40 @@ namespace SpiceSharp.Components
         public GivenParameter<double> Phase { get; } = new GivenParameter<double>();
 
         /// <summary>
+        /// Sets all the sine parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        [ParameterName("sine"), ParameterInfo("A vector of all sine waveform parameters")]
+        public void SetSine(double[] parameters)
+        {
+            parameters.ThrowIfEmpty(nameof(parameters));
+
+            switch (parameters.Length)
+            {
+                case 6:
+                    Phase.Value = parameters[5];
+                    goto case 5;
+                case 5:
+                    Theta.Value = parameters[4];
+                    goto case 4;
+                case 4:
+                    Delay.Value = parameters[3];
+                    goto case 3;
+                case 3:
+                    Frequency.Value = parameters[2];
+                    goto case 2;
+                case 2:
+                    Amplitude.Value = parameters[1];
+                    goto case 1;
+                case 1:
+                    Offset.Value = parameters[0];
+                    break;
+                default:
+                    throw new BadParameterException(nameof(parameters));
+            }
+        }
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private double _vo, _va, _freq, _td, _theta, _phase;
@@ -177,8 +211,7 @@ namespace SpiceSharp.Components
         public override void Accept(TimeSimulation simulation)
         {
             // Do nothing
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Initialize the sinewave
             if (simulation.Method.Time.Equals(0.0))

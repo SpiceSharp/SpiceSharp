@@ -102,8 +102,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [ParameterName("p"), ParameterInfo("Power dissipation")]
         public virtual double GetPower(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             var value = CollectorCurrent * state.Solution[CollectorNode];
             value += BaseCurrent * state.Solution[BaseNode];
             value -= (CollectorCurrent + BaseCurrent) * state.Solution[EmitterNode];
@@ -192,8 +191,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get configurations
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
@@ -205,10 +203,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 4)
-                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 4);
             CollectorNode = pins[0];
             BaseNode = pins[1];
             EmitterNode = pins[2];
@@ -222,10 +217,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (variables == null)
-                throw new ArgumentNullException(nameof(variables));
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            variables.ThrowIfNull(nameof(variables));
+            solver.ThrowIfNull(nameof(solver));
 
             // Add a series collector node if necessary
             CollectorPrimeNode = ModelParameters.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col")).Index : CollectorNode;
@@ -273,8 +266,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Base simulation</param>
         public void Load(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             double gben;
             double cben;
@@ -494,8 +486,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <returns></returns>
         public bool IsConvergent(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             var vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);

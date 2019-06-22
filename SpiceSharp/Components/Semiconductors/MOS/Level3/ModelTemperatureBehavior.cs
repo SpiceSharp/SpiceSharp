@@ -60,8 +60,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             ModelParameters = provider.GetParameterSet<ModelBaseParameters>();
@@ -73,8 +72,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="simulation">Base simulation</param>
         public void Temperature(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Perform model defaulting
             if (!ModelParameters.NominalTemperature.Given)

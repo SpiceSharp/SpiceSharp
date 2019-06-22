@@ -19,8 +19,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         [ParameterName("ac"), ParameterInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
-            if (ac == null)
-                throw new ArgumentNullException(nameof(ac));
+            ac.ThrowIfNull(nameof(ac));
             switch (ac.Length)
             {
                 case 2:

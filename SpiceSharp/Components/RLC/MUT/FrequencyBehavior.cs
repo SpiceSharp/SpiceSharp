@@ -38,8 +38,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
 			base.Setup(simulation, provider);
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
+			provider.ThrowIfNull(nameof(provider));
 
             // Get behaviors
             Bias1 = provider.GetBehavior<BiasingBehavior>("inductor1");
@@ -60,8 +59,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="solver">Matrix</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get matrix equations
             Branch1Branch2Ptr = solver.GetMatrixElement(Bias1.BranchEq, Bias2.BranchEq);
@@ -74,8 +72,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.ComplexState;
             var value = state.Laplace * Factor;

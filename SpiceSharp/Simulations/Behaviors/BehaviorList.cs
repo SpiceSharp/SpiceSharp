@@ -40,8 +40,7 @@ namespace SpiceSharp.Behaviors
         /// <exception cref="ArgumentNullException">behaviors</exception>
         public BehaviorList(IEnumerable<T> behaviors)
         {
-            if (behaviors == null)
-                throw new ArgumentNullException(nameof(behaviors));
+            behaviors.ThrowIfNull(nameof(behaviors));
 
             // Turn into an array
             _behaviors = behaviors.ToArray();

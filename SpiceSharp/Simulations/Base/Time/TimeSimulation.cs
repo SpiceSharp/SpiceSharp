@@ -106,14 +106,13 @@ namespace SpiceSharp.Simulations
         /// </exception>
         protected override void Setup(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             base.Setup(entities);
 
             // Get behaviors and configurations
-            var config = Configurations.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
+            var config = Configurations.Get<TimeConfiguration>().ThrowIfNull("time configuration");
             _useIc = config.UseIc;
-            Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
+            Method = config.Method.ThrowIfNull("method");
             _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 

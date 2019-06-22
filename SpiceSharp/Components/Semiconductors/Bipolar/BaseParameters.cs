@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [ParameterName("ic"), ParameterInfo("Initial condition vector")]
         public void SetIc(double[] value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            value.ThrowIfNull(nameof(value));
 
             switch (value.Length)
             {
