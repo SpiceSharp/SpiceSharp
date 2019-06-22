@@ -91,6 +91,7 @@
     <Compile Include="Simulations\TransientTests.cs" />
     <Compile Include="Models\WaveformTests.cs" />
     <Compile Include="Utils\AssertExtensions.cs" />
+    <Compile Include="Waveforms\PulseTests.cs" />
     <Compile Include="Waveforms\PwlTests.cs" />
   </ItemGroup>
   <ItemGroup>

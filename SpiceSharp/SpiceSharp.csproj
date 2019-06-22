@@ -6,7 +6,7 @@
     <Authors>Sven Boulanger</Authors>
     <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
     <PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/SpiceSharp/SpiceSharp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
     <PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/SpiceSharp/SpiceSharp/master/api/images/logo_full.svg?sanitize=true</PackageIconUrl>
@@ -18,6 +18,8 @@
     <FileVersion>2.7.0.0</FileVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright />
   </PropertyGroup>
 
   <ItemGroup>
