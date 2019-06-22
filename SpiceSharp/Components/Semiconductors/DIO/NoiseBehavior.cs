@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Noise behavior for <see cref="Diode"/>
     /// </summary>
-    public class NoiseBehavior : BaseNoiseBehavior, IConnectedBehavior
+    public class NoiseBehavior : Behavior, INoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Connect the noise source
         /// </summary>
-        public override void ConnectNoise()
+        public void ConnectNoise()
         {
             // Get extra equations
             _posPrimeNode = _load.PosPrimeNode;
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Noise calculations
         /// </summary>
         /// <param name="simulation">Noise simulation</param>
-        public override void Noise(Noise simulation)
+        public void Noise(Noise simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
             var noise = simulation.NoiseState;
