@@ -222,8 +222,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get conigurations
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
@@ -240,8 +239,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
+            pins.ThrowIfNull(nameof(pins));
             if (pins.Length != 4)
                 throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
 
@@ -258,10 +256,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (variables == null)
-                throw new ArgumentNullException(nameof(variables));
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            variables.ThrowIfNull(nameof(variables));
+            solver.ThrowIfNull(nameof(solver));
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
@@ -311,8 +307,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="simulation">The base simulation.</param>
         public void Load(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
             var state = simulation.RealState;
 
             // Get the current voltages
@@ -515,7 +510,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             double von;
             double vdsat, cdrain = 0.0;
 
-            var Vt = Circuit.KOverQ * BaseParameters.Temperature;
+            var Vt = Constants.KOverQ * BaseParameters.Temperature;
             var effectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
             var beta = TempTransconductance * BaseParameters.Width / effectiveLength;
             var oxideCap = ModelParameters.OxideCapFactor * effectiveLength * BaseParameters.Width;
@@ -675,7 +670,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (!ModelParameters.FastSurfaceStateDensity.Value.Equals(0.0) && !oxideCap.Equals(0.0))
             {
                 // XXX constant per model
-                var cfs = Circuit.Charge * ModelParameters.FastSurfaceStateDensity * 1e4;
+                var cfs = Constants.Charge * ModelParameters.FastSurfaceStateDensity * 1e4;
                 var cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
                 xn = 1.0 + cfs / oxideCap * BaseParameters.Width * effectiveLength + cdonco;
                 tmp = Vt * xn;
@@ -1067,8 +1062,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <exception cref="ArgumentNullException">simulation</exception>
         public bool IsConvergent(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             double cdhat;

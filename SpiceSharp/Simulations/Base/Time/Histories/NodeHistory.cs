@@ -152,8 +152,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="ArgumentNullException">generator</exception>
         public NodeHistory(int length, Func<int, T> generator)
         {
-            if (generator == null)
-                throw new ArgumentNullException(nameof(generator));
+            generator.ThrowIfNull(nameof(generator));
             Length = length;
 
             // Create a cycle
@@ -242,8 +241,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="ArgumentNullException">generator</exception>
         public override void Clear(Func<int, T> generator)
         {
-            if (generator == null)
-                throw new ArgumentNullException(nameof(generator));
+            generator.ThrowIfNull(nameof(generator));
 
             var current = _currentPoint;
             for (var i = 0; i < Length; i++)

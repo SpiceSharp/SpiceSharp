@@ -30,9 +30,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
         }
 
+        /// <summary>
+        /// Initialize small-signal parameters.
+        /// </summary>
+        /// <param name="simulation">The frequency simulation.</param>
         public void InitializeParameters(FrequencySimulation simulation)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -42,8 +45,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="ArgumentNullException">solver</exception>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
@@ -58,8 +60,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="ArgumentNullException">simulation</exception>
         public void Load(FrequencySimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Get the current state
             var currentState = CurrentState;

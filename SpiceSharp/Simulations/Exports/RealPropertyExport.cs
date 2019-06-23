@@ -49,8 +49,8 @@ namespace SpiceSharp.Simulations
         public RealPropertyExport(Simulation simulation, string entityName, string propertyName, IEqualityComparer<string> comparer = null)
             : base(simulation)
         {
-            EntityName = entityName ?? throw new ArgumentNullException(nameof(entityName));
-            PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
+            EntityName = entityName.ThrowIfNull(nameof(entityName));
+            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
             Comparer = comparer ?? EqualityComparer<string>.Default;
         }
 
@@ -62,10 +62,8 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">e</exception>
         protected override void Initialize(object sender, EventArgs e)
         {
-            if (e == null)
-                throw new ArgumentNullException(nameof(e));
-            var simulation = (Simulation) sender;
-            var eb = simulation.EntityBehaviors[EntityName];
+            e.ThrowIfNull(nameof(e));
+            var eb = Simulation.EntityBehaviors[EntityName];
             Func<double> extractor = null;
 
             // Get the necessary behavior in order:
@@ -73,7 +71,7 @@ namespace SpiceSharp.Simulations
             {
                 if (eb.TryGetValue(typeof(ITimeBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
-                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
             }
 
             // 2) Second, try the load behavior
@@ -81,7 +79,7 @@ namespace SpiceSharp.Simulations
             {
                 if (eb.TryGetValue(typeof(IBiasingBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
-                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
             }
 
             // 3) Thirdly, check temperature behavior
@@ -89,14 +87,14 @@ namespace SpiceSharp.Simulations
             {
                 if (eb.TryGetValue(typeof(ITemperatureBehavior), out var behavior) &&
                     behavior is IPropertyExporter exporter)
-                    exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
             }
 
             // 4) Check parameter sets
             if (extractor == null)
             {
                 // Get all parameter sets associated with the entity
-                var ps = simulation.EntityParameters[EntityName];
+                var ps = Simulation.EntityParameters[EntityName];
                 foreach (var p in ps.Values)
                 {
                     extractor = p.CreateGetter<double>(PropertyName, Comparer);

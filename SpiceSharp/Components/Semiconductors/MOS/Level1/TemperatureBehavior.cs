@@ -134,8 +134,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -159,13 +158,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            Vt = BaseParameters.Temperature * Circuit.KOverQ;
+            Vt = BaseParameters.Temperature * Constants.KOverQ;
             var ratio = BaseParameters.Temperature / ModelParameters.NominalTemperature;
-            var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
-            var kt = BaseParameters.Temperature * Circuit.Boltzmann;
+            var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
+            var kt = BaseParameters.Temperature * Constants.Boltzmann;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
-            var arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
+            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
             if (ModelParameters.DrainResistance.Given)
             {
@@ -217,12 +216,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             if (tempSaturationCurrentDensity <= 0 || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
             {
-                SourceVCritical = DrainVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * tempSaturationCurrent));
+                SourceVCritical = DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrent));
             }
             else
             {
-                DrainVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * tempSaturationCurrentDensity * BaseParameters.DrainArea));
-                SourceVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * tempSaturationCurrentDensity * BaseParameters.SourceArea));
+                DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrentDensity * BaseParameters.DrainArea));
+                SourceVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrentDensity * BaseParameters.SourceArea));
             }
 
             if (tempSaturationCurrentDensity.Equals(0) || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)

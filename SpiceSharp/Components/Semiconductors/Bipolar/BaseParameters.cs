@@ -14,10 +14,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature")]
         public double TemperatureCelsius
         {
-            get => Temperature - Circuit.CelsiusKelvin;
-            set => Temperature.Value = value + Circuit.CelsiusKelvin;
+            get => Temperature - Constants.CelsiusKelvin;
+            set => Temperature.Value = value + Constants.CelsiusKelvin;
         }
-        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
         [ParameterName("area"), ParameterInfo("Area factor")]
         public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
         [ParameterName("off"), ParameterInfo("Device initially off")]
@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [ParameterName("ic"), ParameterInfo("Initial condition vector")]
         public void SetIc(double[] value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            value.ThrowIfNull(nameof(value));
 
             switch (value.Length)
             {

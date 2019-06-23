@@ -171,7 +171,7 @@ namespace SpiceSharpTest.Simulations
             var bjtModelQp1 = new BipolarJunctionTransistorModel("QP1");
             bjtModelQp1.SetParameter("pnp", true);
             bjtModelQp1.SetParameter("is", 16e-15);
-            bjtModelQp1.SetParameter("bf", 1700);
+            bjtModelQp1.SetParameter("bf", 1700.0);
             var bjtModelQp2 = new BipolarJunctionTransistorModel("QP2");
             bjtModelQp2.SetParameter("pnp", true);
             bjtModelQp2.SetParameter("is", 16e-15);

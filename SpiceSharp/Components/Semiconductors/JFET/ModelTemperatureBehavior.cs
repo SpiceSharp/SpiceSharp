@@ -40,8 +40,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _mbp = provider.GetParameterSet<ModelBaseParameters>();
@@ -54,22 +53,21 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <exception cref="NotImplementedException"></exception>
         public override void Temperature(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             if (_mbp.NominalTemperature.Given)
                 _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
 
-            var vtnom = Circuit.KOverQ * _mbp.NominalTemperature;
-            var fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
-            var kt1 = Circuit.Boltzmann * _mbp.NominalTemperature;
+            var vtnom = Constants.KOverQ * _mbp.NominalTemperature;
+            var fact1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;
+            var kt1 = Constants.Boltzmann * _mbp.NominalTemperature;
             var egfet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) /
                          (_mbp.NominalTemperature + 1108);
-            var arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * 2 * Circuit.ReferenceTemperature);
-            var pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
+            var arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Constants.Boltzmann * 2 * Constants.ReferenceTemperature);
+            var pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Constants.Charge * arg1);
             Pbo = (_mbp.GatePotential - pbfact1) / fact1;
             var gmaold = (_mbp.GatePotential - Pbo) / Pbo;
-            Cjfact = 1 / (1 + .5 * (4e-4 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            Cjfact = 1 / (1 + .5 * (4e-4 * (_mbp.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
 
             if (_mbp.DepletionCapCoefficient > 0.95)
             {

@@ -18,8 +18,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("temp"), ParameterInfo("Instance temperature")]
         public double TemperatureCelsius
         {
-            get => Temperature - Circuit.CelsiusKelvin;
-            set => Temperature.Value = value + Circuit.CelsiusKelvin;
+            get => Temperature - Constants.CelsiusKelvin;
+            set => Temperature.Value = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
@@ -75,8 +75,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ic"), ParameterInfo("Initial VDS,VGS vector")]
         public void SetIc(double[] values)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
+            values.ThrowIfNull(nameof(values));
             switch (values.Length)
             {
                 case 2:

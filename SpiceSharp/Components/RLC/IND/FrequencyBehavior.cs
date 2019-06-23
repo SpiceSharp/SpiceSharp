@@ -41,8 +41,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
@@ -57,10 +56,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 2);
             _posNode = pins[0];
             _negNode = pins[1];
         }
@@ -71,8 +67,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="solver">Matrix</param>
         public override void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get current equation
             _branchEq = _base.BranchEq;
@@ -91,8 +86,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public override void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.ComplexState;
             var val = state.Laplace * _bp.Inductance.Value;

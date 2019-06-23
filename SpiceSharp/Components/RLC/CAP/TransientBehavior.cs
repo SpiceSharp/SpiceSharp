@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("p"), ParameterInfo("Instantaneous device power")]
         public double GetPower(BaseSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
 
             return QCap.Derivative * (state.Solution[PosNode] - state.Solution[NegNode]);
         }
@@ -47,8 +46,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
@@ -75,8 +73,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="method"></param>
         public void CreateStates(IntegrationMethod method)
         {
-			if (method == null)
-				throw new ArgumentNullException(nameof(method));
+			method.ThrowIfNull(nameof(method));
             QCap = method.CreateDerivative();
         }
 
@@ -86,8 +83,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<double> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             // Get matrix elements
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
@@ -106,8 +102,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="simulation"></param>
         public void GetDcState(TimeSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Calculate the state for DC
             var sol = simulation.RealState.Solution;
@@ -123,8 +118,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void Transient(TimeSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             var vcap = state.Solution[PosNode] - state.Solution[NegNode];

@@ -64,8 +64,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         [ParameterName("v"), ParameterInfo("Switch voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
@@ -78,8 +77,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         [ParameterName("i"), ParameterInfo("Switch current")]
         public double GetCurrent(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
         }
 
@@ -92,8 +90,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower(BaseSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return (state.Solution[PosNode] - state.Solution[NegNode]) *
                    (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
         }
@@ -133,8 +130,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="ArgumentNullException">pins</exception>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
+            pins.ThrowIfNull(nameof(pins));
             PosNode = pins[0];
             NegNode = pins[1];
             Method.Connect(pins);
@@ -148,8 +144,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="NotImplementedException"></exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -168,8 +163,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="NotImplementedException"></exception>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             // Get matrix pointers
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
@@ -185,8 +179,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="NotImplementedException"></exception>
         public void Load(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             bool currentState;
             var state = simulation.RealState;

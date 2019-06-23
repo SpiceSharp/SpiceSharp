@@ -66,8 +66,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();
@@ -83,17 +82,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Base simulation</param>
         public void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            Vt = BaseParameters.Temperature * Circuit.KOverQ;
-            var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
+            Vt = BaseParameters.Temperature * Constants.KOverQ;
+            var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
-            var arg = -egfet / (2 * Circuit.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
-                                                                                                                Circuit.ReferenceTemperature));
-            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var arg = -egfet / (2 * Constants.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature +
+                                                                                                                Constants.ReferenceTemperature));
+            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
             var ratlog = Math.Log(BaseParameters.Temperature / ModelParameters.NominalTemperature);
             var ratio1 = BaseParameters.Temperature / ModelParameters.NominalTemperature - 1;
@@ -108,23 +106,23 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             var pbo = (ModelParameters.PotentialBe - pbfact) / ModelTemperature.Factor1;
             var gmaold = (ModelParameters.PotentialBe - pbo) / pbo;
-            TempBeCap = ModelParameters.DepletionCapBe / (1 + ModelParameters.JunctionExpBe * (4e-4 * (ModelParameters.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TempBeCap = ModelParameters.DepletionCapBe / (1 + ModelParameters.JunctionExpBe * (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             TempBePotential = fact2 * pbo + pbfact;
             var gmanew = (TempBePotential - pbo) / pbo;
-            TempBeCap *= 1 + ModelParameters.JunctionExpBe * (4e-4 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TempBeCap *= 1 + ModelParameters.JunctionExpBe * (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
 
             pbo = (ModelParameters.PotentialBc - pbfact) / ModelTemperature.Factor1;
             gmaold = (ModelParameters.PotentialBc - pbo) / pbo;
-            TempBcCap = ModelParameters.DepletionCapBc / (1 + ModelParameters.JunctionExpBc * (4e-4 * (ModelParameters.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TempBcCap = ModelParameters.DepletionCapBc / (1 + ModelParameters.JunctionExpBc * (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             TempBcPotential = fact2 * pbo + pbfact;
             gmanew = (TempBcPotential - pbo) / pbo;
-            TempBcCap *= 1 + ModelParameters.JunctionExpBc * (4e-4 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TempBcCap *= 1 + ModelParameters.JunctionExpBc * (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
 
             TempDepletionCap = ModelParameters.DepletionCapCoefficient * TempBePotential;
             TempFactor1 = TempBePotential * (1 - Math.Exp((1 - ModelParameters.JunctionExpBe) * ModelTemperature.Xfc)) / (1 - ModelParameters.JunctionExpBe);
             TempFactor4 = ModelParameters.DepletionCapCoefficient * TempBcPotential;
             TempFactor5 = TempBcPotential * (1 - Math.Exp((1 - ModelParameters.JunctionExpBc) * ModelTemperature.Xfc)) / (1 - ModelParameters.JunctionExpBc);
-            TempVCritical = Vt * Math.Log(Vt / (Circuit.Root2 * ModelParameters.SatCur));
+            TempVCritical = Vt * Math.Log(Vt / (Constants.Root2 * ModelParameters.SatCur));
         }
     }
 }

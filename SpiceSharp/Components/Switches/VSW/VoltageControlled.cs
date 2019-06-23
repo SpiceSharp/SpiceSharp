@@ -43,10 +43,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="ArgumentException">Pin count mismatch</exception>
         public override void Connect(int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length < 4)
-                throw new ArgumentException("Pin count mismatch");
+            pins.ThrowIfNot(nameof(pins), 4);
             ContPosNode = pins[2];
             ContNegNode = pins[3];
         }

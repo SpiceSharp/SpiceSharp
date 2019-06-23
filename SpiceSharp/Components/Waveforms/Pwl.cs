@@ -44,27 +44,14 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="voltages">Array of voltages.</param>
         public Pwl(double[] times, double[] voltages)
         {
-            Times = times ?? throw new ArgumentNullException(nameof(times));
-            Voltages = voltages ?? throw new ArgumentNullException(nameof(voltages));
-
-            if (Times.Length != Voltages.Length)
-            {
-                throw new ArgumentException("PWL - times array has different length than voltages array");
-            }
+            Times = times.ThrowIfEmpty(nameof(times));
+            Voltages = voltages.ThrowIfNot(nameof(voltages), times.Length);
 
             _pwlPoints = Times.Length;
-
-            if (_pwlPoints == 0)
-            {
-                throw new ArgumentException("PWL - times array has zero points");
-            }
-
             for (var i = 1; i < _pwlPoints; i++)
             {
                 if (Times[i-1] >= Times[i])
-                {
                     throw new ArgumentException("PWL - times array should contain monotonously increasing time points");
-                }
             }
         }
 
@@ -84,15 +71,10 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="simulation">The time-based simulation</param>
         public override void Accept(TimeSimulation simulation)
         {
-            if (simulation == null)
-            {
-                throw new ArgumentNullException(nameof(simulation));
-            }
+            simulation.ThrowIfNull(nameof(simulation));
 
             if (simulation.Method.Time.Equals(0.0))
-            {
                 Value = GetLineValue(0.0);
-            }
 
             if (simulation.Method is IBreakpoints method)
             {
@@ -116,6 +98,7 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="simulation">The time-based simulation.</param>
         public override void Probe(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var time = simulation.Method.Time;
             Value = GetLineValue(time);
         }

@@ -17,6 +17,8 @@ namespace SpiceSharp.Simulations
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
 
+        protected ComplexSimulationStatistics FrequencySimulationStatistics { get; }
+
         /// <summary>
         /// Occurs before loading the matrix and right-hand side vector.
         /// </summary>
@@ -44,18 +46,6 @@ namespace SpiceSharp.Simulations
         public ComplexSimulationState ComplexState { get; protected set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
-        /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        protected FrequencySimulation(string name) : base(name)
-        {
-            Configurations.Add(new FrequencyConfiguration());
-
-            // Add behavior types in the order they are (usually) called
-            BehaviorTypes.Add(typeof(IFrequencyBehavior));
-        }
-
-        /// <summary>
         /// Gets the frequency sweep.
         /// </summary>
         /// <value>
@@ -67,10 +57,26 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
+        protected FrequencySimulation(string name) : base(name)
+        {
+            Configurations.Add(new FrequencyConfiguration());
+            FrequencySimulationStatistics = new ComplexSimulationStatistics();
+            Statistics.Add(typeof(ComplexSimulationStatistics), FrequencySimulationStatistics);
+
+            // Add behavior types in the order they are (usually) called
+            BehaviorTypes.Add(typeof(IFrequencyBehavior));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
+        /// </summary>
+        /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
         protected FrequencySimulation(string name, Sweep<double> frequencySweep) : base(name)
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
+            FrequencySimulationStatistics = new ComplexSimulationStatistics();
+            Statistics.Add(typeof(ComplexSimulationStatistics), FrequencySimulationStatistics);
 
             // Add behavior types in the order they are (usually) called
             BehaviorTypes.Add(typeof(IFrequencyBehavior));
@@ -88,14 +94,13 @@ namespace SpiceSharp.Simulations
         /// </exception>
         protected override void Setup(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             base.Setup(entities);
 
             // Get behaviors, configurations and states
             var config = Configurations.Get<FrequencyConfiguration>();
             _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
-            FrequencySweep = config.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
+            FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
             // Create the state for complex numbers
             ComplexState = new ComplexSimulationState();
@@ -158,12 +163,18 @@ namespace SpiceSharp.Simulations
 
             if (_shouldReorderAc)
             {
+                FrequencySimulationStatistics.ComplexReorderTime.Start();
                 solver.OrderAndFactor();
+                FrequencySimulationStatistics.ComplexReorderTime.Stop();
                 _shouldReorderAc = false;
             }
             else
             {
-                if (!solver.Factor())
+                FrequencySimulationStatistics.ComplexDecompositionTime.Start();
+                var factored = solver.Factor();
+                FrequencySimulationStatistics.ComplexDecompositionTime.Stop();
+
+                if (!factored)
                 {
                     _shouldReorderAc = true;
                     goto retry;
@@ -171,14 +182,17 @@ namespace SpiceSharp.Simulations
             }
 
             // Solve
+            FrequencySimulationStatistics.ComplexSolveTime.Start();
             solver.Solve(cstate.Solution);
+            FrequencySimulationStatistics.ComplexSolveTime.Stop();
 
             // Reset values
             cstate.Solution[0] = 0.0;
+            FrequencySimulationStatistics.ComplexPoints++;
         }
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeFrequencyLoad" /> event.
+        /// Raises the <see cref="BeforeFrequencyLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeFrequencyLoad(LoadStateEventArgs args) => BeforeFrequencyLoad?.Invoke(this, args);
@@ -211,10 +225,10 @@ namespace SpiceSharp.Simulations
             var cstate = ComplexState;
 
             OnBeforeFrequencyLoad(_loadStateEventArgs);
-
+            FrequencySimulationStatistics.ComplexLoadTime.Start();
             cstate.Solver.Clear();
             LoadFrequencyBehaviors();
-
+            FrequencySimulationStatistics.ComplexLoadTime.Reset();
             OnAfterFrequencyLoad(_loadStateEventArgs);
         }
 

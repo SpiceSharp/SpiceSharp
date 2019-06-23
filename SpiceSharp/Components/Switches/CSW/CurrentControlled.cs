@@ -23,8 +23,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get behaviors
             _loadBehavior = provider.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");

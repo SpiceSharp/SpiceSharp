@@ -55,15 +55,5 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         public abstract void Transient(TimeSimulation simulation);
-
-        /// <summary>
-        /// Truncates the timestep based on the LTE (Local Truncation Error). Obsolete, truncation is now
-        /// handled by the <see cref="StateDerivative" /> returned by the integration method.
-        /// </summary>
-        /// <returns>
-        /// The timestep that should be used for this behavior.
-        /// </returns>
-        [Obsolete]
-        public virtual double Truncate() => double.PositiveInfinity;
     }
 }

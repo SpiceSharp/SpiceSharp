@@ -51,8 +51,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             NoiseParameters = provider.GetParameterSet<ModelNoiseParameters>("model");
@@ -80,8 +79,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <exception cref="ArgumentNullException">simulation</exception>
         public void Noise(Noise simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var noise = simulation.NoiseState;
 

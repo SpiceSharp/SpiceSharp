@@ -57,10 +57,8 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
-            if (parameters == null)
-                throw new ArgumentNullException(nameof(parameters));
-            if (behaviors == null)
-                throw new ArgumentNullException(nameof(behaviors));
+            parameters.ThrowIfNull(nameof(parameters));
+            behaviors.ThrowIfNull(nameof(behaviors));
 
             // Base execution (will add entity behaviors and parameters for this mutual inductance)
             var data = base.BuildSetupDataProvider(parameters, behaviors);

@@ -12,11 +12,6 @@ namespace SpiceSharp.Components
     public abstract class Component : Entity
     {
         /// <summary>
-        /// The default priority for components.
-        /// </summary>
-        public const int ComponentPriority = 0;
-
-        /// <summary>
         /// Private variables
         /// </summary>
         private readonly string[] _connections;
@@ -55,14 +50,10 @@ namespace SpiceSharp.Components
         /// <exception cref="CircuitException">{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length)</exception>
         public void Connect(params string[] nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
-            if (nodes.Length != _connections.Length)
-                throw new CircuitException("{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length));
+            nodes.ThrowIfNot(nameof(nodes), _connections.Length);
             for (var i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i] == null)
-                    throw new ArgumentNullException("node " + (i + 1));
+                nodes[i].ThrowIfNull("node{0}".FormatString(i + 1));
                 _connections[i] = nodes[i];
             }
         }
@@ -140,8 +131,7 @@ namespace SpiceSharp.Components
         /// <returns>The node indices.</returns>
         protected int[] ApplyConnections(VariableSet nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
 
             // Map connected nodes
             var indexes = new int[_connections.Length];
@@ -158,8 +148,7 @@ namespace SpiceSharp.Components
         /// <exception cref="ArgumentNullException">nodes</exception>
         public IEnumerable<int> GetNodeIndexes(VariableSet nodes)
         {
-            if (nodes == null)
-                throw new ArgumentNullException(nameof(nodes));
+            nodes.ThrowIfNull(nameof(nodes));
 
             // Map connected nodes
             foreach (var node in _connections)
@@ -167,6 +156,44 @@ namespace SpiceSharp.Components
                 var index = nodes.MapNode(node).Index;
                 yield return index;
             }
+        }
+
+        /// <summary>
+        /// Clone the component for instantiating.
+        /// </summary>
+        /// <param name="data">The instance data.</param>
+        /// <returns></returns>
+        public override Entity Clone(InstanceData data)
+        {
+            var clone = (Component)base.Clone(data);
+
+            // Manage connections
+            if (data is ComponentInstanceData cid)
+            {
+                // Map nodes
+                string[] nodes = new string[PinCount];
+                for (var i = 0; i < PinCount; i++)
+                    nodes[i] = cid.GenerateNodeName(_connections[i]);
+                clone.Connect(nodes);
+
+                // Map the model
+                if (Model != null)
+                    clone.Model = cid.GenerateModelName(Model);
+            }
+
+            return clone;
+        }
+
+        /// <summary>
+        /// Copy from another component.
+        /// </summary>
+        /// <param name="source">The source component.</param>
+        public override void CopyFrom(Entity source)
+        {
+            base.CopyFrom(source);
+            var c = (Component)source;
+            for (var i = 0; i < PinCount; i++)
+                _connections[i] = c._connections[i];
         }
     }
 }

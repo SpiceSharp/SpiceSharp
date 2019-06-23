@@ -33,8 +33,8 @@ namespace SpiceSharp.Components
         public CurrentSource(string name) 
             : base(name, CurrentSourcePinCount)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters());
-            ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
+            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters());
+            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
         }
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace SpiceSharp.Components
         public CurrentSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(dc));
-            ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
+            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(dc));
+            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
             Connect(pos, neg);
         }
 
@@ -62,8 +62,8 @@ namespace SpiceSharp.Components
         public CurrentSource(string name, string pos, string neg, Waveform waveform)
             : this(name)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentBaseParameters(waveform));
-            ParameterSets.Add(new CommonBehaviors.IndependentFrequencyParameters());
+            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
+            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
             Connect(pos, neg);
         }
     }

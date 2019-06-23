@@ -68,8 +68,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get base configuration
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
@@ -88,33 +87,32 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Base simulation</param>
         public void Temperature(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var xcbv = 0.0;
 
             // loop through all the instances
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
-            Vt = Circuit.KOverQ * BaseParameters.Temperature;
+            Vt = Constants.KOverQ * BaseParameters.Temperature;
             Vte = ModelParameters.EmissionCoefficient * Vt;
 
             // this part gets really ugly - I won't even try to explain these equations
-            var fact2 = BaseParameters.Temperature / Circuit.ReferenceTemperature;
+            var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
-            var arg = -egfet / (2 * Circuit.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
-                                                                                                                Circuit.ReferenceTemperature));
-            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var arg = -egfet / (2 * Constants.Boltzmann * BaseParameters.Temperature) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature +
+                                                                                                                Constants.ReferenceTemperature));
+            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
             var egfet1 = 1.16 - 7.02e-4 * ModelParameters.NominalTemperature * ModelParameters.NominalTemperature / (ModelParameters.NominalTemperature + 1108);
-            var arg1 = -egfet1 / (Circuit.Boltzmann * 2 * ModelParameters.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
-            var fact1 = ModelParameters.NominalTemperature / Circuit.ReferenceTemperature;
-            var pbfact1 = -2 * ModelTemperature.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
+            var arg1 = -egfet1 / (Constants.Boltzmann * 2 * ModelParameters.NominalTemperature) + 1.1150877 / (2 * Constants.Boltzmann * Constants.ReferenceTemperature);
+            var fact1 = ModelParameters.NominalTemperature / Constants.ReferenceTemperature;
+            var pbfact1 = -2 * ModelTemperature.VtNominal * (1.5 * Math.Log(fact1) + Constants.Charge * arg1);
             var pbo = (ModelParameters.JunctionPotential - pbfact1) / fact1;
             var gmaold = (ModelParameters.JunctionPotential - pbo) / pbo;
-            TempJunctionCap = ModelParameters.JunctionCap / (1 + ModelParameters.GradingCoefficient * (400e-6 * (ModelParameters.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TempJunctionCap = ModelParameters.JunctionCap / (1 + ModelParameters.GradingCoefficient * (400e-6 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             TempJunctionPot = pbfact + fact2 * pbo;
             var gmanew = (TempJunctionPot - pbo) / pbo;
-            TempJunctionCap *= 1 + ModelParameters.GradingCoefficient * (400e-6 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TempJunctionCap *= 1 + ModelParameters.GradingCoefficient * (400e-6 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
 
             TempSaturationCurrent = ModelParameters.SaturationCurrent * Math.Exp((BaseParameters.Temperature / ModelParameters.NominalTemperature - 1) * ModelParameters.ActivationEnergy /
                 (ModelParameters.EmissionCoefficient * Vt) + ModelParameters.SaturationCurrentExp / ModelParameters.EmissionCoefficient * Math.Log(BaseParameters.Temperature / ModelParameters.NominalTemperature));
@@ -127,7 +125,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // and Vcrit
             var vte = ModelParameters.EmissionCoefficient * Vt;
-            TempVCritical = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
+            TempVCritical = vte * Math.Log(vte / (Constants.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (ModelParameters.BreakdownVoltage.Given)

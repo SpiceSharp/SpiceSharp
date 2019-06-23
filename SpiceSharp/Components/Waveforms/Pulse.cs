@@ -75,6 +75,42 @@ namespace SpiceSharp.Components
         public GivenParameter<double> Period { get; } = new GivenParameter<double>(double.PositiveInfinity);
 
         /// <summary>
+        /// Sets all the pulse parameters.
+        /// </summary>
+        /// <param name="parameters">The pulse parameters</param>
+        [ParameterName("pulse"), ParameterInfo("A vector of all pulse waveform parameters")]
+        public void SetPulse(double[] parameters)
+        {
+            parameters.ThrowIfEmpty(nameof(parameters));
+            switch (parameters.Length)
+            {
+                case 7:
+                    Period.Value = parameters[6];
+                    goto case 6;
+                case 6:
+                    PulseWidth.Value = parameters[5];
+                    goto case 5;
+                case 5:
+                    FallTime.Value = parameters[4];
+                    goto case 4;
+                case 4:
+                    RiseTime.Value = parameters[3];
+                    goto case 3;
+                case 3:
+                    Delay.Value = parameters[2];
+                    goto case 2;
+                case 2:
+                    PulsedValue.Value = parameters[1];
+                    goto case 1;
+                case 1:
+                    InitialValue.Value = parameters[0];
+                    break;
+                default:
+                    throw new BadParameterException(nameof(parameters));
+            }
+        }
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private double _v1, _v2, _td, _tr, _tf, _pw, _per;
@@ -188,8 +224,7 @@ namespace SpiceSharp.Components
         /// <exception cref="ArgumentNullException">simulation</exception>
         public override void Accept(TimeSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Initialize the pulse
             if (simulation.Method.Time.Equals(0.0))

@@ -50,8 +50,8 @@ namespace SpiceSharp.Simulations
         public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName, IEqualityComparer<string> comparer = null)
             : base(simulation)
         {
-            EntityName = entityName ?? throw new ArgumentNullException(nameof(entityName));
-            PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
+            EntityName = entityName.ThrowIfNull(nameof(entityName));
+            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
             Comparer = comparer ?? EqualityComparer<string>.Default;
         }
 
@@ -63,16 +63,15 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">e</exception>
         protected override void Initialize(object sender, EventArgs e)
         {
-            if (e == null)
-                throw new ArgumentNullException(nameof(e));
-            var simulation = (Simulation) sender;
+            e.ThrowIfNull(nameof(e));
+
             Func<Complex> extractor = null;
-            var eb = simulation.EntityBehaviors[EntityName];
+            var eb = Simulation.EntityBehaviors[EntityName];
 
             // Get the necessary behaviors in order of importance
             // 1) First the frequency analysis analysis
             if (eb.TryGet<IFrequencyBehavior>(out var behavior) && behavior is IPropertyExporter exporter)
-                exporter.CreateGetter(Simulation, PropertyName, Comparer, out extractor);
+                exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
 
             // There are currently no other behaviors that export complex numbers
 

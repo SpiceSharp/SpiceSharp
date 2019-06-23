@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The frequency parameters.
         /// </value>
-        protected CommonBehaviors.IndependentFrequencyParameters FrequencyParameters { get; private set; }
+        protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
         /// Matrix elements
@@ -47,8 +47,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
             return state.Solution[BranchEq];
         }
 
@@ -61,8 +60,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
 
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = state.Solution[BranchEq];
@@ -83,11 +81,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
-            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
+            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
         }
         
         /// <summary>
@@ -104,8 +101,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get matrix elements
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
@@ -123,8 +119,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             // Load Y-matrix
             CPosBranchPtr.Value += 1.0;

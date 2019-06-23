@@ -21,7 +21,7 @@ namespace SpiceSharpTest.Waveforms
         public void When_PwlHasNullArray_Expect_Exception()
         {
             Assert.Throws<ArgumentNullException>(() => new Pwl(null, new double[] { }));
-            Assert.Throws<ArgumentNullException>(() => new Pwl(new double[] { }, null));
+            Assert.Throws<ArgumentNullException>(() => new Pwl(new double[] { 1.0 }, null));
         }
 
         [Test]

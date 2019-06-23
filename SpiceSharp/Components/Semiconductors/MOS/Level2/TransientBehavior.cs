@@ -168,8 +168,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <exception cref="NotImplementedException"></exception>
         public void CreateStates(IntegrationMethod method)
         {
-            if (method == null)
-                throw new ArgumentNullException(nameof(method));
+            method.ThrowIfNull(nameof(method));
             _voltageGs = method.CreateHistory();
             _voltageDs = method.CreateHistory();
             _voltageBs = method.CreateHistory();
@@ -229,8 +228,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <exception cref="ArgumentNullException">solver</exception>
         public void GetEquationPointers(Solver<double> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
             GatePtr = solver.GetRhsElement(GateNode);
         }
 
@@ -241,8 +239,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <exception cref="ArgumentNullException">simulation</exception>
         public void Transient(TimeSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var vbd = VoltageBd;
             var vbs = VoltageBs;

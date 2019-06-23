@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Parameters
             source.Field1 = 1.0;
             source.Field2 = 2;
             var destination = new ParameterExample();
-            Utility.CopyPropertiesAndFields(source, destination);
+            Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1.0, destination.Field1, 1e-12);
             Assert.AreEqual(2, destination.Field2);
 
@@ -70,7 +70,7 @@ namespace SpiceSharpTest.Parameters
             var source = new ParameterExample();
             source.SetMethod1(1);
             var destination = new ParameterExample();
-            Utility.CopyPropertiesAndFields(source, destination);
+            Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Property1);
 
             destination.SetMethod1(2);
@@ -89,7 +89,7 @@ namespace SpiceSharpTest.Parameters
             var source = new ParameterExample();
             source.Property2 = 1;
             var destination = new ParameterExample();
-            Utility.CopyPropertiesAndFields(source, destination);
+            Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Property2);
 
             destination.Property2 = 2;
@@ -108,7 +108,7 @@ namespace SpiceSharpTest.Parameters
             var source = new ParameterExample();
             source.Parameter1.Value = 1;
             var destination = new ParameterExample();
-            Utility.CopyPropertiesAndFields(source, destination);
+            Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter1.Value);
 
             destination.Parameter1.Value = 2;
@@ -127,7 +127,7 @@ namespace SpiceSharpTest.Parameters
             var source = new ParameterExample();
             source.Parameter2.Value = 1;
             var destination = new ParameterExample();
-            Utility.CopyPropertiesAndFields(source, destination);
+            Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter2.Value);
 
             destination.Parameter2.Value = 2;
@@ -195,7 +195,7 @@ namespace SpiceSharpTest.Parameters
         public void When_GetParameter_Expect_Parameter()
         {
             var p = new ParameterExample();
-            var param = p.GetParameter<double>("parameter1");
+            var param = p.GetParameter<Parameter<double>>("parameter1");
             Assert.AreEqual(p.Parameter1, param);
         }
 
@@ -203,7 +203,7 @@ namespace SpiceSharpTest.Parameters
         public void When_PrincipalParameter_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var param = p.GetParameter<double>();
+            var param = p.GetParameter<Parameter<double>>();
             Assert.AreEqual(param, p.PrincipalTest);
         }
 

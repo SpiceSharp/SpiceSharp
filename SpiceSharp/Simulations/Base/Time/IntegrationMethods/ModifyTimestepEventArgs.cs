@@ -46,7 +46,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="delta">The timestep.</param>
         public ModifyTimestepEventArgs(TimeSimulation simulation, double delta)
         {
-            Simulation = simulation;
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
             _delta = delta;
         }
     }

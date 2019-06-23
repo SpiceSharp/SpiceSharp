@@ -15,23 +15,11 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The expected type.</typeparam>
         /// <param name="simulation">The simulation.</param>
         /// <param name="propertyName">Name of the property.</param>
-        /// <param name="function">The function that will return the value of the property.</param>
-        /// <returns>
-        /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
-        /// </returns>
-        bool CreateGetter<T>(Simulation simulation, string propertyName, out Func<T> function) where T : struct;
-
-        /// <summary>
-        /// Creates a getter for a property.
-        /// </summary>
-        /// <typeparam name="T">The expected type.</typeparam>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="propertyName">Name of the property.</param>
         /// <param name="comparer">The property name comparer.</param>
         /// <param name="function">The function that will return the value of the property.</param>
         /// <returns>
         /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
         /// </returns>
-        bool CreateGetter<T>(Simulation simulation, string propertyName, IEqualityComparer<string> comparer, out Func<T> function) where T : struct;
+        bool CreateExportMethod<T>(Simulation simulation, string propertyName, out Func<T> function, IEqualityComparer<string> comparer = null);
     }
 }

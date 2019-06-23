@@ -43,8 +43,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="state">State</param>
         public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, BaseSimulationState state)
         {
-            if (flux == null)
-                throw new ArgumentNullException(nameof(flux));
+            flux.ThrowIfNull(nameof(flux));
 
             Inductance = inductance;
             Current = current;

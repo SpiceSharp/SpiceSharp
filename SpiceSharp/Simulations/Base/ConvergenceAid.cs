@@ -90,6 +90,8 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         public virtual void Initialize(BaseSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Get the unknown variables
             Variables = simulation.Variables;
 
@@ -119,6 +121,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public virtual void Aid()
         {
+            Solver.ThrowIfNull("solver");
+
             // Don't execute if the convergence aid wasn't initialized properly
             if (Diagonal == null)
                 return;

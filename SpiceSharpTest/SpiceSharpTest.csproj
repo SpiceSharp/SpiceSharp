@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicExampleTests.cs" />
+    <Compile Include="Circuits\CircuitTests.cs" />
     <Compile Include="Circuits\ValidatorTests.cs" />
     <Compile Include="Examples\ChangingParameter\Changing.cs" />
     <Compile Include="Examples\CustomResistor\BaseParameters.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Simulations\TransientTests.cs" />
     <Compile Include="Models\WaveformTests.cs" />
     <Compile Include="Utils\AssertExtensions.cs" />
+    <Compile Include="Waveforms\PulseTests.cs" />
     <Compile Include="Waveforms\PwlTests.cs" />
   </ItemGroup>
   <ItemGroup>

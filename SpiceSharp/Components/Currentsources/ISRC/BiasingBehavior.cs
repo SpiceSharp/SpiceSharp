@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        protected CommonBehaviors.IndependentBaseParameters BaseParameters { get; private set; }
+        protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets voltage across the voltage source
@@ -29,15 +29,13 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
         public double GetVoltage(BaseSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
         public double GetPower(BaseSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return (state.Solution[PosNode] - state.Solution[PosNode]) * -Current;
         }
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Current through current source")]
@@ -64,11 +62,10 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
+            BaseParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
 
             // Setup the waveform
             BaseParameters.Waveform?.Setup();
@@ -90,10 +87,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+            pins.ThrowIfNot(nameof(pins), 2);
             PosNode = pins[0];
             NegNode = pins[1];
         }
@@ -105,9 +99,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
-
+            solver.ThrowIfNull(nameof(solver));
             PosPtr = solver.GetRhsElement(PosNode);
             NegPtr = solver.GetRhsElement(NegNode);
         }
@@ -118,8 +110,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="simulation">Base simulation</param>
         public void Load(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             double value;

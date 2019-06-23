@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        protected CommonBehaviors.IndependentFrequencyParameters FrequencyParameters { get; private set; }
+        protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
         /// Nodes
@@ -29,16 +29,13 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
-
+            state.ThrowIfNull(nameof(state));
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             return -v * Complex.Conjugate(FrequencyParameters.Phasor);
         }
@@ -59,11 +56,11 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
-            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentFrequencyParameters>();
+            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
         }
 
         /// <summary>
@@ -80,8 +77,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
             CPosPtr = solver.GetRhsElement(PosNode);
             CNegPtr = solver.GetRhsElement(NegNode);
         }
@@ -92,8 +88,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector

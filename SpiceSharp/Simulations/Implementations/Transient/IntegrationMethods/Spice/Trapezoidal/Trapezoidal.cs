@@ -66,8 +66,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
         protected override void Predict(TimeSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Use the two previous solutions to predict a new one (the one we're about to test)
             var future = IntegrationStates[0];
@@ -112,6 +111,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
+            args.ThrowIfNull(nameof(args));
+
             // Get the state
             var state = args.Simulation.RealState;
             double tol, diff, tmp;

@@ -122,22 +122,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
             var gmaold = (ModelParameters.BulkJunctionPotential - pbo) / pbo;
             var capfact = 1 / (1 + ModelParameters.BulkJunctionBotGradingCoefficient *
-                               (4e-4 * (ModelParameters.NominalTemperature - Circuit.ReferenceTemperature) -
+                               (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) -
                                 gmaold));
             TempCapBd = ModelParameters.CapBd * capfact;
             TempCapBs = ModelParameters.CapBs * capfact;
             TempJunctionCap = ModelParameters.BulkCapFactor * capfact;
             capfact = 1 / (1 + ModelParameters.BulkJunctionSideGradingCoefficient *
-                           (4e-4 * (ModelParameters.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+                           (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             TempJunctionCapSidewall = ModelParameters.SidewallCapFactor * capfact;
             var gmanew = (TempBulkPotential - pbo) / pbo;
             capfact = 1 + ModelParameters.BulkJunctionBotGradingCoefficient *
-                      (4e-4 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
+                      (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
             TempCapBd *= capfact;
             TempCapBs *= capfact;
             TempJunctionCap *= capfact;
             capfact = 1 + ModelParameters.BulkJunctionSideGradingCoefficient *
-                      (4e-4 * (BaseParameters.Temperature - Circuit.ReferenceTemperature) - gmanew);
+                      (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
             TempJunctionCapSidewall *= capfact;
             TempDepletionCap = ModelParameters.ForwardCapDepletionCoefficient * TempBulkPotential;
 

@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         public RealCurrentExport(Simulation simulation, string source)
             : base(simulation)
         {
-            Source = source ?? throw new ArgumentNullException(nameof(source));
+            Source = source.ThrowIfNull(nameof(source));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((BaseSimulation) Simulation).RealState;
+            var state = ((BaseSimulation) Simulation).RealState.ThrowIfNull("real state");
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.BiasingBehavior), out var behavior))

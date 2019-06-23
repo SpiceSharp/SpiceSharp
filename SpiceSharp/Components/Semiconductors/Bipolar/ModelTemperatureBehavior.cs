@@ -57,8 +57,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _mbp = provider.GetParameterSet<ModelBaseParameters>();
@@ -70,12 +69,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             if (!_mbp.NominalTemperature.Given)
                 _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
-            Factor1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            Factor1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;
 
             if (!_mbp.LeakBeCurrent.Given)
             {

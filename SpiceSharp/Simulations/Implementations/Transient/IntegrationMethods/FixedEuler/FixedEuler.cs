@@ -63,7 +63,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </returns>
         public override bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
-            base.Evaluate(simulation, out newDelta);
+            base.Evaluate(simulation, out _);
             newDelta = _fixedStep;
             return true;
         }

@@ -23,23 +23,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("v"), ParameterInfo("Capacitor voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             var conductance = state.Laplace * Capacitance;
             return (state.Solution[PosNode] - state.Solution[NegNode]) * conductance;
         }
         [ParameterName("p"), ParameterInfo("Capacitor power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             var conductance = state.Laplace * Capacitance;
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
             return voltage * Complex.Conjugate(voltage * conductance);
@@ -66,8 +63,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="solver">The matrix</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get matrix pointers
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
@@ -82,8 +78,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.ComplexState;
             var val = state.Laplace * Capacitance;

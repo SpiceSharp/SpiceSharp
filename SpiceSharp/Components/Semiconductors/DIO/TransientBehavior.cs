@@ -51,8 +51,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="method"></param>
         public void CreateStates(IntegrationMethod method)
         {
-			if (method == null)
-				throw new ArgumentNullException(nameof(method));
+			method.ThrowIfNull(nameof(method));
             _capCharge = method.CreateDerivative();
         }
 
@@ -62,8 +61,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Simulation</param>
         public void GetDcState(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.RealState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
@@ -86,8 +84,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public void Transient(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             // Calculate the capacitance
             var state = simulation.RealState;

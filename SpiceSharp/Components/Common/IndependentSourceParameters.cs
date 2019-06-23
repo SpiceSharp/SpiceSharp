@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// <summary>
     /// Base parameters for an independent source.
     /// </summary>
-    public class IndependentBaseParameters : ParameterSet
+    public class IndependentSourceParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        public IndependentBaseParameters()
+        public IndependentSourceParameters()
         {
         }
 
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// Constructor
         /// </summary>
         /// <param name="dc">DC value</param>
-        public IndependentBaseParameters(double dc)
+        public IndependentSourceParameters(double dc)
         {
             DcValue.Value = dc;
         }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// Constructor
         /// </summary>
         /// <param name="waveform">Waveform</param>
-        public IndependentBaseParameters(Waveform waveform)
+        public IndependentSourceParameters(Waveform waveform)
         {
             Waveform = waveform;
         }

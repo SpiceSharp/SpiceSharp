@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// A dictionary of <see cref="ParameterSet" />. Only one instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{ParameterSet}" />
-    public class ParameterSetDictionary : TypeDictionary<ParameterSet>
+    public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>
     {
         /// <summary>
         /// Adds a parameter set to the dictionary.
@@ -15,52 +15,79 @@ namespace SpiceSharp
         /// <param name="set">The parameter set.</param>
         public void Add(ParameterSet set)
         {
-            if (set == null)
-                throw new ArgumentNullException(nameof(set));
-
+            set.ThrowIfNull(nameof(set));
             Add(set.GetType(), set);
         }
 
         /// <summary>
-        /// Gets a parameter from any parameter set in the dictionary.
+        /// Sets the principal parameter.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <param name="value">The value.</param>
         /// <returns>
-        /// The parameter of the specified type and with the specified name, or <c>null</c> if no parameter was found.
+        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public Parameter<T> GetParameter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
+        /// <remarks>
+        /// Only the first encountered principal parameter will be set.
+        /// </remarks>
+        public bool SetPrincipalParameter<T>(T value)
         {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter<T>(name, comparer);
-                if (p != null)
-                    return p;
+                if (ps.TrySetPrincipalParameter(value))
+                    return true;
             }
 
-            return null;
+            throw new CircuitException("No principal parameter found of type {1}".FormatString(typeof(T).Name));
         }
 
         /// <summary>
-        /// Gets a parameters and their names
+        /// Calls a parameter method with a specified name. If multiple methods exist,
+        /// all of them will be called.
         /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        public IEnumerable<Tuple<Parameter<T>, List<string>>> GetParameters<T>() where T : struct
+        /// <param name="name">The name of the method.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
+        /// </returns>
+        public void SetParameter(string name, IEqualityComparer<string> comparer = null)
         {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
+            var isset = false;
             foreach (var ps in Values)
             {
-                var types = ps.GetParameters<T>();
-                if (types != null)
-                {
-                    foreach (var tuple in types)
-                    {
-                        yield return tuple;
-                    }
-                }
+                if (ps.TrySetParameter(name, comparer))
+                    isset = true;
             }
+
+            if (!isset)
+                throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
+        }
+
+        /// <summary>
+        /// Sets all parameters with a specified name in any parameter set in the dictionary.
+        /// </summary>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="value">The parameter value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if one or more parameters were set, otherwise <c>false</c>.
+        /// </returns>
+        public void SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        {
+            comparer = comparer ?? EqualityComparer<string>.Default;
+
+            var isset = false;
+            foreach (var ps in Values)
+            {
+                if (ps.TrySetParameter(name, value, comparer))
+                    isset = true;
+            }
+
+            if (!isset)
+                throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
         }
 
         /// <summary>
@@ -68,18 +95,41 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <returns>
-        /// The principal parameter of the specified type, or <c>null</c> if no principal parameter was found.
+        /// The principal parameter of the specified type.
         /// </returns>
-        public Parameter<T> GetParameter<T>() where T : struct
+        public T GetPrincipalParameter<T>()
         {
             foreach (var ps in Values)
             {
-                var p = ps.GetParameter<T>();
-                if (p != null)
-                    return p;
+                foreach (var member in Reflection.GetPrincipalMembers(ps))
+                {
+                    if (ParameterHelper.GetMember<T>(ps, member, out var p))
+                        return p;
+                }
             }
 
-            return null;
+            throw new CircuitException("No principal parameter found of type {1}".FormatString(typeof(T).Name));
+        }
+
+        /// <summary>
+        /// Gets a named parameter from any parameter set in the dictionary.
+        /// </summary>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns></returns>
+        public T GetParameter<T>(string name, IEqualityComparer<string> comparer = null)
+        {
+            foreach (var ps in Values)
+            {
+                foreach (var member in Reflection.GetNamedMembers(ps, name, comparer))
+                {
+                    if (ParameterHelper.GetMember<T>(ps, member, out var p))
+                        return p;
+                }
+            }
+
+            throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
         }
 
         /// <summary>
@@ -91,7 +141,7 @@ namespace SpiceSharp
         /// <returns>
         /// An action for setting the parameter with the specified type and name, or <c>null</c> if no parameter was found.
         /// </returns>
-        public Action<T> GetSetter<T>(string name, IEqualityComparer<string> comparer = null) where T : struct
+        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -115,7 +165,7 @@ namespace SpiceSharp
         /// <remarks>
         /// Only the first encountered principal parameter will be set using the setter returned from this method.
         /// </remarks>
-        public Action<T> GetSetter<T>() where T : struct
+        public Action<T> CreateSetter<T>()
         {
             foreach (var ps in Values)
             {
@@ -128,114 +178,43 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Sets all parameters with a specified name in any parameter set in the dictionary.
+        /// Clone the dictionary.
         /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="name">The parameter name.</param>
-        /// <param name="value">The parameter value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///   <c>true</c> if one or more parameters were set, otherwise <c>false</c>.
-        /// </returns>
-        public bool SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) where T : struct
+        /// <returns></returns>
+        public virtual ParameterSetDictionary Clone()
         {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
-            var isset = false;
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(name, value, comparer))
-                    isset = true;
-            }
-
-            return isset;
+            var clone = Activator.CreateInstance(GetType());
+            Reflection.CopyPropertiesAndFields(this, clone);
+            return (ParameterSetDictionary)clone;
         }
 
         /// <summary>
-        /// Sets the principal parameter.
+        /// Clone the object.
         /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Only the first encountered principal parameter will be set.
-        /// </remarks>
-        public bool SetParameter<T>(T value) where T : struct
-        {
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(value))
-                    return true;
-            }
+        /// <returns></returns>
+        ICloneable ICloneable.Clone() => Clone();
 
-            return false;
+        /// <summary>
+        /// Copy all parameter sets.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        public virtual void CopyFrom(ParameterSetDictionary source)
+        {
+            var d = source as ParameterSetDictionary ?? throw new CircuitException("Cannot copy, type mismatch");
+            foreach (var ps in d.Values)
+            {
+                // If the parameter set doesn't exist, then we will simply clone it, else copy them
+                if (!TryGetValue(ps.GetType(), out var myps))
+                    Add(ps.Clone());
+                else
+                    Reflection.CopyPropertiesAndFields(ps, myps);
+            }
         }
 
         /// <summary>
-        /// Calls a parameter method with a specified name. If multiple methods exist,
-        /// all of them will be called.
+        /// Copy all properties from another object to this one.
         /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <returns>
-        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
-        /// </returns>
-        public bool SetParameter(string name)
-        {
-            var isset = false;
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(name))
-                    isset = true;
-            }
-
-            return isset;
-        }
-
-        /// <summary>
-        /// Calls a parameter method with a specified name. If multiple methods exist,
-        /// all of them will be called.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
-        /// </returns>
-        public bool SetParameter(string name, IEqualityComparer<string> comparer)
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
-            var isset = false;
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(name, comparer))
-                    isset = true;
-            }
-
-            return isset;
-        }
-
-        /// <summary>
-        /// Sets all parameter with a specified name in any parameter set in the dictionary.
-        /// </summary>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///   <c>true</c> if a parameter was set with the specified name; otherwise <c>false</c>.
-        /// </returns>
-        public bool SetParameter(string name, object value, IEqualityComparer<string> comparer = null)
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
-            var isset = false;
-            foreach (var ps in Values)
-            {
-                if (ps.SetParameter(name, value, comparer))
-                    isset = true;
-            }
-            return isset;
-        }
+        /// <param name="source">The source object.</param>
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((ParameterSetDictionary)source);
     }
 }

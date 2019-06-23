@@ -38,6 +38,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
+
+            provider.ThrowIfNull(nameof(provider));
+
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>();
 
@@ -51,6 +54,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="simulation">The time-based simulation.</param>
         public override void Probe(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             var breakpoint = _wasBreak;
             if (simulation.Method is IBreakpoints method)
                 breakpoint |= method.Break;
@@ -64,6 +69,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="simulation">The time-based simulation</param>
         public override void Accept(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             if (simulation.Method is IBreakpoints method)
             {
                 // The integration method supports breakpoints, let's see if we need to add one

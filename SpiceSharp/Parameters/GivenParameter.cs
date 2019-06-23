@@ -6,7 +6,7 @@
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="SpiceSharp.Parameter{T}" />
-    public class GivenParameter<T> : Parameter<T> where T : struct
+    public class GivenParameter<T> : Parameter<T>
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
@@ -65,7 +65,7 @@
         /// <returns>
         /// The cloned parameter.
         /// </returns>
-        public override BaseParameter Clone()
+        public override Parameter<T> Clone()
         {
             var clone = new GivenParameter<T>
             {
@@ -79,7 +79,7 @@
         /// Copies the contents of a parameter to this parameter.
         /// </summary>
         /// <param name="source">The source parameter.</param>
-        public override void CopyFrom(BaseParameter source)
+        public override void CopyFrom(Parameter<T> source)
         {
             if (source is GivenParameter<T> gp)
             {

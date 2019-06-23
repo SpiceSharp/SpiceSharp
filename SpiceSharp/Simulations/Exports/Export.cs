@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">simulation</exception>
         protected Export(Simulation simulation)
         {
-            Simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
             simulation.AfterSetup += Initialize;
             simulation.BeforeUnsetup += Finalize;
         }

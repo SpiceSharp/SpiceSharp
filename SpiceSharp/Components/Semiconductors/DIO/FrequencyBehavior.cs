@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             return state.Solution[PosPrimeNode] - state.Solution[NegNode];
         }
 
@@ -46,8 +45,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             var geq = Capacitance * state.Laplace + Conductance;
             var voltage = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             return voltage * geq;
@@ -62,8 +60,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-            if (state == null)
-                throw new ArgumentNullException(nameof(state));
+            state.ThrowIfNull(nameof(state));
             var geq = Capacitance * state.Laplace + Conductance;
             var current = (state.Solution[PosPrimeNode] - state.Solution[NegNode]) * geq;
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
@@ -82,8 +79,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-			if (solver == null)
-				throw new ArgumentNullException(nameof(solver));
+			solver.ThrowIfNull(nameof(solver));
 
             // Get matrix pointers
             CPosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
@@ -101,8 +97,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation"></param>
         public void InitializeParameters(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
             var state = simulation.RealState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             CalculateCapacitance(vd);
@@ -114,8 +109,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+			simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.ComplexState;
 

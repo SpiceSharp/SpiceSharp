@@ -43,8 +43,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             _mbp = provider.GetParameterSet<ModelBaseParameters>();
@@ -56,14 +55,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             if (!_mbp.NominalTemperature.Given)
             {
                 _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
             }
-            VtNominal = Circuit.KOverQ * _mbp.NominalTemperature;
+            VtNominal = Constants.KOverQ * _mbp.NominalTemperature;
 
             // limit grading coeff to max of 0.9
             if (_mbp.GradingCoefficient > 0.9)

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// <summary>
     /// AC parameters for an independent source.
     /// </summary>
-    public class IndependentFrequencyParameters : ParameterSet
+    public class IndependentSourceFrequencyParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
@@ -19,8 +19,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         [ParameterName("ac"), ParameterInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
-            if (ac == null)
-                throw new ArgumentNullException(nameof(ac));
+            ac.ThrowIfNull(nameof(ac));
             switch (ac.Length)
             {
                 case 2:
@@ -48,7 +47,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        public IndependentFrequencyParameters()
+        public IndependentSourceFrequencyParameters()
         {
         }
 
@@ -57,7 +56,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </summary>
         /// <param name="magnitude">Magnitude</param>
         /// <param name="phase">Phase</param>
-        public IndependentFrequencyParameters(double magnitude, double phase)
+        public IndependentSourceFrequencyParameters(double magnitude, double phase)
         {
             AcMagnitude.Value = magnitude;
             AcPhase.Value = phase;
@@ -69,11 +68,21 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         /// A deep clone of the parameter set.
         /// </returns>
-        public override ParameterSet DeepClone()
+        public override ParameterSet Clone()
         {
-            var result = (IndependentFrequencyParameters) base.DeepClone();
+            var result = (IndependentSourceFrequencyParameters) base.Clone();
             result.Phasor = Phasor;
             return result;
+        }
+
+        /// <summary>
+        /// Copy parameters.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        public override void CopyFrom(ParameterSet source)
+        {
+            base.CopyFrom(source);
+            Phasor = ((IndependentSourceFrequencyParameters)source).Phasor;
         }
 
         /// <summary>

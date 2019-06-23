@@ -62,6 +62,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="method">The integration method.</param>
         public void CreateStates(IntegrationMethod method)
         {
+            method.ThrowIfNull(nameof(method));
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
         }
@@ -87,6 +88,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="simulation">The time-based simulation.</param>
         public void Transient(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Calculate the states
             var vgs = Vgs;
             var vgd = Vgd;
@@ -98,7 +101,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             var cg = Qgs.Derivative;
             Qgd.Integrate();
             var ggd = Qgd.Jacobian(CapGd);
-            cg = cg + Qgd.Derivative;
+            cg += Qgd.Derivative;
             var cd = -Qgd.Derivative;
             var cgd = Qgd.Derivative;
 

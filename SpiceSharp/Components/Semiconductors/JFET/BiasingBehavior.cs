@@ -147,8 +147,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <exception cref="ArgumentNullException">pins</exception>
         public void Connect(params int[] pins)
         {
-            if (pins == null)
-                throw new ArgumentNullException(nameof(pins));
+            pins.ThrowIfNot(nameof(pins), 3);
             DrainNode = pins[0];
             GateNode = pins[1];
             SourceNode = pins[2];
@@ -163,8 +162,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             // Get configuration
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
@@ -178,6 +176,9 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
+            variables.ThrowIfNull(nameof(variables));
+            solver.ThrowIfNull(nameof(solver));
+            
             SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source")).Index : SourceNode;
             DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain")).Index : DrainNode;
 
@@ -207,6 +208,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="simulation">The base simulation.</param>
         public void Load(BaseSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var state = simulation.RealState;
 
             // DC model parameters
@@ -224,31 +226,31 @@ namespace SpiceSharp.Components.JFETBehaviors
             var vds = vgs - vgd;
 
             // Determine dc current and derivatives 
-            if (vgs <= -5 * BaseParameters.Temperature * Circuit.KOverQ)
+            if (vgs <= -5 * BaseParameters.Temperature * Constants.KOverQ)
             {
                 ggs = -csat / vgs + BaseConfiguration.Gmin;
                 cg = ggs * vgs;
             }
             else
             {
-                var evgs = Math.Exp(vgs / (BaseParameters.Temperature * Circuit.KOverQ));
-                ggs = csat * evgs / (BaseParameters.Temperature * Circuit.KOverQ) + BaseConfiguration.Gmin;
+                var evgs = Math.Exp(vgs / (BaseParameters.Temperature * Constants.KOverQ));
+                ggs = csat * evgs / (BaseParameters.Temperature * Constants.KOverQ) + BaseConfiguration.Gmin;
                 cg = csat * (evgs - 1) + BaseConfiguration.Gmin * vgs;
             }
 
-            if (vgd <= -5 * (BaseParameters.Temperature * Circuit.KOverQ))
+            if (vgd <= -5 * (BaseParameters.Temperature * Constants.KOverQ))
             {
                 ggd = -csat / vgd + BaseConfiguration.Gmin;
                 cgd = ggd * vgd;
             }
             else
             {
-                var evgd = Math.Exp(vgd / (BaseParameters.Temperature * Circuit.KOverQ));
-                ggd = csat * evgd / (BaseParameters.Temperature * Circuit.KOverQ) + BaseConfiguration.Gmin;
+                var evgd = Math.Exp(vgd / (BaseParameters.Temperature * Constants.KOverQ));
+                ggd = csat * evgd / (BaseParameters.Temperature * Constants.KOverQ) + BaseConfiguration.Gmin;
                 cgd = csat * (evgd - 1) + BaseConfiguration.Gmin * vgd;
             }
 
-            cg = cg + cgd;
+            cg += cgd;
 
             // Modification for Sydney University JFET model
             var vto = ModelParameters.Threshold;
@@ -382,6 +384,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="check">if set to <c>true</c> [check].</param>
         protected void Initialize(BaseSimulation simulation, out double vgs, out double vgd, out bool check)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var state = simulation.RealState;
 
             // Initialization
@@ -411,9 +414,9 @@ namespace SpiceSharp.Components.JFETBehaviors
                 // Limit nonlinear branch voltages
                 check = false;
                 vgs = Semiconductor.LimitJunction(vgs, Vgs,
-                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                    BaseParameters.Temperature * Constants.KOverQ, Vcrit, ref check);
                 vgd = Semiconductor.LimitJunction(vgd, Vgd,
-                    BaseParameters.Temperature * Circuit.KOverQ, Vcrit, ref check);
+                    BaseParameters.Temperature * Constants.KOverQ, Vcrit, ref check);
                 vgs = Transistor.LimitFet(vgs, Vgs, ModelParameters.Threshold);
                 vgd = Transistor.LimitFet(vgd, Vgd, ModelParameters.Threshold);
             }

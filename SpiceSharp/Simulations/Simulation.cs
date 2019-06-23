@@ -50,12 +50,12 @@ namespace SpiceSharp.Simulations
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
 
         /// <summary>
-        /// Gets the configuration parameter sets. Obsolete, use <see cref="Configurations" /> instead.
+        /// Gets a set of <see cref="ParameterSet" /> that holds the statistics for the simulation.
         /// </summary>
         /// <value>
-        /// The parameter sets.
+        /// The dictionary with statistics.
         /// </value>
-        [Obsolete] public ParameterSetDictionary ParameterSets => Configurations;
+        public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
 
         /// <summary>
         /// Gets the set of variables (unknowns).
@@ -64,14 +64,6 @@ namespace SpiceSharp.Simulations
         /// The set of variables.
         /// </value>
         public VariableSet Variables { get; private set; }
-
-        /// <summary>
-        /// Gets the nodes. Obsolete, use <see cref="Variables" /> instead.
-        /// </summary>
-        /// <value>
-        /// The nodes.
-        /// </value>
-        [Obsolete] public VariableSet Nodes => Variables;
 
         #region Events
         /// <summary>
@@ -127,6 +119,8 @@ namespace SpiceSharp.Simulations
 
         // Private parameters
         private bool _cloneParameters;
+        
+        protected SimulationStatistics SimulationStatistics { get; }
 
         /// <summary>
         /// Gets the behavior types in the order that they are called.
@@ -147,6 +141,8 @@ namespace SpiceSharp.Simulations
         protected Simulation(string name)
         {
             Name = name;
+            SimulationStatistics = new SimulationStatistics();
+            Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
         }
 
         /// <summary>
@@ -157,13 +153,14 @@ namespace SpiceSharp.Simulations
         /// <exception cref="CircuitException">{0}: No circuit nodes for simulation".FormatString(Name)</exception>
         public virtual void Run(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
+            SimulationStatistics.SetupTime.Start();
             Status = Statuses.Setup;
             Setup(entities);
+            SimulationStatistics.SetupTime.Stop();
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -180,7 +177,9 @@ namespace SpiceSharp.Simulations
                 OnBeforeExecute(beforeArgs);
 
                 // Execute simulation
+                SimulationStatistics.ExecutionTime.Start();
                 Execute();
+                SimulationStatistics.ExecutionTime.Stop();
 
                 // Reset
                 afterArgs.Repeat = false;
@@ -193,8 +192,10 @@ namespace SpiceSharp.Simulations
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
+            SimulationStatistics.UnsetupTime.Start();
             Status = Statuses.Unsetup;
             Unsetup();
+            SimulationStatistics.UnsetupTime.Stop();
             OnAfterUnsetup(EventArgs.Empty);
 
             Status = Statuses.None;
@@ -208,8 +209,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
         protected virtual void Setup(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
@@ -305,9 +305,11 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The circuit entities.</param>
         private void SetupBehaviors(EntityCollection entities)
         {
+            SimulationStatistics.BehaviorCreationTime.Start();
             var types = BehaviorTypes.ToArray();
             foreach (var entity in entities)
                 entity.CreateBehaviors(types, this, entities);
+            SimulationStatistics.BehaviorCreationTime.Stop();
         }
 
         /// <summary>
@@ -321,16 +323,16 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">entities</exception>
         private void SetupParameters(IEnumerable<Entity> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
 
             // Register all parameters
             foreach (var entity in entities)
             {
                 foreach (var p in entity.ParameterSets.Values)
                 {
-                    p.CalculateDefaults();
-                    EntityParameters.Add(entity.Name, _cloneParameters ? p.DeepClone() : p);
+                    var parameterset = _cloneParameters ? p.Clone() : p;
+                    parameterset.CalculateDefaults();
+                    EntityParameters.Add(entity.Name, parameterset);
                 }
             }
         }

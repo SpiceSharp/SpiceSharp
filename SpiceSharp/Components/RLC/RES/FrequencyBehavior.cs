@@ -20,8 +20,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("v"), ParameterInfo("Complex voltage across the capacitor.")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
 
@@ -34,8 +33,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("i"), ParameterInfo("Complex current through the capacitor.")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
 
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
             return voltage * Conductance;
@@ -50,8 +48,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-			if (state == null)
-				throw new ArgumentNullException(nameof(state));
+			state.ThrowIfNull(nameof(state));
             var voltage = state.Solution[PosNode] - state.Solution[NegNode];
             return voltage * Complex.Conjugate(voltage) * Conductance;
         }
@@ -86,8 +83,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="solver">Matrix</param>
         public void GetEquationPointers(Solver<Complex> solver)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             // Get matrix pointers
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);

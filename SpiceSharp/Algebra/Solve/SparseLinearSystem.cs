@@ -173,8 +173,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="ArgumentNullException">externalIndexes</exception>
         public Tuple<int, int> ExternalToInternal(Tuple<int, int> externalIndexes)
         {
-            if (externalIndexes == null)
-                throw new ArgumentNullException(nameof(externalIndexes));
+            externalIndexes.ThrowIfNull(nameof(externalIndexes));
 
             var row = Row[externalIndexes.Item1];
             var column = Column[externalIndexes.Item2];
@@ -191,8 +190,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="ArgumentNullException">internalIndexes</exception>
         public Tuple<int, int> InternalToExternal(Tuple<int, int> internalIndexes)
         {
-            if (internalIndexes == null)
-                throw new ArgumentNullException(nameof(internalIndexes));
+            internalIndexes.ThrowIfNull(nameof(internalIndexes));
 
             var row = Row.Reverse(internalIndexes.Item1);
             var column = Column.Reverse(internalIndexes.Item2);

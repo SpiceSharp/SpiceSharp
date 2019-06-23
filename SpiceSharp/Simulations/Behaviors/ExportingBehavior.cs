@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations.Behaviors
@@ -12,7 +11,7 @@ namespace SpiceSharp.Simulations.Behaviors
     /// </summary>
     /// <seealso cref="SpiceSharp.Attributes.NamedParameterized" />
     /// <seealso cref="SpiceSharp.Behaviors.IPropertyExporter" />
-    public abstract class ExportingBehavior : NamedParameterized, IBehavior, IPropertyExporter
+    public abstract class ExportingBehavior : IBehavior, IPropertyExporter
     {
         /// <summary>
         /// Gets the name of the behavior.
@@ -57,19 +56,21 @@ namespace SpiceSharp.Simulations.Behaviors
         /// <returns>
         /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
         /// </returns>
-        public bool CreateGetter<T>(Simulation simulation, string propertyName, IEqualityComparer<string> comparer, out Func<T> function) where T : struct
+        public bool CreateExportMethod<T>(Simulation simulation, string propertyName, out Func<T> function, IEqualityComparer<string> comparer = null)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // Find methods to create the export
             Func<T> result = null;
-            foreach (var member in Named(propertyName, comparer))
+            foreach (var member in Reflection.GetNamedMembers(this, propertyName, comparer))
             {
                 // Use methods
                 if (member is MethodInfo mi)
-                    result = CreateMethodGetter<T>(simulation, mi);
+                    result = CreateGetterForMethod<T>(simulation, mi);
 
                 // Use properties
-                if (member is PropertyInfo pi)
-                    result = CreateGetter<T>(pi);
+                else if (member is PropertyInfo pi)
+                    result = ParameterHelper.CreateGetterForProperty<T>(this, pi);
                 
                 // Return
                 if (result != null)
@@ -85,21 +86,6 @@ namespace SpiceSharp.Simulations.Behaviors
         }
 
         /// <summary>
-        /// Creates a getter for a property.
-        /// </summary>
-        /// <typeparam name="T">The expected type.</typeparam>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="function">The function that will return the value of the property.</param>
-        /// <returns>
-        /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
-        /// </returns>
-        public bool CreateGetter<T>(Simulation simulation, string propertyName, out Func<T> function) where T : struct
-        {
-            return CreateGetter(simulation, propertyName, EqualityComparer<string>.Default, out function);
-        }
-
-        /// <summary>
         /// Creates a getter for a MethodInfo using reflection. This method allows creating getters for methods that needs the simulation as a parameter.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
@@ -108,8 +94,10 @@ namespace SpiceSharp.Simulations.Behaviors
         /// <returns>
         /// A function that returns the value of the method, or <c>null</c> if the method doesn't exist.
         /// </returns>
-        private Func<T> CreateMethodGetter<T>(Simulation simulation, MethodInfo method) where T : struct
+        private Func<T> CreateGetterForMethod<T>(Simulation simulation, MethodInfo method)
         {
+            simulation.ThrowIfNull(nameof(simulation));
+
             // First make sure it is the right return type
             if (method.ReturnType != typeof(T))
                 return null;

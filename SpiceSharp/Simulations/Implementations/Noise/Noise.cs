@@ -82,8 +82,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(EntityCollection entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            entities.ThrowIfNull(nameof(entities));
             base.Setup(entities);
 
             // Get behaviors

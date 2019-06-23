@@ -57,8 +57,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            provider.ThrowIfNull(nameof(provider));
 
             // Get parameters
             BaseParameters = provider.GetParameterSet<BaseParameters>();

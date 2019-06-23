@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.

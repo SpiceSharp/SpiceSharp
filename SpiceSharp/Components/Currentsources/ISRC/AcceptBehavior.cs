@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CommonBehaviors.IndependentBaseParameters _bp;
+        private CommonBehaviors.IndependentSourceParameters _bp;
 
         /// <summary>
         /// Constructor
@@ -28,11 +28,11 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            
+
+            provider.ThrowIfNull(nameof(provider));
+
             // Get parameters
-            _bp = provider.GetParameterSet<CommonBehaviors.IndependentBaseParameters>();
+            _bp = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
         }
 
         /// <summary>

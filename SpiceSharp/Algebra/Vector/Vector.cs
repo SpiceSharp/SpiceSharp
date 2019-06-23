@@ -47,8 +47,7 @@ namespace SpiceSharp.Algebra
         /// <param name="target">The target vector.</param>
         public void CopyTo(Vector<T> target)
         {
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
+            target.ThrowIfNull(nameof(target));
             if (target.Length != Length)
                 throw new ArgumentException("Vector lengths do not match");
             for (var i = 1; i <= Length; i++)

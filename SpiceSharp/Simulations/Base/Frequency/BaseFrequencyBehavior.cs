@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
@@ -25,13 +23,8 @@ namespace SpiceSharp.Behaviors
         /// Initializes the parameters.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual void InitializeParameters(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
-
-            // Nothing to initialize by default
         }
 
         /// <summary>

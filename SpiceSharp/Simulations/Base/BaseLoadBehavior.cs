@@ -41,9 +41,6 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool IsConvergent(BaseSimulation simulation)
-        {
-            return true;
-        }
+        public virtual bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

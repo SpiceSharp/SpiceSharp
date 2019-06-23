@@ -115,8 +115,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="CircuitException">Simulation does not support real voltages</exception>
         public double GetVoltage(string positive, string negative)
         {
-            if (positive == null)
-                throw new ArgumentNullException(nameof(positive));
+            positive.ThrowIfNull(nameof(positive));
 
             if (!(_simulation is BaseSimulation bs))
                 throw new CircuitException("Simulation does not support real voltages.");
@@ -159,8 +158,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="CircuitException">Simulation does not support complex voltages</exception>
         public Complex GetComplexVoltage(string positive, string negative)
         {
-            if (positive == null)
-                throw new ArgumentNullException(nameof(positive));
+            positive.ThrowIfNull(nameof(positive));
 
             if (!(_simulation is FrequencySimulation fs))
                 throw new CircuitException("Simulation does not support complex voltages.");

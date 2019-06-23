@@ -40,7 +40,7 @@
         /// <param name="history">The base history.</param>
         public ReadOnlyHistory(History<T> history)
         {
-            History = history;
+            History = history.ThrowIfNull(nameof(history));
         }
     }
 }

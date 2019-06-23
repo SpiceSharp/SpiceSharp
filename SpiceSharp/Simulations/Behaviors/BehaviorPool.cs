@@ -68,6 +68,8 @@ namespace SpiceSharp.Behaviors
         /// <param name="types">The types for which a list will be kept which can be retrieved later.</param>
         public BehaviorPool(IEnumerable<Type> types)
         {
+            types.ThrowIfNull(nameof(types));
+
             _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
@@ -89,6 +91,8 @@ namespace SpiceSharp.Behaviors
         /// <param name="types">The types.</param>
         public BehaviorPool(IEqualityComparer<string> comparer, Type[] types)
         {
+            types.ThrowIfNull(nameof(types));
+
             _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>(comparer);
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
@@ -100,6 +104,8 @@ namespace SpiceSharp.Behaviors
         /// <param name="behavior">The behavior.</param>
         public void Add(IBehavior behavior)
         {
+            behavior.ThrowIfNull(nameof(behavior));
+
             // Try finding the entity behavior dictionary
             if (!_entityBehaviors.TryGetValue(behavior.Name, out var ebd))
             {
@@ -128,19 +134,6 @@ namespace SpiceSharp.Behaviors
             if (_behaviorLists.TryGetValue(typeof(T), out var list))
                 return new BehaviorList<T>(list.Cast<T>());
             return new BehaviorList<T>(new T[0]);
-        }
-
-        /// <summary>
-        /// Gets the entity behaviors for a specific identifier. Obsolete, use the indexer instead.
-        /// </summary>
-        /// <param name="name">The identifier of the entity.</param>
-        /// <returns>The behaviors associated to the specified entity identifier.</returns>
-        [Obsolete]
-        public EntityBehaviorDictionary GetEntityBehaviors(string name)
-        {
-            if (_entityBehaviors.TryGetValue(name, out var result))
-                return result;
-            return null;
         }
 
         /// <summary>

@@ -22,15 +22,7 @@ namespace SpiceSharp.Simulations
         /// The real state.
         /// </value>
         public BaseSimulationState RealState { get; protected set; }
-
-        /// <summary>
-        /// Gets the statistics.
-        /// </summary>
-        /// <value>
-        /// The statistics.
-        /// </value>
-        public Statistics Statistics { get; } = new Statistics();
-
+        
         /// <summary>
         /// Gets the variable that caused issues.
         /// </summary>
@@ -95,6 +87,7 @@ namespace SpiceSharp.Simulations
         protected int DcMaxIterations { get; private set; }
         protected double AbsTol { get; private set; }
         protected double RelTol { get; private set; }
+        protected BaseSimulationStatistics BaseSimulationStatistics { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
@@ -104,6 +97,8 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new BaseConfiguration());
+            BaseSimulationStatistics = new BaseSimulationStatistics();
+            Statistics.Add(typeof(BaseSimulationStatistics), BaseSimulationStatistics);
 
             // Add the necessary behaviors in the order that they are (usually) called
             BehaviorTypes.AddRange(new []
@@ -121,12 +116,11 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(EntityCollection circuit)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            circuit.ThrowIfNull(nameof(circuit));
             base.Setup(circuit);
 
             // Get behaviors and configuration data
-            var config = Configurations.Get<BaseConfiguration>();
+            var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
@@ -150,13 +144,6 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _loadBehaviors.Count; i++)
                 _loadBehaviors[i].GetEquationPointers(Variables, RealState.Solver);
             RealState.Setup(Variables);
-
-            // TODO: Compatibility - nodesets from nodes instead of configuration should be removed eventually
-            if (config.Nodesets.Count == 0)
-            {
-                foreach (var ns in Variables.NodeSets)
-                    _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
-            }
 
             // Set up nodesets
             foreach (var ns in config.Nodesets)
@@ -233,7 +220,7 @@ namespace SpiceSharp.Simulations
         protected void Op(int maxIterations)
         {
             var state = RealState;
-            var config = Configurations.Get<BaseConfiguration>();
+            var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
             state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
@@ -438,7 +425,7 @@ namespace SpiceSharp.Simulations
                 catch (CircuitException)
                 {
                     iterno++;
-                    Statistics.Iterations = iterno;
+                    BaseSimulationStatistics.Iterations = iterno;
                     throw;
                 }
 
@@ -454,17 +441,17 @@ namespace SpiceSharp.Simulations
                 // Reorder
                 if (_shouldReorder)
                 {
-                    Statistics.ReorderTime.Start();
+                    BaseSimulationStatistics.ReorderTime.Start();
                     solver.OrderAndFactor();
-                    Statistics.ReorderTime.Stop();
+                    BaseSimulationStatistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }
                 else
                 {
                     // Decompose
-                    Statistics.DecompositionTime.Start();
+                    BaseSimulationStatistics.DecompositionTime.Start();
                     var success = solver.Factor();
-                    Statistics.DecompositionTime.Stop();
+                    BaseSimulationStatistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
@@ -477,9 +464,9 @@ namespace SpiceSharp.Simulations
                 state.StoreSolution();
 
                 // Solve the equation
-                Statistics.SolveTime.Start();
+                BaseSimulationStatistics.SolveTime.Start();
                 solver.Solve(state.Solution);
-                Statistics.SolveTime.Stop();
+                BaseSimulationStatistics.SolveTime.Stop();
 
                 // Reset ground nodes
                 solver.GetRhsElement(0).Value = 0.0;
@@ -489,7 +476,7 @@ namespace SpiceSharp.Simulations
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
                 {
-                    Statistics.Iterations += iterno;
+                    BaseSimulationStatistics.Iterations += iterno;
                     return false;
                 }
 
@@ -509,7 +496,7 @@ namespace SpiceSharp.Simulations
                         }
                         if (state.IsConvergent)
                         {
-                            Statistics.Iterations += iterno;
+                            BaseSimulationStatistics.Iterations += iterno;
                             return true;
                         }
                         break;
@@ -530,7 +517,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     default:
-                        Statistics.Iterations += iterno;
+                        BaseSimulationStatistics.Iterations += iterno;
                         throw new CircuitException("Could not find flag");
                 }
             }
@@ -544,7 +531,7 @@ namespace SpiceSharp.Simulations
             var state = RealState;
 
             // Start the stopwatch
-            Statistics.LoadTime.Start();
+            BaseSimulationStatistics.LoadTime.Start();
             OnBeforeLoad(_realStateLoadArgs);
 
             // Clear rhs and matrix
@@ -553,7 +540,7 @@ namespace SpiceSharp.Simulations
 
             // Keep statistics
             OnAfterLoad(_realStateLoadArgs);
-            Statistics.LoadTime.Stop();
+            BaseSimulationStatistics.LoadTime.Stop();
         }
 
         /// <summary>

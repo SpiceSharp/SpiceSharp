@@ -1,16 +1,15 @@
-﻿using System;
+﻿using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using System.Linq;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Template for a behavior.
     /// </summary>
-    public abstract class Behavior : NamedParameterized, IBehavior, IPropertyExporter
+    public abstract class Behavior : IBehavior
     {
         /// <summary>
         /// Gets the identifier of the behavior.
@@ -50,90 +49,41 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Creates a getter for a property.
+        /// Create a getter for a behavior parameter (possibly requiring a simulation or simulation state).
         /// </summary>
-        /// <typeparam name="T">The expected type.</typeparam>
+        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <param name="behavior">The behavior.</param>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="comparer">The property name comparer.</param>
-        /// <param name="function">The function that will return the value of the property.</param>
-        /// <returns>
-        /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
-        /// </returns>
-        public bool CreateGetter<T>(Simulation simulation, string propertyName, IEqualityComparer<string> comparer, out Func<T> function) where T : struct
+        /// <param name="name">The parameter name.</param>
+        /// <returns></returns>
+        public Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null)
         {
-            // Find methods to create the export
-            Func<T> result = null;
-            foreach (var member in Named(propertyName, comparer))
+            // First find the method
+            comparer = comparer ?? EqualityComparer<string>.Default;
+            var method = Reflection.GetNamedMembers(this, name, comparer).FirstOrDefault(m => m is MethodInfo) as MethodInfo;
+            if (method == null || method.ReturnType != typeof(T))
             {
-                // Use methods
-                if (member is MethodInfo mi)
-                    result = CreateMethodGetter<T>(simulation, mi);
-
-                // Use properties
-                if (member is PropertyInfo pi)
-                    result = CreateGetter<T>(pi);
-                
-                // Return
-                if (result != null)
-                {
-                    function = result;
-                    return true;
-                }
+                // Fall back to any member
+                return ParameterHelper.CreateGetter<T>(this, name, comparer);
             }
-
-            // Not found
-            function = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Creates a getter for a property.
-        /// </summary>
-        /// <typeparam name="T">The expected type.</typeparam>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="function">The function that will return the value of the property.</param>
-        /// <returns>
-        /// <c>true</c> if the getter was created successfully; otherwise <c>false</c>.
-        /// </returns>
-        public bool CreateGetter<T>(Simulation simulation, string propertyName, out Func<T> function) where T : struct
-        {
-            return CreateGetter(simulation, propertyName, EqualityComparer<string>.Default, out function);
-        }
-
-        /// <summary>
-        /// Creates a getter for a MethodInfo using reflection. This method allows creating getters for methods that needs the simulation as a parameter.
-        /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="method">The method information.</param>
-        /// <returns>
-        /// A function that returns the value of the method, or <c>null</c> if the method doesn't exist.
-        /// </returns>
-        private Func<T> CreateMethodGetter<T>(Simulation simulation, MethodInfo method) where T : struct
-        {
-            // First make sure it is the right return type
-            if (method.ReturnType != typeof(T))
-                return null;
             var parameters = method.GetParameters();
 
             // Method: TResult Method()
             if (parameters.Length == 0)
-                return (Func<T>) method.CreateDelegate(typeof(Func<T>), this);
+                return Reflection.CreateGetterForMethod<T>(this, method);
 
             // Methods with one parameter
             if (parameters.Length == 1)
             {
                 // Method: <T> <Method>(<Simulation>)
-                if (parameters[0].ParameterType == typeof(Simulation))
+                if (parameters[0].ParameterType.GetTypeInfo().IsAssignableFrom(simulation.GetType()))
                 {
                     var simMethod = (Func<Simulation, T>)method.CreateDelegate(typeof(Func<Simulation, T>), this);
                     return () => simMethod(simulation);
                 }
 
                 // Method: TResult Method(State)
-                // Works for any child class of State
+                // Works for any child class of SimulationState
                 var paramType = parameters[0].ParameterType;
                 if (paramType.GetTypeInfo().IsSubclassOf(typeof(SimulationState)))
                 {
@@ -145,10 +95,10 @@ namespace SpiceSharp.Behaviors
                         return null;
 
                     // Get this state
-                    var state = (SimulationState) stateMember.GetValue(simulation);
+                    var state = (SimulationState)stateMember.GetValue(simulation);
 
                     // Create the expression
-                    return () => (T)method.Invoke(this, new[] {state});
+                    return () => (T)method.Invoke(this, new[] { state });
                 }
             }
 

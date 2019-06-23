@@ -140,12 +140,12 @@ namespace SpiceSharp.IntegrationMethods
             base.Setup(simulation);
 
             // Base configuration
-            var bp = simulation.Configurations.Get<BaseConfiguration>();
+            var bp = simulation.Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
             AbsTol = bp.AbsoluteTolerance;
             RelTol = bp.RelativeTolerance;
 
             // Basic time configuration
-            var tc = simulation.Configurations.Get<TimeConfiguration>();
+            var tc = simulation.Configurations.Get<TimeConfiguration>().ThrowIfNull("time configuration");
             Breakpoints.SetBreakpoint(tc.InitTime);
             Breakpoints.SetBreakpoint(tc.FinalTime);
             MaxStep = tc.MaxStep;
@@ -378,6 +378,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected virtual void TruncateStates(object sender, TruncateEvaluateEventArgs args)
         {
+            args.ThrowIfNull(nameof(args));
+
             // Don't truncate the first step
             if (BaseTime.Equals(0.0))
                 return;

@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
         public GenericExport(Simulation simulation, Func<T> extractor)
             : base(simulation)
         {
-            _myExtractor = extractor;
+            _myExtractor = extractor.ThrowIfNull(nameof(extractor));
         }
 
         /// <summary>

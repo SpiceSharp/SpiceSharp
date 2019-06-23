@@ -17,8 +17,8 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">solver</exception>
         public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
+            magnitude.ThrowIfNull(nameof(magnitude));
 
             /*
              * MNA often has patterns that we can already use for pivoting
@@ -95,8 +95,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">solver</exception>
         public static void ApplyDiagonalGmin(this SparseLinearSystem<double> solver, double gmin)
         {
-            if (solver == null)
-                throw new ArgumentNullException(nameof(solver));
+            solver.ThrowIfNull(nameof(solver));
 
             // Skip if not necessary
             if (gmin <= 0.0)

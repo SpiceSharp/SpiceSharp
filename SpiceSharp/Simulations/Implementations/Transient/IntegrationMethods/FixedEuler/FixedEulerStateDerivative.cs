@@ -62,7 +62,7 @@
             /// <param name="method">The method.</param>
             public FixedEulerStateDerivative(FixedEuler method)
             {
-                _method = method;
+                _method = method.ThrowIfNull(nameof(method));
                 _index = method.StateManager.AllocateState(1);
                 _states = method.IntegrationStates;
             }

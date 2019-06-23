@@ -55,7 +55,7 @@ namespace SpiceSharp.IntegrationMethods
             /// <param name="method">The trapezoidal method.</param>
             public TrapezoidalStateDerivative(Trapezoidal method)
             {
-                _method = method;
+                _method = method.ThrowIfNull(nameof(method));
                 _index = method.StateManager.AllocateState(1);
                 _states = method.IntegrationStates;
             }

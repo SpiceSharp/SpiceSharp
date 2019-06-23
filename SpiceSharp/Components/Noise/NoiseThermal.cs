@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
 {
@@ -33,8 +32,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="coefficients">Values</param>
         public override void SetCoefficients(params double[] coefficients)
         {
-            if (coefficients == null)
-                throw new ArgumentNullException(nameof(coefficients));
+            coefficients.ThrowIfNot(nameof(coefficients), 1);
             Conductance = coefficients[0];
         }
 
@@ -45,13 +43,12 @@ namespace SpiceSharp.Components.NoiseSources
         /// <returns></returns>
         protected override double CalculateNoise(Noise simulation)
         {
-            if (simulation == null)
-                throw new ArgumentNullException(nameof(simulation));
+            simulation.ThrowIfNull(nameof(simulation));
 
             var state = simulation.ComplexState;
             var val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 4.0 * Circuit.Boltzmann * simulation.RealState.Temperature * Conductance * gain;
+            return 4.0 * Constants.Boltzmann * simulation.RealState.Temperature * Conductance * gain;
         }
     }
 }

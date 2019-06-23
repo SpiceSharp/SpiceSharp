@@ -35,8 +35,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         [ParameterName("tnom"), DerivedProperty, ParameterInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
-            get => NominalTemperature - Circuit.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Circuit.CelsiusKelvin;
+            get => NominalTemperature - Constants.CelsiusKelvin;
+            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <value>
         /// The nominal temperature.
         /// </value>
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Circuit.ReferenceTemperature);
+        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
 
         /// <summary>
         /// Gets or sets the mosfet type.
@@ -361,10 +361,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <returns>
         /// A deep clone of the parameter set.
         /// </returns>
-        public override ParameterSet DeepClone()
+        public override ParameterSet Clone()
         {
             // We have a properties that are only privately settable, so we need to update them manually when cloning.
-            var result = (ModelBaseParameters) base.DeepClone();
+            var result = (ModelBaseParameters) base.Clone();
 
             // Copy the (private/protected) parameters
             result.MosfetType = MosfetType;

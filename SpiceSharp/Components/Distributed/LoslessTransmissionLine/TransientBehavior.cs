@@ -45,6 +45,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="solver">The solver.</param>
         public void GetEquationPointers(Solver<double> solver)
         {
+            solver.ThrowIfNull(nameof(solver));
             Ibr1Ptr = solver.GetRhsElement(BranchEq1);
             Ibr2Ptr = solver.GetRhsElement(BranchEq2);
         }
@@ -68,6 +69,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </remarks>
         public void GetDcState(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var sol = simulation.RealState.Solution;
 
             // Calculate the inputs
@@ -82,6 +84,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="simulation">The time-based simulation.</param>
         public void Transient(TimeSimulation simulation)
         {
+            simulation.ThrowIfNull(nameof(simulation));
             var sol = simulation.RealState.Solution;
 
             // Calculate inputs
