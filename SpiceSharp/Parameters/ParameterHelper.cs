@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp
@@ -18,7 +19,9 @@ namespace SpiceSharp
     public static class ParameterHelper
     {
         private static readonly Dictionary<Type, MethodInfo> _setvalue = new Dictionary<Type, MethodInfo>();
+        private static readonly ReaderWriterLockSlim _setLock = new ReaderWriterLockSlim();
         private static readonly Dictionary<Type, MethodInfo> _getvalue = new Dictionary<Type, MethodInfo>();
+        private static readonly ReaderWriterLockSlim _getLock = new ReaderWriterLockSlim();
 
         /// <summary>
         /// This method will check whether or not a type is a parameter (implements <seealso cref="Parameter{T}"/>).
@@ -257,13 +260,29 @@ namespace SpiceSharp
                 if (parameterType != null)
                 {
                     // This is a parameter! Instead of getting
-                    if (!_setvalue.TryGetValue(parameterType, out var method))
+                    _setLock.EnterUpgradeableReadLock();
+                    try
                     {
-                        method = parameterType.GetTypeInfo().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetSetMethod();
-                        _setvalue.Add(parameterType, method);
+                        if (!_setvalue.TryGetValue(parameterType, out var method))
+                        {
+                            method = parameterType.GetTypeInfo().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetSetMethod();
+                            _setLock.EnterWriteLock();
+                            try
+                            {
+                                _setvalue.Add(parameterType, method);
+                            }
+                            finally
+                            {
+                                _setLock.ExitWriteLock();
+                            }
+                        }
+                        method.Invoke(pi.GetValue(source), new object[] { value });
+                        return true;
                     }
-                    method.Invoke(pi.GetValue(source), new object[] { value });
-                    return true;
+                    finally
+                    {
+                        _setLock.ExitUpgradeableReadLock();
+                    }
                 }
             }
 
@@ -292,13 +311,29 @@ namespace SpiceSharp
                 if (parameterType != null)
                 {
                     // This is a parameter! Instead of getting
-                    if (!_getvalue.TryGetValue(parameterType, out var method))
+                    _getLock.EnterUpgradeableReadLock();
+                    try
                     {
-                        method = parameterType.GetTypeInfo().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
-                        _getvalue.Add(parameterType, method);
+                        if (!_getvalue.TryGetValue(parameterType, out var method))
+                        {
+                            method = parameterType.GetTypeInfo().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
+                            _getLock.EnterWriteLock();
+                            try
+                            {
+                                _getvalue.Add(parameterType, method);
+                            }
+                            finally
+                            {
+                                _getLock.ExitWriteLock();
+                            }
+                        }
+                        value = (T)method.Invoke(pi.GetValue(source), null);
+                        return true;
                     }
-                    value = (T)method.Invoke(pi.GetValue(source), null);
-                    return true;
+                    finally
+                    {
+                        _getLock.ExitUpgradeableReadLock();
+                    }
                 }
             }
 
