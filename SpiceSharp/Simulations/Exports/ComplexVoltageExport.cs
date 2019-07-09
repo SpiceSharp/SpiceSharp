@@ -56,6 +56,24 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Check if the simulation is a <see cref="FrequencySimulation" />.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <returns></returns>
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is FrequencySimulation;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
+        /// </summary>
+        /// <param name="posNode">The node identifier.</param>
+        /// <exception cref="ArgumentNullException">posNode</exception>
+        public ComplexVoltageExport(string posNode)
+        {
+            PosNode = posNode.ThrowIfNull(nameof(posNode));
+            NegNode = null;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
@@ -71,11 +89,23 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
         /// </summary>
+        /// <param name="posNode">The positive node identifier.</param>
+        /// <param name="negNode">The negative node identifier.</param>
+        /// <exception cref="ArgumentNullException">posNode</exception>
+        public ComplexVoltageExport(string posNode, string negNode)
+        {
+            PosNode = posNode.ThrowIfNull(nameof(posNode));
+            NegNode = negNode;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
+        /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public ComplexVoltageExport(Simulation simulation, string posNode, string negNode)
+        public ComplexVoltageExport(FrequencySimulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));

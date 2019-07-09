@@ -38,7 +38,35 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The simulation.
         /// </value>
-        protected Simulation Simulation { get; private set; }
+        public Simulation Simulation
+        {
+            get => _simulation; 
+            set
+            {
+                if (_simulation != null)
+                {
+                    _simulation.AfterSetup -= Initialize;
+                    _simulation.BeforeUnsetup -= Initialize;
+                    Extractor = null;
+                }
+                if (!IsValidSimulation(value))
+                    throw new ArgumentException("Invalid simulation");
+                _simulation = value;
+                if (_simulation != null)
+                {
+                    _simulation.AfterSetup += Initialize;
+                    _simulation.BeforeUnsetup += Finalize;
+                }
+            }
+        }
+        private Simulation _simulation;
+
+        /// <summary>
+        /// Checks whether or not the simulation is a valid one
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <returns></returns>
+        protected virtual bool IsValidSimulation(Simulation simulation) => true;
 
         /// <summary>
         /// Gets the current value from the simulation.
@@ -68,25 +96,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Export{T}"/> class.
         /// </summary>
+        protected Export()
+        {
+            Simulation = null;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Export{T}"/> class.
+        /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <exception cref="ArgumentNullException">simulation</exception>
         protected Export(Simulation simulation)
         {
-            Simulation = simulation.ThrowIfNull(nameof(simulation));
-            simulation.AfterSetup += Initialize;
-            simulation.BeforeUnsetup += Finalize;
-        }
-
-        /// <summary>
-        /// Switch the simulation this export should use.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public virtual void Switch(Simulation simulation)
-        {
-            Destroy();
-            Simulation = simulation.ThrowIfNull(nameof(simulation));
-            simulation.AfterSetup += Initialize;
-            simulation.BeforeUnsetup += Finalize;
+            Simulation = simulation;
         }
 
         /// <summary>
@@ -94,9 +116,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public virtual void Destroy()
         {
-            Simulation.AfterSetup -= Initialize;
-            Simulation.BeforeUnsetup -= Initialize;
-            Extractor = null;
+            Simulation = null;
         }
 
         /// <summary>
@@ -104,6 +124,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void LazyLoad()
         {
+            if (_simulation == null)
+                return;
+
             // If we're already too far, emulate a call from the simulation
             if (Simulation.Status == Simulation.Statuses.Setup || Simulation.Status == Simulation.Statuses.Running)
                 Initialize(Simulation, EventArgs.Empty);

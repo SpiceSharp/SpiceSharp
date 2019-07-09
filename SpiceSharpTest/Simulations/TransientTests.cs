@@ -324,9 +324,9 @@ namespace SpiceSharpTest.Simulations
             sim1.Run(ckt);
 
             // Switch exports
-            vexport.Switch(sim2);
-            iexport.Switch(sim2);
-            pexport.Switch(sim2);
+            vexport.Simulation = sim2;
+            iexport.Simulation = sim2;
+            pexport.Simulation = sim2;
 
             sim2.Run(ckt);
         }

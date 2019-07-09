@@ -25,12 +25,30 @@ namespace SpiceSharp.Simulations
         public string NegNode { get; }
 
         /// <summary>
+        /// Check if the simulation is a <see cref="BaseSimulation"/>.
+        /// </summary>
+        /// <param name="simulation"></param>
+        /// <returns></returns>
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is BaseSimulation;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
+        /// </summary>
+        /// <param name="posNode">The node identifier.</param>
+        /// <exception cref="ArgumentNullException">posNode</exception>
+        public RealVoltageExport(string posNode)
+        {
+            PosNode = posNode.ThrowIfNull(nameof(posNode));
+            NegNode = null;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public RealVoltageExport(Simulation simulation, string posNode)
+        public RealVoltageExport(BaseSimulation simulation, string posNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -44,7 +62,7 @@ namespace SpiceSharp.Simulations
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
-        public RealVoltageExport(Simulation simulation, string posNode, string negNode)
+        public RealVoltageExport(BaseSimulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
