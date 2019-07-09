@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The simulation.
         /// </value>
-        protected Simulation Simulation { get; }
+        protected Simulation Simulation { get; private set; }
 
         /// <summary>
         /// Gets the current value from the simulation.
@@ -72,6 +72,18 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentNullException">simulation</exception>
         protected Export(Simulation simulation)
         {
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
+            simulation.AfterSetup += Initialize;
+            simulation.BeforeUnsetup += Finalize;
+        }
+
+        /// <summary>
+        /// Switch the simulation this export should use.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        public virtual void Switch(Simulation simulation)
+        {
+            Destroy();
             Simulation = simulation.ThrowIfNull(nameof(simulation));
             simulation.AfterSetup += Initialize;
             simulation.BeforeUnsetup += Finalize;
