@@ -8,7 +8,6 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="Export{T}" />
     public class InputNoiseDensityExport : Export<double>
     {
-
         /// <summary>
         /// Check if the simulation is a <see cref="Noise"/> simulation.
         /// </summary>
