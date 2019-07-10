@@ -23,6 +23,31 @@ namespace SpiceSharp.Simulations
         public Variable Ground { get; }
 
         /// <summary>
+        /// Gets the <see cref="IEqualityComparer{T}"/> that is used to determine equality of keys.
+        /// </summary>
+        public IEqualityComparer<string> Comparer => _map.Comparer;
+
+        /// <summary>
+        /// Gets the <see cref="Variable"/> at the specified index.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Variable"/>.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>The variable at the specified index.</returns>
+        public Variable this[int index] => _unknowns[index];
+
+        /// <summary>
+        /// Gets the number of variables.
+        /// </summary>
+        public int Count => _unknowns.Count;
+
+        /// <summary>
+        /// Enumerate all variable names in the set.
+        /// </summary>
+        public IEnumerable<string> Keys => _map.Keys;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VariableSet"/> class.
         /// </summary>
         public VariableSet()
@@ -56,21 +81,6 @@ namespace SpiceSharp.Simulations
             // Unlock
             _locked = false;
         }
-
-        /// <summary>
-        /// Gets the <see cref="Variable"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="Variable"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns>The variable at the specified index.</returns>
-        public Variable this[int index] => _unknowns[index];
-
-        /// <summary>
-        /// Gets the number of variables.
-        /// </summary>
-        public int Count => _unknowns.Count;
 
         /// <summary>
         /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
