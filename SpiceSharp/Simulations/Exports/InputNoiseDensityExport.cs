@@ -9,6 +9,20 @@ namespace SpiceSharp.Simulations
     public class InputNoiseDensityExport : Export<double>
     {
         /// <summary>
+        /// Check if the simulation is a <see cref="Noise"/> simulation.
+        /// </summary>
+        /// <param name="simulation"></param>
+        /// <returns></returns>
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is Noise;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InputNoiseDensityExport"/> class.
+        /// </summary>
+        public InputNoiseDensityExport()
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InputNoiseDensityExport"/> class.
         /// </summary>
         /// <param name="noise">The noise analysis.</param>

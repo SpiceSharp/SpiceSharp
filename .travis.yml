@@ -1,2 +1,6 @@
 language: csharp
 solution: SpiceSharp.sln
+
+branches:
+  only:
+  - master

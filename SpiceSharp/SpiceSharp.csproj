@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.5;netstandard2.0;net45;netcoreapp2.0</TargetFrameworks>
-    <Version>2.7.1</Version>
+    <Version>2.7.2</Version>
     <Authors>Sven Boulanger</Authors>
     <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
     <PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
@@ -10,12 +10,12 @@
     <RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
     <PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/SpiceSharp/SpiceSharp/master/api/images/logo_full.svg?sanitize=true</PackageIconUrl>
-    <AssemblyVersion>2.7.1.0</AssemblyVersion>
+    <AssemblyVersion>2.7.2.0</AssemblyVersion>
     <PackageReleaseNotes>Refer to the GitHub release for release notes</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
     <NeutralLanguage>en-001</NeutralLanguage>
-    <FileVersion>2.7.1.0</FileVersion>
+    <FileVersion>2.7.2.0</FileVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

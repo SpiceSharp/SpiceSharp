@@ -18,12 +18,29 @@ namespace SpiceSharp.Simulations
         public string Source { get; }
 
         /// <summary>
+        /// Check if the simulation is a frequency simulation
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <returns></returns>
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is FrequencySimulation;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
+        /// </summary>
+        /// <param name="source">The source identifier.</param>
+        /// <exception cref="ArgumentNullException">source</exception>
+        public ComplexCurrentExport(string source)
+        {
+            Source = source.ThrowIfNull(nameof(source));
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source identifier.</param>
         /// <exception cref="ArgumentNullException">source</exception>
-        public ComplexCurrentExport(Simulation simulation, string source)
+        public ComplexCurrentExport(FrequencySimulation simulation, string source)
             : base(simulation)
         {
             Source = source.ThrowIfNull(nameof(source));
@@ -37,7 +54,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((BaseSimulation) Simulation).RealState.ThrowIfNull("real state");
+            var state = ((FrequencySimulation) Simulation).RealState.ThrowIfNull("complex state");
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))

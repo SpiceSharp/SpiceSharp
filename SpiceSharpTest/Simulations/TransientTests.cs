@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
@@ -55,6 +53,8 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
+            // TODO: review this test
+            // tran.Configurations.Get<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) => { Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12); };
             tran.Run(ckt);
 
@@ -290,6 +290,45 @@ namespace SpiceSharpTest.Simulations
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
             tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_ExportSwitch_Expect_Reference()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(1, 1, 10)),
+                new Resistor("R1", "in", "out", 1e3),
+                new Resistor("R2", "out", "0", 1e3));
+
+            var sim1 = new DC("dc", "V1", 0, 2, 0.2);
+            var sim2 = new Transient("tran", 1e-3, 0.5);
+
+            var vexport = new RealVoltageExport(sim1, "out");
+            var iexport = new RealCurrentExport(sim1, "V1");
+            var pexport = new RealPropertyExport(sim1, "R1", "p");
+            sim1.ExportSimulationData += (sender, e) =>
+            {
+                var input = e.GetVoltage("in");
+                Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
+                Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
+                Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
+            };
+            sim2.ExportSimulationData += (sender, e) =>
+            {
+                var input = e.GetVoltage("in");
+                Assert.AreEqual(Math.Sin(2 * Math.PI * 10 * e.Time) + 1.0, input, 1e-9);
+                Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
+                Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
+                Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
+            };
+            sim1.Run(ckt);
+
+            // Switch exports
+            vexport.Simulation = sim2;
+            iexport.Simulation = sim2;
+            pexport.Simulation = sim2;
+
+            sim2.Run(ckt);
         }
     }
 }

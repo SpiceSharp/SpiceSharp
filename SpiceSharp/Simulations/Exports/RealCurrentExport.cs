@@ -17,12 +17,30 @@ namespace SpiceSharp.Simulations
         public string Source { get; }
 
         /// <summary>
+        /// Check if the simulation is a base simulation.
+        /// </summary>
+        /// <param name="simulation"></param>
+        /// <returns></returns>
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is BaseSimulation;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source identifier.</param>
         /// <exception cref="ArgumentNullException">source</exception>
-        public RealCurrentExport(Simulation simulation, string source)
+        public RealCurrentExport(string source)
+        {
+            Source = source.ThrowIfNull(nameof(source));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="source">The source identifier.</param>
+        /// <exception cref="ArgumentNullException">source</exception>
+        public RealCurrentExport(BaseSimulation simulation, string source)
             : base(simulation)
         {
             Source = source.ThrowIfNull(nameof(source));
