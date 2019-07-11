@@ -37,24 +37,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
         /// </summary>
-        /// <param name="entityName">The identifier of the entity.</param>
-        /// <param name="propertyName">The name of the property.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <exception cref="ArgumentNullException">
-        /// entityName
-        /// or
-        /// propertyName
-        /// </exception>
-        public RealPropertyExport(string entityName, string propertyName, IEqualityComparer<string> comparer = null)
-        {
-            EntityName = entityName.ThrowIfNull(nameof(entityName));
-            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
-            Comparer = comparer ?? EqualityComparer<string>.Default;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
-        /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="entityName">The identifier of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>

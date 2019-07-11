@@ -17,15 +17,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericExport{T}"/> class.
         /// </summary>
-        /// <param name="extractor">The function for extracting information.</param>
-        public GenericExport(Func<T> extractor)
-        {
-            _myExtractor = extractor.ThrowIfNull(nameof(extractor));
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenericExport{T}"/> class.
-        /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="extractor">The function for extracting information.</param>
         public GenericExport(Simulation simulation, Func<T> extractor)
