@@ -18,13 +18,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="InputNoiseDensityExport"/> class.
         /// </summary>
-        public InputNoiseDensityExport()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InputNoiseDensityExport"/> class.
-        /// </summary>
         /// <param name="noise">The noise analysis.</param>
         public InputNoiseDensityExport(Noise noise)
             : base(noise)

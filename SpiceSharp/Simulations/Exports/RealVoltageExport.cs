@@ -17,12 +17,22 @@ namespace SpiceSharp.Simulations
         public string PosNode { get; }
 
         /// <summary>
+        /// Gets the index of the positive node variable.
+        /// </summary>
+        public int PosIndex { get; private set; }
+
+        /// <summary>
         /// Gets the identifier of the negative node.
         /// </summary>
         /// <value>
         /// The negative node identifier.
         /// </value>
         public string NegNode { get; }
+
+        /// <summary>
+        /// gets the index of the negative node variable.
+        /// </summary>
+        public int NegIndex { get; private set; }
 
         /// <summary>
         /// Check if the simulation is a <see cref="BaseSimulation"/>.
@@ -34,17 +44,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
         /// </summary>
-        /// <param name="posNode">The node identifier.</param>
-        /// <exception cref="ArgumentNullException">posNode</exception>
-        public RealVoltageExport(string posNode)
-        {
-            PosNode = posNode.ThrowIfNull(nameof(posNode));
-            NegNode = null;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
-        /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
         /// <exception cref="ArgumentNullException">posNode</exception>
@@ -52,7 +51,9 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
+            PosIndex = -1;
             NegNode = null;
+            NegIndex = -1;
         }
 
         /// <summary>
@@ -66,14 +67,16 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
+            PosIndex = -1;
             NegNode = negNode;
+            NegIndex = -1;
         }
 
         /// <summary>
         /// Initializes the export.
         /// </summary>
         /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
@@ -81,14 +84,31 @@ namespace SpiceSharp.Simulations
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 var posNodeIndex = posNode.Index;
+                PosIndex = posNodeIndex;
                 if (NegNode == null)
+                {
                     Extractor = () => state.Solution[posNodeIndex];
+                    NegIndex = 0;
+                }
                 else if (Simulation.Variables.TryGetNode(NegNode, out var negNode))
                 {
                     var negNodeIndex = negNode.Index;
                     Extractor = () => state.Solution[posNodeIndex] - state.Solution[negNodeIndex];
+                    NegIndex = negNodeIndex;
                 }
             }
+        }
+
+        /// <summary>
+        /// Finalizes the export.
+        /// </summary>
+        /// <param name="sender">The object (simulation) sending the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        protected override void Finalize(object sender, EventArgs e)
+        {
+            base.Finalize(sender, e);
+            PosIndex = -1;
+            NegIndex = -1;
         }
     }
 }

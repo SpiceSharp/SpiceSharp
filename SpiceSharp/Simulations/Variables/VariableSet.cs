@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class VariableSet : IEnumerable<Variable>
+    public class VariableSet : IEnumerable<Variable>, ICollection, IReadOnlyCollection<Variable>
     {
         /// <summary>
         /// Private variables
@@ -18,9 +18,54 @@ namespace SpiceSharp.Simulations
         private bool _locked;
 
         /// <summary>
+        /// Event that is called when a variable is added to the set.
+        /// </summary>
+        public event EventHandler<VariableEventArgs> VariableAdded;
+
+        /// <summary>
         /// Gets the ground node.
         /// </summary>
         public Variable Ground { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IEqualityComparer{T}"/> that is used to determine equality of keys.
+        /// </summary>
+        public IEqualityComparer<string> Comparer => _map.Comparer;
+
+        /// <summary>
+        /// Gets the <see cref="Variable"/> at the specified index.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Variable"/>.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>The variable at the specified index.</returns>
+        public Variable this[int index] => _unknowns[index];
+
+        /// <summary>
+        /// Gets the number of variables.
+        /// </summary>
+        public int Count => _unknowns.Count;
+
+        /// <summary>
+        /// Enumerate all variable names in the set.
+        /// </summary>
+        public IEnumerable<string> Keys => _map.Keys;
+
+        /// <summary>
+        /// Gets a value indicating whether access to the <see cref="ICollection{T}</see> is synchronized (thread safe).
+        /// </summary>
+        public bool IsSynchronized => true;
+
+        /// <summary>
+        /// Gets an object that can be used to synchronize access to the <see cref="ICollection{T}"/>.
+        /// </summary>
+        public object SyncRoot => this;
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="ICollection{T}"/> is read-only.
+        /// </summary>
+        public bool IsReadOnly => false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableSet"/> class.
@@ -58,21 +103,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the <see cref="Variable"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="Variable"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns>The variable at the specified index.</returns>
-        public Variable this[int index] => _unknowns[index];
-
-        /// <summary>
-        /// Gets the number of variables.
-        /// </summary>
-        public int Count => _unknowns.Count;
-
-        /// <summary>
         /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
         /// </summary>
         /// <remarks>
@@ -93,6 +123,10 @@ namespace SpiceSharp.Simulations
             var node = new Variable(id, type, _unknowns.Count + 1);
             _unknowns.Add(node);
             _map.Add(id, node);
+
+            // Call the event
+            var args = new VariableEventArgs(node);
+            OnVariableAdded(args);
             return node;
         }
 
@@ -136,6 +170,10 @@ namespace SpiceSharp.Simulations
             var index = _unknowns.Count + 1;
             var node = new Variable(id, type, index);
             _unknowns.Add(node);
+
+            // Call the event
+            var args = new VariableEventArgs(node);
+            OnVariableAdded(args);
             return node;
         }
 
@@ -243,5 +281,28 @@ namespace SpiceSharp.Simulations
         /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Copy the elements to an array.
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="index">The starting index.</param>
+        void ICollection.CopyTo(Array array, int index)
+        {
+            array.ThrowIfNull(nameof(array));
+            if (index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (array.Length < index + Count)
+                throw new ArgumentException("Not enough elements in the array");
+
+            foreach (var item in _unknowns)
+                array.SetValue(item, index++);
+        }
+
+        /// <summary>
+        /// Method that calls the <see cref="VariableAdded"/> event.
+        /// </summary>
+        /// <param name="variable"></param>
+        protected virtual void OnVariableAdded(VariableEventArgs args) => VariableAdded?.Invoke(this, args);
     }
 }

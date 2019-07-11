@@ -29,33 +29,6 @@ namespace SpiceSharp.Circuits
         public event EventHandler<EntityEventArgs> EntityRemoved;
 
         /// <summary>
-        /// Gets the comparer for entity identifiers.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
-        public IEqualityComparer<string> Comparer => _entities.Comparer;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntityCollection"/> class.
-        /// </summary>
-        public EntityCollection()
-        {
-            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, Entity>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntityCollection"/> class.
-        /// </summary>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        public EntityCollection(IEqualityComparer<string> comparer)
-        {
-            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, Entity>(comparer);
-        }
-
-        /// <summary>
         /// Search for an entity by its string.
         /// </summary>
         /// <value>
@@ -83,6 +56,14 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// Gets the comparer for entity identifiers.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer => _entities.Comparer;
+
+        /// <summary>
         /// The number of entities.
         /// </summary>
         public int Count
@@ -101,11 +82,44 @@ namespace SpiceSharp.Circuits
             }
         }
 
-        public bool IsSynchronized => throw new NotImplementedException();
+        /// <summary>
+        /// Enumerates the names of all entities in the collection.
+        /// </summary>
+        public IEnumerable<string> Keys => _entities.Keys;
 
-        public object SyncRoot => throw new NotImplementedException();
+        /// <summary>
+        /// Gets a value indicating whether access to the <see cref="ICollection{T}</see> is synchronized (thread safe).
+        /// </summary>
+        public bool IsSynchronized => true;
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        /// <summary>
+        /// Gets an object that can be used to synchronize access to the <see cref="ICollection{T}"/>.
+        /// </summary>
+        public object SyncRoot => this;
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="ICollection{T}"/> is read-only.
+        /// </summary>
+        public bool IsReadOnly => false;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityCollection"/> class.
+        /// </summary>
+        public EntityCollection()
+        {
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _entities = new Dictionary<string, Entity>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityCollection"/> class.
+        /// </summary>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        public EntityCollection(IEqualityComparer<string> comparer)
+        {
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _entities = new Dictionary<string, Entity>(comparer);
+        }
 
         /// <summary>
         /// Clear all entities in the collection.
