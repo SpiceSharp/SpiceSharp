@@ -123,7 +123,10 @@ namespace SpiceSharp.Simulations
             var node = new Variable(id, type, _unknowns.Count + 1);
             _unknowns.Add(node);
             _map.Add(id, node);
-            OnVariableAdded(node);
+
+            // Call the event
+            var args = new VariableEventArgs(node);
+            OnVariableAdded(args);
             return node;
         }
 
@@ -167,7 +170,10 @@ namespace SpiceSharp.Simulations
             var index = _unknowns.Count + 1;
             var node = new Variable(id, type, index);
             _unknowns.Add(node);
-            OnVariableAdded(node);
+
+            // Call the event
+            var args = new VariableEventArgs(node);
+            OnVariableAdded(args);
             return node;
         }
 
@@ -297,6 +303,6 @@ namespace SpiceSharp.Simulations
         /// Method that calls the <see cref="VariableAdded"/> event.
         /// </summary>
         /// <param name="variable"></param>
-        protected virtual void OnVariableAdded(Variable variable) => VariableAdded?.Invoke(this, variable);
+        protected virtual void OnVariableAdded(VariableEventArgs args) => VariableAdded?.Invoke(this, args);
     }
 }
