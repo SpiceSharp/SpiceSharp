@@ -35,6 +35,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -64,6 +65,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -107,6 +109,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -153,6 +156,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -212,6 +216,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
     }
 }

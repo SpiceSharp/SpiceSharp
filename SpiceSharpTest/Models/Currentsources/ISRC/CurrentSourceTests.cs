@@ -45,6 +45,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         /// <summary>
@@ -98,6 +99,7 @@ namespace SpiceSharpTest.Models
             
             // Run test
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]

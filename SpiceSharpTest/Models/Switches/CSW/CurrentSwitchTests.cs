@@ -198,6 +198,7 @@ namespace SpiceSharpTest.Models
                 }
             };
             AnalyzeDC(dc, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]

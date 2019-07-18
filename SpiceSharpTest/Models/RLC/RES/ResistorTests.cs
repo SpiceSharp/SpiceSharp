@@ -43,6 +43,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -61,6 +62,7 @@ namespace SpiceSharpTest.Models
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { f => 1e-3 };
             AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         /// <summary>
@@ -98,6 +100,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         /// <summary>
@@ -137,6 +140,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -158,6 +162,7 @@ namespace SpiceSharpTest.Models
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
     }
 }

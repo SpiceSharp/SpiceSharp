@@ -229,6 +229,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -286,6 +287,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -364,6 +366,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeNoise(noise, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -386,6 +389,7 @@ namespace SpiceSharpTest.Models
             };
 
             op.Run(ckt);
+            export.Destroy();
         }
 
         [Test]

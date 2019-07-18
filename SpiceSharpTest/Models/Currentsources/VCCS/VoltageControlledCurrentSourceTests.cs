@@ -28,6 +28,7 @@ namespace SpiceSharpTest.Models
             Export<double>[] exports = { new RealVoltageExport(dc, "out"), new RealPropertyExport(dc, "R1", "i") };
             Func<double, double>[] references = { sweep => sweep * transconductance * resistance, sweep => sweep * transconductance };
             AnalyzeDC(dc, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -50,6 +51,7 @@ namespace SpiceSharpTest.Models
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { freq => magnitude * transconductance * resistance, freq => magnitude * transconductance };
             AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -66,6 +68,7 @@ namespace SpiceSharpTest.Models
             var current = new RealPropertyExport(op, "G1", "i");
             op.ExportSimulationData += (sender, args) => Assert.AreEqual(300.0, current.Value, 1e-12);
             op.Run(ckt);
+            current.Destroy();
         }
     }
 }
