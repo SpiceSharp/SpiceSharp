@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
                     _simulation.BeforeUnsetup -= Initialize;
                     Extractor = null;
                 }
-                if (!IsValidSimulation(value))
+                if (value != null && !IsValidSimulation(value))
                     throw new ArgumentException("Invalid simulation");
                 _simulation = value;
                 if (_simulation != null)

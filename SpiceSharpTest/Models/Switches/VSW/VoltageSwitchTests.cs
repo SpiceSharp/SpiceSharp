@@ -198,6 +198,7 @@ namespace SpiceSharpTest.Models
                 }
             };
             AnalyzeDC(dc, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -273,6 +274,7 @@ namespace SpiceSharpTest.Models
                 }
             };
             AnalyzeTransient(transient, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]

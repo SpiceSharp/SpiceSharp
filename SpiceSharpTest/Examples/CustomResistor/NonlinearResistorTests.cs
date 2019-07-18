@@ -28,6 +28,8 @@ namespace SpiceSharpTest.Examples
                 var current = -currentExport.Value;
             };
             dc.Run(ckt);
+
+            currentExport.Destroy();
             // </example_customcomponent_nonlinearresistor_test>
         }
     }

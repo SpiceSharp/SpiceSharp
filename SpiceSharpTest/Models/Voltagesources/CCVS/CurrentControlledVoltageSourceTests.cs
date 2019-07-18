@@ -27,6 +27,7 @@ namespace SpiceSharpTest.Models
             Export<double>[] exports = { new RealVoltageExport(dc, "out") };
             Func<double, double>[] references = { sweep => transimpedance * sweep };
             AnalyzeDC(dc, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -48,6 +49,7 @@ namespace SpiceSharpTest.Models
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
             Func<double, Complex>[] references = { sweep => transimpedance * magnitude };
             AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
     }
 }

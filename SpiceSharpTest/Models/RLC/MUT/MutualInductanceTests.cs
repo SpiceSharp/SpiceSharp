@@ -59,6 +59,7 @@ namespace SpiceSharpTest.Models
 
             // Run test
             AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]
@@ -104,6 +105,7 @@ namespace SpiceSharpTest.Models
 
             // Run simulation
             AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
     }
 }

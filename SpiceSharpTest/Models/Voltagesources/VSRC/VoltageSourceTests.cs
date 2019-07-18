@@ -27,6 +27,7 @@ namespace SpiceSharpTest.Models
             Export<double>[] exports = { new RealVoltageExport(op, $"{voltages.Length}") };
             double[] references = { sum };
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
         }
     }
 }

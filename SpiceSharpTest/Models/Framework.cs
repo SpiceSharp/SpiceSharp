@@ -475,5 +475,16 @@ namespace SpiceSharpTest.Models
             for (var i = 0; i < arr.Length; i++)
                 Console.WriteLine($"v{i} = [{string.Join(", ", output[i])} ];");
         }
+
+        /// <summary>
+        /// Destroy all exports.
+        /// </summary>
+        /// <typeparam name="T">The base type.</typeparam>
+        /// <param name="exports">The exports.</param>
+        protected void DestroyExports<T>(IEnumerable<Export<T>> exports)
+        {
+            foreach (var export in exports)
+                export.Destroy();
+        }
     }
 }
