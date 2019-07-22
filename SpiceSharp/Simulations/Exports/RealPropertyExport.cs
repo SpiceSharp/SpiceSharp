@@ -64,30 +64,34 @@ namespace SpiceSharp.Simulations
         {
             e.ThrowIfNull(nameof(e));
             var eb = Simulation.EntityBehaviors[EntityName];
+
             Func<double> extractor = null;
 
-            // Get the necessary behavior in order:
-            // 1) First try transient analysis
+            if (eb != null)
             {
-                if (eb.TryGetValue(typeof(ITimeBehavior), out var behavior) &&
-                    behavior is IPropertyExporter exporter)
-                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
-            }
+                // Get the necessary behavior in order:
+                // 1) First try transient analysis
+                {
+                    if (eb.TryGetValue(typeof(ITimeBehavior), out var behavior) &&
+                        behavior is IPropertyExporter exporter)
+                        exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
+                }
 
-            // 2) Second, try the load behavior
-            if (extractor == null)
-            {
-                if (eb.TryGetValue(typeof(IBiasingBehavior), out var behavior) &&
-                    behavior is IPropertyExporter exporter)
-                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
-            }
+                // 2) Second, try the load behavior
+                if (extractor == null)
+                {
+                    if (eb.TryGetValue(typeof(IBiasingBehavior), out var behavior) &&
+                        behavior is IPropertyExporter exporter)
+                        exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
+                }
 
-            // 3) Thirdly, check temperature behavior
-            if (extractor == null)
-            {
-                if (eb.TryGetValue(typeof(ITemperatureBehavior), out var behavior) &&
-                    behavior is IPropertyExporter exporter)
-                    exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
+                // 3) Thirdly, check temperature behavior
+                if (extractor == null)
+                {
+                    if (eb.TryGetValue(typeof(ITemperatureBehavior), out var behavior) &&
+                        behavior is IPropertyExporter exporter)
+                        exporter.CreateExportMethod(Simulation, PropertyName, out extractor, Comparer);
+                }
             }
 
             // 4) Check parameter sets
