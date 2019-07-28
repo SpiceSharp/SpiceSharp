@@ -21,6 +21,7 @@
     <DebugSymbols>true</DebugSymbols>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
