@@ -86,7 +86,7 @@ namespace SpiceSharp.Simulations
                     // Try initializing (lazy loading)
                     LazyLoad();
                     if (Extractor == null)
-                        return default(T);
+                        return default;
                 }
 
                 return Extractor();

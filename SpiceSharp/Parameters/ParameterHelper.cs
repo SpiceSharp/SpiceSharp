@@ -181,7 +181,7 @@ namespace SpiceSharp
             var member = Reflection.GetNamedMembers(source, name, comparer).FirstOrDefault();
             if (member == null)
             {
-                value = default(T);
+                value = default;
                 return false;
             }
 
@@ -217,7 +217,7 @@ namespace SpiceSharp
             var member = Reflection.GetPrincipalMembers(source).FirstOrDefault();
             if (member == null)
             {
-                value = default(T);
+                value = default;
                 return false;
             }
 

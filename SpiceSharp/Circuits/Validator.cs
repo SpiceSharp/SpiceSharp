@@ -19,7 +19,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         private bool _hasSource;
         private bool _hasGround;
-        private readonly List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
+        private readonly List<(Component, int, int)> _voltageDriven = new List<(Component, int, int)>();
         private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
         private readonly VariableSet _nodes = new VariableSet();
@@ -103,7 +103,7 @@ namespace SpiceSharp.Circuits
                     switch (attr)
                     {
                         case VoltageDriverAttribute vd:
-                            _voltageDriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
+                            _voltageDriven.Add((icc, nodes[vd.Positive], nodes[vd.Negative]));
                             break;
                         case IndependentSourceAttribute _:
                             _hasSource = true;
@@ -205,7 +205,7 @@ namespace SpiceSharp.Circuits
                  */
                 if (exception.Index <= _voltageDriven.Count)
                 {
-                    var indices = solver.InternalToExternal(new Tuple<int, int>(exception.Index, exception.Index));
+                    var indices = solver.InternalToExternal((exception.Index, exception.Index));
                     return _voltageDriven[indices.Item1 - 1].Item1;
                 }
             }

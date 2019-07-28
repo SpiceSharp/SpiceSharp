@@ -265,7 +265,7 @@ namespace SpiceSharp
                     return true;
                 }
 
-                value = default(TResult);
+                value = default;
                 return false;
             }
             finally

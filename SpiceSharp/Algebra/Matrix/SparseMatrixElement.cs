@@ -53,7 +53,7 @@
             /// <param name="column">The column index.</param>
             public SparseMatrixElement(int row, int column)
             {
-                Value = default(T);
+                Value = default;
                 Row = row;
                 Column = column;
             }

@@ -34,17 +34,17 @@ namespace SpiceSharp.Algebra
             {
                 var element = FindElement(index);
                 if (element == null)
-                    return default(T);
+                    return default;
                 return element.Value;
             }
             set
             {
-                if (value.Equals(default(T)))
+                if (value.Equals(default))
                 {
                     // We don't need to create a new element unnecessarily
                     var element = FindElement(index);
                     if (element != null)
-                        element.Value = default(T);
+                        element.Value = default;
                 }
                 else
                 {

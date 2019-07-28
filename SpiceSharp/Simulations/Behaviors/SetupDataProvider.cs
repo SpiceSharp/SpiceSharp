@@ -76,7 +76,7 @@ namespace SpiceSharp.Behaviors
         {
             if (_parameterSets.TryGetValue(name, out var r))
                 return r.TryGet(out value);
-            value = default(T);
+            value = default;
             return false;
         }
 
@@ -109,7 +109,7 @@ namespace SpiceSharp.Behaviors
         {
             if (_entityBehaviors.TryGetValue(name, out var r))
                 return r.TryGet(out value);
-            value = default(T);
+            value = default;
             return false;
         }
     }

@@ -45,7 +45,7 @@
         /// </summary>
         public GivenParameter()
         {
-            RawValue = default(T);
+            RawValue = default;
             Given = false;
         }
 
