@@ -24,7 +24,7 @@ before_build:
 build_script:
   - msbuild SpiceSharp\SpiceSharp.csproj -p:Configuration=Debug
   - msbuild SpiceSharpTest\SpiceSharpTest.csproj -p:Configuration=Debug
-  - OpenCover.Console.exe -register:user -oldStyle -target:"packages\NUnit.ConsoleRunner.3.9.0\tools\nunit3-console.exe" -targetargs:"SpiceSharpTest\SpiceSharpTest.csproj" -filter:"+[*]* -[SpiceSharpTest*]*" -output:"SpiceSharpCoverage.xml"
+  - OpenCover.Console.exe -register:user -oldStyle -target:"packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe" -targetargs:"SpiceSharpTest\SpiceSharpTest.csproj" -filter:"+[*]* -[SpiceSharpTest*]*" -output:"SpiceSharpCoverage.xml"
   - codecov -f "SpiceSharpCoverage.xml"
   - msbuild SpiceSharp\SpiceSharp.csproj -p:Configuration=Release
 
