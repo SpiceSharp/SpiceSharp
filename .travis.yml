@@ -1,6 +1,10 @@
 language: csharp
 solution: SpiceSharp.sln
 
+os:
+  - linux
+  - osx
+
 branches:
   only:
   - master
