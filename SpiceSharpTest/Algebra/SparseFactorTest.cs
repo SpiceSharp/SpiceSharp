@@ -3,7 +3,6 @@
 using System;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
-// using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Sparse
 {

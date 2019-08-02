@@ -15,7 +15,7 @@
     <PackageReleaseNotes>Refer to the GitHub release for release notes</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
-    <NeutralLanguage>en-001</NeutralLanguage>
+    <NeutralLanguage>en</NeutralLanguage>
     <FileVersion>2.7.7.0</FileVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
