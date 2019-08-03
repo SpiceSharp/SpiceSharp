@@ -23,9 +23,7 @@ namespace SpiceSharp.Algebra
         /// <remarks>
         /// The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.
         /// </remarks>
-        /// <value>
-        /// The value at the specified index.
-        /// </value>
+
         /// <param name="index">The index in the vector.</param>
         /// <returns>The value at the specified index.</returns>
         public override T this[int index]

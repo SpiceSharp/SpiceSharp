@@ -17,6 +17,9 @@ namespace SpiceSharp.Simulations
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
 
+        /// <summary>
+        /// Gets the (cached) simulation statistics.
+        /// </summary>
         protected ComplexSimulationStatistics FrequencySimulationStatistics { get; }
 
         /// <summary>
@@ -40,17 +43,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the complex simulation state.
         /// </summary>
-        /// <value>
-        /// The state of the complex.
-        /// </value>
         public ComplexSimulationState ComplexState { get; protected set; }
 
         /// <summary>
         /// Gets the frequency sweep.
         /// </summary>
-        /// <value>
-        /// The frequency sweep.
-        /// </value>
         protected Sweep<double> FrequencySweep { get; private set; }
 
         /// <summary>
@@ -86,7 +83,7 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
+
         /// <exception cref="SpiceSharp.CircuitException">
         /// No frequency configuration found
         /// or

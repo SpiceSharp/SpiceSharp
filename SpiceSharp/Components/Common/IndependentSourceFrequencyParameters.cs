@@ -10,12 +10,21 @@ namespace SpiceSharp.Components.CommonBehaviors
     public class IndependentSourceFrequencyParameters : ParameterSet
     {
         /// <summary>
-        /// Parameters
+        /// Small-signal magnitude.
         /// </summary>
         [ParameterName("acmag"), ParameterInfo("A.C. magnitude value")]
         public GivenParameter<double> AcMagnitude { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Small-signal phase.
+        /// </summary>
         [ParameterName("acphase"), ParameterInfo("A.C. phase value")]
         public GivenParameter<double> AcPhase { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Sets the small-signal parameters of the source.
+        /// </summary>
+        /// <param name="ac">Parameters.</param>
         [ParameterName("ac"), ParameterInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
@@ -39,9 +48,6 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Gets the phasor represented by the amplitude and phase.
         /// </summary>
-        /// <value>
-        /// The phasor.
-        /// </value>
         public Complex Phasor { get; private set; }
 
         /// <summary>

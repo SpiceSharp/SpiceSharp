@@ -8,9 +8,6 @@
         /// <summary>
         /// Gets a value indicating whether this state is set up.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is setup; otherwise, <c>false</c>.
-        /// </value>
         public bool IsSetup { get; private set; }
 
         /// <summary>

@@ -11,9 +11,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a value indicating whether the simulation is repeated.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if repeated; otherwise, <c>false</c>.
-        /// </value>
         public bool Repeated { get; }
 
         /// <summary>

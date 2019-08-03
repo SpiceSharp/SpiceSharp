@@ -21,12 +21,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
-        /// Shared parameters
+        /// Gets the implementation-specific factor 1.
         /// </summary>
         public double Factor1 { get; private set; }
+
+        /// <summary>
+        /// Gets the nominal thermal voltage.
+        /// </summary>
         public double VtNominal { get; private set; }
+
+        /// <summary>
+        /// Gets the band-gap.
+        /// </summary>
         public double EgFet1 { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor PbFactor1
+        /// </summary>
         public double PbFactor1 { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific Xd.
+        /// </summary>
         public double Xd { get; private set; }
 
         /// <summary>

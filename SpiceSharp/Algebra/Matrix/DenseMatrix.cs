@@ -19,17 +19,9 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets or sets a value at the specified row and column.
         /// </summary>
-        /// <value>
-        /// The value at the specified row and column.
-        /// </value>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException">
-        /// Invalid indices ({0}, {1})".FormatString(row, column)
-        /// or
-        /// Invalid indices ({0}, {1})".FormatString(row, column)
-        /// </exception>
         public T this[int row, int column]
         {
             get
@@ -68,7 +60,6 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The value at the specified row and column.
         /// </returns>
-        /// <exception cref="ArgumentException">Invalid indices ({0}, {1})".FormatString(row, column)</exception>
         public override T GetValue(int row, int column)
         {
             if (row < 0 || column < 0 || row >= Size || column >= Size)
@@ -84,7 +75,6 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">Invalid indices ({0}, {1})".FormatString(row, column)</exception>
         public override void SetValue(int row, int column, T value)
         {
             if (row < 0 || column < 0 || row >= Size || column >= Size)

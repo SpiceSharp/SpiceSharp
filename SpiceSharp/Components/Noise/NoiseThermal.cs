@@ -7,6 +7,9 @@ namespace SpiceSharp.Components.NoiseSources
     /// </summary>
     public class NoiseThermal : NoiseGenerator
     {
+        /// <summary>
+        /// The second node of the noise source.
+        /// </summary>
         public int Node2 { get; }
 
         /// <summary>

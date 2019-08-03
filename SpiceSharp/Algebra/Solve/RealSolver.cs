@@ -133,8 +133,6 @@ namespace SpiceSharp.Algebra
         /// Solve the system of equations.
         /// </summary>
         /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
-        /// <exception cref="ArgumentNullException">solution</exception>
-        /// <exception cref="SparseException">Solver is not yet factored</exception>
         public override void Solve(Vector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -201,8 +199,6 @@ namespace SpiceSharp.Algebra
         /// Solve the transposed problem.
         /// </summary>
         /// <param name="solution">The solution vector that will hold the solution to the transposed set of equations.</param>
-        /// <exception cref="ArgumentNullException">solution</exception>
-        /// <exception cref="SparseException">Solver is not yet factored</exception>
         public override void SolveTransposed(Vector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));

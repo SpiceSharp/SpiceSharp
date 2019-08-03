@@ -14,9 +14,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets the current value.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         public abstract T Current { get; set; }
 
         /// <summary>
@@ -31,17 +28,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the number of timesteps stored.
         /// </summary>
-        /// <value>
-        /// The length.
-        /// </value>
         public int Length { get; protected set; }
 
         /// <summary>
         /// Gets all points in the history.
         /// </summary>
-        /// <value>
-        /// The points.
-        /// </value>
         protected abstract IEnumerable<T> Points { get; }
 
         /// <summary>

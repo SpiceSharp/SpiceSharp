@@ -17,17 +17,11 @@ namespace SpiceSharp.Components.Waveforms
             /// <summary>
             /// Gets or sets the slope of the line.
             /// </summary>
-            /// <value>
-            /// The slope.
-            /// </value>
             public double A { get; set; }
 
             /// <summary>
             /// Gets or sets the intercept of the line.
             /// </summary>
-            /// <value>
-            /// The intercept.
-            /// </value>
             public double B { get; set; }
         }
 

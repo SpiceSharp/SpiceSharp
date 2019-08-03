@@ -73,7 +73,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// True if the pivot can be used.
         /// </returns>
-        /// <exception cref="ArgumentNullException">pivot</exception>
         public override bool IsValidPivot(MatrixElement<T> pivot)
         {
             pivot.ThrowIfNull(nameof(pivot));
@@ -100,7 +99,6 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes the pivot searching algorithm.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
-        /// <exception cref="ArgumentNullException">matrix</exception>
         public void Initialize(Matrix<T> matrix)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -189,7 +187,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <param name="magnitude">The method used to determine the magnitude of an element.</param>
-        /// <exception cref="ArgumentNullException">matrix</exception>
         public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -212,7 +209,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="eliminationStep">The elimination step.</param>
-        /// <exception cref="ArgumentNullException">pivot</exception>
         /// <remarks>
         /// This is done by swapping the rows and columns of the diagonal and that of the pivot.
         /// </remarks>
@@ -301,7 +297,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="eliminationStep">The elimination step.</param>
-        /// <exception cref="ArgumentNullException">pivot</exception>
         public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -393,6 +388,11 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         #if DEBUG
+        /// <summary>
+        /// Checks whether or not the Markowitz products are still correct. Can be used when debugging matrix decomposition.
+        /// </summary>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="step">The current step.</param>
         public void CheckMarkowitzCounts(SparseMatrix<T> matrix, int step)
         {
             if (_markowitzProduct == null)

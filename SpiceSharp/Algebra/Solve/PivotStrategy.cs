@@ -11,17 +11,11 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Gets or sets the relative threshold for choosing a pivot.
         /// </summary>
-        /// <value>
-        /// The pivot relative threshold.
-        /// </value>
         public double RelativePivotThreshold { get; set; } = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
         /// </summary>
-        /// <value>
-        /// The pivot absolute threshold.
-        /// </value>
         public double AbsolutePivotThreshold { get; set; } = 1e-13;
 
         /// <summary>

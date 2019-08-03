@@ -5,6 +5,9 @@ using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
+    /// <summary>
+    /// Behavior for accepting time-points for a <see cref="VoltageDelay"/>.
+    /// </summary>
     public class AcceptBehavior : BaseAcceptBehavior
     {
         // Necessary behaviors parameters

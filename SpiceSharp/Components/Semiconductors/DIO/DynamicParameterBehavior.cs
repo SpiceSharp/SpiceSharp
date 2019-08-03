@@ -18,9 +18,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets or sets the capacitor charge.
         /// </summary>
-        /// <value>
-        /// The capacitor charge.
-        /// </value>
         [ParameterName("charge"), ParameterInfo("Diode capacitor charge")]
         public virtual double CapCharge { get; protected set; }
 

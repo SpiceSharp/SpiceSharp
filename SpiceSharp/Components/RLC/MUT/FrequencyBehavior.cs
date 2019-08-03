@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
@@ -13,15 +12,23 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Gets the <see cref="BiasingBehavior"/> of the primary inductor.
         /// </summary>
         protected BiasingBehavior Bias1 { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="BiasingBehavior"/> of the secondary inductor.
+        /// </summary>
         protected BiasingBehavior Bias2 { get; private set; }
 
         /// <summary>
-        /// Matrix elements
+        /// Gets the (primary, secondary) branch element.
         /// </summary>
         protected MatrixElement<Complex> Branch1Branch2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (secondary, primary) branch element.
+        /// </summary>
         protected MatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
 
         /// <summary>

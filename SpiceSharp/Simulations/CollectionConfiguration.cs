@@ -11,9 +11,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the comparer used for comparing two variable/node identifiers.
         /// </summary>
-        /// <value>
-        /// The comparer for <see cref="Variable"/> identifiers.
-        /// </value>
         public IEqualityComparer<string> VariableComparer { get; set; }
 
         /// <summary>
@@ -23,9 +20,6 @@ namespace SpiceSharp.Simulations
         /// This is mainly useful when using the same circuit for multiple simulations and
         /// running them in multiple threads.
         /// </remarks>
-        /// <value>
-        ///   <c>true</c> if parameters need to be cloned; otherwise, <c>false</c>.
-        /// </value>
         public bool CloneParameters { get; set; }
     }
 }

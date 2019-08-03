@@ -11,18 +11,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the threshold current.
         /// </summary>
-        /// <value>
-        /// The threshold current.
-        /// </value>
         [ParameterName("it"), ParameterInfo("Threshold current")]
         public override GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the hysteresis current.
         /// </summary>
-        /// <value>
-        /// The hysteresis current.
-        /// </value>
         [ParameterName("ih"), ParameterInfo("Hysteresis current")]
         public override GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
     }

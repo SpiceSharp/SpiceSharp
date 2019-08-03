@@ -20,7 +20,6 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="Matrix{T}"/> class.
         /// </summary>
         /// <param name="size">The matrix size.</param>
-        /// <exception cref="SparseException">Invalid matrix size {0}".FormatString(size)</exception>
         protected Matrix(int size)
         {
             if (size < 0)

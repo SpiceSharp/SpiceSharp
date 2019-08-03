@@ -13,9 +13,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the currently active sweeps.
         /// </summary>
-        /// <value>
-        /// The sweeps.
-        /// </value>
         public NestedSweeps Sweeps { get; protected set; }
 
         /// <summary>
@@ -58,7 +55,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
-        /// <exception cref="ArgumentNullException">sweeps</exception>
+
         public DC(string name, IEnumerable<SweepConfiguration> sweeps) : base(name)
         {
             sweeps.ThrowIfNull(nameof(sweeps));

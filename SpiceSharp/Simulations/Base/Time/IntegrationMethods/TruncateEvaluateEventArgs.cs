@@ -11,9 +11,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets the order to continue integration. The order is capped between 1 and the maximum integration order.
         /// </summary>
-        /// <value>
-        /// The next integration order.
-        /// </value>
         public int Order
         {
             get => _order;
@@ -32,18 +29,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets whether or not the solution should be accepted. If flagged false, other events cannot reset this value.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if accepted; otherwise, <c>false</c>.
-        /// </value>
         public bool Accepted { get => _accepted; set => _accepted &= value; }
         private bool _accepted = true;
 
         /// <summary>
         /// Gets the maximum integration order.
         /// </summary>
-        /// <value>
-        /// The maximum integration order.
-        /// </value>
         public int MaxOrder { get; }
 
         /// <summary>

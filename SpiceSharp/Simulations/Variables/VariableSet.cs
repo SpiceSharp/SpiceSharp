@@ -35,9 +35,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the <see cref="Variable"/> at the specified index.
         /// </summary>
-        /// <value>
-        /// The <see cref="Variable"/>.
-        /// </value>
         /// <param name="index">The index.</param>
         /// <returns>The variable at the specified index.</returns>
         public Variable this[int index] => _unknowns[index];
@@ -53,7 +50,7 @@ namespace SpiceSharp.Simulations
         public IEnumerable<string> Keys => _map.Keys;
 
         /// <summary>
-        /// Gets a value indicating whether access to the <see cref="ICollection{T}</see> is synchronized (thread safe).
+        /// Gets a value indicating whether access to the <see cref="ICollection{T}"/> is synchronized (thread safe).
         /// </summary>
         public bool IsSynchronized => true;
 
@@ -302,7 +299,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Method that calls the <see cref="VariableAdded"/> event.
         /// </summary>
-        /// <param name="variable"></param>
+        /// <param name="args">The event arguments.</param>
         protected virtual void OnVariableAdded(VariableEventArgs args) => VariableAdded?.Invoke(this, args);
     }
 }

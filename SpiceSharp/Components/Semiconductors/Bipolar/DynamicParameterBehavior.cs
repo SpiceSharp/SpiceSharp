@@ -12,75 +12,54 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the internal base-emitter capacitance.
         /// </summary>
-        /// <value>
-        /// The base-emitter capacitance.
-        /// </value>
         [ParameterName("cpi"), ParameterInfo("Internal base to emitter capactance")]
         public double CapBe { get; private set; }
 
         /// <summary>
         /// Gets the internal bsae-collector capacitance.
         /// </summary>
-        /// <value>
-        /// The base-collector capacitance.
-        /// </value>
         [ParameterName("cmu"), ParameterInfo("Internal base to collector capactiance")]
         public double CapBc { get; private set; }
 
         /// <summary>
         /// Gets the base-collector capacitance.
         /// </summary>
-        /// <value>
-        /// The base-collector capacitance.
-        /// </value>
         [ParameterName("cbx"), ParameterInfo("Base to collector capacitance")]
         public double CapBx { get; private set; }
 
         /// <summary>
         /// Gets the collector-substrate capacitance.
         /// </summary>
-        /// <value>
-        /// The collector-substrate capacitance.
-        /// </value>
         [ParameterName("ccs"), ParameterInfo("Collector to substrate capacitance")]
         public double CapCs { get; private set; }
 
         /// <summary>
         /// Gets or sets the base-emitter charge storage.
         /// </summary>
-        /// <value>
-        /// The base-emitter charge storage.
-        /// </value>
         [ParameterName("qbe"), ParameterInfo("Charge storage B-E junction")]
         public virtual double ChargeBe { get; protected set; }
 
         /// <summary>
         /// Gets or sets the base-collector charge storage.
         /// </summary>
-        /// <value>
-        /// The base-collector charge storage.
-        /// </value>
         [ParameterName("qbc"), ParameterInfo("Charge storage B-C junction")]
         public virtual double ChargeBc { get; protected set; }
 
         /// <summary>
         /// Gets or sets the base-X charge storage.
         /// </summary>
-        /// <value>
-        /// The base-X charge storage.
-        /// </value>
         [ParameterName("qbx"), ParameterInfo("Charge storage B-X junction")]
         public virtual double ChargeBx { get; protected set; }
 
         /// <summary>
         /// Gets or sets the collector-substract charge storage.
         /// </summary>
-        /// <value>
-        /// The collector-substract charge storage.
-        /// </value>
         [ParameterName("qcs"), ParameterInfo("Charge storage C-S junction")]
         public virtual double ChargeCs { get; protected set; }
 
+        /// <summary>
+        /// Gets the small-signal equivalent collector-bulk conductance.
+        /// </summary>
         protected double Geqcb { get; private set; }
 
         /// <summary>
@@ -94,10 +73,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Calculates the capacitances.
         /// </summary>
-        /// <param name="vbe">The VBE.</param>
-        /// <param name="vbc">The VBC.</param>
-        /// <param name="vbx">The VBX.</param>
-        /// <param name="vcs">The VCS.</param>
         protected void CalculateCapacitances(double vbe, double vbc, double vbx, double vcs)
         {
             var cbe = CurrentBe;

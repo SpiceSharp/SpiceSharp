@@ -11,25 +11,16 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the minimum space between two breakpoints.
         /// </summary>
-        /// <value>
-        /// The minimum break space.
-        /// </value>
         public double MinBreak { get; set; } = 0.0;
 
         /// <summary>
         /// Gets the first breakpoint.
         /// </summary>
-        /// <value>
-        /// The first breakpoint.
-        /// </value>
         public double First { get; private set; }
 
         /// <summary>
         /// Gets the timestep set by the first two breakpoints.
         /// </summary>
-        /// <value>
-        /// The timestep.
-        /// </value>
         public double Delta { get; private set; } = double.PositiveInfinity;
 
         /// <summary>

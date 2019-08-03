@@ -16,17 +16,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the parameter set dictionary count.
         /// </summary>
-        /// <value>
-        /// The parameter set dictionary count.
-        /// </value>
         public int ParametersCount => _parameterSets.Count;
 
         /// <summary>
         /// Gets the behavior dictionary count.
         /// </summary>
-        /// <value>
-        /// The behavior dictionary count.
-        /// </value>
         public int BehaviorsCount => _entityBehaviors.Count;
 
         /// <summary>

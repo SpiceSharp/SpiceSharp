@@ -22,9 +22,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the number of behaviors in the pool.
         /// </summary>
-        /// <value>
-        /// The number of behaviors.
-        /// </value>
         public int Count
         {
             get
@@ -39,17 +36,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the behavior keys.
         /// </summary>
-        /// <value>
-        /// The keys.
-        /// </value>
         public IEnumerable<string> Keys => _entityBehaviors.Keys;
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
         /// </summary>
-        /// <value>
-        /// The <see cref="EntityBehaviorDictionary"/>.
-        /// </value>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The behavior associated to the specified entity identifier.</returns>
         public EntityBehaviorDictionary this[string name]

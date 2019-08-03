@@ -15,15 +15,16 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Gets the delayed signals.
         /// </summary>
-        /// <value>
-        /// The signals.
-        /// </value>
         public DelayedSignal Signals { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the left branch RHS element.
         /// </summary>
         protected VectorElement<double> Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right branch RHS element.
+        /// </summary>
         protected VectorElement<double> Ibr2Ptr { get; private set; }
         
         /// <summary>

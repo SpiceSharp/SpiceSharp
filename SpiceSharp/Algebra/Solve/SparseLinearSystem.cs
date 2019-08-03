@@ -170,7 +170,6 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// A tuple of internal row and column indices.
         /// </returns>
-        /// <exception cref="ArgumentNullException">externalIndexes</exception>
         public (int row, int column) ExternalToInternal((int row, int column) externalIndices)
         {
             var row = Row[externalIndices.row];
@@ -181,11 +180,10 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Map the internal indices to external indices.
         /// </summary>
-        /// <param name="internalIndexes">A tuple of internal row and column indices.</param>
+        /// <param name="internalIndices">A tuple of internal row and column indices.</param>
         /// <returns>
         /// A tuple of external row and column indices.
         /// </returns>
-        /// <exception cref="ArgumentNullException">internalIndexes</exception>
         public (int row, int column) InternalToExternal((int row, int column) internalIndices)
         {
             var row = Row.Reverse(internalIndices.row);

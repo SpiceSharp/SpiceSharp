@@ -24,6 +24,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.5|AnyCPU'">
+    <DocumentationFile>D:\Visual Studio Projects\SpiceSharp\SpiceSharp\SpiceSharp.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>

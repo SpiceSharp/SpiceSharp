@@ -15,40 +15,90 @@ namespace SpiceSharp.Components.JFETBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the G-S capacitance.
+        /// Gets the gate-source capacitance.
         /// </summary>
-        /// <value>
-        /// The capacitance.
-        /// </value>
         [ParameterName("capgs"), ParameterInfo("Capacitance G-S")]
         public double CapGs { get; private set; }
 
         /// <summary>
-        /// Gets the G-D capacitance.
+        /// Gets the gate-drain capacitance.
         /// </summary>
-        /// <value>
-        /// The capacitance.
-        /// </value>
         [ParameterName("capgd"), ParameterInfo("Capacitance G-D")]
         public double CapGd { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the external (drain, drain) element.
         /// </summary>
         protected MatrixElement<Complex> CDrainDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, gate) element.
+        /// </summary>
         protected MatrixElement<Complex> CGateGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (source, source) element.
+        /// </summary>
         protected MatrixElement<Complex> CSourceSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, drain) element.
+        /// </summary>
         protected MatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, source) element.
+        /// </summary>
         protected MatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external drain, drain) element.
+        /// </summary>
         protected MatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, drain) element.
+        /// </summary>
         protected MatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, source) element.
+        /// </summary>
         protected MatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external source, source) element.
+        /// </summary>
         protected MatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, external drain) element.
+        /// </summary>
         protected MatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, gate) element.
+        /// </summary>
         protected MatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, source) element.
+        /// </summary>
         protected MatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, gate) element.
+        /// </summary>
         protected MatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, external source) element.
+        /// </summary>
         protected MatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, drain) element.
+        /// </summary>
         protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>

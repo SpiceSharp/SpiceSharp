@@ -10,9 +10,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the name of the behavior.
         /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
         string Name { get; }
 
         /// <summary>

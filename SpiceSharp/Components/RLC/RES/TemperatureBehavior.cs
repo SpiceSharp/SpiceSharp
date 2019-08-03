@@ -19,17 +19,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>

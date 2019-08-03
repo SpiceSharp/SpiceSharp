@@ -12,9 +12,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets an enumeration of the points in the sweep.
         /// </summary>
-        /// <value>
-        /// The points in the sweep.
-        /// </value>
         public override IEnumerable<double> Points
         {
             get

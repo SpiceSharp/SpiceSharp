@@ -13,12 +13,28 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the (positive, branch) element.
         /// </summary>
         protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (controlling branch, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchControlBranchPtr { get; private set; }
 
         /// <summary>
@@ -26,7 +42,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
+
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
@@ -40,7 +56,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
+
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
@@ -54,7 +70,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
+
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {

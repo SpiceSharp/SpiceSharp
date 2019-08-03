@@ -9,25 +9,16 @@
         /// <summary>
         /// Gets the base history object.
         /// </summary>
-        /// <value>
-        /// The history.
-        /// </value>
         protected History<T> History { get; }
 
         /// <summary>
         /// Gets the current value.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         public T Current => History.Current;
 
         /// <summary>
         /// Gets a value in history.
         /// </summary>
-        /// <value>
-        /// The value at the specified index.
-        /// </value>
         /// <param name="index">The number of points to go back in time. 0 means the current point.</param>
         /// <returns>
         /// The value at the specified timepoint.

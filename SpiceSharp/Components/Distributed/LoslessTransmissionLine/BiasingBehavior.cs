@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Behaviors;
@@ -16,44 +15,151 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the left-side positive node.
         /// </summary>
         protected int Pos1 { get; private set; }
+
+        /// <summary>
+        /// Gets the left-side negative node.
+        /// </summary>
         protected int Neg1 { get; private set; }
+
+        /// <summary>
+        /// Gets the right-side positive node.
+        /// </summary>
         protected int Pos2 { get; private set; }
+
+        /// <summary>
+        /// Gets the right-side negative node.
+        /// </summary>
         protected int Neg2 { get; private set; }
+
+        /// <summary>
+        /// Gets the left-side internal node.
+        /// </summary>
         public int Internal1 { get; private set; }
+
+        /// <summary>
+        /// Gets the right-side internal node.
+        /// </summary>
         public int Internal2 { get; private set; }
+
+        /// <summary>
+        /// Gets the left-side branch equation row.
+        /// </summary>
         public int BranchEq1 { get; private set; }
+
+        /// <summary>
+        /// Gets the right-side branch equation row.
+        /// </summary>
         public int BranchEq2 { get; private set; }
+
+        /// <summary>
+        /// Gets the left (positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> Pos1Pos1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (positive, internal) element.
+        /// </summary>
         protected MatrixElement<double> Pos1Int1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (internal, positive) element.
+        /// </summary>
         protected MatrixElement<double> Int1Pos1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (internal, internal) element.
+        /// </summary>
         protected MatrixElement<double> Int1Int1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (internal, branch) element.
+        /// </summary>
         protected MatrixElement<double> Int1Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (branch, internal) element.
+        /// </summary>
         protected MatrixElement<double> Ibr1Int1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (negative, branch) element.
+        /// </summary>
         protected MatrixElement<double> Neg1Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (branch, negative) element.
+        /// </summary>
         protected MatrixElement<double> Ibr1Neg1Ptr { get; private set; }
         
+        /// <summary>
+        /// Gets the right (positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> Pos2Pos2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (positive, internal) element.
+        /// </summary>
         protected MatrixElement<double> Pos2Int2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (internal, positive) element.
+        /// </summary>
         protected MatrixElement<double> Int2Pos2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (internal, internal) element.
+        /// </summary>
         protected MatrixElement<double> Int2Int2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (internal, branch) element.
+        /// </summary>
         protected MatrixElement<double> Int2Ibr2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (branch, internal) element.
+        /// </summary>
         protected MatrixElement<double> Ibr2Int2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (negative, branch) element.
+        /// </summary>
         protected MatrixElement<double> Neg2Ibr2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (branch, negative) element.
+        /// </summary>
         protected MatrixElement<double> Ibr2Neg2Ptr { get; private set; }
 
+        /// <summary>
+        /// Gets the left (branch, positive) element.
+        /// </summary>
         protected MatrixElement<double> Ibr1Pos1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (left branch, right positive) element.
+        /// </summary>
         protected MatrixElement<double> Ibr1Pos2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (left branch, right negative) element.
+        /// </summary>
         protected MatrixElement<double> Ibr1Neg2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (right branch, left branch) element.
+        /// </summary>
         protected MatrixElement<double> Ibr2Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (branch, branch) element.
+        /// </summary>
         protected MatrixElement<double> Ibr2Ibr2Ptr { get; private set; }
 
         /// <summary>

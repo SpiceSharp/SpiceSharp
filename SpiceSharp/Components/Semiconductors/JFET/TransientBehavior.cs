@@ -14,25 +14,23 @@ namespace SpiceSharp.Components.JFETBehaviors
     public class TransientBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
-        /// States
+        /// Gets the state tracking gate-source charge.
         /// </summary>
         protected StateDerivative Qgs { get; private set; }
+
+        /// <summary>
+        /// Gets the state tracking gate-drain charge.
+        /// </summary>
         protected StateDerivative Qgd { get; private set; }
 
         /// <summary>
         /// Gets the G-S capacitance.
         /// </summary>
-        /// <value>
-        /// The G-S capacitance.
-        /// </value>
         public double CapGs { get; private set; }
 
         /// <summary>
         /// Gets the G-D capacitance.
         /// </summary>
-        /// <value>
-        /// The G-D capacitance.
-        /// </value>
         public double CapGd { get; private set; }
 
         /// <summary>

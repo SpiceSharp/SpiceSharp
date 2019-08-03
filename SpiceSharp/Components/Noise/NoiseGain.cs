@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
 {

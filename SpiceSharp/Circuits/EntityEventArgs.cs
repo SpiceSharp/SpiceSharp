@@ -11,9 +11,6 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the entity.
         /// </summary>
-        /// <value>
-        /// The entity.
-        /// </value>
         public Entity Entity { get; }
 
         /// <summary>

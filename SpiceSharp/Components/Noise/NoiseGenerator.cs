@@ -72,6 +72,9 @@ namespace SpiceSharp.Components.NoiseSources
             Nodes = new NodeCollection(mapped);
         }
 
+        /// <summary>
+        /// Unsetup the noise generator.
+        /// </summary>
         public virtual void Unsetup()
         {
             Nodes = null;

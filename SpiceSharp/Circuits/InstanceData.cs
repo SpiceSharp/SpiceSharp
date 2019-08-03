@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SpiceSharp.Circuits
+﻿namespace SpiceSharp.Circuits
 {
     /// <summary>
     /// Class for describing how a circuit can be instanced.
@@ -20,7 +18,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">Instance name.</param>
+        /// <param name="subcircuit">The circuit that describes the contents of the subcircuit.</param>
         public InstanceData(Circuit subcircuit)
         {
             Subcircuit = subcircuit.ThrowIfNull(nameof(subcircuit));
@@ -29,7 +27,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="subcircuit">The subcircuit.</param>
+        /// <param name="subcircuit">The circuit that describes the contents of the subcircuit.</param>
         /// <param name="name">The instance name.</param>
         public InstanceData(Circuit subcircuit, string name)
             : this(subcircuit)

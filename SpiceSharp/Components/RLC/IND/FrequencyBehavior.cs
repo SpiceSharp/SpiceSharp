@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -21,10 +20,30 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         private int _posNode, _negNode, _branchEq;
+
+        /// <summary>
+        /// Gets the (positive, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> PosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> NegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> BranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> BranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> BranchBranchPtr { get; private set; }
 
         /// <summary>
