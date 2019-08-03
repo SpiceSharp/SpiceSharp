@@ -85,7 +85,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Export{T}"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-
         protected Export(Simulation simulation)
         {
             Simulation = simulation;

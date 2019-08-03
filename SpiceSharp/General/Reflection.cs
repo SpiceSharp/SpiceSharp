@@ -340,7 +340,6 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="member">The member reflection information.</param>
         /// <returns>A function that gets the member of this object.</returns>
-
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
             member.ThrowIfNull(nameof(member));

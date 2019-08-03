@@ -73,7 +73,6 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>
-
         protected override void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));

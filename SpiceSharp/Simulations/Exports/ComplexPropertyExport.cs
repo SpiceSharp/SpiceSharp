@@ -33,11 +33,6 @@ namespace SpiceSharp.Simulations
         /// <param name="entityName">The identifier of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <exception cref="ArgumentNullException">
-        /// entityName
-        /// or
-        /// propertyName
-        /// </exception>
         public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName, IEqualityComparer<string> comparer = null)
             : base(simulation)
         {
@@ -51,7 +46,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">The object (simulation) sending the event.</param>
         /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
-
         protected override void Initialize(object sender, EventArgs e)
         {
             e.ThrowIfNull(nameof(e));

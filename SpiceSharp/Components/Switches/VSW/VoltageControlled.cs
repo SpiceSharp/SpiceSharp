@@ -34,7 +34,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="pins">The pins.</param>
 
-
         public override void Connect(int[] pins)
         {
             pins.ThrowIfNot(nameof(pins), 4);

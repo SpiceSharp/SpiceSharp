@@ -894,7 +894,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-
         public bool IsConvergent(BaseSimulation simulation)
         {
 			simulation.ThrowIfNull(nameof(simulation));

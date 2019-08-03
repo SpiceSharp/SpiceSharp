@@ -31,7 +31,6 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BehaviorList{T}"/> class.
         /// </summary>
         /// <param name="behaviors">An enumeration of all behaviors that need to be added.</param>
-
         public BehaviorList(IEnumerable<T> behaviors)
         {
             behaviors.ThrowIfNull(nameof(behaviors));

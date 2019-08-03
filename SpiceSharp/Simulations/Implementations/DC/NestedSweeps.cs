@@ -35,7 +35,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="NestedSweeps"/> class.
         /// </summary>
         /// <param name="sweeps">The sweeps.</param>
-
         public NestedSweeps(IEnumerable<SweepConfiguration> sweeps)
         {
             sweeps.ThrowIfNull(nameof(sweeps));

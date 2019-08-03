@@ -22,7 +22,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-
         [ParameterName("i"), ParameterInfo("Voltage source current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -35,7 +34,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower(BaseSimulationState state)
         {

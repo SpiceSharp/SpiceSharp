@@ -57,7 +57,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
 
-
         protected override void Predict(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
@@ -102,7 +101,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="sender">The sender (integration method).</param>
         /// <param name="args">The <see cref="TruncateEvaluateEventArgs" /> instance containing the event data.</param>
-
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
             args.ThrowIfNull(nameof(args));

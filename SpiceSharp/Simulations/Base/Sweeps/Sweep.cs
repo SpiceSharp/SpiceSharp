@@ -51,7 +51,6 @@ namespace SpiceSharp.Simulations
         /// <param name="initial">The initial value.</param>
         /// <param name="final">The final value.</param>
         /// <param name="count">The number of points.</param>
-
         protected Sweep(T initial, T final, int count)
         {
             if (count < 0)

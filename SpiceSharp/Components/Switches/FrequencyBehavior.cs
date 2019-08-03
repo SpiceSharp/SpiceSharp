@@ -54,7 +54,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
         /// <param name="solver">The solver.</param>
-
         public void GetEquationPointers(Solver<Complex> solver)
         {
             solver.ThrowIfNull(nameof(solver));
@@ -69,7 +68,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-
         public void Load(FrequencySimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

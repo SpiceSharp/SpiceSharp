@@ -122,7 +122,6 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="circuit">The circuit that will be used.</param>
-
         protected override void Setup(EntityCollection circuit)
         {
             circuit.ThrowIfNull(nameof(circuit));
@@ -225,7 +224,6 @@ namespace SpiceSharp.Simulations
         /// Calculates the operating point of the circuit.
         /// </summary>
         /// <param name="maxIterations">The maximum amount of allowed iterations.</param>
-
         protected void Op(int maxIterations)
         {
             var state = RealState;
@@ -401,7 +399,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
         /// </returns>
-
         protected bool Iterate(int maxIterations)
         {
             var state = RealState;
@@ -586,7 +583,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the solution converges; otherwise, <c>false</c>.
         /// </returns>
-
         protected bool IsConvergent()
         {
             var rstate = RealState;

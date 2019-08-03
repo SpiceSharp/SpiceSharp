@@ -34,7 +34,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the parameter.</param>
         /// <param name="level">The sweep level.</param>
-
         public DCParameterSearchEventArgs(string name, int level)
         {
             Name = name.ThrowIfNull(nameof(name));

@@ -40,7 +40,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
-
         public RealVoltageExport(BaseSimulation simulation, string posNode)
             : base(simulation)
         {
@@ -56,7 +55,6 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
-
         public RealVoltageExport(BaseSimulation simulation, string posNode, string negNode)
             : base(simulation)
         {

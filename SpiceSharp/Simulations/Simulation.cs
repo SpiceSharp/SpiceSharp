@@ -195,7 +195,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="entities">The entities that are included in the simulation.</param>
 
-
         protected virtual void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -309,7 +308,6 @@ namespace SpiceSharp.Simulations
         /// simulations in parallel.
         /// </remarks>
         /// <param name="entities">The entities for which parameter sets need to be collected.</param>
-
         private void SetupParameters(IEnumerable<Entity> entities)
         {
             entities.ThrowIfNull(nameof(entities));

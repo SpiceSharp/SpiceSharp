@@ -178,7 +178,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-
         public void Load(FrequencySimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

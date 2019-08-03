@@ -30,7 +30,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source identifier.</param>
-
         public RealCurrentExport(BaseSimulation simulation, string source)
             : base(simulation)
         {

@@ -202,7 +202,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Connect the behavior in the circuit
         /// </summary>
         /// <param name="pins">Pin indices in order</param>
-
         public void Connect(params int[] pins)
         {
             pins.ThrowIfNot(nameof(pins), 3);
@@ -216,7 +215,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The data provider.</param>
-
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);

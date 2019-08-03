@@ -34,7 +34,6 @@ namespace SpiceSharp.Simulations
         /// Setup the simulation state.
         /// </summary>
         /// <param name="nodes">The unknown variables for which the state is used.</param>
-
         public override void Setup(VariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));

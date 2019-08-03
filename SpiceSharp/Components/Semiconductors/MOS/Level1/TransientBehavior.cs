@@ -132,7 +132,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Creates all necessary states for the transient behavior.
         /// </summary>
         /// <param name="method">The integration method.</param>
-
         public void CreateStates(IntegrationMethod method)
         {
             method.ThrowIfNull(nameof(method));
@@ -192,7 +191,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// equations can also be allocated here.
         /// </summary>
         /// <param name="solver">The solver.</param>
-
         public void GetEquationPointers(Solver<double> solver)
         {
             solver.ThrowIfNull(nameof(solver));
@@ -203,7 +201,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Perform time-dependent calculations.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-
         public void Transient(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

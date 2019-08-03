@@ -26,7 +26,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         /// The value at the specified index.
         /// </returns>
-
         public override T this[int index]
         {
             get
@@ -75,7 +74,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="length">The number of points to store.</param>
         /// <param name="generator">The function that generates the initial values.</param>
-
         public ArrayHistory(int length, Func<int, T> generator)
         {
             generator.ThrowIfNull(nameof(generator));
@@ -134,7 +132,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Clear the history using a function by index.
         /// </summary>
         /// <param name="generator">The function generating the values.</param>
-
         public override void Clear(Func<int, T> generator)
         {
             generator.ThrowIfNull(nameof(generator));

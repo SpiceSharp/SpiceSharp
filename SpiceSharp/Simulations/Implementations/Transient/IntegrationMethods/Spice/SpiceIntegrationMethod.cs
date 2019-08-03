@@ -216,7 +216,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="newDelta">The next timestep to be probed.</param>
-
         public override void NonConvergence(TimeSimulation simulation, out double newDelta)
         {
             base.NonConvergence(simulation, out newDelta);
@@ -243,7 +242,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         /// <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
         /// </returns>
-
         public override bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
             // Spice 3f5 ignores the first timestep

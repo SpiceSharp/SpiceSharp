@@ -125,17 +125,6 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets up the waveform.
         /// </summary>
-        /// <exception cref="SpiceSharp.CircuitException">
-        /// Invalid rise time {0}".FormatString(_tr)
-        /// or
-        /// Invalid fall time {0}".FormatString(_tf)
-        /// or
-        /// Invalid pulse width {0}".FormatString(_pw)
-        /// or
-        /// Invalid period {0}".FormatString(_per)
-        /// or
-        /// Invalid pulse specification: Period {0} is too small".FormatString(_per)
-        /// </exception>
         public override void Setup()
         {
             // Cache parameter values
@@ -200,7 +189,6 @@ namespace SpiceSharp.Components
         /// Accepts the current timepoint.
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>
-
         public override void Accept(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

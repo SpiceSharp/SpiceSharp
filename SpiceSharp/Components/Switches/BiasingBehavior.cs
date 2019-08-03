@@ -51,7 +51,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-
         [ParameterName("v"), ParameterInfo("Switch voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
@@ -64,7 +63,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-
         [ParameterName("i"), ParameterInfo("Switch current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -77,7 +75,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -135,7 +132,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Connect the behavior in the circuit
         /// </summary>
         /// <param name="pins">Pin indices in order</param>
-
         public void Connect(params int[] pins)
         {
             pins.ThrowIfNull(nameof(pins));
@@ -149,7 +145,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The provider.</param>
-
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             provider.ThrowIfNull(nameof(provider));
@@ -168,7 +163,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="variables">The variable set.</param>
         /// <param name="solver">The solver.</param>
-
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             solver.ThrowIfNull(nameof(solver));
@@ -184,7 +178,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-
         public void Load(BaseSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

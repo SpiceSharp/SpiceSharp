@@ -18,7 +18,6 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="source">The source parameter.</param>
 
-
         public virtual void CopyFrom(Parameter<T> source)
         {
             source.ThrowIfNull(nameof(source));

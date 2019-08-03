@@ -73,7 +73,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Predicts a solution
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-
         protected override void Predict(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

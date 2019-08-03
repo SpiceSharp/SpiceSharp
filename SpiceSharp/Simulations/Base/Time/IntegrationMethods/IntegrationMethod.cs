@@ -74,7 +74,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes a new instance of the <see cref="IntegrationMethod"/> class.
         /// </summary>
         /// <param name="maxOrder">The maximum integration order.</param>
-
         protected IntegrationMethod(int maxOrder)
         {
             if (maxOrder < 1)
@@ -89,7 +88,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-
         public virtual void Setup(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

@@ -85,7 +85,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Calculate the noise contributions.
         /// </summary>
         /// <param name="simulation">The noise simulation.</param>
-
         public void Noise(Noise simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

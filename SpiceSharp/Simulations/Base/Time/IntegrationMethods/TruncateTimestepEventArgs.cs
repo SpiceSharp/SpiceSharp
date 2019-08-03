@@ -17,7 +17,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets the timestep to be probed.
         /// </summary>
-
         /// <remarks>
         /// Be careful when increasing the timestep, as it could cause truncation errors!
         /// </remarks>

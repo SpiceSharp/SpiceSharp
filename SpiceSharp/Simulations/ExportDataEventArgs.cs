@@ -76,7 +76,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ExportDataEventArgs"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-
         public ExportDataEventArgs(Simulation simulation)
         {
             _simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
@@ -99,8 +98,6 @@ namespace SpiceSharp.Simulations
         /// <param name="positive">The identifier of the node at the positive probe.</param>
         /// <param name="negative">The identifier of the node at the negative probe.</param>
         /// <returns>The extracted voltage.</returns>
-
-
         public double GetVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
@@ -142,8 +139,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The extracted voltage.
         /// </returns>
-
-
         public Complex GetComplexVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));

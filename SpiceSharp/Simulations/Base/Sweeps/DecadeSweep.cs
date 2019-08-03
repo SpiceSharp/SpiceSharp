@@ -41,7 +41,6 @@ namespace SpiceSharp.Simulations
         /// <param name="initial">The initial value.</param>
         /// <param name="final">The final value.</param>
         /// <param name="steps">The number of steps per decade.</param>
-
         public DecadeSweep(double initial, double final, int steps)
         {
             if (final * initial <= 0)

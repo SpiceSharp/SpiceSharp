@@ -59,7 +59,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The data provider.</param>
-
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
@@ -73,7 +72,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Perform temperature-dependent calculations.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-
         public override void Temperature(BaseSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

@@ -44,7 +44,6 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The initial value.</param>
         /// <param name="stop">The final value.</param>
         /// <param name="step">The step value.</param>
-
         public SweepInstance(string parameter, double start, double stop, double step)
         {
             Parameter = parameter;
