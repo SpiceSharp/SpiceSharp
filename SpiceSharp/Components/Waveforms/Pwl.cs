@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.Waveforms
         private readonly long _pwlPoints;
 
         /// <summary>
-        /// Constructor.
+        /// Creates a new instance of the <see cref="Pwl"/> class.
         /// </summary>
         /// <param name="times">Array of times.</param>
         /// <param name="voltages">Array of voltages.</param>

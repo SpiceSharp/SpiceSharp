@@ -124,7 +124,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
         
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

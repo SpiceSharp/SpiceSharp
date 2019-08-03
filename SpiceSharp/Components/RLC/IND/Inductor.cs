@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
 		public const int InductorPinCount = 2;
 
         /// <summary>
-        /// Constructor
+        /// Create a new instance of the <see cref="Inductor"/> class.
         /// </summary>
         /// <param name="name">The name of the inductor</param>
         public Inductor(string name)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="Inductor"/> class.
         /// </summary>
         /// <param name="name">The name of the inductor</param>
         /// <param name="pos">The positive node</param>

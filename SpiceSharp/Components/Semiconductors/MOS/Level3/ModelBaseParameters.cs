@@ -76,14 +76,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public double NarrowFactor { get; set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelBaseParameters"/> class.
         /// </summary>
         public ModelBaseParameters()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelBaseParameters"/> class.
         /// </summary>
         /// <param name="nmos">True for NMOS, false for PMOS</param>
         public ModelBaseParameters(bool nmos)

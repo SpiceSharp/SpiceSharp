@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public BaseSimulationState State { get; }
 
         /// <summary>
-        /// Constructor
+        /// Create a new instance of the <see cref="UpdateFluxEventArgs"/> class.
         /// </summary>
         /// <param name="inductance">Inductor</param>
         /// <param name="current">Current</param>

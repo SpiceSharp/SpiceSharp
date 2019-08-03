@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public ComponentNoise ResistorNoise { get; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 
         /// <summary>
-        /// Constructor
+        /// Create a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public NoiseBehavior(string name) : base(name) { }

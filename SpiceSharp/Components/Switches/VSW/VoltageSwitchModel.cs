@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     public class VoltageSwitchModel : Model
     {
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="VoltageSwitchModel"/> class.
         /// </summary>
         /// <param name="name">The name of the model</param>
         public VoltageSwitchModel(string name)

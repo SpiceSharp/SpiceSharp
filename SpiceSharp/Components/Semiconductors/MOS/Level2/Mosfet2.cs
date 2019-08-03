@@ -30,7 +30,7 @@ namespace SpiceSharp.Components
 		public const int Mosfet2PinCount = 4;
         
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="Mosfet2"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public Mosfet2(string name) : base(name, Mosfet2PinCount)

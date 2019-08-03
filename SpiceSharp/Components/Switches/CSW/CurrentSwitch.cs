@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
 		public const int CurrentSwitchPinCount = 2;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
         public CurrentSwitch(string name) : base(name, CurrentSwitchPinCount)
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
         /// <param name="pos">The positive node</param>

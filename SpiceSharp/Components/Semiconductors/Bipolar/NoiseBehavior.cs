@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             );
         
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public NoiseBehavior(string name) : base(name) { }

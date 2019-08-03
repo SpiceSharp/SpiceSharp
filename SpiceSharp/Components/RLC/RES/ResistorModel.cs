@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     public class ResistorModel : Model
     {
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ResistorModel"/> class.
         /// </summary>
         /// <param name="name"></param>
         public ResistorModel(string name) : base(name)
