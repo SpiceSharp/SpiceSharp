@@ -177,7 +177,6 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="key">The type of the added value.</param>
         /// <param name="value">The added value.</param>
-
         public virtual void Add(Type key, T value)
         {
             key.ThrowIfNull(nameof(key));

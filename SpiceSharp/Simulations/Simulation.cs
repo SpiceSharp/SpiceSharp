@@ -194,7 +194,6 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The entities that are included in the simulation.</param>
-
         protected virtual void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
