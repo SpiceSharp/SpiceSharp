@@ -16,7 +16,7 @@
         public Circuit Subcircuit { get; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="InstanceData"/> class.
         /// </summary>
         /// <param name="subcircuit">The circuit that describes the contents of the subcircuit.</param>
         public InstanceData(Circuit subcircuit)
@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="InstanceData"/> class.
         /// </summary>
         /// <param name="subcircuit">The circuit that describes the contents of the subcircuit.</param>
         /// <param name="name">The instance name.</param>

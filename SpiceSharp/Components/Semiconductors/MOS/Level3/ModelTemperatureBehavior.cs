@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public double PbFactor1 { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }

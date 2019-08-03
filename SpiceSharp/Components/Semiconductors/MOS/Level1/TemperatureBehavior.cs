@@ -124,7 +124,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         protected double SourceSatCurrent { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name)

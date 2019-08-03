@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.InductorBehaviors
         public GivenParameter<double> InitialCondition { get; } = new GivenParameter<double>();
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         public BaseParameters()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         /// <param name="inductance">Inductor</param>
         public BaseParameters(double inductance)

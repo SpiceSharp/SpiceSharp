@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.NoiseSources
         public int this[int index] => _nodes[index];
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NodeCollection"/> class.
         /// </summary>
         /// <param name="nodes">Nodes</param>
         public NodeCollection(IEnumerable<int> nodes)

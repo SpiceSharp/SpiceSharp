@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     public class CapacitorModel : Model
     {
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="CapacitorModel"/> class.
         /// </summary>
         /// <param name="name"></param>
         public CapacitorModel(string name) : base(name)

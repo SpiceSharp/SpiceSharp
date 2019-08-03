@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private StateHistory _stateExcessPhaseCurrentBc;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }

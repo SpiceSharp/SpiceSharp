@@ -61,7 +61,7 @@
     <Compile Include="Examples\ChangingParameter\Changing.cs" />
     <Compile Include="Examples\CustomResistor\BaseParameters.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistor.cs" />
-    <Compile Include="Examples\CustomResistor\LoadBehavior.cs" />
+    <Compile Include="Examples\CustomResistor\BiasingBehavior.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistorTests.cs" />
     <Compile Include="Models\Currentsources\CCCS\CurrentControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />

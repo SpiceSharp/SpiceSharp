@@ -81,7 +81,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         protected StateDerivative QCap { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name of the behavior</param>
         public TransientBehavior(string name) : base(name) { }

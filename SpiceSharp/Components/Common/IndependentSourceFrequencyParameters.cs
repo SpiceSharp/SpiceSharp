@@ -51,14 +51,14 @@ namespace SpiceSharp.Components.CommonBehaviors
         public Complex Phasor { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceFrequencyParameters"/> class.
         /// </summary>
         public IndependentSourceFrequencyParameters()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceFrequencyParameters"/> class.
         /// </summary>
         /// <param name="magnitude">Magnitude</param>
         /// <param name="phase">Phase</param>

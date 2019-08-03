@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private StateDerivative _capCharge;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }

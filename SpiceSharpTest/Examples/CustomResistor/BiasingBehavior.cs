@@ -2,15 +2,14 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.NonlinearResistorBehaviors
 {
     /// <summary>
     /// Load behavior for a <see cref="NonlinearResistor"/>
     /// </summary>
-    /// <seealso cref="BaseLoadBehavior" />
-    /// <seealso cref="IConnectedBehavior" />
-    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
+    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
     {
         private int _nodeA, _nodeB;
         private MatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
@@ -18,25 +17,34 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         private BaseParameters _bp;
         private BaseConfiguration _baseConfig;
 
-        // Constructor
-        public LoadBehavior(string name) : base(name)
+        /// <summary>
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
+        /// </summary>
+        /// <param name="name">The name of the behavior.</param>
+        public BiasingBehavior(string name) : base(name)
         {
         }
 
-        // Get the base parameters
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
             _bp = provider.GetParameterSet<BaseParameters>();
         }
 
-        // Remove all references cached during setup
+        /// <summary>
+        /// Unsetup the behavior.
+        /// </summary>
         public override void Unsetup(Simulation simulation)
         {
             _bp = null;
         }
 
-        // Connect the behavior
+        /// <summary>
+        /// Connect the behavior.
+        /// </summary>
         public void Connect(params int[] pins)
         {
             // Our nonlinear resistor will pass us the indices of the rows
@@ -45,8 +53,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _nodeB = pins[1]; // Node B
         }
 
-        // Allocate Y-matrix and RHS-vector elements
-        public override void GetEquationPointers(VariableSet variables, Solver<double> solver)
+        /// <summary>
+        /// Get Y-matrix and Rhs-vector elements.
+        /// </summary>
+        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             // We need 4 matrix elements here
             _aaPtr = solver.GetMatrixElement(_nodeA, _nodeA);
@@ -59,8 +69,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _bPtr = solver.GetRhsElement(_nodeB);
         }
 
-        // Load the behavior in the Y-matrix and RHS-vector
-        public override void Load(BaseSimulation simulation)
+        /// <summary>
+        /// Load the Y-matrix and Rhs-vector.
+        /// </summary>
+        public void Load(BaseSimulation simulation)
         {
             var state = simulation.RealState;
 
@@ -105,5 +117,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _baPtr.Value -= g;
             _bbPtr.Value += g;
         }
+
+        /// <summary>
+        /// Check for convergence.
+        /// </summary>
+        public bool IsConvergent(BaseSimulation simulation) => true;
     }
 }

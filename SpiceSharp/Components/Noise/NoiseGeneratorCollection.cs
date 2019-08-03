@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.NoiseSources
         public int Count => _generators.Count;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NoiseGeneratorCollection"/> class.
         /// </summary>
         /// <param name="generators">Generators</param>
         public NoiseGeneratorCollection(IEnumerable<NoiseGenerator> generators)

@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.CommonBehaviors
         public GivenParameter<double> DcValue { get; } = new GivenParameter<double>();
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         public IndependentSourceParameters()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         /// <param name="dc">DC value</param>
         public IndependentSourceParameters(double dc)
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         /// <param name="waveform">Waveform</param>
         public IndependentSourceParameters(Waveform waveform)

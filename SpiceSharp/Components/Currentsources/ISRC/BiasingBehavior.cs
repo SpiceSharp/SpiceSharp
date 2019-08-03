@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected VectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

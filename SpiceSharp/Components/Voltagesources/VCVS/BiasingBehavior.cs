@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         protected MatrixElement<double> BranchControlNegPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

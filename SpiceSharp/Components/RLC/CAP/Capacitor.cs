@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
 		public const int CapacitorPinCount = 2;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="Capacitor"/> class.
         /// </summary>
         /// <param name="name"></param>
         public Capacitor(string name) : base(name, CapacitorPinCount)
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="Capacitor"/> class.
         /// </summary>
         /// <param name="name">The name of the capacitor</param>
         /// <param name="pos">The positive node</param>
