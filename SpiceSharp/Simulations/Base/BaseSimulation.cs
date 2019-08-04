@@ -276,7 +276,7 @@ namespace SpiceSharp.Simulations
             CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i < RealState.Solution.Length; i++)
+            for (var i = 0; i <= RealState.Solution.Length; i++)
                 RealState.Solution[i] = 0.0;
 
             // Let's make it a bit easier for our iterations to converge
@@ -329,7 +329,7 @@ namespace SpiceSharp.Simulations
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i < RealState.Solution.Length; i++)
+            for (var i = 0; i <= RealState.Solution.Length; i++)
                 RealState.Solution[i] = 0.0;
                 
             // Let's make it a bit easier for our iterations to converge
@@ -371,7 +371,7 @@ namespace SpiceSharp.Simulations
             CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i < RealState.Solution.Length; i++)
+            for (var i = 0; i <= RealState.Solution.Length; i++)
                 RealState.Solution[i] = 0.0;
 
             // Start SRC stepping

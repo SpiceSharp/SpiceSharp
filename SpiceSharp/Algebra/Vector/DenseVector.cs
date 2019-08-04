@@ -84,7 +84,7 @@ namespace SpiceSharp.Algebra
             vector.ThrowIfNull(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
-            for (var i = 0; i < Length; i++)
+            for (var i = 0; i <= Length; i++)
                 vector._values[i] = _values[i];
         }
 
@@ -97,7 +97,7 @@ namespace SpiceSharp.Algebra
             vector.ThrowIfNull(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
-            for (var i = 0; i < Length; i++)
+            for (var i = 0; i <= Length; i++)
                 _values[i] = vector._values[i];
         }
 
