@@ -292,53 +292,18 @@ namespace SpiceSharpTest.Simulations
             var tran = new Transient("tran", 1e-9, 10e-6);
             try
             {
+                tran.ExportSimulationData += (sender, e) =>
+                {
+                    if (tran.Method != null && tran.Method.BaseTime > 6e-6 && tran.Method.BaseTime < 6.2e-6)
+                    {
+                        DumpTransientState(tran, ckt);
+                    }
+                };
                 tran.Run(ckt);
             }
-            catch (CircuitException ex)
+            catch (CircuitException)
             {
-                Console.WriteLine("----------- Exception encountered, dumping information -------------");
-
-                // Dump the circuit contents
-                Console.WriteLine("- Circuit contents");
-                foreach (var entity in ckt)
-                {
-                    Console.Write(entity.Name);
-                    if (entity is Component c)
-                    {
-                        for (var i = 0; i < c.PinCount; i++)
-                            Console.Write($"{c.GetNode(i)} ");
-                        Console.Write($"({string.Join(", ", c.GetNodeIndexes(tran.Variables))})");
-                    }
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
-
-                // Dump some transient information
-                Console.WriteLine("- Transient information");
-                Console.WriteLine($"Base time: {tran.Method.BaseTime}");
-                Console.WriteLine($"Target time: {tran.Method.Time}");
-                Console.Write($"Last timesteps (current first):");
-                for (var i = 0; i < tran.Method.MaxOrder; i++)
-                    Console.Write("{0}{1}", i > 0 ? ", " : "", tran.Method.GetTimestep(i));
-                Console.WriteLine();
-                Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
-                Console.WriteLine("Problem variable value: {0}", tran.RealState.Solution[tran.ProblemVariable.Index]);
-                Console.WriteLine();
-
-                // Dump the current iteration solution
-                Console.WriteLine("- Current iteration solution");
-                Dictionary<int, string> variables = new Dictionary<int, string>();
-                foreach (var variable in tran.Variables)
-                    variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.RealState.Solution[variable.Index]}");
-                for (var i = 0; i < variables.Count; i++)
-                {
-                    if (variables.TryGetValue(i, out var value))
-                        Console.WriteLine(value);
-                    else
-                        Console.WriteLine($"Could not find variable for index {i}");
-                }
-                
-                Console.WriteLine("------------------------ End of information ------------------------");
+                DumpTransientState(tran, ckt);
                 throw;
             }
         }
