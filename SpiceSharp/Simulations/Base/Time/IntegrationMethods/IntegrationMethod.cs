@@ -269,13 +269,41 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Gets a timestep in history.
+        /// Gets a timestep in history. The index 0 is the current timestep.
         /// </summary>
-        /// <param name="index">Points to go back in time. 0 is the current timestep.</param>
+        /// <param name="index">Points to go back in time.</param>
         /// <returns>
         /// The timestep.
         /// </returns>
         public double GetTimestep(int index) => IntegrationStates[index].Delta;
+
+        /// <summary>
+        /// Gets a solution in history. The index 0 is the last accepted solution.
+        /// </summary>
+        /// <param name="index">Points to go back in time.</param>
+        /// <returns>The solution vector.</returns>
+        public Vector<double> GetSolution(int index)
+        {
+            return IntegrationStates[index].Solution;
+        }
+
+        #if DEBUG
+        /// <summary>
+        /// Gets a state in history. The index 0 is the current timestep.
+        /// </summary>
+        /// <remarks>
+        /// It is generally impossible to find out which state belongs to which entity behavior. A behavior will
+        /// ask for a certain type of state, that works on a specific index in the vector in a way that depends on
+        /// the integration method. This means that the states are pretty useless in this context, and can only really
+        /// be used for debugging purposes.
+        /// </remarks>
+        /// <param name="index">Points to go back in time.</param>
+        /// <returns>The state vector.</returns>
+        public Vector<double> GetStates(int index)
+        {
+            return IntegrationStates[index].State;
+        }
+        #endif
 
         /// <summary>
         /// Raises the <see cref="E:TruncateNonConvergence" /> event.

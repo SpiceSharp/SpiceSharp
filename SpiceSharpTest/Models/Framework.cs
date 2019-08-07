@@ -496,6 +496,15 @@ namespace SpiceSharpTest.Models
         protected void DumpTransientState(Transient tran, Circuit ckt)
         {
             Console.WriteLine("----------- Dumping transient information -------------");
+            Console.WriteLine($"Base time: {tran.Method.BaseTime}");
+            Console.WriteLine($"Target time: {tran.Method.Time}");
+            Console.Write($"Last timesteps (current first):");
+            for (var i = 0; i <= tran.Method.MaxOrder; i++)
+                Console.Write("{0}{1}", i > 0 ? ", " : "", tran.Method.GetTimestep(i));
+            Console.WriteLine();
+            Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
+            Console.WriteLine("Problem variable value: {0}", tran.RealState.Solution[tran.ProblemVariable.Index]);
+            Console.WriteLine();
 
             // Dump the circuit contents
             Console.WriteLine("- Circuit contents");
@@ -512,23 +521,17 @@ namespace SpiceSharpTest.Models
             }
             Console.WriteLine();
 
-            // Dump some transient information
-            Console.WriteLine("- Transient information");
-            Console.WriteLine($"Base time: {tran.Method.BaseTime}");
-            Console.WriteLine($"Target time: {tran.Method.Time}");
-            Console.Write($"Last timesteps (current first):");
-            for (var i = 0; i < tran.Method.MaxOrder; i++)
-                Console.Write("{0}{1}", i > 0 ? ", " : "", tran.Method.GetTimestep(i));
-            Console.WriteLine();
-            Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
-            Console.WriteLine("Problem variable value: {0}", tran.RealState.Solution[tran.ProblemVariable.Index]);
-            Console.WriteLine();
-
             // Dump the current iteration solution
-            Console.WriteLine("- Current iteration solution");
+            Console.WriteLine("- Solutions");
             Dictionary<int, string> variables = new Dictionary<int, string>();
             foreach (var variable in tran.Variables)
                 variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.RealState.Solution[variable.Index]}");
+            for (var i = 0; i <= tran.Method.MaxOrder; i++)
+            {
+                var oldsolution = tran.Method.GetSolution(i);
+                for (var k = 1; k <= variables.Count; k++)
+                    variables[k] += $", {oldsolution[k]}";
+            }
             for (var i = 0; i <= variables.Count; i++)
             {
                 if (variables.TryGetValue(i, out var value))
@@ -536,6 +539,25 @@ namespace SpiceSharpTest.Models
                 else
                     Console.WriteLine($"Could not find variable for index {i}");
             }
+            Console.WriteLine();
+
+            // Dump the states used by the transient
+            #if DEBUG
+            Console.WriteLine("- States");
+            var state = tran.Method.GetStates(0);
+            string[] output = new string[state.Length];
+            for (var i = 0; i < state.Length; i++)
+                output[i] = $"{state[i]}";
+            for (var k = 1; k <= tran.Method.MaxOrder; k++)
+            {
+                state = tran.Method.GetStates(k);
+                for (var i = 0; i < state.Length; i++)
+                    output[i] += $", {state[i]}";
+            }
+            for (var i = 0; i < output.Length; i++)
+                Console.WriteLine(output[i]);
+            Console.WriteLine();
+            #endif
 
             Console.WriteLine("------------------------ End of information ------------------------");
         }
