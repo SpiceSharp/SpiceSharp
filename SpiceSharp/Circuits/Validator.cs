@@ -15,11 +15,21 @@ namespace SpiceSharp.Circuits
     public class Validator
     {
         /// <summary>
+        /// Defines a voltage driver.
+        /// </summary>
+        private class VoltageDriver
+        {
+            public Component Source;
+            public int Node1;
+            public int Node2;
+        }
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private bool _hasSource;
         private bool _hasGround;
-        private readonly List<(Component, int, int)> _voltageDriven = new List<(Component, int, int)>();
+        private readonly List<VoltageDriver> _voltageDriven = new List<VoltageDriver>();
         private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
         private readonly VariableSet _nodes = new VariableSet();
@@ -103,7 +113,11 @@ namespace SpiceSharp.Circuits
                     switch (attr)
                     {
                         case VoltageDriverAttribute vd:
-                            _voltageDriven.Add((icc, nodes[vd.Positive], nodes[vd.Negative]));
+                            _voltageDriven.Add(new VoltageDriver {
+                                Source = icc,
+                                Node1 = nodes[vd.Positive],
+                                Node2 = nodes[vd.Negative]
+                            });
                             break;
                         case IndependentSourceAttribute _:
                             _hasSource = true;
@@ -171,15 +185,15 @@ namespace SpiceSharp.Circuits
             var map = new Dictionary<int, int> {{0, 0}};
             foreach (var vd in _voltageDriven)
             {
-                if (vd.Item2 != 0)
+                if (vd.Node1 != 0)
                 {
-                    if (!map.ContainsKey(vd.Item2))
-                        map.Add(vd.Item2, index++);
+                    if (!map.ContainsKey(vd.Node1))
+                        map.Add(vd.Node1, index++);
                 }
-                if (vd.Item3 != 0)
+                if (vd.Node2 != 0)
                 {
-                    if (!map.ContainsKey(vd.Item3))
-                        map.Add(vd.Item3, index++);
+                    if (!map.ContainsKey(vd.Node2))
+                        map.Add(vd.Node2, index++);
                 }
             }
 
@@ -188,8 +202,8 @@ namespace SpiceSharp.Circuits
             for (var i = 0; i < _voltageDriven.Count; i++)
             {
                 var pins = _voltageDriven[i];
-                solver.GetMatrixElement(i + 1, map[pins.Item2]).Value += 1.0;
-                solver.GetMatrixElement(i + 1, map[pins.Item3]).Value += 1.0;
+                solver.GetMatrixElement(i + 1, map[pins.Node1]).Value += 1.0;
+                solver.GetMatrixElement(i + 1, map[pins.Node2]).Value += 1.0;
             }
             try
             {
@@ -205,8 +219,9 @@ namespace SpiceSharp.Circuits
                  */
                 if (exception.Index <= _voltageDriven.Count)
                 {
-                    var indices = solver.InternalToExternal((exception.Index, exception.Index));
-                    return _voltageDriven[indices.Item1 - 1].Item1;
+                    var indices = new LinearSystemIndices(exception.Index);
+                    solver.InternalToExternal(indices);
+                    return _voltageDriven[indices.Row - 1].Source;
                 }
             }
             return null;

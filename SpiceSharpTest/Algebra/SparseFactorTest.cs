@@ -145,8 +145,9 @@ namespace SpiceSharpTest.Sparse
         /// <param name="expected"></param>
         void AssertInternal(Solver<double> solver, int row, int col, double expected)
         {
-            var indices = solver.InternalToExternal((row, col));
-            var elt = solver.FindMatrixElement(indices.Item1, indices.Item2);
+            var indices = new LinearSystemIndices(row, col);
+            solver.InternalToExternal(indices);
+            var elt = solver.FindMatrixElement(indices.Row, indices.Column);
             Assert.AreNotEqual(null, elt);
             Assert.AreEqual(expected, elt.Value);
         }
