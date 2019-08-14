@@ -290,20 +290,7 @@ namespace SpiceSharpTest.Simulations
 
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
-            try
-            {
-                tran.ExportSimulationData += (sender, e) =>
-                {
-                    if (tran.Method != null && tran.Method.BaseTime > 6.01e-06 - 1e-12 && tran.Method.BaseTime < 6.01e-6 + 1e-12)
-                        DumpTransientState(tran, ckt);
-                };
-                tran.Run(ckt);
-            }
-            catch (CircuitException)
-            {
-                DumpTransientState(tran, ckt);
-                throw;
-            }
+            tran.Run(ckt);
         }
 
         [Test]

@@ -10,14 +10,17 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <summary>
         /// Limiting function FET
         /// </summary>
+        /// <remarks>
+        /// Update taken from ngSpice, which was fixed by Alan Gillespie's code.
+        /// </remarks>
         /// <param name="newVoltage">New voltage</param>
         /// <param name="oldVoltage">Olt voltage</param>
         /// <param name="threshold">Threshold</param>
         /// <returns></returns>
         public static double LimitFet(double newVoltage, double oldVoltage, double threshold)
         {
-            var vtsthi = Math.Abs(2 * (oldVoltage - threshold)) + 2;
-            var vtstlo = vtsthi / 2 + 2;
+            var vtstlo = Math.Abs(oldVoltage - threshold) + 1;
+            var vtsthi = 2 * vtstlo + 2;
             var vtox = threshold + 3.5;
             var delv = newVoltage - oldVoltage;
 
@@ -27,37 +30,31 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 {
                     if (delv <= 0)
                     {
-                        /* going off */
+                        // going off
                         if (newVoltage >= vtox)
                         {
                             if (-delv > vtstlo)
-                            {
                                 newVoltage = oldVoltage - vtstlo;
-                            }
                         }
                         else
-                        {
                             newVoltage = Math.Max(newVoltage, threshold + 2);
-                        }
                     }
                     else
                     {
-                        /* staying on */
+                        // staying on
                         if (delv >= vtsthi)
-                        {
                             newVoltage = oldVoltage + vtsthi;
-                        }
                     }
                 }
                 else
                 {
-                    /* middle region */
-                    newVoltage = delv <= 0 ? Math.Max(newVoltage, threshold - .5) : Math.Min(newVoltage, threshold + 4);
+                    // middle region
+                    newVoltage = delv <= 0 ? Math.Max(newVoltage, threshold - 0.5) : Math.Min(newVoltage, threshold + 4);
                 }
             }
             else
             {
-                /* off */
+                // off
                 if (delv <= 0)
                 {
                     if (-delv > vtsthi)
@@ -71,14 +68,10 @@ namespace SpiceSharp.Components.MosfetBehaviors
                     if (newVoltage <= vtemp)
                     {
                         if (delv > vtstlo)
-                        {
                             newVoltage = oldVoltage + vtstlo;
-                        }
                     }
                     else
-                    {
                         newVoltage = vtemp;
-                    }
                 }
             }
             return newVoltage;
