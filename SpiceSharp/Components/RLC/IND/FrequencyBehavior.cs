@@ -6,45 +6,37 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Inductor"/>
+    /// Frequency behavior for <see cref="Inductor"/>
     /// </summary>
-    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private BaseParameters _bp;
-        private BiasingBehavior _base;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        private int _posNode, _negNode, _branchEq;
-
         /// <summary>
         /// Gets the (positive, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> PosBranchPtr { get; private set; }
+        protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> NegBranchPtr { get; private set; }
+        protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> BranchNegPtr { get; private set; }
+        protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> BranchPosPtr { get; private set; }
+        protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> BranchBranchPtr { get; private set; }
+        protected MatrixElement<Complex> CBranchBranchPtr { get; private set; }
+
+        // Cache
+        private ComplexSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -53,68 +45,55 @@ namespace SpiceSharp.Components.InductorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
-            // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-
-            // Get behaviors
-            _base = provider.GetBehavior<BiasingBehavior>();
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
+            CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
+            CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
+            CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
+            CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
+            CBranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
         }
 
         /// <summary>
-        /// Connect
+        /// Unbind the behavior.
         /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
+        public override void Unbind()
         {
-            pins.ThrowIfNot(nameof(pins), 2);
-            _posNode = pins[0];
-            _negNode = pins[1];
+            base.Unbind();
+            _state = null;
+            CPosBranchPtr = null;
+            CNegBranchPtr = null;
+            CBranchNegPtr = null;
+            CBranchPosPtr = null;
+            CBranchBranchPtr = null;
         }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Initialize the small-signal parameters.
         /// </summary>
-        /// <param name="solver">Matrix</param>
-        public override void GetEquationPointers(Solver<Complex> solver)
+        void IFrequencyBehavior.InitializeParameters()
         {
-			solver.ThrowIfNull(nameof(solver));
-
-            // Get current equation
-            _branchEq = _base.BranchEq;
-
-            // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
-            NegBranchPtr = solver.GetMatrixElement(_negNode, _branchEq);
-            BranchNegPtr = solver.GetMatrixElement(_branchEq, _negNode);
-            BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
-            BranchBranchPtr = solver.GetMatrixElement(_branchEq, _branchEq);
         }
 
         /// <summary>
-        /// Execute behavior for AC analysis
+        /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.ComplexState;
-            var val = state.Laplace * _bp.Inductance.Value;
-
-            PosBranchPtr.Value += 1.0;
-            NegBranchPtr.Value -= 1.0;
-            BranchNegPtr.Value -= 1.0;
-            BranchPosPtr.Value += 1.0;
-            BranchBranchPtr.Value -= val;
+            var val = _state.Laplace * BaseParameters.Inductance.Value;
+            CPosBranchPtr.Value += 1.0;
+            CNegBranchPtr.Value -= 1.0;
+            CBranchNegPtr.Value -= 1.0;
+            CBranchPosPtr.Value += 1.0;
+            CBranchBranchPtr.Value -= val;
         }
     }
 }

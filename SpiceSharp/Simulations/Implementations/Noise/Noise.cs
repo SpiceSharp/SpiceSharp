@@ -76,15 +76,16 @@ namespace SpiceSharp.Simulations
         protected override void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
-            base.Setup(entities);
-
-            // Get behaviors
-            _noiseBehaviors = EntityBehaviors.GetBehaviorList<INoiseBehavior>();
 
             // Get behaviors, parameters and states
             NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
             NoiseState = new NoiseState();
             NoiseState.Setup(Variables);
+
+            base.Setup(entities);
+
+            // Cache local variables
+            _noiseBehaviors = EntityBehaviors.GetBehaviorList<INoiseBehavior>();
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace SpiceSharp.Simulations
             NoiseState.Unsetup();
             NoiseState = null;
             for (var i = 0; i < _noiseBehaviors.Count; i++)
-                _noiseBehaviors[i].Unsetup(this);
+                _noiseBehaviors[i].Unbind();
             _noiseBehaviors = null;
             NoiseConfiguration = null;
 
@@ -152,7 +153,7 @@ namespace SpiceSharp.Simulations
                 // contributions of each generator in the circuit
                 nstate.OutputNoiseDensity = 0.0;
                 for (var i = 0; i < _noiseBehaviors.Count; i++)
-                    _noiseBehaviors[i].Noise(this);
+                    _noiseBehaviors[i].Noise();
 
                 // Export the data
                 OnExport(exportargs);

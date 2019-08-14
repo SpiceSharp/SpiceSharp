@@ -3,9 +3,9 @@
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Class that can be used for setting up a <see cref="Behavior" />.
+    /// Class that can be used for binding a <see cref="Behavior" /> to a simulation.
     /// </summary>
-    public class SetupDataProvider
+    public class BindingContext
     {
         /// <summary>
         /// Available behaviors and parameters

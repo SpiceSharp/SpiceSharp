@@ -13,11 +13,6 @@ namespace SpiceSharp.Components.InductorBehaviors
     public class TransientBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Necessary behaviors and parameters
-        /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
-        
-        /// <summary>
         /// An event called when the flux can be updated
         /// Can be used by mutual inductances
         /// </summary>
@@ -53,17 +48,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
-
-            // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
+            base.Bind(simulation, context);
 
             // Clear all events
             if (UpdateFlux != null)
@@ -71,65 +62,39 @@ namespace SpiceSharp.Components.InductorBehaviors
                 foreach (var inv in UpdateFlux.GetInvocationList())
                     UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
             }
-        }
 
-        /// <summary>
-        /// Gets matrix pointer
-        /// </summary>
-        /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<double> solver)
-        {
-			solver.ThrowIfNull(nameof(solver));
-
-            // Get vector elements
+            var solver = State.Solver;
+            BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
             BranchPtr = solver.GetRhsElement(BranchEq);
 
-            // Get matrix elements
-            BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
-        }
-
-        /// <summary>
-        /// Create states
-        /// </summary>
-        /// <param name="method"></param>
-        public void CreateStates(IntegrationMethod method)
-        {
-			method.ThrowIfNull(nameof(method));
+            var method = ((TimeSimulation)simulation).Method;
             _flux = method.CreateDerivative();
         }
 
         /// <summary>
         /// Calculate DC states
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.InitializeStates()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
             // Get the current through
             if (BaseParameters.InitialCondition.Given)
                 _flux.Current = BaseParameters.InitialCondition * BaseParameters.Inductance;
             else
-                _flux.Current = simulation.RealState.Solution[BranchEq] * BaseParameters.Inductance;
+                _flux.Current = State.Solution[BranchEq] * BaseParameters.Inductance;
         }
 
         /// <summary>
         /// Execute behaviour
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void Transient(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
-
             // Initialize
-            _flux.Current = BaseParameters.Inductance * state.Solution[BranchEq];
+            _flux.ThrowIfNotBound(this).Current = BaseParameters.Inductance * State.Solution[BranchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                var args = new UpdateFluxEventArgs(BaseParameters.Inductance, state.Solution[BranchEq], _flux, state);
+                var args = new UpdateFluxEventArgs(BaseParameters.Inductance, State.Solution[BranchEq], _flux, State);
                 UpdateFlux.Invoke(this, args);
             }
 

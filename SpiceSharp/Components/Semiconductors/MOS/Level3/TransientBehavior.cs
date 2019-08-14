@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
@@ -129,12 +128,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
-        /// Creates all necessary states for the transient behavior.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="method">The integration method.</param>
-        public void CreateStates(IntegrationMethod method)
+        /// <param name="simulation"></param>
+        /// <param name="context"></param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            method.ThrowIfNull(nameof(method));
+            base.Bind(simulation, context);
+
+            var solver = State.Solver;
+            GatePtr = solver.GetRhsElement(GateNode);
+
+            var method = ((TimeSimulation)simulation).Method;
             _voltageGs = method.CreateHistory();
             _voltageDs = method.CreateHistory();
             _voltageBs = method.CreateHistory();
@@ -149,15 +154,35 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            _voltageGs = null;
+            _voltageDs = null;
+            _voltageBs = null;
+            _capGs = null;
+            _capGd = null;
+            _capGb = null;
+            _chargeGs = null;
+            _chargeGd = null;
+            _chargeGb = null;
+            _chargeBd = null;
+            _chargeBs = null;
+        }
+
+        /// <summary>
         /// Calculates the state values from the current DC solution.
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
         /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
         /// </remarks>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.InitializeStates()
         {
+            State.ThrowIfNotBound(this);
             var vgs = VoltageGs;
             var vds = VoltageDs;
             var vbs = VoltageBs;
@@ -187,24 +212,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
-        /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<double> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
-            GatePtr = solver.GetRhsElement(GateNode);
-        }
-
-        /// <summary>
         /// Perform time-dependent calculations.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public void Transient(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
+            State.ThrowIfNotBound(this);
             var vbd = VoltageBd;
             var vbs = VoltageBs;
             var vgs = VoltageGs;

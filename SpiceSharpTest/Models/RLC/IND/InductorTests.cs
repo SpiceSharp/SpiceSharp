@@ -78,9 +78,9 @@ namespace SpiceSharpTest.Models
             var inductance = 1e-6;
             var initialCurrent = 1e-3;
             var ckt = new Circuit(
-                new Inductor("L1", "OUT", "0", inductance),
+                new Inductor("L1", "OUT", "0", inductance)
+                    .SetParameter("ic", initialCurrent),
                 new Capacitor("C1", "OUT", "0", capacitance)
-                    .SetParameter("ic", initialCurrent)
                 );
 
             /*

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -9,8 +8,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <summary>
     /// Frequency behavior for switches.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SwitchBehaviors.BiasingBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.IFrequencyBehavior" />
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
@@ -33,6 +30,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         protected MatrixElement<Complex> CNegNegPtr { get; private set; }
 
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -43,21 +43,16 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
-        /// Initialize small-signal parameters.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
-        /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
-
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
             CNegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
@@ -65,19 +60,36 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _state = null;
+            CPosPosPtr = null;
+            CPosNegPtr = null;
+            CNegPosPtr = null;
+            CNegNegPtr = null;
+        }
+
+        /// <summary>
+        /// Initialize small-signal parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+        }
+
+        /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             // Get the current state
             var currentState = CurrentState;
             var gNow = currentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
 
             // Load the Y-matrix
-            PosPosPtr.Value += gNow;
+            PosPosPtr.ThrowIfNotBound(this).Value += gNow;
             PosNegPtr.Value -= gNow;
             NegPosPtr.Value -= gNow;
             NegNegPtr.Value += gNow;

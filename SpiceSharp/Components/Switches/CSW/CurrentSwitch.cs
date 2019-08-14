@@ -74,20 +74,18 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Build data provider
+        /// Build the binding context.
         /// </summary>
+        /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
+        protected override ComponentBindingContext BuildBindingContext(Simulation simulation)
         {
-            parameters.ThrowIfNull(nameof(parameters));
-            behaviors.ThrowIfNull(nameof(behaviors));
-
-            var provider = base.BuildSetupDataProvider(parameters, behaviors);
+            var context = base.BuildBindingContext(simulation);
 
             // Add controlling voltage source data
-            provider.Add("control", behaviors[ControllingName]);
-            provider.Add("control", parameters[ControllingName]);
-            return provider;
+            context.Add("control", simulation.EntityParameters[ControllingName]);
+            context.Add("control", simulation.EntityBehaviors[ControllingName]);
+            return context;
         }
 
         /// <summary>

@@ -2,14 +2,13 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Mosfet1"/>
     /// </summary>
-    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Gets the base parameters.
@@ -124,6 +123,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         protected double SourceSatCurrent { get; private set; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        protected BaseSimulationState State { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
@@ -132,27 +136,38 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         }
 
         /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior. for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-            ModelParameters = provider.GetParameterSet<ModelBaseParameters>("model");
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+            ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            ModelTemperature = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            ModelTemperature = context.GetBehavior<ModelTemperatureBehavior>("model");
+
+            State = ((BaseSimulation)simulation).RealState;
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            State = null;
         }
 
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
             // Update the width and length if they are not given and if the model specifies them
             if (!BaseParameters.Width.Given && ModelParameters.Width.Given)
@@ -161,7 +176,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 BaseParameters.Length.RawValue = ModelParameters.Length.Value;
 
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+                BaseParameters.Temperature.RawValue = State.ThrowIfNotBound(this).Temperature;
             Vt = BaseParameters.Temperature * Constants.KOverQ;
             var ratio = BaseParameters.Temperature / ModelParameters.NominalTemperature;
             var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;

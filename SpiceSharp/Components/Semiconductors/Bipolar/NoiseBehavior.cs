@@ -36,7 +36,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             new NoiseShot("ib", 5, 6),
             new NoiseGain("1overf", 5, 6)
             );
-        
+
+        private NoiseState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
@@ -44,23 +46,24 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            NoiseParameters = provider.GetParameterSet<ModelNoiseParameters>("model");
+            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>("model");
+
+            _state = ((Noise)simulation).NoiseState;
         }
 
         /// <summary>
         /// Connect noise sources
         /// </summary>
-        public void ConnectNoise()
+        void INoiseBehavior.ConnectNoise()
         {
             // Connect noise
             BipolarJunctionTransistorNoise.Setup(CollectorNode, BaseNode, EmitterNode, SubstrateNode,
@@ -70,12 +73,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
-        public void Noise(Noise simulation)
+        void INoiseBehavior.Noise()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var noise = simulation.NoiseState;
             var generators = BipolarJunctionTransistorNoise.Generators;
 
             // Set noise parameters
@@ -85,10 +84,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             generators[IcNoise].SetCoefficients(CollectorCurrent);
             generators[IbNoise].SetCoefficients(BaseCurrent);
             generators[FlickerNoise].SetCoefficients(NoiseParameters.FlickerNoiseCoefficient * Math.Exp(NoiseParameters.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(BaseCurrent), 1e-38))) / noise.Frequency);
+                * Math.Log(Math.Max(Math.Abs(BaseCurrent), 1e-38))) / _state.Frequency);
 
             // Evaluate all noise sources
-            BipolarJunctionTransistorNoise.Evaluate(simulation);
+            BipolarJunctionTransistorNoise.Evaluate((Noise)Simulation);
         }
     }
 }

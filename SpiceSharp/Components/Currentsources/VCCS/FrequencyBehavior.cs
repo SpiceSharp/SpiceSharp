@@ -35,57 +35,46 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Complex current")]
-        public Complex GetCurrent(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
-        }
+        public Complex GetComplexCurrent() => (_state.Solution[ContPosNode] - _state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public Complex GetComplexPower()
         {
-            state.ThrowIfNull(nameof(state));
-            var v = state.Solution[PosNode] - state.Solution[NegNode];
-            var i = (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
+            _state.ThrowIfNotBound(this);
+            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
+            var i = (_state.Solution[ContPosNode] - _state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
+
+        // Cache
+        private ComplexSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }
-        
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
-        {
-        }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
 
-            // Get matrix pointers
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CPosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
             CPosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);
             CNegControlPosPtr = solver.GetMatrixElement(NegNode, ContPosNode);
@@ -93,10 +82,16 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         }
 
         /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+        }
+
+        /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
             CPosControlPosPtr.Value += value;

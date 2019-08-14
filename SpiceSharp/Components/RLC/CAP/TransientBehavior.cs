@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
@@ -23,27 +22,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the instantaneous power dissipated by the capacitor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
         /// <returns></returns>
         [ParameterName("p"), ParameterInfo("Instantaneous device power")]
-        public double GetPower(BaseSimulationState state)
+        public double GetPower()
         {
-			state.ThrowIfNull(nameof(state));
-
-            return QCap.Derivative * (state.Solution[PosNode] - state.Solution[NegNode]);
+            _state.ThrowIfNotBound(this);
+            return QCap.Derivative * (_state.Solution[PosNode] - _state.Solution[NegNode]);
         }
 
         /// <summary>
         /// Gets the voltage across the capacitor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public double GetVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Gets the (positive, positive) element.
@@ -80,51 +72,59 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         protected StateDerivative QCap { get; private set; }
 
+        // Cache
+        private BaseSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name of the behavior</param>
         public TransientBehavior(string name) : base(name) { }
-        
-        /// <summary>
-        /// Create states
-        /// </summary>
-        /// <param name="method"></param>
-        public void CreateStates(IntegrationMethod method)
-        {
-			method.ThrowIfNull(nameof(method));
-            QCap = method.CreateDerivative();
-        }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<double> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
 
-            // Get matrix elements
+            _state = ((BaseSimulation)simulation).RealState;
+            var solver = _state.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-
-            // Get rhs elements
             PosPtr = solver.GetRhsElement(PosNode);
             NegPtr = solver.GetRhsElement(NegNode);
+
+            var method = ((TimeSimulation)simulation).Method;
+            QCap = method.CreateDerivative();
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _state = null;
+            PosPosPtr = null;
+            NegNegPtr = null;
+            NegPosPtr = null;
+            PosNegPtr = null;
+            PosPtr = null;
+            NegPtr = null;
         }
 
         /// <summary>
         /// Calculate the state for DC
         /// </summary>
-        /// <param name="simulation"></param>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.InitializeStates()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             // Calculate the state for DC
-            var sol = simulation.RealState.Solution;
+            var sol = _state.Solution;
             if (BaseParameters.InitialCondition.Given)
                 QCap.Current = BaseParameters.InitialCondition;
             else
@@ -134,13 +134,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Execute behavior for DC and Transient analysis
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void Transient(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
-            var vcap = state.Solution[PosNode] - state.Solution[NegNode];
+            var vcap = _state.Solution[PosNode] - _state.Solution[NegNode];
 
             // Integrate
             QCap.Current = Capacitance * vcap;

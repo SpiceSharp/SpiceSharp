@@ -1,16 +1,13 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="JFET" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.Behaviors.ExportingBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.ITemperatureBehavior" />
-    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Gets the model parameters.
@@ -63,6 +60,11 @@ namespace SpiceSharp.Components.JFETBehaviors
         public double Vcrit { get; private set; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        protected BaseSimulationState State { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
@@ -74,32 +76,41 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-            ModelParameters = provider.GetParameterSet<ModelBaseParameters>("model");
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+            ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            ModelTemperature = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            ModelTemperature = context.GetBehavior<ModelTemperatureBehavior>("model");
+
+            State = ((BaseSimulation)simulation).RealState;
         }
-        
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            State = null;
+        }
+
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
+            State.ThrowIfNotBound(this);
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+                BaseParameters.Temperature.RawValue = State.Temperature;
             var vt = BaseParameters.Temperature * Constants.KOverQ;
             var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
             var ratio1 = BaseParameters.Temperature / ModelParameters.NominalTemperature - 1;

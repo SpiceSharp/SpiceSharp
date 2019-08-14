@@ -8,13 +8,14 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// <summary>
     /// Behavior for accepting time-points for a <see cref="VoltageDelay"/>.
     /// </summary>
-    public class AcceptBehavior : BaseAcceptBehavior
+    public class AcceptBehavior : Behavior, IAcceptBehavior
     {
         // Necessary behaviors parameters
         private BaseParameters _bp;
         private TransientBehavior _tran;
         private double _oldSlope;
         private bool _wasBreak;
+        private IntegrationMethod _method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
@@ -29,45 +30,41 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The data provider.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
+            _bp = context.GetParameterSet<BaseParameters>();
 
             // Get behaviors
-            _tran = provider.GetBehavior<TransientBehavior>();
+            _tran = context.GetBehavior<TransientBehavior>();
+
+            _method = ((TimeSimulation)simulation).Method;
         }
 
         /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        void IAcceptBehavior.Probe()
         {
             // Force first order interpolation if we are close to a breakpoint
             var breakpoint = _wasBreak;
-            if (simulation.Method is IBreakpoints method)
+            if (_method is IBreakpoints method)
                 breakpoint |= method.Break;
-
-            _tran.Signal.Probe(simulation.Method.Time, breakpoint);
+            _tran.Signal.Probe(_method.Time, breakpoint);
         }
 
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        void IAcceptBehavior.Accept()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            if (simulation.Method is IBreakpoints method)
+            if (_method is IBreakpoints method)
             {
                 // The integration method supports breakpoints, let's see if we need to add one
                 if (_wasBreak || method.Break)

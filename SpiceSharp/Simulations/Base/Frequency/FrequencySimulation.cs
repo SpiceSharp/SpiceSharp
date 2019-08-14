@@ -86,24 +86,24 @@ namespace SpiceSharp.Simulations
         protected override void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
-            base.Setup(entities);
 
             // Get behaviors, configurations and states
             var config = Configurations.Get<FrequencyConfiguration>();
-            _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
             FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
             // Create the state for complex numbers
             ComplexState = new ComplexSimulationState();
-            _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
             var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
-            // Setup behaviors
-            var solver = ComplexState.Solver;
-            for (var i = 0; i < _frequencyBehaviors.Count; i++)
-                _frequencyBehaviors[i].GetEquationPointers(solver);
+            // Setup the rest of the behaviors
+            base.Setup(entities);
+
+            // Cache local variables
+            _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
+            _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
+
             ComplexState.Setup(Variables);
         }
 
@@ -125,7 +125,7 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
-                _frequencyBehaviors[i].Unsetup(this);
+                _frequencyBehaviors[i].Unbind();
             _frequencyBehaviors = null;
 
             // Remove the state
@@ -204,7 +204,7 @@ namespace SpiceSharp.Simulations
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {
                 // _frequencyBehaviors[i].Load(this);
-                _frequencyBehaviors[i].InitializeParameters(this);
+                _frequencyBehaviors[i].InitializeParameters();
             }
         }
 
@@ -229,7 +229,7 @@ namespace SpiceSharp.Simulations
         protected virtual void LoadFrequencyBehaviors()
         {
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
-                _frequencyBehaviors[i].Load(this);
+                _frequencyBehaviors[i].Load();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
@@ -21,23 +20,17 @@ namespace SpiceSharp.Components.SwitchBehaviors
         protected int ContNegNode { get; private set; }
         
         /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior. for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-        }
-
-        /// <summary>
-        /// Connects the specified pins.
-        /// </summary>
-        /// <param name="pins">The pins.</param>
-        public override void Connect(int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 4);
-            ContPosNode = pins[2];
-            ContNegNode = pins[3];
+            if (context is ComponentBindingContext cc)
+            {
+                ContPosNode = cc.Pins[2];
+                ContNegNode = cc.Pins[3];
+            }
         }
 
         /// <summary>

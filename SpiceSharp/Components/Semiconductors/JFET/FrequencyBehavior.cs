@@ -10,8 +10,6 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <summary>
     /// Frequency behavior for a <see cref="JFET" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseFrequencyBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
@@ -101,6 +99,9 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
 
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -113,12 +114,16 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
+
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
             CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
@@ -137,12 +142,33 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            CDrainDrainPtr = null;
+            CGateGatePtr = null;
+            CSourceSourcePtr = null;
+            CDrainPrimeDrainPrimePtr = null;
+            CSourcePrimeSourcePrimePtr = null;
+            CDrainDrainPrimePtr = null;
+            CGateDrainPrimePtr = null;
+            CGateSourcePrimePtr = null;
+            CSourceSourcePrimePtr = null;
+            CDrainPrimeDrainPtr = null;
+            CDrainPrimeGatePtr = null;
+            CDrainPrimeSourcePrimePtr = null;
+            CSourcePrimeGatePtr = null;
+            CSourcePrimeSourcePtr = null;
+            CSourcePrimeDrainPrimePtr = null;
+        }
+
+        /// <summary>
         /// Initializes the parameters.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        void IFrequencyBehavior.InitializeParameters()
         {
-            simulation.ThrowIfNull(nameof(simulation));
             var vgs = Vgs;
             var vgd = Vgd;
 
@@ -170,13 +196,11 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
+        /// Load the Y-matrix and Rhs vector.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var omega = simulation.ComplexState.Laplace.Imaginary;
+            var omega = _state.ThrowIfNotBound(this).Laplace.Imaginary;
 
             var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;
             var gspr = ModelParameters.SourceConductance * BaseParameters.Area;

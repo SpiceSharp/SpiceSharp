@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Examples
             // Now we need to make sure we have a reference to both the base parameters and temperature behavior
             // of the resistor
             SpiceSharp.Components.ResistorBehaviors.BaseParameters bp = null;
-            SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior tb = null;
+            SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
             tran.AfterSetup += (sender, args) =>
             {
                 tran.EntityParameters["R2"].TryGet(out bp);
@@ -55,7 +55,7 @@ namespace SpiceSharpTest.Examples
                 if (bp == null || tb == null)
                     return;
                 bp.Resistance.Value = resistance;
-                tb.Temperature(tran);
+                tb.Temperature();
             };
 
             // Run the simulation

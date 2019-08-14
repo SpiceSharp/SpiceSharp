@@ -8,8 +8,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseAcceptBehavior" />
-    public class AcceptBehavior : BaseAcceptBehavior
+    public class AcceptBehavior : Behavior, IAcceptBehavior
     {
         private BaseParameters _bp;
 
@@ -17,6 +16,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         private TransientBehavior _tran;
         private double _oldSlope1, _oldSlope2;
         private bool _wasBreak = false;
+
+        private IntegrationMethod _method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
@@ -31,47 +32,40 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
+            _bp = context.GetParameterSet<BaseParameters>();
 
             // Get transient
-            _tran = provider.GetBehavior<TransientBehavior>();
+            _tran = context.GetBehavior<TransientBehavior>();
+
+            _method = ((TimeSimulation)simulation).Method.ThrowIfNull("method");
         }
 
         /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        void IAcceptBehavior.Probe()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             var breakpoint = _wasBreak;
-            if (simulation.Method is IBreakpoints method)
+            if (_method is IBreakpoints method)
                 breakpoint |= method.Break;
-
-            _tran.Signals.Probe(simulation.Method.Time, breakpoint);
+            _tran.Signals.Probe(_method.Time, breakpoint);
         }
 
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        void IAcceptBehavior.Accept()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            if (simulation.Method is IBreakpoints method)
+            if (_method is IBreakpoints method)
             {
                 // The integration method supports breakpoints, let's see if we need to add one
                 if (_wasBreak || method.Break)

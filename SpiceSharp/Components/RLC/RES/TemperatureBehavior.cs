@@ -2,14 +2,13 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// The minimum resistance for any resistor.
@@ -33,40 +32,56 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double Conductance { get; private set; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        protected BaseSimulationState State { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation</param>
-        /// <param name="provider">The setup data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The setup data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-			provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-            provider.TryGetParameterSet("model", out ModelBaseParameters mbp);
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+            context.TryGetParameterSet("model", out ModelBaseParameters mbp);
             ModelParameters = mbp;
+
+            State = ((BaseSimulation)simulation).RealState;
         }
-        
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            BaseParameters = null;
+            ModelParameters = null;
+            State = null;
+        }
+
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
             double factor;
             double resistance = BaseParameters.Resistance;
 
             // Default Value Processing for Resistor Instance
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+                BaseParameters.Temperature.RawValue = State.Temperature;
             if (!BaseParameters.Width.Given)
                 BaseParameters.Width.RawValue = ModelParameters?.DefaultWidth ?? 0.0;
 

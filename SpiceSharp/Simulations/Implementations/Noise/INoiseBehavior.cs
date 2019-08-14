@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// A behavior that is used by <see cref="Noise" />.
@@ -16,7 +14,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Calculate the noise contributions.
         /// </summary>
-        /// <param name="simulation">The noise simulation.</param>
-        void Noise(Noise simulation);
+        void Noise();
     }
 }

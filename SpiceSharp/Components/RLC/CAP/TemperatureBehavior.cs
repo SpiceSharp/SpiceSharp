@@ -1,17 +1,13 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Capacitor" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.Behaviors.ExportingBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.ITemperatureBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior, IConnectedBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Gets the model parameters.
@@ -40,53 +36,55 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        protected BaseSimulationState State { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Connect the behavior
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            pins.ThrowIfNull(nameof(pins));
-            if (pins.Length != 2)
-                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            PosNode = pins[0];
-            NegNode = pins[1];
+            // Get parameters
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+
+            ModelBaseParameters modelParameters;
+            if (context.TryGetParameterSet("model", out modelParameters))
+                ModelParameters = modelParameters;
+
+            if (context is ComponentBindingContext cc)
+            {
+                PosNode = cc.Pins[0];
+                NegNode = cc.Pins[1];
+            }
+
+            State = ((BaseSimulation)simulation).RealState;
         }
 
         /// <summary>
-        /// Setup the behavior
+        /// Unbind the behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        public override void Unbind()
         {
-            provider.ThrowIfNull(nameof(provider));
-
-            // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-
-            ModelBaseParameters modelParameters;
-            if (provider.TryGetParameterSet<ModelBaseParameters>("model", out modelParameters))
-            {
-                ModelParameters = modelParameters;
-            }
+            base.Unbind();
+            State = null;
         }
 
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = simulation.RealState.Temperature;
+                BaseParameters.Temperature.RawValue = State.Temperature;
 
             double capacitance;
             if (!BaseParameters.Capacitance.Given)

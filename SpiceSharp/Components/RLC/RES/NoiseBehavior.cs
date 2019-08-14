@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Connect the noise
         /// </summary>
-        public void ConnectNoise()
+        void INoiseBehavior.ConnectNoise()
         {
             ResistorNoise.Setup(PosNode, NegNode);
         }
@@ -31,11 +31,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
-        public void Noise(Noise simulation)
+        void INoiseBehavior.Noise()
         {
             ResistorNoise.Generators[0].SetCoefficients(Conductance);
-            ResistorNoise.Evaluate(simulation);
+            ResistorNoise.Evaluate((Noise)Simulation);
         }
     }
 }

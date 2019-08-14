@@ -6,13 +6,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="VoltageSource"/>
     /// </summary>
-    public class AcceptBehavior : BaseAcceptBehavior
+    public class AcceptBehavior : BiasingBehavior, IAcceptBehavior
     {
-        /// <summary>
-        /// Necessary behaviors and parameters
-        /// </summary>
-        private CommonBehaviors.IndependentSourceParameters _bp;
-
         /// <summary>
         /// Creates a new instance of the <see cref="AcceptBehavior"/> class.
         /// </summary>
@@ -20,35 +15,19 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public AcceptBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
-        {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
-
-            // Get parameters
-            _bp = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
-        }
-
-        /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        void IAcceptBehavior.Probe()
         {
-            _bp.Waveform?.Probe(simulation);
+            BaseParameters.Waveform?.Probe((TimeSimulation)Simulation);
         }
 
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        void IAcceptBehavior.Accept()
         {
-            _bp.Waveform?.Accept(simulation);
+            BaseParameters.Waveform?.Accept((TimeSimulation)Simulation);
         }
     }
 }

@@ -1,14 +1,13 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : ExportingBehavior, ITemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -42,29 +41,26 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public ModelTemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
             
             // Get parameters
-            ModelParameters = provider.GetParameterSet<ModelBaseParameters>();
+            ModelParameters = context.GetParameterSet<ModelBaseParameters>();
         }
         
         /// <summary>
-        /// Do temperature-dependent calculations
+        /// Do temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             // Perform model defaulting
             if (!ModelParameters.NominalTemperature.Given)
-                ModelParameters.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
+                ModelParameters.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
             Factor1 = ModelParameters.NominalTemperature / Constants.ReferenceTemperature;
             VtNominal = ModelParameters.NominalTemperature * Constants.KOverQ;
             var kt1 = Constants.Boltzmann * ModelParameters.NominalTemperature;

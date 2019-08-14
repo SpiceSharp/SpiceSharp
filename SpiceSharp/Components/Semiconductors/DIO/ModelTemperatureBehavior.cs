@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="DiodeModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : BaseTemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -48,31 +48,25 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public ModelTemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Binds the behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            _mbp = provider.GetParameterSet<ModelBaseParameters>();
+            _mbp = context.GetParameterSet<ModelBaseParameters>();
         }
 
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public override void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             if (!_mbp.NominalTemperature.Given)
-            {
-                _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
-            }
+                _mbp.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
             VtNominal = Constants.KOverQ * _mbp.NominalTemperature;
 
             // limit grading coeff to max of 0.9

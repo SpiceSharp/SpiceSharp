@@ -3,7 +3,7 @@
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Contract for a behavior
+    /// Contract for a behavior.
     /// </summary>
     public interface IBehavior
     {
@@ -13,16 +13,15 @@ namespace SpiceSharp.Behaviors
         string Name { get; }
 
         /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior to the specified simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        void Setup(Simulation simulation, SetupDataProvider provider);
+        /// <param name="simulation">The simulation to be bound to.</param>
+        /// <param name="context">The binding context.</param>
+        void Bind(Simulation simulation, BindingContext context);
 
         /// <summary>
-        /// Destroy the behavior.
+        /// Unbind the behavior from any allocated resources.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        void Unsetup(Simulation simulation);
+        void Unbind();
     }
 }

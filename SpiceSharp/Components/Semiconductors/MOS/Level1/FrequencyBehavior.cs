@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -9,8 +8,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// Frequency behavior for a <see cref="Mosfet1" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.IFrequencyBehavior" />
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
@@ -122,7 +119,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Gets the (source, drain) element.
         /// </summary>
         protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
-        
+
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -130,26 +130,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Initializes the parameters.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        /// <param name="simulation"></param>
+        /// <param name="context"></param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            CalculateBaseCapacitances();
-            CalculateCapacitances(VoltageGs, VoltageDs, VoltageBs);
-            CalculateMeyerCharges(VoltageGs, VoltageGs - VoltageDs);
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Gets matrix pionters
-        /// </summary>
-        /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-			solver.ThrowIfNull(nameof(solver));
-
-            // Get matrix pointers
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
             CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
@@ -175,14 +165,52 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _state = null;
+            CDrainDrainPtr = null;
+            CGateGatePtr = null;
+            CSourceSourcePtr = null;
+            CBulkBulkPtr = null;
+            CDrainPrimeDrainPrimePtr = null;
+            CSourcePrimeSourcePrimePtr = null;
+            CDrainDrainPrimePtr = null;
+            CGateBulkPtr = null;
+            CGateDrainPrimePtr = null;
+            CGateSourcePrimePtr = null;
+            CSourceSourcePrimePtr = null;
+            CBulkDrainPrimePtr = null;
+            CBulkSourcePrimePtr = null;
+            CDrainPrimeSourcePrimePtr = null;
+            CDrainPrimeDrainPtr = null;
+            CBulkGatePtr = null;
+            CDrainPrimeGatePtr = null;
+            CSourcePrimeGatePtr = null;
+            CSourcePrimeSourcePtr = null;
+            CDrainPrimeBulkPtr = null;
+            CSourcePrimeBulkPtr = null;
+            CSourcePrimeDrainPrimePtr = null;
+        }
+
+        /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+            CalculateBaseCapacitances();
+            CalculateCapacitances(VoltageGs, VoltageDs, VoltageBs);
+            CalculateMeyerCharges(VoltageGs, VoltageGs - VoltageDs);
+        }
+
+        /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var cstate = simulation.ComplexState;
+            var cstate = _state.ThrowIfNotBound(this);
             int xnrm, xrev;
 
             if (Mode < 0)

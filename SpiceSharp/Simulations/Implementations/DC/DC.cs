@@ -71,11 +71,11 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The circuit that will be used.</param>
         protected override void Setup(EntityCollection entities)
         {
-            base.Setup(entities);
-
             // Get sweeps
             var config = Configurations.Get<DCConfiguration>();
             Sweeps = new NestedSweeps(config.Sweeps);
+
+            base.Setup(entities);
         }
 
         /// <summary>

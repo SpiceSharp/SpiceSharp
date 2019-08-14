@@ -2,7 +2,6 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -13,7 +12,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
     /// This behavior also includes transient behavior logic. When transient analysis is
     /// performed, then waveforms need to be used to calculate the operating point anyway.
     /// </remarks>
-    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -24,21 +23,13 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
-        public double GetVoltage(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public double GetVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
-        public double GetPower(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return (state.Solution[PosNode] - state.Solution[PosNode]) * -Current;
-        }
+        public double GetPower() => (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[PosNode]) * -Current;
 
         /// <summary>
         /// Get the current.
@@ -66,6 +57,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         protected VectorElement<double> NegPtr { get; private set; }
 
+        // Cached variables
+        private BaseSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -73,16 +67,16 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
+            BaseParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
 
             // Setup the waveform
             BaseParameters.Waveform?.Setup();
@@ -96,55 +90,50 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                         ? "{0} has no DC value, transient time 0 value used".FormatString(Name)
                         : "{0} has no value, DC 0 assumed".FormatString(Name));
             }
-        }
-        
-        /// <summary>
-        /// Connect the behavior
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 2);
-            PosNode = pins[0];
-            NegNode = pins[1];
-        }
 
-        /// <summary>
-        /// Get the matrix elements
-        /// </summary>
-        /// <param name="variables">Variables</param>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
+            if (context is ComponentBindingContext cc)
+            {
+                PosNode = cc.Pins[0];
+                NegNode = cc.Pins[1];
+            }
+
+            _state = ((BaseSimulation)simulation).RealState;
+            var solver = _state.Solver;
             PosPtr = solver.GetRhsElement(PosNode);
             NegPtr = solver.GetRhsElement(NegNode);
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _state = null;
+            PosPtr = null;
+            NegPtr = null;
+        }
+
+        /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
             double value;
 
             // Time domain analysis
-            if (simulation is TimeSimulation)
+            if (Simulation is TimeSimulation)
             {
                 // Use the waveform if possible
                 if (BaseParameters.Waveform != null)
                     value = BaseParameters.Waveform.Value;
                 else
-                    value = BaseParameters.DcValue * state.SourceFactor;
+                    value = BaseParameters.DcValue * _state.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = BaseParameters.DcValue * state.SourceFactor;
+                value = BaseParameters.DcValue * _state.SourceFactor;
             }
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
@@ -157,10 +146,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

@@ -8,8 +8,6 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Frequency behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseFrequencyBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
@@ -122,6 +120,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         protected MatrixElement<Complex> CInt2Pos2Ptr { get; private set; }
 
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -135,20 +136,16 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Initializes the parameters.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
-        /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver.ThrowIfNull("solver");
             CPos1Pos1Ptr = solver.GetMatrixElement(Pos1, Pos1);
             CPos1Int1Ptr = solver.GetMatrixElement(Pos1, Internal1);
             CNeg1Ibr1Ptr = solver.GetMatrixElement(Neg1, BranchEq1);
@@ -174,13 +171,48 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            CPos1Pos1Ptr = null;
+            CPos1Int1Ptr = null;
+            CNeg1Ibr1Ptr = null;
+            CPos2Pos2Ptr = null;
+            CNeg2Ibr2Ptr = null;
+            CInt1Pos1Ptr = null;
+            CInt1Int1Ptr = null;
+            CInt1Ibr1Ptr = null;
+            CInt2Int2Ptr = null;
+            CInt2Ibr2Ptr = null;
+            CIbr1Neg1Ptr = null;
+            CIbr1Pos2Ptr = null;
+            CIbr1Neg2Ptr = null;
+            CIbr1Int1Ptr = null;
+            CIbr1Ibr2Ptr = null;
+            CIbr2Pos1Ptr = null;
+            CIbr2Neg1Ptr = null;
+            CIbr2Neg2Ptr = null;
+            CIbr2Int2Ptr = null;
+            CIbr2Ibr1Ptr = null;
+            CPos2Int2Ptr = null;
+            CInt2Pos2Ptr = null;
+        }
+
+        /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+        }
+
+        /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var laplace = simulation.ComplexState.Laplace;
+            var laplace = _state.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay.Value);
 
             var admittance = BaseParameters.Admittance;

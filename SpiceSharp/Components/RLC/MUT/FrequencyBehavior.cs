@@ -31,6 +31,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         protected MatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
 
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -38,51 +41,37 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-			base.Setup(simulation, provider);
-			provider.ThrowIfNull(nameof(provider));
+			base.Bind(simulation, context);
 
             // Get behaviors
-            Bias1 = provider.GetBehavior<BiasingBehavior>("inductor1");
-            Bias2 = provider.GetBehavior<BiasingBehavior>("inductor2");
-        }
+            Bias1 = context.GetBehavior<BiasingBehavior>("inductor1");
+            Bias2 = context.GetBehavior<BiasingBehavior>("inductor2");
 
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
-        {
-        }
-
-        /// <summary>
-        /// Gets matrix pointers
-        /// </summary>
-        /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-			solver.ThrowIfNull(nameof(solver));
-
-            // Get matrix equations
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             Branch1Branch2Ptr = solver.GetMatrixElement(Bias1.BranchEq, Bias2.BranchEq);
             Branch2Branch1Ptr = solver.GetMatrixElement(Bias2.BranchEq, Bias1.BranchEq);
         }
 
         /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+        }
+
+        /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.ComplexState;
-            var value = state.Laplace * Factor;
+            var value = _state.Laplace * Factor;
 
             // Load Y-matrix
             Branch1Branch2Ptr.Value -= value;

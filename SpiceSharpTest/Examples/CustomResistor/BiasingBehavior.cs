@@ -2,20 +2,20 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.NonlinearResistorBehaviors
 {
     /// <summary>
     /// Load behavior for a <see cref="NonlinearResistor"/>
     /// </summary>
-    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         private int _nodeA, _nodeB;
         private MatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
         private VectorElement<double> _aPtr, _bPtr;
         private BaseParameters _bp;
         private BaseConfiguration _baseConfig;
+        private BaseSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -26,39 +26,26 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior
+        /// Bind the behavior.
         /// </summary>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        public override void Bind(Simulation simulation, BindingContext context)
         {
+            base.Bind(simulation, context);
+
+            // Cache some objects that we will use often
             _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
-            _bp = provider.GetParameterSet<BaseParameters>();
-        }
+            _bp = context.GetParameterSet<BaseParameters>();
+            _state = ((BaseSimulation)simulation).RealState;
 
-        /// <summary>
-        /// Unsetup the behavior.
-        /// </summary>
-        public override void Unsetup(Simulation simulation)
-        {
-            _bp = null;
-        }
+            // Find the nodes that the resistor is connected to
+            if (context is ComponentBindingContext cbc)
+            {
+                _nodeA = cbc.Pins[0];
+                _nodeB = cbc.Pins[1];
+            }
 
-        /// <summary>
-        /// Connect the behavior.
-        /// </summary>
-        public void Connect(params int[] pins)
-        {
-            // Our nonlinear resistor will pass us the indices of the rows
-            // for the KCL laws of node A and B.
-            _nodeA = pins[0]; // Node A
-            _nodeB = pins[1]; // Node B
-        }
-
-        /// <summary>
-        /// Get Y-matrix and Rhs-vector elements.
-        /// </summary>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
             // We need 4 matrix elements here
+            var solver = _state.Solver;
             _aaPtr = solver.GetMatrixElement(_nodeA, _nodeA);
             _abPtr = solver.GetMatrixElement(_nodeA, _nodeB);
             _baPtr = solver.GetMatrixElement(_nodeB, _nodeA);
@@ -70,14 +57,27 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _bp = null;
+            _aaPtr = null;
+            _abPtr = null;
+            _baPtr = null;
+            _bbPtr = null;
+            _aPtr = null;
+            _bPtr = null;
+        }
+
+        /// <summary>
         /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            var state = simulation.RealState;
-
             // First get the current iteration voltage
-            var v = state.Solution[_nodeA] - state.Solution[_nodeB];
+            var v = _state.Solution[_nodeA] - _state.Solution[_nodeB];
 
             // Calculate the derivative w.r.t. one of the voltages
             var isNegative = v < 0;
@@ -107,7 +107,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
                 c = -c;
             
             // Load the RHS vector
-            c = c - g * v;
+            c -= g * v;
             _aPtr.Value += c;
             _bPtr.Value -= c;
 
@@ -121,6 +121,6 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         /// <summary>
         /// Check for convergence.
         /// </summary>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

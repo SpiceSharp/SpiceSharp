@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -9,36 +8,28 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// General behavior for <see cref="Resistor"/>
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the voltage across the resistor.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public double GetVoltage() => State.ThrowIfNotBound(this).Solution[PosNode] - State.Solution[NegNode];
 
         /// <summary>
         /// Gets the current through the resistor.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Current")]
-        public double GetCurrent(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
-        }
+        public double GetCurrent() => (State.ThrowIfNotBound(this).Solution[PosNode] - State.Solution[NegNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the resistor.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
-        public double GetPower(BaseSimulationState state)
+        public double GetPower()
         {
-			state.ThrowIfNull(nameof(state));
-            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            State.ThrowIfNotBound(this);
+            var v = State.Solution[PosNode] - State.Solution[NegNode];
             return v * v * Conductance;
         }
 
@@ -81,37 +72,44 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Connect the behavior to nodes
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            pins.ThrowIfNot(nameof(pins), 2);
-            PosNode = pins[0];
-            NegNode = pins[1];
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Gets matrix pointers
-        /// </summary>
-        /// <param name="variables">Nodes</param>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
+            if (context is ComponentBindingContext cc)
+            {
+                PosNode = cc.Pins[0];
+                NegNode = cc.Pins[1];
+            }
 
-            // Get matrix elements
+            var solver = State.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
         }
-        
+
         /// <summary>
-        /// Execute behavior
+        /// Unbind the behavior.
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Load(BaseSimulation simulation)
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            PosPosPtr = null;
+            NegNegPtr = null;
+            PosNegPtr = null;
+            NegPosPtr = null;
+        }
+
+        /// <summary>
+        /// Load the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load()
         {
             var conductance = Conductance;
             PosPosPtr.Value += conductance;
@@ -123,10 +121,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }
