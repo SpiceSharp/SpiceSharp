@@ -119,9 +119,9 @@ namespace SpiceSharpTest.Models
         public void When_CurrentSourceCloned_Expect_Reference()
         {
             // Let's check cloning of entities here.
-            var isrc = new CurrentSource("I1", "A", "B", 1.0);
-            isrc.SetParameter("waveform", new Pulse(0.0, 1.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5));
-            isrc.SetParameter("ac", new double[] { 1.0, 2.0 });
+            var isrc = (CurrentSource) new CurrentSource("I1", "A", "B", 1.0)
+                .SetParameter("waveform", new Pulse(0.0, 1.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5))
+                .SetParameter("ac", new double[] { 1.0, 2.0 });
 
             // Clone the entity
             var clone = (CurrentSource)isrc.Clone();

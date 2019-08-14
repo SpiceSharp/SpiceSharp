@@ -27,12 +27,12 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "1", r1),
-                new Inductor("L1", "1", "0", l1),
+                new Inductor("L1", "1", "0", l1)
+                    .SetParameter("ic", 0.0),
                 new Inductor("L2", "OUT", "0", l2),
                 new Resistor("R2", "OUT", "0", r2),
                 new MutualInductance("M1", "L1", "L2", k)
                 );
-            ckt["L1"].SetParameter("ic", 0.0);
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
@@ -72,14 +72,14 @@ namespace SpiceSharpTest.Models
             var l2 = 2e-3;
             var k = 0.693;
             var ckt = new Circuit(
-                new VoltageSource("V1", "IN", "0", 0.0),
+                new VoltageSource("V1", "IN", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
                 new Inductor("L2", "OUT", "0", l2),
                 new Resistor("R2", "OUT", "0", r2),
                 new MutualInductance("M1", "L1", "L2", k)
                 );
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(1, 1e8, 10));

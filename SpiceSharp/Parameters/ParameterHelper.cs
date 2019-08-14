@@ -73,10 +73,12 @@ namespace SpiceSharp
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="source">The source object.</param>
         /// <param name="value">The value.</param>
-        public static void SetPrincipalParameter<T>(this object source, T value)
+        /// <returns>The source object (can be used for chaining).</returns>
+        public static object SetPrincipalParameter<T>(this object source, T value)
         {
             if (!TrySetPrincipalParameter(source, value))
                 throw new CircuitException("No principal parameter found of type {0}".FormatString(typeof(T).Name));
+            return source;
         }
 
         /// <summary>
@@ -112,10 +114,12 @@ namespace SpiceSharp
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        public static void SetParameter<T>(this object source, string name, T value, IEqualityComparer<string> comparer = null)
+        /// <returns>The source object (can be used for chaining).</returns>
+        public static object SetParameter<T>(this object source, string name, T value, IEqualityComparer<string> comparer = null)
         {
             if (!TrySetParameter(source, name, value, comparer))
                 throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
+            return source;
         }
 
         /// <summary>
@@ -157,10 +161,12 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the method.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        public static void SetParameter(this object source, string name, IEqualityComparer<string> comparer = null)
+        /// <returns>The source object (can be used for chaining).</returns>
+        public static object SetParameter(this object source, string name, IEqualityComparer<string> comparer = null)
         {
             if (!TrySetParameter(source, name, comparer))
                 throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
+            return source;
         }
 
         /// <summary>

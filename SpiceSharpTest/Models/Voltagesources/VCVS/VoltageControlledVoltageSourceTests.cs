@@ -37,10 +37,10 @@ namespace SpiceSharpTest.Models
 
             // Build circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", magnitude),
                 new VoltageControlledVoltageSource("E1", "out", "0", "in", "0", gain)
                 );
-            ckt["V1"].SetParameter("acmag", magnitude);
 
             // Build simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1.0, 10e3, 4));

@@ -118,11 +118,11 @@ namespace SpiceSharpTest.Simulations
             // Create a circuit with a nonlinear component
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-6, 1e-6, 1e-5, 2e-5)),
-                new NonlinearResistor("NLR1", "in", "out"),
+                new NonlinearResistor("NLR1", "in", "out")
+                    .SetParameter("a", 100.0)
+                    .SetParameter("b", 0.7),
                 new Capacitor("C1", "out", "0", 1.0e-9)
                 );
-            ckt["NLR1"].SetParameter("a", 100.0);
-            ckt["NLR1"].SetParameter("b", 0.7);
 
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", 1e-7, 10e-5);
@@ -165,18 +165,18 @@ namespace SpiceSharpTest.Simulations
         public void When_LargeExample_Expect_Reference()
         {
             // First create the models
-            var diodeModelA = new DiodeModel("DA");
-            diodeModelA.SetParameter("n", 0.1e-3);
-            var diodeModelB = new DiodeModel("DB");
-            diodeModelB.SetParameter("is", 100e-14);
-            var bjtModelQp1 = new BipolarJunctionTransistorModel("QP1");
-            bjtModelQp1.SetParameter("pnp", true);
-            bjtModelQp1.SetParameter("is", 16e-15);
-            bjtModelQp1.SetParameter("bf", 1700.0);
-            var bjtModelQp2 = new BipolarJunctionTransistorModel("QP2");
-            bjtModelQp2.SetParameter("pnp", true);
-            bjtModelQp2.SetParameter("is", 16e-15);
-            bjtModelQp2.SetParameter("bf", 1610.5);
+            var diodeModelA = new DiodeModel("DA")
+                .SetParameter("n", 0.1e-3);
+            var diodeModelB = new DiodeModel("DB")
+                .SetParameter("is", 100e-14);
+            var bjtModelQp1 = new BipolarJunctionTransistorModel("QP1")
+                .SetParameter("pnp", true)
+                .SetParameter("is", 16e-15)
+                .SetParameter("bf", 1700.0);
+            var bjtModelQp2 = new BipolarJunctionTransistorModel("QP2")
+                .SetParameter("pnp", true)
+                .SetParameter("is", 16e-15)
+                .SetParameter("bf", 1610.5);
 
             var ckt = new Circuit(
                 new NodeMapper(new[]

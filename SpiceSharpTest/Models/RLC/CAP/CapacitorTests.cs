@@ -199,11 +199,11 @@ namespace SpiceSharpTest.Models
             var resistance = 1e3;
             var capacitance = 1e-6;
             var ckt = new Circuit(
-                new VoltageSource("V1", "IN", "0", 0.0),
+                new VoltageSource("V1", "IN", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new Resistor("R1", "IN", "OUT", resistance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(0.1, 1.0e6, 10));

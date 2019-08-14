@@ -77,7 +77,8 @@ namespace SpiceSharpTest.Models
         {
             // Build circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 1.0e3),
                 new Resistor("R2", "out", "b", 10.0e3),
@@ -95,7 +96,6 @@ namespace SpiceSharpTest.Models
                     "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
                     "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1"))
                 );
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
