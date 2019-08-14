@@ -11,9 +11,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the identifier of the positive node.
         /// </summary>
-        /// <value>
-        /// The positive node identifier.
-        /// </value>
         public string PosNode { get; }
 
         /// <summary>
@@ -24,9 +21,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the identifier of the negative node.
         /// </summary>
-        /// <value>
-        /// The negative node identifier.
-        /// </value>
         public string NegNode { get; }
 
         /// <summary>
@@ -46,7 +40,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
-        /// <exception cref="ArgumentNullException">posNode</exception>
         public RealVoltageExport(BaseSimulation simulation, string posNode)
             : base(simulation)
         {
@@ -62,7 +55,6 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
-        /// <exception cref="ArgumentNullException">posNode</exception>
         public RealVoltageExport(BaseSimulation simulation, string posNode, string negNode)
             : base(simulation)
         {

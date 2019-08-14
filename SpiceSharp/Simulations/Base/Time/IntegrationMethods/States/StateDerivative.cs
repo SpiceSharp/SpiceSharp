@@ -9,9 +9,6 @@
         /// <summary>
         /// Gets the current derivative.
         /// </summary>
-        /// <value>
-        /// The derivative value.
-        /// </value>
         public abstract double Derivative { get; }
 
         /// <summary>

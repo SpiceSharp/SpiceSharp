@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         public NoiseGeneratorCollection Generators { get; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
         /// <param name="generators">Names of the generators</param>
         public ComponentNoise(params NoiseGenerator[] generators)
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
         /// <param name="generators"></param>
         public ComponentNoise(IEnumerable<NoiseGenerator> generators)

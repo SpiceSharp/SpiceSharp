@@ -14,8 +14,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the voltage across the resistor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
-        /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
@@ -26,9 +24,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the current through the resistor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -39,9 +34,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the power dissipated by the resistor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -51,17 +43,37 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> PosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<double> NegNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<double> PosNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<double> NegPosPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name)

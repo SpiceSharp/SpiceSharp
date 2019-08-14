@@ -14,33 +14,117 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the external (drain, drain) element.
         /// </summary>
         protected MatrixElement<Complex> CDrainDrainPtr { get; private set; }
-        protected MatrixElement<Complex> CGateGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourceSourcePtr { get; private set; }
-        protected MatrixElement<Complex> CBulkBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CGateBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBulkDrainPrimePtr { get; private set; }
-        protected MatrixElement<Complex> CBulkSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
-        protected MatrixElement<Complex> CBulkGatePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
-        protected MatrixElement<Complex> CDrainPrimeBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeBulkPtr { get; private set; }
-        protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
-        
+
         /// <summary>
-        /// Constructor
+        /// Gets the (gate, gate) element.
+        /// </summary>
+        protected MatrixElement<Complex> CGateGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (source, source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourceSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, bulk) element.
+        /// </summary>
+        protected MatrixElement<Complex> CBulkBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, drain) element.
+        /// </summary>
+        protected MatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external drain, drain) element.
+        /// </summary>
+        protected MatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, bulk) element.
+        /// </summary>
+        protected MatrixElement<Complex> CGateBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, drain) element.
+        /// </summary>
+        protected MatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external source, source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, drain) element.
+        /// </summary>
+        protected MatrixElement<Complex> CBulkDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CBulkSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, external drain) element.
+        /// </summary>
+        protected MatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, gate) element.
+        /// </summary>
+        protected MatrixElement<Complex> CBulkGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, gate) element.
+        /// </summary>
+        protected MatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, gate) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, external source) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, bulk) element.
+        /// </summary>
+        protected MatrixElement<Complex> CDrainPrimeBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, bulk) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourcePrimeBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, drain) element.
+        /// </summary>
+        protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }
@@ -94,7 +178,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public void Load(FrequencySimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

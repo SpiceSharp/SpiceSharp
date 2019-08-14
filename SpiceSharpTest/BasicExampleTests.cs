@@ -22,7 +22,6 @@ namespace SpiceSharpTest
             var resParameters = ckt["R1"].ParameterSets;
             resParameters.Get<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
             // </example_structure_resistor>
-
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
             ckt["R1"].SetParameter("resistance", 2.0e3);
@@ -44,7 +43,6 @@ namespace SpiceSharpTest
             var dcConfig = dc.Configurations.Get<DCConfiguration>();
             dcConfig.Sweeps.Add(new SweepConfiguration("V1", 0.0, 3.3, 0.1));
             // </example_structure_dc>
-
             // <example_structure_dc_2>
             var baseConfig = dc.Configurations.Get<BaseConfiguration>();
             baseConfig.RelativeTolerance = 1e-4;
@@ -65,23 +63,19 @@ namespace SpiceSharpTest
             var tnomGetter = parameters.CreateGetter<double>("tnom");
             double temperature = tnomGetter(); // In degrees Celsius
             // </example_parameters_mos1_creategetter>
-
             // <example_parameters_mos1_createsetter>
             // Create a setter for the gate-drain overlap capacitance of the mosfet1 model
             var cgdoSetter = parameters.CreateSetter<double>("cgdo");
             cgdoSetter(1e-15); // 1pF
             // </example_parameters_mos1_createsetter>
-
             // <example_parameters_mos1_getparameter>
             // Get the parameter that describes the oxide thickness of the mosfet1 model
             var toxParameter = parameters.GetParameter<double>("tox");
             // </example_parameters_mos1_getparameter>
-
             // <example_parameters_mos1_setparameter>
             // Flag the model as a PMOS type
             parameters.SetParameter("pmos", true);
             // </example_parameters_mos1_setparameter>
-
             // <example_parameters_res_setparameter>
             // Set the resistance of the resistor
             var res = new Resistor("R1");
@@ -100,7 +94,6 @@ namespace SpiceSharpTest
                 new Resistor("R2", "out", "0", 2.0e4)
                 );
             // </example01_build>
-
             // <example01_simulate>
             // Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
             var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);

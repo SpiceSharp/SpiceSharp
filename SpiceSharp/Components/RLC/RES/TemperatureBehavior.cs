@@ -19,17 +19,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
@@ -39,7 +33,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double Conductance { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }

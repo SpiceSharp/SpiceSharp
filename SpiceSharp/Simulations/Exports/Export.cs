@@ -11,9 +11,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Returns true if the exporter is currently valid.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
-        /// </value>
         public bool IsValid
         {
             get
@@ -27,17 +24,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the extractor function.
         /// </summary>
-        /// <value>
-        /// The extractor.
-        /// </value>
         protected Func<T> Extractor { get; set; }
 
         /// <summary>
         /// Gets the simulation from which the data needs to be extracted.
         /// </summary>
-        /// <value>
-        /// The simulation.
-        /// </value>
         public Simulation Simulation
         {
             get => _simulation; 
@@ -71,9 +62,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the current value from the simulation.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         /// <remarks>
         /// This property will return a default if there is nothing to extract.
         /// </remarks>
@@ -86,7 +74,7 @@ namespace SpiceSharp.Simulations
                     // Try initializing (lazy loading)
                     LazyLoad();
                     if (Extractor == null)
-                        return default(T);
+                        return default;
                 }
 
                 return Extractor();
@@ -97,7 +85,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Export{T}"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         protected Export(Simulation simulation)
         {
             Simulation = simulation;

@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
 {
@@ -14,7 +13,7 @@ namespace SpiceSharp.Components.NoiseSources
         public double Gain { get; set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NoiseGain"/> class.
         /// </summary>
         /// <param name="name">Name of the noise source</param>
         /// <param name="node1">Node 1</param>

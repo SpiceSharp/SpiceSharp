@@ -10,36 +10,24 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the starting value.
         /// </summary>
-        /// <value>
-        /// The starting value.
-        /// </value>
         [ParameterName("start"), ParameterInfo("The starting value")]
         public double Start { get; set; }
 
         /// <summary>
         /// Gets or sets the final value.
         /// </summary>
-        /// <value>
-        /// The stopping value.
-        /// </value>
         [ParameterName("stop"), ParameterInfo("The stopping value")]
         public double Stop { get; set; }
 
         /// <summary>
         /// Gets or sets the stepping value.
         /// </summary>
-        /// <value>
-        /// The stepping value.
-        /// </value>
         [ParameterName("step"), ParameterInfo("The step")]
         public double Step { get; set; }
 
         /// <summary>
         /// The name of the source being varied.
         /// </summary>
-        /// <value>
-        /// The name of the source.
-        /// </value>
         [ParameterName("source"), ParameterInfo("The name of the swept source")]
         public string ComponentName { get; set; }
 

@@ -15,7 +15,6 @@ namespace SpiceSharp.Behaviors
         /// Initializes the parameters.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         void InitializeParameters(FrequencySimulation simulation);
 
         /// <summary>

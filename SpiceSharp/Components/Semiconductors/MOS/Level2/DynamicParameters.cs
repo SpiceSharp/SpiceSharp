@@ -12,95 +12,115 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the bulk-drain junction capacitance.
         /// </summary>
-        /// <value>
-        /// The bulk-drain capacitance.
-        /// </value>
         [ParameterName("cbd0"), ParameterInfo("Zero-Bias B-D junction capacitance")]
         public double CapBd { get; private set; }
 
         /// <summary>
         /// Gets the bulk-drain junction sidewall capacitance.
         /// </summary>
-        /// <value>
-        /// The bulk-drain sidewall capacitance.
-        /// </value>
         [ParameterName("cbdsw0"), ParameterInfo("Zero-Bias B-D sidewall capacitance")]
         public double CapBdSidewall { get; private set; }
 
         /// <summary>
         /// Gets the bulk-source junction capacitance.
         /// </summary>
-        /// <value>
-        /// The bulk-source capacitance.
-        /// </value>
         [ParameterName("cbs0"), ParameterInfo("Zero-Bias B-S junction capacitance")]
         public double CapBs { get; private set; }
 
         /// <summary>
         /// Gets the bulk-source junction sidewall capacitance.
         /// </summary>
-        /// <value>
-        /// The bulk-source sidewall capacitance.
-        /// </value>
         [ParameterName("cbssw0"), ParameterInfo("Zero-Bias B-S sidewall capacitance")]
         public double CapBsSidewall { get; private set; }
 
         /// <summary>
         /// Gets or sets the stored bulk-source charge.
         /// </summary>
-        /// <value>
-        /// The stored bulk-source charge.
-        /// </value>
         [ParameterName("qbs"), ParameterInfo("Bulk-Source charge storage")]
         public virtual double ChargeBs { get; protected set; }
 
         /// <summary>
         /// Gets or sets the stored bulk-drain charge.
         /// </summary>
-        /// <value>
-        /// The stored bulk-drain charge.
-        /// </value>
         [ParameterName("qbd"), ParameterInfo("Bulk-Drain charge storage")]
         public virtual double ChargeBd { get; protected set; }
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-source charge storage.
         /// </summary>
-        /// <value>
-        /// The gate-source capacitance.
-        /// </value>
         [ParameterName("cgs"), ParameterInfo("Gate-Source capacitance")]
         public virtual double CapGs { get; protected set; }
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-drain charge storage.
         /// </summary>
-        /// <value>
-        /// The gate-drain capacitance.
-        /// </value>
         [ParameterName("cgd"), ParameterInfo("Gate-Drain capacitance")]
         public virtual double CapGd { get; protected set; }
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-bulk charge storage.
         /// </summary>
-        /// <value>
-        /// The gate-bulk capacitance.
-        /// </value>
         [ParameterName("cgb"), ParameterInfo("Gate-Bulk capacitance")]
         public virtual double CapGb { get; protected set; }
 
+        /// <summary>
+        /// Gets the temperature-modified bulk-drain capacitance.
+        /// </summary>
         protected double TempCapBd { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified bulk-source capacitance.
+        /// </summary>
         protected double TempCapBs { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified junction capacitance.
+        /// </summary>
         protected double TempJunctionCap { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified sidewall junction capacitance.
+        /// </summary>
         protected double TempJunctionCapSidewall { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified depletion capacitance.
+        /// </summary>
         protected double TempDepletionCap { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 2-drain.
+        /// </summary>
         protected double F2D { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 3-drain.
+        /// </summary>
         protected double F3D { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 4-drain.
+        /// </summary>
         protected double F4D { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 2-source.
+        /// </summary>
         protected double F2S { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 3-source.
+        /// </summary>
         protected double F3S { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 4-source.
+        /// </summary>
         protected double F4S { get; private set; }
+
+        /// <summary>
+        /// Gets the effective length.
+        /// </summary>
         protected double EffectiveLength { get; private set; }
 
         /// <summary>

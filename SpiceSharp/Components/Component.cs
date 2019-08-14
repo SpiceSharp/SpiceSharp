@@ -42,12 +42,6 @@ namespace SpiceSharp.Components
         /// Connects the component in the circuit.
         /// </summary>
         /// <param name="nodes">The node indices.</param>
-        /// <exception cref="ArgumentNullException">
-        /// nodes
-        /// or
-        /// node " + (i + 1)
-        /// </exception>
-        /// <exception cref="CircuitException">{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length)</exception>
         public void Connect(params string[] nodes)
         {
             nodes.ThrowIfNot(nameof(nodes), _connections.Length);
@@ -145,7 +139,6 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">The nodes.</param>
         /// <returns>An enumerable for all nodes.</returns>
-        /// <exception cref="ArgumentNullException">nodes</exception>
         public IEnumerable<int> GetNodeIndexes(VariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));

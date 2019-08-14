@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     public class CurrentSwitchModel : Model
     {
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="CurrentSwitchModel"/> class.
         /// </summary>
         /// <param name="name">The name of the model</param>
         public CurrentSwitchModel(string name) : base(name)

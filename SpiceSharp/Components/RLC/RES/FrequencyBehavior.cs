@@ -15,8 +15,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
-        /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Complex voltage across the capacitor.")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
@@ -27,9 +25,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the (complex) current through the resistor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Complex current through the capacitor.")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
@@ -42,9 +37,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the (complex) power dissipated by the resistor.
         /// </summary>
-        /// <param name="state">The simulation state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -54,15 +46,27 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// Gets the (positive, positive) element.
         /// </summary>
         protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegPosPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }
@@ -71,7 +75,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Initializes the parameters.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public void InitializeParameters(FrequencySimulation simulation)
         {
             // Not needed

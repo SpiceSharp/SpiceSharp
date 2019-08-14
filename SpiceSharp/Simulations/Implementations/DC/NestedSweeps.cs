@@ -12,27 +12,18 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a sweep instance.
         /// </summary>
-        /// <value>
-        /// The <see cref="SweepInstance"/>.
-        /// </value>
         /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <returns>The sweep index.</returns>
         public SweepInstance this[int index] => _instances[index];
 
         /// <summary>
         /// Gets the sweep count.
         /// </summary>
-        /// <value>
-        /// The sweep count.
-        /// </value>
         public int Count => _instances.Count;
 
         /// <summary>
         /// Gets the top-most sweep.
         /// </summary>
-        /// <value>
-        /// The top.
-        /// </value>
         public SweepInstance Top => _instances.Last();
 
         /// <summary>
@@ -44,7 +35,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="NestedSweeps"/> class.
         /// </summary>
         /// <param name="sweeps">The sweeps.</param>
-        /// <exception cref="ArgumentNullException">sweeps</exception>
         public NestedSweeps(IEnumerable<SweepConfiguration> sweeps)
         {
             sweeps.ThrowIfNull(nameof(sweeps));

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -18,13 +17,17 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// The positive RHS element.
         /// </summary>
         protected VectorElement<Complex> CPosPtr { get; private set; }
+
+        /// <summary>
+        /// The negative RHS element.
+        /// </summary>
         protected VectorElement<Complex> CNegPtr { get; private set; }
 
         /// <summary>
-        /// Device methods and properties
+        /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
@@ -32,6 +35,10 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Get the power dissipation.
+        /// </summary>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -39,11 +46,15 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             return -v * Complex.Conjugate(FrequencyParameters.Phasor);
         }
+
+        /// <summary>
+        /// Get the current.
+        /// </summary>
         [ParameterName("c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => FrequencyParameters.Phasor;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

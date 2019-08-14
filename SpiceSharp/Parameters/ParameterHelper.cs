@@ -26,7 +26,8 @@ namespace SpiceSharp
         /// <summary>
         /// This method will check whether or not a type is a parameter (implements <seealso cref="Parameter{T}"/>).
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">The parameter to check.</param>
+        /// <param name="generic">If not null, the parameter is also verified to have the generic parameter.</param>
         /// <returns></returns>
         public static Type IsParameter(Type type, Type generic = null)
         {
@@ -181,7 +182,7 @@ namespace SpiceSharp
             var member = Reflection.GetNamedMembers(source, name, comparer).FirstOrDefault();
             if (member == null)
             {
-                value = default(T);
+                value = default;
                 return false;
             }
 
@@ -217,7 +218,7 @@ namespace SpiceSharp
             var member = Reflection.GetPrincipalMembers(source).FirstOrDefault();
             if (member == null)
             {
-                value = default(T);
+                value = default;
                 return false;
             }
 
@@ -428,9 +429,9 @@ namespace SpiceSharp
         /// Create a setter for a member.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="member">The member information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="member">The member reflection information.</param>
         /// <returns>An action that sets the member of this object.</returns>
-        /// <exception cref="ArgumentNullException">member</exception>
         public static Action<T> CreateSetterForMember<T>(object source, MemberInfo member)
         {
             member.ThrowIfNull(nameof(member));
@@ -448,9 +449,9 @@ namespace SpiceSharp
         /// Create a getter for a member.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="member">The member information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="member">The member reflection information.</param>
         /// <returns>A function that gets the member of this object.</returns>
-        /// <exception cref="ArgumentNullException">member</exception>
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
             member.ThrowIfNull(nameof(member));
@@ -468,7 +469,8 @@ namespace SpiceSharp
         /// Creates a setter for a property.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="property">The property information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="property">The property reflection information.</param>
         /// <returns>
         /// An action that sets the property value for this instance.
         /// </returns>
@@ -497,7 +499,8 @@ namespace SpiceSharp
         /// Creates a getter for a property. Parameters are accounted for.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="property">The property information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="property">The property reflection information.</param>
         /// <returns>
         /// A function that gets the property value for this instance.
         /// </returns>

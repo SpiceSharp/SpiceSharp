@@ -12,18 +12,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the time-based simulation.
         /// </summary>
-        /// <value>
-        /// The time-based simulation.
-        /// </value>
         public TimeSimulation Simulation { get; }
 
         /// <summary>
         /// Gets or sets the timestep to be probed.
         /// </summary>
-        /// <value>
-        /// The timestep.
-        /// </value>
-        /// <exception cref="ArgumentException">Cannot set the the timestep to a non-positive values</exception>
         /// <remarks>
         /// Be careful when increasing the timestep, as it could cause truncation errors!
         /// </remarks>

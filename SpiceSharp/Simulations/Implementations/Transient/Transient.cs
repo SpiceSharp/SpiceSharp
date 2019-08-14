@@ -41,7 +41,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Executes the simulation.
         /// </summary>
-        /// <exception cref="SpiceSharp.CircuitException">{0}: transient terminated".FormatString(Name)</exception>
         protected override void Execute()
         {
             // First do temperature-dependent calculations and IC

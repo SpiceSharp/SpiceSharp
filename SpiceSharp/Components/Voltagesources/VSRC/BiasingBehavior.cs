@@ -15,9 +15,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
 
         /// <summary>
@@ -25,7 +22,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Voltage source current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -38,7 +34,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -49,26 +44,51 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the voltage applied by the source.
         /// </summary>
-        /// <value>
-        /// The voltage.
-        /// </value>
         [ParameterName("v"), ParameterInfo("Instantaneous voltage")]
         public double Voltage { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the branch equation.
+        /// </summary>
         public int BranchEq { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, branch) element.
+        /// </summary>
         protected MatrixElement<double> PosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<double> NegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<double> BranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<double> BranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the branch RHS element.
+        /// </summary>
         protected VectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.NoiseSources
         private readonly int[] _pins;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NoiseGenerator"/> class.
         /// </summary>
         /// <param name="name">Name of the noise source</param>
         /// <param name="pins">Pins</param>
@@ -72,6 +72,9 @@ namespace SpiceSharp.Components.NoiseSources
             Nodes = new NodeCollection(mapped);
         }
 
+        /// <summary>
+        /// Unsetup the noise generator.
+        /// </summary>
         public virtual void Unsetup()
         {
             Nodes = null;

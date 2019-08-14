@@ -11,6 +11,9 @@ namespace SpiceSharp.Components.Semiconductors
         /// Limit the per-iteration change of PN junction voltages
         /// Defined as DEVpnjlim in devsup.c
         /// </summary>
+        /// <remarks>
+        /// Taken from ngSpice, where it was fixed by Alan Gillespie's code.
+        /// </remarks>
         /// <param name="newVoltage">New voltage</param>
         /// <param name="oldVoltage">Old voltage</param>
         /// <param name="thermalVoltage">Thermal voltage</param>
@@ -23,15 +26,32 @@ namespace SpiceSharp.Components.Semiconductors
             {
                 if (oldVoltage > 0)
                 {
-                    var arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
+                    var arg = (newVoltage - oldVoltage) / thermalVoltage;
                     if (arg > 0)
-                        newVoltage = oldVoltage + thermalVoltage * Math.Log(arg);
+                        newVoltage = oldVoltage + thermalVoltage * (2 + Math.Log(arg - 2));
                     else
-                        newVoltage = criticalVoltage;
+                        newVoltage = oldVoltage - thermalVoltage * (2 + Math.Log(2 - arg));
                 }
                 else
                     newVoltage = thermalVoltage * Math.Log(newVoltage / thermalVoltage);
                 limited = true;
+            }
+            else
+            {
+                if (newVoltage < 0)
+                {
+                    double arg;
+                    if (oldVoltage > 0)
+                        arg = -oldVoltage - 1;
+                    else
+                        arg = 2 * oldVoltage - 1;
+
+                    if (newVoltage < arg)
+                    {
+                        newVoltage = arg;
+                        limited = true;
+                    }
+                }
             }
             return newVoltage;
         }

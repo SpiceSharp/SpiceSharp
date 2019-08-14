@@ -23,9 +23,6 @@ namespace SpiceSharp.Algebra
         /// <remarks>
         /// The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.
         /// </remarks>
-        /// <value>
-        /// The value at the specified index.
-        /// </value>
         /// <param name="index">The index in the vector.</param>
         /// <returns>The value at the specified index.</returns>
         public override T this[int index]
@@ -34,17 +31,17 @@ namespace SpiceSharp.Algebra
             {
                 var element = FindElement(index);
                 if (element == null)
-                    return default(T);
+                    return default;
                 return element.Value;
             }
             set
             {
-                if (value.Equals(default(T)))
+                if (value.Equals(default))
                 {
                     // We don't need to create a new element unnecessarily
                     var element = FindElement(index);
                     if (element != null)
-                        element.Value = default(T);
+                        element.Value = default;
                 }
                 else
                 {

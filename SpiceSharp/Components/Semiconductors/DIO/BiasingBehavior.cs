@@ -13,37 +13,86 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Gets the positive prime node index.
+        /// Gets the positive internal node.
         /// </summary>
-        /// <value>
-        /// The positive prime node index.
-        /// </value>
         public int PosPrimeNode { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the (external positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> PosPosPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<double> NegPosPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, external positive) element.
+        /// </summary>
         protected MatrixElement<double> PosPrimePosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<double> PosPrimeNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> PosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<double> NegNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> PosPrimePosPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the positive RHS element.
+        /// </summary>
         protected VectorElement<double> PosPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the negative RHS element.
+        /// </summary>
         protected VectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
-        /// Extra variables
+        /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
         public double Voltage { get; private set; }
+
+        /// <summary>
+        /// Gets the current.
+        /// </summary>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
         public double Current { get; protected set; }
+
+        /// <summary>
+        /// Gets the small-signal conductance.
+        /// </summary>
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
         public double Conductance { get; protected set; }
+
+        /// <summary>
+        /// Gets the power dissipated.
+        /// </summary>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -52,7 +101,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }
@@ -166,6 +215,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             PosPrimeNegPtr.Value -= gd;
         }
 
+        /// <summary>
+        /// Initialize the device based on the current iteration state.
+        /// </summary>
         protected void Initialize(BaseSimulation simulation, out double vd, out bool check)
         {
             var state = simulation.RealState;

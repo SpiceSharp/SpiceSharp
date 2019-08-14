@@ -10,25 +10,16 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets the timestep.
         /// </summary>
-        /// <value>
-        /// The timestep.
-        /// </value>
         public double Delta { get; set; }
 
         /// <summary>
         /// Gets the associated solution with the timepoint.
         /// </summary>
-        /// <value>
-        /// The solution.
-        /// </value>
         public Vector<double> Solution { get; }
 
         /// <summary>
         /// Gets the states allocated by entities at this timepoint.
         /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
         public Vector<double> State { get; }
 
         /// <summary>

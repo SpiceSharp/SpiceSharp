@@ -12,58 +12,37 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the maximum integration order for the integration method.
         /// </summary>
-        /// <value>
-        /// The maximum order.
-        /// </value>
         public int MaxOrder { get; }
 
         /// <summary>
         /// Gets the current integration order.
         /// </summary>
-        /// <value>
-        /// The current order.
-        /// </value>
         public int Order { get; protected set; }
 
         /// <summary>
         /// Gets the previously accepted integration states.
         /// </summary>
-        /// <value>
-        /// The integration states.
-        /// </value>
         protected History<IntegrationState> IntegrationStates { get; }
 
         /// <summary>
         /// Class for managing integration states.
         /// </summary>
-        /// <value>
-        /// The state manager.
-        /// </value>
         protected StateManager StateManager { get; } = new StateManager();
 
         /// <summary>
         /// Gets the time of the last accepted timepoint.
         /// </summary>
-        /// <value>
-        /// The base time.
-        /// </value>
         public double BaseTime { get; private set; }
 
         /// <summary>
         /// Gets the time of the currently probed timepoint.
         /// </summary>
-        /// <value>
-        /// The current time.
-        /// </value>
         public virtual double Time { get; private set; }
 
         /// <summary>
         /// The first order derivative of any variable that is
         /// dependent on the timestep.
         /// </summary>
-        /// <value>
-        /// The slope.
-        /// </value>
         public double Slope { get; protected set; }
 
         /// <summary>
@@ -95,7 +74,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes a new instance of the <see cref="IntegrationMethod"/> class.
         /// </summary>
         /// <param name="maxOrder">The maximum integration order.</param>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid order {0}".FormatString(maxOrder)</exception>
         protected IntegrationMethod(int maxOrder)
         {
             if (maxOrder < 1)
@@ -110,7 +88,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <exception cref="SpiceSharp.CircuitException">Could not extract solver</exception>
         public virtual void Setup(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
@@ -292,13 +269,41 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Gets a timestep in history.
+        /// Gets a timestep in history. The index 0 is the current timestep.
         /// </summary>
-        /// <param name="index">Points to go back in time. 0 is the current timestep.</param>
+        /// <param name="index">Points to go back in time.</param>
         /// <returns>
         /// The timestep.
         /// </returns>
         public double GetTimestep(int index) => IntegrationStates[index].Delta;
+
+        /// <summary>
+        /// Gets a solution in history. The index 0 is the last accepted solution.
+        /// </summary>
+        /// <param name="index">Points to go back in time.</param>
+        /// <returns>The solution vector.</returns>
+        public Vector<double> GetSolution(int index)
+        {
+            return IntegrationStates[index].Solution;
+        }
+
+        #if DEBUG
+        /// <summary>
+        /// Gets a state in history. The index 0 is the current timestep.
+        /// </summary>
+        /// <remarks>
+        /// It is generally impossible to find out which state belongs to which entity behavior. A behavior will
+        /// ask for a certain type of state, that works on a specific index in the vector in a way that depends on
+        /// the integration method. This means that the states are pretty useless in this context, and can only really
+        /// be used for debugging purposes.
+        /// </remarks>
+        /// <param name="index">Points to go back in time.</param>
+        /// <returns>The state vector.</returns>
+        public Vector<double> GetStates(int index)
+        {
+            return IntegrationStates[index].State;
+        }
+        #endif
 
         /// <summary>
         /// Raises the <see cref="E:TruncateNonConvergence" /> event.

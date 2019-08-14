@@ -13,9 +13,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the noise parameters.
         /// </summary>
-        /// <value>
-        /// The noise parameters.
-        /// </value>
         protected ModelNoiseParameters NoiseParameters { get; private set; }
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             );
         
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public NoiseBehavior(string name) : base(name) { }
@@ -51,7 +48,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         /// <param name="simulation">Simulation</param>
         /// <param name="provider">Data provider</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);

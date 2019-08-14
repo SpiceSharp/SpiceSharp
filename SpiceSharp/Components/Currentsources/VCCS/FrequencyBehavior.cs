@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -13,15 +12,27 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// The (pos, ctrlpos) element.
         /// </summary>
         protected MatrixElement<Complex> CPosControlPosPtr { get; private set; }
+
+        /// <summary>
+        /// The (pos, ctrlneg) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosControlNegPtr { get; private set; }
+
+        /// <summary>
+        /// The (neg, ctrlpos) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegControlPosPtr { get; private set; }
+
+        /// <summary>
+        /// The (neg, ctrlneg) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegControlNegPtr { get; private set; }
 
         /// <summary>
-        /// Device methods and properties
+        /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
@@ -29,12 +40,20 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Get the current.
+        /// </summary>
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             return (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
         }
+
+        /// <summary>
+        /// Get the power dissipation.
+        /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -45,7 +64,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

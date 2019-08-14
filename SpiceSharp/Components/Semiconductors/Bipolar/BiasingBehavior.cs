@@ -15,90 +15,64 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base configuration of the simulation.
         /// </summary>
-        /// <value>
-        /// The base configuration.
-        /// </value>
         protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
-        /// Gets the base-emitter voltage
+        /// Gets the base-emitter voltage.
         /// </summary>
-        /// <value>
-        /// The base-emitter voltage.
-        /// </value>
         [ParameterName("vbe"), ParameterInfo("B-E voltage")]
         public double VoltageBe { get; private set; }
 
         /// <summary>
         /// Gets the base-collector voltage.
         /// </summary>
-        /// <value>
-        /// The base-collector voltage.
-        /// </value>
         [ParameterName("vbc"), ParameterInfo("B-C voltage")]
         public double VoltageBc { get; private set; }
 
         /// <summary>
-        /// Gets or sets the collector current.
+        /// Gets or modifies the collector current.
         /// </summary>
-        /// <value>
-        /// The collector current.
-        /// </value>
         [ParameterName("cc"), ParameterName("ic"), ParameterInfo("Current at collector node")]
         public double CollectorCurrent { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the base current.
+        /// Gets or modifies the base current.
         /// </summary>
-        /// <value>
-        /// The base current.
-        /// </value>
         [ParameterName("cb"), ParameterName("ib"), ParameterInfo("Current at base node")]
         public double BaseCurrent { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the small signal input conductance - pi
+        /// Gets or sets the small signal input conductance - pi.
         /// </summary>
-        /// <value>
-        /// The conductance pi.
-        /// </value>
         [ParameterName("gpi"), ParameterInfo("Small signal input conductance - pi")]
         public double ConductancePi { get; protected set; }
 
         /// <summary>
         /// Gets or sets the small signal conductance mu.
         /// </summary>
-        /// <value>
-        /// The conductance mu.
-        /// </value>
         [ParameterName("gmu"), ParameterInfo("Small signal conductance - mu")]
         public double ConductanceMu { get; protected set; }
 
         /// <summary>
         /// Gets or sets the transconductance.
         /// </summary>
-        /// <value>
-        /// The transconductance.
-        /// </value>
         [ParameterName("gm"), ParameterInfo("Small signal transconductance")]
         public double Transconductance { get; protected set; }
 
         /// <summary>
         /// Gets or sets the output conductance.
         /// </summary>
-        /// <value>
-        /// The output conductance.
-        /// </value>
         [ParameterName("go"), ParameterInfo("Small signal output conductance")]
         public double OutputConductance { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the conductance - X.
+        /// </summary>
         public double ConductanceX { get; protected set; }
 
         /// <summary>
         /// Gets the dissipated power.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power dissipation")]
         public virtual double GetPower(BaseSimulationState state)
         {
@@ -112,73 +86,207 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the collector prime node index.
         /// </summary>
-        /// <value>
-        /// The collector prime node index.
-        /// </value>
         public int CollectorPrimeNode { get; private set; }
 
         /// <summary>
         /// Gets the base prime node index.
         /// </summary>
-        /// <value>
-        /// The base prime nodeindex .
-        /// </value>
         public int BasePrimeNode { get; private set; }
 
         /// <summary>
         /// Gets the emitter prime node index.
         /// </summary>
-        /// <value>
-        /// The emitter prime node index.
-        /// </value>
         public int EmitterPrimeNode { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the collect node.
         /// </summary>
         protected int CollectorNode { get; private set; }
+
+        /// <summary>
+        /// Gets the base node.
+        /// </summary>
         protected int BaseNode { get; private set; }
-        protected int EmitterNode { get; private set; } 
+
+        /// <summary>
+        /// Gets the emitter node.
+        /// </summary>
+        protected int EmitterNode { get; private set; }
+        
+        /// <summary>
+        /// Gets the substrate node.
+        /// </summary>
         protected int SubstrateNode { get; private set; }
+
+        /// <summary>Gets the (external collector, collector) element.</summary>
         protected MatrixElement<double> CollectorCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external base, base) element.
+        /// </summary>
         protected MatrixElement<double> BaseBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external emitter, emitter) element.
+        /// </summary>
         protected MatrixElement<double> EmitterEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, external collector) element.
+        /// </summary>
         protected MatrixElement<double> CollectorPrimeCollectorPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, base) element.
+        /// </summary>
         protected MatrixElement<double> CollectorPrimeBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, emitter) element.
+        /// </summary>
         protected MatrixElement<double> CollectorPrimeEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, external base) element.
+        /// </summary>
         protected MatrixElement<double> BasePrimeBasePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, collector) element.
+        /// </summary>
         protected MatrixElement<double> BasePrimeCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, emitter) element.
+        /// </summary>
         protected MatrixElement<double> BasePrimeEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, external emitter) element.
+        /// </summary>
         protected MatrixElement<double> EmitterPrimeEmitterPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, collector) element.
+        /// </summary>
         protected MatrixElement<double> EmitterPrimeCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, base) element.
+        /// </summary>
         protected MatrixElement<double> EmitterPrimeBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (collector, collector) element.
+        /// </summary>
         protected MatrixElement<double> CollectorCollectorPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (base, base) element.
+        /// </summary>
         protected MatrixElement<double> BaseBasePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (emitter, emitter) element.
+        /// </summary>
         protected MatrixElement<double> EmitterEmitterPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, collector) element.
+        /// </summary>
         protected MatrixElement<double> CollectorPrimeCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, base) element.
+        /// </summary>
         protected MatrixElement<double> BasePrimeBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, emitter) element.
+        /// </summary>
         protected MatrixElement<double> EmitterPrimeEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (substrate, substrate) element.
+        /// </summary>
         protected MatrixElement<double> SubstrateSubstratePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, substrate) element.
+        /// </summary>
         protected MatrixElement<double> CollectorPrimeSubstratePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (substrate, collector) element.
+        /// </summary>
         protected MatrixElement<double> SubstrateCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// TODO: Check if this is right.
+        /// Gets the (external base, collector) element.
+        /// </summary>
         protected MatrixElement<double> BaseCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// TODO: Check if this is right.
+        /// Gets the (collector, external base) element.
+        /// </summary>
         protected MatrixElement<double> CollectorPrimeBasePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the collector RHS element.
+        /// </summary>
         protected VectorElement<double> CollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the base RHS element.
+        /// </summary>
         protected VectorElement<double> BasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the Emitter RHS element.
+        /// </summary>
         protected VectorElement<double> EmitterPrimePtr { get; private set; }
 
+        /// <summary>
+        /// Gets or modifies the base-emitter current.
+        /// </summary>
         public virtual double CurrentBe { get; protected set; }
 
+        /// <summary>
+        /// Gets or modifies the base-collector current.
+        /// </summary>
         public virtual double CurrentBc { get; protected set; }
 
+        /// <summary>
+        /// Gets or modifies the base-emitter conductance.
+        /// </summary>
         public double CondBe { get; protected set; }
+
+        /// <summary>
+        /// Gets or modifies the base-collector conductance.
+        /// </summary>
         public double CondBc { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the base charge.
+        /// </summary>
         public double BaseCharge { get; protected set; }
+
+        /// <summary>
+        /// TODO: Try to factor out this part of the biasing behavior.
+        /// Gets or sets the charge to collector voltage derivative.
+        /// </summary>
         public double Dqbdvc { get; protected set; }
+
+        /// <summary>
+        /// TODO: Try to factor our this part of the biasing behavior.
+        /// Gets or sets the charge to emitter voltage derivative.
+        /// </summary>
         public double Dqbdve { get; protected set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

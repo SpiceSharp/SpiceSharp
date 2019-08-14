@@ -20,57 +20,36 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the name of the variable.
         /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
         public string Name { get; }
 
         /// <summary>
         /// Gets the value for the convergence aid.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
         public double Value { get; }
 
         /// <summary>
         /// Gets the unknown variables.
         /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
         protected VariableSet Variables { get; private set; }
 
         /// <summary>
         /// Gets the solver of the system of equations.
         /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
         protected Solver<double> Solver { get; private set; }
 
         /// <summary>
         /// Gets the diagonal element.
         /// </summary>
-        /// <value>
-        /// The diagonal element.
-        /// </value>
         protected MatrixElement<double> Diagonal { get; private set; }
 
         /// <summary>
         /// Gets the right-hand side element.
         /// </summary>
-        /// <value>
-        /// The right-hand side element.
-        /// </value>
         protected VectorElement<double> Rhs { get; private set; }
 
         /// <summary>
         /// Gets the node for which the aid is meant.
         /// </summary>
-        /// <value>
-        /// The node.
-        /// </value>
         protected Variable Node { get; private set; }
 
         /// <summary>

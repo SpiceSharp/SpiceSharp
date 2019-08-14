@@ -8,22 +8,26 @@ namespace SpiceSharp.Components.CommonBehaviors
     public class IndependentSourceParameters : ParameterSet
     {
         /// <summary>
-        /// Parameters
+        /// The time-dependent waveform of the source.
         /// </summary>
         [ParameterName("waveform"), ParameterInfo("The waveform object for this source")]
         public Waveform Waveform { get; set; }
+
+        /// <summary>
+        /// The DC value of the source.
+        /// </summary>
         [ParameterName("dc"), ParameterInfo("D.C. source value")]
         public GivenParameter<double> DcValue { get; } = new GivenParameter<double>();
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         public IndependentSourceParameters()
         {
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         /// <param name="dc">DC value</param>
         public IndependentSourceParameters(double dc)
@@ -32,7 +36,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         /// <param name="waveform">Waveform</param>
         public IndependentSourceParameters(Waveform waveform)

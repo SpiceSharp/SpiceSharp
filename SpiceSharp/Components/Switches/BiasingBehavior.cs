@@ -18,17 +18,11 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
@@ -50,9 +44,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the currently active conductance.
         /// </summary>
-        /// <value>
-        /// The conductance.
-        /// </value>
         public double Conductance { get; private set; }
 
         /// <summary>
@@ -60,7 +51,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
@@ -73,7 +63,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Switch current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -86,7 +75,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -96,21 +84,38 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, positive) element.
+        /// </summary>
         protected MatrixElement<double> PosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<double> NegPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<double> PosNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the method used for switching.
         /// </summary>
-        /// <value>
-        /// The method.
-        /// </value>
         protected Controller Method { get; }
 
         /// <summary>
@@ -127,7 +132,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Connect the behavior in the circuit
         /// </summary>
         /// <param name="pins">Pin indices in order</param>
-        /// <exception cref="ArgumentNullException">pins</exception>
         public void Connect(params int[] pins)
         {
             pins.ThrowIfNull(nameof(pins));
@@ -141,7 +145,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The provider.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             provider.ThrowIfNull(nameof(provider));
@@ -160,7 +163,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="variables">The variable set.</param>
         /// <param name="solver">The solver.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             solver.ThrowIfNull(nameof(solver));
@@ -176,7 +178,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public void Load(BaseSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

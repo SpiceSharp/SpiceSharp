@@ -39,6 +39,9 @@ namespace SpiceSharp
             /// </summary>
             public List<Attribute> Attributes { get; private set; }
 
+            /// <summary>
+            /// Convert to a string.
+            /// </summary>
             public override string ToString()
             {
                 if (Member == null)
@@ -219,7 +222,7 @@ namespace SpiceSharp
                 }
             }
 
-            value = default(T);
+            value = default;
             return false;
         }
 
@@ -229,7 +232,7 @@ namespace SpiceSharp
         /// <remarks>
         /// This method heavily uses reflection to find valid properties and methods. It supports properties and fields
         /// of types <see cref="double"/>, <see cref="int"/>, <see cref="string"/>, <see cref="bool"/> and
-        /// <see cref="BaseParameter"/>.
+        /// <see cref="ICloneable"/>.
         /// </remarks>
         /// <param name="source">The source object.</param>
         /// <param name="destination">The destination object</param>
@@ -310,9 +313,9 @@ namespace SpiceSharp
         /// Create a setter for a member.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="member">The member information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="member">The member reflection information.</param>
         /// <returns>An action that sets the member of this object.</returns>
-        /// <exception cref="ArgumentNullException">member</exception>
         public static Action<T> CreateSetterForMember<T>(object source, MemberInfo member)
         {
             member.ThrowIfNull(nameof(member));
@@ -334,9 +337,9 @@ namespace SpiceSharp
         /// Create a getter for a member.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="member">The member information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="member">The member reflection information.</param>
         /// <returns>A function that gets the member of this object.</returns>
-        /// <exception cref="ArgumentNullException">member</exception>
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
             member.ThrowIfNull(nameof(member));
@@ -358,7 +361,8 @@ namespace SpiceSharp
         /// Creates a setter for a method.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="method">The method information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="method">The method reflection information.</param>
         /// <returns>
         /// An action that calls the method for this instance.
         /// </returns>
@@ -383,7 +387,8 @@ namespace SpiceSharp
         /// Creates a getter for a method.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="method">The method information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="method">The method reflection information.</param>
         /// <returns>
         /// A function that calls the method for this instance.
         /// </returns>
@@ -408,7 +413,8 @@ namespace SpiceSharp
         /// Creates a setter for a property.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="property">The property information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="property">The property reflection information.</param>
         /// <returns>
         /// An action that sets the property value for this instance.
         /// </returns>
@@ -428,7 +434,8 @@ namespace SpiceSharp
         /// Creates a getter for a property.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="property">The property information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="property">The property reflection information.</param>
         /// <returns>
         /// A function that gets the property value for this instance.
         /// </returns>
@@ -448,7 +455,8 @@ namespace SpiceSharp
         /// Creates a setter for a field.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="field">The field information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="field">The field reflection information.</param>
         /// <returns>
         /// An action that sets the field value for this instance.
         /// </returns>
@@ -473,7 +481,8 @@ namespace SpiceSharp
         /// Create a getter for a field.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="field">The field information.</param>
+        /// <param name="source">The source object.</param>
+        /// <param name="field">The field reflection information.</param>
         /// <returns>
         /// A function that gets the field value for this instance.
         /// </returns>

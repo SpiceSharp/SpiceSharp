@@ -9,9 +9,6 @@
         /// <summary>
         /// Gets the source identifier.
         /// </summary>
-        /// <value>
-        /// The entity identifier.
-        /// </value>
         public string Source { get; }
 
         /// <summary>

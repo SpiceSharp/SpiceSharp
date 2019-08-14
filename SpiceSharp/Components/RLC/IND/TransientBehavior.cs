@@ -24,18 +24,23 @@ namespace SpiceSharp.Components.InductorBehaviors
         public event EventHandler<UpdateFluxEventArgs> UpdateFlux;
 
         /// <summary>
-        /// Nodes
+        /// Gets the (branch, branch) element.
         /// </summary>
         protected MatrixElement<double> BranchBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the branch RHS element.
+        /// </summary>
         protected VectorElement<double> BranchPtr { get; private set; }
+
+        /// <summary>
+        /// The state tracking the flux.
+        /// </summary>
         private StateDerivative _flux;
 
         /// <summary>
         /// Gets the flux of the inductor.
         /// </summary>
-        /// <value>
-        /// The flux.
-        /// </value>
         [ParameterName("flux"), ParameterInfo("The flux through the inductor.")]
         public double Flux => _flux.Current;
         

@@ -106,12 +106,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        /// <exception cref="ArgumentNullException">
-        /// source
-        /// or
-        /// target
-        /// </exception>
-        /// <exception cref="ArgumentException">Length of inputs does not match</exception>
         public void Scramble<T>(Vector<T> source, Vector<T> target) where T : IFormattable
         {
             source.ThrowIfNull(nameof(source));

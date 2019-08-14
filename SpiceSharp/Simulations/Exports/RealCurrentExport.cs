@@ -11,9 +11,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the identifier of the voltage source.
         /// </summary>
-        /// <value>
-        /// The voltage source identifier.
-        /// </value>
         public string Source { get; }
 
         /// <summary>
@@ -33,7 +30,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source identifier.</param>
-        /// <exception cref="ArgumentNullException">source</exception>
         public RealCurrentExport(BaseSimulation simulation, string source)
             : base(simulation)
         {

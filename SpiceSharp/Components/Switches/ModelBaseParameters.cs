@@ -9,38 +9,40 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public class ModelBaseParameters : ParameterSet
     {
         /// <summary>
-        /// Parameters
+        /// Gets the resistance parameter when closed.
         /// </summary>
         [ParameterName("ron"), ParameterInfo("Closed resistance")]
         public GivenParameter<double> OnResistance { get; } = new GivenParameter<double>(1.0);
+
+        /// <summary>
+        /// Gets the resistance parameter when open.
+        /// </summary>
         [ParameterName("roff"), ParameterInfo("Open resistance")]
         public GivenParameter<double> OffResistance { get; } = new GivenParameter<double>(1.0e12);
 
+        /// <summary>
+        /// Gets the threshold parameter.
+        /// </summary>
         public virtual GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Gets the hysteresis parameter.
+        /// </summary>
         public virtual GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the on conductance.
         /// </summary>
-        /// <value>
-        /// The on conductance.
-        /// </value>
         public double OnConductance { get; private set; }
 
         /// <summary>
         /// Gets the off conductance.
         /// </summary>
-        /// <value>
-        /// The off conductance.
-        /// </value>
         public double OffConductance { get; private set; }
 
         /// <summary>
         /// Method for calculating the default values of derived parameters.
         /// </summary>
-        /// <remarks>
-        /// These calculations should be run whenever a parameter has been changed.
-        /// </remarks>
         public override void CalculateDefaults()
         {
             // Only positive hysteresis values!

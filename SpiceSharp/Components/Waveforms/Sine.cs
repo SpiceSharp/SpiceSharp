@@ -13,54 +13,36 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets the offset.
         /// </summary>
-        /// <value>
-        /// The offset.
-        /// </value>
         [ParameterName("vo"), ParameterInfo("The offset of the sine wave")]
         public GivenParameter<double> Offset { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the amplitude of the sine wave.
         /// </summary>
-        /// <value>
-        /// The amplitude.
-        /// </value>
         [ParameterName("va"), ParameterInfo("The amplitude of the sine wave")]
         public GivenParameter<double> Amplitude { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the frequency of the sine wave in Hertz (Hz).
         /// </summary>
-        /// <value>
-        /// The frequency.
-        /// </value>
         [ParameterName("freq"), ParameterInfo("The frequency in Hz")]
         public GivenParameter<double> Frequency { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the delay of the sine wave in seconds.
         /// </summary>
-        /// <value>
-        /// The delay.
-        /// </value>
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
         public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the damping factor theta of the sinewave.
         /// </summary>
-        /// <value>
-        /// The damping factor.
-        /// </value>
         [ParameterName("theta"), ParameterInfo("The damping factor")]
         public GivenParameter<double> Theta { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the phase of the sinewave.
         /// </summary>
-        /// <value>
-        /// The phase.
-        /// </value>
         [ParameterName("phase"), ParameterInfo("The phase")]
         public GivenParameter<double> Phase { get; } = new GivenParameter<double>();
 
@@ -162,7 +144,6 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets up the waveform.
         /// </summary>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid frequency {0}".FormatString(Frequency.Value)</exception>
         public override void Setup()
         {
             // Cache parameter values

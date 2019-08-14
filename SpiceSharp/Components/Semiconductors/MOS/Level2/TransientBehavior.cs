@@ -17,9 +17,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets or sets the stored bulk-source charge.
         /// </summary>
-        /// <value>
-        /// The stored bulk-source charge.
-        /// </value>
         public override double ChargeBs
         {
             get => _chargeBs.Current;
@@ -30,9 +27,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets or sets the stored bulk-drain charge.
         /// </summary>
-        /// <value>
-        /// The stored bulk-drain charge.
-        /// </value>
         public override double ChargeBd
         {
             get => _chargeBd.Current;
@@ -43,9 +37,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets or sets the capacitance due to gate-source charge storage.
         /// </summary>
-        /// <value>
-        /// The gate-source capacitance.
-        /// </value>
         public override double CapGs
         {
             get => _capGs.Current;
@@ -56,9 +47,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets or sets the capacitance due to gate-drain charge storage.
         /// </summary>
-        /// <value>
-        /// The gate-drain capacitance.
-        /// </value>
         public override double CapGd
         {
             get => _capGd.Current;
@@ -69,9 +57,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets or sets the capacitance due to gate-bulk charge storage.
         /// </summary>
-        /// <value>
-        /// The gate-bulk capacitance.
-        /// </value>
         public override double CapGb
         {
             get => _capGb.Current;
@@ -82,9 +67,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the stored gate-source charge.
         /// </summary>
-        /// <value>
-        /// The gate-source charge.
-        /// </value>
         [ParameterName("qgs"), ParameterName("Gate-Source charge storage")]
         public double ChargeGs => _chargeGs.Current;
         private StateDerivative _chargeGs;
@@ -92,9 +74,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the stored gate-drain charge.
         /// </summary>
-        /// <value>
-        /// The gate-drain charge.
-        /// </value>
         [ParameterName("qgd"), ParameterName("Gate-Drain storage")]
         public double ChargeGd => _chargeGd.Current;
         private StateDerivative _chargeGd;
@@ -102,9 +81,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the stored gate-bulk charge.
         /// </summary>
-        /// <value>
-        /// The gate-bulk charge.
-        /// </value>
         [ParameterName("qgb"), ParameterInfo("Gate-Bulk charge")]
         public double ChargeGb => _chargeGb.Current;
         private StateDerivative _chargeGb;
@@ -112,9 +88,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the drain-source voltage.
         /// </summary>
-        /// <value>
-        /// The drain-source voltage.
-        /// </value>
         public override double VoltageDs
         {
             get => _voltageDs.Current;
@@ -125,9 +98,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the gate-source voltage.
         /// </summary>
-        /// <value>
-        /// The gate-source voltage.
-        /// </value>
         public override double VoltageGs
         {
             get => _voltageGs.Current;
@@ -138,9 +108,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the bulk-source voltage.
         /// </summary>
-        /// <value>
-        /// The bulk-source voltage.
-        /// </value>
         public override double VoltageBs
         {
             get => _voltageBs.Current;
@@ -165,7 +132,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Creates all necessary states for the transient behavior.
         /// </summary>
         /// <param name="method">The integration method.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public void CreateStates(IntegrationMethod method)
         {
             method.ThrowIfNull(nameof(method));
@@ -225,7 +191,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// equations can also be allocated here.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        /// <exception cref="ArgumentNullException">solver</exception>
         public void GetEquationPointers(Solver<double> solver)
         {
             solver.ThrowIfNull(nameof(solver));
@@ -236,7 +201,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Perform time-dependent calculations.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public void Transient(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

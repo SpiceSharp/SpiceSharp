@@ -13,48 +13,95 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the model temperature behavior.
         /// </summary>
-        /// <value>
-        /// The model temperature behavior.
-        /// </value>
         protected ModelTemperatureBehavior ModelTemperature { get; private set; }
 
         /// <summary>
-        /// Shared parameters
+        /// Gets the temperature-modified saturation current.
         /// </summary>
         protected double TempSaturationCurrent { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified forward beta.
+        /// </summary>
         protected double TempBetaForward { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified reverse beta.
+        /// </summary>
         protected double TempBetaReverse { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified base-emitter saturation current.
+        /// </summary>
         protected double TempBeLeakageCurrent { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified base-collector saturation current.
+        /// </summary>
         protected double TempBcLeakageCurrent { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified base-emitter capacitance.
+        /// </summary>
         protected double TempBeCap { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified base-emitter built-in potential.
+        /// </summary>
         protected double TempBePotential { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified base-collector capacitance.
+        /// </summary>
         protected double TempBcCap { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified base-collector built-in potential.
+        /// </summary>
         protected double TempBcPotential { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified depletion capacitance.
+        /// </summary>
         protected double TempDepletionCap { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified implementation-specific factor 1.
+        /// </summary>
         protected double TempFactor1 { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified implementation-specific factor 4.
+        /// </summary>
         protected double TempFactor4 { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified implementation-specific factor 5.
+        /// </summary>
         protected double TempFactor5 { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified critical voltage.
+        /// </summary>
         protected double TempVCritical { get; private set; }
+
+        /// <summary>
+        /// Gets the thermal voltage.
+        /// </summary>
         protected double Vt { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }

@@ -15,15 +15,35 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Necessary parameters and behaviors
         /// </summary>
         protected BaseParameters BaseParameters { get; private set; }
+
+        /// <summary>
+        /// The <see cref="VoltageSourceBehaviors.BiasingBehavior"/> that handles the controlling voltage source current.
+        /// </summary>
         protected VoltageSourceBehaviors.BiasingBehavior VoltageLoad { get; private set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
         public int ControlBranchEq { get; protected set; }
+
+        /// <summary>
+        /// The positive node index.
+        /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// The negative node index.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// The (pos, branch) element.
+        /// </summary>
         protected MatrixElement<double> PosControlBranchPtr { get; private set; }
+
+        /// <summary>
+        /// The (neg, branch) element.
+        /// </summary>
         protected MatrixElement<double> NegControlBranchPtr { get; private set; }
 
         /// <summary>
@@ -35,12 +55,20 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             state.ThrowIfNull(nameof(state));
             return state.Solution[ControlBranchEq] * BaseParameters.Coefficient;
         }
+
+        /// <summary>
+        /// Gets the volage over the source.
+        /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// The power dissipation by the source.
+        /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -49,7 +77,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.IntegrationMethods;
@@ -13,34 +12,32 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     public class TransientBehavior : TemperatureBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Gets the transient behavior of inductor 1.
+        /// Gets the transient behavior of the primary inductor.
         /// </summary>
-        /// <value>
-        /// The transient behavior.
-        /// </value>
         protected InductorBehaviors.TransientBehavior Load1 { get; private set; }
 
         /// <summary>
-        /// Gets the transient behavior of inductor 2.
+        /// Gets the transient behavior of secondary inductor.
         /// </summary>
-        /// <value>
-        /// The transient behavior.
-        /// </value>
         protected InductorBehaviors.TransientBehavior Load2 { get; private set; }
         
         /// <summary>
-        /// Nodes
+        /// Gets the (primary, secondary) branch element.
         /// </summary>
         protected MatrixElement<double> Branch1Branch2 { get; private set; }
+
+        /// <summary>
+        /// Gets the (secondary, primary) branch element.
+        /// </summary>
         protected MatrixElement<double> Branch2Branch1 { get; private set; }
 
         /// <summary>
-        /// Conductance
+        /// Gets the conductance.
         /// </summary>
-        protected double Cond { get; private set; }
+        protected double Conductance { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }
@@ -65,7 +62,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Update the flux through inductor 2
+        /// Update the flux through the secondary inductor.
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
@@ -76,14 +73,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Update the flux through inductor 1
+        /// Update the flux through the primary inductor.
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
         private void UpdateFlux1(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
-            Cond = args.Flux.Jacobian(Factor);
+            Conductance = args.Flux.Jacobian(Factor);
             args.Flux.Current += Factor * state.Solution[Load2.BranchEq];
         }
 
@@ -99,17 +96,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Calculates the state values from the current DC solution.
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        /// <exception cref="NotImplementedException"></exception>
-        /// <remarks>
-        /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
-        /// </remarks>
         public void GetDcState(TimeSimulation simulation)
         {
         }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Gets the matrix pointers.
         /// </summary>
         /// <param name="solver">Solver</param>
         public void GetEquationPointers(Solver<double> solver)
@@ -122,7 +114,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Unsetup behavior
+        /// Unsetup the behavior.
         /// </summary>
         /// <param name="simulation"></param>
         public override void Unsetup(Simulation simulation)
@@ -135,7 +127,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Transient behavior
+        /// Transient behavior.
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
         public void Transient(TimeSimulation simulation)
@@ -143,8 +135,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 			simulation.ThrowIfNull(nameof(simulation));
 
             // Load Y-matrix
-            Branch1Branch2.Value -= Cond;
-            Branch2Branch1.Value -= Cond;
+            Branch1Branch2.Value -= Conductance;
+            Branch2Branch1.Value -= Conductance;
         }
     }
 }

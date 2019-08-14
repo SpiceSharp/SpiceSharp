@@ -20,7 +20,6 @@ namespace SpiceSharpTest.Examples
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-6, 1e-6, 1e-5, 2e-5))
             );
             // </example_change_parameter_circuit>
-
             // <example_change_parameter_transient>
             // Create the transient analysis and exports
             var tran = new Transient("tran", 1e-6, 10e-5);
@@ -31,7 +30,6 @@ namespace SpiceSharpTest.Examples
                 var output = outputExport.Value;
             };
             // </example_change_parameter_transient>
-
             // <example_change_parameter_setup>
             // Now we need to make sure we have a reference to both the base parameters and temperature behavior
             // of the resistor
@@ -43,7 +41,6 @@ namespace SpiceSharpTest.Examples
                 tran.EntityBehaviors["R2"].TryGet(out tb);
             };
             // </example_change_parameter_setup>
-
             // <example_change_parameter_load>
             // Before loading the resistor, let's change its value first!
             tran.BeforeLoad += (sender, args) =>

@@ -18,25 +18,16 @@ namespace SpiceSharp.IntegrationMethods
             /// <summary>
             /// Gets or sets the node value.
             /// </summary>
-            /// <value>
-            /// The node value.
-            /// </value>
             public T Value { get; set; }
 
             /// <summary>
             /// Gets or sets the previous node.
             /// </summary>
-            /// <value>
-            /// The previous node.
-            /// </value>
             public Node Previous { get; set; }
 
             /// <summary>
             /// Gets or sets the next node.
             /// </summary>
-            /// <value>
-            /// The next node.
-            /// </value>
             public Node Next { get; set; }
         }
 
@@ -48,9 +39,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets the current value.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         public override T Current
         {
             get => _currentPoint.Value;
@@ -60,9 +48,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the value at the specified index.
         /// </summary>
-        /// <value>
-        /// The value at the specified index.
-        /// </value>
         /// <param name="index">The index.</param>
         /// <returns>
         /// The value at the specified index.
@@ -82,9 +67,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets all points in the history.
         /// </summary>
-        /// <value>
-        /// The points.
-        /// </value>
         protected override IEnumerable<T> Points
         {
             get
@@ -149,7 +131,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="length">The number of points to store.</param>
         /// <param name="generator">The function that generates the initial values.</param>
-        /// <exception cref="ArgumentNullException">generator</exception>
         public NodeHistory(int length, Func<int, T> generator)
         {
             generator.ThrowIfNull(nameof(generator));
@@ -238,7 +219,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Clear the history using a function by index.
         /// </summary>
         /// <param name="generator">The function generating the values.</param>
-        /// <exception cref="ArgumentNullException">generator</exception>
         public override void Clear(Func<int, T> generator)
         {
             generator.ThrowIfNull(nameof(generator));

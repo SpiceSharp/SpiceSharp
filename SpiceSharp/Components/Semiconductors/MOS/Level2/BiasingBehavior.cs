@@ -16,200 +16,272 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Some signs used in the model
+        /// Signs used in the model
         /// </summary>
         private static readonly double[] Sig1 = { 1.0, -1.0, 1.0, -1.0 };
         private static readonly double[] Sig2 = { 1.0, 1.0, -1.0, -1.0 };
 
         /// <summary>
-        /// The permittivity of silicon
+        /// The permittivity of silicon.
         /// </summary>
         protected const double EpsilonSilicon = 11.7 * 8.854214871e-12;
 
         /// <summary>
-        /// The maximum exponent argument
+        /// The maximum exponent argument.
         /// </summary>
         protected const double MaximumExponentArgument = 709.0;
 
         /// <summary>
         /// Gets the base configuration.
         /// </summary>
-        /// <value>
-        /// The base configuration.
-        /// </value>
         protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets or sets the DrainNode current.
         /// </summary>
-        /// <value>
-        /// The DrainNode current.
-        /// </value>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
         public double DrainCurrent { get; private set; }
 
         /// <summary>
         /// Gets or sets the bulk-source current.
         /// </summary>
-        /// <value>
-        /// The bulk-source current.
-        /// </value>
         [ParameterName("ibs"), ParameterInfo("B-S junction current")]
         public double BsCurrent { get; private set; }
 
         /// <summary>
-        /// Gets or sets the bulk-DrainNode current.
+        /// Gets or sets the small-signal bulk-drain current.
         /// </summary>
-        /// <value>
-        /// The bulk-DrainNode current.
-        /// </value>
         [ParameterName("ibd"), ParameterInfo("B-D junction current")]
         public double BdCurrent { get; private set; }
 
         /// <summary>
-        /// Gets or sets the transconductance.
+        /// Gets or sets the small-signal transconductance.
         /// </summary>
-        /// <value>
-        /// The transconductance.
-        /// </value>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
         public double Transconductance { get; private set; }
 
         /// <summary>
         /// Gets or sets the bulk transconductance.
         /// </summary>
-        /// <value>
-        /// The bulk transconductance.
-        /// </value>
         [ParameterName("gmb"), ParameterName("gmbs"), ParameterInfo("Bulk-Source transconductance")]
         public double TransconductanceBs { get; private set; }
 
         /// <summary>
-        /// Gets or sets the output conductance.
+        /// Gets or sets the small-signal output conductance.
         /// </summary>
-        /// <value>
-        /// The output conductance.
-        /// </value>
         [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
         public double CondDs { get; private set; }
 
         /// <summary>
-        /// Gets or sets the bulk-source conductance.
+        /// Gets or sets the small-signal bulk-source conductance.
         /// </summary>
-        /// <value>
-        /// The bulk-source conductance.
-        /// </value>
         [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
         public double CondBs { get; private set; }
 
         /// <summary>
-        /// Gets or sets the bulk-DrainNode conductance.
+        /// Gets or sets the small-signal bulk-drain conductance.
         /// </summary>
-        /// <value>
-        /// The bulk-DrainNode conductance.
-        /// </value>
         [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
         public double CondBd { get; private set; }
 
         /// <summary>
         /// Gets or sets the turn-on voltage.
         /// </summary>
-        /// <value>
-        /// The turn-on voltage.
-        /// </value>
         [ParameterName("von"), ParameterInfo("Turn-on voltage")]
         public double Von { get; private set; }
 
         /// <summary>
         /// Gets or sets the saturation voltage.
         /// </summary>
-        /// <value>
-        /// The saturation voltage.
-        /// </value>
         [ParameterName("vdsat"), ParameterInfo("Saturation DrainNode voltage")]
         public double SaturationVoltageDs { get; private set; }
 
         /// <summary>
         /// Gets the current mode of operation. +1.0 if vds is positive, -1 if it is negative.
         /// </summary>
-        /// <value>
-        /// The mode.
-        /// </value>
         public double Mode { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
         /// </summary>
-        /// <value>
-        /// The gate-source voltage.
-        /// </value>
         [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
         public virtual double VoltageGs { get; protected set; }
 
         /// <summary>
         /// Gets the drain-source voltage.
         /// </summary>
-        /// <value>
-        /// The drain-source voltage.
-        /// </value>
         [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
         public virtual double VoltageDs { get; protected set; }
 
         /// <summary>
         /// Gets the bulk-source voltage.
         /// </summary>
-        /// <value>
-        /// The bulk-source voltage.
-        /// </value>
         [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
         public virtual double VoltageBs { get; protected set; }
 
         /// <summary>
         /// Gets the bulk-drain voltage.
         /// </summary>
-        /// <value>
-        /// The bulk-drain voltage.
-        /// </value>
         [ParameterName("vbd"), ParameterInfo("Bulk-Drain voltage")]
         public virtual double VoltageBd { get; protected set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the external drain node.
         /// </summary>
         protected int DrainNode { get; private set; }
+
+        /// <summary>
+        /// Gets the gate node.
+        /// </summary>
         protected int GateNode { get; private set; }
+
+        /// <summary>
+        /// Gets the external source node.
+        /// </summary>
         protected int SourceNode { get; private set; }
+
+        /// <summary>
+        /// Gets the bulk node.
+        /// </summary>
         protected int BulkNode { get; private set; }
+
+        /// <summary>
+        /// Gets the (internal) drain node.
+        /// </summary>
         protected int DrainNodePrime { get; private set; }
+
+        /// <summary>
+        /// Gets the (internal) source node.
+        /// </summary>
         protected int SourceNodePrime { get; private set; }
+
+        /// <summary>
+        /// Gets the external (drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, gate) element.
+        /// </summary>
         protected MatrixElement<double> GateGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (source, source) element.
+        /// </summary>
         protected MatrixElement<double> SourceSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, bulk) element.
+        /// </summary>
         protected MatrixElement<double> BulkBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, source) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, bulk) element.
+        /// </summary>
         protected MatrixElement<double> GateBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, drain) element.
+        /// </summary>
         protected MatrixElement<double> GateDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, source) element.
+        /// </summary>
         protected MatrixElement<double> GateSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external source, source) element.
+        /// </summary>
         protected MatrixElement<double> SourceSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, drain) element.
+        /// </summary>
         protected MatrixElement<double> BulkDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, source) element.
+        /// </summary>
         protected MatrixElement<double> BulkSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, source) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, external drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (bulk, gate) element
+        /// </summary>
         protected MatrixElement<double> BulkGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, gate) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, gate) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, external source) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, bulk) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, bulk) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeBulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, drain) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the bulk RHS element.
+        /// </summary>
         protected VectorElement<double> BulkPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the drain RHS element.
+        /// </summary>
         protected VectorElement<double> DrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the source RHS element.
+        /// </summary>
         protected VectorElement<double> SourcePrimePtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }
@@ -1059,7 +1131,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public bool IsConvergent(BaseSimulation simulation)
         {
 			simulation.ThrowIfNull(nameof(simulation));

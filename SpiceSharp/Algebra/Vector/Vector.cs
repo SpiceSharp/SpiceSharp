@@ -14,9 +14,6 @@ namespace SpiceSharp.Algebra
         /// <remarks>
         /// The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.
         /// </remarks>
-        /// <value>
-        /// The value at the specified index.
-        /// </value>
         /// <param name="index">The index in the vector.</param>
         /// <returns>The value at the specified index.</returns>
         public abstract T this[int index] { get; set; }
@@ -33,7 +30,6 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="Vector{T}"/> class.
         /// </summary>
         /// <param name="length">The length of the vector.</param>
-        /// <exception cref="SparseException">Invalid vector length {0}".FormatString(length)</exception>
         protected Vector(int length)
         {
             if (length < 0)

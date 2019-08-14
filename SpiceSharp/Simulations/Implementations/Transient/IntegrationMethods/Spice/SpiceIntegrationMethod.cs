@@ -14,105 +14,66 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the breakpoint system.
         /// </summary>
-        /// <value>
-        /// The breakpoints.
-        /// </value>
         public Breakpoints Breakpoints { get; } = new Breakpoints();
 
         /// <summary>
         /// Gets a value indicating whether this point is the first after a breakpoint.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if we just hit a breakpoint; otherwise, <c>false</c>.
-        /// </value>
         public bool Break { get; protected set; }
 
         /// <summary>
         /// Gets the transient tolerance correction factor.
         /// </summary>
-        /// <value>
-        /// The transient tolerance correction factor.
-        /// </value>
         protected double TrTol { get; private set; } = 7.0;
 
         /// <summary>
         /// Gets or sets the local truncation error relative tolerance.
         /// </summary>
-        /// <value>
-        /// The local truncation error relative tolerance.
-        /// </value>
         protected double LteRelTol { get; private set; } = 1e-3;
 
         /// <summary>
         /// Gets or sets the local truncation truncation error absolute tolerance.
         /// </summary>
-        /// <value>
-        /// The local truncation error absolute tolerance.
-        /// </value>
         protected double LteAbsTol { get; private set; } = 1e-6;
 
         /// <summary>
         /// Gets or sets the absolute tolerance for charges.
         /// </summary>
-        /// <value>
-        /// The allowed tolernace on charges.
-        /// </value>
         protected double ChgTol { get; private set; } = 1e-14;
 
         /// <summary>
         /// Gets the allowed absolute tolerance.
         /// </summary>
-        /// <value>
-        /// The absolute tolerance.
-        /// </value>
         protected double AbsTol { get; private set; } = 1e-12;
 
         /// <summary>
         /// Gets the allowed relative tolerance.
         /// </summary>
-        /// <value>
-        /// The relative tolerance.
-        /// </value>
         protected double RelTol { get; private set; } = 1e-3;
 
         /// <summary>
         /// Gets the maximum timestep.
         /// </summary>
-        /// <value>
-        /// The maximum timestep.
-        /// </value>
         protected double MaxStep { get; private set; } = 1e-6;
 
         /// <summary>
         /// Gets the timestep expansion factor.
         /// </summary>
-        /// <value>
-        /// The expansion factor.
-        /// </value>
         protected double Expansion { get; private set; } = 2.0;
 
         /// <summary>
         /// Gets the minimum timestep.
         /// </summary>
-        /// <value>
-        /// The minimum timestep.
-        /// </value>
         protected double MinStep { get; private set; }
 
         /// <summary>
         /// Gets the prediction vector.
         /// </summary>
-        /// <value>
-        /// The prediction vector.
-        /// </value>
         protected Vector<double> Prediction { get; private set; }
 
         /// <summary>
         /// Gets a list with all truncatable states.
         /// </summary>
-        /// <value>
-        /// The truncatable states.
-        /// </value>
         protected List<ITruncatable> TruncatableStates { get; } = new List<ITruncatable>();
 
         /// <summary>
@@ -255,7 +216,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="newDelta">The next timestep to be probed.</param>
-        /// <exception cref="CircuitException">Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime)</exception>
         public override void NonConvergence(TimeSimulation simulation, out double newDelta)
         {
             base.NonConvergence(simulation, out newDelta);
@@ -282,7 +242,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         /// <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="SpiceSharp.CircuitException">Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime)</exception>
         public override bool Evaluate(TimeSimulation simulation, out double newDelta)
         {
             // Spice 3f5 ignores the first timestep

@@ -12,9 +12,6 @@ namespace SpiceSharp
         /// <summary>
         /// Gets or sets the separator used when combining strings.
         /// </summary>
-        /// <value>
-        /// The separator.
-        /// </value>
         public static string Separator { get; set; } = "/";
 
         /// <summary>

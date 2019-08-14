@@ -22,9 +22,6 @@ namespace SpiceSharp.IntegrationMethods
             /// <summary>
             /// Gets or sets the value of the state at the current timepoint.
             /// </summary>
-            /// <value>
-            /// The current value.
-            /// </value>
             public override double Current
             {
                 get => _states[0].State[_index];
@@ -34,9 +31,6 @@ namespace SpiceSharp.IntegrationMethods
             /// <summary>
             /// Gets the <see cref="System.Double"/> at the specified index.
             /// </summary>
-            /// <value>
-            /// The <see cref="System.Double"/>.
-            /// </value>
             /// <param name="index">The index.</param>
             /// <returns></returns>
             public override double this[int index] => _states[index].State[_index];
@@ -44,9 +38,6 @@ namespace SpiceSharp.IntegrationMethods
             /// <summary>
             /// Gets the current derivative.
             /// </summary>
-            /// <value>
-            /// The derivative value.
-            /// </value>
             public override double Derivative => _states[0].State[_index + 1];
 
             /// <summary>
@@ -90,7 +81,6 @@ namespace SpiceSharp.IntegrationMethods
             /// <summary>
             /// Calculates the derivative.
             /// </summary>
-            /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
             public override void Integrate()
             {
                 var derivativeIndex = _index + 1;

@@ -13,25 +13,16 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the integration coefficients.
         /// </summary>
-        /// <value>
-        /// The integration coefficients.
-        /// </value>
         protected double[] Coefficients { get; } = new double[7];
 
         /// <summary>
         /// Gets the prediction coefficients.
         /// </summary>
-        /// <value>
-        /// The prediction coefficients.
-        /// </value>
         protected double[] PredictionCoefficients { get; } = new double[7];
 
         /// <summary>
         /// Matrix used to solve the integration coefficients.
         /// </summary>
-        /// <value>
-        /// The matrix.
-        /// </value>
         protected DenseMatrix<double> Matrix { get; } = new DenseMatrix<double>(8);
 
         /// <summary>
@@ -82,7 +73,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Predicts a solution
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         protected override void Predict(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

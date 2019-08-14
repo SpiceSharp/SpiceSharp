@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.MutualInductanceBehaviors;
@@ -21,15 +20,19 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Parameters
+        /// Gets or sets the name of the primary inductor.
         /// </summary>
-        [ParameterName("inductor1"), ParameterInfo("First coupled inductor")]
+        [ParameterName("inductor1"), ParameterName("primary"), ParameterInfo("First coupled inductor")]
         public string InductorName1 { get; set; }
-        [ParameterName("inductor2"), ParameterInfo("Second coupled inductor")]
+
+        /// <summary>
+        /// Gets or sets the name of the secondary inductor.
+        /// </summary>
+        [ParameterName("inductor2"), ParameterName("secondary"), ParameterInfo("Second coupled inductor")]
         public string InductorName2 { get; set; }
 
         /// <summary>
-        /// Constructor
+        /// Create a new instance of the <see cref="MutualInductance"/> class.
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
         public MutualInductance(string name) : base(name, 0)
@@ -38,7 +41,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Create a new instance of the <see cref="MutualInductance"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="inductorName1">Inductor 1</param>

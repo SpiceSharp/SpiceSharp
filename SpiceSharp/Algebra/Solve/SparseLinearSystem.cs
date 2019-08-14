@@ -166,35 +166,29 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Map the external indices to internal indices.
         /// </summary>
-        /// <param name="externalIndexes">A tuple of external row and column indices.</param>
+        /// <param name="externalIndices">A tuple of external row and column indices.</param>
         /// <returns>
         /// A tuple of internal row and column indices.
         /// </returns>
-        /// <exception cref="ArgumentNullException">externalIndexes</exception>
-        public Tuple<int, int> ExternalToInternal(Tuple<int, int> externalIndexes)
+        public (int row, int column) ExternalToInternal((int row, int column) externalIndices)
         {
-            externalIndexes.ThrowIfNull(nameof(externalIndexes));
-
-            var row = Row[externalIndexes.Item1];
-            var column = Column[externalIndexes.Item2];
-            return new Tuple<int, int>(row, column);
+            var row = Row[externalIndices.row];
+            var column = Column[externalIndices.column];
+            return (row, column);
         }
 
         /// <summary>
         /// Map the internal indices to external indices.
         /// </summary>
-        /// <param name="internalIndexes">A tuple of internal row and column indices.</param>
+        /// <param name="internalIndices">A tuple of internal row and column indices.</param>
         /// <returns>
         /// A tuple of external row and column indices.
         /// </returns>
-        /// <exception cref="ArgumentNullException">internalIndexes</exception>
-        public Tuple<int, int> InternalToExternal(Tuple<int, int> internalIndexes)
+        public (int row, int column) InternalToExternal((int row, int column) internalIndices)
         {
-            internalIndexes.ThrowIfNull(nameof(internalIndexes));
-
-            var row = Row.Reverse(internalIndexes.Item1);
-            var column = Column.Reverse(internalIndexes.Item2);
-            return new Tuple<int, int>(row, column);
+            var row = Row.Reverse(internalIndices.row);
+            var column = Column.Reverse(internalIndices.column);
+            return (row, column);
         }
 
         /// <summary>
@@ -226,13 +220,13 @@ namespace SpiceSharp.Algebra
         public virtual void Clear()
         {
             // Clear all matrix elements
-            Matrix.FindElement(0, 0).Value = default(T);
+            Matrix.FindElement(0, 0).Value = default;
             for (var r = 1; r <= Matrix.Size; r++)
             {
                 var element = Matrix.GetFirstInRow(r);
                 while (element != null)
                 {
-                    element.Value = default(T);
+                    element.Value = default;
                     element = element.Right;
                 }
             }
@@ -241,7 +235,7 @@ namespace SpiceSharp.Algebra
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
-                rhsElement.Value = default(T);
+                rhsElement.Value = default;
                 rhsElement = rhsElement.Below;
             }
         }

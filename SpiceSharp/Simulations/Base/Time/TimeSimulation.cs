@@ -15,9 +15,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the active integration method.
         /// </summary>
-        /// <value>
-        /// The method.
-        /// </value>
         public IntegrationMethod Method { get; protected set; }
 
         /// <summary>
@@ -98,12 +95,6 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
-        /// <exception cref="SpiceSharp.CircuitException">
-        /// {0}: No time configuration".FormatString(Name)
-        /// or
-        /// {0}: No integration method specified".FormatString(Name)
-        /// </exception>
         protected override void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -192,7 +183,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="SpiceSharp.CircuitException">Could not find flag</exception>
         protected bool TimeIterate(int maxIterations)
         {
             var state = RealState;

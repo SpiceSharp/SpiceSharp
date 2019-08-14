@@ -11,9 +11,6 @@
         /// <summary>
         /// Gets or sets the value of the parameter.
         /// </summary>
-        /// <value>
-        /// The value of the parameter.
-        /// </value>
         public override T Value
         {
             get => RawValue;
@@ -27,17 +24,11 @@
         /// <summary>
         /// Gets or sets the raw value of the parameter without changing <see cref="Given" />.
         /// </summary>
-        /// <value>
-        /// The raw value.
-        /// </value>
         public T RawValue { get; set; }
 
         /// <summary>
         /// Gets whether or not the parameter was specified by the user.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if given; otherwise, <c>false</c>.
-        /// </value>
         public bool Given { get; private set; }
 
         /// <summary>
@@ -45,7 +36,7 @@
         /// </summary>
         public GivenParameter()
         {
-            RawValue = default(T);
+            RawValue = default;
             Given = false;
         }
 

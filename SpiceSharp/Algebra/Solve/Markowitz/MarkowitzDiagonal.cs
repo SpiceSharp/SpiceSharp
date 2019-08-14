@@ -22,12 +22,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// matrix
-        /// or
-        /// markowitz
-        /// </exception>
-        /// <exception cref="ArgumentException">Invalid elimination step</exception>
         public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));

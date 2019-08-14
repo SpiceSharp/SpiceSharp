@@ -1,7 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -13,34 +11,124 @@ namespace SpiceSharp.Components.BipolarBehaviors
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the (external collector, collector) element.
         /// </summary>
         protected MatrixElement<Complex> CCollectorCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external base, base) element.
+        /// </summary>
         protected MatrixElement<Complex> CBaseBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external emitter, emitter) element.
+        /// </summary>
         protected MatrixElement<Complex> CEmitterEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, external collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeCollectorPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, base) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, emitter) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, external base) element.
+        /// </summary>
         protected MatrixElement<Complex> CBasePrimeBasePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CBasePrimeCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, emitter) element.
+        /// </summary>
         protected MatrixElement<Complex> CBasePrimeEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, external emitter) element.
+        /// </summary>
         protected MatrixElement<Complex> CEmitterPrimeEmitterPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CEmitterPrimeCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, base) element.
+        /// </summary>
         protected MatrixElement<Complex> CEmitterPrimeBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (collector, collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorCollectorPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (base, base) element.
+        /// </summary>
         protected MatrixElement<Complex> CBaseBasePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (emitter, emitter) element.
+        /// </summary>
         protected MatrixElement<Complex> CEmitterEmitterPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (base, base) element.
+        /// </summary>
         protected MatrixElement<Complex> CBasePrimeBasePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (emitter, emitter) element.
+        /// </summary>
         protected MatrixElement<Complex> CEmitterPrimeEmitterPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (substrate, substrate) element.
+        /// </summary>
         protected MatrixElement<Complex> CSubstrateSubstratePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (collector, substrate) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeSubstratePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (substrate, collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CSubstrateCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// TODO: Check if this is right.
+        /// Gets the (external base, collector) element.
+        /// </summary>
         protected MatrixElement<Complex> CBaseCollectorPrimePtr { get; private set; }
+
+        /// <summary>
+        /// TODO: Check if this is right.
+        /// Gets the (collector, external base) element.
+        /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeBasePtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

@@ -16,24 +16,61 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the controlling positive node.
+        /// </summary>
         protected int ContPosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the controlling negative node.
+        /// </summary>
         protected int ContNegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the branch equation row.
+        /// </summary>
         public int BranchEq { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, branch) element.
+        /// </summary>
         protected MatrixElement<double> PosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<double> NegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<double> BranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<double> BranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, ctrlpos) element.
+        /// </summary>
         protected MatrixElement<double> BranchControlPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, ctrlneg) element.
+        /// </summary>
         protected MatrixElement<double> BranchControlNegPtr { get; private set; }
 
         /// <summary>
@@ -66,7 +103,6 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The provider.</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             provider.ThrowIfNull(nameof(provider));
@@ -81,11 +117,6 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         /// <param name="variables">The variable set.</param>
         /// <param name="solver">The solver.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// variables
-        /// or
-        /// solver
-        /// </exception>
         public void GetEquationPointers(VariableSet variables, Solver<double> solver)
         {
             variables.ThrowIfNull(nameof(variables));

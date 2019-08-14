@@ -9,16 +9,11 @@ namespace SpiceSharp.Simulations.Behaviors
     /// <summary>
     /// Base class for a behavior that exports properties by using attributes on properties and reflection.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Attributes.NamedParameterized" />
-    /// <seealso cref="SpiceSharp.Behaviors.IPropertyExporter" />
     public abstract class ExportingBehavior : IBehavior, IPropertyExporter
     {
         /// <summary>
         /// Gets the name of the behavior.
         /// </summary>
-        /// <value>
-        /// The name of the behavior.
-        /// </value>
         public string Name { get; }
 
         /// <summary>

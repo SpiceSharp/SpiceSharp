@@ -44,25 +44,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a set of <see cref="ParameterSet" /> that hold the configurations for the simulation.
         /// </summary>
-        /// <value>
-        /// The dictionary with configurations.
-        /// </value>
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
 
         /// <summary>
         /// Gets a set of <see cref="ParameterSet" /> that holds the statistics for the simulation.
         /// </summary>
-        /// <value>
-        /// The dictionary with statistics.
-        /// </value>
         public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
 
         /// <summary>
         /// Gets the set of variables (unknowns).
         /// </summary>
-        /// <value>
-        /// The set of variables.
-        /// </value>
         public VariableSet Variables { get; private set; }
 
         #region Events
@@ -120,14 +111,14 @@ namespace SpiceSharp.Simulations
         // Private parameters
         private bool _cloneParameters;
         
+        /// <summary>
+        /// A reference to the regular simulation statistics (cached)
+        /// </summary>
         protected SimulationStatistics SimulationStatistics { get; }
 
         /// <summary>
         /// Gets the behavior types in the order that they are called.
         /// </summary>
-        /// <value>
-        /// The behavior types.
-        /// </value>
         /// <remarks>
         /// The order is important for establishing dependencies. A behavior that is called first should
         /// not depend on any other behaviors!
@@ -148,9 +139,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Runs the simulation on the specified circuit.
         /// </summary>
-        /// <param name="circuit">The circuit to simulate.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
-        /// <exception cref="CircuitException">{0}: No circuit nodes for simulation".FormatString(Name)</exception>
+        /// <param name="entities">The entities to simulate.</param>
         public virtual void Run(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -204,9 +193,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">The circuit containing the entities that are included in the simulation.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
-        /// <exception cref="CircuitException">{0}: No circuit objects for simulation".FormatString(Name)</exception>
+        /// <param name="entities">The entities that are included in the simulation.</param>
         protected virtual void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -320,7 +307,6 @@ namespace SpiceSharp.Simulations
         /// simulations in parallel.
         /// </remarks>
         /// <param name="entities">The entities for which parameter sets need to be collected.</param>
-        /// <exception cref="ArgumentNullException">entities</exception>
         private void SetupParameters(IEnumerable<Entity> entities)
         {
             entities.ThrowIfNull(nameof(entities));

@@ -15,16 +15,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the branch equation index.
         /// </summary>
-        /// <value>
-        /// The branch equation index.
-        /// </value>
         public int BranchEq { get; private set; }
 
         /// <summary>
         /// Gets the current.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -35,9 +30,6 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the voltage.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
@@ -48,9 +40,6 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the power dissipated by the inductor.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -60,17 +49,37 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, branch) element.
+        /// </summary>
         protected MatrixElement<double> PosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<double> NegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<double> BranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<double> BranchPosPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

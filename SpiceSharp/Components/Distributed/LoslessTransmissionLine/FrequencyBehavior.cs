@@ -13,29 +13,113 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the left (positive, positive) element.
         /// </summary>
         protected MatrixElement<Complex> CPos1Pos1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (positive, internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CPos1Int1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (negative, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CNeg1Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (positive, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CPos2Pos2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (negative, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CNeg2Ibr2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (internal, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CInt1Pos1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (internal, internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CInt1Int1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (internal, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CInt1Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (left internal, right internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CInt2Int2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (internal, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CInt2Ibr2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (branch, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr1Neg1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (left branch, right positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr1Pos2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (left branch, right negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr1Neg2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the left (branch, internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr1Int1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (left branch, right branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr1Ibr2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (right branch, left positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr2Pos1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (right branch, left negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr2Neg1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (branch, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr2Neg2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (branch, internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr2Int2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the (right branch, left internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CIbr2Ibr1Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (positive, internal) element.
+        /// </summary>
         protected MatrixElement<Complex> CPos2Int2Ptr { get; private set; }
+
+        /// <summary>
+        /// Gets the right (internal, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CInt2Pos2Ptr { get; private set; }
 
         /// <summary>

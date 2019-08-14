@@ -25,7 +25,7 @@ namespace SpiceSharp.Algebra
         protected VectorElement(int index)
         {
             Index = index;
-            Value = default(T);
+            Value = default;
         }
 
         /// <summary>

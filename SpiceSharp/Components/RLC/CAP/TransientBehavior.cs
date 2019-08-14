@@ -17,9 +17,6 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the current through the capacitor.
         /// </summary>
-        /// <value>
-        /// The current.
-        /// </value>
         [ParameterName("i"), ParameterInfo("Device current")]
         public double Current => QCap.Derivative;
 
@@ -28,7 +25,6 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <param name="state">The simulation state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Instantaneous device power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -42,7 +38,6 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <param name="state">The simulation state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
@@ -51,18 +46,42 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         }
 
         /// <summary>
-        /// Nodes and states
+        /// Gets the (positive, positive) element.
         /// </summary>
         protected MatrixElement<double> PosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<double> NegNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<double> PosNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<double> NegPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the positive RHS element.
+        /// </summary>
         protected VectorElement<double> PosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the negative RHS element.
+        /// </summary>
         protected VectorElement<double> NegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the state tracking the charge.
+        /// </summary>
         protected StateDerivative QCap { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name of the behavior</param>
         public TransientBehavior(string name) : base(name) { }

@@ -29,25 +29,16 @@ namespace SpiceSharp.Components.Distributed
         /// <summary>
         /// Gets the delay.
         /// </summary>
-        /// <value>
-        /// The delay.
-        /// </value>
         public double Delay { get; }
 
         /// <summary>
         /// Gets the number of values stored by the delayed signal.
         /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
         public int Size { get; }
 
         /// <summary>
         /// Gets the values at the probed point.
         /// </summary>
-        /// <value>
-        /// The values.
-        /// </value>
         public double[] Values { get; }
 
         /// <summary>
@@ -75,11 +66,6 @@ namespace SpiceSharp.Components.Distributed
         /// </summary>
         /// <param name="time">The time.</param>
         /// <param name="breakpoint">If <c>true</c>, interpolation will be linear. Else cubic interpolation will be used if possible.</param>
-        /// <exception cref="CircuitException">
-        /// Delayed signal time is not increasing, {0} goes to {1}.".FormatString(_probed.Older.Time, time)
-        /// or
-        /// Invalid interpolation
-        /// </exception>
         public void Probe(double time, bool breakpoint)
         {
             var refTime = time - Delay;
@@ -145,7 +131,6 @@ namespace SpiceSharp.Components.Distributed
         /// Sets the probed values.
         /// </summary>
         /// <param name="values">The values.</param>
-        /// <exception cref="CircuitException">Delayed signal received {0} values, {1} expected.".FormatString(values.Length, Size)</exception>
         public void SetProbedValues(params double[] values)
         {
             // Copy the values

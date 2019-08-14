@@ -18,62 +18,48 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private IntegrationMethod _method;
 
         /// <summary>
-        /// Nodes
+        /// Gets the base RHS element.
         /// </summary>
         protected VectorElement<double> BasePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the substrate RHS element.
+        /// </summary>
         protected VectorElement<double> SubstratePtr { get; private set; }
 
         /// <summary>
         /// Gets the base-emitter capacitor current.
         /// </summary>
-        /// <value>
-        /// The base-emitter capacitor current.
-        /// </value>
         [ParameterName("cqbe"), ParameterInfo("Capacitance current due to charges in the B-E junction")]
         public double CapCurrentBe => _stateChargeBe.Derivative;
 
         /// <summary>
         /// Gets the base-collector capacitor current.
         /// </summary>
-        /// <value>
-        /// The base-collector capacitor current.
-        /// </value>
         [ParameterName("cqbc"), ParameterInfo("Capacitance current due to charges in the B-C junction")]
         public double CapCurrentBc => _stateChargeBc.Derivative;
 
         /// <summary>
         /// Gets the collector-substrate capacitor current.
         /// </summary>
-        /// <value>
-        /// The collector-substrate capacitor current.
-        /// </value>
         [ParameterName("cqcs"), ParameterInfo("Capacitance current due to charges in the C-S junction")]
         public double CapCurrentCs => _stateChargeCs.Derivative;
 
         /// <summary>
         /// Gets the base-X capacitor current.
         /// </summary>
-        /// <value>
-        /// The base-X capacitor current.
-        /// </value>
         [ParameterName("cqbx"), ParameterInfo("Capacitance current due to charges in the B-X junction")]
         public double CapCurrentBx => _stateChargeBx.Derivative;
 
         /// <summary>
         /// Gets the excess phase base-X capacitor current.
         /// </summary>
-        /// <value>
-        /// The excess phase base-X capacitor current.
-        /// </value>
         [ParameterName("cexbc"), ParameterInfo("Total capacitance in B-X junction")]
         public double CurrentExBc => _stateExcessPhaseCurrentBc.Current;
 
         /// <summary>
         /// Gets or sets the base-emitter charge storage.
         /// </summary>
-        /// <value>
-        /// The base-emitter charge storage.
-        /// </value>
         public sealed override double ChargeBe
         {
             get => _stateChargeBe.Current;
@@ -83,9 +69,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets the base-collector charge storage.
         /// </summary>
-        /// <value>
-        /// The base-collector charge storage.
-        /// </value>
         public sealed override double ChargeBc
         {
             get => _stateChargeBc.Current;
@@ -95,9 +78,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets the collector-substract charge storage.
         /// </summary>
-        /// <value>
-        /// The collector-substract charge storage.
-        /// </value>
         public sealed override double ChargeCs
         {
             get => _stateChargeCs.Current;
@@ -107,9 +87,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets the base-X charge storage.
         /// </summary>
-        /// <value>
-        /// The base-X charge storage.
-        /// </value>
         public sealed override double ChargeBx
         {
             get => _stateChargeBx.Current;
@@ -126,7 +103,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private StateHistory _stateExcessPhaseCurrentBc;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }

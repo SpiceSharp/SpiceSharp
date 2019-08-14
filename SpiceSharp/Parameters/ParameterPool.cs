@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -17,9 +16,6 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the associated <see cref="ParameterSetDictionary"/> of an entity.
         /// </summary>
-        /// <value>
-        /// The <see cref="ParameterSetDictionary"/>.
-        /// </value>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The parameter set associated to the specified entity identifier.</returns>
         public ParameterSetDictionary this[string name]

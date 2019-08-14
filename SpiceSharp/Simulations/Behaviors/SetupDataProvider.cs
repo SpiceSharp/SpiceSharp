@@ -16,17 +16,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the parameter set dictionary count.
         /// </summary>
-        /// <value>
-        /// The parameter set dictionary count.
-        /// </value>
         public int ParametersCount => _parameterSets.Count;
 
         /// <summary>
         /// Gets the behavior dictionary count.
         /// </summary>
-        /// <value>
-        /// The behavior dictionary count.
-        /// </value>
         public int BehaviorsCount => _entityBehaviors.Count;
 
         /// <summary>
@@ -76,7 +70,7 @@ namespace SpiceSharp.Behaviors
         {
             if (_parameterSets.TryGetValue(name, out var r))
                 return r.TryGet(out value);
-            value = default(T);
+            value = default;
             return false;
         }
 
@@ -109,7 +103,7 @@ namespace SpiceSharp.Behaviors
         {
             if (_entityBehaviors.TryGetValue(name, out var r))
                 return r.TryGet(out value);
-            value = default(T);
+            value = default;
             return false;
         }
     }

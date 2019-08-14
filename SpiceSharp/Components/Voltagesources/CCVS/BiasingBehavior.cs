@@ -15,17 +15,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the voltage biasing behavior.
         /// </summary>
-        /// <value>
-        /// The voltage biasing behavior.
-        /// </value>
         protected VoltageSourceBehaviors.BiasingBehavior VoltageLoad { get; private set; }
 
         /// <summary>
@@ -33,7 +27,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterInfo("Output current")]
         public double GetCurrent(BaseSimulationState state)
         {
@@ -46,7 +39,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Output voltage")]
         public double GetVoltage(BaseSimulationState state)
         {
@@ -59,7 +51,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -68,20 +59,52 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// Gets the positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// Gets the negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// Gets the controlling branch equation row.
+        /// </summary>
         protected int ContBranchEq { get; private set; }
+
+        /// <summary>
+        /// Gets the branch equation row.
+        /// </summary>
         public int BranchEq { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, branch) element.
+        /// </summary>
         protected MatrixElement<double> PosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<double> NegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<double> BranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<double> BranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (controlling branch, branch) element.
+        /// </summary>
         protected MatrixElement<double> BranchControlBranchPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

@@ -17,19 +17,47 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// The positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// The negative index.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// The controlling positive node.
+        /// </summary>
         protected int ContPosNode { get; private set; }
+
+        /// <summary>
+        /// The controlling negative node.
+        /// </summary>
         protected int ContNegNode { get; private set; }
+
+        /// <summary>
+        /// The (pos, ctrlpos) element.
+        /// </summary>
         protected MatrixElement<double> PosControlPosPtr { get; private set; }
+
+        /// <summary>
+        /// The (neg, ctrlneg) element.
+        /// </summary>
         protected MatrixElement<double> PosControlNegPtr { get; private set; }
+
+        /// <summary>
+        /// The (neg, ctrlpos) element.
+        /// </summary>
         protected MatrixElement<double> NegControlPosPtr { get; private set; }
+
+        /// <summary>
+        /// The (neg, ctrlneg) element.
+        /// </summary>
         protected MatrixElement<double> NegControlNegPtr { get; private set; }
 
         /// <summary>
-        /// Device methods and properties
+        /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double GetVoltage(BaseSimulationState state)
@@ -37,12 +65,20 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Get the current.
+        /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
         public double GetCurrent(BaseSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             return (state.Solution[ContPosNode] - state.Solution[ContNegNode]) * BaseParameters.Coefficient;
         }
+
+        /// <summary>
+        /// Get the power dissipation.
+        /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower(BaseSimulationState state)
         {
@@ -53,7 +89,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

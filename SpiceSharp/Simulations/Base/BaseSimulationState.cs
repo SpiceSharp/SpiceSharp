@@ -12,25 +12,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the initialization flag.
         /// </summary>
-        /// <value>
-        /// The flag.
-        /// </value>
         public InitializationModes Init { get; set; }
 
         /// <summary>
         /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the simulation assumes a DC solution; otherwise, <c>false</c>.
-        /// </value>
         public bool UseDc { get; set; }
 
         /// <summary>
         /// Gets or sets the flag for using initial conditions. If true, the operating point will not be calculated, and initial conditions will be used instead.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [use ic]; otherwise, <c>false</c>.
-        /// </value>
         public bool UseIc { get; set; }
 
         /// <summary>
@@ -47,59 +38,38 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
         /// </summary>
-        /// <value>
-        /// The conductance.
-        /// </value>
         public double Gmin { get; set; } = 1e-12;
 
         /// <summary>
         /// Is the current iteration convergent?
         /// This parameter is used to communicate convergence.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the iterations converged; otherwise, <c>false</c>.
-        /// </value>
         public bool IsConvergent { get; set; } = true;
 
         /// <summary>
         /// The current temperature for this circuit in Kelvin.
         /// </summary>
-        /// <value>
-        /// The temperature.
-        /// </value>
         public double Temperature { get; set; } = 300.15;
 
         /// <summary>
         /// The nominal temperature for the circuit in Kelvin.
         /// Used by models as the default temperature where the parameters were measured.
         /// </summary>
-        /// <value>
-        /// The nominal temperature.
-        /// </value>
         public double NominalTemperature { get; set; } = 300.15;
 
         /// <summary>
         /// Gets the solver for solving linear systems of equations.
         /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
         public RealSolver Solver { get; } = new RealSolver();
 
         /// <summary>
         /// Gets the solution vector.
         /// </summary>
-        /// <value>
-        /// The solution.
-        /// </value>
         public Vector<double> Solution { get; private set; }
 
         /// <summary>
         /// Gets the previous solution vector.
         /// </summary>
-        /// <value>
-        /// The old solution.
-        /// </value>
         /// <remarks>
         /// This vector is needed for determining convergence.
         /// </remarks>
@@ -109,7 +79,6 @@ namespace SpiceSharp.Simulations
         /// Setup the simulation state.
         /// </summary>
         /// <param name="nodes">The unknown variables for which the state is used.</param>
-        /// <exception cref="ArgumentNullException">nodes</exception>
         public override void Setup(VariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));

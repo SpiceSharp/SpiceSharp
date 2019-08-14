@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
 using SpiceSharp.IntegrationMethods;
@@ -22,9 +21,6 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the delayed signal.
         /// </summary>
-        /// <value>
-        /// The delayed signal.
-        /// </value>
         public DelayedSignal Signal { get; private set; }
 
         /// <summary>

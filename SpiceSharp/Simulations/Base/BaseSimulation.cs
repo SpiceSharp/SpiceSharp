@@ -18,17 +18,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the currently active simulation state.
         /// </summary>
-        /// <value>
-        /// The real state.
-        /// </value>
         public BaseSimulationState RealState { get; protected set; }
         
         /// <summary>
-        /// Gets the variable that caused issues.
+        /// Gets the variable that causes issues.
         /// </summary>
-        /// <value>
-        /// The problem variable.
-        /// </value>
         /// <remarks>
         /// This variable can be used to close in on the problem in case of non-convergence.
         /// </remarks>
@@ -84,9 +78,24 @@ namespace SpiceSharp.Simulations
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
         
+        /// <summary>
+        /// Gets the maximum number of allowed iterations for DC analysis.
+        /// </summary>
         protected int DcMaxIterations { get; private set; }
+
+        /// <summary>
+        /// Gets the (cached) absolute tolerance on values to check convergence.
+        /// </summary>
         protected double AbsTol { get; private set; }
+
+        /// <summary>
+        /// Gets the (cached) relative tolerance on values to check convergence.
+        /// </summary>
         protected double RelTol { get; private set; }
+
+        /// <summary>
+        /// Gets the (cached) simulation statistics for the simulation.
+        /// </summary>
         protected BaseSimulationStatistics BaseSimulationStatistics { get; }
 
         /// <summary>
@@ -113,7 +122,6 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="circuit">The circuit that will be used.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(EntityCollection circuit)
         {
             circuit.ThrowIfNull(nameof(circuit));
@@ -216,7 +224,6 @@ namespace SpiceSharp.Simulations
         /// Calculates the operating point of the circuit.
         /// </summary>
         /// <param name="maxIterations">The maximum amount of allowed iterations.</param>
-        /// <exception cref="SpiceSharp.CircuitException">Could not determine operating point</exception>
         protected void Op(int maxIterations)
         {
             var state = RealState;
@@ -269,7 +276,7 @@ namespace SpiceSharp.Simulations
             CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i < RealState.Solution.Length; i++)
+            for (var i = 0; i <= RealState.Solution.Length; i++)
                 RealState.Solution[i] = 0.0;
 
             // Let's make it a bit easier for our iterations to converge
@@ -322,7 +329,7 @@ namespace SpiceSharp.Simulations
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i < RealState.Solution.Length; i++)
+            for (var i = 0; i <= RealState.Solution.Length; i++)
                 RealState.Solution[i] = 0.0;
                 
             // Let's make it a bit easier for our iterations to converge
@@ -364,7 +371,7 @@ namespace SpiceSharp.Simulations
             CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i < RealState.Solution.Length; i++)
+            for (var i = 0; i <= RealState.Solution.Length; i++)
                 RealState.Solution[i] = 0.0;
 
             // Start SRC stepping
@@ -392,7 +399,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="SpiceSharp.CircuitException">Could not find flag</exception>
         protected bool Iterate(int maxIterations)
         {
             var state = RealState;
@@ -577,7 +583,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="SpiceSharp.CircuitException">Non-convergence, node {0} is not a number.".FormatString(node)</exception>
         protected bool IsConvergent()
         {
             var rstate = RealState;

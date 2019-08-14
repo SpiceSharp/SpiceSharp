@@ -15,26 +15,36 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the frequency parameters.
         /// </summary>
-        /// <value>
-        /// The frequency parameters.
-        /// </value>
         protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
-        /// Matrix elements
+        /// Gets the (positive, branch) element.
         /// </summary>
         protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
+        
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the branch RHS element.
+        /// </summary>
         protected VectorElement<Complex> CBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the complex voltage applied by the source.
         /// </summary>
-        /// <value>
-        /// The complex voltage.
-        /// </value>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex ComplexVoltage => FrequencyParameters.Phasor;
 
@@ -43,7 +53,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
@@ -56,7 +65,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -68,7 +76,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

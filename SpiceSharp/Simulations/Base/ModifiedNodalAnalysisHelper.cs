@@ -14,7 +14,6 @@ namespace SpiceSharp.Simulations
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="solver">The solver.</param>
         /// <param name="magnitude">The method that converts the base value type to a scalar.</param>
-        /// <exception cref="ArgumentNullException">solver</exception>
         public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             solver.ThrowIfNull(nameof(solver));
@@ -92,7 +91,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="gmin">The conductance to be added.</param>
-        /// <exception cref="ArgumentNullException">solver</exception>
         public static void ApplyDiagonalGmin(this SparseLinearSystem<double> solver, double gmin)
         {
             solver.ThrowIfNull(nameof(solver));

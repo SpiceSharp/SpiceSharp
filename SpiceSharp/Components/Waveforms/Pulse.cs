@@ -14,63 +14,42 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets the initial value.
         /// </summary>
-        /// <value>
-        /// The initial value.
-        /// </value>
         [ParameterName("v1"), ParameterInfo("The initial value")]
         public GivenParameter<double> InitialValue { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the pulsed value.
         /// </summary>
-        /// <value>
-        /// The pulsed value.
-        /// </value>
         [ParameterName("v2"), ParameterInfo("The peak value")]
         public GivenParameter<double> PulsedValue { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the delay of the waveform in seconds.
         /// </summary>
-        /// <value>
-        /// The delay.
-        /// </value>
         [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
         public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the rise time in seconds.
         /// </summary>
-        /// <value>
-        /// The rise time.
-        /// </value>
         [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
         public GivenParameter<double> RiseTime { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the fall time in seconds.
         /// </summary>
-        /// <value>
-        /// The fall time.
-        /// </value>
         [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
         public GivenParameter<double> FallTime { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the width of the pulse in seconds.
         /// </summary>
-        /// <value>
-        /// The width of the pulse.
-        /// </value>
         [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
         public GivenParameter<double> PulseWidth { get; } = new GivenParameter<double>(double.PositiveInfinity);
 
         /// <summary>
         /// Gets the period in seconds.
         /// </summary>
-        /// <value>
-        /// The period.
-        /// </value>
         [ParameterName("per"), ParameterInfo("The period in seconds")]
         public GivenParameter<double> Period { get; } = new GivenParameter<double>(double.PositiveInfinity);
 
@@ -146,17 +125,6 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets up the waveform.
         /// </summary>
-        /// <exception cref="SpiceSharp.CircuitException">
-        /// Invalid rise time {0}".FormatString(_tr)
-        /// or
-        /// Invalid fall time {0}".FormatString(_tf)
-        /// or
-        /// Invalid pulse width {0}".FormatString(_pw)
-        /// or
-        /// Invalid period {0}".FormatString(_per)
-        /// or
-        /// Invalid pulse specification: Period {0} is too small".FormatString(_per)
-        /// </exception>
         public override void Setup()
         {
             // Cache parameter values
@@ -221,7 +189,6 @@ namespace SpiceSharp.Components
         /// Accepts the current timepoint.
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public override void Accept(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

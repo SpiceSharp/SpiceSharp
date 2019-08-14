@@ -18,9 +18,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the behavior at the specified index.
         /// </summary>
-        /// <value>
-        /// The behavior at the specified index.
-        /// </value>
         /// <param name="index">The index.</param>
         /// <returns></returns>
         public T this[int index] => _behaviors[index];
@@ -28,16 +25,12 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the number of behaviors in the list.
         /// </summary>
-        /// <value>
-        /// The count.
-        /// </value>
         public int Count { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorList{T}"/> class.
         /// </summary>
         /// <param name="behaviors">An enumeration of all behaviors that need to be added.</param>
-        /// <exception cref="ArgumentNullException">behaviors</exception>
         public BehaviorList(IEnumerable<T> behaviors)
         {
             behaviors.ThrowIfNull(nameof(behaviors));

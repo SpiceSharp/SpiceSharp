@@ -31,13 +31,8 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Search for an entity by its string.
         /// </summary>
-        /// <value>
-        /// The <see cref="Entity"/>.
-        /// </value>
         /// <param name="name">The string.</param>
-        /// <returns>
-        /// The entity with the specified string.
-        /// </returns>
+        /// <returns>The entity with the specified string.</returns>
         [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Entity this[string name]
         {
@@ -58,9 +53,6 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the comparer for entity identifiers.
         /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
         public IEqualityComparer<string> Comparer => _entities.Comparer;
 
         /// <summary>
@@ -88,7 +80,7 @@ namespace SpiceSharp.Circuits
         public IEnumerable<string> Keys => _entities.Keys;
 
         /// <summary>
-        /// Gets a value indicating whether access to the <see cref="ICollection{T}</see> is synchronized (thread safe).
+        /// Gets a value indicating whether access to the <see cref="ICollection{T}" /> is synchronized (thread safe).
         /// </summary>
         public bool IsSynchronized => true;
 

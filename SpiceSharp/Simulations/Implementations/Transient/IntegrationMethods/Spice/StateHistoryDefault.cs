@@ -18,9 +18,6 @@
         /// <summary>
         /// Gets or sets the value of the state at the current timepoint.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         public override double Current
         {
             get => _source[0].State[_index];
@@ -30,9 +27,6 @@
         /// <summary>
         /// Gets the <see cref="double"/> at the specified index.
         /// </summary>
-        /// <value>
-        /// The <see cref="double"/>.
-        /// </value>
         /// <param name="index">The index.</param>
         /// <returns></returns>
         public override double this[int index] => _source[index].State[_index];

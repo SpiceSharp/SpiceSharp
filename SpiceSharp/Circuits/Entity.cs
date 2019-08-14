@@ -107,10 +107,9 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Creates behaviors of the specified type.
         /// </summary>
-        /// <param name="type">The types of behaviors that the simulation wants, in the order that they will be called.</param>
+        /// <param name="types">The types of behaviors that the simulation wants, in the order that they will be called.</param>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public virtual void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
         {
             types.ThrowIfNull(nameof(types));
@@ -175,7 +174,6 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="behavior">The behavior that needs to be set up.</param>
         /// <param name="simulation">The simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         protected virtual void SetupBehavior(IBehavior behavior, Simulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
@@ -192,11 +190,6 @@ namespace SpiceSharp.Circuits
         /// <param name="parameters">The parameters in the simulation.</param>
         /// <param name="behaviors">The behaviors in the simulation.</param>
         /// <returns>A data provider for the behaviors.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// parameters
-        /// or
-        /// behaviors
-        /// </exception>
         protected virtual SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
         {
             parameters.ThrowIfNull(nameof(parameters));

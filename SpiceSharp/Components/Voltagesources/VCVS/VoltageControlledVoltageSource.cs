@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
 		public const int VoltageControlledVoltageSourcePinCount = 4;
         
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="VoltageControlledVoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
         public VoltageControlledVoltageSource(string name) 
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="VoltageControlledVoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
         /// <param name="pos">The positive node</param>

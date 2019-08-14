@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.5;netstandard2.0;net45;netcoreapp2.0</TargetFrameworks>
-    <Version>2.7.6</Version>
+    <Version>2.7.7</Version>
     <Authors>Sven Boulanger</Authors>
     <Title>Spice#</Title>
     <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
@@ -11,17 +11,30 @@
     <RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
     <PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/SpiceSharp/SpiceSharp/master/api/images/logo_full.svg?sanitize=true</PackageIconUrl>
-    <AssemblyVersion>2.7.6.0</AssemblyVersion>
+    <AssemblyVersion>2.7.7.0</AssemblyVersion>
     <PackageReleaseNotes>Refer to the GitHub release for release notes</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
-    <NeutralLanguage>en-001</NeutralLanguage>
-    <FileVersion>2.7.6.0</FileVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <FileVersion>2.7.7.0</FileVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.5|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.5|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

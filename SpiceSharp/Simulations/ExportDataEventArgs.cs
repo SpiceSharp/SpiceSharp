@@ -18,9 +18,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the time if the simulation supports it.
         /// </summary>
-        /// <value>
-        /// The time or NaN if the simulation does not use time.
-        /// </value>
         public double Time
         {
             get
@@ -34,9 +31,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the frequency if the simulation supports it.
         /// </summary>
-        /// <value>
-        /// The frequency in Hertz or NaN if the simulation does not use frequency.
-        /// </value>
         public double Frequency
         {
             get
@@ -55,9 +49,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the laplace variable if the simulation supports it.
         /// </summary>
-        /// <value>
-        /// The laplace variable or NaN if the simulation does not use the laplace variable.
-        /// </value>
         public Complex Laplace
         {
             get
@@ -71,9 +62,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the current sweep value if the simulation is a <see cref="DC" /> analysis.
         /// </summary>
-        /// <value>
-        /// The sweep value or NaN if the simulation is not a DC sweep analysis.
-        /// </value>
         public double SweepValue
         {
             get
@@ -88,7 +76,6 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ExportDataEventArgs"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public ExportDataEventArgs(Simulation simulation)
         {
             _simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
@@ -111,8 +98,6 @@ namespace SpiceSharp.Simulations
         /// <param name="positive">The identifier of the node at the positive probe.</param>
         /// <param name="negative">The identifier of the node at the negative probe.</param>
         /// <returns>The extracted voltage.</returns>
-        /// <exception cref="ArgumentNullException">positive</exception>
-        /// <exception cref="CircuitException">Simulation does not support real voltages</exception>
         public double GetVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
@@ -154,8 +139,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The extracted voltage.
         /// </returns>
-        /// <exception cref="ArgumentNullException">positive</exception>
-        /// <exception cref="CircuitException">Simulation does not support complex voltages</exception>
         public Complex GetComplexVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));

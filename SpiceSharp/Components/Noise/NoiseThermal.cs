@@ -7,6 +7,9 @@ namespace SpiceSharp.Components.NoiseSources
     /// </summary>
     public class NoiseThermal : NoiseGenerator
     {
+        /// <summary>
+        /// The second node of the noise source.
+        /// </summary>
         public int Node2 { get; }
 
         /// <summary>
@@ -16,7 +19,7 @@ namespace SpiceSharp.Components.NoiseSources
         public double Conductance { get; set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="NoiseThermal"/> class.
         /// </summary>
         /// <param name="name">Name of the noise source</param>
         /// <param name="node1">Node 1</param>

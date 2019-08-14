@@ -4,6 +4,9 @@ using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
+    /// <summary>
+    /// This class can calculate the controlling input of a switch.
+    /// </summary>
     public abstract class Controller
     {
         /// <summary>
@@ -11,7 +14,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The provider.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public abstract void Setup(Simulation simulation, SetupDataProvider provider);
 
         /// <summary>

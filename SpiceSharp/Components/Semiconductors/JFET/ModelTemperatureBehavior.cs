@@ -13,11 +13,34 @@ namespace SpiceSharp.Components.JFETBehaviors
         // Necessary behaviors and parameters
         private ModelBaseParameters _mbp;
 
+        /// <summary>
+        /// Gets the implementation-specific factor 2.
+        /// </summary>
         public double F2 { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 3.
+        /// </summary>
         public double F3 { get; private set; }
+
+        /// <summary>
+        /// Gets the bulk factor.
+        /// </summary>
         public double BFactor { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor Pbo.
+        /// </summary>
         public double Pbo { get; private set; }
+
+        /// <summary>
+        /// Gets ???
+        /// </summary>
         public double Xfc { get; private set; }
+
+        /// <summary>
+        /// Gets the junction capacitance factor.
+        /// </summary>
         public double Cjfact { get; private set; }
 
         /// <summary>
@@ -36,7 +59,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The data provider.</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);
@@ -50,7 +72,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Perform temperature-dependent calculations.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public override void Temperature(BaseSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

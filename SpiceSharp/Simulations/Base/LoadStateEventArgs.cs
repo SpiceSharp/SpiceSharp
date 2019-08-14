@@ -11,9 +11,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the state.
         /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
         public SimulationState State { get; }
 
         /// <summary>

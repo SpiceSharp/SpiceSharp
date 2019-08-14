@@ -22,15 +22,27 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public double Conductance { get; protected set; }
 
         /// <summary>
-        /// Shared parameters
+        /// Gets the nominal thermal voltage.
         /// </summary>
         public double VtNominal { get; protected set; }
+
+        /// <summary>
+        /// Gets ???
+        /// </summary>
         public double Xfc { get; protected set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 2.
+        /// </summary>
         public double F2 { get; protected set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 3.
+        /// </summary>
         public double F3 { get; protected set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }

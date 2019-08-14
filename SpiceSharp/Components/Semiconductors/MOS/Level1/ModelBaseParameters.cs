@@ -10,9 +10,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Gets the channel length modulation parameter.
         /// </summary>
-        /// <value>
-        /// The channel length modulation parameter.
-        /// </value>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
         public GivenParameter<double> Lambda { get; } = new GivenParameter<double>();
 

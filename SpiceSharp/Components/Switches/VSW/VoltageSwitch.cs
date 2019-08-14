@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
 		public const int VoltageSwitchPinCount = 4;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="VoltageSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
         public VoltageSwitch(string name) 
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="VoltageSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
         /// <param name="pos">The positive node</param>

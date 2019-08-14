@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         public Dictionary<string, string> NodeMap { get; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ComponentInstanceData"/> class.
         /// </summary>
         /// <param name="subcircuit">The circuit to instantiate.</param>
         public ComponentInstanceData(Circuit subcircuit)
@@ -23,7 +23,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ComponentInstanceData"/> class.
         /// </summary>
         /// <param name="subckt">The circuit to instantiate.</param>
         /// <param name="name">The instance name.</param>
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ComponentInstanceData"/> class.
         /// </summary>
         /// <param name="subckt">The circuit to instantiate.</param>
         /// <param name="name">The instance name.</param>

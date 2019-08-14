@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
@@ -15,9 +14,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the capacitance charge.
         /// </summary>
-        /// <value>
-        /// The capacitance charge.
-        /// </value>
         [ParameterName("charge"), ParameterInfo("Diode capacitor charge")]
         public sealed override double CapCharge
         {
@@ -28,9 +24,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the capacitor current.
         /// </summary>
-        /// <value>
-        /// The capacitor current.
-        /// </value>
         [ParameterName("capcur"), ParameterInfo("Diode capacitor current")]
         public double CapCurrent => _capCharge.Derivative;
 
@@ -40,7 +33,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private StateDerivative _capCharge;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }

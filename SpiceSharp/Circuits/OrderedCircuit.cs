@@ -16,9 +16,6 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets or sets the entity comparer for ordering entities before iteration.
         /// </summary>
-        /// <value>
-        /// The entity comparer.
-        /// </value>
         public IComparer<Entity> EntityComparer { get; set; }
 
         /// <summary>

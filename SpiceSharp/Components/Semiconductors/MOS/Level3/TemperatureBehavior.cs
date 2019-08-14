@@ -14,51 +14,33 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the model temperature behavior.
         /// </summary>
-        /// <value>
-        /// The model temperature behavior.
-        /// </value>
         protected ModelTemperatureBehavior ModelTemperature { get; private set; }
 
         /// <summary>
         /// Gets the source conductance.
         /// </summary>
-        /// <value>
-        /// The source conductance.
-        /// </value>
         [ParameterName("sourceconductance"), ParameterInfo("Conductance at the source")]
         public double SourceConductance { get; private set; }
 
         /// <summary>
         /// Gets the drain conductance.
         /// </summary>
-        /// <value>
-        /// The drain conductance.
-        /// </value>
         [ParameterName("drainconductance"), ParameterInfo("Conductance at the drain")]
         public double DrainConductance { get; private set; }
 
         /// <summary>
         /// Gets the source resistance.
         /// </summary>
-        /// <value>
-        /// The source resistance.
-        /// </value>
         [ParameterName("rs"), ParameterInfo("Source resistance")]
         public double SourceResistance
         {
@@ -73,9 +55,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Gets the drain resistance.
         /// </summary>
-        /// <value>
-        /// The drain resistance.
-        /// </value>
         [ParameterName("rd"), ParameterInfo("Drain conductance")]
         public double DrainResistance
         {
@@ -90,36 +69,62 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Gets or sets the critical source voltage.
         /// </summary>
-        /// <value>
-        /// The critical source voltage.
-        /// </value>
         [ParameterName("sourcevcrit"), ParameterInfo("Critical source voltage")]
         public double SourceVCritical { get; protected set; }
 
         /// <summary>
         /// Gets or sets the critical drain voltage.
         /// </summary>
-        /// <value>
-        /// The drain drain voltage.
-        /// </value>
         [ParameterName("drainvcrit"), ParameterInfo("Critical drain voltage")]
         public double DrainVCritical { get; protected set; }
 
         /// <summary>
-        /// Shared values
+        /// Gets the temperature-modified surface mobility.
         /// </summary>
         protected double TempSurfaceMobility { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified phi.
+        /// </summary>
         protected double TempPhi { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified Vbi.
+        /// </summary>
         protected double TempVoltageBi { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified bulk potential.
+        /// </summary>
         protected double TempBulkPotential { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified transconductance.
+        /// </summary>
         protected double TempTransconductance { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified threshold voltage.
+        /// </summary>
         protected double TempVt0 { get; private set; }
+
+        /// <summary>
+        /// Gets the thermal voltage.
+        /// </summary>
         protected double Vt { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified drain saturation current.
+        /// </summary>
         protected double DrainSatCurrent { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified source saturation current.
+        /// </summary>
         protected double SourceSatCurrent { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }
@@ -129,7 +134,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The provider.</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             provider.ThrowIfNull(nameof(provider));

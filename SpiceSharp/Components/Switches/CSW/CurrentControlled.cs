@@ -20,7 +20,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The provider.</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             provider.ThrowIfNull(nameof(provider));

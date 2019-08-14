@@ -24,7 +24,6 @@ namespace SpiceSharp.Behaviors
         /// Creates all necessary states for the transient behavior.
         /// </summary>
         /// <param name="method">The integration method.</param>
-        /// <exception cref="ArgumentNullException">method</exception>
         public virtual void CreateStates(IntegrationMethod method)
         {
             // Do nothing (for now)

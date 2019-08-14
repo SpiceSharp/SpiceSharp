@@ -16,9 +16,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the current frequency.
         /// </summary>
-        /// <value>
-        /// The frequency.
-        /// </value>
         public double Frequency
         {
             get => _currentFrequency;
@@ -41,9 +38,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the frequency step.
         /// </summary>
-        /// <value>
-        /// The frequency step.
-        /// </value>
         public double DeltaFrequency => _deltaFrequency;
 
         /// <summary>
@@ -54,25 +48,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the total input-referred noise.
         /// </summary>
-        /// <value>
-        /// The total input-referred noise.
-        /// </value>
         public double InputNoise { get; set; }
 
         /// <summary>
         /// Gets or sets the total output noise density.
         /// </summary>
-        /// <value>
-        /// The total output noise density.
-        /// </value>
         public double OutputNoiseDensity { get; set; } = 0.0;
 
         /// <summary>
         /// Gets or sets the inverse squared gain.
         /// </summary>
-        /// <value>
-        /// The inverted squared gain.
-        /// </value>
         /// <remarks>
         /// This value is used to compute the input noise density from the output noise density.
         /// </remarks>
@@ -89,9 +74,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the logarithm of the gain squared.
         /// </summary>
-        /// <value>
-        /// The log of the inverse gain.
-        /// </value>
         public double LogInverseGain { get; private set; }
 
         /// <summary>

@@ -12,17 +12,54 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <seealso cref="SpiceSharp.Behaviors.ITemperatureBehavior" />
     public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
     {
-        // Necessary behaviors and parameters
+        /// <summary>
+        /// Gets the model parameters.
+        /// </summary>
         protected ModelBaseParameters ModelParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the base parameters.
+        /// </summary>
         protected BaseParameters BaseParameters { get; private set; }
+
+        /// <summary>
+        /// Gets the model temperature behavior.
+        /// </summary>
         protected ModelTemperatureBehavior ModelTemperature { get; private set; }
 
+        /// <summary>
+        /// Gets the temperature-modified saturation current.
+        /// </summary>
         public double TempSaturationCurrent { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified gate-source capacitance.
+        /// </summary>
         public double TempCapGs { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified gate-drain capacitance.
+        /// </summary>
         public double TempCapGd { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified gate potential.
+        /// </summary>
         public double TempGatePotential { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified depletion capacitance correction.
+        /// </summary>
         public double CorDepCap { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor 1.
+        /// </summary>
         public double F1 { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified critical voltage.
+        /// </summary>
         public double Vcrit { get; private set; }
 
         /// <summary>
@@ -41,7 +78,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The data provider.</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             provider.ThrowIfNull(nameof(provider));
@@ -58,7 +94,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Perform temperature-dependent calculations.
         /// </summary>
         /// <param name="simulation">The base simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public void Temperature(BaseSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

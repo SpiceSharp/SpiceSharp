@@ -6,23 +6,17 @@ namespace SpiceSharp
     /// A template for parameters of a specific type.
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
-    /// <seealso cref="BaseParameter" />
     public abstract class Parameter<T> : ICloneable, ICloneable<Parameter<T>>
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
         /// </summary>
-        /// <value>
-        /// The value of the parameter.
-        /// </value>
         public abstract T Value { get; set; }
 
         /// <summary>
         /// Copies the contents of a parameter to this parameter.
         /// </summary>
         /// <param name="source">The source parameter.</param>
-        /// <exception cref="ArgumentNullException">source</exception>
-        /// <exception cref="CircuitException">Cannot copy: source is not a Parameter</exception>
         public virtual void CopyFrom(Parameter<T> source)
         {
             source.ThrowIfNull(nameof(source));
@@ -68,7 +62,7 @@ namespace SpiceSharp
         public static implicit operator T(Parameter<T> parameter)
         {
             if (parameter == null)
-                return default(T);
+                return default;
             return parameter.Value;
         }
 

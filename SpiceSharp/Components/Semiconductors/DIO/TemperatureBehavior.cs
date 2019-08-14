@@ -13,50 +13,70 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the model temperature behavior.
         /// </summary>
-        /// <value>
-        /// The model temperature behavior.
-        /// </value>
         protected ModelTemperatureBehavior ModelTemperature { get; private set; }
 
         /// <summary>
         /// Gets the base configuration of the simulation.
         /// </summary>
-        /// <value>
-        /// The base configuration.
-        /// </value>
         protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
-        /// Extra variables
+        /// Gets the temperature-modified junction capacitance.
         /// </summary>
         public double TempJunctionCap { get; protected set; }
+
+        /// <summary>
+        /// Gets the temperature-modified junction built-in potential.
+        /// </summary>
         public double TempJunctionPot { get; protected set; }
+
+        /// <summary>
+        /// Gets the temperature-modified saturation current.
+        /// </summary>
         public double TempSaturationCurrent { get; protected set; }
+
+        /// <summary>
+        /// Gets the temperature-modified implementation-specific factor 1.
+        /// </summary>
         public double TempFactor1 { get; protected set; }
+
+        /// <summary>
+        /// Gets the temperature-modified depletion capacitance.
+        /// </summary>
         public double TempDepletionCap { get; protected set; }
+
+        /// <summary>
+        /// Gets the temperature-modified critical voltage.
+        /// </summary>
         public double TempVCritical { get; protected set; }
+
+        /// <summary>
+        /// Gets the temperature-modified breakdown voltage.
+        /// </summary>
         public double TempBreakdownVoltage { get; protected set; }
+
+        /// <summary>
+        /// Gets the thermal voltage.
+        /// </summary>
         protected double Vt { get; private set; }
+
+        /// <summary>
+        /// Gets the temperature-modified and emission-modified thermal voltage.
+        /// </summary>
         protected double Vte { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }

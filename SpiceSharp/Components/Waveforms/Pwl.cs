@@ -17,17 +17,11 @@ namespace SpiceSharp.Components.Waveforms
             /// <summary>
             /// Gets or sets the slope of the line.
             /// </summary>
-            /// <value>
-            /// The slope.
-            /// </value>
             public double A { get; set; }
 
             /// <summary>
             /// Gets or sets the intercept of the line.
             /// </summary>
-            /// <value>
-            /// The intercept.
-            /// </value>
             public double B { get; set; }
         }
 
@@ -38,7 +32,7 @@ namespace SpiceSharp.Components.Waveforms
         private readonly long _pwlPoints;
 
         /// <summary>
-        /// Constructor.
+        /// Creates a new instance of the <see cref="Pwl"/> class.
         /// </summary>
         /// <param name="times">Array of times.</param>
         /// <param name="voltages">Array of voltages.</param>

@@ -13,17 +13,11 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the controlling positive node index.
         /// </summary>
-        /// <value>
-        /// The controlling positive node index.
-        /// </value>
         protected int ContPosNode { get; private set; }
 
         /// <summary>
         /// Gets the controlling negative node index.
         /// </summary>
-        /// <value>
-        /// The controlling negative node index.
-        /// </value>
         protected int ContNegNode { get; private set; }
         
         /// <summary>
@@ -39,8 +33,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Connects the specified pins.
         /// </summary>
         /// <param name="pins">The pins.</param>
-        /// <exception cref="ArgumentNullException">pins</exception>
-        /// <exception cref="ArgumentException">Pin count mismatch</exception>
         public override void Connect(int[] pins)
         {
             pins.ThrowIfNot(nameof(pins), 4);

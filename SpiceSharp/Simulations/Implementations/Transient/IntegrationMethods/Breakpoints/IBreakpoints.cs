@@ -12,25 +12,16 @@
         /// <summary>
         /// Gets the current time point.
         /// </summary>
-        /// <value>
-        /// The current time.
-        /// </value>
         double Time { get; }
 
         /// <summary>
         /// Gets the breakpoint system.
         /// </summary>
-        /// <value>
-        /// The breakpoints.
-        /// </value>
         Breakpoints Breakpoints { get; }
 
         /// <summary>
         /// Gets a value indicating whether this point is the first after a breakpoint.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if we just hit a breakpoint; otherwise, <c>false</c>.
-        /// </value>
         bool Break { get; }
     }
 }

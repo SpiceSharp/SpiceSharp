@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
@@ -15,7 +14,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         private CommonBehaviors.IndependentSourceParameters _bp;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="AcceptBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public AcceptBehavior(string name) : base(name) { }

@@ -16,35 +16,85 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private ModelBaseParameters _mbp;
 
         /// <summary>
-        /// Shared parameters
+        /// Gets the inverse Early voltage (forward).
         /// </summary>
-        [ParameterName("invearlyvoltf"), ParameterInfo("Inverse early voltage:forward")]
+        [ParameterName("invearlyvoltf"), ParameterInfo("Inverse Early voltage (forward)")]
         public double InverseEarlyVoltForward { get; protected set; }
-        [ParameterName("invearlyvoltr"), ParameterInfo("Inverse early voltage:reverse")]
+
+        /// <summary>
+        /// Gets the inverse Early voltage (reverse).
+        /// </summary>
+        [ParameterName("invearlyvoltr"), ParameterInfo("Inverse Early voltage (reverse)")]
         public double InverseEarlyVoltReverse { get; protected set; }
-        [ParameterName("invrollofff"), ParameterInfo("Inverse roll off - forward")]
+
+        /// <summary>
+        /// Gets the inverse roll-off (forward).
+        /// </summary>
+        [ParameterName("invrollofff"), ParameterInfo("Inverse roll off (forward)")]
         public double InverseRollOffForward { get; protected set; }
-        [ParameterName("invrolloffr"), ParameterInfo("Inverse roll off - reverse")]
+
+        /// <summary>
+        /// Gets the inverse roll-off (reverse).
+        /// </summary>
+        [ParameterName("invrolloffr"), ParameterInfo("Inverse roll off (reverse)")]
         public double InverseRollOffReverse { get; protected set; }
+
+        /// <summary>
+        /// Gets the collector conductance.
+        /// </summary>
         [ParameterName("collectorconduct"), ParameterInfo("Collector conductance")]
         public double CollectorConduct { get; protected set; }
+
+        /// <summary>
+        /// Gets the emitter conductance.
+        /// </summary>
         [ParameterName("emitterconduct"), ParameterInfo("Emitter conductance")]
         public double EmitterConduct { get; protected set; }
+
+        /// <summary>
+        /// Gets the transit time base-collector voltage factor.
+        /// </summary>
         [ParameterName("transtimevbcfact"), ParameterInfo("Transit time VBC factor")]
         public double TransitTimeVoltageBcFactor { get; protected set; }
-        [ParameterName("excessphasefactor"), ParameterInfo("Excess phase fact.")]
+
+        /// <summary>
+        /// Gets the excess phase factor.
+        /// </summary>
+        [ParameterName("excessphasefactor"), ParameterInfo("Excess phase factor")]
         public double ExcessPhaseFactor { get; protected set; }
         
+        /// <summary>
+        /// Gets generic factor 1.
+        /// </summary>
         public double Factor1 { get; protected set; }
+
+        /// <summary>
+        /// Gets ???.
+        /// </summary>
         public double Xfc { get; protected set; }
 
+        /// <summary>
+        /// Gets implementation-specific factor 2.
+        /// </summary>
         public double F2 { get; protected set; }
+
+        /// <summary>
+        /// Gets implementation-specific factor 3.
+        /// </summary>
         public double F3 { get; protected set; }
+
+        /// <summary>
+        /// Gets implementation-specific factor 6.
+        /// </summary>
         public double F6 { get; protected set; }
+
+        /// <summary>
+        /// Gets implementation-specific 7.
+        /// </summary>
         public double F7 { get; protected set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }

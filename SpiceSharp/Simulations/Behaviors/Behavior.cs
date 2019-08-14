@@ -52,9 +52,9 @@ namespace SpiceSharp.Behaviors
         /// Create a getter for a behavior parameter (possibly requiring a simulation or simulation state).
         /// </summary>
         /// <typeparam name="T">The parameter type.</typeparam>
-        /// <param name="behavior">The behavior.</param>
         /// <param name="simulation">The simulation.</param>
         /// <param name="name">The parameter name.</param>
+        /// <param name="comparer">The comparer used to compare property names.</param>
         /// <returns></returns>
         public Func<T> CreateGetter<T>(Simulation simulation, string name, IEqualityComparer<string> comparer = null)
         {

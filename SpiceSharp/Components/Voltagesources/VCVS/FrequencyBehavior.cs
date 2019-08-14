@@ -15,9 +15,6 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the voltage applied by the source.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
@@ -29,9 +26,6 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the current through the source.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
@@ -43,9 +37,6 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -57,17 +48,37 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// Gets the (positive, branch) element.
         /// </summary>
         protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, controlling positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchControlPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (branch, controlling negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CBranchControlNegPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

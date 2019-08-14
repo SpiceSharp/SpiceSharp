@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -22,35 +21,53 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Gets voltage across the voltage source
+        /// Gets the voltage.
         /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
         public double GetVoltage(BaseSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Get the power dissipation.
+        /// </summary>
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
         public double GetPower(BaseSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             return (state.Solution[PosNode] - state.Solution[PosNode]) * -Current;
         }
+
+        /// <summary>
+        /// Get the current.
+        /// </summary>
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
 
         /// <summary>
-        /// Nodes
+        /// The positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// The negative index.
+        /// </summary>
         protected int NegNode { get; private set; }
+
+        /// <summary>
+        /// The positive RHS element.
+        /// </summary>
         protected VectorElement<double> PosPtr { get; private set; }
+
+        /// <summary>
+        /// The negative RHS element.
+        /// </summary>
         protected VectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }

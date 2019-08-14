@@ -32,7 +32,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Accepts the current timepoint.
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>
-        /// <exception cref="NotImplementedException"></exception>
         public void Accept(TimeSimulation simulation)
         {
             UseOldState = true;

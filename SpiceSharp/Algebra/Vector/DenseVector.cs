@@ -23,9 +23,6 @@ namespace SpiceSharp.Algebra
         /// <remarks>
         /// The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.
         /// </remarks>
-        /// <value>
-        /// The value at the specified index.
-        /// </value>
         /// <param name="index">The index in the vector.</param>
         /// <returns>The value at the specified index.</returns>
         public override T this[int index]
@@ -53,7 +50,6 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="DenseVector{T}"/> class.
         /// </summary>
         /// <param name="length">The length of the vector.</param>
-        /// <exception cref="ArgumentException">Invalid length {0}".FormatString(length)</exception>
         public DenseVector(int length)
             : base(length)
         {
@@ -83,14 +79,12 @@ namespace SpiceSharp.Algebra
         /// Copies contents to another vector.
         /// </summary>
         /// <param name="vector">The target vector.</param>
-        /// <exception cref="ArgumentNullException">vector</exception>
-        /// <exception cref="SparseException">Vector lengths do not match</exception>
         public void CopyTo(DenseVector<T> vector)
         {
             vector.ThrowIfNull(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
-            for (var i = 0; i < Length; i++)
+            for (var i = 0; i <= Length; i++)
                 vector._values[i] = _values[i];
         }
 
@@ -98,14 +92,12 @@ namespace SpiceSharp.Algebra
         /// Copy contents from another vector.
         /// </summary>
         /// <param name="vector">Source vector.</param>
-        /// <exception cref="ArgumentNullException">vector</exception>
-        /// <exception cref="SparseException">Vector lengths do not match</exception>
         public void CopyFrom(DenseVector<T> vector)
         {
             vector.ThrowIfNull(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
-            for (var i = 0; i < Length; i++)
+            for (var i = 0; i <= Length; i++)
                 _values[i] = vector._values[i];
         }
 

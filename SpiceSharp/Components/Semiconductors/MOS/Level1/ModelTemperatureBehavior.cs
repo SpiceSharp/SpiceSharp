@@ -16,15 +16,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
-        /// Shared parameters
+        /// Gets implementation-specific factor 1.
         /// </summary>
         public double Factor1 { get; private set; }
+
+        /// <summary>
+        /// Gets the nominal thermal voltage.
+        /// </summary>
         public double VtNominal { get; private set; }
+
+        /// <summary>
+        /// Gets the bandgap voltage.
+        /// </summary>
         public double EgFet1 { get; private set; }
+
+        /// <summary>
+        /// Gets the implementaiton specific factor PbFactor1.
+        /// </summary>
         public double PbFactor1 { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }

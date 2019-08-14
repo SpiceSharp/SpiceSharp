@@ -8,17 +8,11 @@
         /// <summary>
         /// Gets or sets the value of the state at the current timepoint.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         public abstract double Current { get; set; }
 
         /// <summary>
         /// Gets a point in history.
         /// </summary>
-        /// <value>
-        /// The <see cref="double"/>.
-        /// </value>
         /// <param name="index">Steps to go back in history. 0 means the current value.</param>
         /// <returns>
         /// The value at the specified timepoint.

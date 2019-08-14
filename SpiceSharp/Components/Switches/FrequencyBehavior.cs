@@ -14,11 +14,23 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the (positive, positive) element.
         /// </summary>
         protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegNegPtr { get; private set; }
 
         /// <summary>
@@ -42,7 +54,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        /// <exception cref="ArgumentNullException">solver</exception>
         public void GetEquationPointers(Solver<Complex> solver)
         {
             solver.ThrowIfNull(nameof(solver));
@@ -57,7 +68,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
         /// <param name="simulation">The frequency simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
         public void Load(FrequencySimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));

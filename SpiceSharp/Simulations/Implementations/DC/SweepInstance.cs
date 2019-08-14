@@ -10,49 +10,31 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the current value.
         /// </summary>
-        /// <value>
-        /// The current value.
-        /// </value>
         public double CurrentValue { get; private set; }
 
         /// <summary>
         /// Gets the current step index.
         /// </summary>
-        /// <value>
-        /// The current step.
-        /// </value>
         public int CurrentStep { get; private set; }
 
         /// <summary>
         /// Gets the maximum number of steps.
         /// </summary>
-        /// <value>
-        /// The limit.
-        /// </value>
         public int Limit { get; }
 
         /// <summary>
         /// Gets the initial value.
         /// </summary>
-        /// <value>
-        /// The initial.
-        /// </value>
         public double Initial { get; }
 
         /// <summary>
         /// Gets the final value.
         /// </summary>
-        /// <value>
-        /// The final.
-        /// </value>
         public double Final { get; }
 
         /// <summary>
         /// Gets the parameter identifier that is swept.
         /// </summary>
-        /// <value>
-        /// The parameter.
-        /// </value>
         public string Parameter { get; }
 
         /// <summary>
@@ -62,7 +44,6 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The initial value.</param>
         /// <param name="stop">The final value.</param>
         /// <param name="step">The step value.</param>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid sweep: {0} to {1} cannot be reached in steps of {2}".FormatString(start, stop, step)</exception>
         public SweepInstance(string parameter, double start, double stop, double step)
         {
             Parameter = parameter;

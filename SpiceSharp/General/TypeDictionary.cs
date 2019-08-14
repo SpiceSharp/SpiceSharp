@@ -17,12 +17,11 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the dictionary to look up using types.
         /// </summary>
-        /// <value>
-        /// The dictionary.
-        /// </value>
         protected Dictionary<Type, T> Dictionary { get; }
 
-        // Private variables
+        /// <summary>
+        /// Gets the lock used for multithreaded usage.
+        /// </summary>
         protected ReaderWriterLockSlim Lock { get; }
 
         /// <summary>
@@ -93,9 +92,6 @@ namespace SpiceSharp
         /// <summary>
         /// Gets or sets the value with the specified key.
         /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
         /// <param name="key">The type.</param>
         /// <returns>The object of the specified type.</returns>
         public T this[Type key]
@@ -181,8 +177,6 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="key">The type of the added value.</param>
         /// <param name="value">The added value.</param>
-        /// <exception cref="ArgumentNullException">key</exception>
-        /// <exception cref="CircuitException">Type {0} is not derived from {1}".FormatString(key, BaseClass)</exception>
         public virtual void Add(Type key, T value)
         {
             key.ThrowIfNull(nameof(key));
@@ -265,7 +259,7 @@ namespace SpiceSharp
                     return true;
                 }
 
-                value = default(TResult);
+                value = default;
                 return false;
             }
             finally

@@ -10,7 +10,6 @@ namespace SpiceSharp
     /// This class allows accessing parameters by their metadata. Metadata is specified by using 
     /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
     /// </remarks>
-    /// <seealso cref="NamedParameterized" />
     public abstract class ParameterSet : ICloneable, ICloneable<ParameterSet>
     {
         /// <summary>

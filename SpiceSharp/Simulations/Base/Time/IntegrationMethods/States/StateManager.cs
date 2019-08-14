@@ -12,17 +12,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the number of states in the pool.
         /// </summary>
-        /// <value>
-        /// The number of states.
-        /// </value>
         public int States { get; private set; }
 
         /// <summary>
         /// Gets the number of different values in the pool.
         /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
         /// <remarks>
         /// A state that also calculates a derivative, will need one more memory for
         /// storing that derivative. This property will return the total size needed

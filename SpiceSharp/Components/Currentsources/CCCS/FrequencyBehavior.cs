@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Device methods and properties 
+        /// Get the voltage. 
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
@@ -20,12 +20,20 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             state.ThrowIfNull(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
+
+        /// <summary>
+        /// Get the current.
+        /// </summary>
         [ParameterName("i"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             return state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
         }
+
+        /// <summary>
+        /// Get the power dissipation.
+        /// </summary>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -36,13 +44,17 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// Nodes
+        /// The (pos, branch) element.
         /// </summary>
         protected MatrixElement<Complex> CPosControlBranchPtr { get; private set; }
+
+        /// <summary>
+        /// the (neg, branch) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegControlBranchPtr { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

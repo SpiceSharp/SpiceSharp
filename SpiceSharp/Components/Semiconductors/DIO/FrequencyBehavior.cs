@@ -13,22 +13,43 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the (external positive, positive) element.
         /// </summary>
         protected MatrixElement<Complex> CPosPosPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegPosPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, external positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosPrimePosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosPrimeNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the external (positive, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (negative, negative) element.
+        /// </summary>
         protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (positive, positive) element.
+        /// </summary>
         protected MatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
@@ -39,9 +60,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the current.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
@@ -54,9 +72,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the power.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">state</exception>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public Complex GetPower(ComplexSimulationState state)
         {
@@ -68,7 +83,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

@@ -16,116 +16,174 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the base configuration.
         /// </summary>
-        /// <value>
-        /// The base configuration.
-        /// </value>
         protected BaseConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Gets the external drain node.
         /// </summary>
         protected int DrainNode { get; private set; }
+
+        /// <summary>
+        /// Gets the external gate node.
+        /// </summary>
         protected int GateNode { get; private set; }
+
+        /// <summary>
+        /// Gets the external source node.
+        /// </summary>
         protected int SourceNode { get; private set; }
+
+        /// <summary>
+        /// Gets the drain node.
+        /// </summary>
         public int DrainPrimeNode { get; private set; }
+
+        /// <summary>
+        /// Gets the source node.
+        /// </summary>
         public int SourcePrimeNode { get; private set; }
+
+        /// <summary>
+        /// Gets the gate RHS element.
+        /// </summary>
         protected VectorElement<double> GateNodePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the drain RHS element.
+        /// </summary>
         protected VectorElement<double> DrainPrimeNodePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the source RHS element.
+        /// </summary>
         protected VectorElement<double> SourcePrimeNodePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, drain) element.
+        /// </summary>
         protected MatrixElement<double> GateDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, source) element.
+        /// </summary>
         protected MatrixElement<double> GateSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external source, source) element.
+        /// </summary>
         protected MatrixElement<double> SourceSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, gate) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, source) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, gate) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, external source) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, drain) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainDrainPtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (gate, gate) element.
+        /// </summary>
         protected MatrixElement<double> GateGatePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (external source, source) element.
+        /// </summary>
         protected MatrixElement<double> SourceSourcePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (drain, drain) element.
+        /// </summary>
         protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
+
+        /// <summary>
+        /// Gets the (source, source) element.
+        /// </summary>
         protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
         /// </summary>
-        /// <value>
-        /// The gate-source voltage.
-        /// </value>
         [ParameterName("vgs"), ParameterInfo("Voltage G-S")]
         public double Vgs { get; private set; }
 
         /// <summary>
         /// Gets the gate-drain voltage.
         /// </summary>
-        /// <value>
-        /// The gate-drain voltage.
-        /// </value>
         [ParameterName("vgd"), ParameterInfo("Voltage G-D")]
         public double Vgd { get; private set; }
 
         /// <summary>
         /// Gets the gate current.
         /// </summary>
-        /// <value>
-        /// The gate current.
-        /// </value>
         [ParameterName("ig"), ParameterName("cg"), ParameterInfo("Current at gate node")]
         public double Cg { get; private set; }
 
         /// <summary>
         /// Gets the drain current.
         /// </summary>
-        /// <value>
-        /// The drain current.
-        /// </value>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Current at drain node")]
         public double Cd { get; private set; }
 
         /// <summary>
         /// Gets the gate-drain current.
         /// </summary>
-        /// <value>
-        /// The gate-drain current.
-        /// </value>
         [ParameterName("igd"), ParameterInfo("Current G-D")]
         public double Cgd { get; private set; }
 
         /// <summary>
-        /// Gets the transconductance.
+        /// Gets the small-signal transconductance.
         /// </summary>
-        /// <value>
-        /// The transconductance.
-        /// </value>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
         public double Gm { get; private set; }
 
         /// <summary>
-        /// Gets the drain-source conductance.
+        /// Gets the small-signal drain-source conductance.
         /// </summary>
-        /// <value>
-        /// The drain-source conductance.
-        /// </value>
         [ParameterName("gds"), ParameterInfo("Conductance D-S")]
         public double Gds { get; private set; }
 
         /// <summary>
-        /// Gets the gate-source conductance.
+        /// Gets the small-signal gate-source conductance.
         /// </summary>
-        /// <value>
-        /// The GGS.
-        /// </value>
         [ParameterName("ggs"), ParameterName("Conductance G-S")]
         public double Ggs { get; private set; }
 
         /// <summary>
-        /// Gets the gate-drain conductance.
+        /// Gets the small-signal gate-drain conductance.
         /// </summary>
-        /// <value>
-        /// The gate-drain conductance.
-        /// </value>
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 
@@ -144,7 +202,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Connect the behavior in the circuit
         /// </summary>
         /// <param name="pins">Pin indices in order</param>
-        /// <exception cref="ArgumentNullException">pins</exception>
         public void Connect(params int[] pins)
         {
             pins.ThrowIfNot(nameof(pins), 3);
@@ -158,7 +215,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="provider">The data provider.</param>
-        /// <exception cref="ArgumentNullException">provider</exception>
         public override void Setup(Simulation simulation, SetupDataProvider provider)
         {
             base.Setup(simulation, provider);

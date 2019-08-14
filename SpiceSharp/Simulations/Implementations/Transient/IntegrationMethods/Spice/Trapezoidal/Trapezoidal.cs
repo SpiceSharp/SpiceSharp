@@ -12,17 +12,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the xmu.
         /// </summary>
-        /// <value>
-        /// The xmu.
-        /// </value>
         public double Xmu { get; } = 0.5;
 
         /// <summary>
         /// Integration coefficients
         /// </summary>
-        /// <value>
-        /// The coefficients.
-        /// </value>
         protected double[] Coefficients { get; } = new double[2];
 
         /// <summary>
@@ -62,8 +56,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Predicts a solution
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        /// <exception cref="ArgumentNullException">simulation</exception>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
         protected override void Predict(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
@@ -108,7 +100,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="sender">The sender (integration method).</param>
         /// <param name="args">The <see cref="TruncateEvaluateEventArgs" /> instance containing the event data.</param>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid order</exception>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
             args.ThrowIfNull(nameof(args));
@@ -176,7 +167,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Computes the integration coefficients.
         /// </summary>
-        /// <exception cref="SpiceSharp.CircuitException">Invalid order {0}".FormatString(Order)</exception>
         protected override void ComputeCoefficients()
         {
             var delta = IntegrationStates[0].Delta;

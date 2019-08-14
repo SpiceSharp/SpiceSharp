@@ -14,17 +14,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the currently active noise configuration.
         /// </summary>
-        /// <value>
-        /// The noise configuration.
-        /// </value>
         public NoiseConfiguration NoiseConfiguration { get; protected set; }
 
         /// <summary>
         /// Gets the noise state.
         /// </summary>
-        /// <value>
-        /// The noise state.
-        /// </value>
         public NoiseState NoiseState { get; private set; }
 
         /// <summary>
@@ -79,7 +73,6 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>
-        /// <exception cref="ArgumentNullException">circuit</exception>
         protected override void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));

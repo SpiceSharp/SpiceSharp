@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Behaviors;
@@ -17,36 +16,31 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
         protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// Gets the capacitance.
         /// </summary>
-        /// <value>
-        /// The capacitance.
-        /// </value>
         [ParameterName("capacitance"), ParameterInfo("The capacitance of the capacitor.")]
         public double Capacitance { get; private set; }
 
         /// <summary>
-        /// Nodes for child classes
+        /// The positive node.
         /// </summary>
         protected int PosNode { get; private set; }
+
+        /// <summary>
+        /// The negative node.
+        /// </summary>
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TemperatureBehavior(string name) : base(name) { }

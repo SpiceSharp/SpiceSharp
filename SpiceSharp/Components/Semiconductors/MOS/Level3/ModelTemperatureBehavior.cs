@@ -24,31 +24,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Gets the width of the depletion layer.
         /// </summary>
-        /// <value>
-        /// The width of the depletion layer.
-        /// </value>
         [ParameterName("xd"), ParameterInfo("Depletion layer width")]
         public double CoefficientDepletionLayerWidth { get; private set; }
 
         /// <summary>
         /// Gets alpha.
         /// </summary>
-        /// <value>
-        /// Alpha.
-        /// </value>
         [ParameterName("alpha"), ParameterInfo("Alpha")]
         public double Alpha { get; private set; }
-        
+
         /// <summary>
-        /// Shared parameters
+        /// Gets the implementation-specific factor 1.
         /// </summary>
         public double Factor1 { get; private set; }
+
+        /// <summary>
+        /// Gets the nominal thermal voltage.
+        /// </summary>
         public double VtNominal { get; private set; }
+
+        /// <summary>
+        /// Gets the band-gap.
+        /// </summary>
         public double EgFet1 { get; private set; }
+
+        /// <summary>
+        /// Gets the implementation-specific factor PbFactor1
+        /// </summary>
         public double PbFactor1 { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }

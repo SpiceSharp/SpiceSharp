@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(NonlinearResistor), new BehaviorFactoryDictionary
             {
-                {typeof(LoadBehavior), e => new LoadBehavior(e.Name)}
+                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)}
             });
         }
 

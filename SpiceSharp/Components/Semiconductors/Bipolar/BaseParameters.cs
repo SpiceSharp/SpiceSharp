@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -9,7 +8,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     public class BaseParameters : ParameterSet
     {
         /// <summary>
-        /// Parameters
+        /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature")]
         public double TemperatureCelsius
@@ -17,18 +16,40 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => Temperature - Constants.CelsiusKelvin;
             set => Temperature.Value = value + Constants.CelsiusKelvin;
         }
+
+        /// <summary>
+        /// Gets the temperature parameter in degrees Kelvin.
+        /// </summary>
         public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+
+        /// <summary>
+        /// Gets the area parameter.
+        /// </summary>
         [ParameterName("area"), ParameterInfo("Area factor")]
         public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
+
+        /// <summary>
+        /// Gets or sets whether or not the device is initially off (non-conducting).
+        /// </summary>
         [ParameterName("off"), ParameterInfo("Device initially off")]
         public bool Off { get; set; }
+
+        /// <summary>
+        /// Gets the initial base-emitter voltage parameter.
+        /// </summary>
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage")]
         public GivenParameter<double> InitialVoltageBe { get; } = new GivenParameter<double>();
+
+        /// <summary>
+        /// Gets the initial collector-emitter voltage parameter.
+        /// </summary>
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage")]
         public GivenParameter<double> InitialVoltageCe { get; } = new GivenParameter<double>();
-        [ParameterName("sens_area"), ParameterInfo("flag to request sensitivity WRT area")]
-        public bool Sensitivity { get; set; }
 
+        /// <summary>
+        /// Set initial conditions of the device.
+        /// </summary>
+        /// <param name="value">The initial voltages (Vce, Vbe) or just (Vbe).</param>
         [ParameterName("ic"), ParameterInfo("Initial condition vector")]
         public void SetIc(double[] value)
         {
