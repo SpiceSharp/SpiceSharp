@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Behaviors
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -77,27 +77,6 @@
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
   </h3>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseAcceptBehavior.html">BaseAcceptBehavior</a></h4>
-      <section><p>Template for accepting a timepoint.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html">BaseFrequencyBehavior</a></h4>
-      <section><p>A template that describes frequency-dependent behavior.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseInitialConditionBehavior.html">BaseInitialConditionBehavior</a></h4>
-      <section><p>This class describes behavior for initial conditions.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseLoadBehavior.html">BaseLoadBehavior</a></h4>
-      <section><p>A template that describes the loading behavior.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseNoiseBehavior.html">BaseNoiseBehavior</a></h4>
-      <section><p>A template that describes noise analysis behavior.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseTemperatureBehavior.html">BaseTemperatureBehavior</a></h4>
-      <section><p>A template that describes temperature-dependent behavior.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BaseTransientBehavior.html">BaseTransientBehavior</a></h4>
-      <section><p>A template that describes transient (time-dependent) behavior.</p>
-</section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></h4>
       <section><p>Template for a behavior.</p>
 </section>
@@ -110,11 +89,11 @@
       <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorPool.html">BehaviorPool</a></h4>
       <section><p>A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.</p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></h4>
+      <section><p>Class that can be used for binding a <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a> to a simulation.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.EntityBehaviorDictionary.html">EntityBehaviorDictionary</a></h4>
       <section><p>A dictionary of <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a>. Only on instance of each type is allowed.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.SetupDataProvider.html">SetupDataProvider</a></h4>
-      <section><p>Class that can be used for setting up a <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a>.</p>
 </section>
     <h3 id="interfaces">Interfaces
   </h3>
@@ -122,7 +101,7 @@
       <section><p>Behavior that can accept a time point.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></h4>
-      <section><p>Contract for a behavior</p>
+      <section><p>Contract for a behavior.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></h4>
       <section><p>An interface that describes behaviors for biasing in a <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a>.
@@ -135,10 +114,7 @@ This behavior is responsible for calculating the DC equivalent behavior of an en
       <section><p>This interface describes behavior for initial conditions.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></h4>
-      <section><p>A behavior that is used by <a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html#SpiceSharp_Behaviors_INoiseBehavior_Noise_SpiceSharp_Simulations_Noise_">Noise(Noise)</a>.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></h4>
-      <section><p>A class that exposes named properties.</p>
+      <section><p>A behavior that is used by <a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html#SpiceSharp_Behaviors_INoiseBehavior_Noise">Noise()</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></h4>
       <section><p>An interface that describes temperature-dependent behaviors.</p>
@@ -149,7 +125,7 @@ This behavior is responsible for calculating the DC equivalent behavior of an en
     <h3 id="delegates">Delegates
   </h3>
       <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorFactoryMethod.html">BehaviorFactoryMethod</a></h4>
-      <section><p>Delegate</p>
+      <section><p>Create a behavior for an entity</p>
 </section>
 </article>
           </div>

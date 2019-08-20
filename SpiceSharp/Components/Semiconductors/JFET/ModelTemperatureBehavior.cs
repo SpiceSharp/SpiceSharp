@@ -7,8 +7,7 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="JFETModel" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseTemperatureBehavior" />
-    public class ModelTemperatureBehavior : BaseTemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
     {
         // Necessary behaviors and parameters
         private ModelBaseParameters _mbp;
@@ -55,29 +54,25 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            _mbp = provider.GetParameterSet<ModelBaseParameters>();
+            _mbp = context.GetParameterSet<ModelBaseParameters>();
         }
         
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public override void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             if (_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = simulation.RealState.NominalTemperature;
+                _mbp.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
 
             var vtnom = Constants.KOverQ * _mbp.NominalTemperature;
             var fact1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;

@@ -8,19 +8,19 @@
     <title>DC analysis </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="DC analysis ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -76,16 +76,16 @@
 <p>We wish to find the I-V curve for multiple Vgs voltages. This can be achieved by passing multiple <strong><a class="xref" href="../../api/SpiceSharp.Simulations.SweepConfiguration.html">SweepConfiguration</a></strong>-objects to the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DC.html">DC</a></strong> constructor.</p>
 <p>The code looks as follows:</p>
 <pre><code class="lang-csharp" name="Circuit">// Make the bipolar junction transistor
-var nmos = new Mosfet1(&quot;M1&quot;);
+var nmos = new Mosfet1(&quot;M1&quot;) {Model = &quot;example&quot;};
 nmos.Connect(&quot;d&quot;, &quot;g&quot;, &quot;0&quot;, &quot;0&quot;);
 var nmosmodel = new Mosfet1Model(&quot;example&quot;);
 nmosmodel.SetParameter(&quot;kp&quot;, 150.0e-3);
-nmos.SetModel(nmosmodel);
 
 // Build the circuit
 var ckt = new Circuit(
     new VoltageSource(&quot;Vgs&quot;, &quot;g&quot;, &quot;0&quot;, 0),
     new VoltageSource(&quot;Vds&quot;, &quot;d&quot;, &quot;0&quot;, 0),
+    nmosmodel,
     nmos
     );
 
@@ -107,20 +107,27 @@ dc.ExportSimulationData += (sender, args) =&gt;
     var current = currentExport.Value;
 };
 dc.Run(ckt);
-</code></pre><p>First we will build an NMOS transistor. For this we need a <strong><a class="xref" href="../../api/SpiceSharp.Components.Component.html">Component</a></strong> implementation of a transistor, which we can connect to nodes in the circuit. Most components also need a <strong><a class="xref" href="../../api/SpiceSharp.Components.Model.html">Model</a></strong> in order to work. Models typically describe general common properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).</p>
-<p>In our case, Spice# provides us with a component that implements the model equations of a transistor, called <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which is accompanied by a <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong>.
-Every component or model can have parameters, which can be set by using the method <em><a href="xref:SpiceSharp.Circuits.Entity.SetParameter(System.String,System.Double)">SetParameter</a></em>. The parameter names for MOS level 1 transistors are defined in the model specification and are all lower case.</p>
+</code></pre><p>First we build our NMOS transistor <em>M1</em>. For this we need a <strong><a class="xref" href="../../api/SpiceSharp.Components.Component.html">Component</a></strong> implementation of a transistor, which we can connect to nodes in the circuit. Most components also need a <strong><a class="xref" href="../../api/SpiceSharp.Components.Model.html">Model</a></strong> in order to work. Models typically describe general common properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on an individual level (eg. width, length, device temperature, etc.).</p>
+<p>In our case, Spice# provides us with a component that implements the model equations of a transistor, called <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which is accompanied by a <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong>. This model is identical to Spice&#39;s mosfet LEVEL=1 model.
+Every component or model can have parameters, which can be set by using the method <em><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Collections_Generic_IEqualityComparer_System_String__">SetParameter</a></em>. The parameter names for MOS level 1 are all specified in the parameter sets <strong><a class="xref" href="../../api/SpiceSharp.Components.MosfetBehaviors.Level1.BaseParameters.html">BaseParameters</a></strong> and <strong><a class="xref" href="../../api/SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters.html">ModelBaseParameters</a></strong>. Remember that these parameter sets extend other classes that also contain parameters! Use the API and the GitHub repository to your advantage to find out which parameters are supported. For most models, the names are identical to their Spice 3f5 counterparts.</p>
 <p>After running and plotting the data we get:</p>
 <p align="center"><img src="images/example_DCgraph.svg"></p>
 
-<p>Running this example in Spice 3f5 would involve writing the following netlist.</p>
-<pre><code>.MODEL example NMOS(Kp=150m)
+<p>If we wanted to implement the same simulation in the original Spice simulator, we would provide the following netlist:</p>
+<pre><code>NMOS biasing example
+
+.MODEL example NMOS(Kp=150m)
 M1 d g 0 0
 Vgs g 0 0
 Vds d 0 0
 
 .DC Vds 0 5 0.1 Vgs 0 3 0.2
-</code></pre><p><div class="pull-left"><a href="analysis.html">Previous: Analysis</a></div> <div class="pull-right"><a href="acanalysis.html">Next: AC analysis</a><p>
+
+* Export voltages/currents/...
+
+.END
+</code></pre><p>This netlist would be parsed, executed, and the results are then written to a file which can then be processed. Spice# is a <em>library</em>, and you have access to the data during execution. For example, you could change parts of the simulation during runtime, you could automate designs, and you can freely choose during the simulation which data you want to use and ignore.</p>
+<p><div class="pull-left"><a href="analysis.html">Previous: Analysis</a></div> <div class="pull-right"><a href="acanalysis.html">Next: AC analysis</a><p>
 </div></article>
           </div>
           

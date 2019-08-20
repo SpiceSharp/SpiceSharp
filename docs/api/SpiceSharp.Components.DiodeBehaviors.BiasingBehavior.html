@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class BiasingBehavior
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -79,21 +79,16 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-    <div class="level5"><span class="xref">BiasingBehavior</span></div>
-      <div class="level6"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level6"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TransientBehavior.html">TransientBehavior</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
+    <div class="level3"><span class="xref">BiasingBehavior</span></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.DynamicParameterBehavior.html">DynamicParameterBehavior</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
-    <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -137,58 +132,22 @@
       <a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html#SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Vte">TemperatureBehavior.Vte</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html#SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">TemperatureBehavior.Setup(Simulation, SetupDataProvider)</a>
+      <a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html#SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_State">TemperatureBehavior.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html#SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html#SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_SpiceSharp_Behaviors_ITemperatureBehavior_Temperature">TemperatureBehavior.ITemperatureBehavior.Temperature()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Simulation">Behavior.Simulation</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unbind">Behavior.Unbind()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Principal">NamedParameterized.Principal</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1">NamedParameterized.CreateSetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1">NamedParameterized.CreateGetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_Members">Parameterized.Members</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateSetter__1_System_Reflection_MemberInfo_">Parameterized.CreateSetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateGetter__1_System_Reflection_MemberInfo_">Parameterized.CreateGetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_SetMember__1_System_Reflection_MemberInfo___0_">Parameterized.SetMember&lt;T&gt;(MemberInfo, T)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -216,13 +175,13 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class BiasingBehavior : TemperatureBehavior, IPropertyExporter, ITemperatureBehavior, IBiasingBehavior, IBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class BiasingBehavior : TemperatureBehavior, ITemperatureBehavior, IBiasingBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior__ctor_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.#ctor*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior__ctor_System_String_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.#ctor(System.String)">BiasingBehavior(String)</h4>
-  <div class="markdown level1 summary"><p>Constructor</p>
+  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.html">BiasingBehavior</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -249,15 +208,16 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Conduct_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Conduct*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Conduct" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Conduct">Conduct</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Conductance_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Conductance*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Conductance" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Conductance">Conductance</h4>
+  <div class="markdown level1 summary"><p>Gets the small-signal conductance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;gd&quot;)]
 [ParameterInfo(&quot;Small-signal conductance&quot;)]
-public double Conduct { get; protected set; }</code></pre>
+public double Conductance { get; protected set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -276,40 +236,15 @@ public double Conduct { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Current_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Current*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Current" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Current">Current</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the current.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;i&quot;)]
 [ParameterName(&quot;id&quot;)]
-[ParameterInfo(&quot;Current through the diode&quot;)]
+[ParameterInfo(&quot;Diode current&quot;)]
 public double Current { get; protected set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_InternalVoltage_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.InternalVoltage*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_InternalVoltage" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.InternalVoltage">InternalVoltage</h4>
-  <div class="markdown level1 summary"><p>Extra variables</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vd&quot;)]
-[ParameterInfo(&quot;Voltage across the internal diode&quot;)]
-public double InternalVoltage { get; protected set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -328,7 +263,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegNegPtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegNegPtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegNegPtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegNegPtr">NegNegPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (negative, negative) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -351,7 +287,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegNode_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegNode*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegNode" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegNode">NegNode</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the negative node.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -374,7 +311,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegPosPrimePtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegPosPrimePtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegPosPrimePtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegPosPrimePtr">NegPosPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (negative, positive) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -397,7 +335,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegPtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegPtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_NegPtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.NegPtr">NegPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the negative RHS element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -420,7 +359,7 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosNode_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosNode*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosNode" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosNode">PosNode</h4>
-  <div class="markdown level1 summary"><p>Nodes</p>
+  <div class="markdown level1 summary"><p>Gets the positive node.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -444,7 +383,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPosPrimePtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPosPrimePtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPosPrimePtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPosPrimePtr">PosPosPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (external positive, positive) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -467,7 +407,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPosPtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPosPtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPosPtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPosPtr">PosPosPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the external (positive, positive) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -490,7 +431,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimeNegPtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimeNegPtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimeNegPtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimeNegPtr">PosPrimeNegPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (positive, negative) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -513,7 +455,7 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimeNode_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimeNode*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimeNode" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimeNode">PosPrimeNode</h4>
-  <div class="markdown level1 summary"><p>Gets the positive prime node index.</p>
+  <div class="markdown level1 summary"><p>Gets the positive internal node.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -531,14 +473,14 @@ public double InternalVoltage { get; protected set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>The positive prime node index.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimePosPrimePtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimePosPrimePtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimePosPrimePtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimePosPrimePtr">PosPrimePosPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (positive, positive) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -561,7 +503,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimePosPtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimePosPtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimePosPtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimePosPtr">PosPrimePosPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (positive, external positive) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -584,7 +527,8 @@ public double InternalVoltage { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimePtr_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimePtr*"></a>
   <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_PosPrimePtr" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.PosPrimePtr">PosPrimePtr</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the positive RHS element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -605,97 +549,19 @@ public double InternalVoltage { get; protected set; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Connect_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect the behavior</p>
+  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Voltage_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Voltage*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Voltage" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Voltage">Voltage</h4>
+  <div class="markdown level1 summary"><p>Gets the voltage.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;v&quot;)]
+[ParameterName(&quot;vd&quot;)]
+[ParameterInfo(&quot;Diode voltage&quot;)]
+public double Voltage { get; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetEquationPointers_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetEquationPointers*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetEquationPointers(SpiceSharp.Simulations.VariableSet,SpiceSharp.Algebra.Solver{System.Double})">GetEquationPointers(VariableSet, Solver&lt;Double&gt;)</h4>
-  <div class="markdown level1 summary"><p>Get equation pointers</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void GetEquationPointers(VariableSet variables, Solver&lt;double&gt; solver)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.VariableSet.html">VariableSet</a></td>
-        <td><span class="parametername">variables</span></td>
-        <td><p>Variables</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Solver-1.html">Solver</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td><span class="parametername">solver</span></td>
-        <td><p>Solver</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetPower_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetPower*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetPower_SpiceSharp_Simulations_BaseSimulationState_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetPower(SpiceSharp.Simulations.BaseSimulationState)">GetPower(BaseSimulationState)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;p&quot;)]
-[ParameterName(&quot;pd&quot;)]
-[ParameterInfo(&quot;Power&quot;)]
-public double GetPower(BaseSimulationState state)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulationState.html">BaseSimulationState</a></td>
-        <td><span class="parametername">state</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -710,15 +576,16 @@ public double GetPower(BaseSimulationState state)</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetVoltage_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetVoltage*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetVoltage_SpiceSharp_Simulations_BaseSimulationState_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetVoltage(SpiceSharp.Simulations.BaseSimulationState)">GetVoltage(BaseSimulationState)</h4>
-  <div class="markdown level1 summary"></div>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Bind_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Bind*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Bind(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.BindingContext)">Bind(Simulation, BindingContext)</h4>
+  <div class="markdown level1 summary"><p>Bind the behavior.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;v&quot;)]
-[ParameterInfo(&quot;Voltage across the diode&quot;)]
-public double GetVoltage(BaseSimulationState state)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Bind(Simulation simulation, BindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -731,12 +598,33 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulationState.html">BaseSimulationState</a></td>
-        <td><span class="parametername">state</span></td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context.</p>
+</td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html#SpiceSharp_Components_DiodeBehaviors_TemperatureBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_">TemperatureBehavior.Bind(Simulation, BindingContext)</a></div>
+  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetPower_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetPower*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_GetPower" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.GetPower">GetPower()</h4>
+  <div class="markdown level1 summary"><p>Gets the power dissipated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;p&quot;)]
+[ParameterName(&quot;pd&quot;)]
+[ParameterInfo(&quot;Power&quot;)]
+public double GetPower()</code></pre>
+  </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -753,12 +641,13 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Initialize_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Initialize*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Initialize_SpiceSharp_Simulations_BaseSimulation_System_Double__System_Boolean__" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Initialize(SpiceSharp.Simulations.BaseSimulation,System.Double@,System.Boolean@)">Initialize(BaseSimulation, out Double, out Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Initialize_System_Double__System_Boolean__" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Initialize(System.Double@,System.Boolean@)">Initialize(out Double, out Boolean)</h4>
+  <div class="markdown level1 summary"><p>Initialize the device based on the current iteration state.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void Initialize(BaseSimulation simulation, out double vd, out bool check)</code></pre>
+    <pre><code class="lang-csharp hljs">protected void Initialize(out double vd, out bool check)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -770,11 +659,6 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td></td>
-      </tr>
       <tr>
         <td><span class="xref">System.Double</span></td>
         <td><span class="parametername">vd</span></td>
@@ -787,33 +671,17 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_IsConvergent_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.IsConvergent*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_IsConvergent_SpiceSharp_Simulations_BaseSimulation_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.IsConvergent(SpiceSharp.Simulations.BaseSimulation)">IsConvergent(BaseSimulation)</h4>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_IsConvergent_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.SpiceSharp#Behaviors#IBiasingBehavior#IsConvergent*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_IsConvergent" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.SpiceSharp#Behaviors#IBiasingBehavior#IsConvergent">IBiasingBehavior.IsConvergent()</h4>
   <div class="markdown level1 summary"><p>Check convergence for the diode</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool IsConvergent(BaseSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">bool IBiasingBehavior.IsConvergent()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Base simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -829,37 +697,16 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Load_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Load*"></a>
-  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_Load_SpiceSharp_Simulations_BaseSimulation_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.Load(SpiceSharp.Simulations.BaseSimulation)">Load(BaseSimulation)</h4>
+  <a id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_Load_" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.SpiceSharp#Behaviors#IBiasingBehavior#Load*"></a>
+  <h4 id="SpiceSharp_Components_DiodeBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_Load" data-uid="SpiceSharp.Components.DiodeBehaviors.BiasingBehavior.SpiceSharp#Behaviors#IBiasingBehavior#Load">IBiasingBehavior.Load()</h4>
   <div class="markdown level1 summary"><p>Execute behavior</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Load(BaseSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">void IBiasingBehavior.Load()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Base simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
-  </div>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
   </div>
@@ -869,8 +716,54 @@ public double GetVoltage(BaseSimulationState state)</code></pre>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
   </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

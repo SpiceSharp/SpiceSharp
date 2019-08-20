@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Markowitz&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -262,6 +262,41 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Algebra_Solve_Markowitz_1_CreateFillin_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.CreateFillin*"></a>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_CreateFillin_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_MatrixElement__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.CreateFillin(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.MatrixElement{`0})">CreateFillin(SparseMatrix&lt;T&gt;, MatrixElement&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Notifies the strategy that a fill-in has been created</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void CreateFillin(SparseMatrix&lt;T&gt; matrix, MatrixElement&lt;T&gt; fillin)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><span class="parametername">matrix</span></td>
+        <td><p>The matrix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
+        <td><span class="parametername">fillin</span></td>
+        <td><p>The fill-in.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.CreateFillin(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.MatrixElement&lt;T&gt;)</span></div>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.FindPivot*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_SpiceSharp_Algebra_SparseMatrix__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.FindPivot(SpiceSharp.Algebra.SparseMatrix{`0},System.Int32)">FindPivot(SparseMatrix&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>Find a pivot in the matrix.</p>
@@ -344,22 +379,6 @@ will be moved to the diagonal for this elimination step.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>matrix</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_IsValidPivot_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.IsValidPivot*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_IsValidPivot_SpiceSharp_Algebra_MatrixElement__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.IsValidPivot(SpiceSharp.Algebra.MatrixElement{`0})">IsValidPivot(MatrixElement&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>This method will check whether or not a pivot element is valid or not.
@@ -406,22 +425,6 @@ It checks for the submatrix right/below of the pivot.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.IsValidPivot(SpiceSharp.Algebra.MatrixElement&lt;T&gt;)</span></div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>pivot</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.MovePivot*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__SpiceSharp_Algebra_MatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.MovePivot(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},SpiceSharp.Algebra.MatrixElement{`0},System.Int32)">MovePivot(SparseMatrix&lt;T&gt;, SparseVector&lt;T&gt;, MatrixElement&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>Move the pivot to the diagonal for this elimination step.</p>
@@ -472,22 +475,6 @@ It checks for the submatrix right/below of the pivot.</p>
   <h5 id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__SpiceSharp_Algebra_MatrixElement__0__System_Int32__remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>This is done by swapping the rows and columns of the diagonal and that of the pivot.</p>
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>pivot</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Product_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Product*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Product_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Product(System.Int32)">Product(Int32)</h4>
   <div class="markdown level1 summary"><p>Gets the Markowitz products.</p>
@@ -617,22 +604,6 @@ It checks for the submatrix right/below of the pivot.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.Setup(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.SparseVector&lt;T&gt;, System.Int32, System.Func&lt;T, System.Double&gt;)</span></div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>matrix</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Update_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Update*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Update_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_MatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Update(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.MatrixElement{`0},System.Int32)">Update(SparseMatrix&lt;T&gt;, MatrixElement&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>Update the strategy after the pivot was moved.</p>
@@ -674,22 +645,55 @@ It checks for the submatrix right/below of the pivot.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.Update(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.MatrixElement&lt;T&gt;, System.Int32)</span></div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>pivot</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.Algebra.Solve.PivotStrategy-1.html">PivotStrategy</a>&lt;T&gt;</div>

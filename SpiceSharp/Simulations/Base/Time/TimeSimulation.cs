@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
@@ -98,21 +97,19 @@ namespace SpiceSharp.Simulations
         protected override void Setup(EntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
-            base.Setup(entities);
 
             // Get behaviors and configurations
             var config = Configurations.Get<TimeConfiguration>().ThrowIfNull("time configuration");
             _useIc = config.UseIc;
             Method = config.Method.ThrowIfNull("method");
+
+            // Setup
+            base.Setup(entities);
+
+            // Cache local variables
             _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 
-            // Allow all transient behaviors to allocate equation elements and create states
-            for (var i = 0; i < _transientBehaviors.Count; i++)
-            {
-                _transientBehaviors[i].GetEquationPointers(RealState.Solver);
-                _transientBehaviors[i].CreateStates(Method);
-            }
             Method.Setup(this);
 
             // Set up initial conditions
@@ -146,7 +143,7 @@ namespace SpiceSharp.Simulations
             // Stop calculating the operating point
             state.UseIc = false;
             state.UseDc = false;
-            GetDcStates();
+            InitializeStates();
             AfterLoad -= LoadInitialConditions;
         }
 
@@ -157,10 +154,10 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             for (var i = 0; i < _transientBehaviors.Count; i++)
-                _transientBehaviors[i].Unsetup(this);
+                _transientBehaviors[i].Unbind();
             _transientBehaviors = null;
             for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Unsetup(this);
+                _acceptBehaviors[i].Unbind();
             _acceptBehaviors = null;
 
             // Destroy the integration method
@@ -318,10 +315,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes all transient behaviors to assume that the current solution is the DC solution.
         /// </summary>
-        protected virtual void GetDcStates()
+        protected virtual void InitializeStates()
         {
             for (var i = 0; i < _transientBehaviors.Count; i++)
-                _transientBehaviors[i].GetDcState(this);
+                _transientBehaviors[i].InitializeStates();
             Method.Initialize(this);
         }
 
@@ -347,7 +344,7 @@ namespace SpiceSharp.Simulations
             if (!RealState.UseDc)
             {
                 for (var i = 0; i < _transientBehaviors.Count; i++)
-                    _transientBehaviors[i].Transient(this);
+                    _transientBehaviors[i].Load();
             }
         }
 
@@ -357,7 +354,7 @@ namespace SpiceSharp.Simulations
         protected void Accept()
         {
             for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Accept(this);
+                _acceptBehaviors[i].Accept();
             Method.Accept(this);
             TimeSimulationStatistics.Accepted++;
         }
@@ -370,7 +367,7 @@ namespace SpiceSharp.Simulations
         {
             Method.Probe(this, delta);
             for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Probe(this);
+                _acceptBehaviors[i].Probe();
         }
     }
 }

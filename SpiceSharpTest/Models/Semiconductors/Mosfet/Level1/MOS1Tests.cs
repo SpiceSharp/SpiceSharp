@@ -179,7 +179,8 @@ namespace SpiceSharpTest.Models
              */
             // Build circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "g", 10.0e3),
@@ -187,7 +188,6 @@ namespace SpiceSharpTest.Models
                 CreateMOS1("M1", "out", "g", "0", "0", "MM"),
                 CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
@@ -293,17 +293,17 @@ namespace SpiceSharpTest.Models
         {
             // Create circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
-                CreateMOS1("M1", "out", "g", "0", "0", "MM"),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM")
+                    .SetParameter("w", 100e-6)
+                    .SetParameter("l", 100e-6),
                 CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
-            ckt["V1"].SetParameter("acmag", 1.0);
-            ckt["M1"].SetParameter("w", 100e-6);
-            ckt["M1"].SetParameter("l", 100e-6);
 
             // Create simulation, exports and references
             var noise = new Noise("noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
@@ -393,10 +393,10 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_MOS1PMOSDifferentialPair_Expect_Reference()
         {
-            var model = new Mosfet1Model("Model");
-            model.SetParameter("pmos", true);
-            model.SetParameter("vto", -0.7);
-            model.SetParameter("kp", 12.57e-4);
+            var model = new Mosfet1Model("Model")
+                .SetParameter("pmos", true)
+                .SetParameter("vto", -0.7)
+                .SetParameter("kp", 12.57e-4);
 
             var ckt = new Circuit(
                 new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH"),

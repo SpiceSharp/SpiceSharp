@@ -1,14 +1,10 @@
-﻿using System;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
     /// <summary>
     /// Accepting behavior for switches.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SwitchBehaviors.BiasingBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.IAcceptBehavior" />
     public class AcceptBehavior : BiasingBehavior, IAcceptBehavior
     {
         /// <summary>
@@ -23,16 +19,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public void Probe(TimeSimulation simulation)
+        void IAcceptBehavior.Probe()
         {
         }
 
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public void Accept(TimeSimulation simulation)
+        void IAcceptBehavior.Accept()
         {
             UseOldState = true;
             PreviousState = CurrentState;

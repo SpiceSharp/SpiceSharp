@@ -47,10 +47,10 @@ namespace SpiceSharpTest.Models
             double resistance = 1;
             var inductance = 1e-3;
             var ckt = new Circuit(
-                new VoltageSource("V1", "IN", "0", 0.0),
+                new VoltageSource("V1", "IN", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new Inductor("L1", "IN", "OUT", inductance),
                 new Resistor("R1", "OUT", "0", resistance));
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
@@ -78,10 +78,10 @@ namespace SpiceSharpTest.Models
             var inductance = 1e-6;
             var initialCurrent = 1e-3;
             var ckt = new Circuit(
-                new Inductor("L1", "OUT", "0", inductance),
+                new Inductor("L1", "OUT", "0", inductance)
+                    .SetParameter("ic", initialCurrent),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
-            ckt["L1"].SetParameter("ic", initialCurrent);
 
             /*
              * WARNING: An LC tank is a circuit that oscillates and does not converge. This causes the global truncation error

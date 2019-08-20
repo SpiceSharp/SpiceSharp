@@ -47,10 +47,8 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">The name of the method.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///   <c>true</c> if one or more methods were called; otherwise <c>false</c>.
-        /// </returns>
-        public void SetParameter(string name, IEqualityComparer<string> comparer = null)
+        /// <returns>The source object (can be used for chaining).</returns>
+        public ParameterSetDictionary SetParameter(string name, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -63,6 +61,7 @@ namespace SpiceSharp
 
             if (!isset)
                 throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
+            return this;
         }
 
         /// <summary>
@@ -72,10 +71,8 @@ namespace SpiceSharp
         /// <param name="name">The parameter name.</param>
         /// <param name="value">The parameter value.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///   <c>true</c> if one or more parameters were set, otherwise <c>false</c>.
-        /// </returns>
-        public void SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        /// <returns>The source object (can be used for chaining).</returns>
+        public ParameterSetDictionary SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
         {
             comparer = comparer ?? EqualityComparer<string>.Default;
 
@@ -88,6 +85,7 @@ namespace SpiceSharp
 
             if (!isset)
                 throw new CircuitException("No parameter with the name '{0}' found of type {1}".FormatString(name, typeof(T).Name));
+            return this;
         }
 
         /// <summary>

@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class NoiseBehavior
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -79,19 +79,15 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-    <div class="level5"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-    <div class="level6"><span class="xref">NoiseBehavior</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level4"><span class="xref">NoiseBehavior</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
-    <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
@@ -126,6 +122,9 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ConductanceX">BiasingBehavior.ConductanceX</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_GetPower_SpiceSharp_Simulations_BaseSimulationState_">BiasingBehavior.GetPower(BaseSimulationState)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CollectorPrimeNode">BiasingBehavior.CollectorPrimeNode</a>
@@ -230,10 +229,10 @@
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CurrentBe">BiasingBehavior.CurrentBe</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CondBe">BiasingBehavior.CondBe</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CurrentBc">BiasingBehavior.CurrentBc</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CurrentBc">BiasingBehavior.CurrentBc</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CondBe">BiasingBehavior.CondBe</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_CondBc">BiasingBehavior.CondBc</a>
@@ -248,22 +247,19 @@
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Dqbdve">BiasingBehavior.Dqbdve</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ExcessPhaseCalculation">BiasingBehavior.ExcessPhaseCalculation</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Unbind">BiasingBehavior.Unbind()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Connect_System_Int32___">BiasingBehavior.Connect(Int32[])</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_Load">BiasingBehavior.IBiasingBehavior.Load()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__">BiasingBehavior.GetEquationPointers(VariableSet, Solver&lt;Double&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_ExcessPhaseCalculation_System_Double__System_Double__System_Double__">BiasingBehavior.ExcessPhaseCalculation(Double, Double, Double)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Load_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.Load(BaseSimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Initialize_System_Double__System_Double__">BiasingBehavior.Initialize(Double, Double)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Initialize_SpiceSharp_Simulations_BaseSimulation_System_Double__System_Double__">BiasingBehavior.Initialize(BaseSimulation, Double, Double)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_IsConvergent_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.IsConvergent(BaseSimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_IsConvergent">BiasingBehavior.IBiasingBehavior.IsConvergent()</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_BaseParameters">TemperatureBehavior.BaseParameters</a>
@@ -320,55 +316,19 @@
       <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_Vt">TemperatureBehavior.Vt</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_State">TemperatureBehavior.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html#SpiceSharp_Components_BipolarBehaviors_TemperatureBehavior_SpiceSharp_Behaviors_ITemperatureBehavior_Temperature">TemperatureBehavior.ITemperatureBehavior.Temperature()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Simulation">Behavior.Simulation</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Principal">NamedParameterized.Principal</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1">NamedParameterized.CreateSetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1">NamedParameterized.CreateGetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_Members">Parameterized.Members</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateSetter__1_System_Reflection_MemberInfo_">Parameterized.CreateSetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateGetter__1_System_Reflection_MemberInfo_">Parameterized.CreateGetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_SetMember__1_System_Reflection_MemberInfo___0_">Parameterized.SetMember&lt;T&gt;(MemberInfo, T)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -396,13 +356,13 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class NoiseBehavior : BiasingBehavior, IPropertyExporter, ITemperatureBehavior, IBiasingBehavior, IConnectedBehavior, INoiseBehavior, IBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class NoiseBehavior : BiasingBehavior, ITemperatureBehavior, IBiasingBehavior, INoiseBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior__ctor_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.#ctor*"></a>
   <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior__ctor_System_String_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.#ctor(System.String)">NoiseBehavior(String)</h4>
-  <div class="markdown level1 summary"><p>Constructor</p>
+  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.html">NoiseBehavior</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -473,57 +433,20 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.ModelNoiseParameters.html">ModelNoiseParameters</a></td>
-        <td><p>The noise parameters.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_ConnectNoise_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.ConnectNoise*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_ConnectNoise" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.ConnectNoise">ConnectNoise()</h4>
-  <div class="markdown level1 summary"><p>Connect noise sources</p>
+  <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_Bind_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.Bind*"></a>
+  <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.Bind(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.BindingContext)">Bind(Simulation, BindingContext)</h4>
+  <div class="markdown level1 summary"><p>Bind behavior.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void ConnectNoise()</code></pre>
-  </div>
-  <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_Noise_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.Noise*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_Noise_SpiceSharp_Simulations_Noise_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.Noise(SpiceSharp.Simulations.Noise)">Noise(Noise)</h4>
-  <div class="markdown level1 summary"><p>Noise calculations</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Noise(Noise simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Noise simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_Setup_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.Setup*"></a>
-  <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
-  <div class="markdown level1 summary"><p>Setup behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup(Simulation simulation, SetupDataProvider provider)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Bind(Simulation simulation, BindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -538,39 +461,40 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
         <td><span class="parametername">simulation</span></td>
-        <td><p>Simulation</p>
+        <td><p>The simulation.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.SetupDataProvider.html">SetupDataProvider</a></td>
-        <td><span class="parametername">provider</span></td>
+        <td><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></td>
+        <td><span class="parametername">context</span></td>
         <td><p>Data provider</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">BiasingBehavior.Setup(Simulation, SetupDataProvider)</a></div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>provider</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+  <div><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior.html#SpiceSharp_Components_BipolarBehaviors_BiasingBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_">BiasingBehavior.Bind(Simulation, BindingContext)</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_SpiceSharp_Behaviors_INoiseBehavior_ConnectNoise_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.SpiceSharp#Behaviors#INoiseBehavior#ConnectNoise*"></a>
+  <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_SpiceSharp_Behaviors_INoiseBehavior_ConnectNoise" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.SpiceSharp#Behaviors#INoiseBehavior#ConnectNoise">INoiseBehavior.ConnectNoise()</h4>
+  <div class="markdown level1 summary"><p>Connect noise sources</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void INoiseBehavior.ConnectNoise()</code></pre>
   </div>
+  <a id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_SpiceSharp_Behaviors_INoiseBehavior_Noise_" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.SpiceSharp#Behaviors#INoiseBehavior#Noise*"></a>
+  <h4 id="SpiceSharp_Components_BipolarBehaviors_NoiseBehavior_SpiceSharp_Behaviors_INoiseBehavior_Noise" data-uid="SpiceSharp.Components.BipolarBehaviors.NoiseBehavior.SpiceSharp#Behaviors#INoiseBehavior#Noise">INoiseBehavior.Noise()</h4>
+  <div class="markdown level1 summary"><p>Noise calculations</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void INoiseBehavior.Noise()</code></pre>
+  </div>
+  <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
   </div>
@@ -578,13 +502,59 @@
       <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
-  </div>
-  <div>
       <a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

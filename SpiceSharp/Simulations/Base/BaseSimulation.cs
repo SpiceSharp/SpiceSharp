@@ -125,16 +125,12 @@ namespace SpiceSharp.Simulations
         protected override void Setup(EntityCollection circuit)
         {
             circuit.ThrowIfNull(nameof(circuit));
-            base.Setup(circuit);
 
             // Get behaviors and configuration data
             var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
-            _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
-            _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
-            _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
 
             // Create the state for this simulation
             RealState = new BaseSimulationState
@@ -147,10 +143,14 @@ namespace SpiceSharp.Simulations
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
 
-            // Setup the load behaviors
+            // Setup the rest of the circuit.
+            base.Setup(circuit);
+
+            // Cache local variables
+            _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
+            _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
+            _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
             _realStateLoadArgs = new LoadStateEventArgs(RealState);
-            for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].GetEquationPointers(Variables, RealState.Solver);
             RealState.Setup(Variables);
 
             // Set up nodesets
@@ -184,7 +184,7 @@ namespace SpiceSharp.Simulations
             var args = new LoadStateEventArgs(RealState);
             OnBeforeTemperature(args);
             for (var i = 0; i < _temperatureBehaviors.Count; i++)
-                _temperatureBehaviors[i].Temperature(this);
+                _temperatureBehaviors[i].Temperature();
             OnAfterTemperature(args);
         }
 
@@ -203,11 +203,11 @@ namespace SpiceSharp.Simulations
 
             // Unsetup all behaviors
             for (var i = 0; i < _initialConditionBehaviors.Count; i++)
-                _initialConditionBehaviors[i].Unsetup(this);
+                _initialConditionBehaviors[i].Unbind();
             for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].Unsetup(this);
+                _loadBehaviors[i].Unbind();
             for (var i = 0; i < _temperatureBehaviors.Count; i++)
-                _temperatureBehaviors[i].Unsetup(this);
+                _temperatureBehaviors[i].Unbind();
 
             // Clear the state
             RealState.Unsetup();
@@ -555,7 +555,7 @@ namespace SpiceSharp.Simulations
         protected virtual void LoadBehaviors()
         {
             for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].Load(this);
+                _loadBehaviors[i].Load();
         }
 
         /// <summary>
@@ -620,7 +620,7 @@ namespace SpiceSharp.Simulations
             // Device-level convergence tests
             for (var i = 0; i < _loadBehaviors.Count; i++)
             {
-                if (!_loadBehaviors[i].IsConvergent(this))
+                if (!_loadBehaviors[i].IsConvergent())
                 {
                     // I believe this should be false, but Spice 3f5 doesn't...
 

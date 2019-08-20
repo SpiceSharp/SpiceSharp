@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Waveform
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -79,11 +79,15 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></div>
-    <div class="level2"><span class="xref">Waveform</span></div>
-      <div class="level3"><a class="xref" href="SpiceSharp.Components.Pulse.html">Pulse</a></div>
-      <div class="level3"><a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a></div>
-      <div class="level3"><a class="xref" href="SpiceSharp.Components.Waveforms.Pwl.html">Pwl</a></div>
+    <div class="level1"><span class="xref">Waveform</span></div>
+      <div class="level2"><a class="xref" href="SpiceSharp.Components.Pulse.html">Pulse</a></div>
+      <div class="level2"><a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a></div>
+      <div class="level2"><a class="xref" href="SpiceSharp.Components.Waveforms.Pwl.html">Pwl</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable</a>&lt;<a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -113,7 +117,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Waveform_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class Waveform : BaseParameter</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Waveform : ICloneable, ICloneable&lt;Waveform&gt;</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -137,8 +141,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The waveform value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -173,12 +176,12 @@
   </table>
   <a id="SpiceSharp_Components_Waveform_Clone_" data-uid="SpiceSharp.Components.Waveform.Clone*"></a>
   <h4 id="SpiceSharp_Components_Waveform_Clone" data-uid="SpiceSharp.Components.Waveform.Clone">Clone()</h4>
-  <div class="markdown level1 summary"><p>Clones the parameter.</p>
+  <div class="markdown level1 summary"><p>Clones the waveform.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override BaseParameter Clone()</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual Waveform Clone()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -190,22 +193,20 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></td>
-        <td><p>The cloned parameter.</p>
+        <td><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></td>
+        <td><p>The cloned waveform.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.BaseParameter.html#SpiceSharp_BaseParameter_Clone">BaseParameter.Clone()</a></div>
   <a id="SpiceSharp_Components_Waveform_CopyFrom_" data-uid="SpiceSharp.Components.Waveform.CopyFrom*"></a>
-  <h4 id="SpiceSharp_Components_Waveform_CopyFrom_SpiceSharp_BaseParameter_" data-uid="SpiceSharp.Components.Waveform.CopyFrom(SpiceSharp.BaseParameter)">CopyFrom(BaseParameter)</h4>
-  <div class="markdown level1 summary"><p>Copies the contents of a parameter to this parameter.</p>
+  <h4 id="SpiceSharp_Components_Waveform_CopyFrom_SpiceSharp_Components_Waveform_" data-uid="SpiceSharp.Components.Waveform.CopyFrom(SpiceSharp.Components.Waveform)">CopyFrom(Waveform)</h4>
+  <div class="markdown level1 summary"><p>Copies the contents of another waveform to this one.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CopyFrom(BaseParameter source)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void CopyFrom(Waveform source)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -218,15 +219,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></td>
+        <td><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></td>
         <td><span class="parametername">source</span></td>
         <td><p>The source parameter.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.BaseParameter.html#SpiceSharp_BaseParameter_CopyFrom_SpiceSharp_BaseParameter_">BaseParameter.CopyFrom(BaseParameter)</a></div>
   <a id="SpiceSharp_Components_Waveform_Probe_" data-uid="SpiceSharp.Components.Waveform.Probe*"></a>
   <h4 id="SpiceSharp_Components_Waveform_Probe_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.Waveform.Probe(SpiceSharp.Simulations.TimeSimulation)">Probe(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Indicates a new timepoint is being probed.</p>
@@ -263,9 +262,114 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public abstract void Setup()</code></pre>
   </div>
-  <h3 id="seealso">See Also</h3>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_Waveform_SpiceSharp_ICloneable_Clone_" data-uid="SpiceSharp.Components.Waveform.SpiceSharp#ICloneable#Clone*"></a>
+  <h4 id="SpiceSharp_Components_Waveform_SpiceSharp_ICloneable_Clone" data-uid="SpiceSharp.Components.Waveform.SpiceSharp#ICloneable#Clone">ICloneable.Clone()</h4>
+  <div class="markdown level1 summary"><p>Clones the object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICloneable ICloneable.Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Waveform_SpiceSharp_ICloneable_CopyFrom_" data-uid="SpiceSharp.Components.Waveform.SpiceSharp#ICloneable#CopyFrom*"></a>
+  <h4 id="SpiceSharp_Components_Waveform_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_" data-uid="SpiceSharp.Components.Waveform.SpiceSharp#ICloneable#CopyFrom(SpiceSharp.ICloneable)">ICloneable.CopyFrom(ICloneable)</h4>
+  <div class="markdown level1 summary"><p>Copy the contents of another object to this one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ICloneable.CopyFrom(ICloneable source)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The source object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

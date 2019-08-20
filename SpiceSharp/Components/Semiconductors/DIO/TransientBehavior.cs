@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Algebra;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
@@ -37,50 +36,37 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }
-        
+
         /// <summary>
-        /// Create states
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="method"></param>
-        public void CreateStates(IntegrationMethod method)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-			method.ThrowIfNull(nameof(method));
+            base.Bind(simulation, context);
+
+            var method = ((TimeSimulation)simulation).Method;
             _capCharge = method.CreateDerivative();
         }
 
         /// <summary>
         /// Calculate the state values
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.InitializeStates()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
+            var state = State;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             CalculateCapacitance(vd);
         }
 
         /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
-        /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<double> solver)
-        {
-            // No extra pointers needed
-        }
-
-        /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void Transient(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
             // Calculate the capacitance
-            var state = simulation.RealState;
+            var state = State;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             CalculateCapacitance(vd);
 
@@ -90,7 +76,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var ceq = _capCharge.RhsCurrent(geq, vd);
 
             // Store the current
-            Current = Current + _capCharge.Derivative;
+            Current += _capCharge.Derivative;
 
             // Load Rhs vector
             NegPtr.Value += ceq;

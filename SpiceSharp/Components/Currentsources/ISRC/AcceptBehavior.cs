@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="CurrentSource"/>
     /// </summary>
-    public class AcceptBehavior : BaseAcceptBehavior
+    public class AcceptBehavior : Behavior, IAcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -20,36 +20,32 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public AcceptBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            _bp = provider.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
+            _bp = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
         }
 
         /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        void IAcceptBehavior.Probe()
         {
-            _bp.Waveform?.Probe(simulation);
+            _bp.Waveform?.Probe((TimeSimulation)Simulation);
         }
 
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        void IAcceptBehavior.Accept()
         {
-            _bp.Waveform?.Accept(simulation);
+            _bp.Waveform?.Accept((TimeSimulation)Simulation);
         }
     }
 }

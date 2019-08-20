@@ -8,19 +8,19 @@
     <title>Transient analysis </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Transient analysis ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -100,11 +100,17 @@ tran.Run(ckt);
 <p align="center"><img src="images/example_TransientGraph.svg"></p>
 
 <p>Note that Spice 3f5 will simulate the same thing if you feed it the following netlist.</p>
-<pre><code>V1 in 0 PULSE(0 5 10m 1m 1m 20m 40m)
+<pre><code>Transient example
+
+V1 in 0 PULSE(0 5 10m 1m 1m 20m 40m)
 R1 in out 10k
 C1 out 0 1u
 
 .TRAN 1m 0.1
+
+* Export voltages/currents/etc.
+
+.END
 </code></pre><p><div class="pull-left"><a href="acanalysis.html">Previous: AC anslysis</a></div> <div class="pull-right"><a href="../structure/structure.html">Next: Spice# Structure</a><p>
 </div></article>
           </div>

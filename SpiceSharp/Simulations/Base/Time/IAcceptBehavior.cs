@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Behavior that can accept a time point.
@@ -11,13 +9,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        void Probe(TimeSimulation simulation);
+        void Probe();
         
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        void Accept(TimeSimulation simulation);
+        void Accept();
     }
 }

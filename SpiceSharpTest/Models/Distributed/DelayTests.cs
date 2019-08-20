@@ -107,10 +107,9 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-7, 1e-7, 1e-7, 1e-5, 2e-5)),
                 new VoltageDelay("Delay1", "out", "0", "in", "0", 0.5e-5)
+                    // This will make the delay element add a breakpoint when the input changes rapidly
+                    .SetParameter("reltol", 0.5)
             );
-
-            // This will make the delay element add a breakpoint when the input changes rapidly
-            ckt["Delay1"].SetParameter("reltol", 0.5);
 
             // Build the simulation
             var tran = new Transient("tran", 1e-7, 10e-5);
@@ -214,9 +213,9 @@ namespace SpiceSharpTest.Models
 
             // Build the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0),
+                new VoltageSource("V1", "in", "0", 1.0)
+                    .SetParameter("acmag", 1.0),
                 new VoltageDelay("Delay1", "out", "0", "in", "0", delay));
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(1e-3, 1e5, 5));

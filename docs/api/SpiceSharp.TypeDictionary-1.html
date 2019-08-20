@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class TypeDictionary&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -120,7 +120,7 @@ so you can retrieve objects by their base class.</p>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_TypeDictionary_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class TypeDictionary&lt;T&gt; : IDictionary&lt;Type, T&gt;, ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public class TypeDictionary&lt;T&gt; : IDictionary&lt;Type, T&gt;, ICollection&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -147,7 +147,7 @@ so you can retrieve objects by their base class.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected TypeDictionary()</code></pre>
+    <pre><code class="lang-csharp hljs">public TypeDictionary()</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -195,8 +195,7 @@ so you can retrieve objects by their base class.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.Type</span>, T&gt;</td>
-        <td><p>The dictionary.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -262,7 +261,7 @@ so you can retrieve objects by their base class.</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>The value.</p>
+        <td><p>The object of the specified type.</p>
 </td>
       </tr>
     </tbody>
@@ -287,6 +286,30 @@ so you can retrieve objects by their base class.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.Type</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_TypeDictionary_1_Lock_" data-uid="SpiceSharp.TypeDictionary`1.Lock*"></a>
+  <h4 id="SpiceSharp_TypeDictionary_1_Lock" data-uid="SpiceSharp.TypeDictionary`1.Lock">Lock</h4>
+  <div class="markdown level1 summary"><p>Gets the lock used for multithreaded usage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ReaderWriterLockSlim Lock { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.ReaderWriterLockSlim</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -377,27 +400,6 @@ so you can retrieve objects by their base class.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>key</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Type {0} is not derived from {1}&quot;.FormatString(key, BaseClass)</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_TypeDictionary_1_Clear_" data-uid="SpiceSharp.TypeDictionary`1.Clear*"></a>
   <h4 id="SpiceSharp_TypeDictionary_1_Clear" data-uid="SpiceSharp.TypeDictionary`1.Clear">Clear()</h4>
   <div class="markdown level1 summary"><p>Removes all items from the <a class="xref" href="SpiceSharp.TypeDictionary-1.html">TypeDictionary&lt;T&gt;</a>.</p>
@@ -450,6 +452,15 @@ so you can retrieve objects by their base class.</p>
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_TypeDictionary_1_Finalize_" data-uid="SpiceSharp.TypeDictionary`1.Finalize*"></a>
+  <h4 id="SpiceSharp_TypeDictionary_1_Finalize" data-uid="SpiceSharp.TypeDictionary`1.Finalize">Finalize()</h4>
+  <div class="markdown level1 summary"><p>Finalizes an instance of the <a class="xref" href="SpiceSharp.TypeDictionary-1.html">TypeDictionary&lt;T&gt;</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
+  </div>
   <a id="SpiceSharp_TypeDictionary_1_Get_" data-uid="SpiceSharp.TypeDictionary`1.Get*"></a>
   <h4 id="SpiceSharp_TypeDictionary_1_Get__1" data-uid="SpiceSharp.TypeDictionary`1.Get``1">Get&lt;TResult&gt;()</h4>
   <div class="markdown level1 summary"><p>Gets a strongly typed object from the dictionary.</p>
@@ -458,7 +469,6 @@ so you can retrieve objects by their base class.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public TResult Get&lt;TResult&gt;()
-
     where TResult : T</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -569,7 +579,6 @@ so you can retrieve objects by their base class.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool TryGet&lt;TResult&gt;(out TResult value)
-
     where TResult : T</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -831,6 +840,55 @@ if the key is found; otherwise, the default value for the type of the
   </div>
   <div>
       <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">

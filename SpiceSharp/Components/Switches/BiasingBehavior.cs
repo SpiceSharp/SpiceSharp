@@ -1,19 +1,14 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
     /// <summary>
     /// (DC) biasing behavior for switches.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.Behaviors.ExportingBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.IBiasingBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the base parameters.
@@ -49,38 +44,26 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the voltage over the switch.
         /// </summary>
-        /// <param name="state">The state.</param>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
-        public double GetVoltage(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public double GetVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Gets the current through the switch.
         /// </summary>
-        /// <param name="state">The state.</param>
         /// <returns></returns>
         [ParameterName("i"), ParameterInfo("Switch current")]
-        public double GetCurrent(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
-        }
+        public double GetCurrent() => (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the switch.
         /// </summary>
-        /// <param name="state">The state.</param>
         /// <returns></returns>
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
-        public double GetPower(BaseSimulationState state)
+        public double GetPower()
         {
-            state.ThrowIfNull(nameof(state));
-            return (state.Solution[PosNode] - state.Solution[NegNode]) *
-                   (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
+            var v = (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode]);
+            return v * v * Conductance;
         }
 
         /// <summary>
@@ -118,56 +101,43 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         protected Controller Method { get; }
 
+        // Cache
+        private BaseSimulationState _state;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="method">The method.</param>
-        public BiasingBehavior(string name, Controller method) : base(name)
+        /// <param name="controller">The controller.</param>
+        public BiasingBehavior(string name, Controller controller) : base(name)
         {
-            Method = method;
+            Method = controller.ThrowIfNull(nameof(controller));
         }
 
         /// <summary>
-        /// Connect the behavior in the circuit
-        /// </summary>
-        /// <param name="pins">Pin indices in order</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNull(nameof(pins));
-            PosNode = pins[0];
-            NegNode = pins[1];
-            Method.Connect(pins);
-        }
-
-        /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-            ModelParameters = provider.GetParameterSet<ModelBaseParameters>("model");
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+            ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
 
             // Allow the controling method to set up
-            Method.Setup(simulation, provider);
-        }
+            Method.Bind(simulation, context);
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
-        /// </summary>
-        /// <param name="variables">The variable set.</param>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
+            if (context is ComponentBindingContext cc)
+            {
+                PosNode = cc.Pins[0];
+                NegNode = cc.Pins[1];
+            }
 
-            // Get matrix pointers
+            _state = ((BaseSimulation)simulation).RealState;
+            var solver = _state.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
@@ -175,15 +145,25 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _state = null;
+            PosPosPtr = null;
+            PosNegPtr = null;
+            NegPosPtr = null;
+            NegNegPtr = null;
+        }
+
+        /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             bool currentState;
-            var state = simulation.RealState;
+            var state = _state.ThrowIfNotBound(this);
 
             // decide the state of the switch
             if (state.Init == InitializationModes.Fix || state.Init == InitializationModes.Junction)
@@ -262,10 +242,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Utility
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -133,8 +133,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><p>The separator.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -188,44 +187,6 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Utility_CopyPropertiesAndFields_" data-uid="SpiceSharp.Utility.CopyPropertiesAndFields*"></a>
-  <h4 id="SpiceSharp_Utility_CopyPropertiesAndFields_System_Object_System_Object_" data-uid="SpiceSharp.Utility.CopyPropertiesAndFields(System.Object,System.Object)">CopyPropertiesAndFields(Object, Object)</h4>
-  <div class="markdown level1 summary"><p>Copies all properties and fields from a source object to a destination object.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void CopyPropertiesAndFields(object source, object destination)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">source</span></td>
-        <td><p>The source object.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">destination</span></td>
-        <td><p>The destination object</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="SpiceSharp_Utility_CopyPropertiesAndFields_System_Object_System_Object__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This method heavily uses reflection to find valid properties and methods. It supports properties and fields
-of types <span class="xref">System.Double</span>, <span class="xref">System.Int32</span>, <span class="xref">System.String</span>, <span class="xref">System.Boolean</span> and
-<a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a>.</p>
-</div>
   <a id="SpiceSharp_Utility_FormatString_" data-uid="SpiceSharp.Utility.FormatString*"></a>
   <h4 id="SpiceSharp_Utility_FormatString_System_String_System_Object___" data-uid="SpiceSharp.Utility.FormatString(System.String,System.Object[])">FormatString(String, Object[])</h4>
   <div class="markdown level1 summary"><p>Format a string with the current culture.</p>
@@ -271,6 +232,274 @@ of types <span class="xref">System.Double</span>, <span class="xref">System.Int3
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><p>The formatted string.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Utility_ThrowIfEmpty_" data-uid="SpiceSharp.Utility.ThrowIfEmpty*"></a>
+  <h4 id="SpiceSharp_Utility_ThrowIfEmpty__1___0_System_String_" data-uid="SpiceSharp.Utility.ThrowIfEmpty``1(``0,System.String)">ThrowIfEmpty&lt;T&gt;(T, String)</h4>
+  <div class="markdown level1 summary"><p>Throws an exception if a collection is null or empty.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T ThrowIfEmpty&lt;T&gt;(this T source, string name)
+    where T : ICollection</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The parameter name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The original collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The collection type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Utility_ThrowIfNot_" data-uid="SpiceSharp.Utility.ThrowIfNot*"></a>
+  <h4 id="SpiceSharp_Utility_ThrowIfNot__1___0_System_String_System_Int32_" data-uid="SpiceSharp.Utility.ThrowIfNot``1(``0,System.String,System.Int32)">ThrowIfNot&lt;T&gt;(T, String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Throws an exception if a collection is null or does not contain a fixed amount of elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T ThrowIfNot&lt;T&gt;(this T source, string name, int size)
+    where T : ICollection</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The parameter name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td><p>The original collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The collection type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Utility_ThrowIfNotBound_" data-uid="SpiceSharp.Utility.ThrowIfNotBound*"></a>
+  <h4 id="SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_" data-uid="SpiceSharp.Utility.ThrowIfNotBound``1(``0,SpiceSharp.Behaviors.Behavior)">ThrowIfNotBound&lt;T&gt;(T, Behavior)</h4>
+  <div class="markdown level1 summary"><p>Throws an exception if the behavior is null saying that the behavior is not bound.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T ThrowIfNotBound&lt;T&gt;(this T source, Behavior behavior)
+    where T : class</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></td>
+        <td><span class="parametername">behavior</span></td>
+        <td><p>The behavior that is supposed to be bound.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The base type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Utility_ThrowIfNull_" data-uid="SpiceSharp.Utility.ThrowIfNull*"></a>
+  <h4 id="SpiceSharp_Utility_ThrowIfNull__1___0_System_String_" data-uid="SpiceSharp.Utility.ThrowIfNull``1(``0,System.String)">ThrowIfNull&lt;T&gt;(T, String)</h4>
+  <div class="markdown level1 summary"><p>Throws an exception if the object is null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T ThrowIfNull&lt;T&gt;(this T source, string name)
+    where T : class</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The parameter name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The original object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The base type.</p>
 </td>
       </tr>
     </tbody>

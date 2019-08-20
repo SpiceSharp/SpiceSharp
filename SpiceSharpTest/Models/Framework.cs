@@ -10,7 +10,6 @@ using SpiceSharp.Circuits;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations.Behaviors;
 using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Models
@@ -29,26 +28,21 @@ namespace SpiceSharpTest.Models
                     {typeof(Mapper), e => new Mapper(((NodeMapper)e)._nodes)}
                 });
             }
-            private class Mapper : ExportingBehavior, IBiasingBehavior
+            private class Mapper : Behavior, IBiasingBehavior
             {
                 private List<string> _nodes;
                 public Mapper(List<string> nodes) : base("Mapper")
                 {
                     _nodes = nodes;
                 }
-
-                public override void Setup(Simulation simulation, SetupDataProvider provider)
+                public override void Bind(Simulation simulation, BindingContext context)
                 {
-                }
-                public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-                {
+                    var variables = simulation.Variables;
                     foreach (var node in _nodes)
                         variables.MapNode(node);
                 }
-                public void Load(BaseSimulation simulation)
-                {
-                }
-                public bool IsConvergent(BaseSimulation simulation) => true;
+                void IBiasingBehavior.Load() { }
+                bool IBiasingBehavior.IsConvergent() => true;
             }
             readonly List<string> _nodes = new List<string>();
             public NodeMapper(params string[] nodes) : base("Mapper")

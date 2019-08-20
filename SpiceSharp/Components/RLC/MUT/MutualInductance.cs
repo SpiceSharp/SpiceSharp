@@ -1,7 +1,9 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.MutualInductanceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -56,26 +58,36 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Add inductances to the data provider for setting up behaviors
+        /// Create the behaviors.
         /// </summary>
-        /// <returns></returns>
-        protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
+        /// <param name="types">The behavior types.</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entities">The entities.</param>
+        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
         {
-            parameters.ThrowIfNull(nameof(parameters));
-            behaviors.ThrowIfNull(nameof(behaviors));
+            entities[InductorName1.ThrowIfNull("primary inductor")].CreateBehaviors(types, simulation, entities);
+            entities[InductorName2.ThrowIfNull("secondary inductor")].CreateBehaviors(types, simulation, entities);
+            base.CreateBehaviors(types, simulation, entities);
+        }
 
-            // Base execution (will add entity behaviors and parameters for this mutual inductance)
-            var data = base.BuildSetupDataProvider(parameters, behaviors);
+        /// <summary>
+        /// Build the binding context.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <returns></returns>
+        protected override ComponentBindingContext BuildBindingContext(Simulation simulation)
+        {
+            var context = base.BuildBindingContext(simulation);
 
             // Register inductor 1
-            data.Add("inductor1", parameters[InductorName1]);
-            data.Add("inductor1", behaviors[InductorName1]);
+            context.Add("inductor1", simulation.EntityParameters[InductorName1]);
+            context.Add("inductor1", simulation.EntityBehaviors[InductorName1]);
 
             // Register inductor 2
-            data.Add("inductor2", parameters[InductorName2]);
-            data.Add("inductor2", behaviors[InductorName2]);
+            context.Add("inductor2", simulation.EntityParameters[InductorName2]);
+            context.Add("inductor2", simulation.EntityBehaviors[InductorName2]);
 
-            return data;
+            return context;
         }
 
         /// <summary>

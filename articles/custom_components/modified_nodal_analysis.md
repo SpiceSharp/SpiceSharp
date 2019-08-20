@@ -48,7 +48,7 @@ We notice the following properties:
 
 The electronics world is littered with so-called nonlinear components. These are components where the currents and voltages do not relate *linearly*, but are often connected in complex ways.
 
-A resistor is a *linear* component, because the current and voltage are connected via Ohm's law: ![v = R*i](https://latex.codecogs.com/svg.latex?\inline&space;v=R\cdot i). However, a diode is a *non-linear* component, because the diode current depends on the diode voltage following the equation ![i = I_s(e^{qV/nkT}-1)](https://latex.codecogs.com/svg.latex?\inline&space;i=I_{ss}\left(e^{\frac{qV}{nkT}}-1\right)).
+A resistor is a *linear* component, because the current and voltage are connected via Ohm's law: ![v = R\*i](https://latex.codecogs.com/svg.latex?\inline&space;v=R\cdot i). However, a diode is a *non-linear* component, because the diode current depends on the diode voltage following the equation ![i = I_s(e^{qV/nkT}-1)](https://latex.codecogs.com/svg.latex?\inline&space;i=I_{ss}\left(e^{\frac{qV}{nkT}}-1\right)).
 
 In order to solve a circuit with nonlinear components, we have to resort to *iterative* algorithms. Spice-based simulators almost exclusively use the **Newton-Raphson** algorithm. This algorithm tries to solve, generally speaking, the following problem:
 
@@ -68,12 +68,12 @@ One more thing to note is that Spice will modify the algorithm a tiny bit.
 
 <p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;\pmb&space;J(\pmb&space;x^{(0)})\cdot\Delta\pmb&space;x^{(k+1)}&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;\\&space;&\Downarrow&space;\\&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot\left(\pmb&space;x^{(k+1)}-\pmb&space;x^{(k)}\right)&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;\\&space;&&space;\Downarrow&space;\\&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot&space;\pmb&space;x^{(k+1)}&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;-&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot\pmb&space;x^{(k)}&space;\end{align*}" /></p>
 
-The *Jacobian*, is also called the *Y-matrix*. Everything on the right of the equation is called the *Right-Hand Side vector* (RHS vector). This formulation allows us to immediately calculate the *next* solution rather than the increment to find the next solution.
+The *Jacobian* is from here on out called the *Y-matrix*. Everything on the right of the equation is called the *Right-Hand Side vector* (RHS vector). This formulation allows us to immediately calculate the *next* solution rather than the increment to find the next solution.
 
 ## How Spice# does it
 
-Spice# will give each component the chance to:
-- allocate elements in the Y-matrix and RHS-vector during setup. To optimize performance and memory, the component should not allocate more elements than needed.
+Spice# will give each behavior the chance to:
+- allocate elements in the Y-matrix and RHS-vector during binding (in the method *[Bind](xref:SpiceSharp.Behaviors.IBehavior.Bind(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.BindingContext))*). To optimize performance and memory, the behavior should try not allocate more elements than needed.
 - add contributions to the allocated elements when computing a new iteration. This is called *loading* the Y-matrix and RHS-vector. After all components have loaded the matrix and vector, the simulator will solve the system of equations to find the solution for this iteration.
 
 ### Example: Resistors
@@ -98,11 +98,11 @@ All other *Y-matrix* contributions are 0. Similarly, we calculate the contributi
 
 <img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;RHS_A&=f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_A\pmb&space;x^{(k)}\\&space;&=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right&space;)\\&space;&=0\\&space;RHS_B&=f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_B\pmb&space;x^{(k)}\\&space;&=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right&space;)\\&space;&=0&space;\end{align*}" />
 
-The first and second terms for the RHS vector cancel each other out. This turns out to be a *general property of linear components*. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need *one* iteration to find the right solution *if we only have linear components*. Once a nonlinear component is introduce, a single iteration will not be sufficient anymore.
+The first and second terms for the RHS vector cancel each other out. This turns out to be a *general property of linear components*. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need *one* iteration to find the right solution *if we only have linear components*. Once a nonlinear component is introduced, a single iteration will not be sufficient anymore.
 
 To summarize:
-- During setup, the *Resistor* component will allocate 4 matrix elements: ![matrix elements](https://latex.codecogs.com/svg.latex?\inline&space;Y_{A,A},Y_{A,B},Y_{B,A},Y_{B,B}). It does not need RHS vector elements because they are always 0.
-- During execution, the *Resistor* load behavior will add values to the following elements:
+- During binding, the *Resistor* biasing behavior will allocate 4 matrix elements: ![matrix elements](https://latex.codecogs.com/svg.latex?\inline&space;Y_{A,A},Y_{A,B},Y_{B,A},Y_{B,B}). It does not need RHS vector elements because they are always 0.
+- During execution, the *Resistor* biasing behavior will add values to the following elements:
 
   ![Contributions](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20Y_%7BA%2CA%7D%26%5Cmathrel%7B&plus;%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BA%2CB%7D%26%5Cmathrel%7B-%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BB%2CA%7D%26%5Cmathrel%7B-%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BB%2CB%7D%26%5Cmathrel%7B&plus;%7D%3D%5Cfrac%7B1%7D%7BR%7D%20%5Cend%7Balign*%7D)
 

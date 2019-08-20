@@ -26,7 +26,7 @@
         "files": [
             "*.md",
             "*.yml",
-            "api/*.md",
+            "api/*.md", "api/*.yml",
             "articles/*.md", "articles/*.yml",
             "articles/**/*.md", "articles/**/*.yml"
         ],
@@ -50,7 +50,7 @@
 	},
     "dest": "docs",
     "maxParallelism": 4,
-    "template": [ "default" ],
+    "template": [ "default", "material/material" ],
 	"force": true
   }
 }

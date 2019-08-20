@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Capacitor"/>
+    /// Frequency behavior for a <see cref="Capacitor"/>.
     /// </summary>
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
@@ -35,34 +35,33 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Capacitor voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public Complex GetComplexCurrent()
         {
-            state.ThrowIfNull(nameof(state));
-            var conductance = state.Laplace * Capacitance;
-            return (state.Solution[PosNode] - state.Solution[NegNode]) * conductance;
+            _state.ThrowIfNotBound(this);
+            var conductance = _state.Laplace * Capacitance;
+            return (_state.Solution[PosNode] - _state.Solution[NegNode]) * conductance;
         }
 
         /// <summary>
         /// Gets the power.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Capacitor power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public Complex GetComplexPower()
         {
-            state.ThrowIfNull(nameof(state));
-            var conductance = state.Laplace * Capacitance;
-            var voltage = state.Solution[PosNode] - state.Solution[NegNode];
+            _state.ThrowIfNotBound(this);
+            var conductance = _state.Laplace * Capacitance;
+            var voltage = _state.Solution[PosNode] - _state.Solution[NegNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
+
+        // Cache
+        private ComplexSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -71,39 +70,36 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Initializes the parameters.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            // Not needed
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Gets matrix pointers
-        /// </summary>
-        /// <param name="solver">The matrix</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-			solver.ThrowIfNull(nameof(solver));
-
-            // Get matrix pointers
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
         }
-        
+
+        /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+            // Not needed
+        }
+
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.ComplexState;
-            var val = state.Laplace * Capacitance;
+            var val = _state.Laplace * Capacitance;
 
             // Load the Y-matrix
             PosPosPtr.Value += val;

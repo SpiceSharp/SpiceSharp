@@ -8,20 +8,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Noise behavior for <see cref="Diode"/>
     /// </summary>
-    public class NoiseBehavior : Behavior, INoiseBehavior, IConnectedBehavior
+    public class NoiseBehavior : FrequencyBehavior, INoiseBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private BiasingBehavior _load;
-        private BaseParameters _bp;
         private ModelNoiseParameters _mnp;
-        private ModelTemperatureBehavior _modeltemp;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        private int _posNode, _negNode, _posPrimeNode;
 
         /// <summary>
         /// Noise sources by their index
@@ -38,6 +30,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             new NoiseShot("id", 1, 2),
             new NoiseGain("1overf", 1, 2));
 
+        // Cache
+        private NoiseState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
@@ -45,64 +40,44 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            _bp = provider.GetParameterSet<BaseParameters>();
-            _mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
+            _mnp = context.GetParameterSet<ModelNoiseParameters>("model");
 
-            // Get behaviors
-            _load = provider.GetBehavior<BiasingBehavior>();
-            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _state = ((Noise)simulation).NoiseState;
         }
 
         /// <summary>
         /// Connect the noise source
         /// </summary>
-        public void ConnectNoise()
+        void INoiseBehavior.ConnectNoise()
         {
-            // Get extra equations
-            _posPrimeNode = _load.PosPrimeNode;
-
             // Connect noise sources
-            DiodeNoise.Setup(_posNode, _posPrimeNode, _negNode);
-        }
-        
-        /// <summary>
-        /// Connect the behavior
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 2);
-            _posNode = pins[0];
-            _negNode = pins[1];
+            DiodeNoise.Setup(PosNode, PosPrimeNode, NegNode);
         }
 
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
-        public void Noise(Noise simulation)
+        void INoiseBehavior.Noise()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var noise = simulation.NoiseState;
+            var noise = _state;
 
             // Set noise parameters
-            DiodeNoise.Generators[RsNoise].SetCoefficients(_modeltemp.Conductance * _bp.Area);
-            DiodeNoise.Generators[IdNoise].SetCoefficients(_load.Current);
+            DiodeNoise.Generators[RsNoise].SetCoefficients(ModelTemperature.Conductance * BaseParameters.Area);
+            DiodeNoise.Generators[IdNoise].SetCoefficients(Current);
             DiodeNoise.Generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(_load.Current), 1e-38))) / noise.Frequency);
+                * Math.Log(Math.Max(Math.Abs(Current), 1e-38))) / noise.Frequency);
 
             // Evaluate noise
-            DiodeNoise.Evaluate(simulation);
+            DiodeNoise.Evaluate((Noise)Simulation);
         }
     }
 }

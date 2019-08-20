@@ -127,6 +127,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeBasePtr { get; private set; }
 
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -134,14 +136,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-			solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
 
-            // CGet matrix pointers
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CCollectorCollectorPrimePtr = solver.GetMatrixElement(CollectorNode, CollectorPrimeNode);
             CBaseBasePrimePtr = solver.GetMatrixElement(BaseNode, BasePrimeNode);
             CEmitterEmitterPrimePtr = solver.GetMatrixElement(EmitterNode, EmitterPrimeNode);
@@ -168,29 +172,55 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            _state = null;
+            CCollectorCollectorPrimePtr = null;
+            CBaseBasePrimePtr = null;
+            CEmitterEmitterPrimePtr = null;
+            CCollectorPrimeCollectorPtr = null;
+            CCollectorPrimeBasePrimePtr = null;
+            CCollectorPrimeEmitterPrimePtr = null;
+            CBasePrimeBasePtr = null;
+            CBasePrimeCollectorPrimePtr = null;
+            CBasePrimeEmitterPrimePtr = null;
+            CEmitterPrimeEmitterPtr = null;
+            CEmitterPrimeCollectorPrimePtr = null;
+            CEmitterPrimeBasePrimePtr = null;
+            CCollectorCollectorPtr = null;
+            CBaseBasePtr = null;
+            CEmitterEmitterPtr = null;
+            CCollectorPrimeCollectorPrimePtr = null;
+            CBasePrimeBasePrimePtr = null;
+            CEmitterPrimeEmitterPrimePtr = null;
+            CSubstrateSubstratePtr = null;
+            CCollectorPrimeSubstratePtr = null;
+            CSubstrateCollectorPrimePtr = null;
+            CBaseCollectorPrimePtr = null;
+            CCollectorPrimeBasePtr = null;
+        }
+
+        /// <summary>
         /// Initialize AC parameters
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        void IFrequencyBehavior.InitializeParameters()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.RealState;
             var vbe = VoltageBe;
             var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (state.Solution[BaseNode] - state.Solution[CollectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (state.Solution[SubstrateNode] - state.Solution[CollectorPrimeNode]);
+            var vbx = ModelParameters.BipolarType * (State.Solution[BaseNode] - State.Solution[CollectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (State.Solution[SubstrateNode] - State.Solution[CollectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var cstate = simulation.ComplexState;
+            var cstate = _state;
             var gcpr = ModelTemperature.CollectorConduct * BaseParameters.Area;
             var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
             var gpi = ConductancePi;

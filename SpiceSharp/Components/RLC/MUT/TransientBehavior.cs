@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
@@ -36,6 +35,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         protected double Conductance { get; private set; }
 
+        // Cache
+        private BaseSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
@@ -43,22 +45,42 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-			base.Setup(simulation, provider);
-			provider.ThrowIfNull(nameof(provider));
+			base.Bind(simulation, context);
             
             // Get behaviors
-            Load1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
-            Load2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
+            Load1 = context.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
+            Load2 = context.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
             
             // Register events for modifying the flux through the inductors
             Load1.UpdateFlux += UpdateFlux1;
             Load2.UpdateFlux += UpdateFlux2;
+
+            _state = ((BaseSimulation)simulation).RealState;
+            var solver = _state.Solver;
+            Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
+            Branch2Branch1 = solver.GetMatrixElement(Load2.BranchEq, Load1.BranchEq);
+        }
+
+        /// <summary>
+        /// Unsetup the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            // Remove events
+            Load1.UpdateFlux -= UpdateFlux1;
+            Load2.UpdateFlux -= UpdateFlux2;
+
+            _state = null;
+            Branch1Branch2 = null;
+            Branch2Branch1 = null;
         }
 
         /// <summary>
@@ -85,55 +107,17 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Creates all necessary states for the transient behavior.
+        /// Initialize states.
         /// </summary>
-        /// <param name="method">The integration method.</param>
-        public void CreateStates(IntegrationMethod method)
+        void ITimeBehavior.InitializeStates()
         {
         }
 
         /// <summary>
-        /// Calculates the state values from the current DC solution.
+        /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-        }
-
-        /// <summary>
-        /// Gets the matrix pointers.
-        /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<double> solver)
-        {
-			solver.ThrowIfNull(nameof(solver));
-            
-            // Get matrix pointers
-            Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
-            Branch2Branch1 = solver.GetMatrixElement(Load2.BranchEq, Load1.BranchEq);
-        }
-
-        /// <summary>
-        /// Unsetup the behavior.
-        /// </summary>
-        /// <param name="simulation"></param>
-        public override void Unsetup(Simulation simulation)
-        {
-            base.Unsetup(simulation);
-
-            // Remove events
-            Load1.UpdateFlux -= UpdateFlux1;
-            Load2.UpdateFlux -= UpdateFlux2;
-        }
-
-        /// <summary>
-        /// Transient behavior.
-        /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void Transient(TimeSimulation simulation)
-        {
-			simulation.ThrowIfNull(nameof(simulation));
-
             // Load Y-matrix
             Branch1Branch2.Value -= Conductance;
             Branch2Branch1.Value -= Conductance;

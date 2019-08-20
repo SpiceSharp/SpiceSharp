@@ -1,14 +1,13 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
     /// <summary>
     /// Temperature-dependent calculations for a <see cref="MutualInductance"/>.
     /// </summary>
-    public class TemperatureBehavior : ExportingBehavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
         /// <summary>
         /// Gets the coupling factor.
@@ -39,25 +38,24 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior. for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The provider.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-            BaseParameters1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
-            BaseParameters2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+            BaseParameters1 = context.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
+            BaseParameters2 = context.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
         }
 
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Temperature(BaseSimulation simulation)
+        void ITemperatureBehavior.Temperature()
         {
             // Calculate coupling factor
             Factor = BaseParameters.Coupling * Math.Sqrt(BaseParameters1.Inductance * BaseParameters2.Inductance);

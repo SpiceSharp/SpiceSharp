@@ -46,6 +46,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             new NoiseGain("1overf", 4, 5)
         );
 
+        // Cache
+        private NoiseState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
@@ -53,30 +56,31 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            NoiseParameters = provider.GetParameterSet<ModelNoiseParameters>("model");
+            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>("model");
+
+            _state = ((Noise)simulation).NoiseState;
         }
 
         /// <summary>
         /// Connect noise
         /// </summary>
-        public void ConnectNoise()
+        void INoiseBehavior.ConnectNoise()
         {
             // Connect noise sources
             MosfetNoise.Setup(
                 DrainNode,
                 GateNode,
-                SourceNode, 
-                BulkNode, 
+                SourceNode,
+                BulkNode,
                 DrainNodePrime,
                 SourceNodePrime);
         }
@@ -84,12 +88,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Calculate the noise contributions.
         /// </summary>
-        /// <param name="simulation">The noise simulation.</param>
-        public void Noise(Noise simulation)
+        void INoiseBehavior.Noise()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var noise = simulation.NoiseState;
+            var noise = _state.ThrowIfNotBound(this);
 
             double coxSquared;
             if (ModelParameters.OxideCapFactor > 0.0)
@@ -109,7 +110,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                  coxSquared) / noise.Frequency);
 
             // Evaluate noise sources
-            MosfetNoise.Evaluate(simulation);
+            MosfetNoise.Evaluate((Noise)Simulation);
         }
     }
 }

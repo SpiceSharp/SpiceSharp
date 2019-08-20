@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// This interface describes behavior for initial conditions.
@@ -11,7 +9,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Sets the initial conditions for the behavior.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        void SetInitialCondition(Simulation simulation);
+        void SetInitialCondition();
     }
 }

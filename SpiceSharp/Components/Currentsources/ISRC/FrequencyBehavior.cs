@@ -30,20 +30,16 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Complex power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public Complex GetComplexPower()
         {
-            state.ThrowIfNull(nameof(state));
-            var v = state.Solution[PosNode] - state.Solution[NegNode];
+            _state.ThrowIfNotBound(this);
+            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
             return -v * Complex.Conjugate(FrequencyParameters.Phasor);
         }
 
@@ -53,6 +49,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         [ParameterName("c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => FrequencyParameters.Phasor;
 
+        // Cached
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -60,47 +59,35 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">Data provider</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            FrequencyParameters = provider.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
-        }
+            FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
-        {
-        }
-
-        /// <summary>
-        /// Get equation pointers
-        /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CPosPtr = solver.GetRhsElement(PosNode);
             CNegPtr = solver.GetRhsElement(NegNode);
         }
 
         /// <summary>
-        /// Execute behavior for AC analysis
+        /// Initializes the small-signal parameters.
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.InitializeParameters()
         {
-            simulation.ThrowIfNull(nameof(simulation));
+        }
 
+        /// <summary>
+        /// Load Y-matrix and Rhs-vector.
+        /// </summary>
+        void IFrequencyBehavior.Load()
+        {
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
             CPosPtr.Value -= FrequencyParameters.Phasor;

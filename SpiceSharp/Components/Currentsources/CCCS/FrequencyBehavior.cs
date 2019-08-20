@@ -15,31 +15,23 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Get the voltage. 
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetVoltage(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosNode] - state.Solution[NegNode];
-        }
+        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Complex current")]
-        public Complex GetCurrent(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
-        }
+        public Complex GetComplexCurrent() => _state.ThrowIfNotBound(this).Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Complex power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public Complex GetComplexPower()
         {
-            state.ThrowIfNull(nameof(state));
-            var v = state.Solution[PosNode] - state.Solution[NegNode];
-            var i = state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
+            _state.ThrowIfNotBound(this);
+            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
+            var i = _state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
 
@@ -53,6 +45,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         protected MatrixElement<Complex> CNegControlBranchPtr { get; private set; }
 
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -62,31 +57,41 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Initializes the parameters.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        public void InitializeParameters()
         {
         }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
+
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CPosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
             CNegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);
         }
 
         /// <summary>
-        /// Execute behavior for AC analysis
+        /// Unbind the behavior.
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        public override void Unbind()
         {
-            simulation.ThrowIfNull(nameof(simulation));
+            base.Unbind();
+            _state = null;
+            CPosControlBranchPtr = null;
+            CNegControlBranchPtr = null;
+        }
 
-            // Load the Y-matrix
+        /// <summary>
+        /// Load the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IFrequencyBehavior.Load()
+        {
             CPosControlBranchPtr.Value += BaseParameters.Coefficient.Value;
             CNegControlBranchPtr.Value -= BaseParameters.Coefficient.Value;
         }

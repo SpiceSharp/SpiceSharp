@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class JFETModel
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -83,13 +83,15 @@
     <div class="level2"><a class="xref" href="SpiceSharp.Components.Model.html">Model</a></div>
     <div class="level3"><span class="xref">JFETModel</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable</a>&lt;<a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>&gt;</div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Model.html#SpiceSharp_Components_Model_ModelPriority">Model.ModelPriority</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Behaviors">Entity.Behaviors</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_RegisterBehaviorFactory_System_Type_SpiceSharp_Behaviors_BehaviorFactoryDictionary_">Entity.RegisterBehaviorFactory(Type, BehaviorFactoryDictionary)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_ParameterSets">Entity.ParameterSets</a>
@@ -98,22 +100,40 @@
       <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Name">Entity.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Double_System_Collections_Generic_IEqualityComparer_System_String__">Entity.SetParameter(String, Double, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetPrincipalParameter__1___0_">Entity.SetPrincipalParameter&lt;T&gt;(T)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__">Entity.SetParameter(String, Object, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Entity.SetParameter(String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_CreateBehavior_System_Type_SpiceSharp_Simulations_Simulation_">Entity.CreateBehavior(Type, Simulation)</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter__1_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">Entity.SetParameter&lt;T&gt;(String, T, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetupBehavior_SpiceSharp_Behaviors_IBehavior_SpiceSharp_Simulations_Simulation_">Entity.SetupBehavior(IBehavior, Simulation)</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_GetPrincipalParameter__1">Entity.GetPrincipalParameter&lt;T&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_BuildSetupDataProvider_SpiceSharp_ParameterPool_SpiceSharp_Behaviors_BehaviorPool_">Entity.BuildSetupDataProvider(ParameterPool, BehaviorPool)</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_GetParameter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Entity.GetParameter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Priority">Entity.Priority</a>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_CreateBehaviors_System_Type___SpiceSharp_Simulations_Simulation_SpiceSharp_Circuits_EntityCollection_">Entity.CreateBehaviors(Type[], Simulation, EntityCollection)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_BindBehavior_SpiceSharp_Behaviors_IBehavior_SpiceSharp_Simulations_Simulation_">Entity.BindBehavior(IBehavior, Simulation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Clone">Entity.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_Clone_SpiceSharp_Circuits_InstanceData_">Entity.Clone(InstanceData)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SpiceSharp_ICloneable_Clone">Entity.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_CopyFrom_SpiceSharp_Circuits_Entity_">Entity.CopyFrom(Entity)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">Entity.ICloneable.CopyFrom(ICloneable)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -141,7 +161,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_JFETModel_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class JFETModel : Model</code></pre>
+    <pre><code class="lang-csharp hljs">public class JFETModel : Model, ICloneable, ICloneable&lt;Entity&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -172,6 +192,62 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.Components.Model.html">Model</a></div>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -51,21 +50,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetVoltage(ComplexSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return state.Solution[PosPrimeNode] - state.Solution[NegNode];
-        }
+        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosPrimeNode] - _state.Solution[NegNode];
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
-        public Complex GetCurrent(ComplexSimulationState state)
+        public Complex GetComplexCurrent()
         {
-            state.ThrowIfNull(nameof(state));
-            var geq = Capacitance * state.Laplace + Conductance;
-            var voltage = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+            _state.ThrowIfNotBound(this);
+            var geq = Capacitance * _state.Laplace + Conductance;
+            var voltage = _state.Solution[PosPrimeNode] - _state.Solution[NegNode];
             return voltage * geq;
         }
 
@@ -73,14 +68,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the power.
         /// </summary>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
-        public Complex GetPower(ComplexSimulationState state)
+        public Complex GetComplexPower()
         {
-            state.ThrowIfNull(nameof(state));
-            var geq = Capacitance * state.Laplace + Conductance;
-            var current = (state.Solution[PosPrimeNode] - state.Solution[NegNode]) * geq;
-            var voltage = state.Solution[PosNode] - state.Solution[NegNode];
+            _state.ThrowIfNotBound(this);
+            var geq = Capacitance * _state.Laplace + Conductance;
+            var current = (_state.Solution[PosPrimeNode] - _state.Solution[NegNode]) * geq;
+            var voltage = _state.Solution[PosNode] - _state.Solution[NegNode];
             return voltage * -Complex.Conjugate(current);
         }
+
+        // Cache
+        private ComplexSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -89,14 +87,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(Solver<Complex> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-			solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
 
-            // Get matrix pointers
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CPosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
             CNegPosPrimePtr = solver.GetMatrixElement(NegNode, PosPrimeNode);
             CPosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, PosNode);
@@ -105,28 +105,38 @@ namespace SpiceSharp.Components.DiodeBehaviors
             CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             CPosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
         }
-        
+
         /// <summary>
-        /// Calculate AC parameters
+        /// Unbind the behavior.
         /// </summary>
-        /// <param name="simulation"></param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        public override void Unbind()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.RealState;
-            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+            base.Unbind();
+            _state = null;
+            CPosPosPrimePtr = null;
+            CNegPosPrimePtr = null;
+            CPosPrimePosPtr = null;
+            CPosPrimeNegPtr = null;
+            CPosPosPtr = null;
+            CNegNegPtr = null;
+            CPosPrimePosPrimePtr = null;
+        }
+
+        /// <summary>
+        /// Calculate the small-signal parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+            var vd = State.Solution[PosPrimeNode] - State.Solution[NegNode];
             CalculateCapacitance(vd);
         }
 
         /// <summary>
-        /// Execute behavior for AC analysis
+        /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">Frequency-based simulation</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.ComplexState;
+            var state = _state;
 
             var gspr = ModelTemperature.Conductance * BaseParameters.Area;
             var geq = Conductance;

@@ -8,19 +8,19 @@
     <title>SpiceSharp </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="SpiceSharp ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -70,7 +70,141 @@
 <h1 id="spicesharp">SpiceSharp</h1>
 
 <p>This API documentation is created using DocFX.</p>
-<p align="center"><img src="images/logo_full.svg"></p></article>
+<h2 id="supported-standard-spice-components">Supported (standard) Spice components</h2>
+<p>All components are typically stored under the namespace <strong><a class="xref" href="SpiceSharp.Components.html">SpiceSharp.Components</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Spice identifier</th>
+<th style="text-align:left">Component</th>
+<th style="text-align:left">Spice# class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:left">Capacitor</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Capacitor.html">Capacitor</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">D</td>
+<td style="text-align:left">Diode</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Diode.html">Diode</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td style="text-align:left">Linear voltage-controlled voltage source</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSource.html">VoltageControlledVoltageSource</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Behavioral voltage source</td>
+<td style="text-align:left">Use <a href="https://github.com/SpiceSharp/SpiceSharpBehavioral">Spice#.Behavioral</a></td>
+</tr>
+<tr>
+<td style="text-align:center">F</td>
+<td style="text-align:left">Linear current-Controlled Current Source</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSource.html">CurrentControlledCurrentSource</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">G</td>
+<td style="text-align:left">Linear voltage-controlled current source</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSource.html">VoltageControlledCurrentSource</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Behavioral current source</td>
+<td style="text-align:left">Use <a href="https://github.com/SpiceSharp/SpiceSharpBehavioral">Spice#.Behavioral</a></td>
+</tr>
+<tr>
+<td style="text-align:center">H</td>
+<td style="text-align:left">Linear current-controlled voltage source</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSource.html">CurrentControlledVoltageSource</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">I</td>
+<td style="text-align:left">Independent current source</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.CurrentSource.html">CurrentSource</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">J</td>
+<td style="text-align:left">JFET</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.JFET.html">JFET</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:left">Inductor</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">K</td>
+<td style="text-align:left">Mutual inductance</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.MutualInductance.html">MutualInductance</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">M</td>
+<td style="text-align:left">Mosfet LEVEL=1 (MOS1)</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Mosfet LEVEL=2 (MOS2)</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Mosfet2.html">Mosfet2</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Mosfet LEVEL=3 (MOS3)</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Mosfet LEVEL=4 (BSIM1)</td>
+<td style="text-align:left">Use <a href="https://github.com/SpiceSharp/SpiceSharpBSIM">Spice#.BSIM</a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Mosfet LEVEL=5 (BSIM2)</td>
+<td style="text-align:left">Use <a href="https://github.com/SpiceSharp/SpiceSharpBSIM">Spice#.BSIM</a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Mosfet BSIM3</td>
+<td style="text-align:left">Use <a href="https://github.com/SpiceSharp/SpiceSharpBSIM">Spice#.BSIM</a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">Mosfet BSIM 3.2.4</td>
+<td style="text-align:left">Use <a href="https://github.com/SpiceSharp/SpiceSharpBSIM">Spice#.BSIM</a></td>
+</tr>
+<tr>
+<td style="text-align:center">Q</td>
+<td style="text-align:left">Bipolar Junction Transistor (BJT)</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistor.html">BipolarJunctionTransistor</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">R</td>
+<td style="text-align:left">Resistor</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.Resistor.html">Resistor</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">S</td>
+<td style="text-align:left">Voltage-controlled switch</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.VoltageSwitch.html">VoltageSwitch</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">T</td>
+<td style="text-align:left">Lossless transmission line</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLine.html">LosslessTransmissionLine</a></strong></td>
+</tr>
+<tr>
+<td style="text-align:center">W</td>
+<td style="text-align:left">Current-controlled switch</td>
+<td style="text-align:left"><strong><a class="xref" href="SpiceSharp.Components.CurrentSwitch.html">CurrentSwitch</a></strong></td>
+</tr>
+</tbody>
+</table>
+<p align="center"><img src="images/logo_full.svg"></p>
+</article>
           </div>
           
           <div class="hidden-sm col-md-2" role="complementary">

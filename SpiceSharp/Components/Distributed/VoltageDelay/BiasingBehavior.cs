@@ -1,17 +1,13 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="VoltageDelay" />.
+    /// Biasing behavior for a <see cref="VoltageDelay" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the base parameters.
@@ -74,6 +70,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         protected MatrixElement<double> BranchControlNegPtr { get; private set; }
 
         /// <summary>
+        /// Gets the real state.
+        /// </summary>
+        protected BaseSimulationState State { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
@@ -86,42 +87,28 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 4);
-            PosNode = pins[0];
-            NegNode = pins[1];
-            ContPosNode = pins[2];
-            ContNegNode = pins[3];
-        }
-
-        /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The provider.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-        }
+            BaseParameters = context.GetParameterSet<BaseParameters>();
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
-        /// </summary>
-        /// <param name="variables">The variable set.</param>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            solver.ThrowIfNull(nameof(solver));
+            if (context is ComponentBindingContext cc)
+            {
+                PosNode = cc.Pins[0];
+                NegNode = cc.Pins[1];
+                ContPosNode = cc.Pins[2];
+                ContNegNode = cc.Pins[3];
+            }
 
+            State = ((BaseSimulation)simulation).RealState;
+            var solver = State.Solver;
+            var variables = simulation.Variables;
             BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
@@ -132,20 +119,32 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            State = null;
+            PosBranchPtr = null;
+            NegBranchPtr = null;
+            BranchPosPtr = null;
+            BranchNegPtr = null;
+            BranchControlPosPtr = null;
+            BranchControlNegPtr = null;
+        }
+
+        /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             PosBranchPtr.Value += 1;
             BranchPosPtr.Value += 1;
             NegBranchPtr.Value -= 1;
             BranchNegPtr.Value -= 1;
 
             // In DC, the delay should just copy input to output
-            if (simulation.RealState.UseDc)
+            if (State.UseDc)
             {
                 BranchControlPosPtr.Value -= 1.0;
                 BranchControlNegPtr.Value += 1.0;
@@ -155,10 +154,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

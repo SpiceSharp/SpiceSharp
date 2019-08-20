@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class IntegrationMethod
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -142,22 +142,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Invalid order {0}&quot;.FormatString(maxOrder)</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_IntegrationMethods_IntegrationMethod_BaseTime_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.BaseTime*"></a>
@@ -180,8 +164,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The base time.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -205,8 +188,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.IntegrationMethods.History-1.html">History</a>&lt;<a class="xref" href="SpiceSharp.IntegrationMethods.IntegrationState.html">IntegrationState</a>&gt;</td>
-        <td><p>The integration states.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -230,8 +212,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>The maximum order.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -255,8 +236,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>The current order.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -281,8 +261,7 @@ dependent on the timestep.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The slope.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -306,8 +285,7 @@ dependent on the timestep.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.IntegrationMethods.StateManager.html">StateManager</a></td>
-        <td><p>The state manager.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -331,8 +309,7 @@ dependent on the timestep.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The current time.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -546,9 +523,52 @@ want the derivative to participate in these features, set <code data-dev-comment
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_IntegrationMethods_IntegrationMethod_GetSolution_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.GetSolution*"></a>
+  <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_GetSolution_System_Int32_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.GetSolution(System.Int32)">GetSolution(Int32)</h4>
+  <div class="markdown level1 summary"><p>Gets a solution in history. The index 0 is the last accepted solution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector&lt;double&gt; GetSolution(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>Points to go back in time.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>The solution vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_IntegrationMethods_IntegrationMethod_GetTimestep_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.GetTimestep*"></a>
   <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_GetTimestep_System_Int32_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.GetTimestep(System.Int32)">GetTimestep(Int32)</h4>
-  <div class="markdown level1 summary"><p>Gets a timestep in history.</p>
+  <div class="markdown level1 summary"><p>Gets a timestep in history. The index 0 is the current timestep.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -568,7 +588,7 @@ want the derivative to participate in these features, set <code data-dev-comment
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>Points to go back in time. 0 is the current timestep.</p>
+        <td><p>Points to go back in time.</p>
 </td>
       </tr>
     </tbody>
@@ -843,22 +863,6 @@ want the derivative to participate in these features, set <code data-dev-comment
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Could not extract solver</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_IntegrationMethods_IntegrationMethod_Unsetup_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Unsetup*"></a>
   <h4 id="SpiceSharp_IntegrationMethods_IntegrationMethod_Unsetup_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.IntegrationMethods.IntegrationMethod.Unsetup(SpiceSharp.Simulations.TimeSimulation)">Unsetup(TimeSimulation)</h4>
   <div class="markdown level1 summary"><p>Destroys the integration method.</p>
@@ -1003,6 +1007,55 @@ want the derivative to participate in these features, set <code data-dev-comment
       </tr>
     </tbody>
   </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
 </article>
           </div>
           

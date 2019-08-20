@@ -8,19 +8,19 @@
     <title>Example </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Example ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -90,21 +90,21 @@ tran.ExportSimulationData += (sender, args) =&gt;
     var output = outputExport.Value;
 };
 </code></pre><p>So far so good. Nothing has really changed from before. We will now subscribe to the necessary events to modify the value of <em>R2</em>. We want it to change linearly with time from <img src="https://latex.codecogs.com/svg.latex?\inline&space;1k\Omega" alt="1kOhm"> to <img src="https://latex.codecogs.com/svg.latex?\inline&space;11k\Omega" alt="11kOhm">.</p>
-<h2 id="to-the-loading-behavior-of-a-resistor">To the loading behavior of a resistor</h2>
+<h2 id="the-biasing-behavior-of-a-resistor">The biasing behavior of a resistor</h2>
 <p>The resistance of a resistor can be changed using the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">BaseParameters</a></strong> of that resistor. But we cannot change the base parameters directly from the entity stored in the circuit! In other words, the following will fail to change the resistance for the simulation.</p>
 <pre><code class="lang-csharp">ckt.Object[&quot;R1&quot;].SetParameter(newResistance);
-</code></pre><p> Any simulation will <em>clone</em> all parameters to make it independent of other simulations. So we will need to <strong>ask our simulation</strong> - rather than the entity - for the base parameters.</p>
+</code></pre><p> Any simulation may <em>clone</em> all parameters to make it independent of other simulations. So we will need to <strong>ask our simulation</strong> - rather than the entity - for the base parameters.</p>
 <p>Another something to consider is that even if we change the resistance parameter, the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></strong> will compute the <em>conductance</em> that is loaded by the load behavior of the resistor. So in order to update the resistance of a resistor, we will need to execute the following steps.</p>
 <ol>
-<li>Change the resistance in the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">BaseParameters</a></strong>, requested from our <strong>simulation</strong>.</li>
-<li>Call the <em>Temperature()</em> method of the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></strong>, also requested from our <strong>simulation</strong>.</li>
+<li>Change the resistance in the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">BaseParameters</a></strong>, extracted from our <strong>simulation</strong>.</li>
+<li>Call the <em>Temperature</em> method of the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></strong>, also extracted from our <strong>simulation</strong>.</li>
 </ol>
 <h3 id="requesting-the-parameters-and-behaviors">Requesting the parameters and behaviors</h3>
 <p>All entity parameters and behaviors are loaded during <em>setup</em> of the simulation. So we can use the <em>AfterSetup</em> event of the simulation to extract them.</p>
 <pre><code class="lang-csharp" name="Extract parameters and behaviors">// Now we need to make sure we have a reference to both the base parameters and temperature behavior
 // of the resistor
 SpiceSharp.Components.ResistorBehaviors.BaseParameters bp = null;
-SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior tb = null;
+SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
 tran.AfterSetup += (sender, args) =&gt;
 {
     tran.EntityParameters[&quot;R2&quot;].TryGet(out bp);
@@ -125,13 +125,15 @@ tran.BeforeLoad += (sender, args) =&gt;
     if (bp == null || tb == null)
         return;
     bp.Resistance.Value = resistance;
-    tb.Temperature(tran);
+    tb.Temperature();
 };
 
 // Run the simulation
 tran.Run(ckt);
-</code></pre><p>Combining all these code snippets finally result in the following simulation output.</p>
+</code></pre><p>Combining all these code snippets finally results in the following simulation output.</p>
 <p align="center"><img src="images/example_lpf_resdiv_graph.svg"></p>
+
+<div class="pull-left"><a href="changing_parameters_during_simulation.html">Previous: Changing parameters during simulation</a></div>
 </article>
           </div>
           

@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// An interface that describes temperature-dependent behaviors.
@@ -11,7 +9,6 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        void Temperature(BaseSimulation simulation);
+        void Temperature();
     }
 }

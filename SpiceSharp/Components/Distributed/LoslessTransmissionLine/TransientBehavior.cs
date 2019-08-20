@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
@@ -9,7 +8,6 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseTransientBehavior" />
     public class TransientBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
@@ -40,38 +38,27 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<double> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
+
+            var solver = ((BaseSimulation)simulation).RealState.Solver;
             Ibr1Ptr = solver.GetRhsElement(BranchEq1);
             Ibr2Ptr = solver.GetRhsElement(BranchEq2);
-        }
 
-        /// <summary>
-        /// Creates all necessary states for the transient behavior.
-        /// </summary>
-        /// <param name="method">The integration method.</param>
-        public void CreateStates(IntegrationMethod method)
-        {
             Signals = new DelayedSignal(2, BaseParameters.Delay);
         }
 
         /// <summary>
-        /// Calculates the state values from the current DC solution.
+        /// Initialize the states.
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        /// <remarks>
-        /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
-        /// </remarks>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.InitializeStates()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var sol = simulation.RealState.Solution;
+            var sol = State.ThrowIfNotBound(this).Solution;
 
             // Calculate the inputs
             var input1 = sol[Pos2] - sol[Neg2] + BaseParameters.Impedance * sol[BranchEq2];
@@ -80,13 +67,11 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Perform time-dependent calculations.
+        /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public void Transient(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var sol = simulation.RealState.Solution;
+            var sol = State.Solution;
 
             // Calculate inputs
             var input1 = sol[Pos2] - sol[Neg2] + BaseParameters.Impedance * sol[BranchEq2];

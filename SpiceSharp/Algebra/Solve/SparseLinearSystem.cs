@@ -164,31 +164,29 @@ namespace SpiceSharp.Algebra
         public VectorElement<T> FirstInReorderedRhs() => Rhs.First;
 
         /// <summary>
-        /// Map the external indices to internal indices.
+        /// Transforms the indices from external to internal indices.
         /// </summary>
-        /// <param name="externalIndices">A tuple of external row and column indices.</param>
-        /// <returns>
-        /// A tuple of internal row and column indices.
-        /// </returns>
-        public (int row, int column) ExternalToInternal((int row, int column) externalIndices)
+        /// <remarks>
+        /// Opposite of <see cref="InternalToExternal(LinearSystemIndices)"/>.
+        /// </remarks>
+        /// <param name="indices">The row/column indices.</param>
+        public void ExternalToInternal(LinearSystemIndices indices)
         {
-            var row = Row[externalIndices.row];
-            var column = Column[externalIndices.column];
-            return (row, column);
+            indices.Row = Row[indices.Row];
+            indices.Column = Column[indices.Column];
         }
 
         /// <summary>
-        /// Map the internal indices to external indices.
+        /// Transforms the indices from internal to external indices.
         /// </summary>
-        /// <param name="internalIndices">A tuple of internal row and column indices.</param>
-        /// <returns>
-        /// A tuple of external row and column indices.
-        /// </returns>
-        public (int row, int column) InternalToExternal((int row, int column) internalIndices)
+        /// <remarks>
+        /// Opposite of <see cref="ExternalToInternal(LinearSystemIndices)"/>.
+        /// </remarks>
+        /// <param name="indices">The row/column indices.</param>
+        public void InternalToExternal(LinearSystemIndices indices)
         {
-            var row = Row.Reverse(internalIndices.row);
-            var column = Column.Reverse(internalIndices.column);
-            return (row, column);
+            indices.Row = Row.Reverse(indices.Row);
+            indices.Column = Column.Reverse(indices.Column);
         }
 
         /// <summary>

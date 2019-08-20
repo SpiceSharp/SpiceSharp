@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="JFET" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the base configuration.
@@ -199,42 +199,26 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Connect the behavior in the circuit
-        /// </summary>
-        /// <param name="pins">Pin indices in order</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 3);
-            DrainNode = pins[0];
-            GateNode = pins[1];
-            SourceNode = pins[2];
-        }
-
-        /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            simulation.ThrowIfNull(nameof(simulation));
+            base.Bind(simulation, context);
 
             // Get configuration
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
-        }
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
-        /// </summary>
-        /// <param name="variables">The variable set.</param>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            solver.ThrowIfNull(nameof(solver));
-            
+            if (context is ComponentBindingContext cc)
+            {
+                DrainNode = cc.Pins[0];
+                GateNode = cc.Pins[1];
+                SourceNode = cc.Pins[2];
+            }
+
+            var solver = State.Solver;
+            var variables = simulation.Variables;
             SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source")).Index : SourceNode;
             DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain")).Index : DrainNode;
 
@@ -257,15 +241,39 @@ namespace SpiceSharp.Components.JFETBehaviors
             DrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainPrimeNode, DrainPrimeNode);
             SourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourcePrimeNode, SourcePrimeNode);
         }
-        
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            GateNodePtr = null;
+            DrainPrimeNodePtr = null;
+            SourcePrimeNodePtr = null;
+            DrainDrainPrimePtr = null;
+            GateDrainPrimePtr = null;
+            GateSourcePrimePtr = null;
+            SourceSourcePrimePtr = null;
+            DrainPrimeDrainPtr = null;
+            DrainPrimeGatePtr = null;
+            DrainPrimeSourcePrimePtr = null;
+            SourcePrimeGatePtr = null;
+            SourcePrimeSourcePtr = null;
+            SourcePrimeDrainPrimePtr = null;
+            DrainDrainPtr = null;
+            GateGatePtr = null;
+            SourceSourcePtr = null;
+            DrainPrimeDrainPrimePtr = null;
+            SourcePrimeSourcePrimePtr = null;
+        }
+
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.RealState;
+            var state = State;
 
             // DC model parameters
             var beta = ModelParameters.Beta * BaseParameters.Area;
@@ -278,7 +286,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             double cdrain, gm, gds, betap, bfac;
 
             // Get the current voltages
-            Initialize(simulation, out double vgs, out double vgd, out bool check);
+            Initialize(out double vgs, out double vgd, out bool check);
             var vds = vgs - vgd;
 
             // Determine dc current and derivatives 
@@ -434,18 +442,16 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Initializes the voltages for the current iteration.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="vgs">The VGS.</param>
         /// <param name="vgd">The VGD.</param>
         /// <param name="check">if set to <c>true</c> [check].</param>
-        protected void Initialize(BaseSimulation simulation, out double vgs, out double vgd, out bool check)
+        protected void Initialize(out double vgs, out double vgd, out bool check)
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.RealState;
+            var state = State;
 
             // Initialization
             check = true;
-            if (state.Init == InitializationModes.Junction && simulation is TimeSimulation && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && Simulation is TimeSimulation && state.UseDc && state.UseIc)
             {
                 var vds = ModelParameters.JFETType * BaseParameters.InitialVds;
                 vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;
@@ -481,10 +487,9 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

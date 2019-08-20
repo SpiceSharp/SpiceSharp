@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// <summary>
     /// General behavior for a <see cref="Mosfet3"/>
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// The permittivity of silicon
@@ -278,51 +278,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
+            simulation.ThrowIfNull(nameof(simulation));
 
-            // Get conigurations
+            // Get configurations
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
 
             // Reset
             SaturationVoltageDs = 0;
             Von = 0;
             Mode = 1;
-        }
 
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 4);
+            if (context is ComponentBindingContext cc)
+            {
+                DrainNode = cc.Pins[0];
+                GateNode = cc.Pins[1];
+                SourceNode = cc.Pins[2];
+                BulkNode = cc.Pins[3];
+            }
 
-            DrainNode = pins[0];
-            GateNode = pins[1];
-            SourceNode = pins[2];
-            BulkNode = pins[3];
-        }
-
-        /// <summary>
-        /// Gets matrix pointers
-        /// </summary>
-        /// <param name="variables">Nodes</param>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            solver.ThrowIfNull(nameof(solver));
+            var solver = State.Solver;
+            var variables = simulation.Variables;
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
-                DrainNodePrime = variables.Create(Name.Combine("DrainNode")).Index;
+                DrainNodePrime = variables.Create(Name.Combine("drain")).Index;
             else
                 DrainNodePrime = DrainNode;
 
@@ -363,16 +349,51 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            // Get matrix pointers
+            DrainDrainPtr = null;
+            GateGatePtr = null;
+            SourceSourcePtr = null;
+            BulkBulkPtr = null;
+            DrainPrimeDrainPrimePtr = null;
+            SourcePrimeSourcePrimePtr = null;
+            DrainDrainPrimePtr = null;
+            GateBulkPtr = null;
+            GateDrainPrimePtr = null;
+            GateSourcePrimePtr = null;
+            SourceSourcePrimePtr = null;
+            BulkDrainPrimePtr = null;
+            BulkSourcePrimePtr = null;
+            DrainPrimeSourcePrimePtr = null;
+            DrainPrimeDrainPtr = null;
+            BulkGatePtr = null;
+            DrainPrimeGatePtr = null;
+            SourcePrimeGatePtr = null;
+            SourcePrimeSourcePtr = null;
+            DrainPrimeBulkPtr = null;
+            SourcePrimeBulkPtr = null;
+            SourcePrimeDrainPrimePtr = null;
+
+            // Get rhs pointers
+            BulkPtr = null;
+            DrainPrimePtr = null;
+            SourcePrimePtr = null;
+        }
+
+        /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.RealState;
+            var state = State.ThrowIfNotBound(this);
 
             // Get the current voltages
-            Initialize(simulation, out var vgs, out var vds, out var vbs, out var check);
+            Initialize(out var vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
 
@@ -481,18 +502,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Initializes the voltages to be used for the current iteration.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="vgs">The VGS.</param>
         /// <param name="vds">The VDS.</param>
         /// <param name="vbs">The VBS.</param>
         /// <param name="check">if set to <c>true</c> [check].</param>
-        protected void Initialize(BaseSimulation simulation,
-            out double vgs, out double vds, out double vbs, out bool check)
+        protected void Initialize(out double vgs, out double vds, out double vbs, out bool check)
         {
-            var state = simulation.RealState;
+            var state = State;
             check = true;
 
-            if (state.Init == InitializationModes.Float || (simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
+            if (state.Init == InitializationModes.Float || (Simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
                 state.Init == InitializationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration
@@ -890,15 +909,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation)
+        bool IBiasingBehavior.IsConvergent()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
+            var state = State.ThrowIfNotBound(this);
             double cdhat;
 
             var vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);

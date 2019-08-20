@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the base configuration of the simulation.
@@ -292,41 +292,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">Simulation</param>
-        /// <param name="provider">Data provider</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            base.Setup(simulation, provider);
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get configurations
             BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
-        }
 
-        /// <summary>
-        /// Connect
-        /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            pins.ThrowIfNot(nameof(pins), 4);
-            CollectorNode = pins[0];
-            BaseNode = pins[1];
-            EmitterNode = pins[2];
-            SubstrateNode = pins[3];
-        }
+            if (context is ComponentBindingContext cc)
+            {
+                CollectorNode = cc.Pins[0];
+                BaseNode = cc.Pins[1];
+                EmitterNode = cc.Pins[2];
+                SubstrateNode = cc.Pins[3];
+            }
 
-        /// <summary>
-        /// Gets matrix pointers
-        /// </summary>
-        /// <param name="variables">Variables</param>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            solver.ThrowIfNull(nameof(solver));
+            var solver = State.Solver;
+            var variables = Simulation.Variables;
 
             // Add a series collector node if necessary
             CollectorPrimeNode = ModelParameters.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col")).Index : CollectorNode;
@@ -369,13 +355,44 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            CollectorCollectorPrimePtr = null;
+            BaseBasePrimePtr = null;
+            EmitterEmitterPrimePtr = null;
+            CollectorPrimeCollectorPtr = null;
+            CollectorPrimeBasePrimePtr = null;
+            CollectorPrimeEmitterPrimePtr = null;
+            BasePrimeBasePtr = null;
+            BasePrimeCollectorPrimePtr = null;
+            BasePrimeEmitterPrimePtr = null;
+            EmitterPrimeEmitterPtr = null;
+            EmitterPrimeCollectorPrimePtr = null;
+            EmitterPrimeBasePrimePtr = null;
+            CollectorCollectorPtr = null;
+            BaseBasePtr = null;
+            EmitterEmitterPtr = null;
+            CollectorPrimeCollectorPrimePtr = null;
+            BasePrimeBasePrimePtr = null;
+            EmitterPrimeEmitterPrimePtr = null;
+            SubstrateSubstratePtr = null;
+            CollectorPrimeSubstratePtr = null;
+            SubstrateCollectorPrimePtr = null;
+            BaseCollectorPrimePtr = null;
+            CollectorPrimeBasePtr = null;
+            CollectorPrimePtr = null;
+            BasePrimePtr = null;
+            EmitterPrimePtr = null;
+        }
+
+        /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             double gben;
             double cben;
             double gbcn;
@@ -396,7 +413,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var xjrb = ModelParameters.BaseCurrentHalfResist * BaseParameters.Area;
 
             // Get the current voltages
-            Initialize(simulation, out var vbe, out var vbc);
+            Initialize(out var vbe, out var vbc);
 
             // Determine dc current and derivitives
             var vtn = Vt * ModelParameters.EmissionCoefficientForward;
@@ -547,15 +564,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Initializes the voltages for the current iteration.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="vbe">The VBE.</param>
         /// <param name="vbc">The VBC.</param>
-        protected void Initialize(BaseSimulation simulation, out double vbe, out double vbc)
+        protected void Initialize(out double vbe, out double vbc)
         {
-            var state = simulation.RealState;
+            var state = State;
 
             // Initialization
-            if (state.Init == InitializationModes.Junction && (simulation is TimeSimulation) && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && (Simulation is TimeSimulation) && state.UseDc && state.UseIc)
             {
                 vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
                 var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;
@@ -590,13 +606,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Check if the BJT is convergent
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
         /// <returns></returns>
-        public bool IsConvergent(BaseSimulation simulation)
+        bool IBiasingBehavior.IsConvergent()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
+            var state = State;
             var vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
             var vbc = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
             var delvbe = vbe - VoltageBe;

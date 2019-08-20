@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
@@ -12,11 +11,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Necessary behaviors and parameters
-        /// </summary>
-        private IntegrationMethod _method;
-
         /// <summary>
         /// Gets the base RHS element.
         /// </summary>
@@ -93,14 +87,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             protected set => _stateChargeBx.Current = value;
         }
 
-        /// <summary>
-        /// The state charge be
-        /// </summary>
+        // Cache
         private StateDerivative _stateChargeBe;
         private StateDerivative _stateChargeBc;
         private StateDerivative _stateChargeCs;
         private StateDerivative _stateChargeBx;
         private StateHistory _stateExcessPhaseCurrentBc;
+        private IntegrationMethod _method;
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -109,49 +102,52 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="solver">Matrix</param>
-        public void GetEquationPointers(Solver<double> solver)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            solver.ThrowIfNull(nameof(solver));
+            base.Bind(simulation, context);
 
-            // Get rhs pointers
+            var solver = State.Solver;
             BasePtr = solver.GetRhsElement(BaseNode);
             SubstratePtr = solver.GetRhsElement(SubstrateNode);
-        }
-        
-        /// <summary>
-        /// Create states
-        /// </summary>
-        /// <param name="method"></param>
-        public void CreateStates(IntegrationMethod method)
-        {
-            _method = method ?? throw new ArgumentNullException(nameof(method));
 
-            // We just need a history without integration here
-            _stateChargeBe = method.CreateDerivative();
-            _stateChargeBc = method.CreateDerivative();
-            _stateChargeCs = method.CreateDerivative();
-            _stateChargeBx = method.CreateDerivative(false); // Spice 3f5 does not include this state for LTE calculations
-            _stateExcessPhaseCurrentBc = method.CreateHistory();
+            _method = ((TimeSimulation)simulation).Method;
+            _stateChargeBe = _method.CreateDerivative();
+            _stateChargeBc = _method.CreateDerivative();
+            _stateChargeCs = _method.CreateDerivative();
+            _stateChargeBx = _method.CreateDerivative(false); // Spice 3f5 does not include this state for LTE calculations
+            _stateExcessPhaseCurrentBc = _method.CreateHistory();
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+
+            BasePtr = null;
+            SubstratePtr = null;
+            _stateChargeBe = null;
+            _stateChargeBc = null;
+            _stateChargeCs = null;
+            _stateChargeBx = null; // Spice 3f5 does not include this state for LTE calculations
+            _stateExcessPhaseCurrentBc = null;
         }
 
         /// <summary>
         /// Calculate state variables
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void GetDcState(TimeSimulation simulation)
+        void ITimeBehavior.InitializeStates()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
-            
             // Calculate capacitances
             var vbe = VoltageBe;
             var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (state.Solution[BaseNode] - state.Solution[CollectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (state.Solution[SubstrateNode] - state.Solution[CollectorPrimeNode]);
+            var vbx = ModelParameters.BipolarType * (State.Solution[BaseNode] - State.Solution[CollectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (State.Solution[SubstrateNode] - State.Solution[CollectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
             _stateExcessPhaseCurrentBc.Current = CapCurrentBe / BaseCharge;
         }
@@ -159,12 +155,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="simulation">Time-based simulation</param>
-        public void Transient(TimeSimulation simulation)
+        void ITimeBehavior.Load()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
+            var state = State;
             var gpi = 0.0;
             var gmu = 0.0;
             var cb = 0.0;

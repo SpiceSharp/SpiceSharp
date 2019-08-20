@@ -19,11 +19,17 @@ The resulting waveforms look as follows:
 Note that Spice 3f5 will simulate the same thing if you feed it the following netlist.
 
 ```
+Transient example
+
 V1 in 0 PULSE(0 5 10m 1m 1m 20m 40m)
 R1 in out 10k
 C1 out 0 1u
 
 .TRAN 1m 0.1
+
+* Export voltages/currents/etc.
+
+.END
 ```
 
 <div class="pull-left">[Previous: AC anslysis](acanalysis.md)</div> <div class="pull-right">[Next: Spice# Structure](../structure/structure.md)</p>

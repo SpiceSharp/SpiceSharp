@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Simulation
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -163,8 +163,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Type</span>&gt;</td>
-        <td><p>The behavior types.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -192,8 +191,7 @@ not depend on any other behaviors!</p>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.ParameterSetDictionary.html">ParameterSetDictionary</a></td>
-        <td><p>The dictionary with configurations.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -269,15 +267,14 @@ not depend on any other behaviors!</p>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Simulation_Nodes_" data-uid="SpiceSharp.Simulations.Simulation.Nodes*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Nodes" data-uid="SpiceSharp.Simulations.Simulation.Nodes">Nodes</h4>
-  <div class="markdown level1 summary"><p>Gets the nodes. Obsolete, use <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Variables">Variables</a> instead.</p>
+  <a id="SpiceSharp_Simulations_Simulation_SimulationStatistics_" data-uid="SpiceSharp.Simulations.Simulation.SimulationStatistics*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_SimulationStatistics" data-uid="SpiceSharp.Simulations.Simulation.SimulationStatistics">SimulationStatistics</h4>
+  <div class="markdown level1 summary"><p>A reference to the regular simulation statistics (cached)</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete]
-public VariableSet Nodes { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected SimulationStatistics SimulationStatistics { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -289,21 +286,19 @@ public VariableSet Nodes { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.VariableSet.html">VariableSet</a></td>
-        <td><p>The nodes.</p>
-</td>
+        <td><a class="xref" href="SpiceSharp.Simulations.SimulationStatistics.html">SimulationStatistics</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Simulation_ParameterSets_" data-uid="SpiceSharp.Simulations.Simulation.ParameterSets*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_ParameterSets" data-uid="SpiceSharp.Simulations.Simulation.ParameterSets">ParameterSets</h4>
-  <div class="markdown level1 summary"><p>Gets the configuration parameter sets. Obsolete, use <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Configurations">Configurations</a> instead.</p>
+  <a id="SpiceSharp_Simulations_Simulation_Statistics_" data-uid="SpiceSharp.Simulations.Simulation.Statistics*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Statistics" data-uid="SpiceSharp.Simulations.Simulation.Statistics">Statistics</h4>
+  <div class="markdown level1 summary"><p>Gets a set of <a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a> that holds the statistics for the simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete]
-public ParameterSetDictionary ParameterSets { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public TypeDictionary&lt;Statistics&gt; Statistics { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -315,9 +310,8 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.ParameterSetDictionary.html">ParameterSetDictionary</a></td>
-        <td><p>The parameter sets.</p>
-</td>
+        <td><a class="xref" href="SpiceSharp.TypeDictionary-1.html">TypeDictionary</a>&lt;<a class="xref" href="SpiceSharp.Simulations.Statistics.html">Statistics</a>&gt;</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -365,8 +359,7 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.VariableSet.html">VariableSet</a></td>
-        <td><p>The set of variables.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -571,13 +564,13 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_Run_" data-uid="SpiceSharp.Simulations.Simulation.Run*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Circuit)">Run(Circuit)</h4>
+  <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Circuits_EntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Circuits.EntityCollection)">Run(EntityCollection)</h4>
   <div class="markdown level1 summary"><p>Runs the simulation on the specified circuit.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Run(Circuit circuit)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void Run(EntityCollection entities)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -590,42 +583,21 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
-        <td><span class="parametername">circuit</span></td>
-        <td><p>The circuit to simulate.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>circuit</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>{0}: No circuit nodes for simulation&quot;.FormatString(Name)</p>
+        <td><a class="xref" href="SpiceSharp.Circuits.EntityCollection.html">EntityCollection</a></td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities to simulate.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_Setup_" data-uid="SpiceSharp.Simulations.Simulation.Setup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Setup_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.Simulation.Setup(SpiceSharp.Circuit)">Setup(Circuit)</h4>
+  <h4 id="SpiceSharp_Simulations_Simulation_Setup_SpiceSharp_Circuits_EntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Setup(SpiceSharp.Circuits.EntityCollection)">Setup(EntityCollection)</h4>
   <div class="markdown level1 summary"><p>Set up the simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void Setup(Circuit circuit)</code></pre>
+    <pre><code class="lang-csharp hljs">protected virtual void Setup(EntityCollection entities)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -638,30 +610,9 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
-        <td><span class="parametername">circuit</span></td>
-        <td><p>The circuit that will be used.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>circuit</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>{0}: No circuit objects for simulation&quot;.FormatString(Name)</p>
+        <td><a class="xref" href="SpiceSharp.Circuits.EntityCollection.html">EntityCollection</a></td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities that are included in the simulation.</p>
 </td>
       </tr>
     </tbody>
@@ -838,6 +789,55 @@ public ParameterSetDictionary ParameterSets { get; }</code></pre>
       </tr>
     </tbody>
   </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
 </article>
           </div>
           

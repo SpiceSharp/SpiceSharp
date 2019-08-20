@@ -8,19 +8,19 @@
     <title>Modified Nodal Analysis </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Modified Nodal Analysis ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -106,7 +106,7 @@
 </ul>
 <h2 id="nonlinear-components">Nonlinear components</h2>
 <p>The electronics world is littered with so-called nonlinear components. These are components where the currents and voltages do not relate <em>linearly</em>, but are often connected in complex ways.</p>
-<p>A resistor is a <em>linear</em> component, because the current and voltage are connected via Ohm&#39;s law: ![v = R<em>i](https://latex.codecogs.com/svg.latex?\inline&space;v=R\cdot i). However, a diode is a *non-linear</em> component, because the diode current depends on the diode voltage following the equation <img src="https://latex.codecogs.com/svg.latex?\inline&space;i=I_{ss}\left(e^{\frac{qV}{nkT}}-1\right)" alt="i = I_s(e^{qV/nkT}-1)">.</p>
+<p>A resistor is a <em>linear</em> component, because the current and voltage are connected via Ohm&#39;s law: ![v = R*i](https://latex.codecogs.com/svg.latex?\inline&space;v=R\cdot i). However, a diode is a <em>non-linear</em> component, because the diode current depends on the diode voltage following the equation <img src="https://latex.codecogs.com/svg.latex?\inline&space;i=I_{ss}\left(e^{\frac{qV}{nkT}}-1\right)" alt="i = I_s(e^{qV/nkT}-1)">.</p>
 <p>In order to solve a circuit with nonlinear components, we have to resort to <em>iterative</em> algorithms. Spice-based simulators almost exclusively use the <strong>Newton-Raphson</strong> algorithm. This algorithm tries to solve, generally speaking, the following problem:</p>
 <p align="center"><img src="https://latex.codecogs.com/svg.latex?\left\{&space;\begin{matrix}&space;f_1(x_1,&space;x_2,&space;...,&space;x_n)&space;&&space;=&space;0&space;\\&space;\vdots&space;&&space;=&space;0&space;\\&space;f_n(x_1,&space;x_2,&space;...,&space;x_n)&space;&&space;=&space;0&space;\end{matrix}\right.&space;\&space;\text{or}\&space;\pmb&space;F(\pmb&space;X)&space;=&space;0"></p>
 
@@ -120,11 +120,11 @@
 <p>One more thing to note is that Spice will modify the algorithm a tiny bit.</p>
 <p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;\pmb&space;J(\pmb&space;x^{(0)})\cdot\Delta\pmb&space;x^{(k+1)}&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;\\&space;&\Downarrow&space;\\&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot\left(\pmb&space;x^{(k+1)}-\pmb&space;x^{(k)}\right)&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;\\&space;&&space;\Downarrow&space;\\&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot&space;\pmb&space;x^{(k+1)}&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;-&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot\pmb&space;x^{(k)}&space;\end{align*}"></p>
 
-<p>The <em>Jacobian</em>, is also called the <em>Y-matrix</em>. Everything on the right of the equation is called the <em>Right-Hand Side vector</em> (RHS vector). This formulation allows us to immediately calculate the <em>next</em> solution rather than the increment to find the next solution.</p>
+<p>The <em>Jacobian</em> is from here on out called the <em>Y-matrix</em>. Everything on the right of the equation is called the <em>Right-Hand Side vector</em> (RHS vector). This formulation allows us to immediately calculate the <em>next</em> solution rather than the increment to find the next solution.</p>
 <h2 id="how-spice-does-it">How Spice# does it</h2>
-<p>Spice# will give each component the chance to:</p>
+<p>Spice# will give each behavior the chance to:</p>
 <ul>
-<li>allocate elements in the Y-matrix and RHS-vector during setup. To optimize performance and memory, the component should not allocate more elements than needed.</li>
+<li>allocate elements in the Y-matrix and RHS-vector during binding (in the method <em><a class="xref" href="../../api/SpiceSharp.Behaviors.IBehavior.html#SpiceSharp_Behaviors_IBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_">Bind</a></em>). To optimize performance and memory, the behavior should try not allocate more elements than needed.</li>
 <li>add contributions to the allocated elements when computing a new iteration. This is called <em>loading</em> the Y-matrix and RHS-vector. After all components have loaded the matrix and vector, the simulator will solve the system of equations to find the solution for this iteration.</li>
 </ul>
 <h3 id="example-resistors">Example: Resistors</h3>
@@ -141,11 +141,11 @@
 <p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;Y_{A,A}&=\frac{\partial&space;f_A}{\partial&space;v_A}=\frac{1}{R}\\&space;Y_{A,B}&=\frac{\partial&space;f_A}{\partial&space;v_B}=-\frac{1}{R}\\&space;Y_{B,A}&=\frac{\partial&space;f_B}{\partial&space;v_A}=-\frac{1}{R}\\&space;Y_{B,B}&=\frac{\partial&space;f_B}{\partial&space;v_B}=\frac{1}{R}&space;\end{align*}"></p>
 <p>All other <em>Y-matrix</em> contributions are 0. Similarly, we calculate the contributions to the <em>RHS vector</em>:</p>
 <p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;RHS_A&=f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_A\pmb&space;x^{(k)}\\&space;&=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right&space;)\\&space;&=0\\&space;RHS_B&=f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_B\pmb&space;x^{(k)}\\&space;&=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right&space;)\\&space;&=0&space;\end{align*}"></p>
-<p>The first and second terms for the RHS vector cancel each other out. This turns out to be a <em>general property of linear components</em>. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need <em>one</em> iteration to find the right solution <em>if we only have linear components</em>. Once a nonlinear component is introduce, a single iteration will not be sufficient anymore.</p>
+<p>The first and second terms for the RHS vector cancel each other out. This turns out to be a <em>general property of linear components</em>. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need <em>one</em> iteration to find the right solution <em>if we only have linear components</em>. Once a nonlinear component is introduced, a single iteration will not be sufficient anymore.</p>
 <p>To summarize:</p>
 <ul>
-<li>During setup, the <em>Resistor</em> component will allocate 4 matrix elements: <img src="https://latex.codecogs.com/svg.latex?\inline&space;Y_{A,A},Y_{A,B},Y_{B,A},Y_{B,B}" alt="matrix elements">. It does not need RHS vector elements because they are always 0.</li>
-<li><p>During execution, the <em>Resistor</em> load behavior will add values to the following elements:</p>
+<li>During binding, the <em>Resistor</em> biasing behavior will allocate 4 matrix elements: <img src="https://latex.codecogs.com/svg.latex?\inline&space;Y_{A,A},Y_{A,B},Y_{B,A},Y_{B,B}" alt="matrix elements">. It does not need RHS vector elements because they are always 0.</li>
+<li><p>During execution, the <em>Resistor</em> biasing behavior will add values to the following elements:</p>
 <p><img src="https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20Y_%7BA%2CA%7D%26%5Cmathrel%7B&plus;%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BA%2CB%7D%26%5Cmathrel%7B-%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BB%2CA%7D%26%5Cmathrel%7B-%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BB%2CB%7D%26%5Cmathrel%7B&plus;%7D%3D%5Cfrac%7B1%7D%7BR%7D%20%5Cend%7Balign*%7D" alt="Contributions"></p>
 </li>
 <li><p>The simulator will give all other components in the circuit a chance to load the matrix with its contributions.</p>

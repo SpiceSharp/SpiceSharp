@@ -301,12 +301,12 @@ namespace SpiceSharpTest.Models
         {
             // Build the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "g", "0", 0.5),
+                new VoltageSource("V1", "g", "0", 0.5)
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "d", "0", 2.0),
                 CreateJFET("J1", "d", "g", "0", "JX"),
                 CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
             );
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create the simulation
             var ac = new AC("ac", new DecadeSweep(0.1, 10e9, 10));

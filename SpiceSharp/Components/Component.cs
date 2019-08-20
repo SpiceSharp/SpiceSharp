@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
@@ -66,42 +67,37 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Sets up the behavior.
+        /// Bind a behavior to a simulation.
         /// </summary>
-        /// <param name="behavior">The behavior that needs to be set up.</param>
+        /// <param name="behavior">The behavior.</param>
         /// <param name="simulation">The simulation.</param>
-        protected override void SetupBehavior(IBehavior behavior, Simulation simulation)
+        protected override void BindBehavior(IBehavior behavior, Simulation simulation)
         {
-            base.SetupBehavior(behavior, simulation);
-            if (behavior is IConnectedBehavior conn)
+            var context = BuildBindingContext(simulation);
+
+            // Apply entity context
+            context.Add("entity", simulation.EntityBehaviors[Name]);
+            context.Add("entity", simulation.EntityParameters[Name]);
+
+            // Apply model context
+            if (!string.IsNullOrEmpty(Model))
             {
-                var pins = ApplyConnections(simulation.Variables);
-                conn.Connect(pins);
+                context.Add("model", simulation.EntityBehaviors[Model]);
+                context.Add("model", simulation.EntityParameters[Model]);
             }
+
+            // Apply connection context
+            context.Connect(ApplyConnections(simulation.Variables));
+
+            behavior.Bind(simulation, context);
         }
 
         /// <summary>
-        /// Build the data provider for setting up a behavior for the entity. The entity can control which parameters
-        /// and behaviors are visible to behaviors using this method.
+        /// Build a binding context for a behavior.
         /// </summary>
-        /// <param name="parameters">The parameters in the simulation.</param>
-        /// <param name="behaviors">The behaviors in the simulation.</param>
-        /// <returns>
-        /// A data provider for the behaviors.
-        /// </returns>
-        protected override SetupDataProvider BuildSetupDataProvider(ParameterPool parameters, BehaviorPool behaviors)
-        {
-            var provider = base.BuildSetupDataProvider(parameters, behaviors);
-
-            // Add our model parameters and behaviors
-            if (!string.IsNullOrEmpty(Model))
-            {
-                provider.Add("model", parameters[Model]);
-                provider.Add("model", behaviors[Model]);
-            }
-
-            return provider;
-        }
+        /// <param name="simulation">The simulation.</param>
+        /// <returns></returns>
+        protected virtual ComponentBindingContext BuildBindingContext(Simulation simulation) => new ComponentBindingContext();
 
         /// <summary>
         /// Gets the node index of a pin.
@@ -126,6 +122,8 @@ namespace SpiceSharp.Components
         protected int[] ApplyConnections(VariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
+            if (_connections == null)
+                return new int[0];
 
             // Map connected nodes
             var indexes = new int[_connections.Length];

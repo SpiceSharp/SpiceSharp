@@ -20,6 +20,11 @@ namespace SpiceSharp.Behaviors
         public string Name { get; }
 
         /// <summary>
+        /// Gets the simulation this behavior is bound to.
+        /// </summary>
+        protected Simulation Simulation { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
@@ -32,20 +37,21 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public virtual void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The binding context.</param>
+        public virtual void Bind(Simulation simulation, BindingContext context)
         {
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
         }
 
         /// <summary>
         /// Destroy the behavior.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public virtual void Unsetup(Simulation simulation)
+        public virtual void Unbind()
         {
+            Simulation = null;
         }
 
         /// <summary>

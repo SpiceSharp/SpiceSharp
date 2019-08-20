@@ -1,16 +1,13 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Behaviors;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
     /// <summary>
     /// Load behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseLoadBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class BiasingBehavior : ExportingBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the base parameters.
@@ -163,6 +160,11 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         protected MatrixElement<double> Ibr2Ibr2Ptr { get; private set; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        protected BaseSimulationState State { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
@@ -188,30 +190,29 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Setup the behavior.
+        /// Bind the behavior.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The data provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The data provider.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
+            base.Bind(simulation, context);
 
             // Get parameters
-            BaseParameters = provider.GetParameterSet<BaseParameters>();
-        }
+            BaseParameters = context.GetParameterSet<BaseParameters>();
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading. Additional
-        /// equations can also be allocated here.
-        /// </summary>
-        /// <param name="variables">The variable set.</param>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            solver.ThrowIfNull(nameof(solver));
+            if (context is ComponentBindingContext cc)
+            {
+                Pos1 = cc.Pins[0];
+                Neg1 = cc.Pins[1];
+                Pos2 = cc.Pins[2];
+                Neg2 = cc.Pins[3];
+            }
 
-            // Allocate branch equations first
+            State = ((BaseSimulation)simulation).RealState;
+            var solver = State.Solver;
+            var variables = simulation.Variables;
+
             Internal1 = variables.Create(Name.Combine("int1")).Index;
             Internal2 = variables.Create(Name.Combine("int2")).Index;
             BranchEq1 = variables.Create(Name.Combine("branch1"), VariableType.Current).Index;
@@ -244,14 +245,40 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            State = null;
+            Pos1Pos1Ptr = null;
+            Pos1Int1Ptr = null;
+            Int1Pos1Ptr = null;
+            Int1Int1Ptr = null;
+            Int1Ibr1Ptr = null;
+            Ibr1Int1Ptr = null;
+            Neg1Ibr1Ptr = null;
+            Ibr1Neg1Ptr = null;
+            Pos2Pos2Ptr = null;
+            Pos2Int2Ptr = null;
+            Int2Pos2Ptr = null;
+            Int2Int2Ptr = null;
+            Int2Ibr2Ptr = null;
+            Ibr2Int2Ptr = null;
+            Neg2Ibr2Ptr = null;
+            Ibr2Neg2Ptr = null;
+            Ibr1Pos1Ptr = null;
+            Ibr1Pos2Ptr = null;
+            Ibr1Neg2Ptr = null;
+            Ibr2Ibr1Ptr = null;
+            Ibr2Ibr2Ptr = null;
+        }
+
+        /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.RealState;
-
             // Admittance between POS1 and INT1
             Pos1Pos1Ptr.Value += BaseParameters.Admittance;
             Pos1Int1Ptr.Value -= BaseParameters.Admittance;
@@ -270,7 +297,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Int2Ibr2Ptr.Value += 1.0;
             Neg2Ibr2Ptr.Value -= 1.0;
 
-            if (state.UseDc)
+            if (State.UseDc)
             {
                 // Assume DC operation
                 
@@ -299,10 +326,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
-        /// <param name="simulation">The base simulation.</param>
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent(BaseSimulation simulation) => true;
+        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

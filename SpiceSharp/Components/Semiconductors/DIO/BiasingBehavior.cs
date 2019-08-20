@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="Diode" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConnectedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         /// <summary>
         /// Gets the positive internal node.
@@ -94,11 +94,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the power dissipated.
         /// </summary>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
-        public double GetPower(BaseSimulationState state)
-        {
-            state.ThrowIfNull(nameof(state));
-            return Current * Voltage;
-        }
+        public double GetPower() => Current * Voltage;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -107,25 +103,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Connect the behavior
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            pins.ThrowIfNot(nameof(pins), 2);
-            PosNode = pins[0];
-            NegNode = pins[1];
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Get equation pointers
-        /// </summary>
-        /// <param name="variables">Variables</param>
-        /// <param name="solver">Solver</param>
-        public void GetEquationPointers(VariableSet variables, Solver<double> solver)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            solver.ThrowIfNull(nameof(solver));
+            if (context is ComponentBindingContext cc)
+            {
+                PosNode = cc.Pins[0];
+                NegNode = cc.Pins[1];
+            }
+
+            var solver = State.Solver;
+            var variables = simulation.Variables;
 
             // Create
             PosPrimeNode = ModelParameters.Resistance > 0 ? variables.Create(Name.Combine("pos")).Index : PosNode;
@@ -138,25 +131,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             PosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
-            
+
             // Get RHS elements
             NegPtr = solver.GetRhsElement(NegNode);
             PosPrimePtr = solver.GetRhsElement(PosPrimeNode);
         }
-        
+
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
-        public void Load(BaseSimulation simulation)
+        void IBiasingBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
+            var state = State;
             double cd, gd;
 
             // Get the current voltages
-            Initialize(simulation, out double vd, out bool check);
+            Initialize(out double vd, out bool check);
 
             /* 
              * this routine loads diodes for dc and transient analyses.
@@ -218,9 +208,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Initialize the device based on the current iteration state.
         /// </summary>
-        protected void Initialize(BaseSimulation simulation, out double vd, out bool check)
+        protected void Initialize(out double vd, out bool check)
         {
-            var state = simulation.RealState;
+            var state = State;
             check = false;
             if (state.Init == InitializationModes.Junction)
             {
@@ -252,13 +242,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Check convergence for the diode
         /// </summary>
-        /// <param name="simulation">Base simulation</param>
         /// <returns></returns>
-        public bool IsConvergent(BaseSimulation simulation)
+        bool IBiasingBehavior.IsConvergent()
         {
-			simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.RealState;
+            var state = State;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
 
             var delvd = vd - Voltage;

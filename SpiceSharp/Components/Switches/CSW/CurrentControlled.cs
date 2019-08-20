@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
@@ -16,16 +15,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         private VoltageSourceBehaviors.BiasingBehavior _loadBehavior;
 
         /// <summary>
-        /// Setup the behavior for the specified simulation.
+        /// Bind the behavior. for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="provider">The provider.</param>
-        public override void Setup(Simulation simulation, SetupDataProvider provider)
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-            provider.ThrowIfNull(nameof(provider));
-
             // Get behaviors
-            _loadBehavior = provider.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
+            _loadBehavior = context.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
         }
 
         /// <summary>

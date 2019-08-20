@@ -53,6 +53,20 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Throws an exception if the behavior is null saying that the behavior is not bound.
+        /// </summary>
+        /// <typeparam name="T">The base type.</typeparam>
+        /// <param name="source">The object.</param>
+        /// <param name="behavior">The behavior that is supposed to be bound.</param>
+        /// <returns></returns>
+        public static T ThrowIfNotBound<T>(this T source, SpiceSharp.Behaviors.Behavior behavior) where T : class
+        {
+            if (source == null)
+                throw new CircuitException("Behavior '{0}' is not bound to any simulation".FormatString(behavior.Name));
+            return source;
+        }
+
+        /// <summary>
         /// Throws an exception if a collection is null or empty.
         /// </summary>
         /// <typeparam name="T">The collection type.</typeparam>

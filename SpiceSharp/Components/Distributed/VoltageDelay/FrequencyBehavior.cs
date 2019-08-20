@@ -8,9 +8,7 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// <summary>
     /// Frequency behavior for a <see cref="VoltageDelay" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.BaseFrequencyBehavior" />
-    /// <seealso cref="SpiceSharp.Components.IConnectedBehavior" />
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
         /// Gets the (positive, branch) element.
@@ -42,6 +40,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         protected MatrixElement<Complex> CBranchControlPosPtr { get; private set; }
 
+        // Cache
+        private ComplexSimulationState _state;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -55,20 +56,16 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Initializes the parameters.
+        /// Bind the behavior.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void InitializeParameters(FrequencySimulation simulation)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="context">The context.</param>
+        public override void Bind(Simulation simulation, BindingContext context)
         {
-        }
+            base.Bind(simulation, context);
 
-        /// <summary>
-        /// Allocate elements in the Y-matrix and Rhs-vector to populate during loading.
-        /// </summary>
-        /// <param name="solver">The solver.</param>
-        public void GetEquationPointers(Solver<Complex> solver)
-        {
-            solver.ThrowIfNull(nameof(solver));
+            _state = ((FrequencySimulation)simulation).ComplexState;
+            var solver = _state.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
@@ -78,13 +75,32 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            CPosBranchPtr = null;
+            CNegBranchPtr = null;
+            CBranchPosPtr = null;
+            CBranchNegPtr = null;
+            CBranchControlPosPtr = null;
+            CBranchControlNegPtr = null;
+        }
+
+        /// <summary>
+        /// Initializes the small-signal parameters.
+        /// </summary>
+        void IFrequencyBehavior.InitializeParameters()
+        {
+        }
+
+        /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
-        /// <param name="simulation">The frequency simulation.</param>
-        public void Load(FrequencySimulation simulation)
+        void IFrequencyBehavior.Load()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var laplace = simulation.ComplexState.Laplace;
+            var laplace = _state.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay);
 
             // Load the Y-matrix and RHS-vector

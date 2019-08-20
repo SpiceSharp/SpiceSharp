@@ -8,19 +8,19 @@
     <title>Structure </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Structure ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -69,33 +69,33 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="structure">Structure</h1>
 
-<p>In this section we will discuss the basic structure of any simulation that is run. We will discuss:</p>
+<p>In this section we will discuss the basic structure of any simulation that is run. We discuss</p>
 <ul>
 <li>The data structure of Spice#.</li>
-<li>How any <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html">Simulation</a></strong> use a <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong> object to run a simulation.</li>
+<li>How any <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html">Simulation</a></strong> uses a <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong> object to run a simulation.</li>
 <li>How any <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html">Simulation</a></strong> runs an analysis.</li>
 </ul>
 <h2 id="circuit-description">Circuit description</h2>
-<p>The main container for storing your circuit will be the <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong> class. It contains one or more <strong><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html">Entity</a></strong> objects which can be referenced by their name. Each <strong><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html">Entity</a></strong> contains parameters, which can be accessed through the <strong><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_ParameterSets">ParameterSets</a></strong> property. This is a collection of classes (all implementing <strong><a class="xref" href="../../api/SpiceSharp.ParameterSet.html">ParameterSet</a></strong>) that can be searched by type.</p>
-<p>For example, a <strong><a class="xref" href="../../api/SpiceSharp.Components.Resistor.html">Resistor</a></strong> will typically contain one set of parameters, namely an object of the class  <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">SpiceSharp.Components.ResistorBehaviors.BaseParameters</a></strong>. This parameter set contains - among others - the <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html#SpiceSharp_Components_ResistorBehaviors_BaseParameters_Resistance">Resistance</a></strong> of the resistor. So we can change the resistance of a <strong><a class="xref" href="../../api/SpiceSharp.Components.Resistor.html">Resistor</a></strong> by writing:</p>
+<p>The main container for storing your circuit elements will be the <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong> class. It contains one or more <strong><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html">Entity</a></strong> objects which can be referenced by a unique name. Each <strong><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html">Entity</a></strong> can contain parameters that can be accessed through the <em><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_ParameterSets">ParameterSets</a></em> property. This is a collection of classes (all implementing <strong><a class="xref" href="../../api/SpiceSharp.ParameterSet.html">ParameterSet</a></strong>) that can be searched by type. This allows logically separating parameters based on their context.</p>
+<p>For example, a <strong><a class="xref" href="../../api/SpiceSharp.Components.Resistor.html">Resistor</a></strong> will typically contain one set of parameters, namely an object of the class  <strong><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html">SpiceSharp.Components.ResistorBehaviors.BaseParameters</a></strong>. This parameter set contains - amongst others - the <em><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html#SpiceSharp_Components_ResistorBehaviors_BaseParameters_Resistance">Resistance</a></em> of type <strong><a class="xref" href="../../api/SpiceSharp.GivenParameter-1.html">GivenParameter</a></strong> of the resistor. So we can change the resistance value of our resistor by writing:</p>
 <pre><code class="lang-csharp" name="Resistor">// Build the circuit
 var ckt = new Circuit(
     new Resistor(&quot;R1&quot;, &quot;a&quot;, &quot;b&quot;, 1e3)
 );
 
 // Change the value of the resistor
-var resParameters = ckt.Entities[&quot;R1&quot;].ParameterSets;
+var resParameters = ckt[&quot;R1&quot;].ParameterSets;
 resParameters.Get&lt;SpiceSharp.Components.ResistorBehaviors.BaseParameters&gt;().Resistance.Value = 2.0e3;
-</code></pre><p>Alternatively, we can see that the same property is tagged with a <strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterNameAttribute.html">ParameterNameAttribute</a></strong> that gives the property the name &quot;resistance&quot;, and a <strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html">ParameterInfoAttribute</a></strong> that indicates that the property is a <em>principal</em> parameter. These two attributes allow us to edit the same property in two other ways. Respectively:</p>
+</code></pre><p>Alternatively, we can see that the <em><a class="xref" href="../../api/SpiceSharp.Components.ResistorBehaviors.BaseParameters.html#SpiceSharp_Components_ResistorBehaviors_BaseParameters_Resistance">Resistance</a></em> property is tagged with a <strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterNameAttribute.html">ParameterNameAttribute</a></strong> that gives the property the name &quot;resistance&quot;, and a <strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html">ParameterInfoAttribute</a></strong> that indicates that the property is a <em>principal</em> parameter. These two attributes allow us to edit the same property in other ways.</p>
 <pre><code class="lang-csharp" name="Resistor 2">// Using the ParameterNameAttribute
-ckt.Entities[&quot;R1&quot;].SetParameter(&quot;resistance&quot;, 2.0e3);
-ckt.Entities[&quot;R1&quot;].ParameterSets.SetParameter(&quot;resistance&quot;, 2.0e3);
+ckt[&quot;R1&quot;].SetParameter(&quot;resistance&quot;, 2.0e3);
+ckt[&quot;R1&quot;].ParameterSets.SetParameter(&quot;resistance&quot;, 2.0e3);
 
 // Using the ParameterInfoAttributes IsPrincipal=true
-ckt.Entities[&quot;R1&quot;].ParameterSets.SetParameter(2.0e3);
-</code></pre><p>Depending on the situation, parameter sets can be added for different types of simulations or situations.</p>
+ckt[&quot;R1&quot;].ParameterSets.SetPrincipalParameter(2.0e3);
+</code></pre><p>Depending on the situation, parameter sets can be added for different types of simulations or situations. Also note that the <em><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html#SpiceSharp_Circuits_Entity_SetParameter_System_String_System_Collections_Generic_IEqualityComparer_System_String__">SetParameter</a></em> method can be chained to easily specify multiple parameters on an entity.</p>
 <h2 id="simulation-description">Simulation description</h2>
-<p>Simulations can be set up in a similar fashion. They also contain a property with parameter sets called <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Configurations">Configurations</a></strong>. For example, a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DC.html">DC</a></strong> simulation will use a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DCConfiguration.html">DCConfiguration</a></strong> to determine the sweeps of the analysis. These can be accessed using the following code:</p>
+<p>Simulations can be set up in a similar fashion. They also contain a configurations with the same type of parameter sets in the property  <em><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Configurations">Configurations</a></em>. For example, a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DC.html">DC</a></strong> simulation will use a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DCConfiguration.html">DCConfiguration</a></strong> to determine the sweeps of the analysis. These can be accessed using the following code:</p>
 <pre><code class="lang-csharp" name="DC example">// Build the simulation
 var dc = new DC(&quot;DC 1&quot;);
 
@@ -107,23 +107,27 @@ dcConfig.Sweeps.Add(new SweepConfiguration(&quot;V1&quot;, 0.0, 3.3, 0.1));
 baseConfig.RelativeTolerance = 1e-4;
 baseConfig.AbsoluteTolerance = 1e-10;
 </code></pre><h2 id="running-simulations">Running simulations</h2>
-<p>All simulations implement the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html">Simulation</a></strong> class. The whole act of analysis can be summarized in the following flowchart.</p>
+<p>All simulations implement the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html">Simulation</a></strong> class. Executing an analysis can be summarized in the following flowchart.</p>
 <p align="center"><img src="images/simulation_flow.svg" alt="Simulation flow"></p>
 
-<p>The processes in yellow indicate events for which you can register.</p>
+<p>The processes in yellow indicate events for which you can register to control the flow of the simulation.</p>
 <h3 id="setup">Setup</h3>
-<p>During setup the simulation will copy <em>all</em> data necessary for running the simulation. This makes the simulation fully self-supporting, allowing multiple simulations to run in parallel from the same circuit description.</p>
-<p>In this method, the simulation will request two things from each <strong><a class="xref" href="../../api/SpiceSharp.Circuits.Entity.html">Entity</a></strong>:</p>
+<p>When a simulation sets up, it will ask each entity in the circuit to create <em>behaviors</em>. It gives a list of interfaces that the simulation will use to the entity (in order of potential appearance, eg. a <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong> always precedes the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> because it is used earlier by the simulation), and the entity returns a number of behaviors that implement these interfaces. If none of the behaviors implement an interface, then it is not returned and it is silently ignored. Do <em>avoid</em> the situation where multiple behavior objects implement the same behavior interface, as only one of them will be recognized by the simulation.</p>
+<p>A typical class structure for entity behaviors can look as follows:</p>
 <ul>
-<li>The necessary <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html">Behavior</a></strong> objects to run the simulation. Behaviors describe how the entity behaves in a specific situation, and work in tandem with the simulation requesting it. If the entity cannot generate the requested behavior, it is ignored. All generated behaviors can be found in the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityBehaviors">EntityBehaviors</a></strong> property.</li>
-<li>All parameter sets of the entity are <em>cloned</em> to avoid issues when multithreading. All the cloned parameters can be found in the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityParameters">EntityParameters</a></strong> property.</li>
+<li>We implement a <strong>TemperatureBehavior</strong> that implements the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong> interface.</li>
+<li>We create a new class <strong>BiasingBehavior</strong> that extends <strong>TemperatureBehavior</strong>, and also additionally implements <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong>.</li>
+<li>We also implement the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></strong> in the <strong>TimeBehavior</strong> class that extends <strong>BiasingBehavior</strong>.</li>
+<li>In order to support small-signal analysis, we don&#39;t need time behaviors, but we do need the <strong>BiasingBehavior</strong> to find the operating point. So we create a <strong>FrequencyBehavior</strong> that extends <strong>BiasingBehavior</strong>, and implements the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></strong>.</li>
+<li>Finally, we implement the <strong>NoiseBehavior</strong> class by extending the <strong>FrequencyBehavior</strong> and implementing the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></strong>.</li>
 </ul>
-<p>Each behavior is set up as well and default parameters are calculated (eg. parameters that are derived from other parameters if they are not set by the user).</p>
-<p>Another thing that happens during setup is creating all the <em>unknown variables</em> that will need to be solved. This is usually all node voltages in the circuit, but can also contain other types of variables. These are stored in the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Variables">Variables</a></strong> property.</p>
+<p>An <strong><a class="xref" href="../../api/SpiceSharp.Simulations.AC.html">AC</a></strong> simulation needs the behaviors (in order): <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong>, <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong>, <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></strong>. When the simulation asks the entity with the above behavior class structure for these behavior types, the entity will first try to find a behavior that implements <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></strong> and creates an instance of that type. It then continues to search for a <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> but it will quickly detect that it already created a behavior that implements it, so it will not need to create a new instance. The situation is identical for the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong>. While the analysis asked for three behavior types, our entity only returns one behavior, and that behavior implements all interfaces.</p>
+<p>The simulation will also store references to the parameter sets of each entity in the circuit. It is possible to <em>clone</em> parameter sets, rather than referencing them, to allow multiple simulations to be run in parallel. To enable this feature, set the flag <strong><a class="xref" href="../../api/SpiceSharp.Simulations.CollectionConfiguration.html#SpiceSharp_Simulations_CollectionConfiguration_CloneParameters">CloneParameters</a></strong> in the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.CollectionConfiguration.html">CloneConfiguration</a></strong> configuration class of the simulation.</p>
+<p>Each behavior is bound to the simulation and default parameters are calculated for each parameter set (eg. parameters that are derived from other parameters if they are not set by the user).</p>
 <h3 id="execute">Execute</h3>
-<p>Execution of the simulation is entirely dependent on the type of simulation. After the simulation execution has finished, you have the option to <em>repeat</em> the simulation. This is by subscribing to the <em>AfterExecute</em> event, and changing the argument property <strong><a href="xref:SpiceSharp.Simulations.SimulationFlowEventArgs#SpiceSharp_Simulations_SimulationFlowEventArgs_Repeat">Repeat</a></strong>.</p>
+<p>Execution of the simulation is entirely dependent on the type of simulation. After the simulation execution has finished, you have the option to <em>repeat</em> the simulation. This is by subscribing to the <em><a class="xref" href="../../api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterExecute">AfterExecute</a></em> event, and changing the argument property <em><a class="xref" href="../../api/SpiceSharp.Simulations.AfterExecuteEventArgs.html#SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat">Repeat</a></em>.</p>
 <h3 id="unsetupdestroy">Unsetup/Destroy</h3>
-<p>In this phase the simulation will dispose of all the data previously allocated during setup.</p>
+<p>In this phase the simulation will remove references of all the data previously allocated during setup. This allows the garbage collector to clean up resources.</p>
 <div class="pull-left"><a href="../tutorial/transientanalysis.html">Previous: Transient analysis</a></div> <div class="pull-right"><a href="entities.html">Next: Entities, components and models</a></div>
 </article>
           </div>
