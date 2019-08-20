@@ -26,6 +26,7 @@ namespace SpiceSharpTest.Examples
             dc.ExportSimulationData += (sender, args) =>
             {
                 var current = -currentExport.Value;
+                System.Console.Write("{0}, ".FormatString(current));
             };
             dc.Run(ckt);
 

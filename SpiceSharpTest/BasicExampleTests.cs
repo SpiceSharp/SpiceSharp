@@ -183,11 +183,11 @@ namespace SpiceSharpTest
             // <example_AC>
             // Build the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
                 new Resistor("R1", "in", "out", 10.0e3),
                 new Capacitor("C1", "out", "0", 1e-6)
                 );
-            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create the simulation
             var ac = new AC("AC 1", new DecadeSweep(1e-2, 1.0e3, 5));

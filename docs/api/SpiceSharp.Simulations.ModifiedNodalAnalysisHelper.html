@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ModifiedNodalAnalysisHelper
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -146,22 +146,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>solver</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Simulations_ModifiedNodalAnalysisHelper_PreorderModifiedNodalAnalysis_" data-uid="SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis*"></a>
   <h4 id="SpiceSharp_Simulations_ModifiedNodalAnalysisHelper_PreorderModifiedNodalAnalysis__1_SpiceSharp_Algebra_Solver___0__System_Func___0_System_Double__" data-uid="SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis``1(SpiceSharp.Algebra.Solver{``0},System.Func{``0,System.Double})">PreorderModifiedNodalAnalysis&lt;T&gt;(Solver&lt;T&gt;, Func&lt;T, Double&gt;)</h4>
   <div class="markdown level1 summary"><p>This method preorders a matrix that is typically constructed using Modified Nodal Analysis (MNA).</p>
@@ -170,7 +154,6 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static void PreorderModifiedNodalAnalysis&lt;T&gt;(this Solver&lt;T&gt; solver, Func&lt;T, double&gt; magnitude)
-
     where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -209,22 +192,6 @@
       <tr>
         <td><span class="parametername">T</span></td>
         <td><p>The base value type.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>solver</p>
 </td>
       </tr>
     </tbody>

@@ -8,19 +8,19 @@
     <title> Spice#/SpiceSharp </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content=" Spice#/SpiceSharp ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="api/images/favicon.ico">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
     <link rel="stylesheet" href="styles/docfx.css">
     <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -72,19 +72,34 @@
 </ul>
 <h2 id="quickstart">Quickstart</h2>
 <p>Simulating a circuit is relatively straightforward. For example:</p>
-<pre><code class="lang-csharp">// Build the circuit
-var ckt = new Circuit(
-    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0),
-    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e3),
-    new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e3)
-);
+<pre><code class="lang-csharp">using System;
+using SpiceSharp;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
-// Create a DC sweep and register to the event for exporting simulation data
-var dc = new DC(&quot;dc&quot;, &quot;V1&quot;, 0.0, 5.0, 0.001);
-dc.ExportSimulationData += (sender, args) =&gt; Console.WriteLine(args.GetVoltage(&quot;out&quot;));
-
-// Run the simulation
-dc.Run(ckt);
+namespace SpiceSimu
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Build the circuit
+            var ckt = new Circuit(
+                new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0),
+                new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e3),
+                new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e3)
+                );
+            // Create a DC sweep and register to the event for exporting simulation data
+            var dc = new DC(&quot;dc&quot;, &quot;V1&quot;, 0.0, 5.0, 0.001);
+            dc.ExportSimulationData += (sender, exportDataEventArgs) =&gt;
+            {
+                Console.WriteLine(exportDataEventArgs.GetVoltage(&quot;out&quot;));
+            };
+            // Run the simulation
+            dc.Run(ckt);
+        }
+    }
+}
 </code></pre><p>Most standard Spice-components are available, and building your own custom components is also possible!</p>
 <h2 id="installation">Installation</h2>
 <p>Spice# is available as a <strong>NuGet Package</strong>.</p>

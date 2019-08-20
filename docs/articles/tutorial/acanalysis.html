@@ -8,19 +8,19 @@
     <title>AC analysis </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="AC analysis ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -69,19 +69,19 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="ac-analysis">AC analysis</h1>
 
-<p>An AC analysis allows you to find the behavior of a circuit for small signals. The simulation will first determine the operating point, after which small perturbations are applied. The result of this analysis indicates how the circuit behaves for these small perturbations. This is useful when the gain and bandwidth needs to be characterized of a filter.</p>
-<p>By assuming the perturbations are small and sinusoidal, the circuit can be linearized which makes this type of simulation relatively fast. The result is a <em>Complex</em> number, which contain the amplitude and phase information.</p>
+<p>An AC analysis allows you to find the behavior of a circuit for small signals. The simulation will first determine the operating point, after which small sinusoidal excitations are applied on top of the calculated biasing conditions. Each voltage, current or other simulated quantity will then vary along with the excited signal and will show an amplitude and phase shift that is represented by a single complex number. This is useful when characterizing a filter, or when analyzing stability of systems that have feedback in them.</p>
+<p>By assuming the perturbations are small and sinusoidal, the circuit can be linearized which makes this type of simulation relatively fast. The result is a <em>Complex</em> number, which contains the amplitude and phase information.</p>
 <p>Consider the following circuit:</p>
 <p align="center"><img src="images/example_AC.svg"></p>
 
 <p>To simulate this, we can write</p>
 <pre><code class="lang-csharp" name="Circuit">// Build the circuit
 var ckt = new Circuit(
-    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0),
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0)
+        .SetParameter(&quot;acmag&quot;, 1.0),
     new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 10.0e3),
     new Capacitor(&quot;C1&quot;, &quot;out&quot;, &quot;0&quot;, 1e-6)
     );
-ckt.Entities[&quot;V1&quot;].SetParameter(&quot;acmag&quot;, 1.0);
 
 // Create the simulation
 var ac = new AC(&quot;AC 1&quot;, new DecadeSweep(1e-2, 1.0e3, 5));
@@ -96,15 +96,21 @@ ac.ExportSimulationData += (sender, args) =&gt;
     var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
 };
 ac.Run(ckt);
-</code></pre><p>For our AC analysis, we need an AC source that will excite the circuit. The amplitude and phase of the excitation can be set by using the <em>acmag</em> and <em>acphase</em> parameters for a <strong><a class="xref" href="../../api/SpiceSharp.Components.VoltageSource.html">Voltage source</a></strong>.</p>
-<p>The frequency points that are simulated range from 10mHz to 1kHz, simulating 5 points per decade, logarithmically spaced.</p>
-<p>This is effectively the same as using the following netlist in Spice 3f5:</p>
-<pre><code>V1 in 0 0 AC 1
+</code></pre><p>For our AC analysis, we need an AC source that will excite the circuit. The amplitude and phase of the excitation can be set by using the <em>acmag</em> and <em>acphase</em> parameters for a <strong><a class="xref" href="../../api/SpiceSharp.Components.VoltageSource.html">VoltageSource</a></strong> object.</p>
+<p>The frequency points that are simulated in our example range from 10mHz to 1kHz, simulating 5 points per decade, logarithmically spaced.</p>
+<p>This is effectively the same as using the following netlist in other Spice simulators:</p>
+<pre><code>AC example
+
+V1 in 0 0 AC 1
 R1 in out 10k
 C1 out 0 1u
 
 .AC dec 5 10m 1k
-</code></pre><p>Plotting the output amplitude (dB) yields the following graph:</p>
+
+* Export voltages/currents/etc.
+
+.END
+</code></pre><p>Plotting the output amplitude in decibels gives the following low-pass filter characteristic:</p>
 <p align="center"><img src="images/example_ACgraph.svg"></p>
 
 <div class="pull-left"><a href="dcanalysis.html">Previous: DC analysis</a></div> <div class="pull-right"><a href="transientanalysis.html">Next: Transient analysis</a></div>

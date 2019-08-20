@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class GivenParameter&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -80,12 +80,22 @@ found using the Given variable. It also has a default value when not specified.<
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Parameter-1.html">Parameter</a>&lt;T&gt;</div>
-    <div class="level3"><span class="xref">GivenParameter&lt;T&gt;</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Parameter-1.html">Parameter</a>&lt;T&gt;</div>
+    <div class="level2"><span class="xref">GivenParameter&lt;T&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable</a>&lt;<a class="xref" href="SpiceSharp.Parameter-1.html">Parameter</a>&lt;T&gt;&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameter-1.html#SpiceSharp_Parameter_1_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">Parameter&lt;T&gt;.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameter-1.html#SpiceSharp_Parameter_1_SpiceSharp_ICloneable_Clone">Parameter&lt;T&gt;.ICloneable.Clone()</a>
+    </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
@@ -109,7 +119,7 @@ found using the Given variable. It also has a default value when not specified.<
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_GivenParameter_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class GivenParameter&lt;T&gt; : Parameter&lt;T&gt; where T : struct</code></pre>
+    <pre><code class="lang-csharp hljs">public class GivenParameter&lt;T&gt; : Parameter&lt;T&gt;, ICloneable, ICloneable&lt;Parameter&lt;T&gt;&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -187,8 +197,7 @@ found using the Given variable. It also has a default value when not specified.<
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p><code>true</code> if given; otherwise, <code>false</code>.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -212,8 +221,7 @@ found using the Given variable. It also has a default value when not specified.<
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>The raw value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -237,8 +245,7 @@ found using the Given variable. It also has a default value when not specified.<
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>The value of the parameter.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -253,7 +260,7 @@ found using the Given variable. It also has a default value when not specified.<
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override BaseParameter Clone()</code></pre>
+    <pre><code class="lang-csharp hljs">public override Parameter&lt;T&gt; Clone()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -265,22 +272,22 @@ found using the Given variable. It also has a default value when not specified.<
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></td>
+        <td><a class="xref" href="SpiceSharp.Parameter-1.html">Parameter</a>&lt;T&gt;</td>
         <td><p>The cloned parameter.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.BaseParameter.html#SpiceSharp_BaseParameter_Clone">BaseParameter.Clone()</a></div>
+  <div><span class="xref">SpiceSharp.Parameter&lt;T&gt;.Clone()</span></div>
   <a id="SpiceSharp_GivenParameter_1_CopyFrom_" data-uid="SpiceSharp.GivenParameter`1.CopyFrom*"></a>
-  <h4 id="SpiceSharp_GivenParameter_1_CopyFrom_SpiceSharp_BaseParameter_" data-uid="SpiceSharp.GivenParameter`1.CopyFrom(SpiceSharp.BaseParameter)">CopyFrom(BaseParameter)</h4>
+  <h4 id="SpiceSharp_GivenParameter_1_CopyFrom_SpiceSharp_Parameter__0__" data-uid="SpiceSharp.GivenParameter`1.CopyFrom(SpiceSharp.Parameter{`0})">CopyFrom(Parameter&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Copies the contents of a parameter to this parameter.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CopyFrom(BaseParameter source)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void CopyFrom(Parameter&lt;T&gt; source)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -293,7 +300,7 @@ found using the Given variable. It also has a default value when not specified.<
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.BaseParameter.html">BaseParameter</a></td>
+        <td><a class="xref" href="SpiceSharp.Parameter-1.html">Parameter</a>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td><p>The source parameter.</p>
 </td>
@@ -301,7 +308,7 @@ found using the Given variable. It also has a default value when not specified.<
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Parameter&lt;T&gt;.CopyFrom(SpiceSharp.BaseParameter)</span></div>
+  <div><span class="xref">SpiceSharp.Parameter&lt;T&gt;.CopyFrom(SpiceSharp.Parameter&lt;T&gt;)</span></div>
   <a id="SpiceSharp_GivenParameter_1_ToString_" data-uid="SpiceSharp.GivenParameter`1.ToString*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_ToString" data-uid="SpiceSharp.GivenParameter`1.ToString">ToString()</h4>
   <div class="markdown level1 summary"><p>Returns a <span class="xref">System.String</span> that represents this instance.</p>
@@ -329,6 +336,62 @@ found using the Given variable. It also has a default value when not specified.<
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">SpiceSharp.Parameter&lt;T&gt;.ToString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.Parameter-1.html">Parameter</a>&lt;T&gt;</div>

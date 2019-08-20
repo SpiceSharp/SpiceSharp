@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class DynamicParameterBehavior
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -79,22 +79,18 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html">ExportingBehavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html">TemperatureBehavior</a></div>
-    <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html">BiasingBehavior</a></div>
-    <div class="level6"><span class="xref">DynamicParameterBehavior</span></div>
-      <div class="level7"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.html">FrequencyBehavior</a></div>
-      <div class="level7"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TransientBehavior.html">TransientBehavior</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html">TemperatureBehavior</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level4"><span class="xref">DynamicParameterBehavior</span></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.FrequencyBehavior.html">FrequencyBehavior</a></div>
+      <div class="level5"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TransientBehavior.html">TransientBehavior</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
-    <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -243,25 +239,22 @@
       <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_SourcePrimePtr">BiasingBehavior.SourcePrimePtr</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Connect_System_Int32___">BiasingBehavior.Connect(Int32[])</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_">BiasingBehavior.Bind(Simulation, BindingContext)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">BiasingBehavior.Setup(Simulation, SetupDataProvider)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Unbind">BiasingBehavior.Unbind()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_GetEquationPointers_SpiceSharp_Simulations_VariableSet_SpiceSharp_Algebra_Solver_System_Double__">BiasingBehavior.GetEquationPointers(VariableSet, Solver&lt;Double&gt;)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_Load">BiasingBehavior.IBiasingBehavior.Load()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Load_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.Load(BaseSimulation)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Initialize_SpiceSharp_Simulations_BaseSimulation_System_Double__System_Double__System_Double__System_Boolean__">BiasingBehavior.Initialize(BaseSimulation, Double, Double, Double, Boolean)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Initialize_System_Double__System_Double__System_Double__System_Boolean__">BiasingBehavior.Initialize(Double, Double, Double, Boolean)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_Evaluate_System_Double_System_Double_System_Double_">BiasingBehavior.Evaluate(Double, Double, Double)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_IsConvergent_SpiceSharp_Simulations_BaseSimulation_">BiasingBehavior.IsConvergent(BaseSimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.BiasingBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_IsConvergent">BiasingBehavior.IBiasingBehavior.IsConvergent()</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_TemperatureBehavior_BaseParameters">TemperatureBehavior.BaseParameters</a>
@@ -318,55 +311,19 @@
       <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_TemperatureBehavior_SourceSatCurrent">TemperatureBehavior.SourceSatCurrent</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_TemperatureBehavior_Temperature_SpiceSharp_Simulations_BaseSimulation_">TemperatureBehavior.Temperature(BaseSimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_TemperatureBehavior_State">TemperatureBehavior.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Name">ExportingBehavior.Name</a>
+      <a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html#SpiceSharp_Components_MosfetBehaviors_Level1_TemperatureBehavior_SpiceSharp_Behaviors_ITemperatureBehavior_Temperature">TemperatureBehavior.ITemperatureBehavior.Temperature()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_Unsetup_SpiceSharp_Simulations_Simulation_">ExportingBehavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Simulation">Behavior.Simulation</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Behaviors.ExportingBehavior.html#SpiceSharp_Simulations_Behaviors_ExportingBehavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">ExportingBehavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Principal">NamedParameterized.Principal</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1">NamedParameterized.CreateSetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1">NamedParameterized.CreateGetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_Members">Parameterized.Members</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateSetter__1_System_Reflection_MemberInfo_">Parameterized.CreateSetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateGetter__1_System_Reflection_MemberInfo_">Parameterized.CreateGetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_SetMember__1_System_Reflection_MemberInfo___0_">Parameterized.SetMember&lt;T&gt;(MemberInfo, T)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -394,7 +351,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class DynamicParameterBehavior : BiasingBehavior, IPropertyExporter, ITemperatureBehavior, IBiasingBehavior, IBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class DynamicParameterBehavior : BiasingBehavior, ITemperatureBehavior, IBiasingBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -449,8 +406,7 @@ public double CapBd { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The bulk-drain capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -476,8 +432,7 @@ public double CapBdSidewall { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The bulk-drain sidewall capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -503,8 +458,7 @@ public double CapBs { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The bulk-source capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -530,8 +484,7 @@ public double CapBsSidewall { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The bulk-source sidewall capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -557,8 +510,7 @@ public virtual double CapGb { get; protected set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The gate-bulk capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -584,8 +536,7 @@ public virtual double CapGd { get; protected set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The gate-drain capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -611,8 +562,7 @@ public virtual double CapGs { get; protected set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The gate-source capacitance.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -638,8 +588,7 @@ public virtual double ChargeBd { get; protected set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The stored bulk-drain charge.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -665,14 +614,14 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><p>The stored bulk-source charge.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_EffectiveLength_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.EffectiveLength*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_EffectiveLength" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.EffectiveLength">EffectiveLength</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the effective length.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -695,7 +644,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F2D_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F2D*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F2D" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F2D">F2D</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the implementation-specific factor 2-drain.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -718,7 +668,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F2S_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F2S*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F2S" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F2S">F2S</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the implementation-specific factor 2-source.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -741,7 +692,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F3D_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F3D*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F3D" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F3D">F3D</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the implementation-specific factor 3-drain.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -764,7 +716,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F3S_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F3S*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F3S" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F3S">F3S</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the implementation-specific factor 3-source.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -787,7 +740,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F4D_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F4D*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F4D" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F4D">F4D</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the implementation-specific factor 4-drain.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -810,7 +764,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F4S_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F4S*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_F4S" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.F4S">F4S</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the implementation-specific factor 4-source.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -833,7 +788,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempCapBd_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempCapBd*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempCapBd" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempCapBd">TempCapBd</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the temperature-modified bulk-drain capacitance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -856,7 +812,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempCapBs_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempCapBs*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempCapBs" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempCapBs">TempCapBs</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the temperature-modified bulk-source capacitance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -879,7 +836,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempDepletionCap_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempDepletionCap*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempDepletionCap" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempDepletionCap">TempDepletionCap</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the temperature-modified depletion capacitance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -902,7 +860,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempJunctionCap_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempJunctionCap*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempJunctionCap" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempJunctionCap">TempJunctionCap</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the temperature-modified junction capacitance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -925,7 +884,8 @@ public virtual double ChargeBs { get; protected set; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempJunctionCapSidewall_" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempJunctionCapSidewall*"></a>
   <h4 id="SpiceSharp_Components_MosfetBehaviors_Level1_DynamicParameterBehavior_TempJunctionCapSidewall" data-uid="SpiceSharp.Components.MosfetBehaviors.Level1.DynamicParameterBehavior.TempJunctionCapSidewall">TempJunctionCapSidewall</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the temperature-modified sidewall junction capacitance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -1032,9 +992,6 @@ once when temperature or parameters have changed.</p>
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
-  </div>
-  <div>
       <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
   </div>
   <div>
@@ -1043,8 +1000,54 @@ once when temperature or parameters have changed.</p>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
   </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">

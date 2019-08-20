@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class BehaviorPool
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -114,14 +114,32 @@
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Behaviors_BehaviorPool__ctor_" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor*"></a>
-  <h4 id="SpiceSharp_Behaviors_BehaviorPool__ctor" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor">BehaviorPool()</h4>
+  <h4 id="SpiceSharp_Behaviors_BehaviorPool__ctor_System_Collections_Generic_IEnumerable_System_Type__" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor(System.Collections.Generic.IEnumerable{System.Type})">BehaviorPool(IEnumerable&lt;Type&gt;)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Behaviors.BehaviorPool.html">BehaviorPool</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BehaviorPool()</code></pre>
+    <pre><code class="lang-csharp hljs">public BehaviorPool(IEnumerable&lt;Type&gt; types)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Type</span>&gt;</td>
+        <td><span class="parametername">types</span></td>
+        <td><p>The types for which a list will be kept which can be retrieved later.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Behaviors_BehaviorPool__ctor_" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor*"></a>
   <h4 id="SpiceSharp_Behaviors_BehaviorPool__ctor_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor(System.Collections.Generic.IEqualityComparer{System.String})">BehaviorPool(IEqualityComparer&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Behaviors.BehaviorPool.html">BehaviorPool</a> class.</p>
@@ -149,8 +167,65 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Behaviors_BehaviorPool__ctor_" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorPool__ctor_System_Collections_Generic_IEqualityComparer_System_String__System_Type___" data-uid="SpiceSharp.Behaviors.BehaviorPool.#ctor(System.Collections.Generic.IEqualityComparer{System.String},System.Type[])">BehaviorPool(IEqualityComparer&lt;String&gt;, Type[])</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Behaviors.BehaviorPool.html">BehaviorPool</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BehaviorPool(IEqualityComparer&lt;string&gt; comparer, Type[] types)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The comparer.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Type</span>[]</td>
+        <td><span class="parametername">types</span></td>
+        <td><p>The types.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
+  <a id="SpiceSharp_Behaviors_BehaviorPool_Count_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Count*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorPool_Count" data-uid="SpiceSharp.Behaviors.BehaviorPool.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Gets the number of behaviors in the pool.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Behaviors_BehaviorPool_Item_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Item*"></a>
   <h4 id="SpiceSharp_Behaviors_BehaviorPool_Item_System_String_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Item(System.String)">Item[String]</h4>
   <div class="markdown level1 summary"><p>Gets the associated <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a> of an entity.</p>
@@ -189,21 +264,45 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Behaviors.EntityBehaviorDictionary.html">EntityBehaviorDictionary</a></td>
-        <td><p>The <a class="xref" href="SpiceSharp.Behaviors.EntityBehaviorDictionary.html">EntityBehaviorDictionary</a>.</p>
+        <td><p>The behavior associated to the specified entity identifier.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorPool_Keys_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Keys*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorPool_Keys" data-uid="SpiceSharp.Behaviors.BehaviorPool.Keys">Keys</h4>
+  <div class="markdown level1 summary"><p>Gets the behavior keys.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;string&gt; Keys { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
   <a id="SpiceSharp_Behaviors_BehaviorPool_Add_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Add*"></a>
-  <h4 id="SpiceSharp_Behaviors_BehaviorPool_Add_System_Type_System_String_SpiceSharp_Behaviors_IBehavior_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Add(System.Type,System.String,SpiceSharp.Behaviors.IBehavior)">Add(Type, String, IBehavior)</h4>
-  <div class="markdown level1 summary"><p>Adds the specified behavior to the pool.</p>
+  <h4 id="SpiceSharp_Behaviors_BehaviorPool_Add_SpiceSharp_Behaviors_IBehavior_" data-uid="SpiceSharp.Behaviors.BehaviorPool.Add(SpiceSharp.Behaviors.IBehavior)">Add(IBehavior)</h4>
+  <div class="markdown level1 summary"><p>Adds the specified behavior.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Add(Type type, string creator, IBehavior behavior)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Add(IBehavior behavior)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -216,37 +315,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Type</span></td>
-        <td><span class="parametername">type</span></td>
-        <td><p>The type of the requested behavior.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">creator</span></td>
-        <td><p>The entity identifier to which the .</p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></td>
         <td><span class="parametername">behavior</span></td>
-        <td><p>The behavior to be added.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Invalid behavior</p>
+        <td><p>The behavior.</p>
 </td>
       </tr>
     </tbody>
@@ -311,7 +382,6 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public BehaviorList&lt;T&gt; GetBehaviorList&lt;T&gt;()
-
     where T : IBehavior</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -342,50 +412,6 @@
       <tr>
         <td><span class="parametername">T</span></td>
         <td><p>The base behavior type.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Behaviors_BehaviorPool_GetEntityBehaviors_" data-uid="SpiceSharp.Behaviors.BehaviorPool.GetEntityBehaviors*"></a>
-  <h4 id="SpiceSharp_Behaviors_BehaviorPool_GetEntityBehaviors_System_String_" data-uid="SpiceSharp.Behaviors.BehaviorPool.GetEntityBehaviors(System.String)">GetEntityBehaviors(String)</h4>
-  <div class="markdown level1 summary"><p>Gets the entity behaviors for a specific identifier. Obsolete, use the indexer instead.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete]
-public EntityBehaviorDictionary GetEntityBehaviors(string name)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The identifier of the entity.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.EntityBehaviorDictionary.html">EntityBehaviorDictionary</a></td>
-        <td><p>The behaviors associated to the specified entity identifier.</p>
 </td>
       </tr>
     </tbody>
@@ -438,6 +464,55 @@ public EntityBehaviorDictionary GetEntityBehaviors(string name)</code></pre>
       </tr>
     </tbody>
   </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
 </article>
           </div>
           

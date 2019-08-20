@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         private MatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
         private VectorElement<double> _aPtr, _bPtr;
         private BaseParameters _bp;
-        private BaseConfiguration _baseConfig;
         private BaseSimulationState _state;
+        private BaseConfiguration _baseConfig;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -33,9 +33,9 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             base.Bind(simulation, context);
 
             // Cache some objects that we will use often
-            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
             _bp = context.GetParameterSet<BaseParameters>();
             _state = ((BaseSimulation)simulation).RealState;
+            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
 
             // Find the nodes that the resistor is connected to
             if (context is ComponentBindingContext cbc)
@@ -63,6 +63,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         {
             base.Unbind();
             _bp = null;
+            _state = null;
+            _baseConfig = null;
             _aaPtr = null;
             _abPtr = null;
             _baPtr = null;
@@ -84,28 +86,19 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             var c = Math.Pow(Math.Abs(v) / _bp.A, 1.0 / _bp.B);
             double g;
 
-            // Isolate special cases for the derivative
-            if (_bp.B.Equals(1.0))
-            {
-                // i = v/a
-                g = 1.0 / _bp.A;
-            }
+            // If v=0 the derivative is either 0 or infinity (avoid 0^(negative number) = not a number)
+            if (v.Equals(0.0))
+                g = _bp.B < 1.0 / _bp.A ? double.PositiveInfinity : 0.0;
             else
-            {
-                // If v=0 the derivative is either 0 or infinity (avoid 0^(negative number))
-                if (v.Equals(0.0))
-                    g = _bp.B < 1.0 / _bp.A ? double.PositiveInfinity : 0.0;
-                else
-                    g = Math.Pow(Math.Abs(v) / _bp.A, 1.0 / _bp.B - 1.0) / _bp.A;
-            }
+                g = Math.Pow(Math.Abs(v) / _bp.A, 1.0 / _bp.B - 1.0) / _bp.A;
 
-            // At v=0
-            g += _baseConfig.Gmin;
+            // In order to avoid having a singular matrix, we want to have at least a very small value here.
+            g = Math.Max(g, _baseConfig.Gmin);
 
-            // If the voltage was reversed, reverse the current
+            // If the voltage was reversed, reverse the current back
             if (isNegative)
                 c = -c;
-            
+
             // Load the RHS vector
             c -= g * v;
             _aPtr.Value += c;

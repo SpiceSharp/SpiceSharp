@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class EntityCollection
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -80,9 +80,13 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">EntityCollection</span></div>
+      <div class="level2"><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>&gt;</div>
+    <div><span class="xref">System.Collections.ICollection</span></div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>&gt;</div>
     <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>&gt;</div>
     <div><span class="xref">System.Collections.IEnumerable</span></div>
   </div>
@@ -114,7 +118,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Circuits_EntityCollection_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class EntityCollection : IEnumerable&lt;Entity&gt;, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public class EntityCollection : ICollection&lt;Entity&gt;, ICollection, IReadOnlyCollection&lt;Entity&gt;, IEnumerable&lt;Entity&gt;, IEnumerable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -176,8 +180,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td><p>The comparer.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -205,6 +208,54 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_IsReadOnly_" data-uid="SpiceSharp.Circuits.EntityCollection.IsReadOnly*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_IsReadOnly" data-uid="SpiceSharp.Circuits.EntityCollection.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span> is read-only.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_IsSynchronized_" data-uid="SpiceSharp.Circuits.EntityCollection.IsSynchronized*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_IsSynchronized" data-uid="SpiceSharp.Circuits.EntityCollection.IsSynchronized">IsSynchronized</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether access to the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span> is synchronized (thread safe).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsSynchronized { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Circuits_EntityCollection_Item_" data-uid="SpiceSharp.Circuits.EntityCollection.Item*"></a>
   <h4 id="SpiceSharp_Circuits_EntityCollection_Item_System_String_" data-uid="SpiceSharp.Circuits.EntityCollection.Item(System.String)">Item[String]</h4>
   <div class="markdown level1 summary"><p>Search for an entity by its string.</p>
@@ -212,7 +263,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Entity this[string id] { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public Entity this[string name] { get; }</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -226,7 +277,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">id</span></td>
+        <td><span class="parametername">name</span></td>
         <td><p>The string.</p>
 </td>
       </tr>
@@ -243,13 +294,88 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a></td>
-        <td><p>The <a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>.</p>
+        <td><p>The entity with the specified string.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_Keys_" data-uid="SpiceSharp.Circuits.EntityCollection.Keys*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Keys" data-uid="SpiceSharp.Circuits.EntityCollection.Keys">Keys</h4>
+  <div class="markdown level1 summary"><p>Enumerates the names of all entities in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;string&gt; Keys { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_SyncRoot_" data-uid="SpiceSharp.Circuits.EntityCollection.SyncRoot*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_SyncRoot" data-uid="SpiceSharp.Circuits.EntityCollection.SyncRoot">SyncRoot</h4>
+  <div class="markdown level1 summary"><p>Gets an object that can be used to synchronize access to the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object SyncRoot { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="SpiceSharp_Circuits_EntityCollection_Add_" data-uid="SpiceSharp.Circuits.EntityCollection.Add*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Add_SpiceSharp_Circuits_Entity_" data-uid="SpiceSharp.Circuits.EntityCollection.Add(SpiceSharp.Circuits.Entity)">Add(Entity)</h4>
+  <div class="markdown level1 summary"><p>Add an entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(Entity item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a></td>
+        <td><span class="parametername">item</span></td>
+        <td><p>The item to be added.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Circuits_EntityCollection_Add_" data-uid="SpiceSharp.Circuits.EntityCollection.Add*"></a>
   <h4 id="SpiceSharp_Circuits_EntityCollection_Add_SpiceSharp_Circuits_Entity___" data-uid="SpiceSharp.Circuits.EntityCollection.Add(SpiceSharp.Circuits.Entity[])">Add(Entity[])</h4>
   <div class="markdown level1 summary"><p>Add one or more entities.</p>
@@ -257,7 +383,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Add(params Entity[] cs)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Add(params Entity[] entities)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -271,25 +397,12 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>[]</td>
-        <td><span class="parametername">cs</span></td>
+        <td><span class="parametername">entities</span></td>
         <td><p>The entities that need to be added.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Circuits_EntityCollection_BuildOrderedComponentList_" data-uid="SpiceSharp.Circuits.EntityCollection.BuildOrderedComponentList*"></a>
-  <h4 id="SpiceSharp_Circuits_EntityCollection_BuildOrderedComponentList" data-uid="SpiceSharp.Circuits.EntityCollection.BuildOrderedComponentList">BuildOrderedComponentList()</h4>
-  <div class="markdown level1 summary"><p>This method is called when building an ordered list of circuit objects. Circuit objects will be called by descending priority.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void BuildOrderedComponentList()</code></pre>
-  </div>
-  <h5 id="SpiceSharp_Circuits_EntityCollection_BuildOrderedComponentList_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>Ordering is necessary for entities that depend on one another. For example, a <a class="xref" href="SpiceSharp.Components.MutualInductance.html">MutualInductance</a> needs access
-to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a> in order to apply mutual coupling. So inductors need to come before mutual inductances.</p>
-</div>
   <a id="SpiceSharp_Circuits_EntityCollection_ByType_" data-uid="SpiceSharp.Circuits.EntityCollection.ByType*"></a>
   <h4 id="SpiceSharp_Circuits_EntityCollection_ByType_System_Type_" data-uid="SpiceSharp.Circuits.EntityCollection.ByType(System.Type)">ByType(Type)</h4>
   <div class="markdown level1 summary"><p>Gets all entities of a specific type.</p>
@@ -343,13 +456,55 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
     <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
   </div>
   <a id="SpiceSharp_Circuits_EntityCollection_Contains_" data-uid="SpiceSharp.Circuits.EntityCollection.Contains*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Contains_SpiceSharp_Circuits_Entity_" data-uid="SpiceSharp.Circuits.EntityCollection.Contains(SpiceSharp.Circuits.Entity)">Contains(Entity)</h4>
+  <div class="markdown level1 summary"><p>Find out if an entity is contained in this collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(Entity item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a></td>
+        <td><span class="parametername">item</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_Contains_" data-uid="SpiceSharp.Circuits.EntityCollection.Contains*"></a>
   <h4 id="SpiceSharp_Circuits_EntityCollection_Contains_System_String_" data-uid="SpiceSharp.Circuits.EntityCollection.Contains(System.String)">Contains(String)</h4>
   <div class="markdown level1 summary"><p>This method checks if a component exists with a specified string.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Contains(string id)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Contains(string name)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -363,7 +518,7 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">id</span></td>
+        <td><span class="parametername">name</span></td>
         <td><p>The string.</p>
 </td>
       </tr>
@@ -385,6 +540,39 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_CopyTo_" data-uid="SpiceSharp.Circuits.EntityCollection.CopyTo*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_CopyTo_SpiceSharp_Circuits_Entity___System_Int32_" data-uid="SpiceSharp.Circuits.EntityCollection.CopyTo(SpiceSharp.Circuits.Entity[],System.Int32)">CopyTo(Entity[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Copy the elements to an array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(Entity[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td><p>The array.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td><p>The starting index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Circuits_EntityCollection_GetEnumerator_" data-uid="SpiceSharp.Circuits.EntityCollection.GetEnumerator*"></a>
   <h4 id="SpiceSharp_Circuits_EntityCollection_GetEnumerator" data-uid="SpiceSharp.Circuits.EntityCollection.GetEnumerator">GetEnumerator()</h4>
   <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
@@ -392,7 +580,7 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerator&lt;Entity&gt; GetEnumerator()</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IEnumerator&lt;Entity&gt; GetEnumerator()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -410,14 +598,14 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Circuits_EntityCollection_Remove_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove*"></a>
-  <h4 id="SpiceSharp_Circuits_EntityCollection_Remove_System_String___" data-uid="SpiceSharp.Circuits.EntityCollection.Remove(System.String[])">Remove(String[])</h4>
-  <div class="markdown level1 summary"><p>Remove specific entities from the collection.</p>
+  <a id="SpiceSharp_Circuits_EntityCollection_OnEntityAdded_" data-uid="SpiceSharp.Circuits.EntityCollection.OnEntityAdded*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_OnEntityAdded_SpiceSharp_Circuits_EntityEventArgs_" data-uid="SpiceSharp.Circuits.EntityCollection.OnEntityAdded(SpiceSharp.Circuits.EntityEventArgs)">OnEntityAdded(EntityEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_EntityAdded">EntityAdded</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Remove(params string[] ids)</code></pre>
+    <pre><code class="lang-csharp hljs">protected virtual void OnEntityAdded(EntityEventArgs args)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -430,21 +618,115 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span>[]</td>
-        <td><span class="parametername">ids</span></td>
-        <td><p>strings of the entities that need to be deleted.</p>
-</td>
+        <td><a class="xref" href="SpiceSharp.Circuits.EntityEventArgs.html">EntityEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Circuits_EntityCollection_TryGetEntity_" data-uid="SpiceSharp.Circuits.EntityCollection.TryGetEntity*"></a>
-  <h4 id="SpiceSharp_Circuits_EntityCollection_TryGetEntity_System_String_SpiceSharp_Circuits_Entity__" data-uid="SpiceSharp.Circuits.EntityCollection.TryGetEntity(System.String,SpiceSharp.Circuits.Entity@)">TryGetEntity(String, out Entity)</h4>
-  <div class="markdown level1 summary"><p>Try to find an entity in the collection.</p>
+  <a id="SpiceSharp_Circuits_EntityCollection_OnEntityRemoved_" data-uid="SpiceSharp.Circuits.EntityCollection.OnEntityRemoved*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_OnEntityRemoved_SpiceSharp_Circuits_EntityEventArgs_" data-uid="SpiceSharp.Circuits.EntityCollection.OnEntityRemoved(SpiceSharp.Circuits.EntityEventArgs)">OnEntityRemoved(EntityEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Circuits.EntityCollection.html#SpiceSharp_Circuits_EntityCollection_EntityRemoved">EntityRemoved</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool TryGetEntity(string id, out Entity entity)</code></pre>
+    <pre><code class="lang-csharp hljs">protected virtual void OnEntityRemoved(EntityEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuits.EntityEventArgs.html">EntityEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_Remove_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Remove_SpiceSharp_Circuits_Entity_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove(SpiceSharp.Circuits.Entity)">Remove(Entity)</h4>
+  <div class="markdown level1 summary"><p>Removes the specified entity from the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(Entity item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a></td>
+        <td><span class="parametername">item</span></td>
+        <td><p>The item to be deleted.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_Remove_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Remove_SpiceSharp_Circuits_Entity___" data-uid="SpiceSharp.Circuits.EntityCollection.Remove(SpiceSharp.Circuits.Entity[])">Remove(Entity[])</h4>
+  <div class="markdown level1 summary"><p>Removes the specified entities from the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Remove(params Entity[] entities)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuits.Entity.html">Entity</a>[]</td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_Remove_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Remove_System_String_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove(System.String)">Remove(String)</h4>
+  <div class="markdown level1 summary"><p>Removes the specified entity from the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(string name)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -458,8 +740,77 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">id</span></td>
-        <td><p>The string to be searched for.</p>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the entity to be deleted.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_Remove_" data-uid="SpiceSharp.Circuits.EntityCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_Remove_System_String___" data-uid="SpiceSharp.Circuits.EntityCollection.Remove(System.String[])">Remove(String[])</h4>
+  <div class="markdown level1 summary"><p>Removes the specified entities from the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Remove(params string[] names)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">names</span></td>
+        <td><p>strings of the entities that need to be deleted.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Circuits_EntityCollection_TryGetEntity_" data-uid="SpiceSharp.Circuits.EntityCollection.TryGetEntity*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_TryGetEntity_System_String_SpiceSharp_Circuits_Entity__" data-uid="SpiceSharp.Circuits.EntityCollection.TryGetEntity(System.String,SpiceSharp.Circuits.Entity@)">TryGetEntity(String, out Entity)</h4>
+  <div class="markdown level1 summary"><p>Try to find an entity in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetEntity(string name, out Entity entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name to be searched for.</p>
 </td>
       </tr>
       <tr>
@@ -486,8 +837,89 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
       </tr>
     </tbody>
   </table>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_EntityAdded" data-uid="SpiceSharp.Circuits.EntityCollection.EntityAdded">EntityAdded</h4>
+  <div class="markdown level1 summary"><p>Occurs when an entity is about to be added to the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EntityEventArgs&gt; EntityAdded</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Circuits.EntityEventArgs.html">EntityEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_EntityRemoved" data-uid="SpiceSharp.Circuits.EntityCollection.EntityRemoved">EntityRemoved</h4>
+  <div class="markdown level1 summary"><p>Occurs when an entity has been removed from the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EntityEventArgs&gt; EntityRemoved</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Circuits.EntityEventArgs.html">EntityEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="eii">Explicit Interface Implementations
   </h3>
+  <a id="SpiceSharp_Circuits_EntityCollection_System_Collections_ICollection_CopyTo_" data-uid="SpiceSharp.Circuits.EntityCollection.System#Collections#ICollection#CopyTo*"></a>
+  <h4 id="SpiceSharp_Circuits_EntityCollection_System_Collections_ICollection_CopyTo_System_Array_System_Int32_" data-uid="SpiceSharp.Circuits.EntityCollection.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">ICollection.CopyTo(Array, Int32)</h4>
+  <div class="markdown level1 summary"><p>Copy the elements to an array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ICollection.CopyTo(Array array, int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Array</span></td>
+        <td><span class="parametername">array</span></td>
+        <td><p>The array.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The starting index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Circuits_EntityCollection_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.Circuits.EntityCollection.System#Collections#IEnumerable#GetEnumerator*"></a>
   <h4 id="SpiceSharp_Circuits_EntityCollection_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.Circuits.EntityCollection.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
   <div class="markdown level1 summary"><p>Returns an enumerator that iterates through a collection.</p>
@@ -515,10 +947,74 @@ to other <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>
   </table>
   <h3 id="implements">Implements</h3>
   <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.ICollection</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</span>
+  </div>
+  <div>
       <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
   </div>
   <div>
       <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfEmpty__1___0_System_String_">Utility.ThrowIfEmpty&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNot__1___0_System_String_System_Int32_">Utility.ThrowIfNot&lt;T&gt;(T, String, Int32)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

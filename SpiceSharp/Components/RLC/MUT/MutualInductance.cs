@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.MutualInductanceBehaviors;
@@ -54,6 +55,19 @@ namespace SpiceSharp.Components
             ParameterSets.Add(new BaseParameters(coupling));
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
+        }
+
+        /// <summary>
+        /// Create the behaviors.
+        /// </summary>
+        /// <param name="types">The behavior types.</param>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entities">The entities.</param>
+        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        {
+            entities[InductorName1.ThrowIfNull("primary inductor")].CreateBehaviors(types, simulation, entities);
+            entities[InductorName2.ThrowIfNull("secondary inductor")].CreateBehaviors(types, simulation, entities);
+            base.CreateBehaviors(types, simulation, entities);
         }
 
         /// <summary>

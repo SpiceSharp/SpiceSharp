@@ -2,39 +2,22 @@
 
 Parameters and properties are your main way of configuring the behavior of an entity in the circuit. They are typically specified in a **[ParameterSet](xref:SpiceSharp.ParameterSet)**.
 
-## Parameter objects
-Spice# provides a basic **[Parameter<T>](xref:SpiceSharp.Parameter`1)** class for generic parameters. It implements getting and setting a value, for which custom logic can be implemented.
-
-The most common use of this class is the **[GivenParameter](xref:SpiceSharp.GivenParameter`1)** class. Many parameters in Spice also track whether or not they have been specified by the user or not. This class also exposes a *Given* property that will resolve to *true* if the value has been set.
-
 ## Parameter attributes
-It is possible to provide parameters with attributes containing more meta-information.
+It is possible to provide parameters with attributes containing more runtime meta-information.
 
-- **[ParameterNameAttribute](xref:SpiceSharp.Attributes.ParameterNameAttribute)**: Tags the property, method or field with a specific name. Multiple names can be specified. Using this attribute enables accessing these members using reflection. These can generally be accessed because of the following classes:
-  - **[NamedParameterized](xref:SpiceSharp.Attributes.NamedParameterized)**
-    - *[CreateGetter<T>()](xref:SpiceSharp.Attributes.NamedParameterized#SpiceSharp_Attributes_NamedParameterized_CreateGetter_)* creates a delegate that gets the member value of type *T* tagged by the specified name. Example:
-
-      [!code-csharp[CreateGetter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_creategetter)]
-    - *[CreateSetter<T>()](xref:SpiceSharp.Attributes.NamedParameterized#SpiceSharp_Attributes_NamedParameterized_CreateSetter_)* creates a delegate that sets the member value of type *T* tagged by the specified name. Example:
-
-      [!code-csharp[CreateSetter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_createsetter)]
-  - **[ParameterSet](xref:SpiceSharp.ParameterSet)** (also implements **[NamedParameterized](xref:SpiceSharp.Attributes.NamedParameterized)**)
-    - *[GetParameter<T>()](xref:SpiceSharp.ParameterSet#SpiceSharp_ParameterSet_GetParameter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__)* gets a **[Parameter<T>](xref:SpiceSharp.Parameter`1)** object tagged by the specified name. Example:
-
-      [!code-csharp[GetParameter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_getparameter)]
-    - *[SetParameter(string)](xref:SpiceSharp.ParameterSet#SpiceSharp_ParameterSet_SetParameter_System_String_)* calls a method without parameters that is tagged by the specified name. Can be useful for activating certain flags.
-    - *[SetParameter(string, object)](xref:SpiceSharp.ParameterSet#SpiceSharp_ParameterSet_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__)* will set a property or method with one argument, tagged by the specified name. This method can be used to pass classes to a named parameter.
-    - *[SetParameter<T>()](xref:SpiceSharp.ParameterSet#SpiceSharp_ParameterSet_SetParameter__1___0_)* sets a property, field or method, or **[Parameter<T>](xref:SpiceSharp.Parameter`1)**-object tagged by the specified name with the specified value. Example:
-
-      [!code-csharp[SetParameter example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_mos1_setparameter)]
-
-  - **[Behavior](xref:SpiceSharp.Behaviors.Behavior)** (also implements **[NamedParameterized](xref:SpiceSharp.Attributes.NamedParameterized)**)
-    - *[CreateGetter(Simulation,string)](xref:SpiceSharp.Behaviors.Behavior#SpiceSharp_Behaviors_Behavior_CreateGetter_)* creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.
+- **[ParameterNameAttribute](xref:SpiceSharp.Attributes.ParameterNameAttribute)**: Tags the property, method or field with a specific name. Multiple names can be specified..
 - **[ParameterInfoAttribute](xref:SpiceSharp.Attributes.ParameterInfoAttribute)**: Adds more information about the parameter.
   - *[Description](xref:SpiceSharp.Attributes.ParameterInfoAttribute#SpiceSharp_Attributes_ParameterInfoAttribute_Description)* gives more information about the parameter.
   - *[Interesting](xref:SpiceSharp.Attributes.ParameterInfoAttribute#SpiceSharp_Attributes_ParameterInfoAttribute_Interesting)* indicates whether the parameter is interesting to be shown as a parameter (legacy from Spice 3f5).
-  - *[IsPrincipal](xref:SpiceSharp.Attributes.ParameterInfoAttribute#SpiceSharp_Attributes_ParameterInfoAttribute_IsPrincipal)* indicates that this parameter is the *principal* design parameter of the entity. Examples are the resistance, capacitance and inductance of a resistor, capacitor and inductor. Using this flag allows you to find the parameter without specifying the parameter name. For example:
+  - *[IsPrincipal](xref:SpiceSharp.Attributes.ParameterInfoAttribute#SpiceSharp_Attributes_ParameterInfoAttribute_IsPrincipal)* indicates that this parameter is the *principal* design parameter of the entity. Examples are the resistance, capacitance and inductance of a resistor, capacitor and inductor. Using this flag allows you to find the parameter without specifying the parameter name.
 
-    [!code-csharp[SetParameter IsPrincipal example](../../SpiceSharpTest/BasicExampleTests.cs#example_parameters_res_setparameter)]
+The biggest advantage that these attributes provide, is that they can be used in conjunction with the **[ParameterHelper](xref:SpiceSharp.ParameterHelper)** extension methods. These methods allow you to set or get parameters based on their **[ParameterNameAttribute](xref:SpiceSharp.Attributes.ParameterNameAttribute)**.
+- You can set or get a parameter immediately by its name, using the *[SetParameter](xref:SpiceSharp.ParameterHelper.SetParameter(System.Object,System.String,System.Collections.Generic.IEqualityComparer{System.String}))* and *[GetParameter](xref:SpiceSharp.ParameterHelper.GetParameter``1(System.Object,System.String,System.Collections.Generic.IEqualityComparer{System.String}))*. You can also use the *TrySetParameter* and *TryGetParameter* variants if want to test whether or not the parameter exist.
+- You can create a getter or setter using the *[CreateSetter](xref:CreateSetter<T>(String, IEqualityComparer<String>))* and *[CreateGetter](xref:SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String}))* methods. This gives fast access, and bypasses slower reflection (although it is cached).
+
+## Parameter objects
+Any member (property, field, method) can be named using the above mentioned attributes. Furthermore, the system also supports deep cloning of objects using reflection, which may be necessary when running multiple simulations on multiple threads. However, when it encounters a member that cannot be cloned, then the member will be copied by reference if possible. If the property implements **[ICloneable](xref:SpiceSharp.ICloneable)**, then the member will either be cloned (if the member is publicy settable), or the property will be copied using *[CopyFrom](xref:SpiceSharp.ICloneable.CopyFrom(SpiceSharp.ICloneable))*. In other cases, the member is ignored and should be implemented manually.
+
+Spice# provides a basic **[Parameter<T>](xref:SpiceSharp.Parameter`1)** class for generic parameters that implement **[ICloneable](xref:SpiceSharp.ICloneable)**. It implements getting and setting a *[Value](xref:SpiceSharp.Parameter`1.Value)* property, for which custom logic can be implemented. The most common use of this class is the **[GivenParameter](xref:SpiceSharp.GivenParameter`1)** class. Many parameters in Spice also track whether or not they have been specified by the user or not. This class also exposes a *[Given](xref:SpiceSharp.GivenParameter`1.Given)* property that will resolve to *true* if the value has been set. This is often used to find out if a default property has to be calculated.
 
 <div class="pull-left">[Previous: Entities, components and models](entities.md)</div> <div class="pull-right">[Next: Custom models](../custom_components/custom_models.md)</div>

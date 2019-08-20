@@ -50,7 +50,7 @@
 	},
     "dest": "docs",
     "maxParallelism": 4,
-    "template": [ "default" ],
+    "template": [ "default", "material/material" ],
 	"force": true
   }
 }

@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class FrequencyBehavior
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -73,77 +73,74 @@
   
   <h1 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior" class="text-break">Class FrequencyBehavior
   </h1>
-  <div class="markdown level0 summary"><p>AC behavior for <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a></p>
+  <div class="markdown level0 summary"><p>Frequency behavior for <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a></p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Parameterized.html">Parameterized</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></div>
-    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html">BaseFrequencyBehavior</a></div>
-    <div class="level5"><span class="xref">FrequencyBehavior</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level3"><span class="xref">FrequencyBehavior</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
-    <div><a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_InitializeParameters_SpiceSharp_Simulations_FrequencySimulation_">BaseFrequencyBehavior.InitializeParameters(FrequencySimulation)</a>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_BaseParameters">BiasingBehavior.BaseParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_BranchEq">BiasingBehavior.BranchEq</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_GetCurrent">BiasingBehavior.GetCurrent()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_GetVoltage">BiasingBehavior.GetVoltage()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_GetPower">BiasingBehavior.GetPower()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_PosNode">BiasingBehavior.PosNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_NegNode">BiasingBehavior.NegNode</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_PosBranchPtr">BiasingBehavior.PosBranchPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_NegBranchPtr">BiasingBehavior.NegBranchPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_BranchNegPtr">BiasingBehavior.BranchNegPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_BranchPosPtr">BiasingBehavior.BranchPosPtr</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_State">BiasingBehavior.State</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_Load">BiasingBehavior.IBiasingBehavior.Load()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_SpiceSharp_Behaviors_IBiasingBehavior_IsConvergent">BiasingBehavior.IBiasingBehavior.IsConvergent()</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Unsetup_SpiceSharp_Simulations_Simulation_">Behavior.Unsetup(Simulation)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Simulation">Behavior.Simulation</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;, Func&lt;T&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Func___0___">Behavior.CreateGetter&lt;T&gt;(Simulation, String, Func&lt;T&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Named_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.Named(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_Principal">NamedParameterized.Principal</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateSetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter__1">NamedParameterized.CreateSetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetter&lt;T&gt;(String, IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter__1">NamedParameterized.CreateGetter&lt;T&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetters__1_System_Collections_Generic_IEqualityComparer_System_String__">NamedParameterized.CreateGetters&lt;T&gt;(IEqualityComparer&lt;String&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_Members">Parameterized.Members</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateSetter__1_System_Reflection_MemberInfo_">Parameterized.CreateSetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_CreateGetter__1_System_Reflection_MemberInfo_">Parameterized.CreateGetter&lt;T&gt;(MemberInfo)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Parameterized.html#SpiceSharp_Parameterized_SetMember__1_System_Reflection_MemberInfo___0_">Parameterized.SetMember&lt;T&gt;(MemberInfo, T)</a>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">Behavior.CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -171,13 +168,13 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class FrequencyBehavior : BaseFrequencyBehavior, IPropertyExporter, IFrequencyBehavior, IBehavior, IConnectedBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public class FrequencyBehavior : BiasingBehavior, IBiasingBehavior, IFrequencyBehavior, IBehavior</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior__ctor_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.#ctor*"></a>
   <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior__ctor_System_String_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.#ctor(System.String)">FrequencyBehavior(String)</h4>
-  <div class="markdown level1 summary"><p>Constructor</p>
+  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.html">FrequencyBehavior</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -204,13 +201,14 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_BranchBranchPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.BranchBranchPtr*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_BranchBranchPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.BranchBranchPtr">BranchBranchPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CBranchBranchPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CBranchBranchPtr*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CBranchBranchPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CBranchBranchPtr">CBranchBranchPtr</h4>
+  <div class="markdown level1 summary"><p>Gets the (branch, branch) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BranchBranchPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBranchBranchPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -227,13 +225,14 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_BranchNegPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.BranchNegPtr*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_BranchNegPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.BranchNegPtr">BranchNegPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CBranchNegPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CBranchNegPtr*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CBranchNegPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CBranchNegPtr">CBranchNegPtr</h4>
+  <div class="markdown level1 summary"><p>Gets the (branch, negative) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BranchNegPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBranchNegPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -250,13 +249,14 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_BranchPosPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.BranchPosPtr*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_BranchPosPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.BranchPosPtr">BranchPosPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CBranchPosPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CBranchPosPtr*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CBranchPosPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CBranchPosPtr">CBranchPosPtr</h4>
+  <div class="markdown level1 summary"><p>Gets the (branch, positive) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; BranchPosPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CBranchPosPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -273,13 +273,14 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_NegBranchPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.NegBranchPtr*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_NegBranchPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.NegBranchPtr">NegBranchPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CNegBranchPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CNegBranchPtr*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CNegBranchPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CNegBranchPtr">CNegBranchPtr</h4>
+  <div class="markdown level1 summary"><p>Gets the (negative, branch) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; NegBranchPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CNegBranchPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -296,13 +297,14 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_PosBranchPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.PosBranchPtr*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_PosBranchPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.PosBranchPtr">PosBranchPtr</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CPosBranchPtr_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CPosBranchPtr*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_CPosBranchPtr" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.CPosBranchPtr">CPosBranchPtr</h4>
+  <div class="markdown level1 summary"><p>Gets the (positive, branch) element.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; PosBranchPtr { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;Complex&gt; CPosBranchPtr { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -321,99 +323,14 @@
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Connect_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Connect*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Connect_System_Int32___" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Connect</p>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Bind_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Bind*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Bind(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.BindingContext)">Bind(Simulation, BindingContext)</h4>
+  <div class="markdown level1 summary"><p>Bind behavior.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
-        <td><p>Pins</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_GetEquationPointers_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.GetEquationPointers(SpiceSharp.Algebra.Solver{System.Numerics.Complex})">GetEquationPointers(Solver&lt;Complex&gt;)</h4>
-  <div class="markdown level1 summary"><p>Gets matrix pointers</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void GetEquationPointers(Solver&lt;Complex&gt; solver)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Solver-1.html">Solver</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</td>
-        <td><span class="parametername">solver</span></td>
-        <td><p>Matrix</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_GetEquationPointers_SpiceSharp_Algebra_Solver_System_Numerics_Complex__">BaseFrequencyBehavior.GetEquationPointers(Solver&lt;Complex&gt;)</a></div>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Load_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Load*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Load_SpiceSharp_Simulations_FrequencySimulation_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Load(SpiceSharp.Simulations.FrequencySimulation)">Load(FrequencySimulation)</h4>
-  <div class="markdown level1 summary"><p>Execute behavior for AC analysis</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Load(FrequencySimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Frequency-based simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.BaseFrequencyBehavior.html#SpiceSharp_Behaviors_BaseFrequencyBehavior_Load_SpiceSharp_Simulations_FrequencySimulation_">BaseFrequencyBehavior.Load(FrequencySimulation)</a></div>
-  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Setup_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Setup*"></a>
-  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Setup(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.SetupDataProvider)">Setup(Simulation, SetupDataProvider)</h4>
-  <div class="markdown level1 summary"><p>Setup behavior</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup(Simulation simulation, SetupDataProvider provider)</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Bind(Simulation simulation, BindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -428,22 +345,53 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
         <td><span class="parametername">simulation</span></td>
-        <td><p>Simulation</p>
+        <td><p>The simulation.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.SetupDataProvider.html">SetupDataProvider</a></td>
-        <td><span class="parametername">provider</span></td>
+        <td><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></td>
+        <td><span class="parametername">context</span></td>
         <td><p>Data provider</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Setup_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_SetupDataProvider_">Behavior.Setup(Simulation, SetupDataProvider)</a></div>
+  <div><a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_">BiasingBehavior.Bind(Simulation, BindingContext)</a></div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Unbind_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Unbind*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_Unbind" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.Unbind">Unbind()</h4>
+  <div class="markdown level1 summary"><p>Unbind the behavior.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Unbind()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html#SpiceSharp_Components_InductorBehaviors_BiasingBehavior_Unbind">BiasingBehavior.Unbind()</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_SpiceSharp_Behaviors_IFrequencyBehavior_InitializeParameters_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.SpiceSharp#Behaviors#IFrequencyBehavior#InitializeParameters*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_SpiceSharp_Behaviors_IFrequencyBehavior_InitializeParameters" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.SpiceSharp#Behaviors#IFrequencyBehavior#InitializeParameters">IFrequencyBehavior.InitializeParameters()</h4>
+  <div class="markdown level1 summary"><p>Initialize the small-signal parameters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IFrequencyBehavior.InitializeParameters()</code></pre>
+  </div>
+  <a id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_SpiceSharp_Behaviors_IFrequencyBehavior_Load_" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.SpiceSharp#Behaviors#IFrequencyBehavior#Load*"></a>
+  <h4 id="SpiceSharp_Components_InductorBehaviors_FrequencyBehavior_SpiceSharp_Behaviors_IFrequencyBehavior_Load" data-uid="SpiceSharp.Components.InductorBehaviors.FrequencyBehavior.SpiceSharp#Behaviors#IFrequencyBehavior#Load">IFrequencyBehavior.Load()</h4>
+  <div class="markdown level1 summary"><p>Load the Y-matrix and Rhs-vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IFrequencyBehavior.Load()</code></pre>
+  </div>
   <h3 id="implements">Implements</h3>
   <div>
-      <a class="xref" href="SpiceSharp.Behaviors.IPropertyExporter.html">IPropertyExporter</a>
+      <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a>
@@ -451,8 +399,54 @@
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
   </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="SpiceSharp.Components.IConnectedBehavior.html">IConnectedBehavior</a>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

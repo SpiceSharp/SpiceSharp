@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class BaseSimulation
    ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -95,13 +95,10 @@
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Configurations">Simulation.Configurations</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ParameterSets">Simulation.ParameterSets</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Statistics">Simulation.Statistics</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Variables">Simulation.Variables</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Nodes">Simulation.Nodes</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData">Simulation.ExportSimulationData</a>
@@ -134,10 +131,13 @@
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityParameters">Simulation.EntityParameters</a>
     </div>
     <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_SimulationStatistics">Simulation.SimulationStatistics</a>
+    </div>
+    <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BehaviorTypes">Simulation.BehaviorTypes</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Circuit_">Simulation.Run(Circuit)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Circuits_EntityCollection_">Simulation.Run(EntityCollection)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnExport_SpiceSharp_Simulations_ExportDataEventArgs_">Simulation.OnExport(ExportDataEventArgs)</a>
@@ -224,7 +224,8 @@
   </h3>
   <a id="SpiceSharp_Simulations_BaseSimulation_AbsTol_" data-uid="SpiceSharp.Simulations.BaseSimulation.AbsTol*"></a>
   <h4 id="SpiceSharp_Simulations_BaseSimulation_AbsTol" data-uid="SpiceSharp.Simulations.BaseSimulation.AbsTol">AbsTol</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (cached) absolute tolerance on values to check convergence.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -245,9 +246,34 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Simulations_BaseSimulation_BaseSimulationStatistics_" data-uid="SpiceSharp.Simulations.BaseSimulation.BaseSimulationStatistics*"></a>
+  <h4 id="SpiceSharp_Simulations_BaseSimulation_BaseSimulationStatistics" data-uid="SpiceSharp.Simulations.BaseSimulation.BaseSimulationStatistics">BaseSimulationStatistics</h4>
+  <div class="markdown level1 summary"><p>Gets the (cached) simulation statistics for the simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BaseSimulationStatistics BaseSimulationStatistics { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulationStatistics.html">BaseSimulationStatistics</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_BaseSimulation_DcMaxIterations_" data-uid="SpiceSharp.Simulations.BaseSimulation.DcMaxIterations*"></a>
   <h4 id="SpiceSharp_Simulations_BaseSimulation_DcMaxIterations" data-uid="SpiceSharp.Simulations.BaseSimulation.DcMaxIterations">DcMaxIterations</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the maximum number of allowed iterations for DC analysis.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -270,7 +296,7 @@
   </table>
   <a id="SpiceSharp_Simulations_BaseSimulation_ProblemVariable_" data-uid="SpiceSharp.Simulations.BaseSimulation.ProblemVariable*"></a>
   <h4 id="SpiceSharp_Simulations_BaseSimulation_ProblemVariable" data-uid="SpiceSharp.Simulations.BaseSimulation.ProblemVariable">ProblemVariable</h4>
-  <div class="markdown level1 summary"><p>Gets the variable that caused issues.</p>
+  <div class="markdown level1 summary"><p>Gets the variable that causes issues.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -288,8 +314,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.Variable.html">Variable</a></td>
-        <td><p>The problem variable.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -316,14 +341,14 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulationState.html">BaseSimulationState</a></td>
-        <td><p>The real state.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_BaseSimulation_RelTol_" data-uid="SpiceSharp.Simulations.BaseSimulation.RelTol*"></a>
   <h4 id="SpiceSharp_Simulations_BaseSimulation_RelTol" data-uid="SpiceSharp.Simulations.BaseSimulation.RelTol">RelTol</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the (cached) relative tolerance on values to check convergence.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -341,31 +366,6 @@
       <tr>
         <td><span class="xref">System.Double</span></td>
         <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_BaseSimulation_Statistics_" data-uid="SpiceSharp.Simulations.BaseSimulation.Statistics*"></a>
-  <h4 id="SpiceSharp_Simulations_BaseSimulation_Statistics" data-uid="SpiceSharp.Simulations.BaseSimulation.Statistics">Statistics</h4>
-  <div class="markdown level1 summary"><p>Gets the statistics.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Statistics Statistics { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Statistics.html">Statistics</a></td>
-        <td><p>The statistics.</p>
-</td>
       </tr>
     </tbody>
   </table>
@@ -403,22 +403,6 @@
       <tr>
         <td><span class="xref">System.Boolean</span></td>
         <td><p><code>true</code> if the solution converges; otherwise, <code>false</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Non-convergence, node {0} is not a number.&quot;.FormatString(node)</p>
 </td>
       </tr>
     </tbody>
@@ -466,19 +450,147 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
+  <a id="SpiceSharp_Simulations_BaseSimulation_IterateDiagonalGminStepping_" data-uid="SpiceSharp.Simulations.BaseSimulation.IterateDiagonalGminStepping*"></a>
+  <h4 id="SpiceSharp_Simulations_BaseSimulation_IterateDiagonalGminStepping_System_Int32_System_Int32_" data-uid="SpiceSharp.Simulations.BaseSimulation.IterateDiagonalGminStepping(System.Int32,System.Int32)">IterateDiagonalGminStepping(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Iterates to a solution while adding a conductive path to ground on all nodes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool IterateDiagonalGminStepping(int maxIterations, int steps)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
+        <th>Name</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Could not find flag</p>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxIterations</span></td>
+        <td><p>The maximum number of iterations per step.</p>
 </td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">steps</span></td>
+        <td><p>The number of steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_BaseSimulation_IterateGminStepping_" data-uid="SpiceSharp.Simulations.BaseSimulation.IterateGminStepping*"></a>
+  <h4 id="SpiceSharp_Simulations_BaseSimulation_IterateGminStepping_System_Int32_System_Int32_" data-uid="SpiceSharp.Simulations.BaseSimulation.IterateGminStepping(System.Int32,System.Int32)">IterateGminStepping(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Iterates to a solution while shunting PN-junctions with a conductance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool IterateGminStepping(int maxIterations, int steps)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxIterations</span></td>
+        <td><p>The maximum number of iterations per step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">steps</span></td>
+        <td><p>The number of steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_BaseSimulation_IterateSourceStepping_" data-uid="SpiceSharp.Simulations.BaseSimulation.IterateSourceStepping*"></a>
+  <h4 id="SpiceSharp_Simulations_BaseSimulation_IterateSourceStepping_System_Int32_System_Int32_" data-uid="SpiceSharp.Simulations.BaseSimulation.IterateSourceStepping(System.Int32,System.Int32)">IterateSourceStepping(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Iterates to a solution slowly ramping up independent voltages and currents.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool IterateSourceStepping(int maxIterations, int steps)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxIterations</span></td>
+        <td><p>The maximum number of iterations per step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">steps</span></td>
+        <td><p>The number of steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -668,30 +780,14 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></td>
-        <td><p>Could not determine operating point</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Simulations_BaseSimulation_Setup_" data-uid="SpiceSharp.Simulations.BaseSimulation.Setup*"></a>
-  <h4 id="SpiceSharp_Simulations_BaseSimulation_Setup_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.BaseSimulation.Setup(SpiceSharp.Circuit)">Setup(Circuit)</h4>
+  <h4 id="SpiceSharp_Simulations_BaseSimulation_Setup_SpiceSharp_Circuits_EntityCollection_" data-uid="SpiceSharp.Simulations.BaseSimulation.Setup(SpiceSharp.Circuits.EntityCollection)">Setup(EntityCollection)</h4>
   <div class="markdown level1 summary"><p>Set up the simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Setup(Circuit circuit)</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void Setup(EntityCollection circuit)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -704,7 +800,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
+        <td><a class="xref" href="SpiceSharp.Circuits.EntityCollection.html">EntityCollection</a></td>
         <td><span class="parametername">circuit</span></td>
         <td><p>The circuit that will be used.</p>
 </td>
@@ -712,23 +808,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Setup_SpiceSharp_Circuit_">Simulation.Setup(Circuit)</a></div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>circuit</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
+  <div><a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Setup_SpiceSharp_Circuits_EntityCollection_">Simulation.Setup(EntityCollection)</a></div>
   <a id="SpiceSharp_Simulations_BaseSimulation_Temperature_" data-uid="SpiceSharp.Simulations.BaseSimulation.Temperature*"></a>
   <h4 id="SpiceSharp_Simulations_BaseSimulation_Temperature" data-uid="SpiceSharp.Simulations.BaseSimulation.Temperature">Temperature()</h4>
   <div class="markdown level1 summary"><p>Perform temperature-dependent calculations.</p>
@@ -859,6 +939,55 @@ generates a load behavior.</p>
   <div class="markdown level1 remarks"><p>For better performance, you can also create an entity with a high priority that
 creates a temperature behavior.</p>
 </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></div>

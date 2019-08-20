@@ -8,19 +8,19 @@
     <title>Parameters </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Parameters ">
-    <meta name="generator" content="docfx 2.39.2.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
     
     
     
-  </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -70,61 +70,25 @@
 <h1 id="parameters">Parameters</h1>
 
 <p>Parameters and properties are your main way of configuring the behavior of an entity in the circuit. They are typically specified in a <strong><a class="xref" href="../../api/SpiceSharp.ParameterSet.html">ParameterSet</a></strong>.</p>
-<h2 id="parameter-objects">Parameter objects</h2>
-<p>Spice# provides a basic <strong><a class="xref" href="../../api/SpiceSharp.Parameter-1.html">Parameter<t></t></a></strong> class for generic parameters. It implements getting and setting a value, for which custom logic can be implemented.</p>
-<p>The most common use of this class is the <strong><a class="xref" href="../../api/SpiceSharp.GivenParameter-1.html">GivenParameter</a></strong> class. Many parameters in Spice also track whether or not they have been specified by the user or not. This class also exposes a <em>Given</em> property that will resolve to <em>true</em> if the value has been set.</p>
 <h2 id="parameter-attributes">Parameter attributes</h2>
-<p>It is possible to provide parameters with attributes containing more meta-information.</p>
+<p>It is possible to provide parameters with attributes containing more runtime meta-information.</p>
 <ul>
-<li><p><strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterNameAttribute.html">ParameterNameAttribute</a></strong>: Tags the property, method or field with a specific name. Multiple names can be specified. Using this attribute enables accessing these members using reflection. These can generally be accessed because of the following classes:</p>
-<ul>
-<li><p><strong><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></strong></p>
-<ul>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateGetter_">CreateGetter<t>()</t></a></em> creates a delegate that gets the member value of type <em>T</em> tagged by the specified name. Example:</p>
-<pre><code class="lang-csharp" name="CreateGetter example">// Create a getter for the nominal temperature of the mosfet1 model
-var tnomGetter = parameters.CreateGetter&lt;double&gt;(&quot;tnom&quot;);
-double temperature = tnomGetter(); // In degrees Celsius
-</code></pre></li>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html#SpiceSharp_Attributes_NamedParameterized_CreateSetter_">CreateSetter<t>()</t></a></em> creates a delegate that sets the member value of type <em>T</em> tagged by the specified name. Example:</p>
-<pre><code class="lang-csharp" name="CreateSetter example">// Create a setter for the gate-drain overlap capacitance of the mosfet1 model
-var cgdoSetter = parameters.CreateSetter&lt;double&gt;(&quot;cgdo&quot;);
-cgdoSetter(1e-15); // 1pF
-</code></pre></li>
-</ul>
-</li>
-<li><p><strong><a class="xref" href="../../api/SpiceSharp.ParameterSet.html">ParameterSet</a></strong> (also implements <strong><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></strong>)</p>
-<ul>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_GetParameter__1_System_String_System_Collections_Generic_IEqualityComparer_System_String__">GetParameter<t>()</t></a></em> gets a <strong><a class="xref" href="../../api/SpiceSharp.Parameter-1.html">Parameter<t></t></a></strong> object tagged by the specified name. Example:</p>
-<pre><code class="lang-csharp" name="GetParameter example">// Get the parameter that describes the oxide thickness of the mosfet1 model
-var toxParameter = parameters.GetParameter&lt;double&gt;(&quot;tox&quot;);
-</code></pre></li>
-<li><em><a class="xref" href="../../api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_">SetParameter(string)</a></em> calls a method without parameters that is tagged by the specified name. Can be useful for activating certain flags.</li>
-<li><em><a class="xref" href="../../api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter_System_String_System_Object_System_Collections_Generic_IEqualityComparer_System_String__">SetParameter(string, object)</a></em> will set a property or method with one argument, tagged by the specified name. This method can be used to pass classes to a named parameter.</li>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SetParameter__1___0_">SetParameter<t>()</t></a></em> sets a property, field or method, or <strong><a class="xref" href="../../api/SpiceSharp.Parameter-1.html">Parameter<t></t></a></strong>-object tagged by the specified name with the specified value. Example:</p>
-<pre><code class="lang-csharp" name="SetParameter example">// Flag the model as a PMOS type
-parameters.SetParameter(&quot;pmos&quot;, true);
-</code></pre></li>
-</ul>
-</li>
-<li><p><strong><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html">Behavior</a></strong> (also implements <strong><a class="xref" href="../../api/SpiceSharp.Attributes.NamedParameterized.html">NamedParameterized</a></strong>)</p>
-<ul>
-<li><em><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter_">CreateGetter(Simulation,string)</a></em> creates a delegate for extracting a behavior parameter from the specified simulation. The simulation argument needs to be the simulation that owns the behavior.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html">ParameterInfoAttribute</a></strong>: Adds more information about the parameter.</p>
-<ul>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterNameAttribute.html">ParameterNameAttribute</a></strong>: Tags the property, method or field with a specific name. Multiple names can be specified..</li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html">ParameterInfoAttribute</a></strong>: Adds more information about the parameter.<ul>
 <li><em><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html#SpiceSharp_Attributes_ParameterInfoAttribute_Description">Description</a></em> gives more information about the parameter.</li>
 <li><em><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html#SpiceSharp_Attributes_ParameterInfoAttribute_Interesting">Interesting</a></em> indicates whether the parameter is interesting to be shown as a parameter (legacy from Spice 3f5).</li>
-<li><p><em><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html#SpiceSharp_Attributes_ParameterInfoAttribute_IsPrincipal">IsPrincipal</a></em> indicates that this parameter is the <em>principal</em> design parameter of the entity. Examples are the resistance, capacitance and inductance of a resistor, capacitor and inductor. Using this flag allows you to find the parameter without specifying the parameter name. For example:</p>
-<pre><code class="lang-csharp" name="SetParameter IsPrincipal example">// Set the resistance of the resistor
-var res = new Resistor(&quot;R1&quot;);
-res.ParameterSets.SetParameter(2.0e3); // 2kOhm
-</code></pre></li>
+<li><em><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterInfoAttribute.html#SpiceSharp_Attributes_ParameterInfoAttribute_IsPrincipal">IsPrincipal</a></em> indicates that this parameter is the <em>principal</em> design parameter of the entity. Examples are the resistance, capacitance and inductance of a resistor, capacitor and inductor. Using this flag allows you to find the parameter without specifying the parameter name.</li>
 </ul>
 </li>
 </ul>
+<p>The biggest advantage that these attributes provide, is that they can be used in conjunction with the <strong><a class="xref" href="../../api/SpiceSharp.ParameterHelper.html">ParameterHelper</a></strong> extension methods. These methods allow you to set or get parameters based on their <strong><a class="xref" href="../../api/SpiceSharp.Attributes.ParameterNameAttribute.html">ParameterNameAttribute</a></strong>.</p>
+<ul>
+<li>You can set or get a parameter immediately by its name, using the <em><a class="xref" href="../../api/SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">SetParameter</a></em> and <em><a class="xref" href="../../api/SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">GetParameter</a></em>. You can also use the <em>TrySetParameter</em> and <em>TryGetParameter</em> variants if want to test whether or not the parameter exist.</li>
+<li>You can create a getter or setter using the <em>[CreateSetter](xref:CreateSetter<t>(String, IEqualityComparer<string>))</string></t></em> and <em><a class="xref" href="../../api/SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__">CreateGetter</a></em> methods. This gives fast access, and bypasses slower reflection (although it is cached).</li>
+</ul>
+<h2 id="parameter-objects">Parameter objects</h2>
+<p>Any member (property, field, method) can be named using the above mentioned attributes. Furthermore, the system also supports deep cloning of objects using reflection, which may be necessary when running multiple simulations on multiple threads. However, when it encounters a member that cannot be cloned, then the member will be copied by reference if possible. If the property implements <strong><a class="xref" href="../../api/SpiceSharp.ICloneable.html">ICloneable</a></strong>, then the member will either be cloned (if the member is publicy settable), or the property will be copied using <em><a class="xref" href="../../api/SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">CopyFrom</a></em>. In other cases, the member is ignored and should be implemented manually.</p>
+<p>Spice# provides a basic <strong><a class="xref" href="../../api/SpiceSharp.Parameter-1.html">Parameter<t></t></a></strong> class for generic parameters that implement <strong><a class="xref" href="../../api/SpiceSharp.ICloneable.html">ICloneable</a></strong>. It implements getting and setting a <em><a class="xref" href="../../api/SpiceSharp.Parameter-1.html#SpiceSharp_Parameter_1_Value">Value</a></em> property, for which custom logic can be implemented. The most common use of this class is the <strong><a class="xref" href="../../api/SpiceSharp.GivenParameter-1.html">GivenParameter</a></strong> class. Many parameters in Spice also track whether or not they have been specified by the user or not. This class also exposes a <em><a class="xref" href="../../api/SpiceSharp.GivenParameter-1.html#SpiceSharp_GivenParameter_1_Given">Given</a></em> property that will resolve to <em>true</em> if the value has been set. This is often used to find out if a default property has to be calculated.</p>
 <div class="pull-left"><a href="entities.html">Previous: Entities, components and models</a></div> <div class="pull-right"><a href="../custom_components/custom_models.html">Next: Custom models</a></div>
 </article>
           </div>
