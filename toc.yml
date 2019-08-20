@@ -3,4 +3,5 @@
 - name: Tutorial
   href: articles/tutorial/gettingstarted.md
 - name: API
-  uid: SpiceSharp
+  href: SpiceSharp/obj/api/
+  topicHref: api/index.md
