@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the real state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -87,13 +87,12 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Binds the specified simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The provider.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
@@ -106,10 +105,9 @@ namespace SpiceSharp.Components.DelayBehaviors
                 ContNegNode = cc.Pins[3];
             }
 
-            State = ((BaseSimulation)simulation).RealState;
-            var solver = State.Solver;
-            var variables = simulation.Variables;
-            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
@@ -124,7 +122,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            State = null;
+            BiasingState = null;
             PosBranchPtr = null;
             NegBranchPtr = null;
             BranchPosPtr = null;
@@ -144,7 +142,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             BranchNegPtr.Value -= 1;
 
             // In DC, the delay should just copy input to output
-            if (State.UseDc)
+            if (BiasingState.UseDc)
             {
                 BranchControlPosPtr.Value -= 1.0;
                 BranchControlNegPtr.Value += 1.0;

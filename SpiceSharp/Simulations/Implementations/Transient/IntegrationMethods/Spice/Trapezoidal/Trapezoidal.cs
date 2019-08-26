@@ -105,7 +105,6 @@ namespace SpiceSharp.IntegrationMethods
             args.ThrowIfNull(nameof(args));
 
             // Get the state
-            var state = args.Simulation.RealState;
             double tol, diff, tmp;
             var timetemp = double.PositiveInfinity;
             var nodes = args.Simulation.Variables;
@@ -122,12 +121,12 @@ namespace SpiceSharp.IntegrationMethods
                         index = node.Index;
 
                         // Milne's estimate for the second-order derivative using a Forward Euler predictor and Backward Euler corrector
-                        diff = state.Solution[index] - Prediction[index];
+                        diff = BiasingState.Solution[index] - Prediction[index];
 
                         // Avoid division by zero
                         if (!diff.Equals(0.0))
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * LteRelTol + LteAbsTol;
+                            tol = Math.Max(Math.Abs(BiasingState.Solution[index]), Math.Abs(Prediction[index])) * LteRelTol + LteAbsTol;
                             tmp = IntegrationStates[0].Delta * Math.Sqrt(Math.Abs(2.0 * TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
@@ -142,14 +141,14 @@ namespace SpiceSharp.IntegrationMethods
                         index = node.Index;
 
                         // Milne's estimate for the third-order derivative using an Adams-Bashforth predictor and Trapezoidal corrector
-                        diff = state.Solution[index] - Prediction[index];
+                        diff = BiasingState.Solution[index] - Prediction[index];
                         var deriv = IntegrationStates[1].Delta / IntegrationStates[0].Delta;
                         deriv = diff * 4.0 / (1 + deriv * deriv);
 
                         // Avoid division by zero
                         if (!deriv.Equals(0.0))
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * LteRelTol + LteAbsTol;
+                            tol = Math.Max(Math.Abs(BiasingState.Solution[index]), Math.Abs(Prediction[index])) * LteRelTol + LteAbsTol;
                             tmp = IntegrationStates[0].Delta * Math.Pow(Math.Abs(12.0 * TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }

@@ -47,6 +47,14 @@ namespace SpiceSharp.Simulations
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
 
         /// <summary>
+        /// Gets a set of <see cref="SimulationState"/> objects used by the simulation.
+        /// </summary>
+        /// <value>
+        /// The states.
+        /// </value>
+        public TypeDictionary<SimulationState> States { get; } = new TypeDictionary<SimulationState>();
+
+        /// <summary>
         /// Gets a set of <see cref="ParameterSet" /> that holds the statistics for the simulation.
         /// </summary>
         public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
@@ -54,7 +62,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the set of variables (unknowns).
         /// </summary>
-        public VariableSet Variables { get; private set; }
+        /// <value>
+        /// The set of variables.
+        /// </value>
+        public IVariableSet Variables { get; private set; }
 
         #region Events
         /// <summary>
@@ -207,7 +218,7 @@ namespace SpiceSharp.Simulations
             // Create the variables that will need solving
             if (Configurations.TryGet(out CollectionConfiguration cconfig))
             {
-                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default);
+                Variables = cconfig.Variables ?? new VariableSet();
                 _cloneParameters = cconfig.CloneParameters;
             }
             else

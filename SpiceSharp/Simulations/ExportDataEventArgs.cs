@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly Simulation _simulation;
+        private Simulation _simulation;
 
         /// <summary>
         /// Gets the time if the simulation supports it.
@@ -22,8 +22,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is TimeSimulation timeSimulation && timeSimulation.Method != null)
-                    return timeSimulation.Method.Time;
+                if (_simulation.States.TryGet<TimeSimulationState>(out var state))
+                    return state.Method.Time;
                 return double.NaN;
             }
         }
@@ -35,13 +35,12 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is FrequencySimulation frequencySimulation && frequencySimulation.ComplexState != null)
+                if (_simulation.States.TryGet<ComplexSimulationState>(out var state))
                 {
-                    if (!frequencySimulation.ComplexState.Laplace.Real.Equals(0.0))
+                    if (!state.Laplace.Real.Equals(0.0))
                         return double.NaN;
-                    return frequencySimulation.ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
+                    return state.Laplace.Imaginary / 2.0 / Math.PI;
                 }
-
                 return double.NaN;
             }
         }
@@ -53,8 +52,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is FrequencySimulation frequencySimulation && frequencySimulation.ComplexState != null)
-                    return frequencySimulation.ComplexState.Laplace;
+                if (_simulation.States.TryGet<ComplexSimulationState>(out var state))
+                    return state.Laplace;
                 return double.NaN;
             }
         }
@@ -102,22 +101,22 @@ namespace SpiceSharp.Simulations
         {
             positive.ThrowIfNull(nameof(positive));
 
-            if (!(_simulation is BaseSimulation bs))
-                throw new CircuitException("Simulation does not support real voltages.");
-            var state = bs.RealState;
-
-            // Get the voltage of the positive node
-            var index = _simulation.Variables.GetNode(positive).Index;
-            var voltage = state.Solution[index];
-
-            // Subtract negative node if necessary
-            if (negative != null)
+            if (_simulation.States.TryGet<BiasingSimulationState>(out var state))
             {
-                index = _simulation.Variables.GetNode(negative).Index;
-                voltage -= state.Solution[index];
-            }
+                // Get the voltage of the positive node
+                var index = _simulation.Variables[positive].Index;
+                var voltage = state.Solution[index];
 
-            return voltage;
+                // Subtract negative node if necessary
+                if (negative != null)
+                {
+                    index = _simulation.Variables[negative].Index;
+                    voltage -= state.Solution[index];
+                }
+
+                return voltage;
+            }
+            return double.NaN;
         }
 
         /// <summary>
@@ -143,22 +142,23 @@ namespace SpiceSharp.Simulations
         {
             positive.ThrowIfNull(nameof(positive));
 
-            if (!(_simulation is FrequencySimulation fs))
-                throw new CircuitException("Simulation does not support complex voltages.");
-            var state = fs.ComplexState;
-
-            // Get the voltage of the positive node
-            var index = _simulation.Variables.GetNode(positive).Index;
-            var voltage = state.Solution[index];
-
-            // Subtract negative node if necessary
-            if (negative != null)
+            if (_simulation.States.TryGet<ComplexSimulationState>(out var state))
             {
-                index = _simulation.Variables.GetNode(negative).Index;
-                voltage -= state.Solution[index];
-            }
 
-            return voltage;
+                // Get the voltage of the positive node
+                var index = _simulation.Variables[positive].Index;
+                var voltage = state.Solution[index];
+
+                // Subtract negative node if necessary
+                if (negative != null)
+                {
+                    index = _simulation.Variables[negative].Index;
+                    voltage -= state.Solution[index];
+                }
+
+                return voltage;
+            }
+            return double.NaN;
         }
     }
 }

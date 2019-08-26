@@ -41,8 +41,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         protected VectorElement<Complex> CBranchPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Gets the complex voltage applied by the source.
@@ -55,7 +61,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
-        public Complex GetComplexCurrent() => _state.ThrowIfNotBound(this).Solution[BranchEq];
+        public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[BranchEq];
 
         /// <summary>
         /// Gets the power through the source.
@@ -64,9 +70,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetComplexPower()
         {
-            _state.ThrowIfNotBound(this);
-            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
-            var i = _state.Solution[BranchEq];
+            ComplexState.ThrowIfNotBound(this);
+            var v = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var i = ComplexState.Solution[BranchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -77,21 +83,19 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
-
             // Get matrix elements
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
@@ -107,7 +111,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            ComplexState = null;
             CPosBranchPtr = null;
             CBranchPosPtr = null;
             CNegBranchPtr = null;

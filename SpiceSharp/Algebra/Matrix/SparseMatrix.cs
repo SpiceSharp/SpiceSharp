@@ -15,6 +15,8 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base value type.</typeparam>
     public partial class SparseMatrix<T> : Matrix<T> where T : IFormattable, IEquatable<T>
     {
+        // TODO: Support removing ALL elements + do that at the end of the simulation.
+
         /// <summary>
         /// Constants
         /// </summary>

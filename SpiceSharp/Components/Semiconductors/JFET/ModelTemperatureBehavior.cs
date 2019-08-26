@@ -42,6 +42,15 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         public double Cjfact { get; private set; }
 
+
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
@@ -54,16 +63,18 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             _mbp = context.GetParameterSet<ModelBaseParameters>();
+
+            // Get states
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
         
         /// <summary>
@@ -72,7 +83,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
+                _mbp.NominalTemperature.RawValue = BiasingState.NominalTemperature;
 
             var vtnom = Constants.KOverQ * _mbp.NominalTemperature;
             var fact1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;

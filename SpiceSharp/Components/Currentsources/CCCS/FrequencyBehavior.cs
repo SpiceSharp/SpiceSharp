@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Get the voltage. 
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Complex current")]
-        public Complex GetComplexCurrent() => _state.ThrowIfNotBound(this).Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
+        public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
 
         /// <summary>
         /// Get the power dissipation.
@@ -29,9 +29,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetComplexPower()
         {
-            _state.ThrowIfNotBound(this);
-            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
-            var i = _state.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
+            ComplexState.ThrowIfNotBound(this);
+            var v = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var i = ComplexState.Solution[ControlBranchEq] * BaseParameters.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
 
@@ -45,8 +45,13 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         protected MatrixElement<Complex> CNegControlBranchPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -62,16 +67,15 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">Data provider</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
             CNegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);
         }
@@ -82,7 +86,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            ComplexState = null;
             CPosControlBranchPtr = null;
             CNegControlBranchPtr = null;
         }

@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
@@ -15,11 +14,21 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public AcceptBehavior(string name) : base(name) { }
 
         /// <summary>
+        /// Bind the behavior to a simulation.
+        /// </summary>
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
+        {
+            base.Bind(context);
+            BaseParameters.Waveform?.Bind(context);
+        }
+
+        /// <summary>
         /// Called when a new timepoint is being tested.
         /// </summary>
         void IAcceptBehavior.Probe()
         {
-            BaseParameters.Waveform?.Probe((TimeSimulation)Simulation);
+            BaseParameters.Waveform?.Probe();
         }
 
         /// <summary>
@@ -27,7 +36,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Accept()
         {
-            BaseParameters.Waveform?.Accept((TimeSimulation)Simulation);
+            BaseParameters.Waveform?.Accept();
         }
     }
 }

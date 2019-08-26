@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage across the capacitor.")]
-        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Gets the (complex) current through the resistor.
@@ -23,8 +23,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("i"), ParameterInfo("Complex current through the capacitor.")]
         public Complex GetComplexCurrent()
         {
-            _state.ThrowIfNotBound(this);
-            var voltage = _state.Solution[PosNode] - _state.Solution[NegNode];
+            ComplexState.ThrowIfNotBound(this);
+            var voltage = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
             return voltage * Conductance;
         }
 
@@ -34,8 +34,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetComplexPower()
         {
-            _state.ThrowIfNotBound(this);
-            var voltage = _state.Solution[PosNode] - _state.Solution[NegNode];
+            ComplexState.ThrowIfNotBound(this);
+            var voltage = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
             return voltage * Complex.Conjugate(voltage) * Conductance;
         }
 
@@ -59,8 +59,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         protected MatrixElement<Complex> CNegPosPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -69,16 +74,15 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
@@ -92,7 +96,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             base.Unbind();
 
-            _state = null;
+            ComplexState = null;
             CPosPosPtr = null;
             CNegNegPtr = null;
             CPosNegPtr = null;

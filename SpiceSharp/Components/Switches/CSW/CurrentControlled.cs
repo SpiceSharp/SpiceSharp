@@ -17,9 +17,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Bind the behavior. for the specified simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        public override void Bind(BindingContext context)
         {
             // Get behaviors
             _loadBehavior = context.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
@@ -30,6 +29,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        public override double GetValue(BaseSimulationState state) => state.Solution[_loadBehavior.BranchEq];
+        public override double GetValue(BiasingSimulationState state) => state.Solution[_loadBehavior.BranchEq];
     }
 }

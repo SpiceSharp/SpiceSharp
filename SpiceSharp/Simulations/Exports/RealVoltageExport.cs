@@ -29,18 +29,18 @@ namespace SpiceSharp.Simulations
         public int NegIndex { get; private set; }
 
         /// <summary>
-        /// Check if the simulation is a <see cref="BaseSimulation"/>.
+        /// Check if the simulation is a <see cref="BiasingSimulation"/>.
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        protected override bool IsValidSimulation(Simulation simulation) => simulation is BaseSimulation;
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is BiasingSimulation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
-        public RealVoltageExport(BaseSimulation simulation, string posNode)
+        public RealVoltageExport(BiasingSimulation simulation, string posNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -55,7 +55,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
-        public RealVoltageExport(BaseSimulation simulation, string posNode, string negNode)
+        public RealVoltageExport(BiasingSimulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((BaseSimulation) Simulation).RealState.ThrowIfNull("real state");
+            var state = ((Simulation)sender).States.Get<BiasingSimulationState>();
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 var posNodeIndex = posNode.Index;

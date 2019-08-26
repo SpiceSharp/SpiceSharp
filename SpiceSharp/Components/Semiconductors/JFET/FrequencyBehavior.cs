@@ -99,8 +99,13 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -114,16 +119,15 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
             CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
@@ -200,7 +204,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var omega = _state.ThrowIfNotBound(this).Laplace.Imaginary;
+            var omega = ComplexState.ThrowIfNotBound(this).Laplace.Imaginary;
 
             var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;
             var gspr = ModelParameters.SourceConductance * BaseParameters.Area;

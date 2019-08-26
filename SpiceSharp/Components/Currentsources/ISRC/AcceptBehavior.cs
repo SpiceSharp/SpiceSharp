@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -20,16 +19,16 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public AcceptBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             _bp = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
+            _bp.Waveform?.Bind(context);
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Probe()
         {
-            _bp.Waveform?.Probe((TimeSimulation)Simulation);
+            _bp.Waveform?.Probe();
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Accept()
         {
-            _bp.Waveform?.Accept((TimeSimulation)Simulation);
+            _bp.Waveform?.Accept();
         }
     }
 }

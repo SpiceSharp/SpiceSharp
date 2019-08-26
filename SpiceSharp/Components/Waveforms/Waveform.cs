@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 using System;
 
 namespace SpiceSharp.Components
@@ -12,23 +12,22 @@ namespace SpiceSharp.Components
         /// Gets the current waveform value at the last probed timepoint.
         /// </summary>
         public virtual double Value { get; protected set; }
-        
-        /// <summary>
-        /// Sets up the waveform.
-        /// </summary>
-        public abstract void Setup();
 
         /// <summary>
-        /// Indicates a new timepoint is being probed.
+        /// Binds the waveform to the simulation.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public abstract void Probe(TimeSimulation simulation);
+        /// <param name="context">The binding context.</param>
+        public abstract void Bind(BindingContext context);
+
+        /// <summary>
+        /// Probes a new timepoint.
+        /// </summary>
+        public abstract void Probe();
 
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public abstract void Accept(TimeSimulation simulation);
+        public abstract void Accept();
 
         /// <summary>
         /// Clones the waveform.

@@ -31,8 +31,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         protected MatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -41,20 +47,19 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-			base.Bind(simulation, context);
+			base.Bind(context);
 
             // Get behaviors
             Bias1 = context.GetBehavior<BiasingBehavior>("inductor1");
             Bias2 = context.GetBehavior<BiasingBehavior>("inductor2");
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             Branch1Branch2Ptr = solver.GetMatrixElement(Bias1.BranchEq, Bias2.BranchEq);
             Branch2Branch1Ptr = solver.GetMatrixElement(Bias2.BranchEq, Bias1.BranchEq);
         }
@@ -71,7 +76,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var value = _state.Laplace * Factor;
+            var value = ComplexState.Laplace * Factor;
 
             // Load Y-matrix
             Branch1Branch2Ptr.Value -= value;

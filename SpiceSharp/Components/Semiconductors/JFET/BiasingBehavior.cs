@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the base configuration.
         /// </summary>
-        protected BaseConfiguration BaseConfiguration { get; private set; }
+        protected BiasingConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets the external drain node.
@@ -187,6 +187,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 
+        private TimeSimulationState _timeState;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -199,16 +201,18 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get configuration
-            BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
+            BaseConfiguration = context.Configurations.Get<BiasingConfiguration>();
+
+            // Get states
+            context.States.TryGet(out _timeState);
 
             if (context is ComponentBindingContext cc)
             {
@@ -217,10 +221,10 @@ namespace SpiceSharp.Components.JFETBehaviors
                 SourceNode = cc.Pins[2];
             }
 
-            var solver = State.Solver;
-            var variables = simulation.Variables;
-            SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source")).Index : SourceNode;
-            DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain")).Index : DrainNode;
+            var solver = BiasingState.Solver;
+            var variables = context.Variables;
+            SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source"), VariableType.Voltage).Index : SourceNode;
+            DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain"), VariableType.Voltage).Index : DrainNode;
 
             GateNodePtr = solver.GetRhsElement(GateNode);
             DrainPrimeNodePtr = solver.GetRhsElement(DrainPrimeNode);
@@ -273,7 +277,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var state = State;
+            var state = BiasingState;
 
             // DC model parameters
             var beta = ModelParameters.Beta * BaseParameters.Area;
@@ -447,11 +451,11 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="check">if set to <c>true</c> [check].</param>
         protected void Initialize(out double vgs, out double vgd, out bool check)
         {
-            var state = State;
+            var state = BiasingState;
 
             // Initialization
             check = true;
-            if (state.Init == InitializationModes.Junction && Simulation is TimeSimulation && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && _timeState != null && state.UseDc && state.UseIc)
             {
                 var vds = ModelParameters.JFETType * BaseParameters.InitialVds;
                 vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;

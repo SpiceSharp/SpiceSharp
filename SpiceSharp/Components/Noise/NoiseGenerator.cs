@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
@@ -43,6 +44,31 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         private readonly int[] _pins;
 
+
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
+        /// <summary>
+        /// Gets the noise simulation state.
+        /// </summary>
+        /// <value>
+        /// The noise simulation state.
+        /// </value>
+        protected NoiseSimulationState NoiseState { get; private set; }
+
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
+
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseGenerator"/> class.
         /// </summary>
@@ -58,8 +84,9 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Connect the noise generator in the circuit
         /// </summary>
-        /// <param name="nodes">Nodes</param>
-        public virtual void Setup(params int[] nodes)
+        /// <param name="context">The binding context.</param>
+        /// <param name="nodes">The nodes the generator can connect to.</param>
+        public virtual void Bind(BindingContext context, params int[] nodes)
         {
             // Get the nodes
             var mapped = new int[nodes.Length];
@@ -70,6 +97,10 @@ namespace SpiceSharp.Components.NoiseSources
                 mapped[i] = nodes[_pins[i]];
             }
             Nodes = new NodeCollection(mapped);
+
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            NoiseState = context.States.Get<NoiseSimulationState>();
         }
 
         /// <summary>
@@ -87,19 +118,16 @@ namespace SpiceSharp.Components.NoiseSources
         public abstract void SetCoefficients(params double[] coefficients);
 
         /// <summary>
-        /// Evaluate
+        /// Evaluates the specified cstate.
         /// </summary>
-        public virtual void Evaluate(Noise simulation)
+        public virtual void Evaluate()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var noise = simulation.NoiseState;
-
             // Calculate the noise
-            Noise = CalculateNoise(simulation);
+            Noise = CalculateNoise();
             var lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
-            if (noise.DeltaFrequency.Equals(0.0))
+            if (NoiseState.DeltaFrequency.Equals(0.0))
             {
                 LogNoise = lnNdens;
                 TotalOutputNoise = 0.0;
@@ -108,8 +136,8 @@ namespace SpiceSharp.Components.NoiseSources
             else
             {
                 // Integrate the output noise
-                var tempOnoise = noise.Integrate(Noise, lnNdens, LogNoise);
-                var tempInoise = noise.Integrate(Noise * noise.GainInverseSquared, lnNdens + noise.LogInverseGain, LogNoise + noise.LogInverseGain);
+                var tempOnoise = NoiseState.Integrate(Noise, lnNdens, LogNoise);
+                var tempInoise = NoiseState.Integrate(Noise * NoiseState.GainInverseSquared, lnNdens + NoiseState.LogInverseGain, LogNoise + NoiseState.LogInverseGain);
                 LogNoise = lnNdens;
 
                 // Add integrated quantity
@@ -119,10 +147,9 @@ namespace SpiceSharp.Components.NoiseSources
         }
 
         /// <summary>
-        /// Calculate noise coefficient
+        /// Calculates the noise contributions.
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected abstract double CalculateNoise(Noise simulation);
+        protected abstract double CalculateNoise();
     }
 }

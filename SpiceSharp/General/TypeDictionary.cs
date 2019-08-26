@@ -383,12 +383,12 @@ namespace SpiceSharp
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// An <see cref="System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => Dictionary.GetEnumerator();
 
         /// <summary>
-        /// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+        /// Determines whether the <see cref="System.Collections.Generic.ICollection{T}" /> contains a specific value.
         /// </summary>
         /// <param name="item">The object to locate in the <see cref="TypeDictionary{T}" />.</param>
         /// <returns>
@@ -397,9 +397,9 @@ namespace SpiceSharp
         bool ICollection<KeyValuePair<Type, T>>.Contains(KeyValuePair<Type, T> item) => ((ICollection<KeyValuePair<Type, T>>)Dictionary).Contains(item);
 
         /// <summary>
-        /// Copies the elements of the <see cref="TypeDictionary{T}" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+        /// Copies the elements of the <see cref="TypeDictionary{T}" /> to an <see cref="System.Array" />, starting at a particular <see cref="System.Array" /> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="TypeDictionary{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="array">The one-dimensional <see cref="System.Array" /> that is the destination of the elements copied from <see cref="TypeDictionary{T}" />. The <see cref="System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         void ICollection<KeyValuePair<Type, T>>.CopyTo(KeyValuePair<Type, T>[] array, int arrayIndex) => ((ICollection<KeyValuePair<Type, T>>)Dictionary).CopyTo(array, arrayIndex);
 

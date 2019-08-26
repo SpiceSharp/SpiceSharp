@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -43,20 +43,19 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation</param>
-        /// <param name="context">The setup data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
             context.TryGetParameterSet("model", out ModelBaseParameters mbp);
             ModelParameters = mbp;
 
-            State = ((BaseSimulation)simulation).RealState;
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             BaseParameters = null;
             ModelParameters = null;
-            State = null;
+            BiasingState = null;
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             // Default Value Processing for Resistor Instance
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = State.Temperature;
+                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
             if (!BaseParameters.Width.Given)
                 BaseParameters.Width.RawValue = ModelParameters?.DefaultWidth ?? 0.0;
 

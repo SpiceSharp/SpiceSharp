@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         private MatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
         private VectorElement<double> _aPtr, _bPtr;
         private BaseParameters _bp;
-        private BaseSimulationState _state;
-        private BaseConfiguration _baseConfig;
+        private BiasingSimulationState _state;
+        private BiasingConfiguration _baseConfig;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -26,16 +26,17 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Cache some objects that we will use often
             _bp = context.GetParameterSet<BaseParameters>();
-            _state = ((BaseSimulation)simulation).RealState;
-            _baseConfig = simulation.Configurations.Get<BaseConfiguration>();
+            _state = context.States.Get<BiasingSimulationState>();
+            _baseConfig = context.Configurations.Get<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
             if (context is ComponentBindingContext cbc)
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             }
 
             // We need 4 matrix elements here
-            var solver = _state.Solver;
+            var solver = context.States.Get<BiasingSimulationState>().Solver;
             _aaPtr = solver.GetMatrixElement(_nodeA, _nodeA);
             _abPtr = solver.GetMatrixElement(_nodeA, _nodeB);
             _baPtr = solver.GetMatrixElement(_nodeB, _nodeA);

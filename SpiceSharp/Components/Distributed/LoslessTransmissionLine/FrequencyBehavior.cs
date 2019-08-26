@@ -120,8 +120,13 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         protected MatrixElement<Complex> CInt2Pos2Ptr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -136,16 +141,15 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver.ThrowIfNull("solver");
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPos1Pos1Ptr = solver.GetMatrixElement(Pos1, Pos1);
             CPos1Int1Ptr = solver.GetMatrixElement(Pos1, Internal1);
             CNeg1Ibr1Ptr = solver.GetMatrixElement(Neg1, BranchEq1);
@@ -212,7 +216,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var laplace = _state.Laplace;
+            var laplace = ComplexState.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay.Value);
 
             var admittance = BaseParameters.Admittance;

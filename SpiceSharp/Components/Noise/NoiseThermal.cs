@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Components.NoiseSources
+﻿namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Thermal noise generator
@@ -40,18 +38,14 @@ namespace SpiceSharp.Components.NoiseSources
         }
 
         /// <summary>
-        /// Calculate the noise quantity
+        /// Calculates the noise contributions.
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Noise simulation)
+        protected override double CalculateNoise()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.ComplexState;
-            var val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
+            var val = ComplexState.Solution[Nodes[0]] - ComplexState.Solution[Nodes[1]];
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 4.0 * Constants.Boltzmann * simulation.RealState.Temperature * Conductance * gain;
+            return 4.0 * Constants.Boltzmann * BiasingState.Temperature * Conductance * gain;
         }
     }
 }

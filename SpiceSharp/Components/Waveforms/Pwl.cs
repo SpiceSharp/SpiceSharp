@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -30,6 +31,7 @@ namespace SpiceSharp.Components.Waveforms
         private bool _breakPointAdded;
         private long _currentLineIndex;
         private readonly long _pwlPoints;
+        private TimeSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="Pwl"/> class.
@@ -62,15 +64,13 @@ namespace SpiceSharp.Components.Waveforms
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        public override void Accept()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            if (simulation.Method.Time.Equals(0.0))
+            _state.ThrowIfNull("time state");
+            if (_state.Method.Time.Equals(0.0))
                 Value = GetLineValue(0.0);
 
-            if (simulation.Method is IBreakpoints method)
+            if (_state.Method is IBreakpoints method)
             {
                 var breaks = method.Breakpoints;
 
@@ -87,13 +87,12 @@ namespace SpiceSharp.Components.Waveforms
         }
 
         /// <summary>
-        /// Indicates a new timepoint is being probed.
+        /// Probes a new timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        public override void Probe()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var time = simulation.Method.Time;
+            _state.ThrowIfNull("time state");
+            var time = _state.Method.Time;
             Value = GetLineValue(time);
         }
 
@@ -107,10 +106,13 @@ namespace SpiceSharp.Components.Waveforms
         }
 
         /// <summary>
-        /// Sets up the waveform.
+        /// Binds the waveform to the simulation.
         /// </summary>
-        public override void Setup()
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
+            _state = context.States.Get<TimeSimulationState>();
+
             // Set value for time = 0.0
             Value = GetLineValue(0.0);
         }

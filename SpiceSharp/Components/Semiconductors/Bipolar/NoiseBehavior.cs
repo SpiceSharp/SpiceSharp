@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             new NoiseGain("1overf", 5, 6)
             );
 
-        private NoiseState _state;
+        private NoiseSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
@@ -46,30 +46,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             NoiseParameters = context.GetParameterSet<ModelNoiseParameters>("model");
 
-            _state = ((Noise)simulation).NoiseState;
-        }
-
-        /// <summary>
-        /// Connect noise sources
-        /// </summary>
-        void INoiseBehavior.ConnectNoise()
-        {
-            // Connect noise
-            BipolarJunctionTransistorNoise.Setup(CollectorNode, BaseNode, EmitterNode, SubstrateNode,
+            _state = context.States.Get<NoiseSimulationState>();
+            BipolarJunctionTransistorNoise.Bind(context, CollectorNode, BaseNode, EmitterNode, SubstrateNode,
                 CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode);
         }
-
+        
         /// <summary>
         /// Noise calculations
         /// </summary>
@@ -87,7 +78,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 * Math.Log(Math.Max(Math.Abs(BaseCurrent), 1e-38))) / _state.Frequency);
 
             // Evaluate all noise sources
-            BipolarJunctionTransistorNoise.Evaluate((Noise)Simulation);
+            BipolarJunctionTransistorNoise.Evaluate();
         }
     }
 }

@@ -30,12 +30,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the unknown variables.
         /// </summary>
-        protected VariableSet Variables { get; private set; }
+        protected IVariableSet Variables { get; private set; }
 
         /// <summary>
         /// Gets the solver of the system of equations.
         /// </summary>
-        protected Solver<double> Solver { get; private set; }
+        protected SparseSolver<double> Solver { get; private set; }
 
         /// <summary>
         /// Gets the diagonal element.
@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
         /// Sets up the convergence aid for a specific simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        public virtual void Initialize(BaseSimulation simulation)
+        public virtual void Initialize(BiasingSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -75,8 +75,7 @@ namespace SpiceSharp.Simulations
             Variables = simulation.Variables;
 
             // Get the real solver
-            var state = simulation.RealState;
-            Solver = state.Solver;
+            Solver = simulation.States.Get<BiasingSimulationState>().Solver;
 
             // Get the node
             if (!simulation.Variables.TryGetNode(Name, out var node))
@@ -92,6 +91,7 @@ namespace SpiceSharp.Simulations
             Rhs = !Value.Equals(0.0) ? Solver.GetRhsElement(node.Index) : Solver.FindRhsElement(node.Index);
 
             // Update the current solution to reflect our convergence aid value
+            var state = simulation.States.Get<BiasingSimulationState>();
             state.Solution[node.Index] = Value;
         }
 

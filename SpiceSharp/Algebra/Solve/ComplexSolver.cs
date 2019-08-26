@@ -8,7 +8,7 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving real matrices
     /// </summary>
-    public class ComplexSolver : Solver<Complex>
+    public class ComplexSolver : SparseSolver<Complex>
     {
         /// <summary>
         /// Private variables

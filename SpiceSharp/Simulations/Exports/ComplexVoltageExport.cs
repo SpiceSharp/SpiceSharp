@@ -97,7 +97,8 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((FrequencySimulation) Simulation).ComplexState.ThrowIfNull("complex state");
+            var simulation = (Simulation)sender;
+            var state = simulation.States.Get<ComplexSimulationState>();
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 PosIndex = posNode.Index;

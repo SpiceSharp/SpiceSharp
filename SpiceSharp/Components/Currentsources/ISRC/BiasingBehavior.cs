@@ -23,13 +23,13 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
-        public double GetVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power supplied by the source")]
-        public double GetPower() => (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[PosNode]) * -Current;
+        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[PosNode]) * -Current;
 
         /// <summary>
         /// Get the current.
@@ -57,8 +57,15 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         protected VectorElement<double> NegPtr { get; private set; }
 
-        // Cached variables
-        private BaseSimulationState _state;
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
+        private TimeSimulationState _timeState;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -67,19 +74,21 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
 
+            // Get states
+            context.States.TryGet<TimeSimulationState>(out _timeState);
+
             // Setup the waveform
-            BaseParameters.Waveform?.Setup();
+            BaseParameters.Waveform?.Bind(context);
 
             // Give some warnings if no value is given
             if (!BaseParameters.DcValue.Given)
@@ -97,8 +106,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            _state = ((BaseSimulation)simulation).RealState;
-            var solver = _state.Solver;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
             PosPtr = solver.GetRhsElement(PosNode);
             NegPtr = solver.GetRhsElement(NegNode);
         }
@@ -109,7 +118,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            BiasingState = null;
             PosPtr = null;
             NegPtr = null;
         }
@@ -122,18 +131,18 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             double value;
 
             // Time domain analysis
-            if (Simulation is TimeSimulation)
+            if (_timeState != null)
             {
                 // Use the waveform if possible
                 if (BaseParameters.Waveform != null)
                     value = BaseParameters.Waveform.Value;
                 else
-                    value = BaseParameters.DcValue * _state.SourceFactor;
+                    value = BaseParameters.DcValue * BiasingState.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = BaseParameters.DcValue * _state.SourceFactor;
+                value = BaseParameters.DcValue * BiasingState.SourceFactor;
             }
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE

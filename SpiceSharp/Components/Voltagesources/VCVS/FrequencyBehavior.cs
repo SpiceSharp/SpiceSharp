@@ -76,8 +76,13 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// </summary>
         protected MatrixElement<Complex> CBranchControlNegPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -86,16 +91,15 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation"></param>
-        /// <param name="context"></param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
@@ -110,7 +114,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            ComplexState = null;
             CPosBranchPtr = null;
             CNegBranchPtr = null;
             CBranchPosPtr = null;

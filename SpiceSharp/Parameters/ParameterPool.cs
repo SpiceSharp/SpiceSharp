@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 
 namespace SpiceSharp
 {
@@ -8,6 +9,8 @@ namespace SpiceSharp
     /// </summary>
     public class ParameterPool
     {
+        private readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
+
         /// <summary>
         /// The entity parameters
         /// </summary>
@@ -22,11 +25,27 @@ namespace SpiceSharp
         {
             get
             {
-                if (_entityParameters.TryGetValue(name, out var result))
-                    return result;
-                return null;
+                Lock.EnterReadLock();
+                try
+                {
+                    if (_entityParameters.TryGetValue(name, out var result))
+                        return result;
+                    return null;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
             }
         }
+
+        /// <summary>
+        /// Gets the entity identifier comparer.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer => _entityParameters.Comparer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterPool"/> class.
@@ -52,12 +71,20 @@ namespace SpiceSharp
         /// <param name="parameters">The parameter set.</param>
         public void Add(string creator, ParameterSet parameters)
         {
-            if (!_entityParameters.TryGetValue(creator, out var ep))
+            Lock.EnterWriteLock();
+            try
             {
-                ep = new ParameterSetDictionary();
-                _entityParameters.Add(creator, ep);
+                if (!_entityParameters.TryGetValue(creator, out var ep))
+                {
+                    ep = new ParameterSetDictionary();
+                    _entityParameters.Add(creator, ep);
+                }
+                ep.Add(parameters);
             }
-            ep.Add(parameters);
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -67,11 +94,33 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if a parameter set exists; otherwise <c>false</c>.
         /// </returns>
-        public bool Contains(string name) => _entityParameters.ContainsKey(name);
+        public bool Contains(string name)
+        {
+            Lock.EnterReadLock();
+            try
+            {
+                return _entityParameters.ContainsKey(name);
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Clears all parameter sets in the pool.
         /// </summary>
-        public void Clear() => _entityParameters.Clear();
+        public void Clear()
+        {
+            Lock.EnterWriteLock();
+            try
+            {
+                _entityParameters.Clear();
+            }
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
+        }
     }
 }

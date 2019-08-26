@@ -127,7 +127,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         protected MatrixElement<Complex> CCollectorPrimeBasePtr { get; private set; }
 
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -136,16 +142,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CCollectorCollectorPrimePtr = solver.GetMatrixElement(CollectorNode, CollectorPrimeNode);
             CBaseBasePrimePtr = solver.GetMatrixElement(BaseNode, BasePrimeNode);
             CEmitterEmitterPrimePtr = solver.GetMatrixElement(EmitterNode, EmitterPrimeNode);
@@ -177,7 +182,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            ComplexState = null;
             CCollectorCollectorPrimePtr = null;
             CBaseBasePrimePtr = null;
             CEmitterEmitterPrimePtr = null;
@@ -210,8 +215,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             var vbe = VoltageBe;
             var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (State.Solution[BaseNode] - State.Solution[CollectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (State.Solution[SubstrateNode] - State.Solution[CollectorPrimeNode]);
+            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[BaseNode] - BiasingState.Solution[CollectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[SubstrateNode] - BiasingState.Solution[CollectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 
@@ -220,7 +225,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var cstate = _state;
+            var cstate = ComplexState;
             var gcpr = ModelTemperature.CollectorConduct * BaseParameters.Area;
             var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
             var gpi = ConductancePi;

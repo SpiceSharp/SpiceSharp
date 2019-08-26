@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for frequency-dependent analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
-    public abstract class FrequencySimulation : BaseSimulation
+    /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
+    public abstract class FrequencySimulation : BiasingSimulation
     {
         /// <summary>
         /// Private variables
@@ -43,7 +43,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the complex simulation state.
         /// </summary>
-        public ComplexSimulationState ComplexState { get; protected set; }
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Gets the frequency sweep.
@@ -92,10 +95,16 @@ namespace SpiceSharp.Simulations
             FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
             // Create the state for complex numbers
-            ComplexState = new ComplexSimulationState();
+            if (!States.TryGet<ComplexSimulationState>(out var state))
+            {
+                state = new ComplexSimulationState();
+                States.Add(state.GetType(), state);
+            }
+            ComplexState = state;
             var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
+            ComplexState.Solver.Clear();
 
             // Setup the rest of the behaviors
             base.Setup(entities);
@@ -199,7 +208,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
-            RealState.UseDc = false;
+            BiasingState.UseDc = false;
             Load();
             for (var i = 0; i < _frequencyBehaviors.Count; i++)
             {
@@ -213,11 +222,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void FrequencyLoad()
         {
-            var cstate = ComplexState;
-
             OnBeforeFrequencyLoad(_loadStateEventArgs);
             FrequencySimulationStatistics.ComplexLoadTime.Start();
-            cstate.Solver.Clear();
+            ComplexState.Solver.Clear();
             LoadFrequencyBehaviors();
             FrequencySimulationStatistics.ComplexLoadTime.Reset();
             OnAfterFrequencyLoad(_loadStateEventArgs);

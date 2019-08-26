@@ -125,7 +125,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -136,13 +136,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         }
 
         /// <summary>
-        /// Bind the behavior. for the specified simulation.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
@@ -151,7 +150,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             // Get behaviors
             ModelTemperature = context.GetBehavior<ModelTemperatureBehavior>("model");
 
-            State = ((BaseSimulation)simulation).RealState;
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>
@@ -161,7 +160,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             base.Unbind();
 
-            State = null;
+            BiasingState = null;
         }
 
         /// <summary>
@@ -176,7 +175,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 BaseParameters.Length.RawValue = ModelParameters.Length.Value;
 
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = State.ThrowIfNotBound(this).Temperature;
+                BaseParameters.Temperature.RawValue = BiasingState.ThrowIfNotBound(this).Temperature;
             Vt = BaseParameters.Temperature * Constants.KOverQ;
             var ratio = BaseParameters.Temperature / ModelParameters.NominalTemperature;
             var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;

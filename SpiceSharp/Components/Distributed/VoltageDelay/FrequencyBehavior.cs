@@ -40,8 +40,13 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         protected MatrixElement<Complex> CBranchControlPosPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -56,16 +61,15 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Binds the specified simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
@@ -100,7 +104,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var laplace = _state.Laplace;
+            var laplace = ComplexState.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay);
 
             // Load the Y-matrix and RHS-vector

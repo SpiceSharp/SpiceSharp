@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
@@ -84,6 +85,7 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double _vo, _va, _freq, _td, _theta, _phase;
+        private TimeSimulationState _timeState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sine"/> class.
@@ -144,16 +146,18 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets up the waveform.
         /// </summary>
-        public override void Setup()
+        public override void Bind(BindingContext context)
         {
-            // Cache parameter values
-            _vo = Offset;
-            _va = Amplitude;
-            _freq = Frequency * 2.0 * Math.PI;
-            _td = Delay;
-            _theta = Theta;
-            _phase = 2 * Math.PI * Phase / 360.0;
-
+            if (context.States.TryGet(out _timeState))
+            {
+                // Cache parameter values
+                _vo = Offset;
+                _va = Amplitude;
+                _freq = Frequency * 2.0 * Math.PI;
+                _td = Delay;
+                _theta = Theta;
+                _phase = 2 * Math.PI * Phase / 360.0;
+            }
             Value = _vo;
 
             // Some checks
@@ -162,12 +166,11 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Indicates a new timepoint is being probed.
+        /// Probes a new timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        public override void Probe()
         {
-            var time = simulation.Method.Time;
+            var time = _timeState.ThrowIfNull("time state").Method.Time;
             time -= _td;
 
             // Calculate sine wave result (no offset)
@@ -188,14 +191,12 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        public override void Accept()
         {
-            // Do nothing
-            simulation.ThrowIfNull(nameof(simulation));
+            _timeState.ThrowIfNull("time state");
 
             // Initialize the sinewave
-            if (simulation.Method.Time.Equals(0.0))
+            if (_timeState.Method.Time.Equals(0.0))
                 Value = _vo;
         }
     }

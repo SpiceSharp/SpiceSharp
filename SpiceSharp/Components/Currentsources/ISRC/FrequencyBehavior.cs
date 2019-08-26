@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Get the power dissipation.
@@ -38,8 +38,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex GetComplexPower()
         {
-            _state.ThrowIfNotBound(this);
-            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
+            ComplexState.ThrowIfNotBound(this);
+            var v = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
             return -v * Complex.Conjugate(FrequencyParameters.Phasor);
         }
 
@@ -49,8 +49,13 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         [ParameterName("c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => FrequencyParameters.Phasor;
 
-        // Cached
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -59,19 +64,18 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosPtr = solver.GetRhsElement(PosNode);
             CNegPtr = solver.GetRhsElement(NegNode);
         }

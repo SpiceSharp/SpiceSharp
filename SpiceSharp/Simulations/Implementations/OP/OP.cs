@@ -3,8 +3,8 @@
     /// <summary>
     /// Class that implements the operating point analysis.
     /// </summary>
-    /// <seealso cref="BaseSimulation" />
-    public class OP : BaseSimulation
+    /// <seealso cref="BiasingSimulation" />
+    public class OP : BiasingSimulation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OP"/> class.
@@ -22,7 +22,7 @@
             base.Execute();
 
             // Setup the state
-            var state = RealState;
+            var state = States.Get<BiasingSimulationState>();
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
 

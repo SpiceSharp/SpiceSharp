@@ -71,6 +71,14 @@ namespace SpiceSharp.IntegrationMethods
         public event EventHandler<ModifyTimestepEventArgs> ContinueTimestep;
 
         /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationMethod"/> class.
         /// </summary>
         /// <param name="maxOrder">The maximum integration order.</param>
@@ -91,11 +99,9 @@ namespace SpiceSharp.IntegrationMethods
         public virtual void Setup(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            var solver = simulation.RealState?.Solver;
-            if (solver == null)
-                throw new CircuitException("Could not extract solver");
+            BiasingState = simulation.States.Get<BiasingSimulationState>();
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
-                new DenseVector<double>(solver.Order), 
+                new DenseVector<double>(BiasingState.Solver.Order), 
                 StateManager.Build()));
         }
 
@@ -143,7 +149,7 @@ namespace SpiceSharp.IntegrationMethods
             Order = 1;
 
             // Copy the first state to all other states (assume DC situation)
-            simulation.RealState.Solution.CopyTo(IntegrationStates[0].Solution);
+            BiasingState.Solution.CopyTo(IntegrationStates[0].Solution);
             for (var i = 1; i < IntegrationStates.Length; i++)
             {
                 IntegrationStates[i].Delta = IntegrationStates[0].Delta;
@@ -188,7 +194,7 @@ namespace SpiceSharp.IntegrationMethods
 
             // Copy the last accepted solution back into the time simulation
             // The simulator could have diverged to some crazy value, so we'll start again from the last known correct solution
-            IntegrationStates[1].Solution.CopyTo(simulation.RealState.Solution);
+            IntegrationStates[1].Solution.CopyTo(BiasingState.Solution);
         }
 
         /// <summary>
@@ -222,10 +228,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="simulation">The time-based simulation.</param>
         public virtual void Accept(TimeSimulation simulation)
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
             // Store the current solution
-            simulation.RealState?.Solution.CopyTo(IntegrationStates[0].Solution);
+            BiasingState.Solution.CopyTo(IntegrationStates[0].Solution);
             OnAcceptSolution(EventArgs.Empty);
         }
 

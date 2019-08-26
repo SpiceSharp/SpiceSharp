@@ -35,11 +35,11 @@ namespace SpiceSharpTest.Models
                 {
                     _nodes = nodes;
                 }
-                public override void Bind(Simulation simulation, BindingContext context)
+                public override void Bind(BindingContext context)
                 {
-                    var variables = simulation.Variables;
+                    var variables = context.Variables;
                     foreach (var node in _nodes)
-                        variables.MapNode(node);
+                        variables.MapNode(node, VariableType.Voltage);
                 }
                 void IBiasingBehavior.Load() { }
                 bool IBiasingBehavior.IsConvergent() => true;
@@ -497,7 +497,7 @@ namespace SpiceSharpTest.Models
                 Console.Write("{0}{1}", i > 0 ? ", " : "", tran.Method.GetTimestep(i));
             Console.WriteLine();
             Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
-            Console.WriteLine("Problem variable value: {0}", tran.RealState.Solution[tran.ProblemVariable.Index]);
+            Console.WriteLine("Problem variable value: {0}", tran.States.Get<BiasingSimulationState>().Solution[tran.ProblemVariable.Index]);
             Console.WriteLine();
 
             // Dump the circuit contents
@@ -519,7 +519,7 @@ namespace SpiceSharpTest.Models
             Console.WriteLine("- Solutions");
             Dictionary<int, string> variables = new Dictionary<int, string>();
             foreach (var variable in tran.Variables)
-                variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.RealState.Solution[variable.Index]}");
+                variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.States.Get<BiasingSimulationState>().Solution[variable.Index]}");
             for (var i = 0; i <= tran.Method.MaxOrder; i++)
             {
                 var oldsolution = tran.Method.GetSolution(i);

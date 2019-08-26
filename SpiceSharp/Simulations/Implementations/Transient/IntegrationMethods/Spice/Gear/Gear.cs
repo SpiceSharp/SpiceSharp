@@ -92,13 +92,12 @@ namespace SpiceSharp.IntegrationMethods
         /// Truncates the timestep using nodes.
         /// </summary>
         /// <param name="sender">The sender (integration method).</param>
-        /// <param name="args">The <see cref="T:SpiceSharp.IntegrationMethods.TruncateEvaluateEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="SpiceSharp.IntegrationMethods.TruncateEvaluateEventArgs" /> instance containing the event data.</param>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
             args.ThrowIfNull(nameof(args));
 
             // Get the state
-            var state = args.Simulation.RealState;
             var timetmp = double.PositiveInfinity;
             var nodes = args.Simulation.Variables;
 
@@ -110,8 +109,8 @@ namespace SpiceSharp.IntegrationMethods
             {
                 var node = nodes[i];
                 var index = node.Index;
-                var tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * RelTol + AbsTol;
-                var diff = state.Solution[index] - Prediction[i];
+                var tol = Math.Max(Math.Abs(BiasingState.Solution[index]), Math.Abs(Prediction[index])) * RelTol + AbsTol;
+                var diff = BiasingState.Solution[index] - Prediction[i];
 
                 if (!diff.Equals(0.0))
                 {
@@ -245,7 +244,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Produces a derivative.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> that can be used with this integration method.
+        /// A <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> that can be used with this integration method.
         /// </returns>
         protected override StateDerivative ProduceDerivative() => new GearStateDerivative(this);
     }

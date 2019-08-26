@@ -49,13 +49,13 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
-        public double GetCurrent() => _state.ThrowIfNotBound(this).Solution[ControlBranchEq] * BaseParameters.Coefficient;
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[ControlBranchEq] * BaseParameters.Coefficient;
 
         /// <summary>
         /// Gets the volage over the source.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// The power dissipation by the source.
@@ -63,12 +63,17 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower()
         {
-            _state.ThrowIfNotBound(this);
-            return (_state.Solution[PosNode] - _state.Solution[NegNode]) * _state.Solution[ControlBranchEq] * BaseParameters.Coefficient;
+            BiasingState.ThrowIfNotBound(this);
+            return (BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode]) * BiasingState.Solution[ControlBranchEq] * BaseParameters.Coefficient;
         }
 
-        // Cached
-        private BaseSimulationState _state;
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -79,11 +84,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Bind behavior.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
             context.ThrowIfNull(nameof(context));
 
             // Get parameters
@@ -92,16 +96,17 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             // Get behaviors (0 = CCCS behaviors, 1 = VSRC behaviors)
             VoltageLoad = context.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
 
-            // Connect
+            // Connect nodes
             if (context is ComponentBindingContext cc)
             {
                 PosNode = cc.Pins[0];
                 NegNode = cc.Pins[1];
             }
-
-            _state = ((BaseSimulation)simulation).RealState.ThrowIfNull("state");
-            var solver = _state.Solver;
             ControlBranchEq = VoltageLoad.BranchEq;
+
+            // Get states
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
             PosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
             NegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);
         }
@@ -112,7 +117,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            BiasingState = null;
             PosControlBranchPtr = null;
             NegControlBranchPtr = null;
         }

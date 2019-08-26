@@ -49,13 +49,12 @@ namespace SpiceSharp.Simulations
             // Execute base behavior
             base.Execute();
 
-            var state = RealState;
             var cstate = ComplexState;
             
             // Calculate the operating point
             cstate.Laplace = 0.0;
-            state.UseIc = false;
-            state.UseDc = true;
+            BiasingState.UseIc = false;
+            BiasingState.UseDc = true;
             Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices

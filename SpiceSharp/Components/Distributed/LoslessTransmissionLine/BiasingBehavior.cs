@@ -162,7 +162,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -177,26 +177,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Connect the behavior in the circuit
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="pins">Pin indices in order</param>
-        public void Connect(params int[] pins)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            pins.ThrowIfNot(nameof(pins), 4);
-            Pos1 = pins[0];
-            Neg1 = pins[1];
-            Pos2 = pins[2];
-            Neg2 = pins[3];
-        }
-
-        /// <summary>
-        /// Bind the behavior.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The data provider.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
-        {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
@@ -209,12 +195,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                 Neg2 = cc.Pins[3];
             }
 
-            State = ((BaseSimulation)simulation).RealState;
-            var solver = State.Solver;
-            var variables = simulation.Variables;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
+            var variables = context.Variables;
 
-            Internal1 = variables.Create(Name.Combine("int1")).Index;
-            Internal2 = variables.Create(Name.Combine("int2")).Index;
+            Internal1 = variables.Create(Name.Combine("int1"), VariableType.Voltage).Index;
+            Internal2 = variables.Create(Name.Combine("int2"), VariableType.Voltage).Index;
             BranchEq1 = variables.Create(Name.Combine("branch1"), VariableType.Current).Index;
             BranchEq2 = variables.Create(Name.Combine("branch2"), VariableType.Current).Index;
 
@@ -250,7 +236,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            State = null;
+            BiasingState = null;
             Pos1Pos1Ptr = null;
             Pos1Int1Ptr = null;
             Int1Pos1Ptr = null;
@@ -297,7 +283,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Int2Ibr2Ptr.Value += 1.0;
             Neg2Ibr2Ptr.Value -= 1.0;
 
-            if (State.UseDc)
+            if (BiasingState.UseDc)
             {
                 // Assume DC operation
                 

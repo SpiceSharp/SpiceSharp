@@ -38,15 +38,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            var method = ((TimeSimulation)simulation).Method;
+            var method = context.States.Get<TimeSimulationState>().Method;
             _capCharge = method.CreateDerivative();
         }
 
@@ -55,7 +54,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            var state = State;
+            var state = BiasingState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             CalculateCapacitance(vd);
         }
@@ -66,7 +65,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         void ITimeBehavior.Load()
         {
             // Calculate the capacitance
-            var state = State;
+            var state = BiasingState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
             CalculateCapacitance(vd);
 

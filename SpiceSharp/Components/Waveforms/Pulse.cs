@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -93,6 +94,7 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double _v1, _v2, _td, _tr, _tf, _pw, _per;
+        private TimeSimulationState _timeState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Pulse"/> class.
@@ -125,8 +127,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets up the waveform.
         /// </summary>
-        public override void Setup()
+        public override void Bind(BindingContext context)
         {
+            context.States.TryGet(out _timeState);
+
             // Cache parameter values
             _v1 = InitialValue;
             _v2 = PulsedValue;
@@ -153,12 +157,11 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Indicates a new timepoint is being probed.
+        /// Probes a new timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Probe(TimeSimulation simulation)
+        public override void Probe()
         {
-            At(simulation.Method.Time);
+            At(_timeState.Method.Time);
         }
 
         /// <summary>
@@ -188,17 +191,16 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        public override void Accept(TimeSimulation simulation)
+        public override void Accept()
         {
-            simulation.ThrowIfNull(nameof(simulation));
+            _timeState.ThrowIfNull("time state");
 
             // Initialize the pulse
-            if (simulation.Method.Time.Equals(0.0))
+            if (_timeState.Method.Time.Equals(0.0))
                 Value = _v1;
 
             // Are we at a breakpoint?
-            if (simulation.Method is IBreakpoints method)
+            if (_timeState.Method is IBreakpoints method)
             {
                 var breaks = method.Breakpoints;
                 if (!method.Break)

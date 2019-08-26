@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState State { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -47,11 +47,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
@@ -66,7 +65,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            State = ((BaseSimulation)simulation).RealState;
+            State = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>

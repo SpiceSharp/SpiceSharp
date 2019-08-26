@@ -19,7 +19,7 @@ namespace SpiceSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
-        /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer`1" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="T:System.Collections.Generic.EqualityComparer`1" />.</param>
+        /// <param name="comparer">The <see cref="System.Collections.Generic.IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="System.Collections.Generic.EqualityComparer{T}" />.</param>
         public Circuit(IEqualityComparer<string> comparer)
             : base(comparer)
         {

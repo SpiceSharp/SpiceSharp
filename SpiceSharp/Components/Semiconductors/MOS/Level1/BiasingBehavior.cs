@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Gets the base configuration.
         /// </summary>
-        protected BaseConfiguration BaseConfiguration { get; private set; }
+        protected BiasingConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets or sets the drain current.
@@ -266,6 +266,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </summary>
         protected VectorElement<double> SourcePrimePtr { get; private set; }
 
+        private TimeSimulationState _timeState;
+
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -273,17 +275,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
-            simulation.ThrowIfNull(nameof(simulation));
+            base.Bind(context);
 
             // Get configurations
-            BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
+            BaseConfiguration = context.Configurations.Get<BiasingConfiguration>();
+
+            // Get states
+            context.States.TryGet<TimeSimulationState>(out _timeState);
 
             // Reset
             SaturationVoltageDs = 0;
@@ -298,18 +301,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 BulkNode = cc.Pins[3];
             }
 
-            var solver = State.Solver;
-            var variables = simulation.Variables;
+            var solver = BiasingState.Solver;
+            var variables = context.Variables;
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
-                DrainNodePrime = variables.Create(Name.Combine("drain")).Index;
+                DrainNodePrime = variables.Create(Name.Combine("drain"), VariableType.Voltage).Index;
             else
                 DrainNodePrime = DrainNode;
 
             // Add series source node if necessary
             if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.SourceSquares > 0)
-                SourceNodePrime = variables.Create(Name.Combine("source")).Index;
+                SourceNodePrime = variables.Create(Name.Combine("source"), VariableType.Voltage).Index;
             else
                 SourceNodePrime = SourceNode;
 
@@ -385,7 +388,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var state = State.ThrowIfNotBound(this);
+            var state = BiasingState.ThrowIfNotBound(this);
 
             // Get the current voltages
             Initialize(out double vgs, out var vds, out var vbs, out var check);
@@ -503,10 +506,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <param name="check">If set to <c>true</c>, the current voltage was limited and another iteration should be calculated.</param>
         protected void Initialize(out double vgs, out double vds, out double vbs, out bool check)
         {
-            var state = State;
+            var state = BiasingState;
             check = true;
 
-            if (state.Init == InitializationModes.Float || (!state.UseDc && Simulation is TimeSimulation tsim && tsim.Method.BaseTime.Equals(0.0)) ||
+            if (state.Init == InitializationModes.Float || (!state.UseDc && _timeState != null && _timeState.Method.BaseTime.Equals(0.0)) ||
                 state.Init == InitializationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration
@@ -675,7 +678,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </returns>
         bool IBiasingBehavior.IsConvergent()
         {
-            var state = State.ThrowIfNotBound(this);
+            var state = BiasingState.ThrowIfNotBound(this);
             double cdhat;
 
             var vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);

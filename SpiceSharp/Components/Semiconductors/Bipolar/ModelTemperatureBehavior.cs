@@ -94,22 +94,32 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double F7 { get; protected set; }
 
         /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             _mbp = context.GetParameterSet<ModelBaseParameters>();
+
+            // Get states
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>
@@ -118,7 +128,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
+                _mbp.NominalTemperature.RawValue = BiasingState.NominalTemperature;
             Factor1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;
 
             if (!_mbp.LeakBeCurrent.Given)

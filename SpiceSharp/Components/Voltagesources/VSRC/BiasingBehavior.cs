@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterInfo("Voltage source current")]
-        public double GetCurrent() => _state.ThrowIfNotBound(this).Solution[BranchEq];
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq];
 
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
-        public double GetPower() => (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode]) * -_state.Solution[BranchEq];
+        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * -BiasingState.Solution[BranchEq];
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -75,8 +75,16 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         protected VectorElement<double> BranchPtr { get; private set; }
 
-        // Cache
-        private BaseSimulationState _state;
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
+        
+        private TimeSimulationState _timeState;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -85,19 +93,18 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
 
             // Setup the waveform
-            BaseParameters.Waveform?.Setup();
+            BaseParameters.Waveform?.Bind(context);
 
             if (!BaseParameters.DcValue.Given)
             {
@@ -119,10 +126,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            _state = ((BaseSimulation)simulation).RealState;
-            var solver = _state.Solver;
-            var variables = simulation.Variables;
-            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
+            context.States.TryGet(out _timeState);
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix elements
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
@@ -140,7 +147,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            BiasingState = null;
             PosBranchPtr = null;
             BranchPosPtr = null;
             NegBranchPtr = null;
@@ -153,7 +160,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var state = _state.ThrowIfNotBound(this);
+            var state = BiasingState.ThrowIfNotBound(this);
             double value;
 
             PosBranchPtr.Value += 1;
@@ -161,7 +168,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             NegBranchPtr.Value -= 1;
             BranchNegPtr.Value -= 1;
 
-            if (Simulation is TimeSimulation)
+            if (_timeState != null)
             {
                 // Use the waveform if possible
                 if (BaseParameters.Waveform != null)

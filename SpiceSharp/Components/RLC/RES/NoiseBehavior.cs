@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -21,11 +20,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Connect the noise
+        /// Bind the behavior to a simulation.
         /// </summary>
-        void INoiseBehavior.ConnectNoise()
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            ResistorNoise.Setup(PosNode, NegNode);
+            base.Bind(context);
+            ResistorNoise.Bind(context, PosNode, NegNode);
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         void INoiseBehavior.Noise()
         {
             ResistorNoise.Generators[0].SetCoefficients(Conductance);
-            ResistorNoise.Evaluate((Noise)Simulation);
+            ResistorNoise.Evaluate();
         }
     }
 }

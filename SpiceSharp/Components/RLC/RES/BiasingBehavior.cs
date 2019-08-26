@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -14,13 +13,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the voltage across the resistor.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => State.ThrowIfNotBound(this).Solution[PosNode] - State.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// Gets the current through the resistor.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Current")]
-        public double GetCurrent() => (State.ThrowIfNotBound(this).Solution[PosNode] - State.Solution[NegNode]) * Conductance;
+        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the resistor.
@@ -28,8 +27,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower()
         {
-            State.ThrowIfNotBound(this);
-            var v = State.Solution[PosNode] - State.Solution[NegNode];
+            BiasingState.ThrowIfNotBound(this);
+            var v = BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode];
             return v * v * Conductance;
         }
 
@@ -72,13 +71,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             if (context is ComponentBindingContext cc)
             {
@@ -86,7 +84,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            var solver = State.Solver;
+            var solver = BiasingState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);

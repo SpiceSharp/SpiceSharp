@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
@@ -33,15 +32,14 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Binds the specified simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            var solver = State.Solver;
+            var solver = BiasingState.Solver;
             BranchPtr = solver.GetRhsElement(BranchEq);
 
             Signal = new DelayedSignal(1, BaseParameters.Delay);
@@ -61,11 +59,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
+        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
         /// </remarks>
         void ITimeBehavior.InitializeStates()
         {
-            var sol = State.Solution;
+            var sol = BiasingState.Solution;
             var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
         }
@@ -75,7 +73,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void ITimeBehavior.Load()
         {
-            var sol = State.Solution;
+            var sol = BiasingState.Solution;
             var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
             BranchPtr.Value += Signal.Values[0];

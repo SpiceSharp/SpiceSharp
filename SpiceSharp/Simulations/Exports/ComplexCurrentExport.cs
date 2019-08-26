@@ -46,8 +46,9 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((FrequencySimulation) Simulation).RealState.ThrowIfNull("complex state");
-            if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
+            var simulation = (Simulation)sender;
+            var state = simulation.States.Get<ComplexSimulationState>();
+            if (simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))
                 {

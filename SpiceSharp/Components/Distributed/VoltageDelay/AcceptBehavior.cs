@@ -30,13 +30,12 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The data provider.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             _bp = context.GetParameterSet<BaseParameters>();
@@ -44,7 +43,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             // Get behaviors
             _tran = context.GetBehavior<TransientBehavior>();
 
-            _method = ((TimeSimulation)simulation).Method;
+            _method = context.States.Get<TimeSimulationState>().Method;
         }
 
         /// <summary>

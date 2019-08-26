@@ -3,6 +3,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using NUnit.Framework;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharpTest.Waveforms
 {
@@ -12,16 +13,18 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PulseHasInvalidParameters_Expect_Exception()
         {
+            var context = new BindingContext(new ParameterSetDictionary(), new TypeDictionary<SimulationState>(), new VariableSet());
+
             // Negative rise time
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Setup());
+            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Bind(context));
             // Negative fall time
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Setup());
+            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Bind(context));
             // Negative pulse width
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Setup());
+            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Bind(context));
             // Negative period
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Setup());
+            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Bind(context));
             // Sum of times is higher than a period
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Setup());
+            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Bind(context));
         }
 
         [Test]

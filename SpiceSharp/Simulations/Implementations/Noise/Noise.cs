@@ -17,9 +17,9 @@ namespace SpiceSharp.Simulations
         public NoiseConfiguration NoiseConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets the noise state.
+        /// Gets the noise simulation state.
         /// </summary>
-        public NoiseState NoiseState { get; private set; }
+        protected NoiseSimulationState NoiseState { get; private set; }
 
         /// <summary>
         /// Noise behaviors
@@ -79,7 +79,13 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, parameters and states
             NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
-            NoiseState = new NoiseState();
+
+            if (!States.TryGet<NoiseSimulationState>(out var state))
+            {
+                state = new NoiseSimulationState();
+                States.Add(state.GetType(), state);
+            }
+            NoiseState = state;
             NoiseState.Setup(Variables);
 
             base.Setup(entities);
@@ -111,7 +117,7 @@ namespace SpiceSharp.Simulations
         {
             base.Execute();
 
-            var state = RealState;
+            var state = BiasingState;
             var cstate = ComplexState;
             var nstate = NoiseState;
 
@@ -119,8 +125,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? Variables.GetNode(noiseconfig.Output).Index : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? Variables.GetNode(noiseconfig.OutputRef).Index : 0;
+            var posOutNode = noiseconfig.Output != null ? Variables[noiseconfig.Output].Index : 0;
+            var negOutNode = noiseconfig.OutputRef != null ? Variables[noiseconfig.OutputRef].Index : 0;
 
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
@@ -131,10 +137,6 @@ namespace SpiceSharp.Simulations
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();
-
-            // Connect noise sources
-            for (var i = 0; i < _noiseBehaviors.Count; i++)
-                _noiseBehaviors[i].ConnectNoise();
 
             // Loop through noise figures
             foreach (var freq in FrequencySweep.Points)

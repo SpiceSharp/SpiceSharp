@@ -120,8 +120,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -130,16 +135,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation"></param>
-        /// <param name="context"></param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
             CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
@@ -170,7 +174,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            ComplexState = null;
             CDrainDrainPtr = null;
             CGateGatePtr = null;
             CSourceSourcePtr = null;
@@ -210,7 +214,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var cstate = _state.ThrowIfNotBound(this);
+            var cstate = ComplexState.ThrowIfNotBound(this);
             int xnrm, xrev;
 
             if (Mode < 0)

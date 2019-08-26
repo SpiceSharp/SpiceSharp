@@ -4,10 +4,10 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A configuration for a <see cref="BaseSimulation" />.
+    /// A configuration for a <see cref="BiasingSimulation" />.
     /// </summary>
     /// <seealso cref="SpiceSharp.ParameterSet" />
-    public class BaseConfiguration : ParameterSet
+    public class BiasingConfiguration : ParameterSet
     {
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should go straight to gmin stepping.

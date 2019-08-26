@@ -15,6 +15,9 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the order of the matrix (matrix size).
         /// </summary>
+        /// <value>
+        /// The order.
+        /// </value>
         public int Order { get; private set; }
 
         /// <summary>

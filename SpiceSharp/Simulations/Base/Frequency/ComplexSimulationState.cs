@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Simulations
@@ -15,14 +16,9 @@ namespace SpiceSharp.Simulations
         public bool IsConvergent { get; set; }
 
         /// <summary>
-        /// Gets the solver for complex linear systems of equations.
-        /// </summary>
-        public ComplexSolver Solver { get; } = new ComplexSolver();
-
-        /// <summary>
         /// Gets the solution.
         /// </summary>
-        public SpiceSharp.Algebra.Vector<Complex> Solution { get; private set; }
+        public SpiceSharp.Algebra.Vector<Complex> Solution { get; protected set; }
 
         /// <summary>
         /// Gets or sets the current laplace variable.
@@ -30,10 +26,45 @@ namespace SpiceSharp.Simulations
         public Complex Laplace { get; set; } = new Complex();
 
         /// <summary>
-        /// Setup the simulation state.
+        /// Gets or sets the solver.
+        /// </summary>
+        /// <value>
+        /// The solver.
+        /// </value>
+        public SparseSolver<Complex> Solver
+        {
+            get => _solver;
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+                _solver = value;
+            }
+        }
+        private SparseSolver<Complex> _solver;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
+        /// </summary>
+        public ComplexSimulationState()
+        {
+            _solver = new ComplexSolver();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
+        /// </summary>
+        /// <param name="solver">The solver.</param>
+        public ComplexSimulationState(SparseSolver<Complex> solver)
+        {
+            _solver = solver.ThrowIfNull(nameof(solver));
+        }
+
+        /// <summary>
+        /// Sets up the simulation state.
         /// </summary>
         /// <param name="nodes">The unknown variables for which the state is used.</param>
-        public override void Setup(VariableSet nodes)
+        public override void Setup(IVariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
             Solution = new DenseVector<Complex>(Solver.Order);

@@ -143,7 +143,7 @@ namespace SpiceSharpTest.Sparse
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <param name="expected"></param>
-        void AssertInternal(Solver<double> solver, int row, int col, double expected)
+        void AssertInternal(SparseSolver<double> solver, int row, int col, double expected)
         {
             var indices = new LinearSystemIndices(row, col);
             solver.InternalToExternal(indices);

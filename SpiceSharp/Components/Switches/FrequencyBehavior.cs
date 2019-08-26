@@ -30,9 +30,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         protected MatrixElement<Complex> CNegNegPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -43,16 +40,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            var solver = context.States.Get<ComplexSimulationState>().Solver;
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
             CNegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
@@ -65,7 +60,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
             CPosPosPtr = null;
             CPosNegPtr = null;
             CNegPosPtr = null;

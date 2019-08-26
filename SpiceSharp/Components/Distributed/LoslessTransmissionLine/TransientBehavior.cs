@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
@@ -38,15 +37,14 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            var solver = ((BaseSimulation)simulation).RealState.Solver;
+            var solver = BiasingState.Solver;
             Ibr1Ptr = solver.GetRhsElement(BranchEq1);
             Ibr2Ptr = solver.GetRhsElement(BranchEq2);
 
@@ -58,7 +56,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            var sol = State.ThrowIfNotBound(this).Solution;
+            var sol = BiasingState.ThrowIfNotBound(this).Solution;
 
             // Calculate the inputs
             var input1 = sol[Pos2] - sol[Neg2] + BaseParameters.Impedance * sol[BranchEq2];
@@ -71,7 +69,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         void ITimeBehavior.Load()
         {
-            var sol = State.Solution;
+            var sol = BiasingState.Solution;
 
             // Calculate inputs
             var input1 = sol[Pos2] - sol[Neg2] + BaseParameters.Impedance * sol[BranchEq2];

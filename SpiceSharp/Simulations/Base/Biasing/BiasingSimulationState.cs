@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Simulations
 {
@@ -6,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// A simulation state for simulations using real numbers.
     /// </summary>
     /// <seealso cref="SimulationState" />
-    public class BaseSimulationState : SimulationState
+    public class BiasingSimulationState : SimulationState
     {
         /// <summary>
         /// Gets or sets the initialization flag.
@@ -57,14 +58,9 @@ namespace SpiceSharp.Simulations
         public double NominalTemperature { get; set; } = 300.15;
 
         /// <summary>
-        /// Gets the solver for solving linear systems of equations.
-        /// </summary>
-        public RealSolver Solver { get; } = new RealSolver();
-
-        /// <summary>
         /// Gets the solution vector.
         /// </summary>
-        public Vector<double> Solution { get; private set; }
+        public Vector<double> Solution { get; protected set; }
 
         /// <summary>
         /// Gets the previous solution vector.
@@ -72,19 +68,55 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// This vector is needed for determining convergence.
         /// </remarks>
-        public Vector<double> OldSolution { get; private set; }
+        public Vector<double> OldSolution { get; protected set; }
 
         /// <summary>
-        /// Setup the simulation state.
+        /// Gets the sparse solver.
+        /// </summary>
+        /// <value>
+        /// The solver.
+        /// </value>
+        public SparseSolver<double> Solver
+        {
+            get => _solver;
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+                _solver = value;
+            }
+        }
+        private SparseSolver<double> _solver;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
+        /// </summary>
+        public BiasingSimulationState()
+        {
+            Solver = new RealSolver();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
+        /// </summary>
+        /// <param name="solver">The solver.</param>
+        public BiasingSimulationState(SparseSolver<double> solver)
+        {
+            Solver = solver.ThrowIfNull(nameof(solver));
+        }
+
+        /// <summary>
+        /// Sets up the simulation state.
         /// </summary>
         /// <param name="nodes">The unknown variables for which the state is used.</param>
-        public override void Setup(VariableSet nodes)
+        public override void Setup(IVariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
 
             // Initialize all matrices
             Solution = new DenseVector<double>(Solver.Order);
             OldSolution = new DenseVector<double>(Solver.Order);
+            Solver.Clear();
 
             // Initialize all states and parameters
             Init = InitializationModes.None;

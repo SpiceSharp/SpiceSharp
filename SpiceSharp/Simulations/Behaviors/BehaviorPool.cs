@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace SpiceSharp.Behaviors
 {
@@ -9,6 +10,8 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     public class BehaviorPool
     {
+        private readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
+
         /// <summary>
         /// Behaviors indexed by the entity that created them.
         /// </summary>
@@ -26,17 +29,40 @@ namespace SpiceSharp.Behaviors
         {
             get
             {
-                var count = 0;
-                foreach (var pair in _behaviorLists)
-                    count += pair.Value.Count;
-                return count;
+                Lock.EnterReadLock();
+                try
+                {
+                    var count = 0;
+                    foreach (var pair in _behaviorLists)
+                        count += pair.Value.Count;
+                    return count;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
             }
         }
 
         /// <summary>
         /// Gets the behavior keys.
         /// </summary>
-        public IEnumerable<string> Keys => _entityBehaviors.Keys;
+        public IEnumerable<string> Keys
+        {
+            get
+            {
+                Lock.EnterReadLock();
+                try
+                {
+                    foreach (var key in _entityBehaviors.Keys)
+                        yield return key;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
@@ -47,9 +73,17 @@ namespace SpiceSharp.Behaviors
         {
             get
             {
-                if (_entityBehaviors.TryGetValue(name, out var result))
-                    return result;
-                return null;
+                Lock.EnterReadLock();
+                try
+                {
+                    if (_entityBehaviors.TryGetValue(name, out var result))
+                        return result;
+                    return null;
+                }
+                finally
+                {
+                    Lock.ExitReadLock();
+                }
             }
         }
 
@@ -64,6 +98,7 @@ namespace SpiceSharp.Behaviors
             _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
+            Lock.ExitWriteLock();
         }
         
         /// <summary>
@@ -92,26 +127,48 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Adds the specified behavior.
         /// </summary>
+        /// <param name="id">The identifier for the behavior.</param>
         /// <param name="behavior">The behavior.</param>
-        public void Add(IBehavior behavior)
+        public void Add(string id, IBehavior behavior)
         {
             behavior.ThrowIfNull(nameof(behavior));
-
-            // Try finding the entity behavior dictionary
-            if (!_entityBehaviors.TryGetValue(behavior.Name, out var ebd))
+            Lock.EnterWriteLock();
+            try
             {
-                ebd = new EntityBehaviorDictionary(behavior.Name);
-                _entityBehaviors.Add(behavior.Name, ebd);
+                // Try finding the entity behavior dictionary
+                if (!_entityBehaviors.TryGetValue(id, out var ebd))
+                {
+                    ebd = new EntityBehaviorDictionary(id);
+                    _entityBehaviors.Add(id, ebd);
+                }
+                ebd.Add(behavior.GetType(), behavior);
+
+                // Track lists
+                foreach (var pair in _behaviorLists)
+                {
+                    if (ebd.TryGetValue(pair.Key, out var b) && b == behavior)
+                        pair.Value.Add(b);
+                }
             }
-            ebd.Add(behavior.GetType(), behavior);
-
-            // Track lists
-            foreach (var pair in _behaviorLists)
+            finally
             {
-                if (ebd.TryGetValue(pair.Key, out var b) && b == behavior)
-                    pair.Value.Add(b);
+                Lock.ExitWriteLock();
             }
         }
+
+        /// <summary>
+        /// Gets the entity identifier comparer.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer => _entityBehaviors.Comparer;
+
+        /// <summary>
+        /// Adds the specified behavior.
+        /// </summary>
+        /// <param name="behavior">The behavior.</param>
+        public void Add(IBehavior behavior) => Add(behavior.Name, behavior);
 
         /// <summary>
         /// Gets a list of behaviors of a specific type.
@@ -122,9 +179,17 @@ namespace SpiceSharp.Behaviors
         /// </returns>
         public BehaviorList<T> GetBehaviorList<T>() where T : IBehavior
         {
-            if (_behaviorLists.TryGetValue(typeof(T), out var list))
-                return new BehaviorList<T>(list.Cast<T>());
-            return new BehaviorList<T>(new T[0]);
+            Lock.EnterReadLock();
+            try
+            {
+                if (_behaviorLists.TryGetValue(typeof(T), out var list))
+                    return new BehaviorList<T>(list.Cast<T>());
+                return new BehaviorList<T>(new T[0]);
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -133,8 +198,18 @@ namespace SpiceSharp.Behaviors
         /// <param name="name">The identifier.</param>
         /// <param name="ebd">The dictionary of entity behaviors.</param>
         /// <returns></returns>
-        public bool TryGetBehaviors(string name, out EntityBehaviorDictionary ebd) =>
-            _entityBehaviors.TryGetValue(name, out ebd);
+        public bool TryGetBehaviors(string name, out EntityBehaviorDictionary ebd)
+        {
+            Lock.EnterReadLock();
+            try
+            {
+                return _entityBehaviors.TryGetValue(name, out ebd);
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Checks if behaviors exist for a specified entity identifier.
@@ -143,15 +218,34 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if behaviors exist; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsKey(string name) => _entityBehaviors.ContainsKey(name);
+        public bool ContainsKey(string name)
+        {
+            Lock.EnterReadLock();
+            try
+            {
+                return _entityBehaviors.ContainsKey(name);
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
 
         /// <summary>
         /// Clears all behaviors in the pool.
         /// </summary>
         public void Clear()
         {
-            _behaviorLists.Clear();
-            _entityBehaviors.Clear();
+            Lock.EnterWriteLock();
+            try
+            {
+                _behaviorLists.Clear();
+                _entityBehaviors.Clear();
+            }
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
         }
     }
 }

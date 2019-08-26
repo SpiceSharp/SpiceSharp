@@ -9,17 +9,16 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public abstract class Controller
     {
         /// <summary>
-        /// Bind the behavior. for the specified simulation.
+        /// Bind the controller to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
         /// <param name="context">The context.</param>
-        public abstract void Bind(Simulation simulation, BindingContext context);
+        public abstract void Bind(BindingContext context);
 
         /// <summary>
         /// Gets the value that is controlling the switch.
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        public abstract double GetValue(BaseSimulationState state);
+        public abstract double GetValue(BiasingSimulationState state);
     }
 }

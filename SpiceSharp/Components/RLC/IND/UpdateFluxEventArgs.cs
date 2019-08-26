@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the state currently being operated on
         /// </summary>
-        public BaseSimulationState State { get; }
+        public BiasingSimulationState State { get; }
 
         /// <summary>
         /// Create a new instance of the <see cref="UpdateFluxEventArgs"/> class.
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="current">Current</param>
         /// <param name="flux">Flux</param>
         /// <param name="state">State</param>
-        public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, BaseSimulationState state)
+        public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, BiasingSimulationState state)
         {
             flux.ThrowIfNull(nameof(flux));
 

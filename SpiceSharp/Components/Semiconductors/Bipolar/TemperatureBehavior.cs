@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -111,13 +111,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public TemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
@@ -126,7 +125,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Get behaviors
             ModelTemperature = context.GetBehavior<ModelTemperatureBehavior>("model");
 
-            State = ((BaseSimulation)simulation).RealState;
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>
@@ -136,7 +135,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Unbind();
 
-            State = null;
+            BiasingState = null;
         }
 
         /// <summary>
@@ -144,9 +143,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            State.ThrowIfNotBound(this);
+            BiasingState.ThrowIfNotBound(this);
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = State.Temperature;
+                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
             Vt = BaseParameters.Temperature * Constants.KOverQ;
             var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);

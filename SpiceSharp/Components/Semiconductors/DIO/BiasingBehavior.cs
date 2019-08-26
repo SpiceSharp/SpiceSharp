@@ -103,13 +103,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             if (context is ComponentBindingContext cc)
             {
@@ -117,11 +116,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            var solver = State.Solver;
-            var variables = simulation.Variables;
+            var solver = BiasingState.Solver;
+            var variables = context.Variables;
 
             // Create
-            PosPrimeNode = ModelParameters.Resistance > 0 ? variables.Create(Name.Combine("pos")).Index : PosNode;
+            PosPrimeNode = ModelParameters.Resistance > 0 ? variables.Create(Name.Combine("pos"), VariableType.Voltage).Index : PosNode;
 
             // Get matrix elements
             PosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
@@ -142,7 +141,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var state = State;
+            var state = BiasingState;
             double cd, gd;
 
             // Get the current voltages
@@ -210,7 +209,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         protected void Initialize(out double vd, out bool check)
         {
-            var state = State;
+            var state = BiasingState;
             check = false;
             if (state.Init == InitializationModes.Junction)
             {
@@ -245,7 +244,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <returns></returns>
         bool IBiasingBehavior.IsConvergent()
         {
-            var state = State;
+            var state = BiasingState;
             var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
 
             var delvd = vd - Voltage;

@@ -48,13 +48,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Clear all events
             if (UpdateFlux != null)
@@ -63,11 +62,11 @@ namespace SpiceSharp.Components.InductorBehaviors
                     UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
             }
 
-            var solver = State.Solver;
+            var solver = context.States.Get<BiasingSimulationState>().Solver;
             BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
             BranchPtr = solver.GetRhsElement(BranchEq);
 
-            var method = ((TimeSimulation)simulation).Method;
+            var method = context.States.Get<TimeSimulationState>().Method;
             _flux = method.CreateDerivative();
         }
 
@@ -80,7 +79,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             if (BaseParameters.InitialCondition.Given)
                 _flux.Current = BaseParameters.InitialCondition * BaseParameters.Inductance;
             else
-                _flux.Current = State.Solution[BranchEq] * BaseParameters.Inductance;
+                _flux.Current = BiasingState.Solution[BranchEq] * BaseParameters.Inductance;
         }
 
         /// <summary>
@@ -89,12 +88,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         void ITimeBehavior.Load()
         {
             // Initialize
-            _flux.ThrowIfNotBound(this).Current = BaseParameters.Inductance * State.Solution[BranchEq];
+            _flux.ThrowIfNotBound(this).Current = BaseParameters.Inductance * BiasingState.Solution[BranchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                var args = new UpdateFluxEventArgs(BaseParameters.Inductance, State.Solution[BranchEq], _flux, State);
+                var args = new UpdateFluxEventArgs(BaseParameters.Inductance, BiasingState.Solution[BranchEq], _flux, BiasingState);
                 UpdateFlux.Invoke(this, args);
             }
 

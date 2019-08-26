@@ -4,9 +4,9 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Statistics for a <see cref="BaseSimulationStatistics" />.
+    /// Statistics for a <see cref="BiasingSimulationStatistics" />.
     /// </summary>
-    public class BaseSimulationStatistics : Statistics
+    public class BiasingSimulationStatistics : Statistics
     {
         /// <summary>
         /// Gets the total number of iterations.

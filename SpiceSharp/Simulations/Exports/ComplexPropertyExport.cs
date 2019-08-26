@@ -45,7 +45,7 @@ namespace SpiceSharp.Simulations
         /// Initializes the export.
         /// </summary>
         /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             e.ThrowIfNull(nameof(e));

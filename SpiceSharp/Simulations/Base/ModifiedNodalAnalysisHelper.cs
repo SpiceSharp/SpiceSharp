@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="solver">The solver.</param>
         /// <param name="magnitude">The method that converts the base value type to a scalar.</param>
-        public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
+        public static void PreorderModifiedNodalAnalysis<T>(this SparseSolver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             solver.ThrowIfNull(nameof(solver));
             magnitude.ThrowIfNull(nameof(magnitude));
@@ -121,7 +121,7 @@ namespace SpiceSharp.Simulations
         /// <param name="twin2">The second twin element.</param>
         /// <param name="magnitude">The method that converts the base value type to a scalar.</param>
         /// <returns>The number of twins found.</returns>
-        private static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
+        private static int CountTwins<T>(SparseSolver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             var twins = 0;
 

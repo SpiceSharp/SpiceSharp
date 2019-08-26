@@ -14,7 +14,7 @@
         /// Sets up the simulation state.
         /// </summary>
         /// <param name="nodes">The unknown variables for which the state is used.</param>
-        public virtual void Setup(VariableSet nodes)
+        public virtual void Setup(IVariableSet nodes)
         {
             IsSetup = true;
         }

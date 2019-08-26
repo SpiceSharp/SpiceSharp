@@ -30,8 +30,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             new NoiseShot("id", 1, 2),
             new NoiseGain("1overf", 1, 2));
 
-        // Cache
-        private NoiseState _state;
+        
+        private NoiseSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
@@ -40,27 +40,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public NoiseBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             _mnp = context.GetParameterSet<ModelNoiseParameters>("model");
 
-            _state = ((Noise)simulation).NoiseState;
-        }
-
-        /// <summary>
-        /// Connect the noise source
-        /// </summary>
-        void INoiseBehavior.ConnectNoise()
-        {
-            // Connect noise sources
-            DiodeNoise.Setup(PosNode, PosPrimeNode, NegNode);
+            // Get the state
+            _state = context.States.Get<NoiseSimulationState>();
+            DiodeNoise.Bind(context, PosNode, PosPrimeNode, NegNode);
         }
 
         /// <summary>
@@ -77,7 +69,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 * Math.Log(Math.Max(Math.Abs(Current), 1e-38))) / noise.Frequency);
 
             // Evaluate noise
-            DiodeNoise.Evaluate((Noise)Simulation);
+            DiodeNoise.Evaluate();
         }
     }
 }

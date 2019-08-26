@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
@@ -89,7 +88,7 @@ namespace SpiceSharp.Components
             // Apply connection context
             context.Connect(ApplyConnections(simulation.Variables));
 
-            behavior.Bind(simulation, context);
+            behavior.Bind(context);
         }
 
         /// <summary>
@@ -97,7 +96,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected virtual ComponentBindingContext BuildBindingContext(Simulation simulation) => new ComponentBindingContext();
+        protected virtual ComponentBindingContext BuildBindingContext(Simulation simulation) => new ComponentBindingContext(simulation);
 
         /// <summary>
         /// Gets the node index of a pin.
@@ -119,7 +118,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">The variable set.</param>
         /// <returns>The node indices.</returns>
-        protected int[] ApplyConnections(VariableSet nodes)
+        protected virtual int[] ApplyConnections(IVariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
             if (_connections == null)
@@ -128,7 +127,7 @@ namespace SpiceSharp.Components
             // Map connected nodes
             var indexes = new int[_connections.Length];
             for (var i = 0; i < _connections.Length; i++)
-                indexes[i] = nodes.MapNode(_connections[i]).Index;
+                indexes[i] = nodes.MapNode(_connections[i], VariableType.Voltage).Index;
             return indexes;
         }
 
@@ -137,14 +136,14 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">The nodes.</param>
         /// <returns>An enumerable for all nodes.</returns>
-        public IEnumerable<int> GetNodeIndexes(VariableSet nodes)
+        public virtual IEnumerable<int> GetNodeIndexes(IVariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
 
             // Map connected nodes
             foreach (var node in _connections)
             {
-                var index = nodes.MapNode(node).Index;
+                var index = nodes.MapNode(node, VariableType.Voltage).Index;
                 yield return index;
             }
         }

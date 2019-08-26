@@ -35,13 +35,13 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
-        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("c"), ParameterName("i"), ParameterInfo("Complex current")]
-        public Complex GetComplexCurrent() => (_state.Solution[ContPosNode] - _state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
+        public Complex GetComplexCurrent() => (ComplexState.Solution[ContPosNode] - ComplexState.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
 
         /// <summary>
         /// Get the power dissipation.
@@ -49,14 +49,19 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public Complex GetComplexPower()
         {
-            _state.ThrowIfNotBound(this);
-            var v = _state.Solution[PosNode] - _state.Solution[NegNode];
-            var i = (_state.Solution[ContPosNode] - _state.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
+            ComplexState.ThrowIfNotBound(this);
+            var v = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var i = (ComplexState.Solution[ContPosNode] - ComplexState.Solution[ContNegNode]) * BaseParameters.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -65,16 +70,15 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
             CPosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);
             CNegControlPosPtr = solver.GetMatrixElement(NegNode, ContPosNode);

@@ -128,18 +128,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation"></param>
-        /// <param name="context"></param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            var solver = State.Solver;
+            var solver = BiasingState.Solver;
             GatePtr = solver.GetRhsElement(GateNode);
 
-            var method = ((TimeSimulation)simulation).Method;
+            var method = context.States.Get<TimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();
             _voltageDs = method.CreateHistory();
             _voltageBs = method.CreateHistory();
@@ -178,11 +177,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="T:SpiceSharp.IntegrationMethods.StateHistory" />.
+        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
         /// </remarks>
         void ITimeBehavior.InitializeStates()
         {
-            State.ThrowIfNotBound(this);
+            BiasingState.ThrowIfNotBound(this);
             var vgs = VoltageGs;
             var vds = VoltageDs;
             var vbs = VoltageBs;
@@ -216,7 +215,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         void ITimeBehavior.Load()
         {
-            State.ThrowIfNotBound(this);
+            BiasingState.ThrowIfNotBound(this);
             var vbd = VoltageBd;
             var vbs = VoltageBs;
             var vgs = VoltageGs;

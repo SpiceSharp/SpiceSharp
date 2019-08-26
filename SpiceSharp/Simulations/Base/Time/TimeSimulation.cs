@@ -8,8 +8,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A base class for time-domain analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
-    public abstract class TimeSimulation : BaseSimulation
+    /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
+    public abstract class TimeSimulation : BiasingSimulation
     {
         /// <summary>
         /// Gets the active integration method.
@@ -103,6 +103,12 @@ namespace SpiceSharp.Simulations
             _useIc = config.UseIc;
             Method = config.Method.ThrowIfNull("method");
 
+            if (!States.TryGet<TimeSimulationState>(out var state))
+            {
+                state = new TimeSimulationState(Method);
+                States.Add(state.GetType(), state);
+            }
+
             // Setup
             base.Setup(entities);
 
@@ -125,7 +131,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Apply initial conditions if they are not set for the devices (UseIc).
-            if (_initialConditions.Count > 0 && !RealState.UseIc)
+            if (_initialConditions.Count > 0 && !BiasingState.UseIc)
             {
                 // Initialize initial conditions
                 foreach (var ic in _initialConditions)
@@ -134,15 +140,14 @@ namespace SpiceSharp.Simulations
             }
 
             // Calculate the operating point of the circuit
-            var state = RealState;
-            state.UseIc = _useIc;
-            state.UseDc = true;
+            BiasingState.UseIc = _useIc;
+            BiasingState.UseDc = true;
             Op(DcMaxIterations);
             TimeSimulationStatistics.TimePoints++;
 
             // Stop calculating the operating point
-            state.UseIc = false;
-            state.UseDc = false;
+            BiasingState.UseIc = false;
+            BiasingState.UseDc = false;
             InitializeStates();
             AfterLoad -= LoadInitialConditions;
         }
@@ -182,11 +187,11 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool TimeIterate(int maxIterations)
         {
-            var state = RealState;
-            var solver = state.Solver;
+            var solver = BiasingState.Solver;
             // var pass = false;
             var iterno = 0;
             var initTransient = Method.BaseTime.Equals(0.0);
+            var state = BiasingState;
 
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIc)
@@ -341,7 +346,7 @@ namespace SpiceSharp.Simulations
             base.LoadBehaviors();
 
             // Not calculating DC behavior
-            if (!RealState.UseDc)
+            if (!BiasingState.UseDc)
             {
                 for (var i = 0; i < _transientBehaviors.Count; i++)
                     _transientBehaviors[i].Load();

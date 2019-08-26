@@ -23,14 +23,14 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        protected override bool IsValidSimulation(Simulation simulation) => simulation is BaseSimulation;
+        protected override bool IsValidSimulation(Simulation simulation) => simulation is BiasingSimulation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source identifier.</param>
-        public RealCurrentExport(BaseSimulation simulation, string source)
+        public RealCurrentExport(BiasingSimulation simulation, string source)
             : base(simulation)
         {
             Source = source.ThrowIfNull(nameof(source));
@@ -45,7 +45,8 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
-            var state = ((BaseSimulation) Simulation).RealState.ThrowIfNull("real state");
+            var simulation = (Simulation)sender;
+            var state = simulation.States.Get<BiasingSimulationState>();
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.BiasingBehavior), out var behavior))

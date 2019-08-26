@@ -39,6 +39,27 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// Finds the behavior factory for a certain behavior type.
+        /// </summary>
+        /// <param name="entityType">The entity type.</param>
+        /// <returns></returns>
+        protected static BehaviorFactoryDictionary FindBehaviorFactory(Type entityType)
+        {
+            // Get the behavior factories for this entity
+            Lock.EnterReadLock();
+            try
+            {
+                if (BehaviorFactories.TryGetValue(entityType, out var factories))
+                    return factories;
+                return null;
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+        }
+
+        /// <summary>
         /// Gets a collection of parameters.
         /// </summary>
         public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
@@ -137,18 +158,10 @@ namespace SpiceSharp.Circuits
             if (pool.ContainsKey(Name))
                 return;
 
-            // Get the behavior factories for this entity
-            BehaviorFactoryDictionary factories;
-            Lock.EnterReadLock();
-            try
-            {
-                if (!BehaviorFactories.TryGetValue(GetType(), out factories))
-                    return;
-            }
-            finally
-            {
-                Lock.ExitReadLock();
-            }
+            // Find the behavior factory
+            var factories = FindBehaviorFactory(GetType());
+            if (factories == null)
+                return;
 
             // By default, go through the types in reverse order (to account for inheritance) and create
             // the behaviors
@@ -159,24 +172,18 @@ namespace SpiceSharp.Circuits
                 // Skip creating behaviors that aren't needed
                 if (ebd != null && ebd.ContainsKey(types[i]))
                     continue;
-                Lock.EnterReadLock();
-                try
-                {
-                    if (factories.TryGetValue(types[i], out var factory))
-                    {
-                        // Create the behavior
-                        var behavior = factory(this);
-                        pool.Add(behavior);
-                        newBehaviors.Add(behavior);
 
-                        // Get the dictionary if necessary
-                        if (ebd == null)
-                            ebd = pool[Name];
-                    }
-                }
-                finally
+                // BehaviorFactoryDictionary is thread-safe, so no need to lock it again
+                if (factories.TryGetValue(types[i], out var factory))
                 {
-                    Lock.ExitReadLock();
+                    // Create the behavior
+                    var behavior = factory(this);
+                    pool.Add(behavior);
+                    newBehaviors.Add(behavior);
+
+                    // Get the dictionary if necessary
+                    if (ebd == null)
+                        ebd = pool[Name];
                 }
             }
 
@@ -195,14 +202,14 @@ namespace SpiceSharp.Circuits
             simulation.ThrowIfNull(nameof(simulation));
 
             // Build the setup behavior
-            var context = new BindingContext();
+            var context = new BindingContext(simulation);
 
             // Add existing entity behaviors that have already been created
             context.Add("entity", simulation.EntityBehaviors[Name]);
             context.Add("entity", simulation.EntityParameters[Name]);
 
             // Finally bind the behavior to the simulation
-            behavior.Bind(simulation, context);
+            behavior.Bind(context);
         }
 
         /// <summary>

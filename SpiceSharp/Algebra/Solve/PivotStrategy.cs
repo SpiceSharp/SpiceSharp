@@ -3,7 +3,7 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// A pivot strategy used by a <see cref="Solver{T}" />
+    /// A pivot strategy used by a <see cref="SparseSolver{T}" />
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
     public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>

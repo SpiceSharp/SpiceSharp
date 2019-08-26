@@ -10,16 +10,11 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="SpiceSharp.Simulations.Simulation" />
     /// <remarks>
-    /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="RealState" /> is always part of the simulation.
+    /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="BiasingState" /> is always part of the simulation.
     /// </remarks>
     /// <seealso cref="Simulation" />
-    public abstract class BaseSimulation : Simulation
-    {
-        /// <summary>
-        /// Gets the currently active simulation state.
-        /// </summary>
-        public BaseSimulationState RealState { get; protected set; }
-        
+    public abstract class BiasingSimulation : Simulation
+    {        
         /// <summary>
         /// Gets the variable that causes issues.
         /// </summary>
@@ -77,6 +72,14 @@ namespace SpiceSharp.Simulations
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
+
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
         
         /// <summary>
         /// Gets the maximum number of allowed iterations for DC analysis.
@@ -96,18 +99,18 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the (cached) simulation statistics for the simulation.
         /// </summary>
-        protected BaseSimulationStatistics BaseSimulationStatistics { get; }
+        protected BiasingSimulationStatistics BaseSimulationStatistics { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseSimulation"/> class.
+        /// Initializes a new instance of the <see cref="BiasingSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected BaseSimulation(string name)
+        protected BiasingSimulation(string name)
             : base(name)
         {
-            Configurations.Add(new BaseConfiguration());
-            BaseSimulationStatistics = new BaseSimulationStatistics();
-            Statistics.Add(typeof(BaseSimulationStatistics), BaseSimulationStatistics);
+            Configurations.Add(new BiasingConfiguration());
+            BaseSimulationStatistics = new BiasingSimulationStatistics();
+            Statistics.Add(typeof(BiasingSimulationStatistics), BaseSimulationStatistics);
 
             // Add the necessary behaviors in the order that they are (usually) called
             BehaviorTypes.AddRange(new []
@@ -127,21 +130,25 @@ namespace SpiceSharp.Simulations
             circuit.ThrowIfNull(nameof(circuit));
 
             // Get behaviors and configuration data
-            var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
+            var config = Configurations.Get<BiasingConfiguration>().ThrowIfNull("base configuration");
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
 
             // Create the state for this simulation
-            RealState = new BaseSimulationState
+            if (!States.TryGet<BiasingSimulationState>(out var state))
             {
-                Gmin = config.Gmin
-            };
+                state = new BiasingSimulationState();
+                States.Add(typeof(BiasingSimulationState), state);
+            }
+            BiasingState = state;
+            BiasingState.Gmin = config.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
-            var strategy = RealState.Solver.Strategy;
+            var strategy = BiasingState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
+            BiasingState.Solver.Clear();
 
             // Setup the rest of the circuit.
             base.Setup(circuit);
@@ -150,8 +157,8 @@ namespace SpiceSharp.Simulations
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
-            _realStateLoadArgs = new LoadStateEventArgs(RealState);
-            RealState.Setup(Variables);
+            _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
+            BiasingState.Setup(Variables);
 
             // Set up nodesets
             foreach (var ns in config.Nodesets)
@@ -181,7 +188,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Temperature()
         {
-            var args = new LoadStateEventArgs(RealState);
+            var args = new LoadStateEventArgs(BiasingState);
             OnBeforeTemperature(args);
             for (var i = 0; i < _temperatureBehaviors.Count; i++)
                 _temperatureBehaviors[i].Temperature();
@@ -210,8 +217,8 @@ namespace SpiceSharp.Simulations
                 _temperatureBehaviors[i].Unbind();
 
             // Clear the state
-            RealState.Unsetup();
-            RealState = null;
+            BiasingState.Unsetup();
+            BiasingState = null;
             _realStateLoadArgs = null;
 
             // Remove behavior and configuration references
@@ -226,8 +233,8 @@ namespace SpiceSharp.Simulations
         /// <param name="maxIterations">The maximum amount of allowed iterations.</param>
         protected void Op(int maxIterations)
         {
-            var state = RealState;
-            var config = Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
+            var state = BiasingState;
+            var config = Configurations.Get<BiasingConfiguration>().ThrowIfNull("base configuration");
             state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
@@ -270,14 +277,14 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected bool IterateGminStepping(int maxIterations, int steps)
         {
-            var state = RealState;
+            var state = BiasingState;
 
             // We will shunt all PN-junctions with a conductance (should be implemented by the components)
             CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= RealState.Solution.Length; i++)
-                RealState.Solution[i] = 0.0;
+            for (var i = 0; i <= BiasingState.Solution.Length; i++)
+                BiasingState.Solution[i] = 0.0;
 
             // Let's make it a bit easier for our iterations to converge
             var original = state.Gmin;
@@ -316,7 +323,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected bool IterateDiagonalGminStepping(int maxIterations, int steps)
         {
-            var state = RealState;
+            var state = BiasingState;
 
             // We will add a DC path to ground to all nodes to aid convergence
             CircuitWarning.Warning(this, Properties.Resources.StartDiagonalGminStepping);
@@ -325,12 +332,12 @@ namespace SpiceSharp.Simulations
             _diagonalGmin = state.Gmin;
             if (_diagonalGmin <= 0)
                 _diagonalGmin = 1e-12;
-            void ApplyGminStep(object sender, LoadStateEventArgs args) => state.Solver.ApplyDiagonalGmin(_diagonalGmin);
+            void ApplyGminStep(object sender, LoadStateEventArgs args) => BiasingState.Solver.ApplyDiagonalGmin(_diagonalGmin);
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= RealState.Solution.Length; i++)
-                RealState.Solution[i] = 0.0;
+            for (var i = 0; i <= BiasingState.Solution.Length; i++)
+                BiasingState.Solution[i] = 0.0;
                 
             // Let's make it a bit easier for our iterations to converge
             for (var i = 0; i < steps; i++)
@@ -365,14 +372,14 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected bool IterateSourceStepping(int maxIterations, int steps)
         {
-            var state = RealState;
+            var state = BiasingState;
 
             // We will slowly ramp up voltages starting at 0 to make sure it converges
             CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= RealState.Solution.Length; i++)
-                RealState.Solution[i] = 0.0;
+            for (var i = 0; i <= BiasingState.Solution.Length; i++)
+                BiasingState.Solution[i] = 0.0;
 
             // Start SRC stepping
             bool success = true;
@@ -401,8 +408,8 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool Iterate(int maxIterations)
         {
-            var state = RealState;
-            var solver = state.Solver;
+            var state = BiasingState;
+            var solver = BiasingState.Solver;
             var pass = false;
             var iterno = 0;
 
@@ -534,14 +541,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Load()
         {
-            var state = RealState;
-
             // Start the stopwatch
             BaseSimulationStatistics.LoadTime.Start();
             OnBeforeLoad(_realStateLoadArgs);
 
             // Clear rhs and matrix
-            state.Solver.Clear();
+            BiasingState.Solver.Clear();
             LoadBehaviors();
 
             // Keep statistics
@@ -565,7 +570,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">Arguments</param>
         protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
-            var state = RealState;
+            var state = BiasingState;
 
             // Consider doing nodeset assignments when we're starting out or in trouble
             if ((state.Init & (InitializationModes.Junction | InitializationModes.Fix)) ==
@@ -585,7 +590,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool IsConvergent()
         {
-            var rstate = RealState;
+            var rstate = BiasingState;
 
             // Check convergence for each node
             for (var i = 0; i < Variables.Count; i++)
@@ -686,7 +691,7 @@ namespace SpiceSharp.Simulations
         public void ListVariables()
         {
             foreach (var variable in Variables)
-                System.Diagnostics.Debug.WriteLine(variable.Name + " (" + variable.Index + ") = " + RealState.Solution[variable.Index]);
+                System.Diagnostics.Debug.WriteLine(variable.Name + " (" + variable.Index + ") = " + BiasingState.Solution[variable.Index]);
         }
         #endif
     }

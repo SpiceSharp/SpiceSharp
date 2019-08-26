@@ -7,8 +7,8 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving sets of equations with real numbers.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Algebra.Solver{Double}" />
-    public class RealSolver : Solver<double>
+    /// <seealso cref="SpiceSharp.Algebra.SparseSolver{Double}" />
+    public class RealSolver : SparseSolver<double>
     {
         /// <summary>
         /// Private variables

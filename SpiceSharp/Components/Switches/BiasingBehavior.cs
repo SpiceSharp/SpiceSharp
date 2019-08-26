@@ -46,14 +46,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
-        public double GetVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// Gets the current through the switch.
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterInfo("Switch current")]
-        public double GetCurrent() => (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode]) * Conductance;
+        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the switch.
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower()
         {
-            var v = (_state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode]);
+            var v = (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]);
             return v * v * Conductance;
         }
 
@@ -101,8 +101,13 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         protected Controller Method { get; }
 
-        // Cache
-        private BaseSimulationState _state;
+        /// <summary>
+        /// Gets the state of the biasing.
+        /// </summary>
+        /// <value>
+        /// The state of the biasing.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -115,20 +120,19 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
             ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
 
             // Allow the controling method to set up
-            Method.Bind(simulation, context);
+            Method.Bind(context);
 
             if (context is ComponentBindingContext cc)
             {
@@ -136,8 +140,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            _state = ((BaseSimulation)simulation).RealState;
-            var solver = _state.Solver;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
@@ -150,7 +154,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            BiasingState = null;
             PosPosPtr = null;
             PosNegPtr = null;
             NegPosPtr = null;
@@ -163,7 +167,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         void IBiasingBehavior.Load()
         {
             bool currentState;
-            var state = _state.ThrowIfNotBound(this);
+            var state = BiasingState.ThrowIfNotBound(this);
 
             // decide the state of the switch
             if (state.Init == InitializationModes.Fix || state.Init == InitializationModes.Junction)

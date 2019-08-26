@@ -73,7 +73,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="track">if set to <c>false</c>, the state is considered purely informative.</param>
         /// <returns>
-        /// A <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> object that is compatible with this integration method.
+        /// A <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> object that is compatible with this integration method.
         /// </returns>
         /// <remarks>
         /// Tracked derivatives are used in more advanced features implemented by the integration method.

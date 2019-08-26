@@ -101,7 +101,7 @@ namespace SpiceSharp.IntegrationMethods
             base.Setup(simulation);
 
             // Base configuration
-            var bp = simulation.Configurations.Get<BaseConfiguration>().ThrowIfNull("base configuration");
+            var bp = simulation.Configurations.Get<BiasingConfiguration>().ThrowIfNull("base configuration");
             AbsTol = bp.AbsoluteTolerance;
             RelTol = bp.RelativeTolerance;
 
@@ -125,7 +125,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Allocate a new vector for predictions
-            Prediction = new DenseVector<double>(simulation.RealState.Solver.Order);
+            Prediction = new DenseVector<double>(BiasingState.Solver.Order);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="track">if set to <c>false</c>, the state is considered purely informative.</param>
         /// <returns>
-        /// A <see cref="T:SpiceSharp.IntegrationMethods.StateDerivative" /> object that is compatible with this integration method.
+        /// A <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> object that is compatible with this integration method.
         /// </returns>
         /// <remarks>
         /// Tracked derivatives are used in more advanced features implemented by the integration method.

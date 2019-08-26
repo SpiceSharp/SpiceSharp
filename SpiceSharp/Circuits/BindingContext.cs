@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -14,6 +15,30 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<string, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
 
         /// <summary>
+        /// Gets or sets the simulation configurations to be used by the component.
+        /// </summary>
+        /// <value>
+        /// The configurations.
+        /// </value>
+        public ParameterSetDictionary Configurations { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the simulation states to be used by the component.
+        /// </summary>
+        /// <value>
+        /// The states.
+        /// </value>
+        public TypeDictionary<SimulationState> States { get; protected set; }
+
+        /// <summary>
+        /// Gets the variable set to be used by the component, if any.
+        /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
+        public IVariableSet Variables { get; protected set; }
+
+        /// <summary>
         /// Gets the parameter set dictionary count.
         /// </summary>
         public int ParametersCount => _parameterSets.Count;
@@ -22,6 +47,31 @@ namespace SpiceSharp.Behaviors
         /// Gets the behavior dictionary count.
         /// </summary>
         public int BehaviorsCount => _entityBehaviors.Count;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingContext"/> class.
+        /// </summary>
+        /// <param name="simulation">The simulation to bind to.</param>
+        public BindingContext(Simulation simulation)
+        {
+            simulation.ThrowIfNull(nameof(simulation));
+            Configurations = simulation.Configurations.ThrowIfNull("configurations");
+            States = simulation.States.ThrowIfNull("states");
+            Variables = simulation.Variables.ThrowIfNull("variables");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingContext"/> class.
+        /// </summary>
+        /// <param name="configurations">The configurations to be used by the behavior.</param>
+        /// <param name="states">The simulation states to be used by the behavior.</param>
+        /// <param name="variables">The variable manager to be used by the behavior.</param>
+        public BindingContext(ParameterSetDictionary configurations, TypeDictionary<SimulationState> states, IVariableSet variables)
+        {
+            Configurations = configurations.ThrowIfNull(nameof(configurations));
+            States = states.ThrowIfNull(nameof(states));
+            Variables = variables.ThrowIfNull(nameof(variables));
+        }
 
         /// <summary>
         /// Adds a parameter set dictionary.

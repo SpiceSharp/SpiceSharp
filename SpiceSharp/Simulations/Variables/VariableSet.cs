@@ -8,13 +8,27 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class VariableSet : IEnumerable<Variable>, ICollection, IReadOnlyCollection<Variable>
+    public class VariableSet : IVariableSet
     {
         /// <summary>
-        /// Private variables
+        /// Gets all the unknowns stored in the variable set.
         /// </summary>
-        private readonly List<Variable> _unknowns = new List<Variable>();
-        private readonly Dictionary<string, Variable> _map;
+        /// <value>
+        /// The unknowns.
+        /// </value>
+        protected List<Variable> Unknowns { get; } = new List<Variable>();
+
+        /// <summary>
+        /// Gets the map of variables that are searchable by their name.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        protected Dictionary<string, Variable> Map { get; }
+
+        /// <summary>
+        /// Is the variable set locked?
+        /// </summary>
         private bool _locked;
 
         /// <summary>
@@ -30,39 +44,37 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the <see cref="IEqualityComparer{T}"/> that is used to determine equality of keys.
         /// </summary>
-        public IEqualityComparer<string> Comparer => _map.Comparer;
+        public IEqualityComparer<string> Comparer => Map.Comparer;
 
         /// <summary>
         /// Gets the <see cref="Variable"/> at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>The variable at the specified index.</returns>
-        public Variable this[int index] => _unknowns[index];
+        public Variable this[int index] => Unknowns[index];
 
         /// <summary>
         /// Gets the number of variables.
         /// </summary>
-        public int Count => _unknowns.Count;
+        public int Count => Unknowns.Count;
 
         /// <summary>
         /// Enumerate all variable names in the set.
         /// </summary>
-        public IEnumerable<string> Keys => _map.Keys;
+        public IEnumerable<string> Keys => Map.Keys;
 
         /// <summary>
-        /// Gets a value indicating whether access to the <see cref="ICollection{T}"/> is synchronized (thread safe).
+        /// Gets the <see cref="Variable"/> with the specified identifier.
         /// </summary>
-        public bool IsSynchronized => true;
-
-        /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see cref="ICollection{T}"/>.
-        /// </summary>
-        public object SyncRoot => this;
-
-        /// <summary>
-        /// Gets a value indicating whether the <see cref="ICollection{T}"/> is read-only.
-        /// </summary>
-        public bool IsReadOnly => false;
+        /// <value>
+        /// The <see cref="Variable"/>.
+        /// </value>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public virtual Variable this[string id]
+        {
+            get => Unknowns.FirstOrDefault(node => node.Name.Equals(id));
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableSet"/> class.
@@ -71,7 +83,7 @@ namespace SpiceSharp.Simulations
         {
             // Setup the ground node
             Ground = new Variable("0", 0);
-            _map = new Dictionary<string, Variable>
+            Map = new Dictionary<string, Variable>
             {
                 {Ground.Name, Ground}, 
                 {"GND", Ground}
@@ -89,7 +101,7 @@ namespace SpiceSharp.Simulations
         {
             // Setup the ground node
             Ground = new Variable("0", 0);
-            _map = new Dictionary<string, Variable>(comparer)
+            Map = new Dictionary<string, Variable>(comparer)
             {
                 {Ground.Name, Ground}, 
                 {"GND", Ground}
@@ -108,31 +120,24 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier of the variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
-        public Variable MapNode(string id, VariableType type)
+        public virtual Variable MapNode(string id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
 
             // Check the node
-            if (_map.ContainsKey(id))
-                return _map[id];
+            if (Map.ContainsKey(id))
+                return Map[id];
 
-            var node = new Variable(id, type, _unknowns.Count + 1);
-            _unknowns.Add(node);
-            _map.Add(id, node);
+            var node = new Variable(id, type, Unknowns.Count + 1);
+            Unknowns.Add(node);
+            Map.Add(id, node);
 
             // Call the event
             var args = new VariableEventArgs(node);
             OnVariableAdded(args);
             return node;
         }
-
-        /// <summary>
-        /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
-        /// </summary>
-        /// <param name="id">The identifier of the variable.</param>
-        /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
-        public Variable MapNode(string id) => MapNode(id, VariableType.Voltage);
 
         /// <summary>
         /// Make an alias for a variable identifier.
@@ -143,10 +148,10 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         /// <param name="original">The original identifier.</param>
         /// <param name="alias">The alias for the identifier.</param>
-        public void AliasNode(string original, string alias)
+        public virtual void AliasNode(string original, string alias)
         {
-            var originalNode = _map[original];
-            _map.Add(alias, originalNode);
+            var originalNode = Map[original];
+            Map.Add(alias, originalNode);
         }
 
         /// <summary>
@@ -158,15 +163,15 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier of the new variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable.</returns>
-        public Variable Create(string id, VariableType type)
+        public virtual Variable Create(string id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
 
             // Create the node
-            var index = _unknowns.Count + 1;
+            var index = Unknowns.Count + 1;
             var node = new Variable(id, type, index);
-            _unknowns.Add(node);
+            Unknowns.Add(node);
 
             // Call the event
             var args = new VariableEventArgs(node);
@@ -175,23 +180,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create a new variable.
-        /// </summary>
-        /// <remarks>
-        /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.
-        /// </remarks>
-        /// <param name="id">The identifier of the new variable.</param>
-        /// <returns>A new variable.</returns>
-        public Variable Create(string id) => Create(id, VariableType.Voltage);
-
-        /// <summary>
         /// Determines whether the set contains a mapped variable by a specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsNode(string id) => _map.ContainsKey(id);
+        public virtual bool ContainsNode(string id) => Map.ContainsKey(id);
 
         /// <summary>
         /// Determines whether the set contains any variable by a specified identifier.
@@ -200,7 +195,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(string id) => _unknowns.Exists(node => node.Name.Equals(id));
+        public virtual bool Contains(string id) => Unknowns.Exists(node => node.Name.Equals(id));
 
         /// <summary>
         /// Tries to get a variable.
@@ -210,7 +205,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(string id, out Variable node) => _map.TryGetValue(id, out node);
+        public virtual bool TryGetNode(string id, out Variable node) => Map.TryGetValue(id, out node);
 
         /// <summary>
         /// Gets a mapped variable. If the node voltage does not exist, an exception will be thrown.
@@ -219,25 +214,18 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The node with the specified identifier.
         /// </returns>
-        public Variable GetNode(string id)
+        public virtual Variable GetNode(string id)
         {
             id.ThrowIfNull(nameof(id));
-            if (_map.TryGetValue(id, out var result))
+            if (Map.TryGetValue(id, out var result))
                 return result;
             throw new CircuitException("Could not find node {0}".FormatString(id));
         }
 
         /// <summary>
-        /// Gets a variable.
-        /// </summary>
-        /// <param name="id">string</param>
-        /// <returns>Return the variable with the specified identifier, or <c>null</c> if it doesn't exist.</returns>
-        public Variable GetVariable(string id) => _unknowns.FirstOrDefault(node => node.Name.Equals(id));
-
-        /// <summary>
         /// Enumerates all variables.
         /// </summary>
-        public IEnumerable<Variable> GetVariables() => _unknowns;
+        public IEnumerable<Variable> GetVariables() => Unknowns;
 
         /// <summary>
         /// Avoids any further additions of variables.
@@ -250,14 +238,14 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Clear all variables.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
-            _unknowns.Clear();
+            Unknowns.Clear();
 
             // Setup ground node
-            _map.Clear();
-            _map.Add(Ground.Name, Ground);
-            _map.Add("GND", Ground);
+            Map.Clear();
+            Map.Add(Ground.Name, Ground);
+            Map.Add("GND", Ground);
 
             // Unlock
             _locked = false;
@@ -269,7 +257,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Variable> GetEnumerator() => _unknowns.GetEnumerator();
+        public IEnumerator<Variable> GetEnumerator() => Unknowns.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
@@ -278,23 +266,6 @@ namespace SpiceSharp.Simulations
         /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Copy the elements to an array.
-        /// </summary>
-        /// <param name="array">The array.</param>
-        /// <param name="index">The starting index.</param>
-        void ICollection.CopyTo(Array array, int index)
-        {
-            array.ThrowIfNull(nameof(array));
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            if (array.Length < index + Count)
-                throw new ArgumentException("Not enough elements in the array");
-
-            foreach (var item in _unknowns)
-                array.SetValue(item, index++);
-        }
 
         /// <summary>
         /// Method that calls the <see cref="VariableAdded"/> event.

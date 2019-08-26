@@ -35,8 +35,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         protected MatrixElement<Complex> CBranchBranchPtr { get; private set; }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -45,16 +50,15 @@ namespace SpiceSharp.Components.InductorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
@@ -68,7 +72,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            _state = null;
+            ComplexState = null;
             CPosBranchPtr = null;
             CNegBranchPtr = null;
             CBranchNegPtr = null;
@@ -88,7 +92,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var val = _state.Laplace * BaseParameters.Inductance.Value;
+            var val = ComplexState.Laplace * BaseParameters.Inductance.Value;
             CPosBranchPtr.Value += 1.0;
             CNegBranchPtr.Value -= 1.0;
             CBranchNegPtr.Value -= 1.0;

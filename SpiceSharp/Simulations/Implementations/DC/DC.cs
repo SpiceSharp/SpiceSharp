@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Class that implements a DC sweep analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
-    public class DC : BaseSimulation
+    /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
+    public class DC : BiasingSimulation
     {
         /// <summary>
         /// Gets the currently active sweeps.
@@ -89,11 +89,10 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Setup the state
-            var state = RealState;
             var dcconfig = Configurations.Get<DCConfiguration>().ThrowIfNull("dc configuration");
-            state.Init = InitializationModes.Junction;
-            state.UseIc = false; // UseIC is only used in transient simulations
-            state.UseDc = true;
+            BiasingState.Init = InitializationModes.Junction;
+            BiasingState.UseIc = false; // UseIC is only used in transient simulations
+            BiasingState.UseDc = true;
 
             // Initialize
             Sweeps = new NestedSweeps(dcconfig.Sweeps);
@@ -151,7 +150,7 @@ namespace SpiceSharp.Simulations
                     level++;
                     Sweeps[level].Reset();
                     swept[level].Value = Sweeps[level].CurrentValue;
-                    state.Init = InitializationModes.Junction;
+                    BiasingState.Init = InitializationModes.Junction;
                 }
 
                 // Calculate the solution

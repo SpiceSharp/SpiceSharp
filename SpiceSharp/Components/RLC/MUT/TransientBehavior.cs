@@ -35,8 +35,13 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         protected double Conductance { get; private set; }
 
-        // Cache
-        private BaseSimulationState _state;
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -45,13 +50,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public TransientBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">Data provider</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-			base.Bind(simulation, context);
+			base.Bind(context);
             
             // Get behaviors
             Load1 = context.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
@@ -61,8 +65,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load1.UpdateFlux += UpdateFlux1;
             Load2.UpdateFlux += UpdateFlux2;
 
-            _state = ((BaseSimulation)simulation).RealState;
-            var solver = _state.Solver;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
             Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
             Branch2Branch1 = solver.GetMatrixElement(Load2.BranchEq, Load1.BranchEq);
         }
@@ -78,7 +82,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load1.UpdateFlux -= UpdateFlux1;
             Load2.UpdateFlux -= UpdateFlux2;
 
-            _state = null;
+            BiasingState = null;
             Branch1Branch2 = null;
             Branch2Branch1 = null;
         }

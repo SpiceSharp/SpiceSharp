@@ -24,13 +24,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
-        public double GetCurrent() => State.ThrowIfNotBound(this).Solution[BranchEq];
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq];
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => State.ThrowIfNotBound(this).Solution[PosNode] - State.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// Gets the power dissipated by the inductor.
@@ -38,9 +38,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         [ParameterName("p"), ParameterInfo("Power")]
         public double GetPower()
         {
-            State.ThrowIfNotBound(this);
-            var v = State.Solution[PosNode] - State.Solution[NegNode];
-            return v * State.Solution[BranchEq];
+            BiasingState.ThrowIfNotBound(this);
+            var v = BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode];
+            return v * BiasingState.Solution[BranchEq];
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BaseSimulationState State { get; private set; }
+        protected BiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -85,13 +85,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The provider.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters.
             BaseParameters = context.GetParameterSet<BaseParameters>();
@@ -102,10 +101,9 @@ namespace SpiceSharp.Components.InductorBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            State = ((BaseSimulation)simulation).RealState;
-            var solver = State.Solver;
-            var variables = simulation.Variables;
-            BranchEq = variables.Create(Name.Combine("branch"), VariableType.Current).Index;
+            BiasingState = context.States.Get<BiasingSimulationState>();
+            var solver = BiasingState.Solver;
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
@@ -118,7 +116,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            State = null;
+            BiasingState = null;
             PosBranchPtr = null;
             NegBranchPtr = null;
             BranchNegPtr = null;

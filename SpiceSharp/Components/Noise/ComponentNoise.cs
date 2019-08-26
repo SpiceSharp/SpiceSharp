@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
@@ -35,6 +36,10 @@ namespace SpiceSharp.Components
         /// </summary>
         public NoiseGeneratorCollection Generators { get; }
 
+        // States
+        private ComplexSimulationState _cstate;
+        private NoiseSimulationState _nstate;
+
         /// <summary>
         /// Creates a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
@@ -56,23 +61,26 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Setup the component noise
+        /// Binds the component noise generators to the simulation.
         /// </summary>
-        /// <param name="pins">The pin indices</param>
-        public void Setup(params int[] pins)
+        /// <param name="context">The binding context.</param>
+        /// <param name="pins">The pins the noise sources are connected to.</param>
+        public void Bind(BindingContext context, params int[] pins)
         {
+            _cstate = context.States.Get<ComplexSimulationState>();
+            _nstate = context.States.Get<NoiseSimulationState>();
+
             foreach (var generator in Generators)
-                generator.Setup(pins);
+                generator.Bind(context, pins);
         }
 
         /// <summary>
-        /// Evaluate all noise source contributions
+        /// Evaluate all noise source contributions.
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
-        public void Evaluate(Noise simulation)
+        public void Evaluate()
         {
-            simulation.ThrowIfNull(nameof(simulation));
-            var noise = simulation.NoiseState;
+            if (_nstate == null || _cstate == null)
+                throw new CircuitException("Component noise is not bound");
 
             // Calculate the output noise density
             Noise = 0.0;
@@ -80,7 +88,7 @@ namespace SpiceSharp.Components
             TotalOutNoise = 0.0;
             foreach (var generator in Generators)
             {
-                generator.Evaluate(simulation);
+                generator.Evaluate();
                 Noise += generator.Noise;
                 TotalInNoise += generator.TotalInputNoise;
                 TotalOutNoise += generator.TotalOutputNoise;
@@ -90,13 +98,13 @@ namespace SpiceSharp.Components
             LogNoise = Math.Log(Math.Max(Noise, 1e-38));
 
             // Output noise density
-            noise.OutputNoiseDensity += Noise;
+            _nstate.OutputNoiseDensity += Noise;
 
             // Integrated input referred noise
-            noise.InputNoise += TotalInNoise;
+            _nstate.InputNoise += TotalInNoise;
 
             // Integrated output referred noise
-            noise.OutputNoise += TotalOutNoise;
+            _nstate.OutputNoise += TotalOutNoise;
         }
     }
 }

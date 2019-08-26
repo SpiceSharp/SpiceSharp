@@ -41,6 +41,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         public double F3 { get; protected set; }
 
+
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
         /// <summary>
         /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
@@ -48,16 +57,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public ModelTemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Binds the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             _mbp = context.GetParameterSet<ModelBaseParameters>();
+
+            // Get states
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>
@@ -66,7 +77,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
+                _mbp.NominalTemperature.RawValue = BiasingState.NominalTemperature;
             VtNominal = Constants.KOverQ * _mbp.NominalTemperature;
 
             // limit grading coeff to max of 0.9

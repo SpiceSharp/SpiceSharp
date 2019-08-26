@@ -44,7 +44,7 @@ namespace SpiceSharpTest
             dcConfig.Sweeps.Add(new SweepConfiguration("V1", 0.0, 3.3, 0.1));
             // </example_structure_dc>
             // <example_structure_dc_2>
-            var baseConfig = dc.Configurations.Get<BaseConfiguration>();
+            var baseConfig = dc.Configurations.Get<BiasingConfiguration>();
             baseConfig.RelativeTolerance = 1e-4;
             baseConfig.AbsoluteTolerance = 1e-10;
             // </example_structure_dc_2>

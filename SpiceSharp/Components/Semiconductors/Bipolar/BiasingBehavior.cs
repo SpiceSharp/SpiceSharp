@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base configuration of the simulation.
         /// </summary>
-        protected BaseConfiguration BaseConfiguration { get; private set; }
+        protected BiasingConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets the base-emitter voltage.
@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the dissipated power.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power dissipation")]
-        public virtual double GetPower(BaseSimulationState state)
+        public virtual double GetPower(BiasingSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             var value = CollectorCurrent * state.Solution[CollectorNode];
@@ -285,6 +285,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public double Dqbdve { get; protected set; }
 
+        private TimeSimulationState _timeState;
+
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -292,16 +294,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public BiasingBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get configurations
-            BaseConfiguration = simulation.Configurations.Get<BaseConfiguration>();
+            BaseConfiguration = context.Configurations.Get<BiasingConfiguration>();
+
+            // Get states
+            context.States.TryGet(out _timeState);
 
             if (context is ComponentBindingContext cc)
             {
@@ -311,17 +315,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 SubstrateNode = cc.Pins[3];
             }
 
-            var solver = State.Solver;
-            var variables = Simulation.Variables;
+            var solver = BiasingState.Solver;
+            var variables = context.Variables;
 
             // Add a series collector node if necessary
-            CollectorPrimeNode = ModelParameters.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col")).Index : CollectorNode;
+            CollectorPrimeNode = ModelParameters.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col"), VariableType.Voltage).Index : CollectorNode;
 
             // Add a series base node if necessary
-            BasePrimeNode = ModelParameters.BaseResist.Value > 0 ? variables.Create(Name.Combine("base")).Index : BaseNode;
+            BasePrimeNode = ModelParameters.BaseResist.Value > 0 ? variables.Create(Name.Combine("base"), VariableType.Voltage).Index : BaseNode;
 
             // Add a series emitter node if necessary
-            EmitterPrimeNode = ModelParameters.EmitterResistance.Value > 0 ? variables.Create(Name.Combine("emit")).Index : EmitterNode;
+            EmitterPrimeNode = ModelParameters.EmitterResistance.Value > 0 ? variables.Create(Name.Combine("emit"), VariableType.Voltage).Index : EmitterNode;
 
             // Get solver pointers
             CollectorCollectorPrimePtr = solver.GetMatrixElement(CollectorNode, CollectorPrimeNode);
@@ -568,10 +572,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="vbc">The VBC.</param>
         protected void Initialize(out double vbe, out double vbc)
         {
-            var state = State;
+            var state = BiasingState;
 
             // Initialization
-            if (state.Init == InitializationModes.Junction && (Simulation is TimeSimulation) && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && (_timeState != null) && state.UseDc && state.UseIc)
             {
                 vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
                 var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;
@@ -609,7 +613,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <returns></returns>
         bool IBiasingBehavior.IsConvergent()
         {
-            var state = State;
+            var state = BiasingState;
             var vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
             var vbc = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
             var delvbe = vbe - VoltageBe;

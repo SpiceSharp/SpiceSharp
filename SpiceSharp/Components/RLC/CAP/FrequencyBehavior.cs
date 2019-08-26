@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Capacitor voltage")]
-        public Complex GetComplexVoltage() => _state.ThrowIfNotBound(this).Solution[PosNode] - _state.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Gets the current.
@@ -43,9 +43,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
         public Complex GetComplexCurrent()
         {
-            _state.ThrowIfNotBound(this);
-            var conductance = _state.Laplace * Capacitance;
-            return (_state.Solution[PosNode] - _state.Solution[NegNode]) * conductance;
+            ComplexState.ThrowIfNotBound(this);
+            var conductance = ComplexState.Laplace * Capacitance;
+            return (ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode]) * conductance;
         }
 
         /// <summary>
@@ -54,14 +54,19 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [ParameterName("p"), ParameterInfo("Capacitor power")]
         public Complex GetComplexPower()
         {
-            _state.ThrowIfNotBound(this);
-            var conductance = _state.Laplace * Capacitance;
-            var voltage = _state.Solution[PosNode] - _state.Solution[NegNode];
+            ComplexState.ThrowIfNotBound(this);
+            var conductance = ComplexState.Laplace * Capacitance;
+            var voltage = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
 
-        // Cache
-        private ComplexSimulationState _state;
+        /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        /// <value>
+        /// The complex simulation state.
+        /// </value>
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -70,16 +75,15 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public FrequencyBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind the behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
-            _state = ((FrequencySimulation)simulation).ComplexState;
-            var solver = _state.Solver;
+            ComplexState = context.States.Get<ComplexSimulationState>();
+            var solver = ComplexState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
@@ -99,7 +103,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var val = _state.Laplace * Capacitance;
+            var val = ComplexState.Laplace * Capacitance;
 
             // Load the Y-matrix
             PosPosPtr.Value += val;

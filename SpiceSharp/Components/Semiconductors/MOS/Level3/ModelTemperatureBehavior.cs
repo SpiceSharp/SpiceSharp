@@ -52,6 +52,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         public double PbFactor1 { get; private set; }
 
+
+        /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        /// <value>
+        /// The biasing simulation state.
+        /// </value>
+        protected BiasingSimulationState BiasingState { get; private set; }
+
         /// <summary>
         /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
@@ -59,16 +68,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public ModelTemperatureBehavior(string name) : base(name) { }
 
         /// <summary>
-        /// Bind behavior.
+        /// Bind the behavior to a simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public override void Bind(Simulation simulation, BindingContext context)
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
         {
-            base.Bind(simulation, context);
+            base.Bind(context);
 
             // Get parameters
             ModelParameters = context.GetParameterSet<ModelBaseParameters>();
+
+            // Get states
+            BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
         /// <summary>
@@ -78,7 +89,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             // Perform model defaulting
             if (!ModelParameters.NominalTemperature.Given)
-                ModelParameters.NominalTemperature.RawValue = ((BaseSimulation)Simulation).RealState.NominalTemperature;
+                ModelParameters.NominalTemperature.RawValue = BiasingState.NominalTemperature;
             Factor1 = ModelParameters.NominalTemperature / Constants.ReferenceTemperature;
             VtNominal = ModelParameters.NominalTemperature * Constants.KOverQ;
             var kt1 = Constants.Boltzmann * ModelParameters.NominalTemperature;
