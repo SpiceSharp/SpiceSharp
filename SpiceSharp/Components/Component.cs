@@ -53,11 +53,19 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates behaviors of the specified type.
+        /// Creates behaviors of the specified types. The type order is important.
         /// </summary>
-        /// <param name="types"></param>
+        /// <param name="types">The types of behaviors that the simulation wants, in the order that they will be called.</param>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed.</param>
+        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
+        /// <remarks>
+        /// The order typically indicates hierarchy. The entity will create the behaviors in reverse order, allowing
+        /// the most specific child class to be used that is necessary. For example, the <see cref="OP" /> simulation needs
+        /// <see cref="ITemperatureBehavior" /> and an <see cref="IBiasingBehavior" />. The entity will first look for behaviors
+        /// of type <see cref="IBiasingBehavior" />, and then for the behaviors of type <see cref="ITemperatureBehavior" />. However,
+        /// if the behavior that was created for <see cref="IBiasingBehavior" /> also implements <see cref="ITemperatureBehavior" />,
+        /// then then entity will not create a new instance of the behavior.
+        /// </remarks>
         public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
         {
             if (Model != null)

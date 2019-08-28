@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
@@ -8,10 +7,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// </summary>
     /// <seealso cref="SpiceSharp.Behaviors.Behavior" />
     /// <seealso cref="SpiceSharp.Behaviors.ITemperatureBehavior" />
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : SubcircuitBehavior<ITemperatureBehavior>, ITemperatureBehavior
     {
-        private BehaviorList<ITemperatureBehavior> _behaviors;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
@@ -24,26 +21,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            var sc = (SubcircuitBindingContext)context;
-            // _behaviors = sc.Pool.GetBehaviorList<ITemperatureBehavior>();
-
-            for (var i = 0; i < _behaviors.Count; i++)
-                _behaviors[i].Bind(context);
-        }
-
-        /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public void Temperature()
         {
-            for (var i = 0; i < _behaviors.Count; i++)
-                _behaviors[i].Temperature();
+            for (var i = 0; i < Behaviors.Count; i++)
+                Behaviors[i].Temperature();
         }
     }
 }

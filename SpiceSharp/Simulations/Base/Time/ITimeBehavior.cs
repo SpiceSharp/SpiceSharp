@@ -1,6 +1,4 @@
-﻿using SpiceSharp.IntegrationMethods;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// An interface for time-dependent behaviors.
@@ -13,7 +11,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="StateDerivative" /> or <see cref="StateHistory" />.
+        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
         /// </remarks>
         void InitializeStates();
 

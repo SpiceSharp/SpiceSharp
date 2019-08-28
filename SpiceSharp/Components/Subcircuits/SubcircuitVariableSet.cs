@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.Subcircuits
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
     /// A <see cref="VariableSet"/> that will map unknowns in such a way that the subcircuit does not interfere with the rest of the circuit.
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <value>
         /// The pins.
         /// </value>
-        public HashSet<string> Pins { get; }
+        public Dictionary<string, string> Pins { get; }
 
         /// <summary>
         /// Gets the comparer used for variables.
@@ -59,19 +59,21 @@ namespace SpiceSharp.Components.Subcircuits
         /// </value>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Variable this[string id] => _variables[Map(id)];
+        public Variable this[string id] => _variables[MapNodeName(id)];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitVariableSet"/> class.
         /// </summary>
-        /// <param name="pins">The pins.</param>
+        /// <param name="name">The subcircuit name.</param>
+        /// <param name="nodemap">The structure mapping internal nodes to external nodes.</param>
         /// <param name="variableSet">The "real" variable set.</param>
-        public SubcircuitVariableSet(string[] pins, IVariableSet variableSet)
+        public SubcircuitVariableSet(string name, IEnumerable<KeyValuePair<string, string>> nodemap, IVariableSet variableSet)
         {
+            Name = name.ThrowIfNull(nameof(name));
             _variables = variableSet.ThrowIfNull(nameof(variableSet));
-            Pins = new HashSet<string>(variableSet.Comparer);
-            for (var i = 0; i < pins.Length; i++)
-                Pins.Add(pins[i].ThrowIfNull("pin"));
+            Pins = new Dictionary<string, string>(variableSet.Comparer);
+            foreach (var pin in nodemap)
+                Pins.Add(pin.Key.ThrowIfNull("internal pin"), pin.Value.ThrowIfNull("external pin"));
         }
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <remarks>
         /// If the variable already exists, the variable type is ignored.
         /// </remarks>
-        public Variable MapNode(string id, VariableType type) => _variables.MapNode(Map(id), type);
+        public Variable MapNode(string id, VariableType type) => _variables.MapNode(MapNodeName(id), type);
 
         /// <summary>
         /// Create a new variable.
@@ -98,7 +100,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <remarks>
         /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)" />.
         /// </remarks>
-        public Variable Create(string id, VariableType type) => _variables.Create(id, type);
+        public Variable Create(string id, VariableType type) => _variables.Create(Name.Combine(id), type);
 
         /// <summary>
         /// Determines whether the set contains a mapped variable by a specified identifier.
@@ -107,7 +109,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsNode(string id) => _variables.ContainsNode(Map(id));
+        public bool ContainsNode(string id) => _variables.ContainsNode(MapIdentifier(id));
 
         /// <summary>
         /// Determines whether this instance contains the object.
@@ -116,7 +118,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(string id) => _variables.Contains(id);
+        public bool Contains(string id) => _variables.Contains(MapIdentifier(id));
 
         /// <summary>
         /// Tries to get a variable.
@@ -126,7 +128,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(string id, out Variable node) => _variables.TryGetNode(Map(id), out node);
+        public bool TryGetNode(string id, out Variable node) => _variables.TryGetNode(MapIdentifier(id), out node);
 
         /// <summary>
         /// Clears the set from any variables.
@@ -152,13 +154,32 @@ namespace SpiceSharp.Components.Subcircuits
         /// <summary>
         /// Maps the specified variable identifier.
         /// </summary>
-        /// <param name="identifier">The variable.</param>
+        /// <param name="node">The node name.</param>
         /// <returns></returns>
-        protected virtual string Map(string identifier)
+        protected virtual string MapNodeName(string node)
         {
-            if (!Pins.Contains(identifier))
-                identifier = Name.Combine(identifier);
-            return identifier;
+            // If it is a pin, then we just map it
+            if (Pins.TryGetValue(node, out var result))
+                return result;
+
+            // If the node is an alias for the ground node, then we will automatically treat it as ground
+            if (_variables.TryGetNode(node, out var v))
+            {
+                if (v.Index == 0)
+                    return node;
+            }
+
+            return Name.Combine(node);
+        }
+
+        /// <summary>
+        /// Maps the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        protected virtual string MapIdentifier(string id)
+        {
+            return Name.Combine(id);
         }
     }
 }

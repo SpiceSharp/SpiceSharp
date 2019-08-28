@@ -37,9 +37,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the current status of the simulation.
+        /// Gets or sets the current status of the simulation.
         /// </summary>
-        public Statuses Status { get; private set; } = Statuses.None;
+        public Statuses Status { get; protected set; } = Statuses.None;
 
         /// <summary>
         /// Gets a set of <see cref="ParameterSet" /> that hold the configurations for the simulation.
@@ -112,20 +112,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
-        public BehaviorPool EntityBehaviors { get; private set; }
+        public BehaviorPool EntityBehaviors { get; protected set; }
 
         /// <summary>
         /// Gets a pool of all entity parameter sets active in the simulation.
         /// </summary>
-        public ParameterPool EntityParameters { get; private set; }
+        public ParameterPool EntityParameters { get; protected set; }
 
-        // Private parameters
-        private bool _cloneParameters;
-        
         /// <summary>
         /// A reference to the regular simulation statistics (cached)
         /// </summary>
-        protected SimulationStatistics SimulationStatistics { get; }
+        protected SimulationStatistics SimulationStatistics { get; } = new SimulationStatistics();
 
         /// <summary>
         /// Gets the behavior types in the order that they are called.
@@ -143,8 +140,10 @@ namespace SpiceSharp.Simulations
         protected Simulation(string name)
         {
             Name = name;
-            SimulationStatistics = new SimulationStatistics();
             Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
+
+            // Initialize
+            States = new TypeDictionary<SimulationState>();
         }
 
         /// <summary>
@@ -207,29 +206,17 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities that are included in the simulation.</param>
         protected virtual void Setup(EntityCollection entities)
         {
+            // Validate the entities
             entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
-            // Use the same comparers as the circuit. This is crucial because they use the same identifiers!
-            EntityParameters = new ParameterPool(entities.Comparer);
-            EntityBehaviors = new BehaviorPool(entities.Comparer, BehaviorTypes.ToArray());
-
-            // Create the variables that will need solving
-            if (Configurations.TryGet(out CollectionConfiguration cconfig))
-            {
-                Variables = cconfig.Variables ?? new VariableSet();
-                _cloneParameters = cconfig.CloneParameters;
-            }
-            else
-            {
-                Variables = new VariableSet();
-                _cloneParameters = false;
-            }
+            // Create the variable set
+            Variables = CreateVariableSet(entities);
 
             // Setup all entity parameters and behaviors
-            SetupParameters(entities);
-            SetupBehaviors(entities);
+            CopyParameters(entities);
+            CreateBehaviors(entities);
         }
 
         /// <summary>
@@ -298,36 +285,62 @@ namespace SpiceSharp.Simulations
         #endregion
 
         /// <summary>
+        /// Creates the variable set.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        protected virtual IVariableSet CreateVariableSet(EntityCollection entities)
+        {
+            // Check the configuration for one, else just copy our own one
+            if (Configurations.TryGet(out CollectionConfiguration cconfig))
+                return cconfig.Variables ?? new VariableSet();
+            else
+                return new VariableSet();
+        }
+
+        /// <summary>
         /// Set up all behaviors previously created.
         /// </summary>
         /// <param name="entities">The circuit entities.</param>
-        private void SetupBehaviors(EntityCollection entities)
+        protected virtual void CreateBehaviors(EntityCollection entities)
         {
+            // Create the behavior pool
+            EntityBehaviors = new BehaviorPool(entities.Comparer, BehaviorTypes.ToArray());
+
+            // Keep track of how long we are taking to create behaviors
             SimulationStatistics.BehaviorCreationTime.Start();
+
+            // Create the behaviors
             var types = BehaviorTypes.ToArray();
             foreach (var entity in entities)
                 entity.CreateBehaviors(types, this, entities);
+
             SimulationStatistics.BehaviorCreationTime.Stop();
         }
 
         /// <summary>
-        /// Collect and set up the parameter sets of all circuit entities.
+        /// Copy all parameter sets of the entities to the parameter pool.
         /// </summary>
         /// <remarks>
         /// The parameter sets are cloned during set up to avoid issues when running multiple
         /// simulations in parallel.
         /// </remarks>
         /// <param name="entities">The entities for which parameter sets need to be collected.</param>
-        private void SetupParameters(IEnumerable<Entity> entities)
+        protected virtual void CopyParameters(EntityCollection entities)
         {
-            entities.ThrowIfNull(nameof(entities));
+            // Create the parameter pool
+            EntityParameters = new ParameterPool(entities.Comparer);
+
+            // Check if we need to clone parameters
+            bool _clone = false;
+            if (Configurations.TryGet<CollectionConfiguration>(out var config))
+                _clone = config.CloneParameters;
 
             // Register all parameters
             foreach (var entity in entities)
             {
                 foreach (var p in entity.ParameterSets.Values)
                 {
-                    var parameterset = _cloneParameters ? p.Clone() : p;
+                    var parameterset = _clone ? p.Clone() : p;
                     parameterset.CalculateDefaults();
                     EntityParameters.Add(entity.Name, parameterset);
                 }
