@@ -53,9 +53,8 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates behaviors of the specified types. The type order is important.
+        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
         /// </summary>
-        /// <param name="types">The types of behaviors that the simulation wants, in the order that they will be called.</param>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
         /// <remarks>
@@ -66,11 +65,11 @@ namespace SpiceSharp.Components
         /// if the behavior that was created for <see cref="IBiasingBehavior" /> also implements <see cref="ITemperatureBehavior" />,
         /// then then entity will not create a new instance of the behavior.
         /// </remarks>
-        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
         {
             if (Model != null)
-                entities[Model].CreateBehaviors(types, simulation, entities);
-            base.CreateBehaviors(types, simulation, entities);
+                entities[Model].CreateBehaviors(simulation, entities);
+            base.CreateBehaviors(simulation, entities);
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="behavior">The behavior.</param>
         /// <param name="simulation">The simulation.</param>
-        protected override void BindBehavior(IBehavior behavior, Simulation simulation)
+        protected override void BindBehavior(IBehavior behavior, ISimulation simulation)
         {
             var context = BuildBindingContext(simulation);
 
@@ -104,7 +103,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected virtual ComponentBindingContext BuildBindingContext(Simulation simulation) => new ComponentBindingContext(simulation);
+        protected virtual ComponentBindingContext BuildBindingContext(ISimulation simulation) => new ComponentBindingContext(simulation);
 
         /// <summary>
         /// Gets the node index of a pin.

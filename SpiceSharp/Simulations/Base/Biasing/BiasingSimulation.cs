@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
             Statistics.Add(typeof(BiasingSimulationStatistics), BaseSimulationStatistics);
 
             // Add the necessary behaviors in the order that they are (usually) called
-            BehaviorTypes.AddRange(new []
+            Types.AddRange(new []
             {
                 typeof(ITemperatureBehavior),
                 typeof(IBiasingBehavior),
@@ -125,7 +125,7 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="circuit">The circuit that will be used.</param>
-        protected override void Setup(EntityCollection circuit)
+        protected override void Setup(IEntityCollection circuit)
         {
             circuit.ThrowIfNull(nameof(circuit));
 

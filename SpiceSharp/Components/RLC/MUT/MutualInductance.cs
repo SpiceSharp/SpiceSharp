@@ -58,16 +58,23 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Create the behaviors.
+        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
         /// </summary>
-        /// <param name="types">The behavior types.</param>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="entities">The entities.</param>
-        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        /// <param name="simulation">The simulation requesting the behaviors.</param>
+        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
+        /// <remarks>
+        /// The order typically indicates hierarchy. The entity will create the behaviors in reverse order, allowing
+        /// the most specific child class to be used that is necessary. For example, the <see cref="OP" /> simulation needs
+        /// <see cref="ITemperatureBehavior" /> and an <see cref="IBiasingBehavior" />. The entity will first look for behaviors
+        /// of type <see cref="IBiasingBehavior" />, and then for the behaviors of type <see cref="ITemperatureBehavior" />. However,
+        /// if the behavior that was created for <see cref="IBiasingBehavior" /> also implements <see cref="ITemperatureBehavior" />,
+        /// then then entity will not create a new instance of the behavior.
+        /// </remarks>
+        public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
         {
-            entities[InductorName1.ThrowIfNull("primary inductor")].CreateBehaviors(types, simulation, entities);
-            entities[InductorName2.ThrowIfNull("secondary inductor")].CreateBehaviors(types, simulation, entities);
-            base.CreateBehaviors(types, simulation, entities);
+            entities[InductorName1.ThrowIfNull("primary inductor")].CreateBehaviors(simulation, entities);
+            entities[InductorName2.ThrowIfNull("secondary inductor")].CreateBehaviors(simulation, entities);
+            base.CreateBehaviors(simulation, entities);
         }
 
         /// <summary>
@@ -75,7 +82,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(Simulation simulation)
+        protected override ComponentBindingContext BuildBindingContext(ISimulation simulation)
         {
             var context = base.BuildBindingContext(simulation);
 

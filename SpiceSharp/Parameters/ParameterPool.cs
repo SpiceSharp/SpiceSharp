@@ -21,7 +21,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The parameter set associated to the specified entity identifier.</returns>
-        public ParameterSetDictionary this[string name]
+        public virtual ParameterSetDictionary this[string name]
         {
             get
             {
@@ -69,7 +69,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="creator">The entity identifier to which the parameter set belongs.</param>
         /// <param name="parameters">The parameter set.</param>
-        public void Add(string creator, ParameterSet parameters)
+        public virtual void Add(string creator, ParameterSet parameters)
         {
             Lock.EnterWriteLock();
             try
@@ -94,7 +94,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if a parameter set exists; otherwise <c>false</c>.
         /// </returns>
-        public bool Contains(string name)
+        public virtual bool Contains(string name)
         {
             Lock.EnterReadLock();
             try
@@ -110,7 +110,7 @@ namespace SpiceSharp
         /// <summary>
         /// Clears all parameter sets in the pool.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             Lock.EnterWriteLock();
             try

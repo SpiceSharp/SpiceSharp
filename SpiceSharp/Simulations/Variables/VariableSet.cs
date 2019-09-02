@@ -71,7 +71,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public virtual Variable this[string id]
+        public Variable this[string id]
         {
             get => Unknowns.FirstOrDefault(node => node.Name.Equals(id));
         }
@@ -120,7 +120,7 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier of the variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
-        public virtual Variable MapNode(string id, VariableType type)
+        public Variable MapNode(string id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
@@ -148,7 +148,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         /// <param name="original">The original identifier.</param>
         /// <param name="alias">The alias for the identifier.</param>
-        public virtual void AliasNode(string original, string alias)
+        public void AliasNode(string original, string alias)
         {
             var originalNode = Map[original];
             Map.Add(alias, originalNode);
@@ -163,7 +163,7 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier of the new variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable.</returns>
-        public virtual Variable Create(string id, VariableType type)
+        public Variable Create(string id, VariableType type)
         {
             if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
@@ -186,7 +186,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool ContainsNode(string id) => Map.ContainsKey(id);
+        public bool ContainsNode(string id) => Map.ContainsKey(id);
 
         /// <summary>
         /// Determines whether the set contains any variable by a specified identifier.
@@ -195,7 +195,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool Contains(string id) => Unknowns.Exists(node => node.Name.Equals(id));
+        public bool Contains(string id) => Unknowns.Exists(node => node.Name.Equals(id));
 
         /// <summary>
         /// Tries to get a variable.
@@ -205,7 +205,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public virtual bool TryGetNode(string id, out Variable node) => Map.TryGetValue(id, out node);
+        public bool TryGetNode(string id, out Variable node) => Map.TryGetValue(id, out node);
 
         /// <summary>
         /// Gets a mapped variable. If the node voltage does not exist, an exception will be thrown.
@@ -214,7 +214,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The node with the specified identifier.
         /// </returns>
-        public virtual Variable GetNode(string id)
+        public Variable GetNode(string id)
         {
             id.ThrowIfNull(nameof(id));
             if (Map.TryGetValue(id, out var result))
@@ -238,7 +238,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Clear all variables.
         /// </summary>
-        public virtual void Clear()
+        public void Clear()
         {
             Unknowns.Clear();
 
@@ -271,6 +271,6 @@ namespace SpiceSharp.Simulations
         /// Method that calls the <see cref="VariableAdded"/> event.
         /// </summary>
         /// <param name="args">The event arguments.</param>
-        protected virtual void OnVariableAdded(VariableEventArgs args) => VariableAdded?.Invoke(this, args);
+        protected void OnVariableAdded(VariableEventArgs args) => VariableAdded?.Invoke(this, args);
     }
 }

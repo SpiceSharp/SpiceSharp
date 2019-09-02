@@ -52,7 +52,7 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BindingContext"/> class.
         /// </summary>
         /// <param name="simulation">The simulation to bind to.</param>
-        public BindingContext(Simulation simulation)
+        public BindingContext(ISimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
             Configurations = simulation.Configurations.ThrowIfNull("configurations");

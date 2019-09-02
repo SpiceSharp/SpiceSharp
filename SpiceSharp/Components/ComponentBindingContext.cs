@@ -17,7 +17,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="ComponentBindingContext"/> class.
         /// </summary>
         /// <param name="simulation">The simulation to bind to.</param>
-        public ComponentBindingContext(Simulation simulation)
+        public ComponentBindingContext(ISimulation simulation)
             : base(simulation)
         {
         }

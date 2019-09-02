@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The entities.
         /// </value>
-        public EntityCollection Entities { get; }
+        public IEntityCollection Entities { get; }
 
         /// <summary>
         /// Gets the set of global nodes.
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="pins">The local node names in the subcircuit that will be connected outside.</param>
         /// <param name="entities">The entities in the subcircuit.</param>
-        public Subcircuit(string name, string[] pins, EntityCollection entities)
+        public Subcircuit(string name, string[] pins, IEntityCollection entities)
             : base(name, pins.Length)
         {
             Entities = entities.ThrowIfNull(nameof(entities));
@@ -83,16 +83,15 @@ namespace SpiceSharp.Components
         /// <param name="pins">The local node names in the subcircuit that will be connected outside.</param>
         /// <param name="entities">The entities in the subcircuit.</param>
         /// <param name="connections">The node connections on the outside.</param>
-        public Subcircuit(string name, string[] pins, EntityCollection entities, string[] connections)
+        public Subcircuit(string name, string[] pins, IEntityCollection entities, string[] connections)
             : this(name, pins, entities)
         {
             Connect(connections);
         }
 
         /// <summary>
-        /// Creates behaviors of the specified types. The type order is important.
+        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
         /// </summary>
-        /// <param name="types">The types of behaviors that the simulation wants, in the order that they will be called.</param>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
         /// <remarks>
@@ -103,7 +102,7 @@ namespace SpiceSharp.Components
         /// if the behavior that was created for <see cref="IBiasingBehavior" /> also implements <see cref="ITemperatureBehavior" />,
         /// then then entity will not create a new instance of the behavior.
         /// </remarks>
-        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
         {
             // If our behaviors are already created, skip this
             if (simulation.EntityBehaviors.ContainsKey(Name))
@@ -118,11 +117,14 @@ namespace SpiceSharp.Components
                 foreach (var g in GlobalNodes)
                     nodemap.Add(g, g);
             }
-            _subcktSimulation = new SubcircuitSimulation(Name, simulation, types, nodemap);
-            _subcktSimulation.Run(Entities); // Create the behaviors for our own entity
+
+            // We need to use a proxy simulation to create the behaviors
+            _subcktSimulation = new SubcircuitSimulation(Name, simulation, nodemap);
+            var ec = new SubcircuitEntityCollection(entities, Entities, simulation);
+            _subcktSimulation.Run(ec);
 
             // Now let's create our own behaviors
-            base.CreateBehaviors(types, simulation, entities);
+            base.CreateBehaviors(simulation, entities);
         }
 
         /// <summary>
@@ -130,7 +132,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(Simulation simulation)
+        protected override ComponentBindingContext BuildBindingContext(ISimulation simulation)
         {
             // Make sure our behaviors can find the behaviors of the subcircuit
             return new SubcircuitBindingContext(simulation, _subcktSimulation.EntityBehaviors);

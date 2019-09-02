@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected override bool IsValidSimulation(Simulation simulation) => simulation is Noise;
+        protected override bool IsValidSimulation(ISimulation simulation) => simulation is Noise;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OutputNoiseDensityExport"/> class.

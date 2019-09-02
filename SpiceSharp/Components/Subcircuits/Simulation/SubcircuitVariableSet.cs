@@ -21,14 +21,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public string Name { get; }
 
         /// <summary>
-        /// Gets the pins.
-        /// </summary>
-        /// <value>
-        /// The pins.
-        /// </value>
-        public Dictionary<string, string> Pins { get; }
-
-        /// <summary>
         /// Gets the comparer used for variables.
         /// </summary>
         /// <value>
@@ -59,21 +51,17 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </value>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Variable this[string id] => _variables[MapNodeName(id)];
+        public Variable this[string id] => _variables[Name.Combine(id)];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitVariableSet"/> class.
         /// </summary>
         /// <param name="name">The subcircuit name.</param>
-        /// <param name="nodemap">The structure mapping internal nodes to external nodes.</param>
         /// <param name="variableSet">The "real" variable set.</param>
-        public SubcircuitVariableSet(string name, IEnumerable<KeyValuePair<string, string>> nodemap, IVariableSet variableSet)
+        public SubcircuitVariableSet(string name, IVariableSet variableSet)
         {
             Name = name.ThrowIfNull(nameof(name));
             _variables = variableSet.ThrowIfNull(nameof(variableSet));
-            Pins = new Dictionary<string, string>(variableSet.Comparer);
-            foreach (var pin in nodemap)
-                Pins.Add(pin.Key.ThrowIfNull("internal pin"), pin.Value.ThrowIfNull("external pin"));
         }
 
         /// <summary>
@@ -87,7 +75,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <remarks>
         /// If the variable already exists, the variable type is ignored.
         /// </remarks>
-        public Variable MapNode(string id, VariableType type) => _variables.MapNode(MapNodeName(id), type);
+        public Variable MapNode(string id, VariableType type)
+        {
+            // We need to check if the node is ground
+            if (_variables.TryGetNode(id, out var result) && result.Index == 0)
+                return result;
+
+            // Else just map the node
+            return _variables.MapNode(Name.Combine(id), type);
+        }
 
         /// <summary>
         /// Create a new variable.
@@ -109,7 +105,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsNode(string id) => _variables.ContainsNode(MapIdentifier(id));
+        public bool ContainsNode(string id) => _variables.ContainsNode(Name.Combine(id));
 
         /// <summary>
         /// Determines whether this instance contains the object.
@@ -118,7 +114,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(string id) => _variables.Contains(MapIdentifier(id));
+        public bool Contains(string id) => _variables.Contains(Name.Combine(id));
 
         /// <summary>
         /// Tries to get a variable.
@@ -128,7 +124,18 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(string id, out Variable node) => _variables.TryGetNode(MapIdentifier(id), out node);
+        public bool TryGetNode(string id, out Variable node) => _variables.TryGetNode(Name.Combine(id), out node);
+
+        /// <summary>
+        /// Make an alias for a variable identifier.
+        /// </summary>
+        /// <param name="original">The original identifier.</param>
+        /// <param name="alias">The alias for the identifier.</param>
+        /// <remarks>
+        /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
+        /// point to the ground node.
+        /// </remarks>
+        public void AliasNode(string original, string alias) => _variables.AliasNode(original, Name.Combine(alias));
 
         /// <summary>
         /// Clears the set from any variables.
@@ -150,36 +157,5 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// An <see cref="System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Maps the specified variable identifier.
-        /// </summary>
-        /// <param name="node">The node name.</param>
-        /// <returns></returns>
-        protected virtual string MapNodeName(string node)
-        {
-            // If it is a pin, then we just map it
-            if (Pins.TryGetValue(node, out var result))
-                return result;
-
-            // If the node is an alias for the ground node, then we will automatically treat it as ground
-            if (_variables.TryGetNode(node, out var v))
-            {
-                if (v.Index == 0)
-                    return node;
-            }
-
-            return Name.Combine(node);
-        }
-
-        /// <summary>
-        /// Maps the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        protected virtual string MapIdentifier(string id)
-        {
-            return Name.Combine(id);
-        }
     }
 }

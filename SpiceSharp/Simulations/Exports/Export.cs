@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected virtual bool IsValidSimulation(Simulation simulation) => true;
+        protected virtual bool IsValidSimulation(ISimulation simulation) => true;
 
         /// <summary>
         /// Gets the current value from the simulation.
@@ -107,7 +107,7 @@ namespace SpiceSharp.Simulations
                 return;
 
             // If we're already too far, emulate a call from the simulation
-            if (Simulation.Status == Simulation.Statuses.Setup || Simulation.Status == Simulation.Statuses.Running)
+            if (Simulation.Status == SimulationStatus.Setup || Simulation.Status == SimulationStatus.Running)
                 Initialize(Simulation, EventArgs.Empty);
         }
 

@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="simulation">The simulation to bind to.</param>
         /// <param name="pool">The pool of behaviors in the subcircuit.</param>
-        public SubcircuitBindingContext(Simulation simulation, BehaviorPool pool)
+        public SubcircuitBindingContext(ISimulation simulation, BehaviorPool pool)
             : base(simulation)
         {
             Pool = pool;

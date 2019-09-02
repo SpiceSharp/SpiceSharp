@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new NoiseConfiguration());
             
             // Add behavior types in the order they are (usually) called
-            BehaviorTypes.Add(typeof(INoiseBehavior));
+            Types.Add(typeof(INoiseBehavior));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new NoiseConfiguration(output, null, input));
 
             // Add behavior types in the order they are (usually) called
-            BehaviorTypes.Add(typeof(INoiseBehavior));
+            Types.Add(typeof(INoiseBehavior));
         }
 
         /// <summary>
@@ -66,14 +66,14 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new NoiseConfiguration(output, reference, input));
 
             // Add behavior types in the order they are (usually) called
-            BehaviorTypes.Add(typeof(INoiseBehavior));
+            Types.Add(typeof(INoiseBehavior));
         }
 
         /// <summary>
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>
-        protected override void Setup(EntityCollection entities)
+        protected override void Setup(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
 

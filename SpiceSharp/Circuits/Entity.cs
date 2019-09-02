@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -134,7 +135,7 @@ namespace SpiceSharp.Circuits
         public T GetParameter<T>(string name, IEqualityComparer<string> comparer = null) => ParameterSets.GetParameter<T>(name, comparer);
 
         /// <summary>
-        /// Creates behaviors of the specified types. The type order is important.
+        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
         /// </summary>
         /// <remarks>
         /// The order typically indicates hierarchy. The entity will create the behaviors in reverse order, allowing
@@ -144,12 +145,10 @@ namespace SpiceSharp.Circuits
         /// if the behavior that was created for <see cref="IBiasingBehavior"/> also implements <see cref="ITemperatureBehavior"/>,
         /// then then entity will not create a new instance of the behavior.
         /// </remarks>
-        /// <param name="types">The types of behaviors that the simulation wants, in the order that they will be called.</param>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
-        public virtual void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        public virtual void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
         {
-            types.ThrowIfNull(nameof(types));
             simulation.ThrowIfNull(nameof(simulation));
             entities.ThrowIfNull(nameof(entities));
 
@@ -166,6 +165,7 @@ namespace SpiceSharp.Circuits
             // By default, go through the types in reverse order (to account for inheritance) and create
             // the behaviors
             EntityBehaviorDictionary ebd = null;
+            var types = simulation.BehaviorTypes.ToArray();
             var newBehaviors = new List<IBehavior>(types.Length);
             for (var i = types.Length - 1; i >= 0; i--)
             {
@@ -197,7 +197,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="behavior">The behavior that needs to be bound to the simulation.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
-        protected virtual void BindBehavior(IBehavior behavior, Simulation simulation)
+        protected virtual void BindBehavior(IBehavior behavior, ISimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
 

@@ -65,11 +65,19 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
+        /// Gets the types.
+        /// </summary>
+        /// <value>
+        /// The types.
+        /// </value>
+        public IEnumerable<Type> Types => _behaviorLists.Keys;
+
+        /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
         /// </summary>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The behavior associated to the specified entity identifier.</returns>
-        public EntityBehaviorDictionary this[string name]
+        public virtual EntityBehaviorDictionary this[string name]
         {
             get
             {
@@ -115,7 +123,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="comparer">The comparer.</param>
         /// <param name="types">The types.</param>
-        public BehaviorPool(IEqualityComparer<string> comparer, Type[] types)
+        public BehaviorPool(IEqualityComparer<string> comparer, IEnumerable<Type> types)
         {
             types.ThrowIfNull(nameof(types));
 
@@ -129,7 +137,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="id">The identifier for the behavior.</param>
         /// <param name="behavior">The behavior.</param>
-        public void Add(string id, IBehavior behavior)
+        public virtual void Add(string id, IBehavior behavior)
         {
             behavior.ThrowIfNull(nameof(behavior));
             Lock.EnterWriteLock();
@@ -177,7 +185,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A <see cref="BehaviorList{T}" /> with all behaviors of the specified type.
         /// </returns>
-        public BehaviorList<T> GetBehaviorList<T>() where T : IBehavior
+        public virtual BehaviorList<T> GetBehaviorList<T>() where T : IBehavior
         {
             Lock.EnterReadLock();
             try
@@ -198,7 +206,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="name">The identifier.</param>
         /// <param name="ebd">The dictionary of entity behaviors.</param>
         /// <returns></returns>
-        public bool TryGetBehaviors(string name, out EntityBehaviorDictionary ebd)
+        public virtual bool TryGetBehaviors(string name, out EntityBehaviorDictionary ebd)
         {
             Lock.EnterReadLock();
             try
@@ -218,7 +226,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if behaviors exist; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsKey(string name)
+        public virtual bool ContainsKey(string name)
         {
             Lock.EnterReadLock();
             try
@@ -234,7 +242,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Clears all behaviors in the pool.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             Lock.EnterWriteLock();
             try

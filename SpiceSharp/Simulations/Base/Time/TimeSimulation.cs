@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
             Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
-            BehaviorTypes.AddRange(new []
+            Types.AddRange(new []
             {
                 typeof(ITimeBehavior),
                 typeof(IAcceptBehavior)
@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
             Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
-            BehaviorTypes.AddRange(new []
+            Types.AddRange(new []
             {
                 typeof(ITimeBehavior),
                 typeof(IAcceptBehavior)
@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
             Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
-            BehaviorTypes.AddRange(new []
+            Types.AddRange(new []
             {
                 typeof(ITimeBehavior),
                 typeof(IAcceptBehavior)
@@ -94,7 +94,7 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>
-        protected override void Setup(EntityCollection entities)
+        protected override void Setup(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
 

@@ -10,7 +10,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// A class that manages a collection of entities.
     /// </summary>
-    public class EntityCollection : IEnumerable<Entity>, ICollection<Entity>, ICollection, IReadOnlyCollection<Entity>
+    public class EntityCollection : IEntityCollection
     {
         /// <summary>
         /// Private variables
@@ -56,6 +56,11 @@ namespace SpiceSharp.Circuits
         public IEqualityComparer<string> Comparer => _entities.Comparer;
 
         /// <summary>
+        /// Gets a value indicating whether the <see cref="System.Collections.Generic.ICollection{T}" /> is read-only.
+        /// </summary>
+        public bool IsReadOnly => false;
+
+        /// <summary>
         /// The number of entities.
         /// </summary>
         public int Count
@@ -78,21 +83,6 @@ namespace SpiceSharp.Circuits
         /// Enumerates the names of all entities in the collection.
         /// </summary>
         public IEnumerable<string> Keys => _entities.Keys;
-
-        /// <summary>
-        /// Gets a value indicating whether access to the <see cref="ICollection{T}" /> is synchronized (thread safe).
-        /// </summary>
-        public bool IsSynchronized => true;
-
-        /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see cref="ICollection{T}"/>.
-        /// </summary>
-        public object SyncRoot => this;
-
-        /// <summary>
-        /// Gets a value indicating whether the <see cref="ICollection{T}"/> is read-only.
-        /// </summary>
-        public bool IsReadOnly => false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
@@ -316,18 +306,16 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="type">The type of entities to be listed.</param>
         /// <returns>An array with entities of the specified type.</returns>
-        public Entity[] ByType(Type type)
+        public IEnumerable<Entity> ByType(Type type)
         {
-            var result = new List<Entity>();
             _lock.EnterReadLock();
             try
             {   
                 foreach (var c in _entities.Values)
                 {
                     if (c.GetType() == type)
-                        result.Add(c);
+                        yield return c;
                 }
-                return result.ToArray();
             }
             finally
             {
@@ -368,23 +356,6 @@ namespace SpiceSharp.Circuits
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        /// <summary>
-        /// Copy the elements to an array.
-        /// </summary>
-        /// <param name="array">The array.</param>
-        /// <param name="index">The starting index.</param>
-        void ICollection.CopyTo(Array array, int index)
-        {
-            array.ThrowIfNull(nameof(array));
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            if (array.Length < index + Count)
-                throw new ArgumentException("Not enough elements in the array");
-
-            foreach (var item in _entities.Values)
-                array.SetValue(item, index++);
         }
 
         /// <summary>

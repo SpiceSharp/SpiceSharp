@@ -24,7 +24,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <returns></returns>
-        protected override bool IsValidSimulation(Simulation simulation) => simulation is FrequencySimulation;
+        protected override bool IsValidSimulation(ISimulation simulation) => simulation is FrequencySimulation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.

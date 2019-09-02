@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        protected override bool IsValidSimulation(Simulation simulation) => simulation is BiasingSimulation;
+        protected override bool IsValidSimulation(ISimulation simulation) => simulation is BiasingSimulation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.

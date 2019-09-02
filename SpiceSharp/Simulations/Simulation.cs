@@ -8,46 +8,26 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation
+    public abstract class Simulation : ISimulation
     {
         /// <summary>
-        /// Possible statuses for a simulation.
+        /// Gets the current status of the <see cref="ISimulation" />.
         /// </summary>
-        public enum Statuses
-        {
-            /// <summary>
-            /// Indicates that the simulation has not started.
-            /// </summary>
-            None,
-
-            /// <summary>
-            /// Indicates that the simulation is now in its setup phase.
-            /// </summary>
-            Setup,
-
-            /// <summary>
-            /// Indicates that the simulation is running.
-            /// </summary>
-            Running,
-
-            /// <summary>
-            /// Indicates that the simulation is cleaning up all its resources.
-            /// </summary>
-            Unsetup
-        }
+        /// <value>
+        /// The status.
+        /// </value>
+        public SimulationStatus Status { get; private set; }
 
         /// <summary>
-        /// Gets or sets the current status of the simulation.
+        /// Gets a set of configurations for the <see cref="ISimulation" />.
         /// </summary>
-        public Statuses Status { get; protected set; } = Statuses.None;
-
-        /// <summary>
-        /// Gets a set of <see cref="ParameterSet" /> that hold the configurations for the simulation.
-        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
 
         /// <summary>
-        /// Gets a set of <see cref="SimulationState"/> objects used by the simulation.
+        /// Gets a set of <see cref="SimulationState" /> instances used by the <see cref="ISimulation" />.
         /// </summary>
         /// <value>
         /// The states.
@@ -55,15 +35,18 @@ namespace SpiceSharp.Simulations
         public TypeDictionary<SimulationState> States { get; } = new TypeDictionary<SimulationState>();
 
         /// <summary>
-        /// Gets a set of <see cref="ParameterSet" /> that holds the statistics for the simulation.
+        /// Gets a set of <see cref="Statistics" /> instances tracked by the <see cref="ISimulation" />.
         /// </summary>
+        /// <value>
+        /// The statistics.
+        /// </value>
         public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
 
         /// <summary>
-        /// Gets the set of variables (unknowns).
+        /// Gets the variables.
         /// </summary>
         /// <value>
-        /// The set of variables.
+        /// The variables.
         /// </value>
         public IVariableSet Variables { get; private set; }
 
@@ -120,6 +103,14 @@ namespace SpiceSharp.Simulations
         public ParameterPool EntityParameters { get; protected set; }
 
         /// <summary>
+        /// Gets the <see cref="IBehavior" /> types used by the <see cref="ISimulation" />.
+        /// </summary>
+        /// <value>
+        /// The behavior types.
+        /// </value>
+        public IEnumerable<Type> BehaviorTypes => Types;
+
+        /// <summary>
         /// A reference to the regular simulation statistics (cached)
         /// </summary>
         protected SimulationStatistics SimulationStatistics { get; } = new SimulationStatistics();
@@ -131,7 +122,7 @@ namespace SpiceSharp.Simulations
         /// The order is important for establishing dependencies. A behavior that is called first should
         /// not depend on any other behaviors!
         /// </remarks>
-        protected List<Type> BehaviorTypes { get; } = new List<Type>(6);
+        protected List<Type> Types { get; } = new List<Type>(6);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
@@ -140,24 +131,23 @@ namespace SpiceSharp.Simulations
         protected Simulation(string name)
         {
             Name = name;
-            Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
 
-            // Initialize
-            States = new TypeDictionary<SimulationState>();
+            // Add our own statistics
+            Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
         }
 
         /// <summary>
         /// Runs the simulation on the specified circuit.
         /// </summary>
         /// <param name="entities">The entities to simulate.</param>
-        public virtual void Run(EntityCollection entities)
+        public virtual void Run(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
             SimulationStatistics.SetupTime.Start();
-            Status = Statuses.Setup;
+            Status = SimulationStatus.Setup;
             Setup(entities);
             SimulationStatistics.SetupTime.Stop();
             OnAfterSetup(EventArgs.Empty);
@@ -167,7 +157,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Execute the simulation
-            Status = Statuses.Running;
+            Status = SimulationStatus.Running;
             var beforeArgs = new BeforeExecuteEventArgs(false);
             var afterArgs = new AfterExecuteEventArgs();
             do
@@ -192,27 +182,30 @@ namespace SpiceSharp.Simulations
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
             SimulationStatistics.UnsetupTime.Start();
-            Status = Statuses.Unsetup;
+            Status = SimulationStatus.Unsetup;
             Unsetup();
             SimulationStatistics.UnsetupTime.Stop();
             OnAfterUnsetup(EventArgs.Empty);
 
-            Status = Statuses.None;
+            Status = SimulationStatus.None;
         }
 
         /// <summary>
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The entities that are included in the simulation.</param>
-        protected virtual void Setup(EntityCollection entities)
+        protected virtual void Setup(IEntityCollection entities)
         {
             // Validate the entities
             entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
-            // Create the variable set
-            Variables = CreateVariableSet(entities);
+            // Create the set of variables
+            if (Configurations.TryGet(out CollectionConfiguration cconfig))
+                Variables = cconfig.Variables ?? new VariableSet();
+            else
+                Variables = new VariableSet();
 
             // Setup all entity parameters and behaviors
             CopyParameters(entities);
@@ -239,6 +232,54 @@ namespace SpiceSharp.Simulations
         /// Executes the simulation.
         /// </summary>
         protected abstract void Execute();
+
+        /// <summary>
+        /// Create all behaviors for the simulation.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        protected virtual void CreateBehaviors(IEntityCollection entities)
+        {
+            EntityBehaviors = new BehaviorPool(entities.Comparer, Types.ToArray());
+
+            // Keep track of how long we are taking to create behaviors
+            SimulationStatistics.BehaviorCreationTime.Start();
+
+            // Create the behaviors
+            foreach (var entity in entities)
+                entity.CreateBehaviors(this, entities);
+
+            SimulationStatistics.BehaviorCreationTime.Stop();
+        }
+
+        /// <summary>
+        /// Copy all parameter sets of the entities to the parameter pool.
+        /// </summary>
+        /// <remarks>
+        /// The parameter sets are cloned during set up to avoid issues when running multiple
+        /// simulations in parallel.
+        /// </remarks>
+        /// <param name="entities">The entities for which parameter sets need to be collected.</param>
+        protected virtual void CopyParameters(IEntityCollection entities)
+        {
+            // Create the parameter pool
+            EntityParameters = new ParameterPool(entities.Comparer);
+
+            // Check if we need to clone parameters
+            bool _clone = false;
+            if (Configurations.TryGet<CollectionConfiguration>(out var config))
+                _clone = config.CloneParameters;
+
+            // Register all parameters
+            foreach (var entity in entities)
+            {
+                foreach (var p in entity.ParameterSets.Values)
+                {
+                    var parameterset = _clone ? p.Clone() : p;
+                    parameterset.CalculateDefaults();
+                    EntityParameters.Add(entity.Name, parameterset);
+                }
+            }
+        }
 
         #region Methods for raising events
         /// <summary>
@@ -283,68 +324,5 @@ namespace SpiceSharp.Simulations
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);
         #endregion
-
-        /// <summary>
-        /// Creates the variable set.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        protected virtual IVariableSet CreateVariableSet(EntityCollection entities)
-        {
-            // Check the configuration for one, else just copy our own one
-            if (Configurations.TryGet(out CollectionConfiguration cconfig))
-                return cconfig.Variables ?? new VariableSet();
-            else
-                return new VariableSet();
-        }
-
-        /// <summary>
-        /// Set up all behaviors previously created.
-        /// </summary>
-        /// <param name="entities">The circuit entities.</param>
-        protected virtual void CreateBehaviors(EntityCollection entities)
-        {
-            // Create the behavior pool
-            EntityBehaviors = new BehaviorPool(entities.Comparer, BehaviorTypes.ToArray());
-
-            // Keep track of how long we are taking to create behaviors
-            SimulationStatistics.BehaviorCreationTime.Start();
-
-            // Create the behaviors
-            var types = BehaviorTypes.ToArray();
-            foreach (var entity in entities)
-                entity.CreateBehaviors(types, this, entities);
-
-            SimulationStatistics.BehaviorCreationTime.Stop();
-        }
-
-        /// <summary>
-        /// Copy all parameter sets of the entities to the parameter pool.
-        /// </summary>
-        /// <remarks>
-        /// The parameter sets are cloned during set up to avoid issues when running multiple
-        /// simulations in parallel.
-        /// </remarks>
-        /// <param name="entities">The entities for which parameter sets need to be collected.</param>
-        protected virtual void CopyParameters(EntityCollection entities)
-        {
-            // Create the parameter pool
-            EntityParameters = new ParameterPool(entities.Comparer);
-
-            // Check if we need to clone parameters
-            bool _clone = false;
-            if (Configurations.TryGet<CollectionConfiguration>(out var config))
-                _clone = config.CloneParameters;
-
-            // Register all parameters
-            foreach (var entity in entities)
-            {
-                foreach (var p in entity.ParameterSets.Values)
-                {
-                    var parameterset = _clone ? p.Clone() : p;
-                    parameterset.CalculateDefaults();
-                    EntityParameters.Add(entity.Name, parameterset);
-                }
-            }
-        }
     }
 }
