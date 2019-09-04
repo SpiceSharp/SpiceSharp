@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.JFETBehaviors
@@ -69,11 +70,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            _mbp = context.GetParameterSet<ModelBaseParameters>();
-
-            // Get states
+            _mbp = Parameters.Get<ModelBaseParameters>();
             BiasingState = context.States.Get<BiasingSimulationState>();
         }
         

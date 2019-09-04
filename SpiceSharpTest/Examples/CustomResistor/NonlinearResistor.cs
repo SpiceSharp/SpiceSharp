@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
         public NonlinearResistor(string name, string nodeA, string nodeB) : base(name, 2)
         {
             // Add a NonlinearResistorBehaviors.BaseParameters
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
 
             // Connect the entity
             Connect(nodeA, nodeB);

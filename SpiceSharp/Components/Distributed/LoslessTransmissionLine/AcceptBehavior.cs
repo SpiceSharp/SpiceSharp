@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -38,14 +39,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            _bp = context.GetParameterSet<BaseParameters>();
-
-            // Get transient
-            _tran = context.GetBehavior<TransientBehavior>();
-
-            // Get states
+            _bp = Parameters.Get<BaseParameters>();
+            _tran = context.Behaviors.Get<TransientBehavior>();
             _method = context.States.Get<TimeSimulationState>().Method;
         }
 

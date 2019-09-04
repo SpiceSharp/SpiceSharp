@@ -13,14 +13,5 @@
         /// The variables.
         /// </value>
         public IVariableSet Variables { get; set; }
-
-        /// <summary>
-        /// Gets or sets a flag indicating whether the simulation should clone all parameters.
-        /// </summary>
-        /// <remarks>
-        /// This is mainly useful when using the same circuit for multiple simulations and
-        /// running them in multiple threads.
-        /// </remarks>
-        public bool CloneParameters { get; set; }
     }
 }

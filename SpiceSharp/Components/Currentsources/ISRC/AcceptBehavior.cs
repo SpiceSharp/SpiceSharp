@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -25,9 +26,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            _bp = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
+            _bp = Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
             _bp.Waveform?.Bind(context);
         }
 

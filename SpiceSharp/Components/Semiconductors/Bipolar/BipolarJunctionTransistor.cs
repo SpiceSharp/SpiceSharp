@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         public BipolarJunctionTransistor(string name) 
             : base(name, BipolarJunctionTransistorPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>

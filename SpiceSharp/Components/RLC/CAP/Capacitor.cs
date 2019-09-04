@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(string name) : base(name, CapacitorPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         public Capacitor(string name, string pos, string neg, double cap) 
             : base(name, CapacitorPinCount)
         {
-            ParameterSets.Add(new BaseParameters(cap));
+            Parameters.Add(new BaseParameters(cap));
             Connect(pos, neg);
         }
     }

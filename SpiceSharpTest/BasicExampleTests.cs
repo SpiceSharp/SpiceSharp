@@ -19,16 +19,16 @@ namespace SpiceSharpTest
             );
 
             // Change the value of the resistor
-            var resParameters = ckt["R1"].ParameterSets;
+            var resParameters = ckt["R1"].Parameters;
             resParameters.Get<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
             // </example_structure_resistor>
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
             ckt["R1"].SetParameter("resistance", 2.0e3);
-            ckt["R1"].ParameterSets.SetParameter("resistance", 2.0e3);
+            ckt["R1"].Parameters.SetParameter("resistance", 2.0e3);
 
             // Using the ParameterInfoAttributes IsPrincipal=true
-            ckt["R1"].ParameterSets.SetPrincipalParameter(2.0e3);
+            ckt["R1"].Parameters.SetPrincipalParameter(2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -56,7 +56,7 @@ namespace SpiceSharpTest
             // Create the mosfet
             var model = new Mosfet1Model("M1");
             var parameters =
-                model.ParameterSets.Get<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
+                model.Parameters.Get<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
 
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model
@@ -79,7 +79,7 @@ namespace SpiceSharpTest
             // <example_parameters_res_setparameter>
             // Set the resistance of the resistor
             var res = new Resistor("R1");
-            res.ParameterSets.SetPrincipalParameter(2.0e3); // 2kOhm
+            res.Parameters.SetPrincipalParameter(2.0e3); // 2kOhm
             // </example_parameters_res_setparameter>
         }
 
@@ -253,7 +253,9 @@ namespace SpiceSharpTest
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation) sender;
-                sim.EntityParameters["R1"].SetParameter("resistance", value);
+                sim.EntityBehaviors["R1"]
+                    .Get<SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior>()
+                    .SetParameter("resistance", value);
             };
             op.AfterExecute += (sender, args) =>
             {

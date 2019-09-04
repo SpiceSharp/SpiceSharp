@@ -22,8 +22,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Mosfet3Model(string name) : base(name)
         {
-            ParameterSets.Add(new ModelBaseParameters());
-            ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters());
+            Parameters.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace SpiceSharp.Components
         /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>
         public Mosfet3Model(string name, bool nmos) : base(name)
         {
-            ParameterSets.Add(new ModelBaseParameters(nmos));
-            ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters(nmos));
+            Parameters.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }
     }
 }

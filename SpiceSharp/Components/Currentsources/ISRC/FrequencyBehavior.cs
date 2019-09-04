@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
@@ -70,10 +72,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
+            FrequencyParameters = Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
-            // Get parameters
-            FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
-
+            // Get matrix elements
             ComplexState = context.States.Get<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosPtr = solver.GetRhsElement(PosNode);

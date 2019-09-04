@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
@@ -46,11 +47,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            _mnp = context.GetParameterSet<ModelNoiseParameters>("model");
-
-            // Get the state
+            _mnp = ModelTemperature.Parameters.Get<ModelNoiseParameters>();
             _state = context.States.Get<NoiseSimulationState>();
             DiodeNoise.Bind(context, PosNode, PosPrimeNode, NegNode);
         }

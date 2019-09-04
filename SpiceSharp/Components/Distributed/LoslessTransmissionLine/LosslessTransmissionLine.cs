@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
         public LosslessTransmissionLine(string name)
             : base(name, LosslessTransmissionLinePinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
             : this(name)
         {
             Connect(pos1, neg1, pos2, neg2);
-            var bp = ParameterSets.Get<BaseParameters>();
+            var bp = Parameters.Get<BaseParameters>();
             bp.Impedance = impedance;
             bp.Delay.Value = delay;
         }

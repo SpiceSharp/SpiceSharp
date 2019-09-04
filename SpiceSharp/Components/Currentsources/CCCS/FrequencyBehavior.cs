@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
@@ -73,7 +75,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
             ComplexState = context.States.Get<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);

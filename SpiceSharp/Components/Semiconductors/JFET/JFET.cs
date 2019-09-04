@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         public JFET(string name)
             : base(name, JFETPincount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
     }
 }

@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
         public VoltageSwitch(string name) 
             : base(name, VoltageSwitchPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>

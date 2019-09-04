@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.SwitchBehaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -7,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class CurrentSwitchModel : Model
     {
+        static CurrentSwitchModel()
+        {
+            RegisterBehaviorFactory(typeof(CurrentSwitchModel), new BehaviorFactoryDictionary
+            {
+                { typeof(CommonBehaviors.ModelParameterContainer), e => new CommonBehaviors.ModelParameterContainer(e.Name) }
+            });
+        }
+
         /// <summary>
         /// Creates a new instance of the <see cref="CurrentSwitchModel"/> class.
         /// </summary>
@@ -14,7 +23,7 @@ namespace SpiceSharp.Components
         public CurrentSwitchModel(string name) : base(name)
         {
             // Add parameters
-            ParameterSets.Add(new CurrentModelParameters());
+            Parameters.Add(new CurrentModelParameters());
         }
     }
 }

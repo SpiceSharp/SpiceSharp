@@ -99,7 +99,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
 
             Variables = new SubcircuitVariableSet(name, _parent.Variables);
             EntityBehaviors = new SubcircuitBehaviorPool(_parent.EntityBehaviors.Comparer, parent.EntityBehaviors);
-            EntityParameters = new SubcircuitParameterPool(_parent.EntityParameters.Comparer, parent.EntityParameters);
 
             // Alias all pins to local nodes
             foreach (var pair in nodemap)
@@ -119,20 +118,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <exception cref="CircuitException">Cannot run subcircuit simulation</exception>
         public void Run(IEntityCollection entities)
         {
-            // Copy the parameters
-            var clone = false;
-            if (_parent.Configurations.TryGet<CollectionConfiguration>(out var config))
-                clone = config.CloneParameters;
-            foreach (var entity in entities)
-            {
-                foreach (var p in entity.ParameterSets.Values)
-                {
-                    var parameterset = clone ? p.Clone() : p;
-                    parameterset.CalculateDefaults();
-                    EntityParameters.Add(entity.Name, parameterset);
-                }
-            }
-
             // We basically need to create the subcircuit behaviors
             foreach (var entity in entities)
                 entity.CreateBehaviors(this, entities);

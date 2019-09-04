@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
@@ -18,18 +19,16 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Gets the controlling negative node index.
         /// </summary>
         protected int ContNegNode { get; private set; }
-        
+
         /// <summary>
         /// Bind the behavior. for the specified simulation.
         /// </summary>
         /// <param name="context">The context.</param>
         public override void Bind(BindingContext context)
         {
-            if (context is ComponentBindingContext cc)
-            {
-                ContPosNode = cc.Pins[2];
-                ContNegNode = cc.Pins[3];
-            }
+            var c = (ComponentBindingContext)context;
+            ContPosNode = c.Pins[2];
+            ContNegNode = c.Pins[3];
         }
 
         /// <summary>

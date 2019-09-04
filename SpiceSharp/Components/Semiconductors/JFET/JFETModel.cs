@@ -24,8 +24,8 @@ namespace SpiceSharp.Components
         public JFETModel(string name)
             : base(name)
         {
-            ParameterSets.Add(new ModelBaseParameters());
-            ParameterSets.Add(new ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters());
+            Parameters.Add(new ModelNoiseParameters());
         }
     }
 }

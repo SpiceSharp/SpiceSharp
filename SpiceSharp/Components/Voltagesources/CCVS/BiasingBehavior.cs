@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -105,26 +106,16 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-
-            // Get behaviors
-            VoltageLoad = context.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
-
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-            }
-
-            var solver = context.States.Get<BiasingSimulationState>().Solver;
-
-            // Create/get nodes
+            var c = (CommonBehaviors.ControlledBindingContext)context;
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
+            VoltageLoad = c.ControlBehaviors.Get<VoltageSourceBehaviors.BiasingBehavior>();
             ContBranchEq = VoltageLoad.BranchEq;
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
+            BaseParameters = Parameters.Get<BaseParameters>();
 
-            // Get matrix pointers
+            // Get matrix elements
+            var solver = context.States.Get<BiasingSimulationState>().Solver;
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);

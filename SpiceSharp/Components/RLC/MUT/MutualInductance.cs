@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
@@ -39,7 +40,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the mutual inductance</param>
         public MutualInductance(string name) : base(name, 0)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace SpiceSharp.Components
         public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
             : base(name, 0)
         {
-            ParameterSets.Add(new BaseParameters(coupling));
+            Parameters.Add(new BaseParameters(coupling));
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
         }
@@ -78,23 +79,20 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Build the binding context.
+        /// Binds the behaviors to the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(ISimulation simulation)
+        /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
+        /// <param name="simulation">The simulation to be bound to.</param>
+        /// <param name="entities">The entities that the entity may be connected to.</param>
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, ISimulation simulation, IEntityCollection entities)
         {
-            var context = base.BuildBindingContext(simulation);
+            var context = new MutualInductanceBindingContext(simulation, Name, InductorName1, InductorName2);
 
-            // Register inductor 1
-            context.Add("inductor1", simulation.EntityParameters[InductorName1]);
-            context.Add("inductor1", simulation.EntityBehaviors[InductorName1]);
-
-            // Register inductor 2
-            context.Add("inductor2", simulation.EntityParameters[InductorName2]);
-            context.Add("inductor2", simulation.EntityBehaviors[InductorName2]);
-
-            return context;
+            foreach (var behavior in behaviors)
+            {
+                behavior.Bind(context);
+                context.Behaviors.Add(behavior.GetType(), behavior);
+            }
         }
 
         /// <summary>

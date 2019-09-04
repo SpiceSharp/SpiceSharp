@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
@@ -53,10 +54,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public override void Bind(BindingContext context)
         {
 			base.Bind(context);
-
-            // Get behaviors
-            Bias1 = context.GetBehavior<BiasingBehavior>("inductor1");
-            Bias2 = context.GetBehavior<BiasingBehavior>("inductor2");
+            var c = (MutualInductanceBindingContext)context;
+            Bias1 = c.Inductor1Behaviors.Get<BiasingBehavior>();
+            Bias2 = c.Inductor2Behaviors.Get<BiasingBehavior>();
 
             ComplexState = context.States.Get<ComplexSimulationState>();
             var solver = ComplexState.Solver;

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using System;
 using System.Collections.Generic;
 
@@ -123,10 +124,10 @@ namespace SpiceSharp.Simulations
                     // Get entity parameters
                     if (!EntityBehaviors.ContainsKey(sweep.Parameter))
                         throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
-                    var eb = EntityParameters[sweep.Parameter];
+                    var eb = EntityBehaviors[sweep.Parameter].Get<IBiasingBehavior>();
 
                     // Check for a Voltage source or Current source parameters
-                    if (eb.TryGet<Components.CommonBehaviors.IndependentSourceParameters>(out var ibp))
+                    if (eb.Parameters.TryGet<Components.CommonBehaviors.IndependentSourceParameters>(out var ibp))
                         swept[i] = ibp.DcValue;
                     else
                         throw new CircuitException("Invalid sweep object");

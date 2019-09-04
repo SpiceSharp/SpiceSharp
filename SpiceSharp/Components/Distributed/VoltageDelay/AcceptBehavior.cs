@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -36,14 +37,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            _bp = context.GetParameterSet<BaseParameters>();
-
-            // Get behaviors
-            _tran = context.GetBehavior<TransientBehavior>();
-
-            _method = context.States.Get<TimeSimulationState>().Method;
+            _bp = Parameters.Get<BaseParameters>();
+            _tran = context.Behaviors.Get<TransientBehavior>();
+            _method = ((ComponentBindingContext)context).States.Get<TimeSimulationState>().Method;
         }
 
         /// <summary>

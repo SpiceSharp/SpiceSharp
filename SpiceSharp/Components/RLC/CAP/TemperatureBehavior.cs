@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
@@ -53,18 +54,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public override void Bind(BindingContext context)
         {
             // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-
-            ModelBaseParameters modelParameters;
-            if (context.TryGetParameterSet("model", out modelParameters))
-                ModelParameters = modelParameters;
-
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-            }
-
+            BaseParameters = Parameters.Get<BaseParameters>();
+            var c = (ComponentBindingContext)context;
+            if (c.ModelBehaviors != null)
+                ModelParameters = c.ModelBehaviors.Get<CommonBehaviors.ModelParameterContainer>().Parameters.Get<ModelBaseParameters>();
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
             State = context.States.Get<BiasingSimulationState>();
         }
 

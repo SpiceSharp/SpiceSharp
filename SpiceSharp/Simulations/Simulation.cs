@@ -98,11 +98,6 @@ namespace SpiceSharp.Simulations
         public BehaviorPool EntityBehaviors { get; protected set; }
 
         /// <summary>
-        /// Gets a pool of all entity parameter sets active in the simulation.
-        /// </summary>
-        public ParameterPool EntityParameters { get; protected set; }
-
-        /// <summary>
         /// Gets the <see cref="IBehavior" /> types used by the <see cref="ISimulation" />.
         /// </summary>
         /// <value>
@@ -207,8 +202,7 @@ namespace SpiceSharp.Simulations
             else
                 Variables = new VariableSet();
 
-            // Setup all entity parameters and behaviors
-            CopyParameters(entities);
+            // Create all entity behaviors
             CreateBehaviors(entities);
         }
 
@@ -220,8 +214,6 @@ namespace SpiceSharp.Simulations
             // Clear all parameters
             EntityBehaviors.Clear();
             EntityBehaviors = null;
-            EntityParameters.Clear();
-            EntityParameters = null;
 
             // Clear all nodes
             Variables.Clear();
@@ -249,36 +241,6 @@ namespace SpiceSharp.Simulations
                 entity.CreateBehaviors(this, entities);
 
             SimulationStatistics.BehaviorCreationTime.Stop();
-        }
-
-        /// <summary>
-        /// Copy all parameter sets of the entities to the parameter pool.
-        /// </summary>
-        /// <remarks>
-        /// The parameter sets are cloned during set up to avoid issues when running multiple
-        /// simulations in parallel.
-        /// </remarks>
-        /// <param name="entities">The entities for which parameter sets need to be collected.</param>
-        protected virtual void CopyParameters(IEntityCollection entities)
-        {
-            // Create the parameter pool
-            EntityParameters = new ParameterPool(entities.Comparer);
-
-            // Check if we need to clone parameters
-            bool _clone = false;
-            if (Configurations.TryGet<CollectionConfiguration>(out var config))
-                _clone = config.CloneParameters;
-
-            // Register all parameters
-            foreach (var entity in entities)
-            {
-                foreach (var p in entity.ParameterSets.Values)
-                {
-                    var parameterset = _clone ? p.Clone() : p;
-                    parameterset.CalculateDefaults();
-                    EntityParameters.Add(entity.Name, parameterset);
-                }
-            }
         }
 
         #region Methods for raising events

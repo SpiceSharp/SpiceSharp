@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -114,7 +115,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             base.Bind(context);
 
             // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
+            BaseParameters = Parameters.Get<BaseParameters>();
 
             if (context is ComponentBindingContext cc)
             {

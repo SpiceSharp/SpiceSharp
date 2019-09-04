@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
@@ -185,16 +187,16 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             base.Bind(context);
 
             // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
+            BaseParameters = Parameters.Get<BaseParameters>();
 
-            if (context is ComponentBindingContext cc)
-            {
-                Pos1 = cc.Pins[0];
-                Neg1 = cc.Pins[1];
-                Pos2 = cc.Pins[2];
-                Neg2 = cc.Pins[3];
-            }
+            // Connect
+            var c = (ComponentBindingContext)context;
+            Pos1 = c.Pins[0];
+            Neg1 = c.Pins[1];
+            Pos2 = c.Pins[2];
+            Neg2 = c.Pins[3];
 
+            // Get matrix elements
             BiasingState = context.States.Get<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             var variables = context.Variables;

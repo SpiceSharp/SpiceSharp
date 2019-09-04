@@ -22,8 +22,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Mosfet2Model(string name) : base(name)
         {
-            ParameterSets.Add(new ModelBaseParameters());
-            ParameterSets.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters());
+            Parameters.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }
     }
 }

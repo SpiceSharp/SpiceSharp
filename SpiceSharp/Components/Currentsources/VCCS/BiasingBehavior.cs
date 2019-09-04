@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
@@ -100,17 +102,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-                ContPosNode = cc.Pins[2];
-                ContNegNode = cc.Pins[3];
-            }
+            var c = (ComponentBindingContext)context;
+            BaseParameters = Parameters.Get<BaseParameters>();
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
+            ContPosNode = c.Pins[2];
+            ContNegNode = c.Pins[3];
 
             BiasingState = context.States.Get<BiasingSimulationState>();
             var solver = BiasingState.Solver;

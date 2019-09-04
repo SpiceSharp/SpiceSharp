@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <param name="context">The context.</param>
         public override void Bind(BindingContext context)
         {
-            // Get behaviors
-            _loadBehavior = context.GetBehavior<VoltageSourceBehaviors.BiasingBehavior>("control");
+            var c = (CommonBehaviors.ControlledBindingContext)context;
+            _loadBehavior = c.ControlBehaviors.Get<VoltageSourceBehaviors.BiasingBehavior>();
         }
 
         /// <summary>

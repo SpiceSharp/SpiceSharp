@@ -82,20 +82,6 @@ namespace SpiceSharp.Simulations
                         extractor = behavior.CreateGetter<double>(PropertyName, Comparer);
                 }
             }
-
-            // 5) Check parameter sets
-            if (extractor == null)
-            {
-                // Get all parameter sets associated with the entity
-                var ps = Simulation.EntityParameters[EntityName];
-                foreach (var p in ps.Values)
-                {
-                    extractor = p.CreateGetter<double>(PropertyName, Comparer);
-                    if (extractor != null)
-                        break;
-                }
-            }
-
             Extractor = extractor;
         }
     }

@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
@@ -76,7 +78,6 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
             ComplexState = context.States.Get<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);

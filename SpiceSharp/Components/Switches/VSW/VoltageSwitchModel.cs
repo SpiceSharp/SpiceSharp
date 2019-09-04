@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.SwitchBehaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -7,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class VoltageSwitchModel : Model
     {
+        static VoltageSwitchModel()
+        {
+            RegisterBehaviorFactory(typeof(VoltageSwitchModel), new BehaviorFactoryDictionary
+            {
+                { typeof(CommonBehaviors.ModelParameterContainer), e => new CommonBehaviors.ModelParameterContainer(e.Name) }
+            });
+        }
+
         /// <summary>
         /// Creates a new instance of the <see cref="VoltageSwitchModel"/> class.
         /// </summary>
@@ -15,7 +24,7 @@ namespace SpiceSharp.Components
             : base(name)
         {
             // Add parameters
-            ParameterSets.Add(new VoltageModelParameters());
+            Parameters.Add(new VoltageModelParameters());
         }
     }
 }

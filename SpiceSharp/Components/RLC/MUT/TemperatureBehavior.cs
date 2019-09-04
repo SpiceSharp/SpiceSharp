@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -43,11 +44,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-            BaseParameters1 = context.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
-            BaseParameters2 = context.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
+            var c = (MutualInductanceBindingContext)context;
+            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters1 = c.Inductor1Behaviors.Get<InductorBehaviors.BiasingBehavior>()
+                .Parameters.Get<InductorBehaviors.BaseParameters>();
+            BaseParameters2 = c.Inductor2Behaviors.Get<InductorBehaviors.BiasingBehavior>()
+                .Parameters.Get<InductorBehaviors.BaseParameters>();
         }
 
         /// <summary>

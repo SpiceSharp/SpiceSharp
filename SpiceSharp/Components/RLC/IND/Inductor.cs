@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         public Inductor(string name)
             : base(name, InductorPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
         public Inductor(string name, string pos, string neg, double inductance) 
             : base(name, InductorPinCount)
         {
-            ParameterSets.Add(new BaseParameters(inductance));
+            Parameters.Add(new BaseParameters(inductance));
             Connect(pos, neg);
         }
     }

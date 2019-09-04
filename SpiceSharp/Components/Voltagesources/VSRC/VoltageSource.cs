@@ -32,8 +32,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name</param>
         public VoltageSource(string name) : base(name, VoltageSourcePinCount)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters());
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.Add(new CommonBehaviors.IndependentSourceParameters());
+            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
         }
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, double dc)
             : base(name, VoltageSourcePinCount)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(dc));
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.Add(new CommonBehaviors.IndependentSourceParameters(dc));
+            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
             Connect(pos, neg);
         }
 
@@ -61,8 +61,8 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, Waveform waveform) 
             : base(name, VoltageSourcePinCount)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
+            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
             Connect(pos, neg);
         }
     }

@@ -4,6 +4,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using NUnit.Framework;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharpTest.Waveforms
 {
@@ -13,7 +14,8 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PulseHasInvalidParameters_Expect_Exception()
         {
-            var context = new BindingContext(new ParameterSetDictionary(), new TypeDictionary<SimulationState>(), new VariableSet());
+            var op = new OP("op");
+            var context = new BindingContext(op, "Pulse");
 
             // Negative rise time
             Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Bind(context));

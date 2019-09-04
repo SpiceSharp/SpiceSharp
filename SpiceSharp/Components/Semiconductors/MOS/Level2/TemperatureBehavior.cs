@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
@@ -142,14 +143,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-            ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            ModelTemperature = context.GetBehavior<ModelTemperatureBehavior>("model");
-
+            var c = (ComponentBindingContext)context;
+            ModelTemperature = c.ModelBehaviors.Get<ModelTemperatureBehavior>();
+            BaseParameters = Parameters.Get<BaseParameters>();
+            ModelParameters = ModelTemperature.Parameters.Get<ModelBaseParameters>();
             BiasingState = context.States.Get<BiasingSimulationState>();
         }
 

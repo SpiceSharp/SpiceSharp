@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -48,7 +49,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
             var method = context.States.Get<TimeSimulationState>().Method;
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();

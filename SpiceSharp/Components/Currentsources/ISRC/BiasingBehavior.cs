@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
@@ -81,13 +83,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             base.Bind(context);
 
-            // Get parameters
-            BaseParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
+            var c = (ComponentBindingContext)context;
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
 
-            // Get states
-            context.States.TryGet<TimeSimulationState>(out _timeState);
-
-            // Setup the waveform
+            BaseParameters = Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
+            context.States.TryGet(out _timeState);
             BaseParameters.Waveform?.Bind(context);
 
             // Give some warnings if no value is given
@@ -98,12 +99,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                     BaseParameters.Waveform != null
                         ? "{0} has no DC value, transient time 0 value used".FormatString(Name)
                         : "{0} has no value, DC 0 assumed".FormatString(Name));
-            }
-
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
             }
 
             BiasingState = context.States.Get<BiasingSimulationState>();

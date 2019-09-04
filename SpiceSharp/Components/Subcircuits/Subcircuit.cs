@@ -128,14 +128,20 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Build a binding context for a behavior.
+        /// Binds the behaviors to the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(ISimulation simulation)
+        /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
+        /// <param name="simulation">The simulation to be bound to.</param>
+        /// <param name="entities">The entities that the entity may be connected to.</param>
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, ISimulation simulation, IEntityCollection entities)
         {
-            // Make sure our behaviors can find the behaviors of the subcircuit
-            return new SubcircuitBindingContext(simulation, _subcktSimulation.EntityBehaviors);
+            var context = new SubcircuitBindingContext(simulation, _subcktSimulation.EntityBehaviors);
+
+            foreach (var behavior in behaviors)
+            {
+                behavior.Bind(context);
+                context.Behaviors.Add(behavior.GetType(), behavior);
+            }
         }
     }
 }

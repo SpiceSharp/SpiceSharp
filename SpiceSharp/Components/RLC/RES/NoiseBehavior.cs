@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.NoiseSources;
 
 namespace SpiceSharp.Components.ResistorBehaviors
@@ -26,7 +27,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            ResistorNoise.Bind(context, PosNode, NegNode);
+            ResistorNoise.Bind((ComponentBindingContext)context, PosNode, NegNode);
         }
 
         /// <summary>

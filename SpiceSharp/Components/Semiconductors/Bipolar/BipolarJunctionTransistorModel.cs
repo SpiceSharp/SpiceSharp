@@ -23,8 +23,8 @@ namespace SpiceSharp.Components
         public BipolarJunctionTransistorModel(string name) : base(name)
         {
             // Add parameters
-            ParameterSets.Add(new ModelBaseParameters());
-            ParameterSets.Add(new ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters());
+            Parameters.Add(new ModelNoiseParameters());
         }
     }
 }

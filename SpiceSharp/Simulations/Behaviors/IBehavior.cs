@@ -1,10 +1,20 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Circuits;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Contract for a behavior.
     /// </summary>
-    public interface IBehavior
+    public interface IBehavior : IParameterSet
     {
+        /// <summary>
+        /// Gets the parameters of the behavior.
+        /// </summary>
+        /// <value>
+        /// The parameters.
+        /// </value>
+        ParameterSetDictionary Parameters { get; }
+
         /// <summary>
         /// Gets the name of the behavior.
         /// </summary>

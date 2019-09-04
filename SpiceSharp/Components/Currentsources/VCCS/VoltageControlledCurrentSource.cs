@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         public VoltageControlledCurrentSource(string name)
             : base(name, VoltageControlledCurrentSourcePinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
         public VoltageControlledCurrentSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain)
             : this(name)
         {
-            ParameterSets.Add(new BaseParameters(gain));
+            Parameters.Add(new BaseParameters(gain));
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

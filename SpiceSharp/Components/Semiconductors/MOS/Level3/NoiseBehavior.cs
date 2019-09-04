@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.MosfetBehaviors.Common;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
@@ -62,12 +63,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>("model");
-
+            NoiseParameters = ModelTemperature.Parameters.Get<ModelNoiseParameters>();
             _state = context.States.Get<NoiseSimulationState>();
-
             MosfetNoise.Bind(context, DrainNode,
                 GateNode,
                 SourceNode,

@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         public VoltageDelay(string name)
             : base(name, VoltageDelayPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components
         public VoltageDelay(string name, string pos, string neg, string controlPos, string controlNeg, double delay)
             : this(name)
         {
-            ParameterSets.Get<BaseParameters>().Delay = delay;
+            Parameters.Get<BaseParameters>().Delay = delay;
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

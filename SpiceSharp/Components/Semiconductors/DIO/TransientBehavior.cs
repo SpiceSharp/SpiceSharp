@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -44,7 +45,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
             var method = context.States.Get<TimeSimulationState>().Method;
             _capCharge = method.CreateDerivative();
         }

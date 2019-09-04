@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
@@ -42,7 +43,9 @@ namespace SpiceSharpTest.Simulations
             {
                 if (args.Name.Equals("R2"))
                 {
-                    args.Result = dc.EntityParameters["R2"].GetParameter<Parameter<double>>("resistance");
+                    args.Result = dc.EntityBehaviors["R2"]
+                        .Get<ITemperatureBehavior>()
+                        .GetParameter<Parameter<double>>("resistance");
                     args.TemperatureNeeded = true;
                 }
             };

@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
@@ -52,10 +53,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>("model");
-
+            NoiseParameters = ModelTemperature.Parameters.Get<ModelNoiseParameters>();
             _state = context.States.Get<NoiseSimulationState>();
             BipolarJunctionTransistorNoise.Bind(context, CollectorNode, BaseNode, EmitterNode, SubstrateNode,
                 CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode);

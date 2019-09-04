@@ -48,8 +48,9 @@ namespace SpiceSharp
             return null;
         }
 
+        #region Principal members
         /// <summary>
-        /// Sets the value of the principal parameter.
+        /// Tries to set the value of the principal parameter.
         /// </summary>
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="source">The source object.</param>
@@ -82,6 +83,92 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Tries to get the value of the principal parameter.
+        /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// </returns>
+        public static bool TryGetPrincipalParameter<T>(this object source, out T value)
+        {
+            // Get the first principal parameter
+            var member = Reflection.GetPrincipalMembers(source).FirstOrDefault();
+            if (member == null)
+            {
+                value = default;
+                return false;
+            }
+
+            // Extract
+            return GetMember(source, member, out value);
+        }
+
+        /// <summary>
+        /// Gets the value of the principal parameter.
+        /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <returns>The value of the principal parameter.</returns>
+        public static T GetPrincipalParameter<T>(this object source)
+        {
+            if (TryGetPrincipalParameter<T>(source, out var result))
+                return result;
+            throw new CircuitException("Principal parameter does not exist for type '{1}'".FormatString(typeof(T).Name));
+        }
+
+        /// <summary>
+        /// Creates a setter for the principal parameter.
+        /// </summary>
+        /// <remarks>
+        /// The principal parameter is a member flagged with a <seealso cref="ParameterInfoAttribute" />
+        /// where the principal flag is set. It can be used to flag a class member as the default
+        /// parameter.
+        /// </remarks>
+        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <param name="source">The object with parameters.</param>
+        /// <returns>
+        /// An action that can set the value of the principal parameter, or <c>null</c> if there is no principal parameter.
+        /// </returns>
+        public static Action<T> CreatePrincipalSetter<T>(this object source)
+        {
+            foreach (var member in Reflection.GetPrincipalMembers(source))
+            {
+                var result = CreateSetterForMember<T>(source, member);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Creates a getter for the principal parameter.
+        /// </summary>
+        /// <remarks>
+        /// The principal parameter is a member flagged with a <seealso cref="ParameterInfoAttribute" />
+        /// where the principal flag is set. It can be used to flag a class member as the default
+        /// parameter.
+        /// </remarks>
+        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <param name="source">The object with parameters.</param>
+        /// <returns>
+        /// A function returning the value of the principal parameter, or <c>null</c> if there is no principal parameter.
+        /// </returns>
+        public static Func<T> CreatePrincipalGetter<T>(this object source)
+        {
+            foreach (var member in Reflection.GetPrincipalMembers(source))
+            {
+                var result = CreateGetterForMember<T>(source, member);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+        #endregion
+
+        #region Named value parameters
+        /// <summary>
         /// Tries setting a parameter with a specified name.
         /// If multiple parameters have the same name, they will all be set.
         /// </summary>
@@ -95,7 +182,6 @@ namespace SpiceSharp
         /// </returns>
         public static bool TrySetParameter<T>(this object source, string name, T value, IEqualityComparer<string> comparer = null)
         {
-            // Set the property if any
             var isset = false;
             foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
             {
@@ -123,7 +209,94 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Calls a method by name without arguments.
+        /// Tries getting a parameter value. Only the first found parameter with the specified name is returned.
+        /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        ///     <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
+        /// </returns>
+        public static bool TryGetParameter<T>(this object source, string name, out T value, IEqualityComparer<string> comparer = null)
+        {
+            var member = Reflection.GetNamedMembers(source, name, comparer).FirstOrDefault();
+            if (member == null)
+            {
+                value = default;
+                return false;
+            }
+
+            // Get the value of this member
+            return GetMember(source, member, out value);
+        }
+
+        /// <summary>
+        /// Gets a parameter value. Only the first found parameter with the specified name is returned.
+        /// </summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        /// The parameter value.
+        /// </returns>
+        public static T GetParameter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
+        {
+            if (TryGetParameter<T>(source, name, out var result, comparer))
+                return result;
+            throw new CircuitException("Parameter '{0}' does not exist for type '{1}'".FormatString(name, typeof(T).Name));
+        }
+
+        /// <summary>
+        /// Returns a setter for the first eligible parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <param name="source">The object with parameters.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
+        /// <returns>
+        /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
+        /// </returns>
+        public static Action<T> CreateSetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
+        {
+            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
+            {
+                var result = CreateSetterForMember<T>(source, member);
+                if (result != null)
+                    return result;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns a getter for the first found parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <param name="source">The object with parameters.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="comparer">The string comparer used for identifying the parameter name.</param>
+        /// <returns>
+        /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
+        /// </returns>
+        public static Func<T> CreateGetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
+        {
+            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
+            {
+                var result = CreateGetterForMember<T>(source, member);
+                if (result != null)
+                    return result;
+            }
+
+            return null;
+        }
+        #endregion
+
+        #region Named methods
+        /// <summary>
+        /// Tries to call a method by name without arguments.
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="source">The source object.</param>
@@ -134,9 +307,6 @@ namespace SpiceSharp
         /// </returns>
         public static bool TrySetParameter(this object source, string name, IEqualityComparer<string> comparer = null)
         {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
-            // Set the property if any
             var isset = false;
             foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
             {
@@ -168,82 +338,7 @@ namespace SpiceSharp
                 throw new CircuitException("No parameter with the name '{0}' found".FormatString(name));
             return source;
         }
-
-        /// <summary>
-        /// Get a parameter value. Only the first found parameter with the specified name is returned.
-        /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
-        /// <param name="source">The source object.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>
-        ///     <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
-        /// </returns>
-        public static bool TryGetParameter<T>(this object source, string name, out T value, IEqualityComparer<string> comparer = null)
-        {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-
-            // Get the associated member
-            var member = Reflection.GetNamedMembers(source, name, comparer).FirstOrDefault();
-            if (member == null)
-            {
-                value = default;
-                return false;
-            }
-
-            // Get the value of this member
-            return GetMember(source, member, out value);
-        }
-
-        /// <summary>
-        /// Get a parameter value. Only the first found parameter with the specified name is returned.
-        /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
-        /// <param name="source">The source object.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns></returns>
-        public static T GetParameter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
-        {
-            if (TryGetParameter<T>(source, name, out var result, comparer))
-                return result;
-            throw new CircuitException("Parameter '{0}' does not exist for type '{1}'".FormatString(name, typeof(T).Name));
-        }
-
-        /// <summary>
-        /// Get a parameter value. Only the first principal parameter is returned.
-        /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
-        /// <param name="source">The source object.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        public static bool TryGetParameter<T>(this object source, out T value)
-        {
-            // Get the first principal parameter
-            var member = Reflection.GetPrincipalMembers(source).FirstOrDefault();
-            if (member == null)
-            {
-                value = default;
-                return false;
-            }
-
-            // Extract
-            return GetMember<T>(source, member, out value);
-        }
-
-        /// <summary>
-        /// Get a parameter value. Only the first principal parameter is returned.
-        /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
-        /// <param name="source">The source object.</param>
-        /// <returns></returns>
-        public static T GetParameter<T>(this object source)
-        {
-            if (TryGetParameter<T>(source, out var result))
-                return result;
-            throw new CircuitException("Principal parameter does not exist for type '{1}'".FormatString(typeof(T).Name));
-        }
+        #endregion
 
         /// <summary>
         /// Sets the value of a member. If the member is a property that implements <seealso cref="Parameter{T}" />
@@ -345,90 +440,6 @@ namespace SpiceSharp
             }
 
             return Reflection.GetMember(source, member, out value);
-        }
-
-        /// <summary>
-        /// Create a getter for the principal parameter.
-        /// </summary>
-        /// <remarks>
-        /// The principal parameter is a member flagged with a <seealso cref="ParameterInfoAttribute" />
-        /// where the principal flag is set. It can be used to flag a class member as the default
-        /// parameter.
-        /// </remarks>
-        /// <typeparam name="T">The parameter type.</typeparam>
-        /// <param name="source">The object with parameters.</param>
-        /// <returns>A function returning the value of the principal parameter, or <c>null</c> if there is no principal parameter.</returns>
-        public static Func<T> CreateGetter<T>(this object source)
-        {
-            foreach (var member in Reflection.GetPrincipalMembers(source))
-            {
-                var result = CreateGetterForMember<T>(source, member);
-                if (result != null)
-                    return result;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns a getter for the eligible first parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
-        /// <param name="source">The object with parameters.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The string comparer used for identifying the parameter name.</param>
-        /// <returns>A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.</returns>
-        public static Func<T> CreateGetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
-        {
-            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
-            {
-                var result = CreateGetterForMember<T>(source, member);
-                if (result != null)
-                    return result;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Create a setter for the principal parameter.
-        /// </summary>
-        /// <remarks>
-        /// The principal parameter is a member flagged with a <seealso cref="ParameterInfoAttribute" />
-        /// where the principal flag is set. It can be used to flag a class member as the default
-        /// parameter.
-        /// </remarks>
-        /// <typeparam name="T">The parameter type.</typeparam>
-        /// <param name="source">The object with parameters.</param>
-        /// <returns>An action that can set the value of the principal parameter, or <c>null</c> if there is no principal parameter.</returns>
-        public static Action<T> CreateSetter<T>(this object source)
-        {
-            foreach (var member in Reflection.GetPrincipalMembers(source))
-            {
-                var result = CreateSetterForMember<T>(source, member);
-                if (result != null)
-                    return result;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns a setter for the first eligible parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
-        /// <param name="source">The object with parameters.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns>A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.</returns>
-        public static Action<T> CreateSetter<T>(this object source, string name, IEqualityComparer<string> comparer = null)
-        {
-            foreach (var member in Reflection.GetNamedMembers(source, name, comparer))
-            {
-                var result = CreateSetterForMember<T>(source, member);
-                if (result != null)
-                    return result;
-            }
-
-            return null;
         }
 
         /// <summary>

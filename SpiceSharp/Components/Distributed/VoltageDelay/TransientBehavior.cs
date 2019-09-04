@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.Distributed;
 
 namespace SpiceSharp.Components.DelayBehaviors

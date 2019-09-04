@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -126,20 +127,15 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-            ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
-
-            // Allow the controling method to set up
+            var c = (ComponentBindingContext)context;
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
+            ModelParameters = c.ModelBehaviors.Get<CommonBehaviors.ModelParameterContainer>()
+                .Parameters.Get<ModelBaseParameters>();
+            BaseParameters = Parameters.Get<BaseParameters>();
             Method.Bind(context);
 
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-            }
-
+            // Get matrix elements
             BiasingState = context.States.Get<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);

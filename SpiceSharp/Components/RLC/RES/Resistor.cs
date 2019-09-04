@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
         public Resistor(string name) 
             : base(name, ResistorPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
         public Resistor(string name, string pos, string neg, double res) 
             : base(name, ResistorPinCount)
         {
-            ParameterSets.Add(new BaseParameters(res));
+            Parameters.Add(new BaseParameters(res));
             Connect(pos, neg);
         }
     }

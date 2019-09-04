@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
@@ -14,15 +15,16 @@ namespace SpiceSharpTest.Simulations
         [Test]
         public void When_DCSweepResistorParameter_Expect_Reference()
         {
-            // Create the circuit
+            // Note: We specify LinkParameters = false for entities that should not share data across different threads.
+            // The voltage source and resistor R2 are swept for different instances so they should be completely independent.
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V1", "in", "0", 0) { LinkParameters = false },
                 new Resistor("R1", "in", "out", 1.0e4),
-                new Resistor("R2", "out", "0", 1.0e4)
+                new Resistor("R2", "out", "0", 1.0e4) { LinkParameters = false }
                 );
 
             // Do a DC sweep where one of the sweeps is a parameter
-            var cconfig = new CollectionConfiguration() {CloneParameters = true};
+            var cconfig = new CollectionConfiguration();
             var dcSimulations = new List<DC>();
             var n = 4;
             for (var i = 0; i < n; i++)
@@ -36,7 +38,9 @@ namespace SpiceSharpTest.Simulations
                 {
                     if (args.Name.Equals("R2"))
                     {
-                        args.Result = dc.EntityParameters["R2"].GetParameter<Parameter<double>>("resistance");
+                        args.Result = dc.EntityBehaviors["R2"]
+                            .Get<ITemperatureBehavior>()
+                            .GetParameter<Parameter<double>>("resistance");
                         args.TemperatureNeeded = true;
                     }
                 };

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
@@ -42,7 +43,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current-controlled switch</param>
         public CurrentSwitch(string name) : base(name, CurrentSwitchPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace SpiceSharp.Components
         public CurrentSwitch(string name, string pos, string neg, string controllingSource)
             : base(name, CurrentSwitchPinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
             Connect(pos, neg);
             ControllingName = controllingSource;
         }
@@ -81,18 +82,20 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Build the binding context.
+        /// Binds the behaviors to the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(ISimulation simulation)
+        /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
+        /// <param name="simulation">The simulation to be bound to.</param>
+        /// <param name="entities">The entities that the entity may be connected to.</param>
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, ISimulation simulation, IEntityCollection entities)
         {
-            var context = base.BuildBindingContext(simulation);
+            var context = new CommonBehaviors.ControlledBindingContext(simulation, Name, ApplyConnections(simulation.Variables), Model, ControllingName);
 
-            // Add controlling voltage source data
-            context.Add("control", simulation.EntityParameters[ControllingName]);
-            context.Add("control", simulation.EntityBehaviors[ControllingName]);
-            return context;
+            foreach (var behavior in behaviors)
+            {
+                behavior.Bind(context);
+                context.Behaviors.Add(behavior.GetType(), behavior);
+            }
         }
 
         /// <summary>
@@ -103,8 +106,8 @@ namespace SpiceSharp.Components
         public override Entity Clone(InstanceData data)
         {
             var clone = (CurrentControlledCurrentSource)base.Clone(data);
-            if (clone.ControllingName != null && data is ComponentInstanceData cid)
-                clone.ControllingName = cid.GenerateIdentifier(clone.ControllingName);
+            if (clone.ControllingSource != null && data is ComponentInstanceData cid)
+                clone.ControllingSource = cid.GenerateIdentifier(clone.ControllingSource);
             return clone;
         }
     }

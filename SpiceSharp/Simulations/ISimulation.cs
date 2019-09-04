@@ -67,14 +67,6 @@ namespace SpiceSharp.Simulations
         BehaviorPool EntityBehaviors { get; }
 
         /// <summary>
-        /// Gets the entity parameters.
-        /// </summary>
-        /// <value>
-        /// The entity parameters.
-        /// </value>
-        ParameterPool EntityParameters { get; }
-
-        /// <summary>
         /// Gets the <see cref="IBehavior"/> types used by the <see cref="ISimulation"/>.
         /// </summary>
         /// <value>

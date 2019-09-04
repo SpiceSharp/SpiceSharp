@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DiodeBehaviors
@@ -92,17 +93,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get base configuration
+            var c = (ComponentBindingContext)context;
+            ModelTemperature = c.ModelBehaviors.Get<ModelTemperatureBehavior>();
             BaseConfiguration = context.Configurations.Get<BiasingConfiguration>();
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-            ModelParameters = context.GetParameterSet<ModelBaseParameters>("model");
-
-            // Get behaviors
-            ModelTemperature = context.GetBehavior<ModelTemperatureBehavior>("model");
-
+            BaseParameters = Parameters.Get<BaseParameters>();
+            ModelParameters = ModelTemperature.Parameters.Get<ModelBaseParameters>();
             BiasingState = context.States.Get<BiasingSimulationState>();
         }
 

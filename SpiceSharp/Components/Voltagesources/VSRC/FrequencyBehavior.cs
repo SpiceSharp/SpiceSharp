@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
@@ -89,9 +91,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
+            var c = (ComponentBindingContext)context;
+            FrequencyParameters = Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
             ComplexState = context.States.Get<ComplexSimulationState>();

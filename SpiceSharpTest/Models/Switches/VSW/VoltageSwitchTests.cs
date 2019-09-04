@@ -282,14 +282,14 @@ namespace SpiceSharpTest.Models
         {
             // Create voltage source
             var s = new VoltageSwitch("SW 1");
-            var p = s.ParameterSets.Get<SpiceSharp.Components.SwitchBehaviors.BaseParameters>();
+            var p = s.Parameters.Get<SpiceSharp.Components.SwitchBehaviors.BaseParameters>();
 
             // Check on
-            s.ParameterSets.SetParameter("on");
+            s.Parameters.SetParameter("on");
             Assert.AreEqual(true, p.ZeroState);
 
             // Check off
-            s.ParameterSets.SetParameter("off");
+            s.Parameters.SetParameter("off");
             Assert.AreEqual(false, p.ZeroState);
         }
     }

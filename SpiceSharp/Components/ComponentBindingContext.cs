@@ -1,52 +1,51 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A binding context for a <see cref="Component"/>.
+    /// Context for binding an <see cref="IBehavior"/> created by a <see cref="Component"/> to an <see cref="ISimulation"/>.
     /// </summary>
+    /// <seealso cref="BindingContext" />
     public class ComponentBindingContext : BindingContext
     {
         /// <summary>
-        /// Gets the pins the component is connected to.
+        /// Gets the model.
         /// </summary>
-        public int[] Pins { get; private set; } = new int[0];
+        /// <value>
+        /// The model.
+        /// </value>
+        protected string Model { get; }
+
+        /// <summary>
+        /// Gets the model behaviors.
+        /// </summary>
+        /// <value>
+        /// The model behaviors.
+        /// </value>
+        public virtual TypeDictionary<IBehavior> ModelBehaviors => Model != null ? Simulation.EntityBehaviors[Model] : null;
+
+        /// <summary>
+        /// Gets the pins that the component is connected to.
+        /// </summary>
+        /// <value>
+        /// The pins.
+        /// </value>
+        public int[] Pins { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentBindingContext"/> class.
         /// </summary>
-        /// <param name="simulation">The simulation to bind to.</param>
-        public ComponentBindingContext(ISimulation simulation)
-            : base(simulation)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="name">The name of the entity.</param>
+        /// <param name="pins">The pins that the component is connected to.</param>
+        /// <param name="model">The name of the model.</param>
+        public ComponentBindingContext(ISimulation simulation, string name, int[] pins, string model)
+            : base(simulation, name)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComponentBindingContext"/> class.
-        /// </summary>
-        /// <param name="configurations">The configurations to be used by the behavior.</param>
-        /// <param name="states">The simulation states to be used by the behavior.</param>
-        /// <param name="variables">The variable manager to be used by the behavior.</param>
-        public ComponentBindingContext(ParameterSetDictionary configurations, TypeDictionary<SimulationState> states, IVariableSet variables)
-            : base(configurations, states, variables)
-        {
-        }
-
-        /// <summary>
-        /// Apply the indices that the pins of the component are connected to.
-        /// </summary>
-        /// <param name="pins">The pins.</param>
-        public void Connect(params int[] pins)
-        {
-            if (pins == null || pins.Length == 0)
-            {
-                Pins = new int[0];
-                return;
-            }
-            Pins = new int[pins.Length];
-            for (var i = 0; i < pins.Length; i++)
-                Pins[i] = pins[i];
+            Pins = pins.ThrowIfNull(nameof(pins));
+            Model = model;
         }
     }
 }

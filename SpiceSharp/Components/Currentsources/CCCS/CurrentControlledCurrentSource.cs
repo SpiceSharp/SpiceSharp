@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
@@ -26,7 +27,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [ParameterName("control"), ParameterInfo("Name of the controlling source")]
-        public string ControllingName { get; set; }
+        public string ControllingSource { get; set; }
 
         /// <summary>
         /// Constants
@@ -41,7 +42,7 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name) 
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -55,9 +56,9 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
             : this(name)
         {
-            ParameterSets.Get<BaseParameters>().Coefficient.Value = gain;
+            Parameters.Get<BaseParameters>().Coefficient.Value = gain;
             Connect(pos, neg);
-            ControllingName = voltageSource;
+            ControllingSource = voltageSource;
         }
 
         /// <summary>
@@ -75,24 +76,31 @@ namespace SpiceSharp.Components
         /// </remarks>
         public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
         {
-            if (ControllingName != null)
-                entities[ControllingName].CreateBehaviors(simulation, entities);
+            if (ControllingSource != null)
+                entities[ControllingSource].CreateBehaviors(simulation, entities);
             base.CreateBehaviors(simulation, entities);
         }
 
         /// <summary>
-        /// Build the binding context.
+        /// Binds the behaviors to the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(ISimulation simulation)
+        /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
+        /// <param name="simulation">The simulation to be bound to.</param>
+        /// <param name="entities">The entities that the entity may be connected to.</param>
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, ISimulation simulation, IEntityCollection entities)
         {
-            var context = base.BuildBindingContext(simulation);
+            var context = new CommonBehaviors.ControlledBindingContext(
+                simulation, 
+                Name,
+                ApplyConnections(simulation.Variables), 
+                Model, 
+                ControllingSource);
 
-            // Add behaviors and parameters of the controlling voltage source
-            context.Add("control", simulation.EntityParameters[ControllingName]);
-            context.Add("control", simulation.EntityBehaviors[ControllingName]);
-            return context;
+            foreach (var behavior in behaviors)
+            {
+                behavior.Bind(context);
+                context.Behaviors.Add(behavior.GetType(), behavior);
+            }
         }
 
         /// <summary>
@@ -103,8 +111,8 @@ namespace SpiceSharp.Components
         public override Entity Clone(InstanceData data)
         {
             var clone = (CurrentControlledCurrentSource) base.Clone(data);
-            if (clone.ControllingName != null && data is ComponentInstanceData cid)
-                clone.ControllingName = cid.GenerateIdentifier(clone.ControllingName);
+            if (clone.ControllingSource != null && data is ComponentInstanceData cid)
+                clone.ControllingSource = cid.GenerateIdentifier(clone.ControllingSource);
             return clone;
         }
     }

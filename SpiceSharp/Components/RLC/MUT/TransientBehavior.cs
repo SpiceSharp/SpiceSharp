@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
@@ -56,10 +57,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public override void Bind(BindingContext context)
         {
 			base.Bind(context);
-            
-            // Get behaviors
-            Load1 = context.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
-            Load2 = context.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
+            var c = (MutualInductanceBindingContext)context;
+            Load1 = c.Inductor1Behaviors.Get<InductorBehaviors.TransientBehavior>();
+            Load2 = c.Inductor2Behaviors.Get<InductorBehaviors.TransientBehavior>();
             
             // Register events for modifying the flux through the inductors
             Load1.UpdateFlux += UpdateFlux1;

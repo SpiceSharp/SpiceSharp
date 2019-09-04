@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NonlinearResistorBehaviors
@@ -34,9 +35,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             base.Bind(context);
 
             // Cache some objects that we will use often
-            _bp = context.GetParameterSet<BaseParameters>();
-            _state = context.States.Get<BiasingSimulationState>();
-            _baseConfig = context.Configurations.Get<BiasingConfiguration>();
+            var c = (ComponentBindingContext)context;
+            _bp = Parameters.Get<BaseParameters>();
+            _state = c.States.Get<BiasingSimulationState>();
+            _baseConfig = c.Configurations.Get<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
             if (context is ComponentBindingContext cbc)
@@ -46,7 +48,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             }
 
             // We need 4 matrix elements here
-            var solver = context.States.Get<BiasingSimulationState>().Solver;
+            var solver = c.States.Get<BiasingSimulationState>().Solver;
             _aaPtr = solver.GetMatrixElement(_nodeA, _nodeA);
             _abPtr = solver.GetMatrixElement(_nodeA, _nodeB);
             _baPtr = solver.GetMatrixElement(_nodeB, _nodeA);

@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         public VoltageControlledVoltageSource(string name) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
-            ParameterSets.Add(new BaseParameters());
+            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
         public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
-            ParameterSets.Add(new BaseParameters(gain));
+            Parameters.Add(new BaseParameters(gain));
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

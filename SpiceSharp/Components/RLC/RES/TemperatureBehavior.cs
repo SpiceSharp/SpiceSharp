@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
@@ -49,12 +50,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-
-            // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-            context.TryGetParameterSet("model", out ModelBaseParameters mbp);
-            ModelParameters = mbp;
-
+            var c = (ComponentBindingContext)context;
+            BaseParameters = Parameters.Get<BaseParameters>();
+            if (c.ModelBehaviors != null)
+                ModelParameters = c.ModelBehaviors.Get<CommonBehaviors.ModelParameterContainer>().Parameters.Get<ModelBaseParameters>();
             BiasingState = context.States.Get<BiasingSimulationState>();
         }
 
