@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.SubcircuitBehaviors;
@@ -40,8 +39,8 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <remarks>
         /// Global nodes are nodes that are shared among all subcircuits without explicit connection. Typical examples
-        /// are supply voltages ("VDD", "VEE", etc.), but any number can be specified. The ground node "0" is always
-        /// treated as a global node, as well as any aliases to ground.
+        /// are supply voltages ("VDD", "VEE", etc.). The ground node "0" is always treated as a global node, as well 
+        /// as any other identifiers that map to the ground node.
         /// </remarks>
         /// <value>
         /// The global nodes.
@@ -131,17 +130,14 @@ namespace SpiceSharp.Components
         /// Binds the behaviors to the simulation.
         /// </summary>
         /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
+        /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
         {
-            var context = new SubcircuitBindingContext(simulation, _subcktSimulation.EntityBehaviors);
-
+            var context = new SubcircuitBindingContext(simulation, eb, _subcktSimulation.EntityBehaviors);
             foreach (var behavior in behaviors)
-            {
                 behavior.Bind(context);
-                context.Behaviors.Add(behavior.GetType(), behavior);
-            }
         }
     }
 }

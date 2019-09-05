@@ -2,7 +2,6 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors

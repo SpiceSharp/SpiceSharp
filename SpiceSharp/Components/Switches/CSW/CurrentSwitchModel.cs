@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SwitchBehaviors;
+﻿using SpiceSharp.Components.SwitchBehaviors;
 
 namespace SpiceSharp.Components
 {

@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         private IEntityCollection _parentEntities, _currentEntities;
 
         /// <summary>
-        /// Gets the comparer used to compare <see cref="Entity" /> identifiers.
+        /// Gets the comparer used to compare <see cref="IEntity" /> identifiers.
         /// </summary>
         /// <value>
         /// The comparer.
@@ -41,14 +41,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public bool IsReadOnly => _currentEntities.IsReadOnly;
 
         /// <summary>
-        /// Gets the <see cref="Entity"/> with the specified name.
+        /// Gets the <see cref="IEntity"/> with the specified name.
         /// </summary>
         /// <value>
-        /// The <see cref="Entity"/>.
+        /// The <see cref="IEntity"/>.
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public Entity this[string name]
+        public IEntity this[string name]
         {
             get
             {
@@ -61,10 +61,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// An entity that is just acting as a proxy for the original entity.
         /// </summary>
-        /// <seealso cref="SpiceSharp.Circuits.Entity" />
+        /// <seealso cref="SpiceSharp.Circuits.IEntity" />
         protected class SubcircuitEntityProxy : Entity
         {
-            private Entity _parent;
+            private IEntity _parent;
             private IEntityCollection _parentEntities;
             private ISimulation _parentSimulation;
 
@@ -74,8 +74,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             /// <param name="parent">The parent entity.</param>
             /// <param name="parentEntities">The parent entities.</param>
             /// <param name="parentSimulation">The parent simulation.</param>
-            public SubcircuitEntityProxy(Entity parent, IEntityCollection parentEntities, ISimulation parentSimulation)
-                : base(parent?.Name)
+            public SubcircuitEntityProxy(IEntity parent, IEntityCollection parentEntities, ISimulation parentSimulation)
+                : base(parent.Name)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
                 _parentEntities = parentEntities.ThrowIfNull(nameof(parentEntities));
@@ -83,7 +83,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
 
             /// <summary>
-            /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
+            /// Creates behaviors for the specified simulation that describe this <see cref="IEntity"/>.
             /// </summary>
             /// <param name="simulation">The simulation requesting the behaviors.</param>
             /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
@@ -116,14 +116,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Removes the <see cref="Entity" /> with specified name.
+        /// Removes the <see cref="IEntity" /> with specified name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
         public bool Remove(string name) => _currentEntities.Remove(name);
 
         /// <summary>
-        /// Determines whether this instance contains an <see cref="Entity"/> with the specified name.
+        /// Determines whether this instance contains an <see cref="IEntity"/> with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>
@@ -137,14 +137,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Tries to find an <see cref="Entity" /> in the collection.
+        /// Tries to find an <see cref="IEntity" /> in the collection.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         /// <param name="entity">The entity.</param>
         /// <returns>
         ///   <c>True</c> if the entity is found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetEntity(string name, out Entity entity)
+        public bool TryGetEntity(string name, out IEntity entity)
         {
             if (_currentEntities.TryGetEntity(name, out entity))
                 return true;
@@ -157,17 +157,17 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Enumerates each <see cref="Entity" /> of the specified type.
+        /// Enumerates each <see cref="IEntity" /> of the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public IEnumerable<Entity> ByType(Type type) => _currentEntities.ByType(type);
+        public IEnumerable<IEntity> ByType(Type type) => _currentEntities.ByType(type);
 
         /// <summary>
         /// Adds an item to the <see cref="System.Collections.Generic.ICollection{T}" />.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-        public void Add(Entity item) => _currentEntities.Add(item);
+        public void Add(IEntity item) => _currentEntities.Add(item);
 
         /// <summary>
         /// Removes all items from the <see cref="System.Collections.Generic.ICollection{T}" />.
@@ -181,7 +181,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// true if <paramref name="item" /> is found in the <see cref="System.Collections.Generic.ICollection{T}" />; otherwise, false.
         /// </returns>
-        public bool Contains(Entity item)
+        public bool Contains(IEntity item)
         {
             if (_currentEntities.Contains(item))
                 return true;
@@ -193,7 +193,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="System.Collections.Generic.ICollection{T}" />. The <see cref="System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        public void CopyTo(Entity[] array, int arrayIndex) => _currentEntities.CopyTo(array, arrayIndex);
+        public void CopyTo(IEntity[] array, int arrayIndex) => _currentEntities.CopyTo(array, arrayIndex);
 
         /// <summary>
         /// Removes the first occurrence of a specific object from the <see cref="System.Collections.Generic.ICollection{T}" />.
@@ -202,7 +202,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// true if <paramref name="item" /> was successfully removed from the <see cref="System.Collections.Generic.ICollection{T}" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="System.Collections.Generic.ICollection{T}" />.
         /// </returns>
-        public bool Remove(Entity item) => _currentEntities.Remove(item);
+        public bool Remove(IEntity item) => _currentEntities.Remove(item);
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -210,7 +210,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Entity> GetEnumerator() => _currentEntities.GetEnumerator();
+        public IEnumerator<IEntity> GetEnumerator() => _currentEntities.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.

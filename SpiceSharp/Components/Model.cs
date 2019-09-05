@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components
 {

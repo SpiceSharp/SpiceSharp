@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Algebra;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 

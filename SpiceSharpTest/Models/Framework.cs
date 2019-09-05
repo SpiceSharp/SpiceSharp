@@ -8,7 +8,6 @@ using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 using NUnit.Framework;
-using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 

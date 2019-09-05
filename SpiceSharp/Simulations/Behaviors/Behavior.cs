@@ -1,6 +1,4 @@
 ﻿using SpiceSharp.Circuits;
-using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Behaviors
 {

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
@@ -29,14 +27,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Gets the <see cref="EntityBehaviorDictionary"/> with the specified name.
+        /// Gets the <see cref="EntityBehaviors"/> with the specified name.
         /// </summary>
         /// <value>
-        /// The <see cref="EntityBehaviorDictionary"/>.
+        /// The <see cref="EntityBehaviors"/>.
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public override EntityBehaviorDictionary this[string name]
+        public override EntityBehaviors this[string name]
         {
             get
             {

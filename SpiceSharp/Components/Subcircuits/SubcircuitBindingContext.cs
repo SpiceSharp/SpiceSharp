@@ -21,9 +21,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes a new instance of the <see cref="SubcircuitBindingContext"/> class.
         /// </summary>
         /// <param name="simulation">The simulation to bind to.</param>
+        /// <param name="eb">The entity behaviors.</param>
         /// <param name="pool">The pool of behaviors in the subcircuit.</param>
-        public SubcircuitBindingContext(ISimulation simulation, BehaviorPool pool)
-            : base(simulation)
+        public SubcircuitBindingContext(ISimulation simulation, EntityBehaviors eb, BehaviorPool pool)
+            : base(simulation, eb, new int[] { }, null)
         {
             Pool = pool;
         }
