@@ -16,7 +16,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets or sets the entity comparer for ordering entities before iteration.
         /// </summary>
-        public IComparer<Entity> EntityComparer { get; set; }
+        public IComparer<IEntity> EntityComparer { get; set; }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -24,9 +24,9 @@ namespace SpiceSharp.Circuits
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public override IEnumerator<Entity> GetEnumerator()
+        public override IEnumerator<IEntity> GetEnumerator()
         {
-            var list = new List<Entity>(Count);
+            var list = new List<IEntity>(Count);
             foreach (var e in this)
                 list.Add(e);
 

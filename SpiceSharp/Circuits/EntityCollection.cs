@@ -15,7 +15,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly Dictionary<string, Entity> _entities;
+        private readonly Dictionary<string, IEntity> _entities;
         private readonly ReaderWriterLockSlim _lock;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace SpiceSharp.Circuits
         /// <param name="name">The string.</param>
         /// <returns>The entity with the specified string.</returns>
         [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        public Entity this[string name]
+        public IEntity this[string name]
         {
             get
             {
@@ -90,7 +90,7 @@ namespace SpiceSharp.Circuits
         public EntityCollection()
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, Entity>();
+            _entities = new Dictionary<string, IEntity>();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SpiceSharp.Circuits
         public EntityCollection(IEqualityComparer<string> comparer)
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, Entity>(comparer);
+            _entities = new Dictionary<string, IEntity>(comparer);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace SpiceSharp.Circuits
         /// Add an entity.
         /// </summary>
         /// <param name="item">The item to be added.</param>
-        public void Add(Entity item)
+        public void Add(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
 
@@ -143,7 +143,7 @@ namespace SpiceSharp.Circuits
         /// Add one or more entities.
         /// </summary>
         /// <param name="entities">The entities that need to be added.</param>
-        public void Add(params Entity[] entities)
+        public void Add(params IEntity[] entities)
         {
             if (entities == null)
                 return;
@@ -161,7 +161,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="item">The item to be deleted.</param>
         /// <returns></returns>
-        public bool Remove(Entity item)
+        public bool Remove(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
 
@@ -237,7 +237,7 @@ namespace SpiceSharp.Circuits
         /// Removes the specified entities from the collection.
         /// </summary>
         /// <param name="entities">The entities.</param>
-        public void Remove(params Entity[] entities)
+        public void Remove(params IEntity[] entities)
         {
             if (entities == null)
                 return;
@@ -288,7 +288,7 @@ namespace SpiceSharp.Circuits
         /// <param name="name">The name to be searched for.</param>
         /// <param name="entity">The found entity.</param>
         /// <returns>True if the entity was found.</returns>
-        public bool TryGetEntity(string name, out Entity entity)
+        public bool TryGetEntity(string name, out IEntity entity)
         {
             _lock.EnterReadLock();
             try
@@ -306,7 +306,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="type">The type of entities to be listed.</param>
         /// <returns>An array with entities of the specified type.</returns>
-        public IEnumerable<Entity> ByType(Type type)
+        public IEnumerable<IEntity> ByType(Type type)
         {
             _lock.EnterReadLock();
             try
@@ -329,9 +329,9 @@ namespace SpiceSharp.Circuits
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public virtual IEnumerator<Entity> GetEnumerator()
+        public virtual IEnumerator<IEntity> GetEnumerator()
         {
-            Entity[] result;
+            IEntity[] result;
             _lock.EnterReadLock();
             try
             {
@@ -363,7 +363,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="item">The entity.</param>
         /// <returns></returns>
-        public bool Contains(Entity item)
+        public bool Contains(IEntity item)
         {
             _lock.EnterReadLock();
             try
@@ -381,7 +381,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="array">The array.</param>
         /// <param name="arrayIndex">The starting index.</param>
-        public void CopyTo(Entity[] array, int arrayIndex)
+        public void CopyTo(IEntity[] array, int arrayIndex)
         {
             array.ThrowIfNull(nameof(array));
             if (arrayIndex < 0)

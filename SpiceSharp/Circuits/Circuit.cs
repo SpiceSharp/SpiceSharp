@@ -71,19 +71,5 @@ namespace SpiceSharp
             foreach (var entity in ckt)
                 Add(entity);
         }
-
-        /// <summary>
-        /// Instantiate another circuit as a subcircuit.
-        /// </summary>
-        /// <param name="data">The instance data.</param>
-        public void Instantiate(InstanceData data)
-        {
-            data.ThrowIfNull(nameof(data));
-            foreach (var entity in data.Subcircuit)
-            {
-                var clone = entity.Clone(data);
-                Add(clone);
-            }
-        }
     }
 }

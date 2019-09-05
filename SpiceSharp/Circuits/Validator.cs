@@ -86,7 +86,7 @@ namespace SpiceSharp.Circuits
         /// Perform checks on an entity.
         /// </summary>
         /// <param name="c">The entity to be checked.</param>
-        private void CheckEntity(Entity c)
+        private void CheckEntity(IEntity c)
         {
             // Circuit components
             if (c is Component icc)

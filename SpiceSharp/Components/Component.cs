@@ -140,36 +140,10 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Clone the component for instantiating.
-        /// </summary>
-        /// <param name="data">The instance data.</param>
-        /// <returns></returns>
-        public override Entity Clone(InstanceData data)
-        {
-            var clone = (Component)base.Clone(data);
-
-            // Manage connections
-            if (data is ComponentInstanceData cid)
-            {
-                // Map nodes
-                string[] nodes = new string[PinCount];
-                for (var i = 0; i < PinCount; i++)
-                    nodes[i] = cid.GenerateNodeName(_connections[i]);
-                clone.Connect(nodes);
-
-                // Map the model
-                if (Model != null)
-                    clone.Model = cid.GenerateModelName(Model);
-            }
-
-            return clone;
-        }
-
-        /// <summary>
         /// Copy from another component.
         /// </summary>
         /// <param name="source">The source component.</param>
-        public override void CopyFrom(Entity source)
+        public override void CopyFrom(IEntity source)
         {
             base.CopyFrom(source);
             var c = (Component)source;

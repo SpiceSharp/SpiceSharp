@@ -11,13 +11,13 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the entity.
         /// </summary>
-        public Entity Entity { get; }
+        public IEntity Entity { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityEventArgs"/> class.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public EntityEventArgs(Entity entity)
+        public EntityEventArgs(IEntity entity)
         {
             Entity = entity.ThrowIfNull(nameof(entity));
         }

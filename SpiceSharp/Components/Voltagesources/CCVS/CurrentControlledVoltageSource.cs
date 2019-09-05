@@ -97,18 +97,5 @@ namespace SpiceSharp.Components
             foreach (var behavior in behaviors)
                 behavior.Bind(context);
         }
-
-        /// <summary>
-        /// Clone the current controlled current source
-        /// </summary>
-        /// <param name="data">Instance data.</param>
-        /// <returns></returns>
-        public override Entity Clone(InstanceData data)
-        {
-            var clone = (CurrentControlledCurrentSource)base.Clone(data);
-            if (clone.ControllingSource != null && data is ComponentInstanceData cid)
-                clone.ControllingSource = cid.GenerateIdentifier(clone.ControllingSource);
-            return clone;
-        }
     }
 }

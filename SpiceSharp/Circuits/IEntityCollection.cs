@@ -8,7 +8,7 @@ namespace SpiceSharp.Circuits
     /// </summary>
     /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
     /// <seealso cref="System.Collections.Generic.ICollection{T}" />
-    public interface IEntityCollection : IEnumerable<Entity>, ICollection<Entity>
+    public interface IEntityCollection : IEnumerable<IEntity>, ICollection<IEntity>
     {
         /// <summary>
         /// Gets the <see cref="Entity"/> with the specified name.
@@ -18,7 +18,7 @@ namespace SpiceSharp.Circuits
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        Entity this[string name] { get; }
+        IEntity this[string name] { get; }
 
         /// <summary>
         /// Gets the comparer used to compare <see cref="Entity"/> identifiers.
@@ -52,13 +52,13 @@ namespace SpiceSharp.Circuits
         /// <returns>
         /// <c>True</c> if the entity is found; otherwise <c>false</c>.
         /// </returns>
-        bool TryGetEntity(string name, out Entity entity);
+        bool TryGetEntity(string name, out IEntity entity);
 
         /// <summary>
         /// Enumerates each <see cref="Entity"/> of the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        IEnumerable<Entity> ByType(Type type);
+        IEnumerable<IEntity> ByType(Type type);
     }
 }
