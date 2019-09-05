@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
 
             // Cache some objects that we will use often
             var c = (ComponentBindingContext)context;
-            _bp = Parameters.Get<BaseParameters>();
+            _bp = context.Behaviors.Parameters.Get<BaseParameters>();
             _state = c.States.Get<BiasingSimulationState>();
             _baseConfig = c.Configurations.Get<BiasingConfiguration>();
 

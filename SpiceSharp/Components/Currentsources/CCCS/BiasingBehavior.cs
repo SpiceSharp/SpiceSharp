@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
 
             var c = (CommonBehaviors.ControlledBindingContext)context;
             PosNode = c.Pins[0];

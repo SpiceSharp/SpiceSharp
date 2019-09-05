@@ -53,7 +53,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
+        /// Creates behaviors for the specified simulation that describe this <see cref="Entity" />.
         /// </summary>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
@@ -76,19 +76,17 @@ namespace SpiceSharp.Components
         /// Binds the behaviors to the simulation.
         /// </summary>
         /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
+        /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
         {
-            // Create the context, specifically for components
-            var context = new ComponentBindingContext(simulation, Name, ApplyConnections(simulation.Variables), Model);
+            simulation.ThrowIfNull(nameof(simulation));
+            var context = new ComponentBindingContext(simulation, eb, ApplyConnections(simulation.Variables), Model);
 
             // Bind the behaviors
             foreach (var behavior in behaviors)
-            {
                 behavior.Bind(context);
-                context.Behaviors.Add(behavior.GetType(), behavior);
-            }
         }
 
         /// <summary>

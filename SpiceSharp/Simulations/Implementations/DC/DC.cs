@@ -124,7 +124,7 @@ namespace SpiceSharp.Simulations
                     // Get entity parameters
                     if (!EntityBehaviors.ContainsKey(sweep.Parameter))
                         throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
-                    var eb = EntityBehaviors[sweep.Parameter].Get<IBiasingBehavior>();
+                    var eb = EntityBehaviors[sweep.Parameter];
 
                     // Check for a Voltage source or Current source parameters
                     if (eb.Parameters.TryGet<Components.CommonBehaviors.IndependentSourceParameters>(out var ibp))

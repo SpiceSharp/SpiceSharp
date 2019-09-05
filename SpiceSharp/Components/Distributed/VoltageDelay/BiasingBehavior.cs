@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];

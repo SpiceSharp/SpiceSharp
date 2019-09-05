@@ -37,8 +37,9 @@ namespace SpiceSharpTest.Examples
             SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
             tran.AfterSetup += (sender, args) =>
             {
-                tran.EntityBehaviors["R2"].TryGet(out tb);
-                tb.Parameters.TryGet(out bp);
+                var eb = tran.EntityBehaviors["R2"];
+                eb.TryGet(out tb);
+                eb.Parameters.TryGet(out bp);
             };
             // </example_change_parameter_setup>
             // <example_change_parameter_load>

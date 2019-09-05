@@ -130,9 +130,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            ModelParameters = c.ModelBehaviors.Get<CommonBehaviors.ModelParameterContainer>()
-                .Parameters.Get<ModelBaseParameters>();
-            BaseParameters = Parameters.Get<BaseParameters>();
+            ModelParameters = c.ModelBehaviors.Parameters.Get<ModelBaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
             Method.Bind(context);
 
             // Get matrix elements

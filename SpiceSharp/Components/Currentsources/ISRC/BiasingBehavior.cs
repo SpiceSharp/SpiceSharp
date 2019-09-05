@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
 
-            BaseParameters = Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
             context.States.TryGet(out _timeState);
             BaseParameters.Waveform?.Bind(context);
 

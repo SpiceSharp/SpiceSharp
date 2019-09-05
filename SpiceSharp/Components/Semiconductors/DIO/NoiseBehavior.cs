@@ -47,7 +47,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            _mnp = ModelTemperature.Parameters.Get<ModelNoiseParameters>();
+            var c = (ComponentBindingContext)context;
+            _mnp = c.ModelBehaviors.Parameters.Get<ModelNoiseParameters>();
             _state = context.States.Get<NoiseSimulationState>();
             DiodeNoise.Bind(context, PosNode, PosPrimeNode, NegNode);
         }

@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             NegNode = c.Pins[1];
             VoltageLoad = c.ControlBehaviors.Get<VoltageSourceBehaviors.BiasingBehavior>();
             ContBranchEq = VoltageLoad.BranchEq;
-            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
 
             // Get matrix elements
             var solver = context.States.Get<BiasingSimulationState>().Solver;

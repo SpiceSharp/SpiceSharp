@@ -1,66 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// A dictionary of <see cref="ParameterSet" />. Only one instance of each type is allowed.
+    /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
-    /// <seealso cref="TypeDictionary{T}" />
-    public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>, IParameterSet
+    /// <seealso cref="TypeDictionary{Behavior}" />
+    public class EntityBehaviors : TypeDictionary<IBehavior>, IParameterSet
     {
         /// <summary>
-        /// Adds a parameter set to the dictionary.
+        /// Gets the source identifier.
         /// </summary>
-        /// <param name="set">The parameter set.</param>
-        public void Add(ParameterSet set)
+        public string Source { get; }
+
+        /// <summary>
+        /// Gets the parameters used by the behaviors.
+        /// </summary>
+        /// <value>
+        /// The parameters.
+        /// </value>
+        public ParameterSetDictionary Parameters { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityBehaviors"/> class.
+        /// </summary>
+        /// <param name="source">The entity identifier that will provide the behaviors.</param>
+        public EntityBehaviors(string source)
         {
-            set.ThrowIfNull(nameof(set));
-            Add(set.GetType(), set);
+            Source = source.ThrowIfNull(nameof(source));
+            Parameters = new ParameterSetDictionary();
         }
 
         /// <summary>
-        /// Clone the dictionary.
+        /// Initializes a new instance of the <see cref="EntityBehaviors"/> class.
         /// </summary>
-        /// <returns></returns>
-        public virtual ParameterSetDictionary Clone()
+        /// <param name="source">The source.</param>
+        /// <param name="parameters">The parameters.</param>
+        public EntityBehaviors(string source, ParameterSetDictionary parameters)
         {
-            var clone = (ParameterSetDictionary)Activator.CreateInstance(GetType());
-            foreach (var p in Values)
-                clone.Add(p.Clone());
-            return clone;
+            Source = source.ThrowIfNull(nameof(source));
+            Parameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
-        /// <summary>
-        /// Clone the object.
-        /// </summary>
-        /// <returns></returns>
-        ICloneable ICloneable.Clone() => Clone();
+        #region Implementation of IParameterSet   
+        
+        /*
+         * In general, we first apply the set/get to the behaviors, then to the parameters.
+         */
 
-        /// <summary>
-        /// Copy all parameter sets.
-        /// </summary>
-        /// <param name="source">The source object.</param>
-        public virtual void CopyFrom(ParameterSetDictionary source)
-        {
-            var d = source as ParameterSetDictionary ?? throw new CircuitException("Cannot copy, type mismatch");
-            foreach (var ps in d.Values)
-            {
-                // If the parameter set doesn't exist, then we will simply clone it, else copy them
-                if (!TryGetValue(ps.GetType(), out var myps))
-                    Add(ps.Clone());
-                else
-                    Reflection.CopyPropertiesAndFields(ps, myps);
-            }
-        }
-
-        /// <summary>
-        /// Copy all properties from another object to this one.
-        /// </summary>
-        /// <param name="source">The source object.</param>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((ParameterSetDictionary)source);
-
-        #region Implement the IParameterSet interface        
         /// <summary>
         /// Sets the value of the principal parameter.
         /// </summary>
@@ -69,15 +57,14 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool TrySetPrincipalParameter<T>(T value)
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                if (p.TrySetPrincipalParameter(value))
+                if (b.TrySetPrincipalParameter(value))
                     return true;
             }
-            return false;
+            return Parameters.TrySetPrincipalParameter(value);
         }
 
         /// <summary>
@@ -88,15 +75,15 @@ namespace SpiceSharp
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public ParameterSetDictionary SetPrincipalParameter<T>(T value)
+        public EntityBehaviors SetPrincipalParameter<T>(T value)
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                if (p.TrySetPrincipalParameter(value))
+                if (b.TrySetPrincipalParameter(value))
                     return this;
             }
-            throw new CircuitException("No principal parameter found");
+            Parameters.SetPrincipalParameter(value);
+            return this;
         }
         object IParameterSet.SetPrincipalParameter<T>(T value) => SetPrincipalParameter(value);
 
@@ -108,16 +95,14 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool TryGetPrincipalParameter<T>(out T value)
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                if (p.TryGetPrincipalParameter(out value))
+                if (b.TryGetPrincipalParameter(out value))
                     return true;
             }
-            value = default;
-            return false;
+            return Parameters.TryGetPrincipalParameter(out value);
         }
 
         /// <summary>
@@ -129,12 +114,12 @@ namespace SpiceSharp
         /// </returns>
         public T GetPrincipalParameter<T>()
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                if (p.TryGetPrincipalParameter(out T value))
+                if (b.TryGetPrincipalParameter(out T value))
                     return value;
             }
-            throw new CircuitException("No principal parameter found");
+            return Parameters.GetPrincipalParameter<T>();
         }
 
         /// <summary>
@@ -146,13 +131,13 @@ namespace SpiceSharp
         /// </returns>
         public Action<T> CreatePrincipalSetter<T>()
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                var setter = p.CreatePrincipalSetter<T>();
+                var setter = b.CreatePrincipalSetter<T>();
                 if (setter != null)
                     return setter;
             }
-            return null;
+            return Parameters.CreatePrincipalSetter<T>();
         }
 
         /// <summary>
@@ -164,13 +149,13 @@ namespace SpiceSharp
         /// </returns>
         public Func<T> CreatePrincipalGetter<T>()
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                var getter = p.CreatePrincipalGetter<T>();
+                var getter = b.CreatePrincipalGetter<T>();
                 if (getter != null)
                     return getter;
             }
-            return null;
+            return Parameters.CreatePrincipalGetter<T>();
         }
 
         /// <summary>
@@ -186,9 +171,10 @@ namespace SpiceSharp
         /// </returns>
         public bool TrySetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
         {
-            bool result = false;
-            foreach (var p in Values)
-                result |= p.TrySetParameter(name, value, comparer);
+            var result = false;
+            foreach (var b in Values)
+                result |= b.TrySetParameter(name, value, comparer);
+            result |= Parameters.TrySetParameter(name, value, comparer);
             return result;
         }
 
@@ -202,12 +188,11 @@ namespace SpiceSharp
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public ParameterSetDictionary SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        public EntityBehaviors SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
         {
             if (TrySetParameter(name, value, comparer))
                 return this;
-            throw new CircuitException("Could not find a parameter '{0}'".FormatString(name));
+            throw new CircuitException("Could not find parameter '{0}'".FormatString(name));
         }
         object IParameterSet.SetParameter<T>(string name, T value, IEqualityComparer<string> comparer)
             => SetParameter(name, value, comparer);
@@ -222,16 +207,14 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool TryGetParameter<T>(string name, out T value, IEqualityComparer<string> comparer = null)
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                if (p.TryGetParameter(name, out value, comparer))
+                if (b.TryGetParameter(name, out value, comparer))
                     return true;
             }
-            value = default;
-            return false;
+            return Parameters.TryGetParameter(name, out value, comparer);
         }
 
         /// <summary>
@@ -243,12 +226,14 @@ namespace SpiceSharp
         /// <returns>
         /// The parameter value.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
         public T GetParameter<T>(string name, IEqualityComparer<string> comparer = null)
         {
-            if (TryGetParameter(name, out T value, comparer))
-                return value;
-            throw new CircuitException("Could not find parameter '{0}'".FormatString(name));
+            foreach (var b in Values)
+            {
+                if (b.TryGetParameter(name, out T value, comparer))
+                    return value;
+            }
+            return Parameters.GetParameter<T>(name, comparer);
         }
 
         /// <summary>
@@ -262,13 +247,13 @@ namespace SpiceSharp
         /// </returns>
         public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null)
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                var setter = p.CreateSetter<T>(name, comparer);
+                var setter = b.CreateSetter<T>(name, comparer);
                 if (setter != null)
                     return setter;
             }
-            return null;
+            return Parameters.CreateSetter<T>(name, comparer);
         }
 
         /// <summary>
@@ -282,13 +267,13 @@ namespace SpiceSharp
         /// </returns>
         public Func<T> CreateGetter<T>(string name, IEqualityComparer<string> comparer = null)
         {
-            foreach (var p in Values)
+            foreach (var b in Values)
             {
-                var getter = p.CreateGetter<T>(name, comparer);
+                var getter = b.CreateGetter<T>(name, comparer);
                 if (getter != null)
                     return getter;
             }
-            return null;
+            return Parameters.CreateGetter<T>(name, comparer);
         }
 
         /// <summary>
@@ -303,8 +288,9 @@ namespace SpiceSharp
         public bool TrySetParameter(string name, IEqualityComparer<string> comparer = null)
         {
             var result = false;
-            foreach (var p in Values)
-                result |= p.TrySetParameter(name, comparer);
+            foreach (var b in Values)
+                result |= b.TrySetParameter(name, comparer);
+            result |= Parameters.TrySetParameter(name, comparer);
             return result;
         }
 
@@ -317,7 +303,7 @@ namespace SpiceSharp
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public ParameterSetDictionary SetParameter(string name, IEqualityComparer<string> comparer = null)
+        public EntityBehaviors SetParameter(string name, IEqualityComparer<string> comparer = null)
         {
             if (TrySetParameter(name, comparer))
                 return this;

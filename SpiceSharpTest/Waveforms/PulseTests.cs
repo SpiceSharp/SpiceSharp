@@ -15,7 +15,7 @@ namespace SpiceSharpTest.Waveforms
         public void When_PulseHasInvalidParameters_Expect_Exception()
         {
             var op = new OP("op");
-            var context = new BindingContext(op, "Pulse");
+            var context = new BindingContext(op, new EntityBehaviors("eb"));
 
             // Negative rise time
             Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Bind(context));

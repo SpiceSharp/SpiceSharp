@@ -30,7 +30,7 @@ namespace SpiceSharp.Circuits
         /// <value>
         /// The behaviors.
         /// </value>
-        public virtual TypeDictionary<IBehavior> Behaviors => Simulation.EntityBehaviors[Name];
+        public virtual EntityBehaviors Behaviors { get; }
 
         /// <summary>
         /// Gets the simulation variables.
@@ -60,11 +60,12 @@ namespace SpiceSharp.Circuits
         /// Initializes a new instance of the <see cref="BindingContext"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="name">The name.</param>
-        public BindingContext(ISimulation simulation, string name)
+        /// <param name="behaviors">The entity behaviors.</param>
+        public BindingContext(ISimulation simulation, EntityBehaviors behaviors)
         {
-            Name = name.ThrowIfNull(nameof(name));
             Simulation = simulation.ThrowIfNull(nameof(simulation));
+            Behaviors = behaviors.ThrowIfNull(nameof(behaviors));
+            Name = behaviors.Source;
         }
     }
 }

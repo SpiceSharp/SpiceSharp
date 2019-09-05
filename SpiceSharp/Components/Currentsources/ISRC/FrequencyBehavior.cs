@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            FrequencyParameters = Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
+            FrequencyParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
             ComplexState = context.States.Get<ComplexSimulationState>();

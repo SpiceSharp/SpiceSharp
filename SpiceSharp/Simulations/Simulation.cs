@@ -233,13 +233,10 @@ namespace SpiceSharp.Simulations
         {
             EntityBehaviors = new BehaviorPool(entities.Comparer, Types.ToArray());
 
-            // Keep track of how long we are taking to create behaviors
-            SimulationStatistics.BehaviorCreationTime.Start();
-
             // Create the behaviors
+            SimulationStatistics.BehaviorCreationTime.Start();
             foreach (var entity in entities)
                 entity.CreateBehaviors(this, entities);
-
             SimulationStatistics.BehaviorCreationTime.Stop();
         }
 

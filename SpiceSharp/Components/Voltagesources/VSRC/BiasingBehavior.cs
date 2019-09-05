@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            BaseParameters = Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
             BaseParameters.Waveform?.Bind(context);
 
             if (!BaseParameters.DcValue.Given)

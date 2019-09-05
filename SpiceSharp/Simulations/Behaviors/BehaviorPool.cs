@@ -15,7 +15,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them.
         /// </summary>
-        private readonly Dictionary<string, EntityBehaviorDictionary> _entityBehaviors;
+        private readonly Dictionary<string, EntityBehaviors> _entityBehaviors;
 
         /// <summary>
         /// Lists of behaviors indexed by type of behavior.
@@ -45,9 +45,9 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the behavior keys.
+        /// Enumerates all names in the pool.
         /// </summary>
-        public IEnumerable<string> Keys
+        public IEnumerable<string> Names
         {
             get
             {
@@ -77,7 +77,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The behavior associated to the specified entity identifier.</returns>
-        public virtual EntityBehaviorDictionary this[string name]
+        public virtual EntityBehaviors this[string name]
         {
             get
             {
@@ -102,11 +102,9 @@ namespace SpiceSharp.Behaviors
         public BehaviorPool(IEnumerable<Type> types)
         {
             types.ThrowIfNull(nameof(types));
-
-            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
+            _entityBehaviors = new Dictionary<string, EntityBehaviors>();
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
-            Lock.ExitWriteLock();
         }
         
         /// <summary>
@@ -115,7 +113,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         public BehaviorPool(IEqualityComparer<string> comparer)
         {
-            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>(comparer);
+            _entityBehaviors = new Dictionary<string, EntityBehaviors>(comparer);
         }
 
         /// <summary>
@@ -126,36 +124,41 @@ namespace SpiceSharp.Behaviors
         public BehaviorPool(IEqualityComparer<string> comparer, IEnumerable<Type> types)
         {
             types.ThrowIfNull(nameof(types));
-
-            _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>(comparer);
+            _entityBehaviors = new Dictionary<string, EntityBehaviors>(comparer);
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
         }
 
         /// <summary>
-        /// Adds the specified behavior.
+        /// Adds the entity behaviors.
         /// </summary>
-        /// <param name="id">The identifier for the behavior.</param>
-        /// <param name="behavior">The behavior.</param>
-        public virtual void Add(string id, IBehavior behavior)
+        /// <param name="id">The identifier.</param>
+        /// <param name="behaviors">The behaviors.</param>
+        /// <exception cref="CircuitException">There are already behaviors for '{0}'".FormatString(id)</exception>
+        public void Add(string id, EntityBehaviors behaviors)
         {
-            behavior.ThrowIfNull(nameof(behavior));
+            id.ThrowIfNull(nameof(id));
+            behaviors.ThrowIfNull(nameof(behaviors));
+            Lock.EnterReadLock();
+            try
+            {
+                // First see if we already have a behavior
+                if (_entityBehaviors.ContainsKey(id))
+                    throw new CircuitException("There are already behaviors for '{0}'".FormatString(id));
+            }
+            finally
+            {
+                Lock.ExitReadLock();
+            }
+
             Lock.EnterWriteLock();
             try
             {
-                // Try finding the entity behavior dictionary
-                if (!_entityBehaviors.TryGetValue(id, out var ebd))
+                _entityBehaviors.Add(id, behaviors);
+                foreach (var type in _behaviorLists.Keys)
                 {
-                    ebd = new EntityBehaviorDictionary(id);
-                    _entityBehaviors.Add(id, ebd);
-                }
-                ebd.Add(behavior.GetType(), behavior);
-
-                // Track lists
-                foreach (var pair in _behaviorLists)
-                {
-                    if (ebd.TryGetValue(pair.Key, out var b) && b == behavior)
-                        pair.Value.Add(b);
+                    if (behaviors.TryGetValue(type, out var behavior))
+                        _behaviorLists[type].Add(behavior);
                 }
             }
             finally
@@ -171,12 +174,6 @@ namespace SpiceSharp.Behaviors
         /// The comparer.
         /// </value>
         public IEqualityComparer<string> Comparer => _entityBehaviors.Comparer;
-
-        /// <summary>
-        /// Adds the specified behavior.
-        /// </summary>
-        /// <param name="behavior">The behavior.</param>
-        public void Add(IBehavior behavior) => Add(behavior.Name, behavior);
 
         /// <summary>
         /// Gets a list of behaviors of a specific type.
@@ -206,7 +203,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="name">The identifier.</param>
         /// <param name="ebd">The dictionary of entity behaviors.</param>
         /// <returns></returns>
-        public virtual bool TryGetBehaviors(string name, out EntityBehaviorDictionary ebd)
+        public virtual bool TryGetBehaviors(string name, out EntityBehaviors ebd)
         {
             Lock.EnterReadLock();
             try

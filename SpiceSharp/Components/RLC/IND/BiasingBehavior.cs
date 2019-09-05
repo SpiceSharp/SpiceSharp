@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             base.Bind(context);
 
             // Get parameters.
-            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
 
             if (context is ComponentBindingContext cc)
             {

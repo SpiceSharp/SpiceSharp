@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            FrequencyParameters = Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
+            FrequencyParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
             ComplexState = context.States.Get<ComplexSimulationState>();

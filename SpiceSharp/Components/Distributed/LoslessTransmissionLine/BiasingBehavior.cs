@@ -187,7 +187,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             base.Bind(context);
 
             // Get parameters
-            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
 
             // Connect
             var c = (ComponentBindingContext)context;

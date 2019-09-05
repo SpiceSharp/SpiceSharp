@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            BaseParameters = Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
             ContPosNode = c.Pins[2];

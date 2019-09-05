@@ -49,40 +49,8 @@ namespace SpiceSharp.Simulations
         {
             e.ThrowIfNull(nameof(e));
             var eb = Simulation.EntityBehaviors[EntityName];
-
-            Func<double> extractor = null;
-
             if (eb != null)
-            {
-                // Get the necessary behavior in order:
-                // 1) First try time behaviors
-                {
-                    if (eb.TryGetValue(typeof(ITimeBehavior), out var behavior))
-                        extractor = behavior.CreateGetter<double>(PropertyName, Comparer);
-                }
-
-                // 2) Try the accept behaviors
-                if (extractor == null)
-                {
-                    if (eb.TryGetValue(typeof(IAcceptBehavior), out var behavior))
-                        extractor = behavior.CreateGetter<double>(PropertyName, Comparer);
-                }
-
-                // 3) Second, try the load behavior
-                if (extractor == null)
-                {
-                    if (eb.TryGetValue(typeof(IBiasingBehavior), out var behavior))
-                        extractor = behavior.CreateGetter<double>(PropertyName, Comparer);
-                }
-
-                // 4) Thirdly, check temperature behavior
-                if (extractor == null)
-                {
-                    if (eb.TryGetValue(typeof(ITemperatureBehavior), out var behavior))
-                        extractor = behavior.CreateGetter<double>(PropertyName, Comparer);
-                }
-            }
-            Extractor = extractor;
+                Extractor = eb.CreateGetter<double>(PropertyName, Comparer);
         }
     }
 }

@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     /// </summary>
     public class ResistorModel : Model
     {
-        static ResistorModel()
-        {
-            RegisterBehaviorFactory(typeof(ResistorModel), new BehaviorFactoryDictionary
-            {
-                { typeof(CommonBehaviors.ModelParameterContainer), e => new CommonBehaviors.ModelParameterContainer(e.Name) }
-            });
-        }
-
         /// <summary>
         /// Creates a new instance of the <see cref="ResistorModel"/> class.
         /// </summary>

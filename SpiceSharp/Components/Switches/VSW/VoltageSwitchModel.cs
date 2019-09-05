@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     /// </summary>
     public class VoltageSwitchModel : Model
     {
-        static VoltageSwitchModel()
-        {
-            RegisterBehaviorFactory(typeof(VoltageSwitchModel), new BehaviorFactoryDictionary
-            {
-                { typeof(CommonBehaviors.ModelParameterContainer), e => new CommonBehaviors.ModelParameterContainer(e.Name) }
-            });
-        }
-
         /// <summary>
         /// Creates a new instance of the <see cref="VoltageSwitchModel"/> class.
         /// </summary>

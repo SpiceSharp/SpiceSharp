@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            _mbp = Parameters.Get<ModelBaseParameters>();
+            _mbp = context.Behaviors.Parameters.Get<ModelBaseParameters>();
             BiasingState = context.States.Get<BiasingSimulationState>();
         }
 

@@ -144,9 +144,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
+            ModelParameters = c.ModelBehaviors.Parameters.Get<ModelBaseParameters>();
             ModelTemperature = c.ModelBehaviors.Get<ModelTemperatureBehavior>();
-            BaseParameters = Parameters.Get<BaseParameters>();
-            ModelParameters = ModelTemperature.Parameters.Get<ModelBaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
             BiasingState = context.States.Get<BiasingSimulationState>();
         }
 

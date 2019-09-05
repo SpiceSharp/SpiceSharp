@@ -253,9 +253,7 @@ namespace SpiceSharpTest
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation) sender;
-                sim.EntityBehaviors["R1"]
-                    .Get<SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior>()
-                    .SetParameter("resistance", value);
+                sim.EntityBehaviors["R1"].SetParameter("resistance", value);
             };
             op.AfterExecute += (sender, args) =>
             {

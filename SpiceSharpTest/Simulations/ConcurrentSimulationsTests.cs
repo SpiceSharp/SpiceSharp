@@ -11,7 +11,7 @@ namespace SpiceSharpTest.Simulations
 {
     [TestFixture]
     public class ConcurrentSimulationsTests : Framework
-    {        
+    {
         [Test]
         public void When_DCSweepResistorParameter_Expect_Reference()
         {
@@ -39,7 +39,6 @@ namespace SpiceSharpTest.Simulations
                     if (args.Name.Equals("R2"))
                     {
                         args.Result = dc.EntityBehaviors["R2"]
-                            .Get<ITemperatureBehavior>()
                             .GetParameter<Parameter<double>>("resistance");
                         args.TemperatureNeeded = true;
                     }

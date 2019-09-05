@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     /// </summary>
     public class CurrentSwitchModel : Model
     {
-        static CurrentSwitchModel()
-        {
-            RegisterBehaviorFactory(typeof(CurrentSwitchModel), new BehaviorFactoryDictionary
-            {
-                { typeof(CommonBehaviors.ModelParameterContainer), e => new CommonBehaviors.ModelParameterContainer(e.Name) }
-            });
-        }
-
         /// <summary>
         /// Creates a new instance of the <see cref="CurrentSwitchModel"/> class.
         /// </summary>
