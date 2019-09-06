@@ -17,8 +17,8 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(CurrentControlledCurrentSource), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
+                { typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name) },
+                { typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name) }
             });
         }
 

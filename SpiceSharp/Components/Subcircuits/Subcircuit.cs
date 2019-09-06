@@ -16,13 +16,13 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Subcircuit), new BehaviorFactoryDictionary()
             {
-                { typeof(InitialConditionBehavior), e => new InitialConditionBehavior(e.Name) },
-                { typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name) },
-                { typeof(BiasingBehavior), e => new BiasingBehavior(e.Name) },
-                { typeof(TimeBehavior), e => new TimeBehavior(e.Name) },
-                { typeof(AcceptBehavior), e => new AcceptBehavior(e.Name) },
-                { typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name) },
-                { typeof(NoiseBehavior), e => new NoiseBehavior(e.Name) }
+                { typeof(IInitialConditionBehavior), e => new InitialConditionBehavior(e.Name) },
+                { typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name) },
+                { typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name) },
+                { typeof(ITimeBehavior), e => new TimeBehavior(e.Name) },
+                { typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name) },
+                { typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name) },
+                { typeof(INoiseBehavior), e => new NoiseBehavior(e.Name) }
             });
         }
 

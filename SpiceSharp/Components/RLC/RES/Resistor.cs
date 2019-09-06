@@ -15,10 +15,10 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Resistor), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(NoiseBehavior), e => new NoiseBehavior(e.Name)},
-                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)}
+                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
+                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(INoiseBehavior), e => new NoiseBehavior(e.Name)},
+                {typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name)}
             });
         }
 

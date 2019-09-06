@@ -15,9 +15,9 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Capacitor), new BehaviorFactoryDictionary
             {
-                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(TemperatureBehavior), e => new TemperatureBehavior(e.Name)}
+                {typeof(ITimeBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)},
+                {typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name)}
             });
         }
 

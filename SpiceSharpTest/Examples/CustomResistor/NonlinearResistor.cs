@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(NonlinearResistor), new BehaviorFactoryDictionary
             {
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)}
+                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)}
             });
         }
 

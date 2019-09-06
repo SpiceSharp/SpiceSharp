@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Mosfet2Model), new BehaviorFactoryDictionary
             {
-                {typeof(ModelTemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
+                {typeof(ITemperatureBehavior), e => new ModelTemperatureBehavior(e.Name)}
             });
         }
 

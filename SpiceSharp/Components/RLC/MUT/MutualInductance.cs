@@ -16,8 +16,8 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(MutualInductance), new BehaviorFactoryDictionary
             {
-                {typeof(TransientBehavior), e => new TransientBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
+                {typeof(ITimeBehavior), e => new TransientBehavior(e.Name)},
+                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)}
             });
         }
 

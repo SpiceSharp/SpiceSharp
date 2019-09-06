@@ -16,9 +16,9 @@ namespace SpiceSharp.Components
             RegisterBehaviorFactory(typeof(VoltageSwitch), new BehaviorFactoryDictionary
             {
                 // Add factories
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name, new VoltageControlled())},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name, new VoltageControlled())},
-                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name, new VoltageControlled())}
+                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name, new VoltageControlled())},
+                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name, new VoltageControlled())},
+                {typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name, new VoltageControlled())}
             });
         }
 
