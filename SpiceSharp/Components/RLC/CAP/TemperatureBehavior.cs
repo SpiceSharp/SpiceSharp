@@ -54,13 +54,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public override void Bind(BindingContext context)
         {
             // Get parameters
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             var c = (ComponentBindingContext)context;
             if (c.ModelBehaviors != null)
-                ModelParameters = c.ModelBehaviors.Parameters.Get<ModelBaseParameters>();
+                ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            State = context.States.Get<BiasingSimulationState>();
+            State = context.States.GetValue<BiasingSimulationState>();
         }
 
         /// <summary>

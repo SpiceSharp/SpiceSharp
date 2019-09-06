@@ -148,7 +148,7 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Bind(BindingContext context)
         {
-            if (context.States.TryGet(out _timeState))
+            if (context.States.TryGetValue(out _timeState))
             {
                 // Cache parameter values
                 _vo = Offset;

@@ -7,12 +7,12 @@ using System.Threading;
 namespace SpiceSharp
 {
     /// <summary>
-    /// A base template for storing objects that can be retrieved by their type. It also tracks inheritance,
-    /// so you can retrieve objects by their base class.
+    /// An implementation of the <see cref="ITypeDictionary{T}"/> interface.
+    /// This implementation supports multithreaded access.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="IDictionary{Type, T}" />
-    public class TypeDictionary<T> : IDictionary<Type, T>
+    /// <seealso cref="ITypeDictionary{T}" />
+    public class TypeDictionary<T> : ITypeDictionary<T>
     {
         /// <summary>
         /// Gets the dictionary to look up using types.
@@ -83,11 +83,6 @@ namespace SpiceSharp
                 }
             }
         }
-
-        /// <summary>
-        /// Gets a value indicating whether the <see cref="TypeDictionary{T}" /> is read-only.
-        /// </summary>
-        public bool IsReadOnly => false;
 
         /// <summary>
         /// Gets or sets the value with the specified key.
@@ -175,12 +170,10 @@ namespace SpiceSharp
         /// <summary>
         /// Adds an element with the provided key and value to the <see cref="TypeDictionary{T}"/>.
         /// </summary>
-        /// <param name="key">The type of the added value.</param>
         /// <param name="value">The added value.</param>
-        public virtual void Add(Type key, T value)
+        public virtual void Add(T value)
         {
-            key.ThrowIfNull(nameof(key));
-
+            var key = value.GetType();
             Lock.EnterWriteLock();
             try
             {
@@ -195,7 +188,7 @@ namespace SpiceSharp
 
                 // Add the regular class hierarchy that this instance implements.
                 var currentType = key;
-                while (currentType != null && currentType != typeof(object))
+                while (currentType != null && currentType != typeof(T))
                 {
                     if (!isChild)
                         Dictionary[currentType] = value;
@@ -226,7 +219,7 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <returns>The requested object.</returns>
-        public TResult Get<TResult>() where TResult : T
+        public TResult GetValue<TResult>() where TResult : T
         {
             Lock.EnterReadLock();
             try
@@ -247,10 +240,9 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the object was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGet<TResult>(out TResult value) where TResult : T
+        public bool TryGetValue<TResult>(out TResult value) where TResult : T
         {
             Lock.EnterReadLock();
-
             try
             {
                 if (Dictionary.TryGetValue(typeof(TResult), out var result))
@@ -278,7 +270,6 @@ namespace SpiceSharp
         public bool ContainsKey(Type key)
         {
             key.ThrowIfNull(nameof(key));
-
             Lock.EnterReadLock();
             try
             {
@@ -287,40 +278,6 @@ namespace SpiceSharp
             finally
             {
                 Lock.ExitReadLock();
-            }
-        }
-
-        /// <summary>
-        /// Removes the element with the specified key from the <see cref="TypeDictionary{T}" />.
-        /// </summary>
-        /// <param name="key">The key of the element to remove.</param>
-        /// <returns>
-        ///   <c>true</c> if the element is successfully removed; otherwise, <c>false</c>.  This method also returns false if <paramref name="key" /> was not found in the original <see cref="TypeDictionary{T}" />.
-        /// </returns>
-        public bool Remove(Type key)
-        {
-            key.ThrowIfNull(nameof(key));
-
-            Lock.EnterWriteLock();
-            try
-            {
-                if (Dictionary.TryGetValue(key, out T value))
-                {
-                    // Remove the key and all references to the same value
-                    foreach (var entry in Dictionary)
-                    {
-                        if (entry.Value.Equals(value))
-                            Dictionary.Remove(entry.Key);
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-            finally
-            {
-                Lock.ExitWriteLock();
             }
         }
 
@@ -348,12 +305,6 @@ namespace SpiceSharp
                 Lock.ExitReadLock();
             }
         }
-
-        /// <summary>
-        /// Adds an item to the <see cref="TypeDictionary{T}"/>.
-        /// </summary>
-        /// <param name="item">The object to add to the <see cref="TypeDictionary{T}" />.</param>
-        public void Add(KeyValuePair<Type, T> item) => Add(item.Key, item.Value);
 
         /// <summary>
         /// Removes all items from the <see cref="TypeDictionary{T}"/>.
@@ -386,30 +337,5 @@ namespace SpiceSharp
         /// An <see cref="System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => Dictionary.GetEnumerator();
-
-        /// <summary>
-        /// Determines whether the <see cref="System.Collections.Generic.ICollection{T}" /> contains a specific value.
-        /// </summary>
-        /// <param name="item">The object to locate in the <see cref="TypeDictionary{T}" />.</param>
-        /// <returns>
-        /// true if <paramref name="item" /> is found in the <see cref="TypeDictionary{T}" />; otherwise, false.
-        /// </returns>
-        bool ICollection<KeyValuePair<Type, T>>.Contains(KeyValuePair<Type, T> item) => ((ICollection<KeyValuePair<Type, T>>)Dictionary).Contains(item);
-
-        /// <summary>
-        /// Copies the elements of the <see cref="TypeDictionary{T}" /> to an <see cref="System.Array" />, starting at a particular <see cref="System.Array" /> index.
-        /// </summary>
-        /// <param name="array">The one-dimensional <see cref="System.Array" /> that is the destination of the elements copied from <see cref="TypeDictionary{T}" />. The <see cref="System.Array" /> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        void ICollection<KeyValuePair<Type, T>>.CopyTo(KeyValuePair<Type, T>[] array, int arrayIndex) => ((ICollection<KeyValuePair<Type, T>>)Dictionary).CopyTo(array, arrayIndex);
-
-        /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="TypeDictionary{T}" />.
-        /// </summary>
-        /// <param name="item">The object to remove from the <see cref="TypeDictionary{T}" />.</param>
-        /// <returns>
-        ///   <c>true</c> if <paramref name="item" /> was successfully removed from the <see cref="TypeDictionary{T}" />; otherwise, <c>false</c>. This method also returns false if <paramref name="item" /> is not found in the original <see cref="TypeDictionary{T}" />.
-        /// </returns>
-        bool ICollection<KeyValuePair<Type, T>>.Remove(KeyValuePair<Type, T> item) => ((ICollection<KeyValuePair<Type, T>>)Dictionary).Remove(item);
     }
 }

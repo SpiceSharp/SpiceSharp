@@ -24,7 +24,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The model behaviors.
         /// </value>
-        public EntityBehaviors ModelBehaviors => Model != null ? Simulation.EntityBehaviors[Model] : null;
+        public IBehaviorContainer ModelBehaviors => Model != null ? Simulation.EntityBehaviors[Model] : null;
 
         /// <summary>
         /// Gets the pins that the component is connected to.
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="pins">The pins.</param>
         /// <param name="model">The model.</param>
-        public ComponentBindingContext(ISimulation simulation, EntityBehaviors behaviors, int[] pins, string model)
+        public ComponentBindingContext(ISimulation simulation, BehaviorContainer behaviors, int[] pins, string model)
             : base(simulation, behaviors)
         {
             Pins = pins.ThrowIfNull(nameof(pins));

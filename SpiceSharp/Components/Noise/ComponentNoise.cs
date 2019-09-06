@@ -67,8 +67,8 @@ namespace SpiceSharp.Components
         /// <param name="pins">The pins the noise sources are connected to.</param>
         public void Bind(BindingContext context, params int[] pins)
         {
-            _cstate = context.States.Get<ComplexSimulationState>();
-            _nstate = context.States.Get<NoiseSimulationState>();
+            _cstate = context.States.GetValue<ComplexSimulationState>();
+            _nstate = context.States.GetValue<NoiseSimulationState>();
 
             foreach (var generator in Generators)
                 generator.Bind(context, pins);

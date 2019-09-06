@@ -23,8 +23,8 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.Configurations.Get<TimeConfiguration>().InitTime = 0.0;
-            tran.Configurations.Get<TimeConfiguration>().Method = new Gear();
+            tran.Configurations.GetValue<TimeConfiguration>().InitTime = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) =>
             {
                 Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-9);
@@ -125,7 +125,7 @@ namespace SpiceSharpTest.Simulations
 
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", 1e-7, 10e-5);
-            tran.Configurations.Get<TimeConfiguration>().Method = new FixedEuler();
+            tran.Configurations.GetValue<TimeConfiguration>().Method = new FixedEuler();
             tran.Run(ckt);
         }
 
@@ -153,7 +153,7 @@ namespace SpiceSharpTest.Simulations
             };
 
             // Set initial conditions
-            var ic = tran.Configurations.Get<TimeConfiguration>().InitialConditions;
+            var ic = tran.Configurations.GetValue<TimeConfiguration>().InitialConditions;
             ic["in"] = 0.0;
 
             // Analyze

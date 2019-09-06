@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The circuit that will be used.</param>
         protected override void Setup(IEntityCollection entities)
         {
-            var config = Configurations.Get<FrequencyConfiguration>();
+            var config = Configurations.GetValue<FrequencyConfiguration>();
             _keepOpInfo = config.KeepOpInfo;
 
             base.Setup(entities);

@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new BiasingConfiguration());
             BaseSimulationStatistics = new BiasingSimulationStatistics();
-            Statistics.Add(typeof(BiasingSimulationStatistics), BaseSimulationStatistics);
+            Statistics.Add(BaseSimulationStatistics);
 
             // Add the necessary behaviors in the order that they are (usually) called
             Types.AddRange(new []
@@ -130,16 +130,16 @@ namespace SpiceSharp.Simulations
             circuit.ThrowIfNull(nameof(circuit));
 
             // Get behaviors and configuration data
-            var config = Configurations.Get<BiasingConfiguration>().ThrowIfNull("base configuration");
+            var config = Configurations.GetValue<BiasingConfiguration>().ThrowIfNull("base configuration");
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
 
             // Create the state for this simulation
-            if (!States.TryGet<BiasingSimulationState>(out var state))
+            if (!States.TryGetValue<BiasingSimulationState>(out var state))
             {
                 state = new BiasingSimulationState();
-                States.Add(typeof(BiasingSimulationState), state);
+                States.Add(state);
             }
             BiasingState = state;
             BiasingState.Gmin = config.Gmin;
@@ -234,7 +234,7 @@ namespace SpiceSharp.Simulations
         protected void Op(int maxIterations)
         {
             var state = BiasingState;
-            var config = Configurations.Get<BiasingConfiguration>().ThrowIfNull("base configuration");
+            var config = Configurations.GetValue<BiasingConfiguration>().ThrowIfNull("base configuration");
             state.Init = InitializationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations

@@ -101,12 +101,12 @@ namespace SpiceSharp.IntegrationMethods
             base.Setup(simulation);
 
             // Base configuration
-            var bp = simulation.Configurations.Get<BiasingConfiguration>().ThrowIfNull("base configuration");
+            var bp = simulation.Configurations.GetValue<BiasingConfiguration>().ThrowIfNull("base configuration");
             AbsTol = bp.AbsoluteTolerance;
             RelTol = bp.RelativeTolerance;
 
             // Basic time configuration
-            var tc = simulation.Configurations.Get<TimeConfiguration>().ThrowIfNull("time configuration");
+            var tc = simulation.Configurations.GetValue<TimeConfiguration>().ThrowIfNull("time configuration");
             Breakpoints.SetBreakpoint(tc.InitTime);
             Breakpoints.SetBreakpoint(tc.FinalTime);
             MaxStep = tc.MaxStep;
@@ -115,7 +115,7 @@ namespace SpiceSharp.IntegrationMethods
             _saveDelta = double.PositiveInfinity;
 
             // Detect spice configuration
-            if (simulation.Configurations.TryGet(out SpiceConfiguration sc))
+            if (simulation.Configurations.TryGetValue(out SpiceConfiguration sc))
             {
                 TrTol = sc.TrTol;
                 LteRelTol = sc.LteRelTol;

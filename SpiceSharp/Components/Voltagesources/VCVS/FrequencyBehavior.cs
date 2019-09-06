@@ -99,7 +99,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);

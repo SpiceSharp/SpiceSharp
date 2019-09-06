@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
@@ -10,31 +11,31 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// The pool first tries to find a behavior in the subcircuit, but if it can't find it, it
     /// will forward the behavior from the parent simulation.
     /// </remarks>
-    /// <seealso cref="SpiceSharp.Behaviors.BehaviorPool" />
-    public class SubcircuitBehaviorPool : BehaviorPool
+    /// <seealso cref="SpiceSharp.Behaviors.BehaviorContainerCollection" />
+    public class SubcircuitBehaviorContainerCollection : BehaviorContainerCollection
     {
-        private BehaviorPool _parent;
+        private BehaviorContainerCollection _parent;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubcircuitBehaviorPool"/> class.
+        /// Initializes a new instance of the <see cref="SubcircuitBehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
         /// <param name="parentPool">The parent behavior pool.</param>
-        public SubcircuitBehaviorPool(IEqualityComparer<string> comparer, BehaviorPool parentPool) 
+        public SubcircuitBehaviorContainerCollection(IEqualityComparer<string> comparer, BehaviorContainerCollection parentPool) 
             : base(comparer, parentPool.Types)
         {
             _parent = parentPool.ThrowIfNull(nameof(parentPool));
         }
 
         /// <summary>
-        /// Gets the <see cref="EntityBehaviors"/> with the specified name.
+        /// Gets the <see cref="BehaviorContainer"/> with the specified name.
         /// </summary>
         /// <value>
-        /// The <see cref="EntityBehaviors"/>.
+        /// The <see cref="BehaviorContainer"/>.
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public override EntityBehaviors this[string name]
+        public override IBehaviorContainer this[string name]
         {
             get
             {

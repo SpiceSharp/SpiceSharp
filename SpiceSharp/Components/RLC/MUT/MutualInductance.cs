@@ -84,7 +84,7 @@ namespace SpiceSharp.Components
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             var context = new MutualInductanceBindingContext(simulation, eb, InductorName1, InductorName2);
             foreach (var behavior in behaviors)

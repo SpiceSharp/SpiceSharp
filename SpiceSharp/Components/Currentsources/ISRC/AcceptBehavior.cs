@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            _bp = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
+            _bp = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             _bp.Waveform?.Bind(context);
         }
 

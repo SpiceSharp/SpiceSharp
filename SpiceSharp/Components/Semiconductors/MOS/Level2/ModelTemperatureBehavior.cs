@@ -66,8 +66,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            ModelParameters = context.Behaviors.Parameters.Get<ModelBaseParameters>();
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            ModelParameters = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
         }
 
         /// <summary>

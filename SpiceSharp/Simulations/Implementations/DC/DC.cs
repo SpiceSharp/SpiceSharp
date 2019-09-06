@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
         protected override void Setup(IEntityCollection entities)
         {
             // Get sweeps
-            var config = Configurations.Get<DCConfiguration>();
+            var config = Configurations.GetValue<DCConfiguration>();
             Sweeps = new NestedSweeps(config.Sweeps);
 
             base.Setup(entities);
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Setup the state
-            var dcconfig = Configurations.Get<DCConfiguration>().ThrowIfNull("dc configuration");
+            var dcconfig = Configurations.GetValue<DCConfiguration>().ThrowIfNull("dc configuration");
             BiasingState.Init = InitializationModes.Junction;
             BiasingState.UseIc = false; // UseIC is only used in transient simulations
             BiasingState.UseDc = true;
@@ -125,9 +125,9 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
                     var eb = EntityBehaviors[sweep.Parameter];
 
-                    // Check for a Voltage source or Current source parameters
-                    if (eb.Parameters.TryGet<Components.CommonBehaviors.IndependentSourceParameters>(out var ibp))
-                        swept[i] = ibp.DcValue;
+                    // Check for a parameter called "dc" that we will sweep
+                    if (eb.TryGetParameter("dc", out Parameter<double> dc))
+                        swept[i] = dc;
                     else
                         throw new CircuitException("Invalid sweep object");
                 }

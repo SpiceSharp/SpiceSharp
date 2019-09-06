@@ -70,8 +70,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            _mbp = context.Behaviors.Parameters.Get<ModelBaseParameters>();
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
         }
         
         /// <summary>

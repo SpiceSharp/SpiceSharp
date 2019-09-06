@@ -149,7 +149,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPos1Pos1Ptr = solver.GetMatrixElement(Pos1, Pos1);
             CPos1Int1Ptr = solver.GetMatrixElement(Pos1, Internal1);

@@ -99,7 +99,7 @@ namespace SpiceSharp.IntegrationMethods
         public virtual void Setup(TimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            BiasingState = simulation.States.Get<BiasingSimulationState>();
+            BiasingState = simulation.States.GetValue<BiasingSimulationState>();
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
                 new DenseVector<double>(BiasingState.Solver.Order), 
                 StateManager.Build()));

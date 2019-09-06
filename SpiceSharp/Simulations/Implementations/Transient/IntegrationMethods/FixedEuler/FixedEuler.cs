@@ -27,7 +27,7 @@ namespace SpiceSharp.IntegrationMethods
         public override void Initialize(TimeSimulation simulation)
         {
             base.Initialize(simulation);
-            if (simulation.Configurations.TryGet(out TimeConfiguration config))
+            if (simulation.Configurations.TryGetValue(out TimeConfiguration config))
                 _fixedStep = config.Step;
         }
 

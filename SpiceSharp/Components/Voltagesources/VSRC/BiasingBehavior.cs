@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            BaseParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             BaseParameters.Waveform?.Bind(context);
 
             if (!BaseParameters.DcValue.Given)
@@ -122,9 +122,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             // Get matrix elements
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
-            context.States.TryGet(out _timeState);
+            context.States.TryGetValue(out _timeState);
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);

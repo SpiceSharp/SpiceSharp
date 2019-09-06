@@ -82,7 +82,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);

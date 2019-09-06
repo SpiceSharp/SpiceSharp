@@ -83,10 +83,10 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            ModelTemperature = c.ModelBehaviors.Get<ModelTemperatureBehavior>();
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
-            ModelParameters = c.ModelBehaviors.Parameters.Get<ModelBaseParameters>();
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            ModelTemperature = c.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
         }
 
         /// <summary>

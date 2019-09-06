@@ -91,10 +91,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            FrequencyParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceFrequencyParameters>();
+            FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);

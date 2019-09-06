@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="context">The binding context.</param>
         public override void Bind(BindingContext context)
         {
-            _state = context.States.Get<TimeSimulationState>();
+            _state = context.States.GetValue<TimeSimulationState>();
 
             // Set value for time = 0.0
             Value = GetLineValue(0.0);

@@ -10,16 +10,6 @@ namespace SpiceSharp
     public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>, IParameterSet
     {
         /// <summary>
-        /// Adds a parameter set to the dictionary.
-        /// </summary>
-        /// <param name="set">The parameter set.</param>
-        public void Add(ParameterSet set)
-        {
-            set.ThrowIfNull(nameof(set));
-            Add(set.GetType(), set);
-        }
-
-        /// <summary>
         /// Clone the dictionary.
         /// </summary>
         /// <returns></returns>

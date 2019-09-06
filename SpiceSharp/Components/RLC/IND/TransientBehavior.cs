@@ -63,11 +63,11 @@ namespace SpiceSharp.Components.InductorBehaviors
                     UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
             }
 
-            var solver = context.States.Get<BiasingSimulationState>().Solver;
+            var solver = context.States.GetValue<BiasingSimulationState>().Solver;
             BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
             BranchPtr = solver.GetRhsElement(BranchEq);
 
-            var method = context.States.Get<TimeSimulationState>().Method;
+            var method = context.States.GetValue<TimeSimulationState>().Method;
             _flux = method.CreateDerivative();
         }
 

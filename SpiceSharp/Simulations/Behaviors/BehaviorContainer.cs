@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Behaviors
@@ -7,12 +8,12 @@ namespace SpiceSharp.Behaviors
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{Behavior}" />
-    public class EntityBehaviors : TypeDictionary<IBehavior>, IParameterSet
+    public class BehaviorContainer : TypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
         /// Gets the source identifier.
         /// </summary>
-        public string Source { get; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the parameters used by the behaviors.
@@ -23,23 +24,23 @@ namespace SpiceSharp.Behaviors
         public ParameterSetDictionary Parameters { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityBehaviors"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
-        public EntityBehaviors(string source)
+        public BehaviorContainer(string source)
         {
-            Source = source.ThrowIfNull(nameof(source));
+            Name = source.ThrowIfNull(nameof(source));
             Parameters = new ParameterSetDictionary();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityBehaviors"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="parameters">The parameters.</param>
-        public EntityBehaviors(string source, ParameterSetDictionary parameters)
+        public BehaviorContainer(string source, ParameterSetDictionary parameters)
         {
-            Source = source.ThrowIfNull(nameof(source));
+            Name = source.ThrowIfNull(nameof(source));
             Parameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
@@ -75,7 +76,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public EntityBehaviors SetPrincipalParameter<T>(T value)
+        public BehaviorContainer SetPrincipalParameter<T>(T value)
         {
             foreach (var b in Values)
             {
@@ -188,7 +189,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public EntityBehaviors SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        public BehaviorContainer SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
         {
             if (TrySetParameter(name, value, comparer))
                 return this;
@@ -303,7 +304,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public EntityBehaviors SetParameter(string name, IEqualityComparer<string> comparer = null)
+        public BehaviorContainer SetParameter(string name, IEqualityComparer<string> comparer = null)
         {
             if (TrySetParameter(name, comparer))
                 return this;

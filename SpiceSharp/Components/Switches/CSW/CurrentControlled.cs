@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Bind(BindingContext context)
         {
             var c = (CommonBehaviors.ControlledBindingContext)context;
-            _loadBehavior = c.ControlBehaviors.Get<VoltageSourceBehaviors.BiasingBehavior>();
+            _loadBehavior = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
         }
 
         /// <summary>

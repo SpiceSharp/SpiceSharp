@@ -102,13 +102,13 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
             ContPosNode = c.Pins[2];
             ContNegNode = c.Pins[3];
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             PosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
             PosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);

@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The entity behaviors.
         /// </value>
-        public BehaviorPool EntityBehaviors { get; }
+        public BehaviorContainerCollection EntityBehaviors { get; }
 
         /// <summary>
         /// Gets the entity parameters.
@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             Name = name.ThrowIfNull(nameof(name));
 
             Variables = new SubcircuitVariableSet(name, _parent.Variables);
-            EntityBehaviors = new SubcircuitBehaviorPool(_parent.EntityBehaviors.Comparer, parent.EntityBehaviors);
+            EntityBehaviors = new SubcircuitBehaviorContainerCollection(_parent.EntityBehaviors.Comparer, parent.EntityBehaviors);
 
             // Alias all pins to local nodes
             foreach (var pair in nodemap)

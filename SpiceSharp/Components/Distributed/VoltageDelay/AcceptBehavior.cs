@@ -37,9 +37,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            _bp = context.Behaviors.Parameters.Get<BaseParameters>();
-            _tran = context.Behaviors.Get<TransientBehavior>();
-            _method = ((ComponentBindingContext)context).States.Get<TimeSimulationState>().Method;
+            _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            _tran = context.Behaviors.GetValue<TransientBehavior>();
+            _method = ((ComponentBindingContext)context).States.GetValue<TimeSimulationState>().Method;
         }
 
         /// <summary>

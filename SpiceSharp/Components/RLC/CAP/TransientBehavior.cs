@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             base.Bind(context);
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             PosPtr = solver.GetRhsElement(PosNode);
             NegPtr = solver.GetRhsElement(NegNode);
 
-            var method = context.States.Get<TimeSimulationState>().Method;
+            var method = context.States.GetValue<TimeSimulationState>().Method;
             QCap = method.CreateDerivative();
         }
 

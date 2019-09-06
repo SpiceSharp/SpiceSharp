@@ -86,8 +86,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
 
-            BaseParameters = context.Behaviors.Parameters.Get<CommonBehaviors.IndependentSourceParameters>();
-            context.States.TryGet(out _timeState);
+            BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
+            context.States.TryGetValue(out _timeState);
             BaseParameters.Waveform?.Bind(context);
 
             // Give some warnings if no value is given
@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                         : "{0} has no value, DC 0 assumed".FormatString(Name));
             }
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             PosPtr = solver.GetRhsElement(PosNode);
             NegPtr = solver.GetRhsElement(NegNode);

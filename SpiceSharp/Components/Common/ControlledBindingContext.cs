@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <value>
         /// The behaviors.
         /// </value>
-        public EntityBehaviors ControlBehaviors => Simulation.EntityBehaviors[ControlSource];
+        public IBehaviorContainer ControlBehaviors => Simulation.EntityBehaviors[ControlSource];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ControlledBindingContext"/> class.
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <param name="pins">The pins.</param>
         /// <param name="model">The model.</param>
         /// <param name="control">The control.</param>
-        public ControlledBindingContext(ISimulation simulation, EntityBehaviors eb, int[] pins, string model, string control)
+        public ControlledBindingContext(ISimulation simulation, BehaviorContainer eb, int[] pins, string model, string control)
             : base(simulation, eb, pins, model)
         {
             ControlSource = control.ThrowIfNull(nameof(control));

@@ -114,7 +114,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             BasePtr = solver.GetRhsElement(BaseNode);
             SubstratePtr = solver.GetRhsElement(SubstrateNode);
 
-            _method = context.States.Get<TimeSimulationState>().Method;
+            _method = context.States.GetValue<TimeSimulationState>().Method;
             BiasingStateChargeBe = _method.CreateDerivative();
             BiasingStateChargeBc = _method.CreateDerivative();
             BiasingStateChargeCs = _method.CreateDerivative();

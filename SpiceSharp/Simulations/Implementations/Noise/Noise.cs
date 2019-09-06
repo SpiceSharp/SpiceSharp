@@ -78,12 +78,12 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors, parameters and states
-            NoiseConfiguration = Configurations.Get<NoiseConfiguration>();
+            NoiseConfiguration = Configurations.GetValue<NoiseConfiguration>();
 
-            if (!States.TryGet<NoiseSimulationState>(out var state))
+            if (!States.TryGetValue<NoiseSimulationState>(out var state))
             {
                 state = new NoiseSimulationState();
-                States.Add(state.GetType(), state);
+                States.Add(state);
             }
             NoiseState = state;
             NoiseState.Setup(Variables);

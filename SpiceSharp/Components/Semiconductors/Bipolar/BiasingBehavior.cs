@@ -303,10 +303,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             base.Bind(context);
 
             // Get configurations
-            BaseConfiguration = context.Configurations.Get<BiasingConfiguration>();
+            BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
-            context.States.TryGet(out _timeState);
+            context.States.TryGetValue(out _timeState);
 
             if (context is ComponentBindingContext cc)
             {

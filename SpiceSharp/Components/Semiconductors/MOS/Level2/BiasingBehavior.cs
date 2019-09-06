@@ -295,10 +295,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             base.Bind(context);
 
             // Get configurations
-            BaseConfiguration = context.Configurations.Get<BiasingConfiguration>();
+            BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
-            context.States.TryGet<TimeSimulationState>(out _timeState);
+            context.States.TryGetValue<TimeSimulationState>(out _timeState);
 
             // Reset
             SaturationVoltageDs = 0;

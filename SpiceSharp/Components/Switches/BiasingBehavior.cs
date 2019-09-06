@@ -130,12 +130,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            ModelParameters = c.ModelBehaviors.Parameters.Get<ModelBaseParameters>();
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             Method.Bind(context);
 
             // Get matrix elements
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);

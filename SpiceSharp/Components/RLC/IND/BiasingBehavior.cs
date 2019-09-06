@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             base.Bind(context);
 
             // Get parameters.
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             if (context is ComponentBindingContext cc)
             {
@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 NegNode = cc.Pins[1];
             }
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);

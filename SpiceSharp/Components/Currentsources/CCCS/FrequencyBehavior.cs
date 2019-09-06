@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
             CNegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);

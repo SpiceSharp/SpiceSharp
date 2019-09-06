@@ -129,7 +129,7 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Bind(BindingContext context)
         {
-            context.States.TryGet(out _timeState);
+            context.States.TryGetValue(out _timeState);
 
             // Cache parameter values
             _v1 = InitialValue;

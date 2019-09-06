@@ -83,7 +83,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);

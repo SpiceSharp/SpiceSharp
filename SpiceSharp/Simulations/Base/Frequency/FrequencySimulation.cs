@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new FrequencyConfiguration());
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
-            Statistics.Add(typeof(ComplexSimulationStatistics), FrequencySimulationStatistics);
+            Statistics.Add(FrequencySimulationStatistics);
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(IFrequencyBehavior));
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
-            Statistics.Add(typeof(ComplexSimulationStatistics), FrequencySimulationStatistics);
+            Statistics.Add(FrequencySimulationStatistics);
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(IFrequencyBehavior));
@@ -91,14 +91,14 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors, configurations and states
-            var config = Configurations.Get<FrequencyConfiguration>();
+            var config = Configurations.GetValue<FrequencyConfiguration>();
             FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
             // Create the state for complex numbers
-            if (!States.TryGet<ComplexSimulationState>(out var state))
+            if (!States.TryGetValue<ComplexSimulationState>(out var state))
             {
                 state = new ComplexSimulationState();
-                States.Add(state.GetType(), state);
+                States.Add(state);
             }
             ComplexState = state;
             var strategy = ComplexState.Solver.Strategy;

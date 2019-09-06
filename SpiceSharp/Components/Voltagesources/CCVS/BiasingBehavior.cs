@@ -109,12 +109,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             var c = (CommonBehaviors.ControlledBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            VoltageLoad = c.ControlBehaviors.Get<VoltageSourceBehaviors.BiasingBehavior>();
+            VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
             ContBranchEq = VoltageLoad.BranchEq;
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             // Get matrix elements
-            var solver = context.States.Get<BiasingSimulationState>().Solver;
+            var solver = context.States.GetValue<BiasingSimulationState>().Solver;
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);

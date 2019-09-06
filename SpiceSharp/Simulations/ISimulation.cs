@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The entity behaviors.
         /// </value>
-        BehaviorPool EntityBehaviors { get; }
+        BehaviorContainerCollection EntityBehaviors { get; }
 
         /// <summary>
         /// Gets the <see cref="IBehavior"/> types used by the <see cref="ISimulation"/>.

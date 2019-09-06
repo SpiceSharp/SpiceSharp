@@ -150,7 +150,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CCollectorCollectorPrimePtr = solver.GetMatrixElement(CollectorNode, CollectorPrimeNode);
             CBaseBasePrimePtr = solver.GetMatrixElement(BaseNode, BasePrimeNode);

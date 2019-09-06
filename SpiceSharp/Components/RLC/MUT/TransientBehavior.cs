@@ -58,14 +58,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
 			base.Bind(context);
             var c = (MutualInductanceBindingContext)context;
-            Load1 = c.Inductor1Behaviors.Get<InductorBehaviors.TransientBehavior>();
-            Load2 = c.Inductor2Behaviors.Get<InductorBehaviors.TransientBehavior>();
+            Load1 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
+            Load2 = c.Inductor2Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
             
             // Register events for modifying the flux through the inductors
             Load1.UpdateFlux += UpdateFlux1;
             Load2.UpdateFlux += UpdateFlux2;
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
             Branch2Branch1 = solver.GetMatrixElement(Load2.BranchEq, Load1.BranchEq);

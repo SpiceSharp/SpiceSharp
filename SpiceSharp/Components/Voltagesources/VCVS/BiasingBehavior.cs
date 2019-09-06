@@ -115,7 +115,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             base.Bind(context);
 
             // Get parameters
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             if (context is ComponentBindingContext cc)
             {
@@ -125,7 +125,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
                 ContNegNode = cc.Pins[3];
             }
 
-            var solver = context.States.Get<BiasingSimulationState>().Solver;
+            var solver = context.States.GetValue<BiasingSimulationState>().Solver;
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);

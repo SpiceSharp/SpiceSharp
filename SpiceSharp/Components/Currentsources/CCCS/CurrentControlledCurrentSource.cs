@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
             : this(name)
         {
-            Parameters.Get<BaseParameters>().Coefficient.Value = gain;
+            Parameters.GetValue<BaseParameters>().Coefficient.Value = gain;
             Connect(pos, neg);
             ControllingSource = voltageSource;
         }
@@ -87,7 +87,7 @@ namespace SpiceSharp.Components
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             var context = new CommonBehaviors.ControlledBindingContext(
                 simulation, eb, ApplyConnections(simulation.Variables), 

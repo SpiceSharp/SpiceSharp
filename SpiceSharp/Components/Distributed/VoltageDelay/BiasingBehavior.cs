@@ -94,14 +94,14 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
             ContPosNode = c.Pins[2];
             ContNegNode = c.Pins[3];
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);

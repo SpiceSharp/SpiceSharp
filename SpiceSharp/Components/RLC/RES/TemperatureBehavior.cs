@@ -51,10 +51,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             if (c.ModelBehaviors != null)
-                ModelParameters = c.ModelBehaviors.Parameters.Get<ModelBaseParameters>();
-            BiasingState = context.States.Get<BiasingSimulationState>();
+                ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
         }
 
         /// <summary>

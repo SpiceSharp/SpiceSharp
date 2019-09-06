@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             base.Bind(context);
 
-            var solver = context.States.Get<ComplexSimulationState>().Solver;
+            var solver = context.States.GetValue<ComplexSimulationState>().Solver;
             CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
             CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
             CNegPosPtr = solver.GetMatrixElement(NegNode, PosNode);

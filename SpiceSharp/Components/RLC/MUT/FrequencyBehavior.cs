@@ -55,10 +55,10 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
 			base.Bind(context);
             var c = (MutualInductanceBindingContext)context;
-            Bias1 = c.Inductor1Behaviors.Get<BiasingBehavior>();
-            Bias2 = c.Inductor2Behaviors.Get<BiasingBehavior>();
+            Bias1 = c.Inductor1Behaviors.GetValue<BiasingBehavior>();
+            Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             Branch1Branch2Ptr = solver.GetMatrixElement(Bias1.BranchEq, Bias2.BranchEq);
             Branch2Branch1Ptr = solver.GetMatrixElement(Bias2.BranchEq, Bias1.BranchEq);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,14 +9,14 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.
     /// </summary>
-    public class BehaviorPool
+    public class BehaviorContainerCollection
     {
         private readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
 
         /// <summary>
         /// Behaviors indexed by the entity that created them.
         /// </summary>
-        private readonly Dictionary<string, EntityBehaviors> _entityBehaviors;
+        private readonly Dictionary<string, IBehaviorContainer> _entityBehaviors;
 
         /// <summary>
         /// Lists of behaviors indexed by type of behavior.
@@ -77,7 +78,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="name">The entity identifier.</param>
         /// <returns>The behavior associated to the specified entity identifier.</returns>
-        public virtual EntityBehaviors this[string name]
+        public virtual IBehaviorContainer this[string name]
         {
             get
             {
@@ -96,35 +97,35 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="types">The types for which a list will be kept which can be retrieved later.</param>
-        public BehaviorPool(IEnumerable<Type> types)
+        public BehaviorContainerCollection(IEnumerable<Type> types)
         {
             types.ThrowIfNull(nameof(types));
-            _entityBehaviors = new Dictionary<string, EntityBehaviors>();
+            _entityBehaviors = new Dictionary<string, IBehaviorContainer>();
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
         }
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        public BehaviorPool(IEqualityComparer<string> comparer)
+        public BehaviorContainerCollection(IEqualityComparer<string> comparer)
         {
-            _entityBehaviors = new Dictionary<string, EntityBehaviors>(comparer);
+            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(comparer);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorPool"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
         /// <param name="types">The types.</param>
-        public BehaviorPool(IEqualityComparer<string> comparer, IEnumerable<Type> types)
+        public BehaviorContainerCollection(IEqualityComparer<string> comparer, IEnumerable<Type> types)
         {
             types.ThrowIfNull(nameof(types));
-            _entityBehaviors = new Dictionary<string, EntityBehaviors>(comparer);
+            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(comparer);
             foreach (var type in types)
                 _behaviorLists.Add(type, new List<IBehavior>());
         }
@@ -135,7 +136,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="id">The identifier.</param>
         /// <param name="behaviors">The behaviors.</param>
         /// <exception cref="CircuitException">There are already behaviors for '{0}'".FormatString(id)</exception>
-        public void Add(string id, EntityBehaviors behaviors)
+        public void Add(string id, IBehaviorContainer behaviors)
         {
             id.ThrowIfNull(nameof(id));
             behaviors.ThrowIfNull(nameof(behaviors));
@@ -157,7 +158,7 @@ namespace SpiceSharp.Behaviors
                 _entityBehaviors.Add(id, behaviors);
                 foreach (var type in _behaviorLists.Keys)
                 {
-                    if (behaviors.TryGetValue(type, out var behavior))
+                    if (behaviors.TryGetValue(type, out IBehavior behavior))
                         _behaviorLists[type].Add(behavior);
                 }
             }
@@ -203,7 +204,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="name">The identifier.</param>
         /// <param name="ebd">The dictionary of entity behaviors.</param>
         /// <returns></returns>
-        public virtual bool TryGetBehaviors(string name, out EntityBehaviors ebd)
+        public virtual bool TryGetBehaviors(string name, out IBehaviorContainer ebd)
         {
             Lock.EnterReadLock();
             try

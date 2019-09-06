@@ -112,15 +112,7 @@ namespace SpiceSharp.Circuits
                 return;
 
             // Create our entity behavior container
-            EntityBehaviors eb;
-            if (Parameters.Count > 0)
-            {
-                eb = new EntityBehaviors(Name, LinkParameters ? Parameters : Parameters.Clone());
-                foreach (var p in eb.Parameters.Values)
-                    p.CalculateDefaults();
-            }
-            else
-                eb = new EntityBehaviors(Name);
+            BehaviorContainer eb = CreateBehaviorContainer();
 
             // Create behaviors
             var factories = FindBehaviorFactory(GetType());
@@ -138,7 +130,7 @@ namespace SpiceSharp.Circuits
                     if (factories.TryGetValue(types[i], out var factory))
                     {
                         var behavior = factory(this);
-                        eb.Add(behavior.GetType(), behavior);
+                        eb.Add(behavior);
                         newBehaviors.Push(behavior);
                     }
                 }
@@ -153,13 +145,30 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// Creates the <see cref="BehaviorContainer"/> for storing the behaviors created by the entity.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual BehaviorContainer CreateBehaviorContainer()
+        {
+            if (Parameters.Count > 0)
+            {
+                var eb = new BehaviorContainer(Name, LinkParameters ? Parameters : Parameters.Clone());
+                foreach (var p in eb.Parameters.Values)
+                    p.CalculateDefaults();
+                return eb;
+            }
+
+            return new BehaviorContainer(Name);
+        }
+
+        /// <summary>
         /// Binds the behaviors to the simulation.
         /// </summary>
         /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected virtual void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
+        protected virtual void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             simulation.ThrowIfNull(nameof(simulation));
             var context = new BindingContext(simulation, eb);

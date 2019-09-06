@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation.States.TryGet<TimeSimulationState>(out var state))
+                if (_simulation.States.TryGetValue<TimeSimulationState>(out var state))
                     return state.Method.Time;
                 return double.NaN;
             }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation.States.TryGet<ComplexSimulationState>(out var state))
+                if (_simulation.States.TryGetValue<ComplexSimulationState>(out var state))
                 {
                     if (!state.Laplace.Real.Equals(0.0))
                         return double.NaN;
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation.States.TryGet<ComplexSimulationState>(out var state))
+                if (_simulation.States.TryGetValue<ComplexSimulationState>(out var state))
                     return state.Laplace;
                 return double.NaN;
             }
@@ -101,7 +101,7 @@ namespace SpiceSharp.Simulations
         {
             positive.ThrowIfNull(nameof(positive));
 
-            if (_simulation.States.TryGet<BiasingSimulationState>(out var state))
+            if (_simulation.States.TryGetValue<BiasingSimulationState>(out var state))
             {
                 // Get the voltage of the positive node
                 var index = _simulation.Variables[positive].Index;
@@ -142,7 +142,7 @@ namespace SpiceSharp.Simulations
         {
             positive.ThrowIfNull(nameof(positive));
 
-            if (_simulation.States.TryGet<ComplexSimulationState>(out var state))
+            if (_simulation.States.TryGetValue<ComplexSimulationState>(out var state))
             {
 
                 // Get the voltage of the positive node

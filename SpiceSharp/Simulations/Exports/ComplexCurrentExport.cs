@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         {
             // Create our extractor!
             var simulation = (Simulation)sender;
-            var state = simulation.States.Get<ComplexSimulationState>();
+            var state = simulation.States.GetValue<ComplexSimulationState>();
             if (simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))

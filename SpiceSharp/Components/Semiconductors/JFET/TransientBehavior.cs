@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            var method = context.States.Get<TimeSimulationState>().Method;
+            var method = context.States.GetValue<TimeSimulationState>().Method;
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
         }

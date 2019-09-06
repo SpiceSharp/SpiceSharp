@@ -98,9 +98,9 @@ namespace SpiceSharp.Components.NoiseSources
             }
             Nodes = new NodeCollection(mapped);
 
-            BiasingState = context.States.Get<BiasingSimulationState>();
-            ComplexState = context.States.Get<ComplexSimulationState>();
-            NoiseState = context.States.Get<NoiseSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            NoiseState = context.States.GetValue<NoiseSimulationState>();
         }
 
         /// <summary>

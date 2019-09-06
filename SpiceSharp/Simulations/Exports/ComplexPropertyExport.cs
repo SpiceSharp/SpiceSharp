@@ -55,7 +55,7 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary behaviors in order of importance
             // 1) First the frequency analysis analysis
-            if (eb.TryGet<IFrequencyBehavior>(out var behavior))
+            if (eb.TryGetValue<IFrequencyBehavior>(out var behavior))
                 extractor = behavior.CreateGetter<Complex>(PropertyName, Comparer);
 
             // There are currently no other behaviors that export complex numbers

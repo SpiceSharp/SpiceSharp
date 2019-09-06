@@ -27,35 +27,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the entities in the subcircuit.
-        /// </summary>
-        /// <value>
-        /// The entities.
-        /// </value>
-        public IEntityCollection Entities { get; }
-
-        /// <summary>
-        /// Gets the set of global nodes.
-        /// </summary>
-        /// <remarks>
-        /// Global nodes are nodes that are shared among all subcircuits without explicit connection. Typical examples
-        /// are supply voltages ("VDD", "VEE", etc.). The ground node "0" is always treated as a global node, as well 
-        /// as any other identifiers that map to the ground node.
-        /// </remarks>
-        /// <value>
-        /// The global nodes.
-        /// </value>
-        public HashSet<string> GlobalNodes { get; set; }
-
-        /// <summary>
-        /// Gets the local pin names. These will globally look like other pin names.
-        /// </summary>
-        /// <value>
-        /// The local pin names.
-        /// </value>
-        public string[] LocalPinNames { get; }
-
-        /// <summary>
         /// The mock simulation used to create behaviors inside the subcircuit
         /// </summary>
         private SubcircuitSimulation _subcktSimulation;
@@ -66,26 +37,11 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="pins">The local node names in the subcircuit that will be connected outside.</param>
         /// <param name="entities">The entities in the subcircuit.</param>
-        public Subcircuit(string name, string[] pins, IEntityCollection entities)
+        public Subcircuit(string name, IEntityCollection entities, params string[] pins)
             : base(name, pins.Length)
         {
-            Entities = entities.ThrowIfNull(nameof(entities));
-            LocalPinNames = new string[pins.Length];
-            for (var i = 0; i < pins.Length; i++)
-                LocalPinNames[i] = pins[i].ThrowIfNull("pin");
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Subcircuit"/> class.
-        /// </summary>
-        /// <param name="name">The name of the subcircuit.</param>
-        /// <param name="pins">The local node names in the subcircuit that will be connected outside.</param>
-        /// <param name="entities">The entities in the subcircuit.</param>
-        /// <param name="connections">The node connections on the outside.</param>
-        public Subcircuit(string name, string[] pins, IEntityCollection entities, string[] connections)
-            : this(name, pins, entities)
-        {
-            Connect(connections);
+            var bp = new EntityBaseParameters(entities, pins);
+            Parameters.Add(bp);
         }
 
         /// <summary>
@@ -108,18 +64,19 @@ namespace SpiceSharp.Components
                 return;
 
             // Create the behaviors inside our behaviors
+            var ebp = Parameters.GetValue<EntityBaseParameters>();
             var nodemap = new Dictionary<string, string>(simulation.Variables.Comparer);
             for (var i = 0; i < PinCount; i++)
-                nodemap.Add(LocalPinNames[i], GetNode(i));
-            if (GlobalNodes != null)
+                nodemap.Add(ebp.Pins[i], GetNode(i));
+            if (ebp.GlobalNodes != null)
             {
-                foreach (var g in GlobalNodes)
+                foreach (var g in ebp.GlobalNodes)
                     nodemap.Add(g, g);
             }
 
             // We need to use a proxy simulation to create the behaviors
             _subcktSimulation = new SubcircuitSimulation(Name, simulation, nodemap);
-            var ec = new SubcircuitEntityCollection(entities, Entities, simulation);
+            var ec = new SubcircuitEntityCollection(entities, ebp.Entities, simulation);
             _subcktSimulation.Run(ec);
 
             // Now let's create our own behaviors
@@ -133,8 +90,11 @@ namespace SpiceSharp.Components
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
+            // We want to make sure that the behaviors are accessible through the behavior container
+            eb.Parameters.Add(new BehaviorBaseParameters(_subcktSimulation.EntityBehaviors));
+
             var context = new SubcircuitBindingContext(simulation, eb, _subcktSimulation.EntityBehaviors);
             foreach (var behavior in behaviors)
                 behavior.Bind(context);

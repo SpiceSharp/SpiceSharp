@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var solver = BiasingState.Solver;
             GatePtr = solver.GetRhsElement(GateNode);
 
-            var method = context.States.Get<TimeSimulationState>().Method;
+            var method = context.States.GetValue<TimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();
             _voltageDs = method.CreateHistory();
             _voltageBs = method.CreateHistory();

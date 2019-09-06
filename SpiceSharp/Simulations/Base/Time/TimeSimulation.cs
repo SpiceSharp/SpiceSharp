@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new TimeConfiguration());
             TimeSimulationStatistics = new TimeSimulationStatistics();
-            Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
+            Statistics.Add(TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
             Types.AddRange(new []
@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new TimeConfiguration(step, final));
             TimeSimulationStatistics = new TimeSimulationStatistics();
-            Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
+            Statistics.Add(TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
             Types.AddRange(new []
@@ -80,7 +80,7 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new TimeConfiguration(step, final, maxStep));
             TimeSimulationStatistics = new TimeSimulationStatistics();
-            Statistics.Add(typeof(TimeSimulationStatistics), TimeSimulationStatistics);
+            Statistics.Add(TimeSimulationStatistics);
 
             // Add the behavior in the order they are (usually) called
             Types.AddRange(new []
@@ -99,14 +99,14 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors and configurations
-            var config = Configurations.Get<TimeConfiguration>().ThrowIfNull("time configuration");
+            var config = Configurations.GetValue<TimeConfiguration>().ThrowIfNull("time configuration");
             _useIc = config.UseIc;
             Method = config.Method.ThrowIfNull("method");
 
-            if (!States.TryGet<TimeSimulationState>(out var state))
+            if (!States.TryGetValue<TimeSimulationState>(out var state))
             {
                 state = new TimeSimulationState(Method);
-                States.Add(state.GetType(), state);
+                States.Add(state);
             }
 
             // Setup

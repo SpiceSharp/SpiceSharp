@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
             CNegPosPrimePtr = solver.GetMatrixElement(NegNode, PosPrimeNode);

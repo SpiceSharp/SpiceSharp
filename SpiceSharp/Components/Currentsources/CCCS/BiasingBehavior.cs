@@ -89,16 +89,16 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             var c = (CommonBehaviors.ControlledBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
-            VoltageLoad = c.ControlBehaviors.Get<VoltageSourceBehaviors.BiasingBehavior>();
+            VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
             ControlBranchEq = VoltageLoad.BranchEq;
 
             // Get matrix elements
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             PosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
             NegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);

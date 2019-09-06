@@ -186,7 +186,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             base.Bind(context);
 
             // Get parameters
-            BaseParameters = context.Behaviors.Parameters.Get<BaseParameters>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             // Connect
             var c = (ComponentBindingContext)context;
@@ -196,7 +196,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Neg2 = c.Pins[3];
 
             // Get matrix elements
-            BiasingState = context.States.Get<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
             var variables = context.Variables;
 

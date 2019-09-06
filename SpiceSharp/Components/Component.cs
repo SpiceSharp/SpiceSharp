@@ -40,8 +40,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Connects the component in the circuit.
         /// </summary>
+        /// <remarks>
+        /// This command is chainable.
+        /// </remarks>
         /// <param name="nodes">The node indices.</param>
-        public void Connect(params string[] nodes)
+        public Component Connect(params string[] nodes)
         {
             nodes.ThrowIfNot(nameof(nodes), _connections.Length);
             for (var i = 0; i < nodes.Length; i++)
@@ -49,6 +52,7 @@ namespace SpiceSharp.Components
                 nodes[i].ThrowIfNull("node{0}".FormatString(i + 1));
                 _connections[i] = nodes[i];
             }
+            return this;
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace SpiceSharp.Components
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, EntityBehaviors eb, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             simulation.ThrowIfNull(nameof(simulation));
             var context = new ComponentBindingContext(simulation, eb, ApplyConnections(simulation.Variables), Model);

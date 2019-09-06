@@ -59,7 +59,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
@@ -84,8 +84,8 @@ namespace SpiceSharpTest.Models
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
             var model = new CapacitorModel("model C1");
-            model.Parameters.Get<ModelBaseParameters>().TemperatureCoefficient1.Value = 0.0;
-            model.Parameters.Get<ModelBaseParameters>().TemperatureCoefficient2.Value = 0.0;
+            model.Parameters.GetValue<ModelBaseParameters>().TemperatureCoefficient1.Value = 0.0;
+            model.Parameters.GetValue<ModelBaseParameters>().TemperatureCoefficient2.Value = 0.0;
             capacitor.Model = model.Name;
 
             // Build circuit
@@ -97,7 +97,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
 
             tran.BeforeTemperature += (sender, args) =>
                 {
@@ -131,8 +131,8 @@ namespace SpiceSharpTest.Models
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
             var model = new CapacitorModel("model C1");
-            model.Parameters.Get<ModelBaseParameters>().TemperatureCoefficient1.Value = 1.1;
-            model.Parameters.Get<ModelBaseParameters>().TemperatureCoefficient2.Value = 2.1;
+            model.Parameters.GetValue<ModelBaseParameters>().TemperatureCoefficient1.Value = 1.1;
+            model.Parameters.GetValue<ModelBaseParameters>().TemperatureCoefficient2.Value = 2.1;
             capacitor.Model = model.Name;
 
             // Build circuit
@@ -144,7 +144,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.Get<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
 
             tran.BeforeTemperature += (sender, args) =>
                 {

@@ -225,7 +225,7 @@ namespace SpiceSharpTest.Models
             };
             var references = new Func<double, Complex>[]
             {
-                frequency => Complex.Exp(-ac.States.Get<ComplexSimulationState>().Laplace * delay)
+                frequency => Complex.Exp(-ac.States.GetValue<ComplexSimulationState>().Laplace * delay)
             };
 
             // Analyze the AC behavior

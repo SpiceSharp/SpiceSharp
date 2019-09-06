@@ -20,7 +20,7 @@ namespace SpiceSharpTest
 
             // Change the value of the resistor
             var resParameters = ckt["R1"].Parameters;
-            resParameters.Get<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
+            resParameters.GetValue<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
             // </example_structure_resistor>
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
@@ -40,11 +40,11 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1");
 
             // Add a sweep
-            var dcConfig = dc.Configurations.Get<DCConfiguration>();
+            var dcConfig = dc.Configurations.GetValue<DCConfiguration>();
             dcConfig.Sweeps.Add(new SweepConfiguration("V1", 0.0, 3.3, 0.1));
             // </example_structure_dc>
             // <example_structure_dc_2>
-            var baseConfig = dc.Configurations.Get<BiasingConfiguration>();
+            var baseConfig = dc.Configurations.GetValue<BiasingConfiguration>();
             baseConfig.RelativeTolerance = 1e-4;
             baseConfig.AbsoluteTolerance = 1e-10;
             // </example_structure_dc_2>
@@ -56,7 +56,7 @@ namespace SpiceSharpTest
             // Create the mosfet
             var model = new Mosfet1Model("M1");
             var parameters =
-                model.Parameters.Get<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
+                model.Parameters.GetValue<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
 
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model

@@ -38,8 +38,8 @@ namespace SpiceSharpTest.Examples
             tran.AfterSetup += (sender, args) =>
             {
                 var eb = tran.EntityBehaviors["R2"];
-                eb.TryGet(out tb);
-                eb.Parameters.TryGet(out bp);
+                eb.TryGetValue(out tb);
+                eb.Parameters.TryGetValue(out bp);
             };
             // </example_change_parameter_setup>
             // <example_change_parameter_load>

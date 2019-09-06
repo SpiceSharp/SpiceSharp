@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.LosslessTransmissionLineBehaviors;
 
 namespace SpiceSharp.Components
@@ -65,7 +66,7 @@ namespace SpiceSharp.Components
             : this(name)
         {
             Connect(pos1, neg1, pos2, neg2);
-            var bp = Parameters.Get<BaseParameters>();
+            var bp = Parameters.GetValue<BaseParameters>();
             bp.Impedance = impedance;
             bp.Delay.Value = delay;
         }

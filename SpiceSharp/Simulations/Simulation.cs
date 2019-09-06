@@ -95,7 +95,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
-        public BehaviorPool EntityBehaviors { get; protected set; }
+        public BehaviorContainerCollection EntityBehaviors { get; protected set; }
 
         /// <summary>
         /// Gets the <see cref="IBehavior" /> types used by the <see cref="ISimulation" />.
@@ -128,7 +128,7 @@ namespace SpiceSharp.Simulations
             Name = name;
 
             // Add our own statistics
-            Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
+            Statistics.Add(SimulationStatistics);
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
             // Create the set of variables
-            if (Configurations.TryGet(out CollectionConfiguration cconfig))
+            if (Configurations.TryGetValue(out CollectionConfiguration cconfig))
                 Variables = cconfig.Variables ?? new VariableSet();
             else
                 Variables = new VariableSet();
@@ -231,7 +231,7 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected virtual void CreateBehaviors(IEntityCollection entities)
         {
-            EntityBehaviors = new BehaviorPool(entities.Comparer, Types.ToArray());
+            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer, Types.ToArray());
 
             // Create the behaviors
             SimulationStatistics.BehaviorCreationTime.Start();

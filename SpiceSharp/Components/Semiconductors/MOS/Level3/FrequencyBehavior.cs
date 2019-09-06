@@ -143,7 +143,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             base.Bind(context);
 
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
             CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);

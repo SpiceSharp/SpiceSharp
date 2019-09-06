@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.DelayBehaviors;
 
 namespace SpiceSharp.Components
@@ -50,7 +51,7 @@ namespace SpiceSharp.Components
         public VoltageDelay(string name, string pos, string neg, string controlPos, string controlNeg, double delay)
             : this(name)
         {
-            Parameters.Get<BaseParameters>().Delay = delay;
+            Parameters.GetValue<BaseParameters>().Delay = delay;
             Connect(pos, neg, controlPos, controlNeg);
         }
     }

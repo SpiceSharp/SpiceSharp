@@ -77,7 +77,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            ComplexState = context.States.Get<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
             CPosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
             CPosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);
