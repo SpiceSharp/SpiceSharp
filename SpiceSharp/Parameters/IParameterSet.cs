@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -7,67 +6,66 @@ namespace SpiceSharp
     /// Describes a class that can contain one or more parameters, in combination with the <see cref="SpiceSharp.Attributes.ParameterNameAttribute"/>,
     /// and/or <see cref="SpiceSharp.Attributes.ParameterInfoAttribute"/> attributes.
     /// </summary>
+    /// <typeparam name="T">The source type.</typeparam>
     /// <remarks>
-    /// This is a quite lengthy interface to implement. Remember that there are extension methods in
-    /// <see cref="ParameterHelper"/> that will use reflection if the interface is not implemented. Only
-    /// implement this interface if performance is an issue, or if the default behavior of the extension
-    /// methods is incorrect.
+    /// A thorough implementation that uses reflection is defined in <see cref="Reflection"/>. Use this
+    /// interface if the default behavior of these extension methods is not the right one.
     /// </remarks>
-    public interface IParameterSet
+    public interface IParameterSet<T>
     {
         #region Principal members
         /// <summary>
         /// Sets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
         ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        bool TrySetPrincipalParameter<T>(T value);
+        bool TrySetParameter<P>(P value);
 
         /// <summary>
         /// Sets the value of the principal parameters.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>The source object (can be used for chaining).</returns>
-        object SetPrincipalParameter<T>(T value);
+        T SetParameter<P>(P value);
 
         /// <summary>
         /// Tries to get the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
         ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        bool TryGetPrincipalParameter<T>(out T value);
+        bool TryGetParameter<P>(out P value);
 
         /// <summary>
         /// Gets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>The value of the principal parameter.</returns>
-        T GetPrincipalParameter<T>();
+        P GetParameter<P>();
 
         /// <summary>
         /// Creates a setter for the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// An action that can set the value of the principal parameter, or <c>null</c> if there is no principal parameter.
         /// </returns>
-        Action<T> CreatePrincipalSetter<T>();
+        Action<P> CreateSetter<P>();
 
         /// <summary>
         /// Creates a getter for the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// A function returning the value of the principal parameter, or <c>null</c> if there is no principal parameter.
         /// </returns>
-        Func<T> CreatePrincipalGetter<T>();
+        Func<P> CreateGetter<P>();
         #endregion
 
         #region Named value parameters
@@ -75,69 +73,63 @@ namespace SpiceSharp
         /// Tries setting a parameter with a specified name.
         /// If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
         /// </returns>
-        bool TrySetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null);
+        bool TrySetParameter<P>(string name, P value);
 
         /// <summary>
         /// Sets a parameter with a specified name. If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>The source object (can be used for chaining).</returns>
-        object SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null);
+        T SetParameter<P>(string name, P value);
 
         /// <summary>
         /// Tries getting a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///     <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
         /// </returns>
-        bool TryGetParameter<T>(string name, out T value, IEqualityComparer<string> comparer = null);
+        bool TryGetParameter<P>(string name, out P value);
 
         /// <summary>
         /// Gets a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// The parameter value.
         /// </returns>
-        T GetParameter<T>(string name, IEqualityComparer<string> comparer = null);
+        P GetParameter<P>(string name);
 
         /// <summary>
         /// Returns a setter for the first eligible parameter with the specified name.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
         /// </returns>
-        Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null);
+        Action<P> CreateSetter<P>(string name);
 
         /// <summary>
         /// Returns a getter for the first found parameter with the specified name.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The string comparer used for identifying the parameter name.</param>
         /// <returns>
         /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
         /// </returns>
-        Func<T> CreateGetter<T>(string name, IEqualityComparer<string> comparer = null);
+        Func<P> CreateGetter<P>(string name);
         #endregion
 
         #region Named methods
@@ -146,20 +138,18 @@ namespace SpiceSharp
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>
         ///   <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
         /// </returns>
-        bool TrySetParameter(string name, IEqualityComparer<string> comparer = null);
+        bool TryCall(string name);
 
         /// <summary>
         /// Calls a method by name without arguments.
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         /// <returns>The source object (can be used for chaining).</returns>
-        object SetParameter(string name, IEqualityComparer<string> comparer = null);
+        T Call(string name);
         #endregion
     }
 }

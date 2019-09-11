@@ -5,7 +5,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.
     /// </summary>
-    public interface IEntity : ICloneable, ICloneable<IEntity>, IParameterSet
+    public interface IEntity : ICloneable, ICloneable<IEntity>, IParameterSet<IEntity>
     {
         /// <summary>
         /// Gets the name of the entity.

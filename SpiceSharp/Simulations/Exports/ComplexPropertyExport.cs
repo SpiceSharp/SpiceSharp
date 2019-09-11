@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 
@@ -22,23 +21,16 @@ namespace SpiceSharp.Simulations
         public string PropertyName { get; }
 
         /// <summary>
-        /// Gets the comparer for parameter names.
-        /// </summary>
-        public IEqualityComparer<string> Comparer { get; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ComplexPropertyExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="entityName">The identifier of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName, IEqualityComparer<string> comparer = null)
+        public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
             EntityName = entityName.ThrowIfNull(nameof(entityName));
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
-            Comparer = comparer ?? EqualityComparer<string>.Default;
         }
 
         /// <summary>
@@ -56,10 +48,9 @@ namespace SpiceSharp.Simulations
             // Get the necessary behaviors in order of importance
             // 1) First the frequency analysis analysis
             if (eb.TryGetValue<IFrequencyBehavior>(out var behavior))
-                extractor = behavior.CreateGetter<Complex>(PropertyName, Comparer);
+                extractor = behavior.CreateGetter<Complex>(PropertyName);
 
             // There are currently no other behaviors that export complex numbers
-
             Extractor = extractor;
         }
     }

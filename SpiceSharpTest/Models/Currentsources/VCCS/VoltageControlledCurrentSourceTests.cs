@@ -48,7 +48,7 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1, 1e4, 3));
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
+            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i_c") };
             Func<double, Complex>[] references = { freq => magnitude * transconductance * resistance, freq => magnitude * transconductance };
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);

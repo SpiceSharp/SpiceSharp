@@ -29,7 +29,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         /// <param name="entities">The entities describing the circuit.</param>
-        public Circuit(IEnumerable<Entity> entities)
+        public Circuit(IEnumerable<IEntity> entities)
             : base()
         {
             if (entities == null)
@@ -42,7 +42,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         /// <param name="entities">The entities describing the circuit.</param>
-        public Circuit(params Entity[] entities)
+        public Circuit(params IEntity[] entities)
             : base()
         {
             if (entities == null)

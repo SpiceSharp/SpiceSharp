@@ -50,13 +50,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the voltage.
         /// </summary>
-        [ParameterName("vd"), ParameterInfo("Voltage across the internal diode")]
+        [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
         public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosPrimeNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Gets the current.
         /// </summary>
-        [ParameterName("i"), ParameterName("id"), ParameterInfo("Current through the diode")]
+        [ParameterName("i_c"), ParameterName("id_c"), ParameterInfo("Current through the diode")]
         public Complex GetComplexCurrent()
         {
             ComplexState.ThrowIfNotBound(this);
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the power.
         /// </summary>
-        [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
+        [ParameterName("p_c"), ParameterName("pd_c"), ParameterInfo("Power")]
         public Complex GetComplexPower()
         {
             ComplexState.ThrowIfNotBound(this);

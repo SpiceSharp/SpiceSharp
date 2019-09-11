@@ -96,8 +96,8 @@ namespace SpiceSharpTest.Models
             op.AfterSetup += (sender, args) =>
             {
                 var eb = op.EntityBehaviors["X1"].GetParameter<BehaviorContainerCollection>("b");
-                eb["R1"].SetPrincipalParameter(6e3);
-                eb["R2"].SetPrincipalParameter(6e3);
+                eb["R1"].SetParameter(6e3);
+                eb["R2"].SetParameter(6e3);
             };
             var exports = new[] { new RealVoltageExport(op, "out") };
             AnalyzeOp(op, ckt, exports, new[] { 0.2 });
@@ -122,8 +122,8 @@ namespace SpiceSharpTest.Models
             op.AfterSetup += (sender, args) =>
             {
                 var eb = op.EntityBehaviors["X1"].GetParameter<BehaviorContainerCollection>("b");
-                eb["R1"].SetPrincipalParameter(6e3);
-                eb["R2"].SetPrincipalParameter(6e3);
+                eb["R1"].SetParameter(6e3);
+                eb["R2"].SetParameter(6e3);
             };
             var exports = new[] { new RealVoltageExport(op, "out") };
             AnalyzeOp(op, ckt, exports, new[] { 0.1 });

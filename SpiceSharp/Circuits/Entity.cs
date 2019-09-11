@@ -214,176 +214,155 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Sets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySetPrincipalParameter<T>(T value) => Parameters.TrySetPrincipalParameter(value);
+        public bool TrySetParameter<P>(P value) => Parameters.TrySetParameter(value);
 
         /// <summary>
         /// Sets the value of the principal parameters.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public Entity SetPrincipalParameter<T>(T value)
+        public IEntity SetParameter<P>(P value)
         {
-            Parameters.SetPrincipalParameter(value);
+            Parameters.SetParameter(value);
             return this;
         }
-        object IParameterSet.SetPrincipalParameter<T>(T value) => SetPrincipalParameter(value);
 
         /// <summary>
         /// Tries to get the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public bool TryGetPrincipalParameter<T>(out T value) => Parameters.TryGetPrincipalParameter(out value);
+        public bool TryGetParameter<P>(out P value) => Parameters.TryGetParameter(out value);
 
         /// <summary>
         /// Gets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// The value of the principal parameter.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public T GetPrincipalParameter<T>() => Parameters.GetPrincipalParameter<T>();
+        public P GetParameter<P>() => Parameters.GetParameter<P>();
 
         /// <summary>
         /// Creates a setter for the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// An action that can set the value of the principal parameter, or <c>null</c> if there is no principal parameter.
         /// </returns>
-        public Action<T> CreatePrincipalSetter<T>() => Parameters.CreatePrincipalSetter<T>();
+        public Action<P> CreateSetter<P>() => Parameters.CreateSetter<P>();
 
         /// <summary>
         /// Creates a getter for the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// A function returning the value of the principal parameter, or <c>null</c> if there is no principal parameter.
         /// </returns>
-        public Func<T> CreatePrincipalGetter<T>() => Parameters.CreatePrincipalGetter<T>();
+        public Func<P> CreateGetter<P>() => Parameters.CreateGetter<P>();
 
         /// <summary>
         /// Tries setting a parameter with a specified name.
         /// If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
-        ///   <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
+        /// <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null) 
-            => Parameters.TrySetParameter(name, value, comparer);
+        public bool TrySetParameter<P>(string name, P value) => Parameters.TrySetParameter(name, value);
 
         /// <summary>
         /// Sets a parameter with a specified name. If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public Entity SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        public IEntity SetParameter<P>(string name, P value)
         {
-            Parameters.SetParameter(name, value, comparer);
+            Parameters.SetParameter(name, value);
             return this;
         }
-        object IParameterSet.SetParameter<T>(string name, T value, IEqualityComparer<string> comparer)
-            => SetParameter(name, value, comparer);
 
         /// <summary>
         /// Tries getting a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
-        ///   <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
+        /// <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetParameter<T>(string name, out T value, IEqualityComparer<string> comparer = null)
-            => Parameters.TryGetParameter(name, out value, comparer);
+        public bool TryGetParameter<P>(string name, out P value) => Parameters.TryGetParameter(name, out value);
 
         /// <summary>
         /// Gets a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// The parameter value.
         /// </returns>
-        public T GetParameter<T>(string name, IEqualityComparer<string> comparer = null)
-            => Parameters.GetParameter<T>(name, comparer);
+        public P GetParameter<P>(string name) => Parameters.GetParameter<P>(name);
 
         /// <summary>
         /// Returns a setter for the first eligible parameter with the specified name.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
         /// </returns>
-        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null)
-            => Parameters.CreateSetter<T>(name, comparer);
+        public Action<P> CreateSetter<P>(string name) => Parameters.CreateSetter<P>(name);
 
         /// <summary>
         /// Returns a getter for the first found parameter with the specified name.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The string comparer used for identifying the parameter name.</param>
         /// <returns>
         /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
         /// </returns>
-        public Func<T> CreateGetter<T>(string name, IEqualityComparer<string> comparer = null)
-            => Parameters.CreateGetter<T>(name, comparer);
+        public Func<P> CreateGetter<P>(string name) => Parameters.CreateGetter<P>(name);
 
         /// <summary>
         /// Tries to call a method by name without arguments.
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
-        ///   <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
+        /// <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySetParameter(string name, IEqualityComparer<string> comparer = null)
-            => Parameters.TrySetParameter(name, comparer);
+        public bool TryCall(string name) => Parameters.TryCall(name);
 
         /// <summary>
         /// Calls a method by name without arguments.
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public Entity SetParameter(string name, IEqualityComparer<string> comparer = null)
+        public IEntity Call(string name)
         {
-            Parameters.SetParameter(name, comparer);
+            Parameters.Call(name);
             return this;
         }
-        object IParameterSet.SetParameter(string name, IEqualityComparer<string> comparer)
-            => SetParameter(name, comparer);
         #endregion
     }
 }

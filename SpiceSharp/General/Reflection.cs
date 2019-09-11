@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,122 +15,351 @@ namespace SpiceSharp
     public static class Reflection
     {
         /// <summary>
-        /// Holds information about a specified member of the class and its attributes.
+        /// Gets or sets the default comparer used when creating a parameter mapping.
         /// </summary>
-        public class CachedMemberInfo
+        /// <value>
+        /// The default comparer used.
+        /// </value>
+        public static IEqualityComparer<string> Comparer
         {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CachedMemberInfo"/> class.
-            /// </summary>
-            /// <param name="member"></param>
-            /// <param name="attributes"></param>
-            public CachedMemberInfo(MemberInfo member, IEnumerable<Attribute> attributes)
+            get => _comparer;
+            set
             {
-                Member = member;
-                Attributes = new List<Attribute>(attributes);
-            }
-
-            /// <summary>
-            /// Gets the reference to the member.
-            /// </summary>
-            public MemberInfo Member { get; private set; }
-
-            /// <summary>
-            /// Gets the cached list of attributes for the member.
-            /// </summary>
-            public List<Attribute> Attributes { get; private set; }
-
-            /// <summary>
-            /// Convert to a string.
-            /// </summary>
-            public override string ToString()
-            {
-                if (Member == null)
-                    return "null";
-                string result = Member.Name;
-                string[] names = Attributes.Where(m => m is ParameterNameAttribute).Select(m => ((ParameterNameAttribute)m).Name).ToArray();
-                if (names.Length > 0)
-                    result += " (" + string.Join(", ", names) + ")";
-                return result;
+                var newComparer = value ?? EqualityComparer<string>.Default;
+                if (value != _comparer)
+                {
+                    _comparer = newComparer;
+                    foreach (var map in _parameterMapDict.Values)
+                        map.Remap(_comparer);
+                }
             }
         }
 
-        private static readonly Dictionary<Type, List<CachedMemberInfo>> _membersDict = new Dictionary<Type, List<CachedMemberInfo>>();
-        private static readonly ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        private static IEqualityComparer<string> _comparer = EqualityComparer<string>.Default;
+        private static readonly Dictionary<Type, ParameterMap> _parameterMapDict = new Dictionary<Type, ParameterMap>();
+        private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// Get all the members in the class.
+        /// Gets the members for a specific type.
         /// </summary>
-        /// <param name="source">The source object.</param>
-        /// <returns></returns>
-        public static IEnumerable<CachedMemberInfo> GetMembers(object source)
+        /// <param name="type">The member type.</param>
+        /// <returns>
+        /// An enumeration of all members of the type.
+        /// </returns>
+        public static IEnumerable<MemberDescription> GetMembers(Type type)
         {
-            source.ThrowIfNull(nameof(source));
-
-            cacheLock.EnterUpgradeableReadLock();
+            _lock.EnterUpgradeableReadLock();
             try
             {
-                var type = source.GetType();
-                if (!_membersDict.ContainsKey(type))
+                if (!_parameterMapDict.TryGetValue(type, out var result))
                 {
-                    var members = type
-                        .GetTypeInfo()
-                        .GetMembers(BindingFlags.Public | BindingFlags.Instance)
-                        .Select(m => new CachedMemberInfo(m, m.GetCustomAttributes().ToList())).ToList();
-
-                    cacheLock.EnterWriteLock();
+                    result = new ParameterMap(type, Comparer);
+                    _lock.EnterWriteLock();
                     try
                     {
-                        if (!_membersDict.ContainsKey(type))
-                            _membersDict.Add(type, members);
-                        return _membersDict[type];
+                        _parameterMapDict.Add(type, result);
                     }
                     finally
                     {
-                        cacheLock.ExitWriteLock();
+                        _lock.ExitWriteLock();
                     }
                 }
-
-                return _membersDict[type];
+                return result.Members;
             }
             finally
             {
-                cacheLock.ExitUpgradeableReadLock();
+                _lock.ExitUpgradeableReadLock();
             }
         }
 
         /// <summary>
-        /// Get all members with a specified name.
+        /// Gets the member for a specific type with the specified name and target type.
         /// </summary>
-        /// <remarks>
-        /// You can specify a parameter name using the <seealso cref="ParameterNameAttribute" /> attribute.</remarks>
-        /// <param name="source">The source object.</param>
+        /// <param name="type">The type that should be searched for the parameter.</param>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        /// <returns></returns>
-        public static IEnumerable<MemberInfo> GetNamedMembers(object source, string name, IEqualityComparer<string> comparer = null)
+        /// <returns>The member description.</returns>
+        public static MemberDescription GetMember(Type type, string name)
         {
-            comparer = comparer ?? EqualityComparer<string>.Default;
-            return GetMembers(source)
-                .Where(m => m.Attributes.Any(r => r is ParameterNameAttribute p && comparer.Equals(p.Name, name)))
-                .Select(m => m.Member);
+            _lock.EnterUpgradeableReadLock();
+            try
+            {
+                if (!_parameterMapDict.TryGetValue(type, out var result))
+                {
+                    _lock.EnterWriteLock();
+                    try
+                    {
+                        result = new ParameterMap(type, Comparer);
+                        _parameterMapDict.Add(type, result);
+                    }
+                    finally
+                    {
+                        _lock.ExitWriteLock();
+                    }
+                }
+                return result.Get(name);
+            }
+            finally
+            {
+                _lock.ExitUpgradeableReadLock();
+            }
         }
 
         /// <summary>
-        /// Get all principal members.
+        /// Gets the principal member for a specific type with the specified target type.
         /// </summary>
-        /// <remarks>
-        /// You can specify a parameter as principal using the <seealso cref="ParameterInfoAttribute" /> attribute, using the "IsPrincipal" flag.
-        /// </remarks>
-        /// <param name="source">The source object.</param>
-        /// <returns></returns>
-        public static IEnumerable<MemberInfo> GetPrincipalMembers(object source)
+        /// <param name="type">The type that should be searched for the parameter.</param>
+        /// <returns>The member description.</returns>
+        public static MemberDescription GetPrincipalMember(Type type)
         {
-            return GetMembers(source)
-                .Where(m => m.Attributes.Any(r => r is ParameterInfoAttribute p && p.IsPrincipal))
-                .Select(m => m.Member);
+            _lock.EnterUpgradeableReadLock();
+            try
+            {
+                if (!_parameterMapDict.TryGetValue(type, out var result))
+                {
+                    _lock.EnterWriteLock();
+                    try
+                    {
+                        result = new ParameterMap(type, Comparer);
+                        _parameterMapDict.Add(type, result);
+                    }
+                    finally
+                    {
+                        _lock.ExitWriteLock();
+                    }
+                }
+                return result.Principal;
+            }
+            finally
+            {
+                _lock.ExitUpgradeableReadLock();
+            }
         }
 
+        #region Parameter helpers
+
+        /// <summary>
+        /// Sets the value of the principal parameter.
+        /// </summary>
+        /// <typeparam name="T">The source type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>The original object, can be used to chain.</returns>
+        public static T SetParameter<T, P>(this T source, P value)
+        {
+            var desc = GetPrincipalMember(source.GetType());
+            if (desc == null || !desc.TrySet(source, value))
+                throw new CircuitException("Could not find a principal parameter for {0}".FormatString(source));
+            return source;
+        }
+
+        /// <summary>
+        /// Sets the parameter.
+        /// </summary>
+        /// <typeparam name="T">The source type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>The original object, can be used to chain.</returns>
+        public static T SetParameter<T, P>(this T source, string name, P value)
+        {
+            var desc = GetMember(source.GetType(), name);
+            if (desc == null || !desc.TrySet(source, value))
+                throw new CircuitException("Could not find a parameter '{0}' for {1}".FormatString(name, source));
+            return source;
+        }
+
+        /// <summary>
+        /// Calls the method with the specified name (tagged with <see cref="ParameterNameAttribute"/>).
+        /// </summary>
+        /// <typeparam name="T">The source type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter method.</param>
+        /// <returns>The original object, can be used to chain.</returns>
+        public static T Call<T>(this T source, string name)
+        {
+            var desc = GetMember(source.GetType(), name);
+            if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length > 0)
+                throw new CircuitException("Cannot call method '{0}' on {1}".FormatString(name, source));
+            mi.Invoke(source, null);
+            return source;
+        }
+
+        /// <summary>
+        /// Gets the parameter.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <returns>The value of the parameter.</returns>
+        public static P GetParameter<P>(this object source)
+        {
+            var desc = GetPrincipalMember(source.GetType());
+            if (desc != null && desc.TryGet(source, out P value))
+                return value;
+            throw new CircuitException("Could not find a principal parameter for {0}".FormatString(source));
+        }
+
+        /// <summary>
+        /// Gets the parameter.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>The value of the parameter.</returns>
+        public static P GetParameter<P>(this object source, string name)
+        {
+            var desc = GetMember(source.GetType(), name);
+            if (desc != null && desc.TryGet(source, out P value))
+                return value;
+            throw new CircuitException("Could not find a parameter '{0}' for {0}".FormatString(name, source));
+        }
+
+        /// <summary>
+        /// Tries to set the principal parameter.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///     <c>true</c> if the parameter was set; otherwise <c>false</c>.
+        /// </returns>
+        public static bool TrySetParameter<P>(this object source, P value)
+        {
+            var desc = GetPrincipalMember(source.GetType());
+            return desc != null && desc.TrySet(source, value);
+        }
+
+        /// <summary>
+        /// Tries to set the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static bool TrySetParameter<P>(this object source, string name, P value)
+        {
+            var desc = GetMember(source.GetType(), name);
+            return desc != null && desc.TrySet(source, value);
+        }
+
+        /// <summary>
+        /// Tries calling a method with the specified name (tagged with the <see cref="ParameterNameAttribute"/>).
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        ///     <c>true</c> if the method was called; otherwise <c>false</c>.
+        /// </returns>
+        public static bool TryCall(this object source, string name)
+        {
+            var desc = GetMember(source.GetType(), name);
+            if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length != 0)
+                return false;
+            mi.Invoke(source, new object[] { });
+            return true;
+        }
+
+        /// <summary>
+        /// Tries to get the principal parameter.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///     <c>true</c> if the parameter is returned; otherwise <c>false</c>.
+        /// </returns>
+        public static bool TryGetParameter<P>(this object source, out P value)
+        {
+            var desc = GetPrincipalMember(source.GetType());
+            if (desc != null && desc.TryGet<P>(source, out value))
+                return true;
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to get the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///     <c>true</c> if the parameter is returned; otherwise <c>false</c>.
+        /// </returns>
+        public static bool TryGetParameter<P>(this object source, string name, out P value)
+        {
+            var desc = GetMember(source.GetType(), name);
+            if (desc == null)
+            {
+                value = default;
+                return false;
+            }
+            return desc.TryGet(source, out value);
+        }
+
+        /// <summary>
+        /// Creates a getter for the principal parameter.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <returns>
+        /// The function that can return the value of the principal parameter.
+        /// </returns>
+        public static Func<P> CreateGetter<P>(this object source)
+        {
+            var desc = GetPrincipalMember(source.GetType());
+            return desc?.CreateGetter<P>(source);
+        }
+
+        /// <summary>
+        /// Creates a getter for the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// The function that can return the value of the parameter.
+        /// </returns>
+        public static Func<P> CreateGetter<P>(this object source, string name)
+        {
+            var desc = GetMember(source.GetType(), name);
+            return desc?.CreateGetter<P>(source);
+        }
+
+        /// <summary>
+        /// Creates a setter for the principal parameter.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <returns>
+        /// The action that can set the value of the principal parameter.
+        /// </returns>
+        public static Action<P> CreateSetter<P>(this object source)
+        {
+            var desc = GetPrincipalMember(source.GetType());
+            return desc?.CreateSetter<P>(source);
+        }
+
+        /// <summary>
+        /// Creates a setter for the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The parameter type.</typeparam>
+        /// <param name="source">The source object.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// The action that cna set the value of the parameter.
+        /// </returns>
+        public static Action<P> CreateSetter<P>(this object source, string name)
+        {
+            var desc = GetMember(source.GetType(), name);
+            return desc?.CreateSetter<P>(source);
+        }
+        #endregion
+
+        #region General reflection helper methods
         /// <summary>
         /// Sets the value of a member.
         /// </summary>
@@ -146,17 +376,31 @@ namespace SpiceSharp
 
             if (member is PropertyInfo pi)
             {
-                if (pi.CanWrite && pi.PropertyType.GetTypeInfo().IsAssignableFrom(typeof(T)))
+                var info = pi.PropertyType.GetTypeInfo();
+                if (pi.CanWrite && info.IsAssignableFrom(typeof(T)))
                 {
                     pi.SetValue(source, value);
+                    return true;
+                }
+                if (pi.CanRead && info.IsAssignableFrom(typeof(Parameter<T>)))
+                {
+                    var p = (Parameter<T>)pi.GetValue(source);
+                    p.Value = value;
                     return true;
                 }
             }
             else if (member is FieldInfo fi)
             {
-                if (fi.FieldType.GetTypeInfo().IsAssignableFrom(typeof(T)))
+                var info = fi.FieldType.GetTypeInfo();
+                if (info.IsAssignableFrom(typeof(T)))
                 {
                     fi.SetValue(source, value);
+                    return true;
+                }
+                if (info.IsAssignableFrom(typeof(Parameter<T>)))
+                {
+                    var p = (Parameter<T>)fi.GetValue(source);
+                    p.Value = value;
                     return true;
                 }
             }
@@ -501,5 +745,6 @@ namespace SpiceSharp
             // Could not turn this into a getter
             return null;
         }
+        #endregion
     }
 }

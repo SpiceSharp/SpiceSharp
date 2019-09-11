@@ -27,8 +27,8 @@ namespace SpiceSharpTest
             ckt["R1"].SetParameter("resistance", 2.0e3);
             ckt["R1"].Parameters.SetParameter("resistance", 2.0e3);
 
-            // Using the ParameterInfoAttributes IsPrincipal=true
-            ckt["R1"].Parameters.SetPrincipalParameter(2.0e3);
+            // The resistance is a principal parameter, so we don't even need to specify "resistance"
+            ckt["R1"].Parameters.SetParameter(2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -79,7 +79,7 @@ namespace SpiceSharpTest
             // <example_parameters_res_setparameter>
             // Set the resistance of the resistor
             var res = new Resistor("R1");
-            res.Parameters.SetPrincipalParameter(2.0e3); // 2kOhm
+            res.Parameters.SetParameter(2.0e3); // 2kOhm
             // </example_parameters_res_setparameter>
         }
 

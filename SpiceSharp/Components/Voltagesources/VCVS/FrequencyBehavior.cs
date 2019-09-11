@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the voltage applied by the source.
         /// </summary>
-        [ParameterName("v"), ParameterInfo("Complex voltage")]
+        [ParameterName("v_c"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
 			state.ThrowIfNull(nameof(state));
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the current through the source.
         /// </summary>
-        [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
+        [ParameterName("i_c"), ParameterName("c_c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
 			state.ThrowIfNull(nameof(state));
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
-        [ParameterName("p"), ParameterInfo("Complex power")]
+        [ParameterName("p_c"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
 			state.ThrowIfNull(nameof(state));

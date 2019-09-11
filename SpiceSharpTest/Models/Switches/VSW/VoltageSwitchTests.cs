@@ -285,11 +285,11 @@ namespace SpiceSharpTest.Models
             var p = s.Parameters.GetValue<SpiceSharp.Components.SwitchBehaviors.BaseParameters>();
 
             // Check on
-            s.Parameters.SetParameter("on");
+            s.Parameters.Call("on");
             Assert.AreEqual(true, p.ZeroState);
 
             // Check off
-            s.Parameters.SetParameter("off");
+            s.Parameters.Call("off");
             Assert.AreEqual(false, p.ZeroState);
         }
     }

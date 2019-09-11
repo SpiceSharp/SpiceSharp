@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Attributes;
+using SpiceSharp.General;
 
 namespace SpiceSharpTest.Parameters
 {
@@ -203,7 +204,7 @@ namespace SpiceSharpTest.Parameters
         public void When_PrincipalParameter_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var param = p.GetPrincipalParameter<Parameter<double>>();
+            var param = p.GetParameter<Parameter<double>>();
             Assert.AreEqual(param, p.PrincipalTest);
         }
 
@@ -211,7 +212,7 @@ namespace SpiceSharpTest.Parameters
         public void When_PrincipalSetter_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var setter = p.CreatePrincipalSetter<double>();
+            var setter = p.CreateSetter<double>();
             setter(1.0);
             Assert.AreEqual(1.0, p.PrincipalTest.Value, 1e-12);
             setter(10.0);

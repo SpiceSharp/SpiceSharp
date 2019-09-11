@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp
 {
     /// <summary>
     /// A dictionary of <see cref="ParameterSet" />. Only one instance of each type is allowed.
     /// </summary>
-    /// <seealso cref="TypeDictionary{T}" />
-    public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>, IParameterSet
+    /// <seealso cref="TypeDictionary{P}" />
+    public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>, IParameterSet<ParameterSetDictionary>
     {
         /// <summary>
         /// Clone the dictionary.
@@ -54,17 +53,16 @@ namespace SpiceSharp
         /// <summary>
         /// Sets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public bool TrySetPrincipalParameter<T>(T value)
+        public bool TrySetParameter<P>(P value)
         {
             foreach (var p in Values)
             {
-                if (p.TrySetPrincipalParameter(value))
+                if (p.TrySetParameter(value))
                     return true;
             }
             return false;
@@ -73,37 +71,34 @@ namespace SpiceSharp
         /// <summary>
         /// Sets the value of the principal parameters.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public ParameterSetDictionary SetPrincipalParameter<T>(T value)
+        public ParameterSetDictionary SetParameter<P>(P value)
         {
             foreach (var p in Values)
             {
-                if (p.TrySetPrincipalParameter(value))
+                if (p.TrySetParameter(value))
                     return this;
             }
             throw new CircuitException("No principal parameter found");
         }
-        object IParameterSet.SetPrincipalParameter<T>(T value) => SetPrincipalParameter(value);
 
         /// <summary>
         /// Tries to get the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
+        /// <c>true</c> if a principal parameter was set; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public bool TryGetPrincipalParameter<T>(out T value)
+        public bool TryGetParameter<P>(out P value)
         {
             foreach (var p in Values)
             {
-                if (p.TryGetPrincipalParameter(out value))
+                if (p.TryGetParameter(out value))
                     return true;
             }
             value = default;
@@ -113,15 +108,15 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the value of the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// The value of the principal parameter.
         /// </returns>
-        public T GetPrincipalParameter<T>()
+        public P GetParameter<P>()
         {
             foreach (var p in Values)
             {
-                if (p.TryGetPrincipalParameter(out T value))
+                if (p.TryGetParameter(out P value))
                     return value;
             }
             throw new CircuitException("No principal parameter found");
@@ -130,15 +125,15 @@ namespace SpiceSharp
         /// <summary>
         /// Creates a setter for the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// An action that can set the value of the principal parameter, or <c>null</c> if there is no principal parameter.
         /// </returns>
-        public Action<T> CreatePrincipalSetter<T>()
+        public Action<P> CreateSetter<P>()
         {
             foreach (var p in Values)
             {
-                var setter = p.CreatePrincipalSetter<T>();
+                var setter = p.CreateSetter<P>();
                 if (setter != null)
                     return setter;
             }
@@ -148,15 +143,15 @@ namespace SpiceSharp
         /// <summary>
         /// Creates a getter for the principal parameter.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <returns>
         /// A function returning the value of the principal parameter, or <c>null</c> if there is no principal parameter.
         /// </returns>
-        public Func<T> CreatePrincipalGetter<T>()
+        public Func<P> CreateGetter<P>()
         {
             foreach (var p in Values)
             {
-                var getter = p.CreatePrincipalGetter<T>();
+                var getter = p.CreateGetter<P>();
                 if (getter != null)
                     return getter;
             }
@@ -167,57 +162,50 @@ namespace SpiceSharp
         /// Tries setting a parameter with a specified name.
         /// If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
-        ///   <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
+        /// <c>true</c> if there was one or more parameters set; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        public bool TrySetParameter<P>(string name, P value)
         {
             bool result = false;
             foreach (var p in Values)
-                result |= p.TrySetParameter(name, value, comparer);
+                result |= p.TrySetParameter(name, value);
             return result;
         }
 
         /// <summary>
         /// Sets a parameter with a specified name. If multiple parameters have the same name, they will all be set.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public ParameterSetDictionary SetParameter<T>(string name, T value, IEqualityComparer<string> comparer = null)
+        public ParameterSetDictionary SetParameter<P>(string name, P value)
         {
-            if (TrySetParameter(name, value, comparer))
+            if (TrySetParameter(name, value))
                 return this;
             throw new CircuitException("Could not find a parameter '{0}'".FormatString(name));
         }
-        object IParameterSet.SetParameter<T>(string name, T value, IEqualityComparer<string> comparer)
-            => SetParameter(name, value, comparer);
 
         /// <summary>
         /// Tries getting a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
-        ///   <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
+        /// <c>true</c> if the parameter exists and the value was read; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public bool TryGetParameter<T>(string name, out T value, IEqualityComparer<string> comparer = null)
+        public bool TryGetParameter<P>(string name, out P value)
         {
             foreach (var p in Values)
             {
-                if (p.TryGetParameter(name, out value, comparer))
+                if (p.TryGetParameter(name, out value))
                     return true;
             }
             value = default;
@@ -227,16 +215,14 @@ namespace SpiceSharp
         /// <summary>
         /// Gets a parameter value. Only the first found parameter with the specified name is returned.
         /// </summary>
-        /// <typeparam name="T">The value type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// The parameter value.
         /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public T GetParameter<T>(string name, IEqualityComparer<string> comparer = null)
+        public P GetParameter<P>(string name)
         {
-            if (TryGetParameter(name, out T value, comparer))
+            if (TryGetParameter(name, out P value))
                 return value;
             throw new CircuitException("Could not find parameter '{0}'".FormatString(name));
         }
@@ -244,17 +230,16 @@ namespace SpiceSharp
         /// <summary>
         /// Returns a setter for the first eligible parameter with the specified name.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
         /// </returns>
-        public Action<T> CreateSetter<T>(string name, IEqualityComparer<string> comparer = null)
+        public Action<P> CreateSetter<P>(string name)
         {
             foreach (var p in Values)
             {
-                var setter = p.CreateSetter<T>(name, comparer);
+                var setter = p.CreateSetter<P>(name);
                 if (setter != null)
                     return setter;
             }
@@ -264,17 +249,16 @@ namespace SpiceSharp
         /// <summary>
         /// Returns a getter for the first found parameter with the specified name.
         /// </summary>
-        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
-        /// <param name="comparer">The string comparer used for identifying the parameter name.</param>
         /// <returns>
         /// A function returning the value of the parameter, or <c>null</c> if there is no parameter with the specified name.
         /// </returns>
-        public Func<T> CreateGetter<T>(string name, IEqualityComparer<string> comparer = null)
+        public Func<P> CreateGetter<P>(string name)
         {
             foreach (var p in Values)
             {
-                var getter = p.CreateGetter<T>(name, comparer);
+                var getter = p.CreateGetter<P>(name);
                 if (getter != null)
                     return getter;
             }
@@ -286,15 +270,14 @@ namespace SpiceSharp
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
-        ///   <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
+        /// <c>true</c> if there was one or more methods called; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySetParameter(string name, IEqualityComparer<string> comparer = null)
+        public bool TryCall(string name)
         {
             var result = false;
             foreach (var p in Values)
-                result |= p.TrySetParameter(name, comparer);
+                result |= p.TryCall(name);
             return result;
         }
 
@@ -303,18 +286,15 @@ namespace SpiceSharp
         /// If multiple parameters by this name exist, all of them will be called.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing parameter names, or <c>null</c> to use the default <see cref="EqualityComparer{T}" />.</param>
         /// <returns>
         /// The source object (can be used for chaining).
         /// </returns>
-        public ParameterSetDictionary SetParameter(string name, IEqualityComparer<string> comparer = null)
+        public ParameterSetDictionary Call(string name)
         {
-            if (TrySetParameter(name, comparer))
+            if (TryCall(name))
                 return this;
             throw new CircuitException("Could not find parameter '{0}'".FormatString(name));
         }
-        object IParameterSet.SetParameter(string name, IEqualityComparer<string> comparer)
-            => SetParameter(name, comparer);
         #endregion
     }
 }

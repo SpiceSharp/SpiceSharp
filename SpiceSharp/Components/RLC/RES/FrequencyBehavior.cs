@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
-        [ParameterName("v"), ParameterInfo("Complex voltage across the capacitor.")]
+        [ParameterName("v_c"), ParameterInfo("Complex voltage across the capacitor.")]
         public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
 
         /// <summary>
         /// Gets the (complex) current through the resistor.
         /// </summary>
-        [ParameterName("i"), ParameterInfo("Complex current through the capacitor.")]
+        [ParameterName("i_c"), ParameterInfo("Complex current through the capacitor.")]
         public Complex GetComplexCurrent()
         {
             ComplexState.ThrowIfNotBound(this);
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the (complex) power dissipated by the resistor.
         /// </summary>
-        [ParameterName("p"), ParameterInfo("Power")]
+        [ParameterName("p_c"), ParameterInfo("Power")]
         public Complex GetComplexPower()
         {
             ComplexState.ThrowIfNotBound(this);
