@@ -15,22 +15,22 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the (positive, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> PosPosPtr { get; private set; }
+        protected IMatrixElement<Complex> PosPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> NegNegPtr { get; private set; }
+        protected IMatrixElement<Complex> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> PosNegPtr { get; private set; }
+        protected IMatrixElement<Complex> PosNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> NegPosPtr { get; private set; }
+        protected IMatrixElement<Complex> NegPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the voltage.

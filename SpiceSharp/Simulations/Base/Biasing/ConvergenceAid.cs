@@ -35,17 +35,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the solver of the system of equations.
         /// </summary>
-        protected SparseSolver<double> Solver { get; private set; }
+        protected LUSolver<double> Solver { get; private set; }
 
         /// <summary>
         /// Gets the diagonal element.
         /// </summary>
-        protected MatrixElement<double> Diagonal { get; private set; }
+        protected IMatrixElement<double> Diagonal { get; private set; }
 
         /// <summary>
         /// Gets the right-hand side element.
         /// </summary>
-        protected VectorElement<double> Rhs { get; private set; }
+        protected IVectorElement<double> Rhs { get; private set; }
 
         /// <summary>
         /// Gets the node for which the aid is meant.
@@ -88,7 +88,7 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary elements
             Diagonal = Solver.GetMatrixElement(node.Index, node.Index);
-            Rhs = !Value.Equals(0.0) ? Solver.GetRhsElement(node.Index) : Solver.FindRhsElement(node.Index);
+            Rhs = !Value.Equals(0.0) ? Solver.GetVectorElement(node.Index) : Solver.FindVectorElement(node.Index);
 
             // Update the current solution to reflect our convergence aid value
             var state = simulation.States.GetValue<BiasingSimulationState>();

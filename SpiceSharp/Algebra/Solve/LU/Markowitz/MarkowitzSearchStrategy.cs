@@ -16,6 +16,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <returns>The pivot element, or null if no pivot was found.</returns>
-        public abstract MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep);
+        public abstract IMatrixElement<T> FindPivot(Markowitz<T> markowitz, IPermutableMatrix<T> matrix, int eliminationStep);
     }
 }

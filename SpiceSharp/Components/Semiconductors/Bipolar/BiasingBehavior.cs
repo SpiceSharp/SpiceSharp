@@ -120,134 +120,134 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected int SubstrateNode { get; private set; }
 
         /// <summary>Gets the (external collector, collector) element.</summary>
-        protected MatrixElement<double> CollectorCollectorPrimePtr { get; private set; }
+        protected IMatrixElement<double> CollectorCollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external base, base) element.
         /// </summary>
-        protected MatrixElement<double> BaseBasePrimePtr { get; private set; }
+        protected IMatrixElement<double> BaseBasePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external emitter, emitter) element.
         /// </summary>
-        protected MatrixElement<double> EmitterEmitterPrimePtr { get; private set; }
+        protected IMatrixElement<double> EmitterEmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (collector, external collector) element.
         /// </summary>
-        protected MatrixElement<double> CollectorPrimeCollectorPtr { get; private set; }
+        protected IMatrixElement<double> CollectorPrimeCollectorPtr { get; private set; }
 
         /// <summary>
         /// Gets the (collector, base) element.
         /// </summary>
-        protected MatrixElement<double> CollectorPrimeBasePrimePtr { get; private set; }
+        protected IMatrixElement<double> CollectorPrimeBasePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (collector, emitter) element.
         /// </summary>
-        protected MatrixElement<double> CollectorPrimeEmitterPrimePtr { get; private set; }
+        protected IMatrixElement<double> CollectorPrimeEmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (base, external base) element.
         /// </summary>
-        protected MatrixElement<double> BasePrimeBasePtr { get; private set; }
+        protected IMatrixElement<double> BasePrimeBasePtr { get; private set; }
 
         /// <summary>
         /// Gets the (base, collector) element.
         /// </summary>
-        protected MatrixElement<double> BasePrimeCollectorPrimePtr { get; private set; }
+        protected IMatrixElement<double> BasePrimeCollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (base, emitter) element.
         /// </summary>
-        protected MatrixElement<double> BasePrimeEmitterPrimePtr { get; private set; }
+        protected IMatrixElement<double> BasePrimeEmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (emitter, external emitter) element.
         /// </summary>
-        protected MatrixElement<double> EmitterPrimeEmitterPtr { get; private set; }
+        protected IMatrixElement<double> EmitterPrimeEmitterPtr { get; private set; }
 
         /// <summary>
         /// Gets the (emitter, collector) element.
         /// </summary>
-        protected MatrixElement<double> EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected IMatrixElement<double> EmitterPrimeCollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (emitter, base) element.
         /// </summary>
-        protected MatrixElement<double> EmitterPrimeBasePrimePtr { get; private set; }
+        protected IMatrixElement<double> EmitterPrimeBasePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the external (collector, collector) element.
         /// </summary>
-        protected MatrixElement<double> CollectorCollectorPtr { get; private set; }
+        protected IMatrixElement<double> CollectorCollectorPtr { get; private set; }
 
         /// <summary>
         /// Gets the external (base, base) element.
         /// </summary>
-        protected MatrixElement<double> BaseBasePtr { get; private set; }
+        protected IMatrixElement<double> BaseBasePtr { get; private set; }
 
         /// <summary>
         /// Gets the external (emitter, emitter) element.
         /// </summary>
-        protected MatrixElement<double> EmitterEmitterPtr { get; private set; }
+        protected IMatrixElement<double> EmitterEmitterPtr { get; private set; }
 
         /// <summary>
         /// Gets the (collector, collector) element.
         /// </summary>
-        protected MatrixElement<double> CollectorPrimeCollectorPrimePtr { get; private set; }
+        protected IMatrixElement<double> CollectorPrimeCollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (base, base) element.
         /// </summary>
-        protected MatrixElement<double> BasePrimeBasePrimePtr { get; private set; }
+        protected IMatrixElement<double> BasePrimeBasePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (emitter, emitter) element.
         /// </summary>
-        protected MatrixElement<double> EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected IMatrixElement<double> EmitterPrimeEmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (substrate, substrate) element.
         /// </summary>
-        protected MatrixElement<double> SubstrateSubstratePtr { get; private set; }
+        protected IMatrixElement<double> SubstrateSubstratePtr { get; private set; }
 
         /// <summary>
         /// Gets the (collector, substrate) element.
         /// </summary>
-        protected MatrixElement<double> CollectorPrimeSubstratePtr { get; private set; }
+        protected IMatrixElement<double> CollectorPrimeSubstratePtr { get; private set; }
 
         /// <summary>
         /// Gets the (substrate, collector) element.
         /// </summary>
-        protected MatrixElement<double> SubstrateCollectorPrimePtr { get; private set; }
+        protected IMatrixElement<double> SubstrateCollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// TODO: Check if this is right.
         /// Gets the (external base, collector) element.
         /// </summary>
-        protected MatrixElement<double> BaseCollectorPrimePtr { get; private set; }
+        protected IMatrixElement<double> BaseCollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// TODO: Check if this is right.
         /// Gets the (collector, external base) element.
         /// </summary>
-        protected MatrixElement<double> CollectorPrimeBasePtr { get; private set; }
+        protected IMatrixElement<double> CollectorPrimeBasePtr { get; private set; }
 
         /// <summary>
         /// Gets the collector RHS element.
         /// </summary>
-        protected VectorElement<double> CollectorPrimePtr { get; private set; }
+        protected IVectorElement<double> CollectorPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the base RHS element.
         /// </summary>
-        protected VectorElement<double> BasePrimePtr { get; private set; }
+        protected IVectorElement<double> BasePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the Emitter RHS element.
         /// </summary>
-        protected VectorElement<double> EmitterPrimePtr { get; private set; }
+        protected IVectorElement<double> EmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets or modifies the base-emitter current.
@@ -354,9 +354,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             CollectorPrimeBasePtr = solver.GetMatrixElement(CollectorPrimeNode, BaseNode);
 
             // Get RHS pointers
-            CollectorPrimePtr = solver.GetRhsElement(CollectorPrimeNode);
-            BasePrimePtr = solver.GetRhsElement(BasePrimeNode);
-            EmitterPrimePtr = solver.GetRhsElement(EmitterPrimeNode);
+            CollectorPrimePtr = solver.GetVectorElement(CollectorPrimeNode);
+            BasePrimePtr = solver.GetVectorElement(BasePrimeNode);
+            EmitterPrimePtr = solver.GetVectorElement(EmitterPrimeNode);
         }
 
         /// <summary>

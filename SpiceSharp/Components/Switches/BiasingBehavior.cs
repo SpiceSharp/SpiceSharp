@@ -80,22 +80,22 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the (positive, positive) element.
         /// </summary>
-        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected IMatrixElement<double> PosPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, positive) element.
         /// </summary>
-        protected MatrixElement<double> NegPosPtr { get; private set; }
+        protected IMatrixElement<double> NegPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, negative) element.
         /// </summary>
-        protected MatrixElement<double> PosNegPtr { get; private set; }
+        protected IMatrixElement<double> PosNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, negative) element.
         /// </summary>
-        protected MatrixElement<double> NegNegPtr { get; private set; }
+        protected IMatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the method used for switching.

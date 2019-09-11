@@ -60,7 +60,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the solution vector.
         /// </summary>
-        public Vector<double> Solution { get; protected set; }
+        public IVector<double> Solution { get; protected set; }
 
         /// <summary>
         /// Gets the previous solution vector.
@@ -68,7 +68,7 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// This vector is needed for determining convergence.
         /// </remarks>
-        public Vector<double> OldSolution { get; protected set; }
+        public IVector<double> OldSolution { get; protected set; }
 
         /// <summary>
         /// Gets the sparse solver.
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        public SparseSolver<double> Solver
+        public LUSolver<double> Solver
         {
             get => _solver;
             set
@@ -86,7 +86,7 @@ namespace SpiceSharp.Simulations
                 _solver = value;
             }
         }
-        private SparseSolver<double> _solver;
+        private LUSolver<double> _solver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
@@ -100,7 +100,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public BiasingSimulationState(SparseSolver<double> solver)
+        public BiasingSimulationState(LUSolver<double> solver)
         {
             Solver = solver.ThrowIfNull(nameof(solver));
         }
@@ -114,9 +114,9 @@ namespace SpiceSharp.Simulations
             nodes.ThrowIfNull(nameof(nodes));
 
             // Initialize all matrices
-            Solution = new DenseVector<double>(Solver.Order);
-            OldSolution = new DenseVector<double>(Solver.Order);
-            Solver.Clear();
+            Solution = new DenseVector<double>(Solver.Size);
+            OldSolution = new DenseVector<double>(Solver.Size);
+            Solver.Reset();
 
             // Initialize all states and parameters
             Init = InitializationModes.None;

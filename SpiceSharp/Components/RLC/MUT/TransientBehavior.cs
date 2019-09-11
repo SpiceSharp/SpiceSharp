@@ -24,12 +24,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Gets the (primary, secondary) branch element.
         /// </summary>
-        protected MatrixElement<double> Branch1Branch2 { get; private set; }
+        protected IMatrixElement<double> Branch1Branch2 { get; private set; }
 
         /// <summary>
         /// Gets the (secondary, primary) branch element.
         /// </summary>
-        protected MatrixElement<double> Branch2Branch1 { get; private set; }
+        protected IMatrixElement<double> Branch2Branch1 { get; private set; }
 
         /// <summary>
         /// Gets the conductance.

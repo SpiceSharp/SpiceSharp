@@ -50,7 +50,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         /// A vector that can hold all the state values.
         /// </returns>
-        public Vector<double> Build() => new DenseVector<double>(Size);
+        public IVector<double> Build() => new DenseVector<double>(Size);
 
         /// <summary>
         /// Destroys the state manager.

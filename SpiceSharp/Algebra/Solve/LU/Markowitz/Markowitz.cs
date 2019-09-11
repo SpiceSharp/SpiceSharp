@@ -73,7 +73,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// True if the pivot can be used.
         /// </returns>
-        public override bool IsValidPivot(MatrixElement<T> pivot)
+        public override bool IsValidPivot(IMatrixElement<T> pivot)
         {
             pivot.ThrowIfNull(nameof(pivot));
 
@@ -99,7 +99,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes the pivot searching algorithm.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
-        public void Initialize(Matrix<T> matrix)
+        public void Initialize(IMatrix<T> matrix)
         {
             matrix.ThrowIfNull(nameof(matrix));
 
@@ -115,12 +115,12 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="step">The elimination step.</param>
-        private void Count(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
+        private void Count(IPermutableMatrix<T> matrix, IPermutableVector<T> rhs, int step)
         {
-            MatrixElement<T> element;
+            IMatrixElement<T> element;
 
             // Get the first element in the vector
-            var rhsElement = rhs.First;
+            var rhsElement = rhs.GetFirstInVector();
 
             // Generate Markowitz row count
             for (var i = matrix.Size; i >= step; i--)
@@ -167,7 +167,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="step">The elimination step.</param>
-        private void Products(SparseMatrix<T> matrix, int step)
+        private void Products(IPermutableMatrix<T> matrix, int step)
         {
             Singletons = 0;
             var size = matrix.Size;
@@ -187,7 +187,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <param name="magnitude">The method used to determine the magnitude of an element.</param>
-        public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
+        public override void Setup(IPermutableMatrix<T> matrix, IPermutableVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
         {
             matrix.ThrowIfNull(nameof(matrix));
             rhs.ThrowIfNull(nameof(rhs));
@@ -212,7 +212,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <remarks>
         /// This is done by swapping the rows and columns of the diagonal and that of the pivot.
         /// </remarks>
-        public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int eliminationStep)
+        public override void MovePivot(IPermutableMatrix<T> matrix, IPermutableVector<T> rhs, IMatrixElement<T> pivot, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
             rhs.ThrowIfNull(nameof(rhs));
@@ -297,7 +297,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="eliminationStep">The elimination step.</param>
-        public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int eliminationStep)
+        public override void Update(IPermutableMatrix<T> matrix, IMatrixElement<T> pivot, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
             pivot.ThrowIfNull(nameof(pivot));
@@ -341,7 +341,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="fillin">The fill-in.</param>
-        public override void CreateFillin(SparseMatrix<T> matrix, MatrixElement<T> fillin)
+        public override void CreateFillin(IPermutableMatrix<T> matrix, IMatrixElement<T> fillin)
         {
             matrix.ThrowIfNull(nameof(matrix));
             fillin.ThrowIfNull(nameof(fillin));
@@ -374,7 +374,7 @@ namespace SpiceSharp.Algebra.Solve
         /// current diagonal at row/column <paramref name="eliminationStep" />. This pivot element
         /// will be moved to the diagonal for this elimination step.
         /// </remarks>
-        public override MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int eliminationStep)
+        public override IMatrixElement<T> FindPivot(IPermutableMatrix<T> matrix, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
 
@@ -393,7 +393,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="step">The current step.</param>
-        public void CheckMarkowitzCounts(SparseMatrix<T> matrix, int step)
+        public void CheckMarkowitzCounts(IPermutableMatrix<T> matrix, int step)
         {
             if (_markowitzProduct == null)
                 return;

@@ -4,10 +4,9 @@ using System.Text;
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Sparse vector
+    /// A vector that uses sparse storage methods with doubly-linked elements.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="Algebra.Vector{T}" />
     /// <seealso cref="IFormattable" />
     /// <remarks>
     /// <para>The element at index 0 is considered a "trashcan" element under the hood, consistent to <see cref="SparseMatrix{T}" />.
@@ -15,65 +14,43 @@ namespace SpiceSharp.Algebra
     /// the vector.</para>
     /// <para>This vector automatically expands size if necessary.</para>
     /// </remarks>
-    public partial class SparseVector<T> : Vector<T>, IFormattable where T : IFormattable, IEquatable<T>
+    public partial class SparseVector<T> : IPermutableVector<T>, IFormattable where T : IFormattable
     {
+        /// <summary>
+        /// Gets the length of the vector.
+        /// </summary>
+        /// <value>
+        /// The length.
+        /// </value>
+        public int Length { get; private set; }
+
         /// <summary>
         /// Gets or sets the value at the specified index.
         /// </summary>
-        /// <remarks>
-        /// The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.
-        /// </remarks>
-        /// <param name="index">The index in the vector.</param>
-        /// <returns>The value at the specified index.</returns>
-        public override T this[int index]
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>The value.</returns>
+        public T this[int index]
         {
-            get
-            {
-                var element = FindElement(index);
-                if (element == null)
-                    return default;
-                return element.Value;
-            }
-            set
-            {
-                if (value.Equals(default))
-                {
-                    // We don't need to create a new element unnecessarily
-                    var element = FindElement(index);
-                    if (element != null)
-                        element.Value = default;
-                }
-                else
-                {
-                    var element = GetElement(index);
-                    element.Value = value;
-                }
-            }
+            get => GetVectorValue(index);
+            set => SetVectorValue(index, value);
         }
-
-        /// <summary>
-        /// Gets the first element in the vector.
-        /// </summary>
-        public VectorElement<T> First => _firstInVector;
-
-        /// <summary>
-        /// Gets the last element in the vector.
-        /// </summary>
-        public VectorElement<T> Last => _lastInVector;
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private SparseVectorElement _firstInVector, _lastInVector;
-        private readonly VectorElement<T> _trashCan;
+        private Element _firstInVector, _lastInVector;
+        private readonly Element _trashCan;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SparseVector{T}"/> class.
         /// </summary>
         public SparseVector()
-            : base(1)
         {
-            _trashCan = new SparseVectorElement(0);
+            Length = 0;
+            _trashCan = new Element(0);
         }
 
         /// <summary>
@@ -81,9 +58,47 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="length">The length of the vector.</param>
         public SparseVector(int length)
-            : base(length)
         {
-            _trashCan = new SparseVectorElement(0);
+            if (length < 0)
+                throw new SparseException("Invalid length");
+            Length = length;
+            _trashCan = new Element(0);
+        }
+
+        /// <summary>
+        /// Gets the value of the vector at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The value.
+        /// </returns>
+        public T GetVectorValue(int index)
+        {
+            var element = FindVectorElement(index);
+            if (element == null)
+                return default;
+            return element.Value;
+        }
+
+        /// <summary>
+        /// Sets the value of the vector at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="value">The value.</param>
+        public void SetVectorValue(int index, T value)
+        {
+            if (value.Equals(default))
+            {
+                // We don't need to create a new element unnecessarily
+                var element = FindVectorElement(index);
+                if (element != null)
+                    element.Value = default;
+            }
+            else
+            {
+                var element = GetVectorElement(index);
+                element.Value = value;
+            }
         }
 
         /// <summary>
@@ -91,7 +106,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">Index in the vector</param>
         /// <returns>The vector element at the specified index</returns>
-        public VectorElement<T> GetElement(int index)
+        public IVectorElement<T> GetVectorElement(int index)
         {
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));
@@ -103,7 +118,7 @@ namespace SpiceSharp.Algebra
                 Length = index;
 
             // Find the element
-            SparseVectorElement element = _firstInVector, lastElement = null;
+            Element element = _firstInVector, lastElement = null;
             while (element != null)
             {
                 if (element.Index > index)
@@ -115,7 +130,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Create a new element
-            var result = new SparseVectorElement(index);
+            var result = new Element(index);
 
             // Update links for last element
             if (lastElement == null)
@@ -138,7 +153,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">The index in the vector.</param>
         /// <returns>The element at the specified index, or null if the element does not exist.</returns>
-        public VectorElement<T> FindElement(int index)
+        public IVectorElement<T> FindVectorElement(int index)
         {
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));
@@ -161,10 +176,18 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Gets the first <see cref="IVectorElement{T}" /> in the vector.
+        /// </summary>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        public IVectorElement<T> GetFirstInVector() => _firstInVector;
+
+        /// <summary>
         /// Remove an element.
         /// </summary>
         /// <param name="element">Element to be removed.</param>
-        private void Remove(SparseVectorElement element)
+        private void Remove(Element element)
         {
             // Update surrounding links
             if (element.PreviousInVector == null)
@@ -178,11 +201,24 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Copies the contents of the vector to another one.
+        /// </summary>
+        /// <param name="target">The target vector.</param>
+        public void CopyTo(IVector<T> target)
+        {
+            target.ThrowIfNull(nameof(target));
+            if (target.Length != Length)
+                throw new ArgumentException("Vector lengths do not match");
+            for (var i = 1; i <= Length; i++)
+                target.SetVectorValue(i, GetVectorValue(i));
+        }
+
+        /// <summary>
         /// Swap two elements.
         /// </summary>
         /// <param name="index1">The index of the first element.</param>
         /// <param name="index2">The index of the second element.</param>
-        public void Swap(int index1, int index2)
+        public void SwapElements(int index1, int index2)
         {
             if (index1 < 0 || index2 < 0)
                 throw new SparseException("Invalid indices {0} and {1}".FormatString(index1, index2));
@@ -196,7 +232,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Get the two elements
-            SparseVectorElement first = null, second = null;
+            Element first = null, second = null;
 
             // Find first element
             var element = _firstInVector;
@@ -230,7 +266,7 @@ namespace SpiceSharp.Algebra
         /// <param name="second">The second element.</param>
         /// <param name="index1">The index of the first element.</param>
         /// <param name="index2">The index of the second element.</param>
-        private void Swap(SparseVectorElement first, SparseVectorElement second, int index1, int index2)
+        private void Swap(Element first, Element second, int index1, int index2)
         {
             // Nothing to do
             if (first == null && second == null)
@@ -340,6 +376,20 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Resets all elements in the vector.
+        /// </summary>
+        public void ResetVector()
+        {
+            _trashCan.Value = default;
+            var elt = _firstInVector;
+            while (elt != null)
+            {
+                elt.Value = default;
+                elt = elt.NextInVector;
+            }
+        }
+
+        /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
@@ -349,11 +399,11 @@ namespace SpiceSharp.Algebra
         {
             var sb = new StringBuilder();
             sb.Append("[");
-            var element = First;
+            var element = _firstInVector;
             for (var i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
-                    element = element.Below;
+                    element = element.NextInVector;
                 sb.AppendLine(element.Index == i ? element.Value.ToString() : "...");
             }
             sb.Append("]");
@@ -372,11 +422,11 @@ namespace SpiceSharp.Algebra
         {
             var sb = new StringBuilder();
             sb.AppendLine("[");
-            var element = First;
+            var element = _firstInVector;
             for (var i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
-                    element = element.Below;
+                    element = element.NextInVector;
                 sb.AppendLine(element.Index == i ? element.Value.ToString(format, formatProvider) : "...");
             }
             sb.Append("]");

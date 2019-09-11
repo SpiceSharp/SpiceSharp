@@ -146,6 +146,7 @@ namespace SpiceSharp.IntegrationMethods
             Coefficients[1] = -1.0 / delta;
 
             // First, set up the matrix
+            var n = Order + 1;
             double arg = 0, arg1;
             for (var i = 0; i <= Order; i++)
                 Matrix[0, i] = 1.0;

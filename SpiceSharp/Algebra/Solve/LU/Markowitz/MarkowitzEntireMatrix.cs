@@ -22,17 +22,17 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
+        public override IMatrixElement<T> FindPivot(Markowitz<T> markowitz, IPermutableMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
                 throw new ArgumentException("Invalid elimination step");
 
-            MatrixElement<T> chosen = null;
+            IMatrixElement<T> chosen = null;
             var minMarkowitzProduct = long.MaxValue;
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
-            MatrixElement<T> largestElement = null;
+            IMatrixElement<T> largestElement = null;
             var ties = 0;
 
             // Start search of matrix on column by column basis

@@ -106,7 +106,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        public void Scramble<T>(Vector<T> source, Vector<T> target) where T : IFormattable
+        public void Scramble<T>(IVector<T> source, IVector<T> target) where T : IFormattable
         {
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
@@ -118,7 +118,7 @@ namespace SpiceSharp.Algebra.Solve
                 ExpandTranslation(Math.Max(source.Length, target.Length));
 
             for (var i = 1; i < _extToInt.Length; i++)
-                target[_extToInt[i]] = source[i];
+                target.SetVectorValue(_extToInt[i], source.GetVectorValue(i));
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        public void Unscramble<T>(T[] source, Vector<T> target) where T : IFormattable
+        public void Unscramble<T>(T[] source, IVector<T> target) where T : IFormattable
         {
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
@@ -139,7 +139,7 @@ namespace SpiceSharp.Algebra.Solve
                 ExpandTranslation(Math.Max(source.Length - 1, target.Length));
 
             for (var i = 1; i < source.Length; i++)
-                target[_intToExt[i]] = source[i];
+                target.SetVectorValue(_intToExt[i], source[i]);
         }
 
         /// <summary>

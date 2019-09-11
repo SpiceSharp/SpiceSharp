@@ -14,112 +14,112 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the external (drain, drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainDrainPtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainDrainPtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, gate) element.
         /// </summary>
-        protected MatrixElement<Complex> CGateGatePtr { get; private set; }
+        protected IMatrixElement<Complex> CGateGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the external (source, source) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourceSourcePtr { get; private set; }
+        protected IMatrixElement<Complex> CSourceSourcePtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, bulk) element.
         /// </summary>
-        protected MatrixElement<Complex> CBulkBulkPtr { get; private set; }
+        protected IMatrixElement<Complex> CBulkBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, source) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external drain, drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, bulk) element.
         /// </summary>
-        protected MatrixElement<Complex> CGateBulkPtr { get; private set; }
+        protected IMatrixElement<Complex> CGateBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, source) element.
         /// </summary>
-        protected MatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external source, source) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CBulkDrainPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CBulkDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, source) element.
         /// </summary>
-        protected MatrixElement<Complex> CBulkSourcePrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CBulkSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, source) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, external drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, gate) element.
         /// </summary>
-        protected MatrixElement<Complex> CBulkGatePtr { get; private set; }
+        protected IMatrixElement<Complex> CBulkGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, gate) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, gate) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
+        protected IMatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, external source) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
+        protected IMatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, bulk) element.
         /// </summary>
-        protected MatrixElement<Complex> CDrainPrimeBulkPtr { get; private set; }
+        protected IMatrixElement<Complex> CDrainPrimeBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, bulk) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourcePrimeBulkPtr { get; private set; }
+        protected IMatrixElement<Complex> CSourcePrimeBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, drain) element.
         /// </summary>
-        protected MatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.

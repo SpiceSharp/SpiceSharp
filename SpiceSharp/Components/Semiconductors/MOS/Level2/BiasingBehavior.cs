@@ -156,127 +156,127 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the external (drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainDrainPtr { get; private set; }
+        protected IMatrixElement<double> DrainDrainPtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, gate) element.
         /// </summary>
-        protected MatrixElement<double> GateGatePtr { get; private set; }
+        protected IMatrixElement<double> GateGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the external (source, source) element.
         /// </summary>
-        protected MatrixElement<double> SourceSourcePtr { get; private set; }
+        protected IMatrixElement<double> SourceSourcePtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, bulk) element.
         /// </summary>
-        protected MatrixElement<double> BulkBulkPtr { get; private set; }
+        protected IMatrixElement<double> BulkBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, source) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> DrainDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, bulk) element.
         /// </summary>
-        protected MatrixElement<double> GateBulkPtr { get; private set; }
+        protected IMatrixElement<double> GateBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, drain) element.
         /// </summary>
-        protected MatrixElement<double> GateDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> GateDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, source) element.
         /// </summary>
-        protected MatrixElement<double> GateSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> GateSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external source, source) element.
         /// </summary>
-        protected MatrixElement<double> SourceSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> SourceSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, drain) element.
         /// </summary>
-        protected MatrixElement<double> BulkDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> BulkDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, source) element.
         /// </summary>
-        protected MatrixElement<double> BulkSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> BulkSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, source) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, external drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeDrainPtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeDrainPtr { get; private set; }
 
         /// <summary>
         /// Gets the (bulk, gate) element
         /// </summary>
-        protected MatrixElement<double> BulkGatePtr { get; private set; }
+        protected IMatrixElement<double> BulkGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, gate) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeGatePtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, gate) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeGatePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, external source) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeSourcePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeSourcePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, bulk) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeBulkPtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, bulk) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeBulkPtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeBulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, drain) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the bulk RHS element.
         /// </summary>
-        protected VectorElement<double> BulkPtr { get; private set; }
+        protected IVectorElement<double> BulkPtr { get; private set; }
 
         /// <summary>
         /// Gets the drain RHS element.
         /// </summary>
-        protected VectorElement<double> DrainPrimePtr { get; private set; }
+        protected IVectorElement<double> DrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the source RHS element.
         /// </summary>
-        protected VectorElement<double> SourcePrimePtr { get; private set; }
+        protected IVectorElement<double> SourcePrimePtr { get; private set; }
 
         private TimeSimulationState _timeState;
 
@@ -353,9 +353,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             SourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourceNodePrime, DrainNodePrime);
 
             // Get rhs pointers
-            BulkPtr = solver.GetRhsElement(BulkNode);
-            DrainPrimePtr = solver.GetRhsElement(DrainNodePrime);
-            SourcePrimePtr = solver.GetRhsElement(SourceNodePrime);
+            BulkPtr = solver.GetVectorElement(BulkNode);
+            DrainPrimePtr = solver.GetVectorElement(DrainNodePrime);
+            SourcePrimePtr = solver.GetVectorElement(SourceNodePrime);
         }
 
         /// <summary>

@@ -14,22 +14,22 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets the (positive, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegPosPtr { get; private set; }
+        protected IMatrixElement<Complex> CNegPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CNegNegPtr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.

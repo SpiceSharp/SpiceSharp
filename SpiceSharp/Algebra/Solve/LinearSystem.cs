@@ -10,7 +10,7 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IFormattable" />
-    public abstract class SparseLinearSystem<T> : IFormattable where T : IFormattable, IEquatable<T>
+    public abstract partial class LinearSystem<T> : IMatrix<T>, IVector<T>, IFormattable where T : IFormattable
     {
         /// <summary>
         /// Gets the order of the matrix (matrix size).
@@ -18,12 +18,44 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The order.
         /// </value>
-        public int Order { get; private set; }
+        public int Size { get; private set; }
 
         /// <summary>
-        /// Gets whether or not the number of equations and variables is fixed.
+        /// Gets or sets the value at the specified index.
         /// </summary>
-        public bool IsFixed { get; private set; }
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>The value.</returns>
+        T IVector<T>.this[int index]
+        {
+            get => GetVectorValue(index);
+            set => SetVectorValue(index, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value with the specified row.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>The value.</returns>
+        T IMatrix<T>.this[int row, int column]
+        {
+            get => GetMatrixValue(row, column);
+            set => SetMatrixValue(row, column, value);
+        }
+
+        /// <summary>
+        /// Gets the length of the vector.
+        /// </summary>
+        /// <value>
+        /// The length.
+        /// </value>
+        int IVector<T>.Length => Vector.Length;
 
         /// <summary>
         /// Gets the row translation.
@@ -38,158 +70,168 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the matrix to work on.
         /// </summary>
-        protected SparseMatrix<T> Matrix { get; }
+        protected IPermutableMatrix<T> Matrix { get; }
 
         /// <summary>
         /// Gets the right-hand side vector.
         /// </summary>
-        protected SparseVector<T> Rhs { get; }
+        protected IPermutableVector<T> Vector { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SparseLinearSystem{T}"/> class.
+        /// Initializes a new instance of the <see cref="LinearSystem{T}"/> class.
         /// </summary>
-        protected SparseLinearSystem()
+        protected LinearSystem()
         {
             Matrix = new SparseMatrix<T>();
-            Rhs = new SparseVector<T>();
+            Vector = new SparseVector<T>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SparseLinearSystem{T}"/> class.
+        /// Initializes a new instance of the <see cref="LinearSystem{T}"/> class.
         /// </summary>
         /// <param name="size">The number of equations and variables.</param>
-        protected SparseLinearSystem(int size)
+        protected LinearSystem(int size)
         {
             Matrix = new SparseMatrix<T>(size);
-            Rhs = new SparseVector<T>(size);
+            Vector = new SparseVector<T>(size);
         }
 
         /// <summary>
-        /// Fix the number of equations and variables.
-        /// </summary>
-        /// <remarks>
-        /// This method can be used to make sure that the matrix is fixed during
-        /// solving. When fixed, it is impossible to add more elements to the sparse
-        /// matrix or vector.
-        /// </remarks>
-        public virtual void FixEquations() => IsFixed = true;
-
-        /// <summary>
-        /// Unfix the number of equations and variables.
-        /// </summary>
-        public virtual void UnfixEquations() => IsFixed = false;
-
-        /// <summary>
-        /// Get a matrix element.
+        /// Gets the value in the matrix at the specified row and column.
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
-        /// <returns>The matrix element.</returns>
-        public MatrixElement<T> GetMatrixElement(int row, int column)
+        /// <returns>
+        /// The value at the specified row and column.
+        /// </returns>
+        public T GetMatrixValue(int row, int column)
         {
             row = Row[row];
             column = Column[column];
-            if (IsFixed)
-            {
-                if (row > Order || column > Order)
-                    throw new SparseException("Linear system is fixed");
-            }
-            Order = Math.Max(Order, Math.Max(row, column));
-            return Matrix.GetElement(row, column);
+            return Matrix.GetMatrixValue(row, column);
         }
 
         /// <summary>
-        /// Find a matrix element.
+        /// Sets the value in the matrix at the specified row and column.
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
-        /// <returns>The matrix element or null if there is none.</returns>
-        public MatrixElement<T> FindMatrixElement(int row, int column)
+        /// <param name="value">The value.</param>
+        public void SetMatrixValue(int row, int column, T value)
         {
             row = Row[row];
             column = Column[column];
-            return Matrix.FindElement(row, column);
+            Matrix.SetMatrixValue(row, column, value);
         }
 
         /// <summary>
-        /// Get the right-hand side vector element.
+        /// Gets the diagonal element at the specified row/column.
         /// </summary>
-        /// <param name="index">The index of the element.</param>
-        /// <returns>The vector element.</returns>
-        public VectorElement<T> GetRhsElement(int index)
+        /// <param name="index">The row/column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        public IMatrixElement<T> FindDiagonalElement(int index)
         {
-            index = Row[index];
-            if (IsFixed)
-            {
-                if (index > Order)
-                    throw new SparseException("Linear system is fixed");
-            }
-            Order = Math.Max(index, Order);
-            return Rhs.GetElement(index);
+            int row = Row[index];
+            int column = Column[index];
+            return Matrix.GetMatrixElement(row, column);
         }
 
         /// <summary>
-        /// Finds a right-hand side vector element.
-        /// </summary>
-        /// <param name="index">The index of the element.</param>
-        /// <returns>The vector element or null if there is none.</returns>
-        public VectorElement<T> FindRhsElement(int index)
-        {
-            index = Row[index];
-            return Rhs.FindElement(index);
-        }
-
-        /// <summary>
-        /// Gets the first row element in the reordered matrix.
+        /// Gets a pointer to the matrix element at the specified row and column. If
+        /// the element doesn't exist, it is created.
         /// </summary>
         /// <param name="row">The row index.</param>
-        /// <returns>The first element in the row or null if there are none.</returns>
-        public MatrixElement<T> FirstInReorderedRow(int row) => Matrix.GetFirstInRow(row);
-
-        /// <summary>
-        /// Gets the first column element in the reordered matrix.
-        /// </summary>
         /// <param name="column">The column index.</param>
-        /// <returns>The first element in the column or null if there are none.</returns>
-        public MatrixElement<T> FirstInReorderedColumn(int column) => Matrix.GetFirstInColumn(column);
-
-        /// <summary>
-        /// Gets the diagonal element in the reordered matrix.
-        /// </summary>
-        /// <param name="index">The row/column of the diagonal element.</param>
-        /// <returns>The first diagonal or null if there are none.</returns>
-        public MatrixElement<T> ReorderedDiagonal(int index) => Matrix.GetDiagonalElement(index);
-
-        /// <summary>
-        /// Gets the first element in the reordered Right-Hand Side vector.
-        /// </summary>
-        /// <returns>The first element in the vector or null if there are none.</returns>
-        public VectorElement<T> FirstInReorderedRhs() => Rhs.First;
-
-        /// <summary>
-        /// Transforms the indices from external to internal indices.
-        /// </summary>
-        /// <remarks>
-        /// Opposite of <see cref="InternalToExternal(LinearSystemIndices)"/>.
-        /// </remarks>
-        /// <param name="indices">The row/column indices.</param>
-        public void ExternalToInternal(LinearSystemIndices indices)
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        /// <exception cref="SparseException">Linear system is fixed</exception>
+        public IMatrixElement<T> GetMatrixElement(int row, int column)
         {
-            indices.Row = Row[indices.Row];
-            indices.Column = Column[indices.Column];
+            row = Row[row];
+            column = Column[column];
+            Size = Math.Max(Size, Math.Max(row, column));
+            return Matrix.GetMatrixElement(row, column);
         }
 
         /// <summary>
-        /// Transforms the indices from internal to external indices.
+        /// Finds a pointer to the matrix element at the specified row and column. If
+        /// the element doesn't exist, <c>null</c> is returned.
         /// </summary>
-        /// <remarks>
-        /// Opposite of <see cref="ExternalToInternal(LinearSystemIndices)"/>.
-        /// </remarks>
-        /// <param name="indices">The row/column indices.</param>
-        public void InternalToExternal(LinearSystemIndices indices)
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element; otherwise <c>null</c>.
+        /// </returns>
+        public IMatrixElement<T> FindMatrixElement(int row, int column)
         {
-            indices.Row = Row.Reverse(indices.Row);
-            indices.Column = Column.Reverse(indices.Column);
+            row = Row[row];
+            column = Column[column];
+            return Matrix.FindMatrixElement(row, column);
+        }
+
+        /// <summary>
+        /// Gets the value of the vector at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The value.
+        /// </returns>
+        public T GetVectorValue(int index)
+        {
+            index = Row[index];
+            return Vector.GetVectorValue(index);
+        }
+
+        /// <summary>
+        /// Sets the value of the vector at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="value">The value.</param>
+        public void SetVectorValue(int index, T value)
+        {
+            index = Row[index];
+            Vector.SetVectorValue(index, value);
+        }
+
+        /// <summary>
+        /// Gets a vector element at the specified index. If
+        /// it doesn't exist, a new one is created.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        /// <exception cref="SparseException">Linear system is fixed</exception>
+        public IVectorElement<T> GetVectorElement(int index)
+        {
+            index = Row[index];
+            Size = Math.Max(index, Size);
+            return Vector.GetVectorElement(index);
+        }
+
+        /// <summary>
+        /// Finds a vector element at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The vector element; otherwise <c>null</c>.
+        /// </returns>
+        public IVectorElement<T> FindVectorElement(int index)
+        {
+            index = Row[index];
+            return Vector.FindVectorElement(index);
+        }
+
+        /// <summary>
+        /// Copies the contents of the vector to another one.
+        /// </summary>
+        /// <param name="target">The target vector.</param>
+        void IVector<T>.CopyTo(IVector<T> target)
+        {
+            Vector.CopyTo(target);
         }
 
         /// <summary>
@@ -200,7 +242,7 @@ namespace SpiceSharp.Algebra
         protected void SwapRows(int row1, int row2)
         {
             Matrix.SwapRows(row1, row2);
-            Rhs.Swap(row1, row2);
+            Vector.SwapElements(row1, row2);
             Row.Swap(row1, row2);
         }
 
@@ -216,30 +258,23 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Clear the matrix and right-hand side vector.
+        /// Resets all elements in the matrix and vector.
         /// </summary>
-        public virtual void Clear()
+        public void Reset()
         {
-            // Clear all matrix elements
-            Matrix.FindElement(0, 0).Value = default;
-            for (var r = 1; r <= Matrix.Size; r++)
-            {
-                var element = Matrix.GetFirstInRow(r);
-                while (element != null)
-                {
-                    element.Value = default;
-                    element = element.Right;
-                }
-            }
-
-            // Clear all right-hand side elements
-            var rhsElement = Rhs.First;
-            while (rhsElement != null)
-            {
-                rhsElement.Value = default;
-                rhsElement = rhsElement.Below;
-            }
+            ResetMatrix();
+            ResetVector();
         }
+
+        /// <summary>
+        /// Resets all elements in the matrix.
+        /// </summary>
+        public virtual void ResetMatrix() => Matrix.ResetMatrix();
+
+        /// <summary>
+        /// Resets all elements in the vector.
+        /// </summary>
+        public virtual void ResetVector() => Vector.ResetVector();
 
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
@@ -266,7 +301,7 @@ namespace SpiceSharp.Algebra
             var displayData = new string[Matrix.Size][];
             var columnWidths = new int[Matrix.Size + 1];
 
-            var rhsElement = Rhs.First;
+            var rhsElement = Vector.GetFirstInVector();
             for (var r = 1; r <= Matrix.Size; r++)
             {
                 var element = Matrix.GetFirstInRow(r);

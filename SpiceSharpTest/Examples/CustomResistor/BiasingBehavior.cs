@@ -12,8 +12,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
     public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         private int _nodeA, _nodeB;
-        private MatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
-        private VectorElement<double> _aPtr, _bPtr;
+        private IMatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
+        private IVectorElement<double> _aPtr, _bPtr;
         private BaseParameters _bp;
         private BiasingSimulationState _state;
         private BiasingConfiguration _baseConfig;
@@ -55,8 +55,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _bbPtr = solver.GetMatrixElement(_nodeB, _nodeB);
 
             // We also need 2 RHS vector elements
-            _aPtr = solver.GetRhsElement(_nodeA);
-            _bPtr = solver.GetRhsElement(_nodeB);
+            _aPtr = solver.GetVectorElement(_nodeA);
+            _bPtr = solver.GetVectorElement(_nodeB);
         }
 
         /// <summary>

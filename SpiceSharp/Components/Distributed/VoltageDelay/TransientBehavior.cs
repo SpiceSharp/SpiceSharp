@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected VectorElement<double> BranchPtr { get; private set; }
+        protected IVectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the delayed signal.
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             base.Bind(context);
 
             var solver = BiasingState.Solver;
-            BranchPtr = solver.GetRhsElement(BranchEq);
+            BranchPtr = solver.GetVectorElement(BranchEq);
 
             Signal = new DelayedSignal(1, BaseParameters.Delay);
         }

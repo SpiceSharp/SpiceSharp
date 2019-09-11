@@ -12,21 +12,21 @@ namespace SpiceSharp.Algebra
             /// <summary>
             /// Gets the first element in the row.
             /// </summary>
-            public SparseMatrixElement FirstInRow { get; private set; }
+            public Element FirstInRow { get; private set; }
 
             /// <summary>
             /// Gets the last element in the row.
             /// </summary>
-            public SparseMatrixElement LastInRow { get; private set; }
+            public Element LastInRow { get; private set; }
 
             /// <summary>
             /// Insert an element in the row. This method assumes an element does not exist at its indices!
             /// </summary>
             /// <param name="newElement">The new element to insert.</param>
-            public void Insert(SparseMatrixElement newElement)
+            public void Insert(Element newElement)
             {
                 var column = newElement.Column;
-                SparseMatrixElement element = FirstInRow, lastElement = null;
+                Element element = FirstInRow, lastElement = null;
                 while (element != null)
                 {
                     if (element.Column > column)
@@ -57,9 +57,9 @@ namespace SpiceSharp.Algebra
             /// <param name="column">The column index.</param>
             /// <param name="result">The found or created element.</param>
             /// <returns>True if the element was found, false if it was created.</returns>
-            public bool CreateGetElement(int row, int column, out SparseMatrixElement result)
+            public bool CreateGetElement(int row, int column, out Element result)
             {
-                SparseMatrixElement element = FirstInRow, lastElement = null;
+                Element element = FirstInRow, lastElement = null;
                 while (element != null)
                 {
                     if (element.Column > column)
@@ -76,7 +76,7 @@ namespace SpiceSharp.Algebra
                 }
 
                 // Create a new element
-                result = new SparseMatrixElement(row, column);
+                result = new Element(row, column);
 
                 // Update links for last element
                 if (lastElement == null)
@@ -101,7 +101,7 @@ namespace SpiceSharp.Algebra
             /// </summary>
             /// <param name="column">The column index.</param>
             /// <returns>The element at the specified column, or null if it doesn't exist.</returns>
-            public SparseMatrixElement Find(int column)
+            public Element Find(int column)
             {
                 var element = FirstInRow;
                 while (element != null)
@@ -120,7 +120,7 @@ namespace SpiceSharp.Algebra
             /// Remove an element from the row.
             /// </summary>
             /// <param name="element">The element to be removed.</param>
-            public void Remove(SparseMatrixElement element)
+            public void Remove(Element element)
             {
                 if (element.PreviousInRow == null)
                     FirstInRow = element.NextInRow;
@@ -140,7 +140,7 @@ namespace SpiceSharp.Algebra
             /// <param name="second">The second matrix element.</param>
             /// <param name="columnFirst">The first column.</param>
             /// <param name="columnSecond">The second column.</param>
-            public void Swap(SparseMatrixElement first, SparseMatrixElement second, int columnFirst,
+            public void Swap(Element first, Element second, int columnFirst,
                 int columnSecond)
             {
                 if (first == null && second == null)

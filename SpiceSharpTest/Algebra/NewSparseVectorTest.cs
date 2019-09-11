@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Sparse
                 }
 
                 // Swap rows
-                vector.Swap(2, 4);
+                vector.SwapElements(2, 4);
 
                 // Check
                 fill = i;
@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                         Assert.AreEqual(k, vector[realk], 1e-12);
                     else
-                        Assert.AreEqual(vector.FindElement(realk), null);
+                        Assert.AreEqual(vector.FindVectorElement(realk), null);
                     fill = (fill >> 1) & 0b011111;
                 }
             }

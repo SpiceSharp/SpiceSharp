@@ -18,12 +18,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Gets the left branch RHS element.
         /// </summary>
-        protected VectorElement<double> Ibr1Ptr { get; private set; }
+        protected IVectorElement<double> Ibr1Ptr { get; private set; }
 
         /// <summary>
         /// Gets the right branch RHS element.
         /// </summary>
-        protected VectorElement<double> Ibr2Ptr { get; private set; }
+        protected IVectorElement<double> Ibr2Ptr { get; private set; }
         
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             base.Bind(context);
 
             var solver = BiasingState.Solver;
-            Ibr1Ptr = solver.GetRhsElement(BranchEq1);
-            Ibr2Ptr = solver.GetRhsElement(BranchEq2);
+            Ibr1Ptr = solver.GetVectorElement(BranchEq1);
+            Ibr2Ptr = solver.GetVectorElement(BranchEq2);
 
             Signals = new DelayedSignal(2, BaseParameters.Delay);
         }

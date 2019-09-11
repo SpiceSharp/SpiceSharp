@@ -15,37 +15,37 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the (external positive, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosPosPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CPosPosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegPosPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CNegPosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, external positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosPrimePosPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosPrimePosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosPrimeNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosPrimeNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the external (positive, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosPosPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CNegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
+        protected IMatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the voltage.

@@ -21,12 +21,12 @@ namespace SpiceSharpTest.Sparse
                     var row = r % size;
                     var col = c % size;
                     var expected = row * size + col + 1;
-                    matrix.GetElement(row + 1, col + 1).Value = expected;
+                    matrix.GetMatrixElement(row + 1, col + 1).Value = expected;
                 }
             }
 
             // Check links from left to right
-            MatrixElement<double> element;
+            IMatrixElement<double> element;
             for (var r = 0; r < size; r++)
             {
                 element = matrix.GetFirstInRow(r + 1);
@@ -92,7 +92,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         var expected = k * 32 + i + 1;
-                        matrix.GetElement(k + 1, i + 1).Value = expected;
+                        matrix.GetMatrixElement(k + 1, i + 1).Value = expected;
                     }
                     fill = (fill >> 1) & 0b011111;
                 }
@@ -117,10 +117,10 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         var expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix.GetValue(crow, i + 1), 1e-12);
+                        Assert.AreEqual(expected, matrix.GetMatrixValue(crow, i + 1), 1e-12);
                     }
                     else
-                        Assert.AreEqual(null, matrix.FindElement(crow, i + 1));
+                        Assert.AreEqual(null, matrix.FindMatrixElement(crow, i + 1));
                     fill = (fill >> 1) & 0b011111;
                 }
             }
@@ -143,7 +143,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         var expected = k * 32 + i + 1;
-                        matrix.GetElement(i + 1, k + 1).Value = expected;
+                        matrix.GetMatrixElement(i + 1, k + 1).Value = expected;
                     }
                     fill = (fill >> 1) & 0b011111;
                 }
@@ -168,10 +168,10 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         var expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix.GetValue(i + 1, ccolumn), 1e-12);
+                        Assert.AreEqual(expected, matrix.GetMatrixValue(i + 1, ccolumn), 1e-12);
                     }
                     else
-                        Assert.AreEqual(null, matrix.FindElement(i + 1, ccolumn));
+                        Assert.AreEqual(null, matrix.FindMatrixElement(i + 1, ccolumn));
                     fill = (fill >> 1) & 0b011111;
                 }
             }

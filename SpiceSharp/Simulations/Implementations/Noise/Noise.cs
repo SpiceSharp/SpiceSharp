@@ -178,16 +178,11 @@ namespace SpiceSharp.Simulations
             var solver = ComplexState.Solver;
 
             // Clear out the right hand side vector
-            var element = solver.FirstInReorderedRhs();
-            while (element != null)
-            {
-                element.Value = 0.0;
-                element = element.Below;
-            }
+            solver.ResetVector();
 
             // Apply unit current excitation
-            solver.GetRhsElement(posDrive).Value = 1.0;
-            solver.GetRhsElement(negDrive).Value = -1.0;
+            solver.GetVectorElement(posDrive).Value = 1.0;
+            solver.GetVectorElement(negDrive).Value = -1.0;
 
             solver.SolveTransposed(ComplexState.Solution);
             ComplexState.Solution[0] = 0.0;

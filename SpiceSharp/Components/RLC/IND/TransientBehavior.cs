@@ -22,12 +22,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the (branch, branch) element.
         /// </summary>
-        protected MatrixElement<double> BranchBranchPtr { get; private set; }
+        protected IMatrixElement<double> BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the branch RHS element.
         /// </summary>
-        protected VectorElement<double> BranchPtr { get; private set; }
+        protected IVectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
         /// The state tracking the flux.
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             var solver = context.States.GetValue<BiasingSimulationState>().Solver;
             BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
-            BranchPtr = solver.GetRhsElement(BranchEq);
+            BranchPtr = solver.GetVectorElement(BranchEq);
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             _flux = method.CreateDerivative();

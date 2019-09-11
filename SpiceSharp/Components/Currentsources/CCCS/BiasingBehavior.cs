@@ -39,12 +39,12 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// The (pos, branch) element.
         /// </summary>
-        protected MatrixElement<double> PosControlBranchPtr { get; private set; }
+        protected IMatrixElement<double> PosControlBranchPtr { get; private set; }
 
         /// <summary>
         /// The (neg, branch) element.
         /// </summary>
-        protected MatrixElement<double> NegControlBranchPtr { get; private set; }
+        protected IMatrixElement<double> NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties

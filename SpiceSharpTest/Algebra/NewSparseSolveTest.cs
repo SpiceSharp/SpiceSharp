@@ -30,10 +30,11 @@ namespace SpiceSharpTest.Sparse
                 Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine("Algebra", "Matrices", "spice3f5_vector01.dat")));
 
             // Order and factor
-            solver.PreorderModifiedNodalAnalysis(Math.Abs);
+            ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
+            solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
             solver.OrderAndFactor();
 
-            Vector<double> solution = new DenseVector<double>(solver.Order);
+            IVector<double> solution = new DenseVector<double>(solver.Size);
             solver.Solve(solution);
         }
 
@@ -63,7 +64,7 @@ namespace SpiceSharpTest.Sparse
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetRhsElement(r + 1).Value = rhs[r];
+                    solver.GetVectorElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -96,7 +97,7 @@ namespace SpiceSharpTest.Sparse
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetRhsElement(r + 1).Value = rhs[r];
+                    solver.GetVectorElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -129,7 +130,7 @@ namespace SpiceSharpTest.Sparse
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetRhsElement(r + 1).Value = rhs[r];
+                    solver.GetVectorElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -162,7 +163,7 @@ namespace SpiceSharpTest.Sparse
                         solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetRhsElement(r + 1).Value = rhs[r];
+                    solver.GetVectorElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -210,18 +211,18 @@ namespace SpiceSharpTest.Sparse
 
             // Add some zero elements
             solver.GetMatrixElement(7, 7);
-            solver.GetRhsElement(5);
+            solver.GetVectorElement(5);
 
             // Build the Rhs vector
             for (var r = 0; r < rhs.Length; r++)
             {
                 if (!rhs[r].Equals(Complex.Zero))
-                    solver.GetRhsElement(r + 1).Value = rhs[r];
+                    solver.GetVectorElement(r + 1).Value = rhs[r];
             }
 
             // Solver
             solver.OrderAndFactor();
-            var solution = new DenseVector<Complex>(solver.Order);
+            var solution = new DenseVector<Complex>(solver.Size);
             solver.Solve(solution);
 
             // Check!

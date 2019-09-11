@@ -69,7 +69,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the prediction vector.
         /// </summary>
-        protected Vector<double> Prediction { get; private set; }
+        protected IVector<double> Prediction { get; private set; }
 
         /// <summary>
         /// Gets a list with all truncatable states.
@@ -125,7 +125,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Allocate a new vector for predictions
-            Prediction = new DenseVector<double>(BiasingState.Solver.Order);
+            Prediction = new DenseVector<double>(BiasingState.Solver.Size);
         }
 
         /// <summary>

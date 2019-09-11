@@ -39,22 +39,22 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <summary>
         /// The (pos, ctrlpos) element.
         /// </summary>
-        protected MatrixElement<double> PosControlPosPtr { get; private set; }
+        protected IMatrixElement<double> PosControlPosPtr { get; private set; }
 
         /// <summary>
         /// The (neg, ctrlneg) element.
         /// </summary>
-        protected MatrixElement<double> PosControlNegPtr { get; private set; }
+        protected IMatrixElement<double> PosControlNegPtr { get; private set; }
 
         /// <summary>
         /// The (neg, ctrlpos) element.
         /// </summary>
-        protected MatrixElement<double> NegControlPosPtr { get; private set; }
+        protected IMatrixElement<double> NegControlPosPtr { get; private set; }
 
         /// <summary>
         /// The (neg, ctrlneg) element.
         /// </summary>
-        protected MatrixElement<double> NegControlNegPtr { get; private set; }
+        protected IMatrixElement<double> NegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Get the voltage.

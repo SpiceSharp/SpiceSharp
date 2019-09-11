@@ -39,12 +39,12 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// The (pos, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosControlBranchPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosControlBranchPtr { get; private set; }
 
         /// <summary>
         /// the (neg, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegControlBranchPtr { get; private set; }
+        protected IMatrixElement<Complex> CNegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.

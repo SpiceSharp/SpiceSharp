@@ -51,12 +51,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// The positive RHS element.
         /// </summary>
-        protected VectorElement<double> PosPtr { get; private set; }
+        protected IVectorElement<double> PosPtr { get; private set; }
 
         /// <summary>
         /// The negative RHS element.
         /// </summary>
-        protected VectorElement<double> NegPtr { get; private set; }
+        protected IVectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -102,8 +102,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
             var solver = BiasingState.Solver;
-            PosPtr = solver.GetRhsElement(PosNode);
-            NegPtr = solver.GetRhsElement(NegNode);
+            PosPtr = solver.GetVectorElement(PosNode);
+            NegPtr = solver.GetVectorElement(NegNode);
         }
 
         /// <summary>

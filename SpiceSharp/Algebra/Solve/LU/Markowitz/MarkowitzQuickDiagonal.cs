@@ -17,7 +17,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int eliminationStep)
+        public override IMatrixElement<T> FindPivot(Markowitz<T> markowitz, IPermutableMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -25,7 +25,7 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentException("Invalid elimination step");
 
             var minMarkowitzProduct = int.MaxValue;
-            MatrixElement<T> chosen = null;
+            IMatrixElement<T> chosen = null;
 
             /* Used for debugging along Spice 3f5
             for (var index = matrix.Size + 1; index > eliminationStep; index--)
@@ -39,7 +39,7 @@ namespace SpiceSharp.Algebra.Solve
                     continue;
 
                 // Get the diagonal item
-                var diagonal = matrix.GetDiagonalElement(i);
+                var diagonal = matrix.FindDiagonalElement(i);
                 if (diagonal == null)
                     continue;
 

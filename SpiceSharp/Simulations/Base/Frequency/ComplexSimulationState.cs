@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the solution.
         /// </summary>
-        public SpiceSharp.Algebra.Vector<Complex> Solution { get; protected set; }
+        public IVector<Complex> Solution { get; protected set; }
 
         /// <summary>
         /// Gets or sets the current laplace variable.
@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        public SparseSolver<Complex> Solver
+        public LUSolver<Complex> Solver
         {
             get => _solver;
             set
@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
                 _solver = value;
             }
         }
-        private SparseSolver<Complex> _solver;
+        private LUSolver<Complex> _solver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
@@ -55,7 +55,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public ComplexSimulationState(SparseSolver<Complex> solver)
+        public ComplexSimulationState(LUSolver<Complex> solver)
         {
             _solver = solver.ThrowIfNull(nameof(solver));
         }
@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
         public override void Setup(IVariableSet nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
-            Solution = new DenseVector<Complex>(Solver.Order);
+            Solution = new DenseVector<Complex>(Solver.Size);
             base.Setup(nodes);
         }
 

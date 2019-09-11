@@ -15,12 +15,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the associated solution with the timepoint.
         /// </summary>
-        public Vector<double> Solution { get; }
+        public IVector<double> Solution { get; }
 
         /// <summary>
         /// Gets the states allocated by entities at this timepoint.
         /// </summary>
-        public Vector<double> State { get; }
+        public IVector<double> State { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationState"/> class.
@@ -28,7 +28,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="delta">The timestep.</param>
         /// <param name="solution">The solution.</param>
         /// <param name="state">The state.</param>
-        public IntegrationState(double delta, Vector<double> solution, Vector<double> state)
+        public IntegrationState(double delta, IVector<double> solution, IVector<double> state)
         {
             Delta = delta;
             Solution = solution.ThrowIfNull(nameof(solution));

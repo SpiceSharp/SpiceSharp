@@ -148,7 +148,7 @@ namespace SpiceSharp.Simulations
             var strategy = BiasingState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
-            BiasingState.Solver.Clear();
+            BiasingState.Solver.Reset();
 
             // Setup the rest of the circuit.
             base.Setup(circuit);
@@ -332,7 +332,8 @@ namespace SpiceSharp.Simulations
             _diagonalGmin = state.Gmin;
             if (_diagonalGmin <= 0)
                 _diagonalGmin = 1e-12;
-            void ApplyGminStep(object sender, LoadStateEventArgs args) => BiasingState.Solver.ApplyDiagonalGmin(_diagonalGmin);
+            void ApplyGminStep(object sender, LoadStateEventArgs args)
+                => BiasingState.Solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.ApplyDiagonalGmin(matrix, _diagonalGmin));
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
@@ -445,7 +446,10 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!_isPreordered)
                 {
-                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
+                    if (ModifiedNodalAnalysisHelper<double>.Magnitude == null)
+                        ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
+                    solver.Precondition((matrix, vector)
+                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
                     _isPreordered = true;
                 }
                 if (state.Init == InitializationModes.Junction)
@@ -482,7 +486,7 @@ namespace SpiceSharp.Simulations
                 BaseSimulationStatistics.SolveTime.Stop();
 
                 // Reset ground nodes
-                solver.GetRhsElement(0).Value = 0.0;
+                solver.GetVectorElement(0).Value = 0.0;
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
 
@@ -546,7 +550,7 @@ namespace SpiceSharp.Simulations
             OnBeforeLoad(_realStateLoadArgs);
 
             // Clear rhs and matrix
-            BiasingState.Solver.Clear();
+            BiasingState.Solver.Reset();
             LoadBehaviors();
 
             // Keep statistics

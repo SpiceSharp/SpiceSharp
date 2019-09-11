@@ -65,32 +65,32 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the (positive, branch) element.
         /// </summary>
-        protected MatrixElement<double> PosBranchPtr { get; private set; }
+        protected IMatrixElement<double> PosBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, branch) element.
         /// </summary>
-        protected MatrixElement<double> NegBranchPtr { get; private set; }
+        protected IMatrixElement<double> NegBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, positive) element.
         /// </summary>
-        protected MatrixElement<double> BranchPosPtr { get; private set; }
+        protected IMatrixElement<double> BranchPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, negative) element.
         /// </summary>
-        protected MatrixElement<double> BranchNegPtr { get; private set; }
+        protected IMatrixElement<double> BranchNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, controlling positive) element.
         /// </summary>
-        protected MatrixElement<double> BranchControlPosPtr { get; private set; }
+        protected IMatrixElement<double> BranchControlPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, controlling negative) element.
         /// </summary>
-        protected MatrixElement<double> BranchControlNegPtr { get; private set; }
+        protected IMatrixElement<double> BranchControlNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.

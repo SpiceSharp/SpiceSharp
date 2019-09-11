@@ -15,12 +15,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base RHS element.
         /// </summary>
-        protected VectorElement<double> BasePtr { get; private set; }
+        protected IVectorElement<double> BasePtr { get; private set; }
 
         /// <summary>
         /// Gets the substrate RHS element.
         /// </summary>
-        protected VectorElement<double> SubstratePtr { get; private set; }
+        protected IVectorElement<double> SubstratePtr { get; private set; }
 
         /// <summary>
         /// Gets the base-emitter capacitor current.
@@ -111,8 +111,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             base.Bind(context);
 
             var solver = BiasingState.Solver;
-            BasePtr = solver.GetRhsElement(BaseNode);
-            SubstratePtr = solver.GetRhsElement(SubstrateNode);
+            BasePtr = solver.GetVectorElement(BaseNode);
+            SubstratePtr = solver.GetVectorElement(SubstrateNode);
 
             _method = context.States.GetValue<TimeSimulationState>().Method;
             BiasingStateChargeBe = _method.CreateDerivative();

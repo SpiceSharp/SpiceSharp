@@ -14,32 +14,32 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the (positive, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
+        protected IMatrixElement<Complex> CNegBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
+        protected IMatrixElement<Complex> CBranchPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CBranchNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, ctrlneg) element.
         /// </summary>
-        protected MatrixElement<Complex> CBranchControlNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CBranchControlNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, ctrlpos) element.
         /// </summary>
-        protected MatrixElement<Complex> CBranchControlPosPtr { get; private set; }
+        protected IMatrixElement<Complex> CBranchControlPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.

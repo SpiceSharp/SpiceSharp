@@ -41,32 +41,32 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the (positive, positive) element.
         /// </summary>
-        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected IMatrixElement<double> PosPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, negative) element.
         /// </summary>
-        protected MatrixElement<double> NegNegPtr { get; private set; }
+        protected IMatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, negative) element.
         /// </summary>
-        protected MatrixElement<double> PosNegPtr { get; private set; }
+        protected IMatrixElement<double> PosNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, positive) element.
         /// </summary>
-        protected MatrixElement<double> NegPosPtr { get; private set; }
+        protected IMatrixElement<double> NegPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the positive RHS element.
         /// </summary>
-        protected VectorElement<double> PosPtr { get; private set; }
+        protected IVectorElement<double> PosPtr { get; private set; }
 
         /// <summary>
         /// Gets the negative RHS element.
         /// </summary>
-        protected VectorElement<double> NegPtr { get; private set; }
+        protected IVectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
         /// Gets the state tracking the charge.
@@ -101,8 +101,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
             NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
             PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-            PosPtr = solver.GetRhsElement(PosNode);
-            NegPtr = solver.GetRhsElement(NegNode);
+            PosPtr = solver.GetVectorElement(PosNode);
+            NegPtr = solver.GetVectorElement(NegNode);
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             QCap = method.CreateDerivative();

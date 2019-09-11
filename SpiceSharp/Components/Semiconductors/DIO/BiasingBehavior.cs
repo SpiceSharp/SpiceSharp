@@ -31,47 +31,47 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the (external positive, positive) element.
         /// </summary>
-        protected MatrixElement<double> PosPosPrimePtr { get; private set; }
+        protected IMatrixElement<double> PosPosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, positive) element.
         /// </summary>
-        protected MatrixElement<double> NegPosPrimePtr { get; private set; }
+        protected IMatrixElement<double> NegPosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, external positive) element.
         /// </summary>
-        protected MatrixElement<double> PosPrimePosPtr { get; private set; }
+        protected IMatrixElement<double> PosPrimePosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, negative) element.
         /// </summary>
-        protected MatrixElement<double> PosPrimeNegPtr { get; private set; }
+        protected IMatrixElement<double> PosPrimeNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the external (positive, positive) element.
         /// </summary>
-        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected IMatrixElement<double> PosPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, negative) element.
         /// </summary>
-        protected MatrixElement<double> NegNegPtr { get; private set; }
+        protected IMatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the (positive, positive) element.
         /// </summary>
-        protected MatrixElement<double> PosPrimePosPrimePtr { get; private set; }
+        protected IMatrixElement<double> PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the positive RHS element.
         /// </summary>
-        protected VectorElement<double> PosPrimePtr { get; private set; }
+        protected IVectorElement<double> PosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the negative RHS element.
         /// </summary>
-        protected VectorElement<double> NegPtr { get; private set; }
+        protected IVectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
         /// Gets the voltage.
@@ -133,8 +133,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             PosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
 
             // Get RHS elements
-            NegPtr = solver.GetRhsElement(NegNode);
-            PosPrimePtr = solver.GetRhsElement(PosPrimeNode);
+            NegPtr = solver.GetVectorElement(NegNode);
+            PosPrimePtr = solver.GetVectorElement(PosPrimeNode);
         }
 
         /// <summary>

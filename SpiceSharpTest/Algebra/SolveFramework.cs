@@ -13,9 +13,9 @@ namespace SpiceSharpTest.Sparse
         /// </summary>
         /// <param name="filename">Filename</param>
         /// <returns></returns>
-        protected SparseSolver<double> ReadMtxFile(string filename)
+        protected LUSolver<double> ReadMtxFile(string filename)
         {
-            SparseSolver<double> result;
+            LUSolver<double> result;
 
             using (var sr = new StreamReader(filename))
             {
@@ -60,7 +60,7 @@ namespace SpiceSharpTest.Sparse
         /// <param name="matFilename">The matrix filename.</param>
         /// <param name="vecFilename">The vector filename.</param>
         /// <returns></returns>
-        protected SparseSolver<double> ReadSpice3f5File(string matFilename, string vecFilename)
+        protected LUSolver<double> ReadSpice3f5File(string matFilename, string vecFilename)
         {
             var solver = new RealSolver();
 
@@ -94,7 +94,7 @@ namespace SpiceSharpTest.Sparse
                 while (!reader.EndOfStream && (line = reader.ReadLine()) != null)
                 {
                     var value = double.Parse(line, CultureInfo.InvariantCulture);
-                    solver.GetRhsElement(index).Value = value;
+                    solver.GetVectorElement(index).Value = value;
                     index++;
                 }
             }

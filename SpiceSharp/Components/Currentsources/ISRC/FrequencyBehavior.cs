@@ -20,12 +20,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// The positive RHS element.
         /// </summary>
-        protected VectorElement<Complex> CPosPtr { get; private set; }
+        protected IVectorElement<Complex> CPosPtr { get; private set; }
 
         /// <summary>
         /// The negative RHS element.
         /// </summary>
-        protected VectorElement<Complex> CNegPtr { get; private set; }
+        protected IVectorElement<Complex> CNegPtr { get; private set; }
 
         /// <summary>
         /// Get the voltage.
@@ -76,8 +76,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             // Get matrix elements
             ComplexState = context.States.GetValue<ComplexSimulationState>();
             var solver = ComplexState.Solver;
-            CPosPtr = solver.GetRhsElement(PosNode);
-            CNegPtr = solver.GetRhsElement(NegNode);
+            CPosPtr = solver.GetVectorElement(PosNode);
+            CNegPtr = solver.GetVectorElement(NegNode);
         }
 
         /// <summary>

@@ -20,27 +20,27 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the (positive, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> CPosBranchPtr { get; private set; }
+        protected IMatrixElement<Complex> CPosBranchPtr { get; private set; }
         
         /// <summary>
         /// Gets the (negative, branch) element.
         /// </summary>
-        protected MatrixElement<Complex> CNegBranchPtr { get; private set; }
+        protected IMatrixElement<Complex> CNegBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, positive) element.
         /// </summary>
-        protected MatrixElement<Complex> CBranchPosPtr { get; private set; }
+        protected IMatrixElement<Complex> CBranchPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, negative) element.
         /// </summary>
-        protected MatrixElement<Complex> CBranchNegPtr { get; private set; }
+        protected IMatrixElement<Complex> CBranchNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the branch RHS element.
         /// </summary>
-        protected VectorElement<Complex> CBranchPtr { get; private set; }
+        protected IVectorElement<Complex> CBranchPtr { get; private set; }
 
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
 
             // Get rhs elements
-            CBranchPtr = solver.GetRhsElement(BranchEq);
+            CBranchPtr = solver.GetVectorElement(BranchEq);
         }
 
         /// <summary>

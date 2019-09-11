@@ -101,7 +101,7 @@ namespace SpiceSharp.IntegrationMethods
             simulation.ThrowIfNull(nameof(simulation));
             BiasingState = simulation.States.GetValue<BiasingSimulationState>();
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
-                new DenseVector<double>(BiasingState.Solver.Order), 
+                new DenseVector<double>(BiasingState.Solver.Size), 
                 StateManager.Build()));
         }
 
@@ -286,7 +286,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="index">Points to go back in time.</param>
         /// <returns>The solution vector.</returns>
-        public Vector<double> GetSolution(int index)
+        public IVector<double> GetSolution(int index)
         {
             return IntegrationStates[index].Solution;
         }
@@ -303,7 +303,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </remarks>
         /// <param name="index">Points to go back in time.</param>
         /// <returns>The state vector.</returns>
-        public Vector<double> GetStates(int index)
+        public IVector<double> GetStates(int index)
         {
             return IntegrationStates[index].State;
         }

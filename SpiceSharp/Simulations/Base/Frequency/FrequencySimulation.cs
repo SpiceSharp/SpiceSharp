@@ -104,7 +104,7 @@ namespace SpiceSharp.Simulations
             var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
-            ComplexState.Solver.Clear();
+            ComplexState.Solver.Reset();
 
             // Setup the rest of the behaviors
             base.Setup(entities);
@@ -224,7 +224,7 @@ namespace SpiceSharp.Simulations
         {
             OnBeforeFrequencyLoad(_loadStateEventArgs);
             FrequencySimulationStatistics.ComplexLoadTime.Start();
-            ComplexState.Solver.Clear();
+            ComplexState.Solver.Reset();
             LoadFrequencyBehaviors();
             FrequencySimulationStatistics.ComplexLoadTime.Reset();
             OnAfterFrequencyLoad(_loadStateEventArgs);

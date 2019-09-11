@@ -54,27 +54,27 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the (positive, branch) element.
         /// </summary>
-        protected MatrixElement<double> PosBranchPtr { get; private set; }
+        protected IMatrixElement<double> PosBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (negative, branch) element.
         /// </summary>
-        protected MatrixElement<double> NegBranchPtr { get; private set; }
+        protected IMatrixElement<double> NegBranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, positive) element.
         /// </summary>
-        protected MatrixElement<double> BranchPosPtr { get; private set; }
+        protected IMatrixElement<double> BranchPosPtr { get; private set; }
 
         /// <summary>
         /// Gets the (branch, negative) element.
         /// </summary>
-        protected MatrixElement<double> BranchNegPtr { get; private set; }
+        protected IMatrixElement<double> BranchNegPtr { get; private set; }
 
         /// <summary>
         /// Gets the branch RHS element.
         /// </summary>
-        protected VectorElement<double> BranchPtr { get; private set; }
+        protected IVectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -128,7 +128,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
             NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
             BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            BranchPtr = solver.GetRhsElement(BranchEq);
+            BranchPtr = solver.GetVectorElement(BranchEq);
         }
 
         /// <summary>

@@ -47,92 +47,92 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the gate RHS element.
         /// </summary>
-        protected VectorElement<double> GateNodePtr { get; private set; }
+        protected IVectorElement<double> GateNodePtr { get; private set; }
 
         /// <summary>
         /// Gets the drain RHS element.
         /// </summary>
-        protected VectorElement<double> DrainPrimeNodePtr { get; private set; }
+        protected IVectorElement<double> DrainPrimeNodePtr { get; private set; }
 
         /// <summary>
         /// Gets the source RHS element.
         /// </summary>
-        protected VectorElement<double> SourcePrimeNodePtr { get; private set; }
+        protected IVectorElement<double> SourcePrimeNodePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> DrainDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, drain) element.
         /// </summary>
-        protected MatrixElement<double> GateDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> GateDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, source) element.
         /// </summary>
-        protected MatrixElement<double> GateSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> GateSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external source, source) element.
         /// </summary>
-        protected MatrixElement<double> SourceSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> SourceSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeDrainPtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeDrainPtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, gate) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeGatePtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, source) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, gate) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeGatePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, external source) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeSourcePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeSourcePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, drain) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainDrainPtr { get; private set; }
+        protected IMatrixElement<double> DrainDrainPtr { get; private set; }
 
         /// <summary>
         /// Gets the (gate, gate) element.
         /// </summary>
-        protected MatrixElement<double> GateGatePtr { get; private set; }
+        protected IMatrixElement<double> GateGatePtr { get; private set; }
 
         /// <summary>
         /// Gets the (external source, source) element.
         /// </summary>
-        protected MatrixElement<double> SourceSourcePtr { get; private set; }
+        protected IMatrixElement<double> SourceSourcePtr { get; private set; }
 
         /// <summary>
         /// Gets the (drain, drain) element.
         /// </summary>
-        protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
+        protected IMatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the (source, source) element.
         /// </summary>
-        protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
+        protected IMatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
@@ -227,9 +227,9 @@ namespace SpiceSharp.Components.JFETBehaviors
             SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source"), VariableType.Voltage).Index : SourceNode;
             DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain"), VariableType.Voltage).Index : DrainNode;
 
-            GateNodePtr = solver.GetRhsElement(GateNode);
-            DrainPrimeNodePtr = solver.GetRhsElement(DrainPrimeNode);
-            SourcePrimeNodePtr = solver.GetRhsElement(SourcePrimeNode);
+            GateNodePtr = solver.GetVectorElement(GateNode);
+            DrainPrimeNodePtr = solver.GetVectorElement(DrainPrimeNode);
+            SourcePrimeNodePtr = solver.GetVectorElement(SourcePrimeNode);
             DrainDrainPrimePtr = solver.GetMatrixElement(DrainNode, DrainPrimeNode);
             GateDrainPrimePtr = solver.GetMatrixElement(GateNode, DrainPrimeNode);
             GateSourcePrimePtr = solver.GetMatrixElement(GateNode, SourcePrimeNode);

@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Elements needed for transient behavior
         /// </summary>
-        protected VectorElement<double> GatePtr { get; private set; }
+        protected IVectorElement<double> GatePtr { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             base.Bind(context);
 
             var solver = BiasingState.Solver;
-            GatePtr = solver.GetRhsElement(GateNode);
+            GatePtr = solver.GetVectorElement(GateNode);
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();
