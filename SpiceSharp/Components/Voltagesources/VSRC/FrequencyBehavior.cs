@@ -54,21 +54,21 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the complex voltage applied by the source.
         /// </summary>
-        [ParameterName("v_c"), ParameterInfo("Complex voltage")]
+        [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
         public new Complex Voltage => FrequencyParameters.Phasor;
 
         /// <summary>
         /// Gets the current through the source.
         /// </summary>
         /// <returns></returns>
-        [ParameterName("i_c"), ParameterName("c_c"), ParameterInfo("Complex current")]
+        [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
         public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[BranchEq];
 
         /// <summary>
         /// Gets the power through the source.
         /// </summary>
         /// <returns></returns>
-        [ParameterName("p_c"), ParameterInfo("Complex power")]
+        [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
         public Complex GetComplexPower()
         {
             ComplexState.ThrowIfNotBound(this);

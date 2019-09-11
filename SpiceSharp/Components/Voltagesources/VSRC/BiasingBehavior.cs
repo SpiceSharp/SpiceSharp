@@ -20,20 +20,20 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// Gets the current through the source.
         /// </summary>
         /// <returns></returns>
-        [ParameterName("i"), ParameterInfo("Voltage source current")]
+        [ParameterName("i"), ParameterName("i_r"), ParameterInfo("Voltage source current")]
         public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq];
 
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
         /// <returns></returns>
-        [ParameterName("p"), ParameterInfo("Instantaneous power")]
+        [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Instantaneous power")]
         public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * -BiasingState.Solution[BranchEq];
 
         /// <summary>
         /// Gets the voltage applied by the source.
         /// </summary>
-        [ParameterName("v"), ParameterInfo("Instantaneous voltage")]
+        [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Instantaneous voltage")]
         public double Voltage { get; private set; }
 
         /// <summary>
@@ -84,7 +84,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </value>
         protected BiasingSimulationState BiasingState { get; private set; }
 
-        
         private TimeSimulationState _timeState;
 
         /// <summary>

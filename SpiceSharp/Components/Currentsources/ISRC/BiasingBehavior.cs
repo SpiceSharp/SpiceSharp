@@ -23,19 +23,19 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Gets the voltage.
         /// </summary>
-        [ParameterName("v"), ParameterInfo("Voltage accross the supply")]
+        [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
         public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
-        [ParameterName("p"), ParameterInfo("Power supplied by the source")]
+        [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
         public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[PosNode]) * -Current;
 
         /// <summary>
         /// Get the current.
         /// </summary>
-        [ParameterName("c"), ParameterName("i"), ParameterInfo("Current through current source")]
+        [ParameterName("c"), ParameterName("i"), ParameterName("i_r"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
 
         /// <summary>

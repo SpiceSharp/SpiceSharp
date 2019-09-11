@@ -62,13 +62,13 @@ namespace SpiceSharp.General
                 {
                     foreach (var name in desc.Names)
                     {
-                        try
-                        {
+                        if (!_members.TryGetValue(name, out var old))
                             _members.Add(name, desc);
-                        }
-                        catch (ArgumentException)
+                        else
                         {
-                            throw new CircuitException("Duplicate parameter with the name '{0}'".FormatString(name));
+                            // Prefer the child class
+                            if (old.Member.DeclaringType.GetTypeInfo().IsAssignableFrom(desc.Member.DeclaringType))
+                                _members[name] = desc;
                         }
                     }
                 }

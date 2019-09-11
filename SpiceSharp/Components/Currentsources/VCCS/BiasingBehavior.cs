@@ -59,19 +59,19 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <summary>
         /// Get the voltage.
         /// </summary>
-        [ParameterName("v"), ParameterInfo("Voltage")]
+        [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
         public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
-        [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
+        [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
         public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[ContPosNode] - BiasingState.Solution[ContNegNode]) * BaseParameters.Coefficient;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
-        [ParameterName("p"), ParameterInfo("Power")]
+        [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
         public double GetPower()
         {
             BiasingState.ThrowIfNotBound(this);

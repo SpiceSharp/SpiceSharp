@@ -314,8 +314,8 @@ namespace SpiceSharpTest.Models
             // Create exports
             var exports = new Export<Complex>[]
             {
-                new ComplexPropertyExport(ac, "V1", "i_c"),
-                new ComplexPropertyExport(ac, "V2", "i_c"),
+                new ComplexPropertyExport(ac, "V1", "i"),
+                new ComplexPropertyExport(ac, "V2", "i"),
             };
 
             // Create references
