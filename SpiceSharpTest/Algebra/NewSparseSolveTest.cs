@@ -42,7 +42,10 @@ namespace SpiceSharpTest.Sparse
         public void When_SingletonPivoting_Expect_NoException()
         {
             // Build the solver with only the singleton pivoting
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>()
+                );
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzSingleton<double>());
@@ -75,7 +78,10 @@ namespace SpiceSharpTest.Sparse
         public void When_QuickDiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>()
+                );
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzQuickDiagonal<double>());
@@ -108,7 +114,10 @@ namespace SpiceSharpTest.Sparse
         public void When_DiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>()
+                );
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzDiagonal<double>());
@@ -141,7 +150,10 @@ namespace SpiceSharpTest.Sparse
         public void When_EntireMatrixPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>()
+                );
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzEntireMatrix<double>());
@@ -199,7 +211,10 @@ namespace SpiceSharpTest.Sparse
             };
 
             // build the matrix
-            var solver = new ComplexSolver();
+            var solver = new ComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
+                new SparseMatrix<Complex>(),
+                new SparseVector<Complex>()
+                );
             for (var r = 0; r < matrix.Length; r++)
             {
                 for (var c = 0; c < matrix[r].Length; c++)

@@ -26,7 +26,10 @@ namespace SpiceSharpTest.Sparse
             };
 
             // Create matrix
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>()
+                );
             for (var r = 0; r < matrixElements.Length; r++)
                 for (var c = 0; c < matrixElements[r].Length; c++)
                     solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
@@ -43,7 +46,10 @@ namespace SpiceSharpTest.Sparse
         [Test]
         public void When_OrderAndFactoring_Expect_Reference()
         {
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>()
+                );
             solver.GetMatrixElement(1, 1).Value = 0.0001;
             solver.GetMatrixElement(1, 4).Value = -0.0001;
             solver.GetMatrixElement(1, 5).Value = 0.0;
@@ -73,11 +79,13 @@ namespace SpiceSharpTest.Sparse
             Assert.AreEqual(solver.GetMatrixElement(5, 5).Value, 1.0);
         }
 
-        /*
         [Test]
         public void When_OrderAndFactoring2_Expect_Reference()
         {
-            var solver = new RealSolver(5);
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(5),
+                new SparseVector<double>(5)
+                );
 
             solver.GetMatrixElement(1, 1).Value = 1.0;
             solver.GetMatrixElement(2, 1).Value = 0.0;
@@ -109,7 +117,10 @@ namespace SpiceSharpTest.Sparse
         [Test]
         public void When_Preorder_Expect_Reference()
         {
-            var solver = new RealSolver(5);
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(5),
+                new SparseVector<double>(5)
+                );
             solver.GetMatrixElement(1, 1).Value = 1e-4;
             solver.GetMatrixElement(1, 2).Value = 0.0;
             solver.GetMatrixElement(1, 3).Value = -1e-4;
@@ -122,7 +133,8 @@ namespace SpiceSharpTest.Sparse
             solver.GetMatrixElement(4, 3).Value = 1.0;
             solver.GetMatrixElement(5, 2).Value = 1.0;
 
-            SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.PreorderModifiedNodalAnalysis(solver, Math.Abs);
+            SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
+            solver.Precondition((matrix, vector) => SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
 
             AssertInternal(solver, 1, 1, 1e-4);
             AssertInternal(solver, 1, 4, -1e-4);
@@ -144,14 +156,13 @@ namespace SpiceSharpTest.Sparse
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <param name="expected"></param>
-        void AssertInternal(LUSolver<double> solver, int row, int col, double expected)
+        void AssertInternal(ISolver<double> solver, int row, int col, double expected)
         {
-            var indices = new LinearSystemIndices(row, col);
-            solver.InternalToExternal(indices);
-            var elt = solver.FindMatrixElement(indices.Row, indices.Column);
+            var indices = Tuple.Create(row, col);
+            indices = solver.InternalToExternal(indices);
+            var elt = solver.FindMatrixElement(indices.Item1, indices.Item2);
             Assert.AreNotEqual(null, elt);
             Assert.AreEqual(expected, elt.Value);
         }
-        */
     }
 }

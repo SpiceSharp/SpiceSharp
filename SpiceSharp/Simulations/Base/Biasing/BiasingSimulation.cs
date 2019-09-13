@@ -145,9 +145,9 @@ namespace SpiceSharp.Simulations
             BiasingState.Gmin = config.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
-            var strategy = BiasingState.Solver.Strategy;
+            /* var strategy = BiasingState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
             BiasingState.Solver.Reset();
 
             // Setup the rest of the circuit.

@@ -31,31 +31,31 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        public LUSolver<Complex> Solver
+        public ISolver<Complex> Solver
         {
             get => _solver;
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException();
-                _solver = value;
+                _solver = value ?? throw new ArgumentNullException();
             }
         }
-        private LUSolver<Complex> _solver;
+        private ISolver<Complex> _solver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
         /// </summary>
         public ComplexSimulationState()
         {
-            _solver = new ComplexSolver();
+            _solver = new ComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
+                new SparseMatrix<Complex>(),
+                new SparseVector<Complex>());
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public ComplexSimulationState(LUSolver<Complex> solver)
+        public ComplexSimulationState(ISolver<Complex> solver)
         {
             _solver = solver.ThrowIfNull(nameof(solver));
         }

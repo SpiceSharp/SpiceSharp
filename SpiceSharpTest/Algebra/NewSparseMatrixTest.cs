@@ -26,7 +26,7 @@ namespace SpiceSharpTest.Sparse
             }
 
             // Check links from left to right
-            IMatrixElement<double> element;
+            ISparseMatrixElement<double> element;
             for (var r = 0; r < size; r++)
             {
                 element = matrix.GetFirstInRow(r + 1);

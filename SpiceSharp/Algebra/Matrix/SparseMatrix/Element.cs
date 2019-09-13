@@ -6,7 +6,7 @@
         /// An element for a sparse matrix.
         /// </summary>
         /// <seealso cref="IMatrixElement{T}" />
-        protected class Element : IMatrixElement<T>
+        protected class Element : ISparseMatrixElement<T>
         {
             /// <summary>
             /// Gets or sets the value of the matrix element.
@@ -64,7 +64,7 @@
             /// <value>
             /// The matrix element.
             /// </value>
-            IMatrixElement<T> IMatrixElement<T>.Above => PreviousInColumn;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Above => PreviousInColumn;
 
             /// <summary>
             /// Gets the matrix element below this one.
@@ -72,7 +72,7 @@
             /// <value>
             /// The matrix element.
             /// </value>
-            IMatrixElement<T> IMatrixElement<T>.Below => NextInColumn;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Below => NextInColumn;
 
             /// <summary>
             /// Gets the right.
@@ -80,7 +80,7 @@
             /// <value>
             /// The right.
             /// </value>
-            IMatrixElement<T> IMatrixElement<T>.Right => NextInRow;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Right => NextInRow;
 
             /// <summary>
             /// Gets the left.
@@ -88,7 +88,7 @@
             /// <value>
             /// The left.
             /// </value>
-            IMatrixElement<T> IMatrixElement<T>.Left => PreviousInRow;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Left => PreviousInRow;
         }
     }
 }

@@ -31,37 +31,5 @@ namespace SpiceSharp.Algebra
         /// The column.
         /// </value>
         int Column { get; }
-
-        /// <summary>
-        /// Gets the matrix element left of this one.
-        /// </summary>
-        /// <value>
-        /// The matrix element.
-        /// </value>
-        IMatrixElement<T> Left { get; }
-
-        /// <summary>
-        /// Gets the matrix element right of this one.
-        /// </summary>
-        /// <value>
-        /// The matrix element.
-        /// </value>
-        IMatrixElement<T> Right { get; }
-
-        /// <summary>
-        /// Gets the matrix element above this one.
-        /// </summary>
-        /// <value>
-        /// The matrix element.
-        /// </value>
-        IMatrixElement<T> Above { get; }
-
-        /// <summary>
-        /// Gets the matrix element below this one.
-        /// </summary>
-        /// <value>
-        /// The matrix element.
-        /// </value>
-        IMatrixElement<T> Below { get; }
     }
 }

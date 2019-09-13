@@ -27,39 +27,6 @@ namespace SpiceSharp.Algebra
         T this[int index] { get; set; }
 
         /// <summary>
-        /// Gets the value of the vector at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>The value.</returns>
-        T GetVectorValue(int index);
-
-        /// <summary>
-        /// Sets the value of the vector at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="value">The value.</param>
-        void SetVectorValue(int index, T value);
-
-        /// <summary>
-        /// Gets a vector element at the specified index. If
-        /// it doesn't exist, a new one is created.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        IVectorElement<T> GetVectorElement(int index);
-
-        /// <summary>
-        /// Finds a vector element at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element; otherwise <c>null</c>.
-        /// </returns>
-        IVectorElement<T> FindVectorElement(int index);
-
-        /// <summary>
         /// Copies the contents of the vector to another one.
         /// </summary>
         /// <param name="target">The target vector.</param>

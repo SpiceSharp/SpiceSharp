@@ -13,9 +13,9 @@ namespace SpiceSharpTest.Sparse
         /// </summary>
         /// <param name="filename">Filename</param>
         /// <returns></returns>
-        protected LUSolver<double> ReadMtxFile(string filename)
+        protected ISolver<double> ReadMtxFile(string filename)
         {
-            LUSolver<double> result;
+            ISolver<double> result;
 
             using (var sr = new StreamReader(filename))
             {
@@ -29,7 +29,7 @@ namespace SpiceSharpTest.Sparse
                 if (int.Parse(match.Groups["columns"].Value) != size)
                     throw new Exception("Matrix is not square");
 
-                result = new RealSolver(size);
+                result = new RealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(size), new SparseVector<double>(size));
 
                 // All subsequent lines are of the format [row] [column] [value]
                 while (!sr.EndOfStream)
@@ -60,9 +60,9 @@ namespace SpiceSharpTest.Sparse
         /// <param name="matFilename">The matrix filename.</param>
         /// <param name="vecFilename">The vector filename.</param>
         /// <returns></returns>
-        protected LUSolver<double> ReadSpice3f5File(string matFilename, string vecFilename)
+        protected ISolver<double> ReadSpice3f5File(string matFilename, string vecFilename)
         {
-            var solver = new RealSolver();
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(), new SparseVector<double>());
 
             // Read the spice file
             string line;

@@ -14,8 +14,13 @@ namespace SpiceSharp.Algebra
     /// the vector.</para>
     /// <para>This vector automatically expands size if necessary.</para>
     /// </remarks>
-    public partial class SparseVector<T> : IPermutableVector<T>, IFormattable where T : IFormattable
+    public partial class SparseVector<T> : IPermutableVector<T>, ISparseVector<T>, IFormattable where T : IFormattable
     {
+        /// <summary>
+        /// Occurs when two elements have swapped.
+        /// </summary>
+        public event EventHandler<PermutationEventArgs> ElementsSwapped;
+
         /// <summary>
         /// Gets the length of the vector.
         /// </summary>
@@ -176,12 +181,18 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the first <see cref="IVectorElement{T}" /> in the vector.
+        /// Gets the first <see cref="ISparseVectorElement{T}" /> in the vector.
         /// </summary>
         /// <returns>
         /// The vector element.
         /// </returns>
-        public IVectorElement<T> GetFirstInVector() => _firstInVector;
+        public ISparseVectorElement<T> GetFirstInVector() => _firstInVector;
+
+        /// <summary>
+        /// Gets the last <see cref="ISparseVectorElement{T}" /> in the vector.
+        /// </summary>
+        /// <returns></returns>
+        public ISparseVectorElement<T> GetLastInVector() => _lastInVector;
 
         /// <summary>
         /// Remove an element.
@@ -210,7 +221,7 @@ namespace SpiceSharp.Algebra
             if (target.Length != Length)
                 throw new ArgumentException("Vector lengths do not match");
             for (var i = 1; i <= Length; i++)
-                target.SetVectorValue(i, GetVectorValue(i));
+                target[i] = GetVectorValue(i);
         }
 
         /// <summary>
@@ -257,6 +268,8 @@ namespace SpiceSharp.Algebra
 
             // Swap these elements
             Swap(first, second, index1, index2);
+
+            OnElementsSwapped(new PermutationEventArgs(index1, index2));
         }
 
         /// <summary>
@@ -432,5 +445,11 @@ namespace SpiceSharp.Algebra
             sb.Append("]");
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Raises the <see cref="ElementsSwapped" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnElementsSwapped(PermutationEventArgs args) => ElementsSwapped?.Invoke(this, args);
     }
 }

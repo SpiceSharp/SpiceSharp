@@ -7,8 +7,9 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving sets of equations with real numbers.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Algebra.LUSolver{Double}" />
-    public class RealSolver : LUSolver<double>
+    public class RealSolver<M, V> : LUSolver<M, V, double>
+        where M : IPermutableMatrix<double>, ISparseMatrix<double>, IElementMatrix<double>
+        where V : IPermutableVector<double>, ISparseVector<double>, IElementVector<double>
     {
         /// <summary>
         /// Private variables
@@ -17,29 +18,21 @@ namespace SpiceSharp.Algebra
         private IMatrixElement<double>[] _dest;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RealSolver"/> class.
+        /// Initializes a new instance of the <see cref="RealSolver{M,V}"/> class.
         /// </summary>
-        public RealSolver()
-            : base(new Markowitz<double>())
+        public RealSolver(M matrix, V vector)
+            : base(matrix, vector, new Markowitz<double>())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RealSolver"/> class.
+        /// Initializes a new instance of the <see cref="RealSolver{M,V}"/> class.
         /// </summary>
-        /// <param name="size">The number of equations and variables.</param>
-        public RealSolver(int size)
-            : base(new Markowitz<double>(), size)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealSolver"/> class.
-        /// </summary>
-        /// <param name="size">The number of equations and variables.</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="vector">The vector.</param>
         /// <param name="strategy">The pivot strategy.</param>
-        public RealSolver(int size, PivotStrategy<double> strategy)
-            : base(strategy, size)
+        public RealSolver(M matrix, V vector, PivotStrategy<double> strategy)
+            : base(matrix, vector, strategy)
         {
         }
         
@@ -295,7 +288,7 @@ namespace SpiceSharp.Algebra
         /// Eliminate a row.
         /// </summary>
         /// <param name="pivot">The current pivot element.</param>
-        private void Elimination(IMatrixElement<double> pivot)
+        private void Elimination(ISparseMatrixElement<double> pivot)
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))

@@ -23,21 +23,5 @@ namespace SpiceSharp.Algebra
         /// The index.
         /// </value>
         int Index { get; }
-
-        /// <summary>
-        /// Gets the vector element above this one.
-        /// </summary>
-        /// <value>
-        /// The vector element.
-        /// </value>
-        IVectorElement<T> Above { get; }
-
-        /// <summary>
-        /// Gets the vector element below this one.
-        /// </summary>
-        /// <value>
-        /// The vector element.
-        /// </value>
-        IVectorElement<T> Below { get; }
     }
 }

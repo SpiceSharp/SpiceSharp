@@ -18,7 +18,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override IMatrixElement<T> FindPivot(Markowitz<T> markowitz, IPermutableMatrix<T> matrix, int eliminationStep)
+        public override ISparseMatrixElement<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -58,7 +58,7 @@ namespace SpiceSharp.Algebra.Solve
                  */
 
                 // Find the singleton element
-                IMatrixElement<T> chosen;
+                ISparseMatrixElement<T> chosen;
                 if (markowitz.ColumnCount(index) == 0)
                 {
                     // The last element in the column is the singleton element!

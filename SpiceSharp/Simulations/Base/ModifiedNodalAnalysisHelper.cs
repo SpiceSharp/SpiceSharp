@@ -6,35 +6,28 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A helper class that is specific to Modified Nodal Analysis.
     /// </summary>
-    public class ModifiedNodalAnalysisHelper<T> where T : IFormattable, IEquatable<T>
+    public class ModifiedNodalAnalysisHelper<T> where T : IFormattable
     {
         /// <summary>
-        /// A delegate for measuring the magnitude of elements.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The magnitude.</returns>
-        public delegate double MagnitudeMethod(T value);
-
-        /// <summary>
-        /// Gets or sets the magnitude.
+        /// Gets or sets the magnitude method.
         /// </summary>
         /// <value>
         /// The magnitude.
         /// </value>
-        public static MagnitudeMethod Magnitude
-        {
-            get => _magnitude;
-            set => _magnitude = value.ThrowIfNull("magnitude");
-        }
-        private static MagnitudeMethod _magnitude = null;
+        public static Func<T, double> Magnitude { get; set; }
 
         /// <summary>
         /// Preorders the modified nodal analysis.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
-        public static void PreorderModifiedNodalAnalysis(IPermutableMatrix<T> matrix)
+        public static void PreorderModifiedNodalAnalysis(IMatrix<T> matrix)
         {
-            matrix.ThrowIfNull(nameof(matrix));
+            // We can't deal with non-sparse matrices
+            if (!(matrix is ISparseMatrix<T> sparse))
+                return;
+            // We can't deal with non-permutatable matrices
+            if (!(matrix is IPermutableMatrix<T> permutable))
+                return;
 
             /*
              * MNA often has patterns that we can already use for pivoting
@@ -57,7 +50,7 @@ namespace SpiceSharp.Simulations
              * as 2 twins on the ?-diagonal elements. These should be taken
              * care of first.
              */
-            IMatrixElement<T> twin1 = null, twin2 = null;
+            ISparseMatrixElement<T> twin1 = null, twin2 = null;
             var start = 1;
             bool anotherPassNeeded;
 
@@ -69,13 +62,13 @@ namespace SpiceSharp.Simulations
                 // Search for zero diagonals with lone twins. 
                 for (var j = start; j <= matrix.Size; j++)
                 {
-                    if (matrix.FindDiagonalElement(j) == null)
+                    if (sparse.FindDiagonalElement(j) == null)
                     {
-                        var twins = CountTwins(matrix, j, ref twin1, ref twin2);
+                        var twins = CountTwins(sparse, j, ref twin1, ref twin2);
                         if (twins == 1)
                         {
                             // Lone twins found, swap columns
-                            matrix.SwapColumns(twin2.Column, j);
+                            permutable.SwapColumns(twin2.Column, j);
                             swapped = true;
                         }
                         else if (twins > 1 && !anotherPassNeeded)
@@ -91,10 +84,10 @@ namespace SpiceSharp.Simulations
                 {
                     for (var j = start; !swapped && j <= matrix.Size; j++)
                     {
-                        if (matrix.FindDiagonalElement(j) == null)
+                        if (sparse.FindDiagonalElement(j) == null)
                         {
-                            CountTwins(matrix, j, ref twin1, ref twin2);
-                            matrix.SwapColumns(twin2.Column, j);
+                            CountTwins(sparse, j, ref twin1, ref twin2);
+                            permutable.SwapColumns(twin2.Column, j);
                             swapped = true;
                         }
                     }
@@ -108,7 +101,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="gmin">The conductance to be added to the diagonal.</param>
-        public static void ApplyDiagonalGmin(IPermutableMatrix<double> matrix, double gmin)
+        public static void ApplyDiagonalGmin(IMatrix<double> matrix, double gmin)
         {
             matrix.ThrowIfNull(nameof(matrix));
 
@@ -116,12 +109,20 @@ namespace SpiceSharp.Simulations
             if (gmin <= 0.0)
                 return;
 
-            // Add to the diagonal
-            for (var i = 1; i <= matrix.Size; i++)
+            if (matrix is IElementMatrix<double> m)
+            { 
+                // Add to the diagonal
+                for (var i = 1; i <= matrix.Size; i++)
+                {
+                    var diagonal = m.FindDiagonalElement(i);
+                    if (diagonal != null)
+                        diagonal.Value += gmin;
+                }
+            }
+            else
             {
-                var diagonal = matrix.FindDiagonalElement(i);
-                if (diagonal != null)
-                    diagonal.Value += gmin;
+                for (var i = 1; i <= matrix.Size; i++)
+                    matrix[i, i] += gmin;
             }
         }
 
@@ -137,7 +138,8 @@ namespace SpiceSharp.Simulations
         /// <param name="twin1">The first twin element.</param>
         /// <param name="twin2">The second twin element.</param>
         /// <returns>The number of twins found.</returns>
-        private static int CountTwins(IPermutableMatrix<T> matrix, int column, ref IMatrixElement<T> twin1, ref IMatrixElement<T> twin2)
+        private static int CountTwins<M>(M matrix, int column, ref ISparseMatrixElement<T> twin1, ref ISparseMatrixElement<T> twin2)
+            where M : ISparseMatrix<T>
         {
             var twins = 0;
 

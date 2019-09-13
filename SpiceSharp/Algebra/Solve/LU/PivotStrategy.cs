@@ -3,7 +3,7 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// A pivot strategy used by a <see cref="LUSolver{T}" />
+    /// A pivot strategy used by a <see cref="LUSolver{M,V,T}" />
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
     public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>
@@ -24,7 +24,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="pivot">The pivot candidate.</param>
         /// <returns>True if the pivot can be used.</returns>
-        public abstract bool IsValidPivot(IMatrixElement<T> pivot);
+        public abstract bool IsValidPivot(ISparseMatrixElement<T> pivot);
 
         /// <summary>
         /// Setup the pivot strategy.
@@ -33,7 +33,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <param name="magnitude">The method used to determine the magnitude of an element.</param>
-        public abstract void Setup(IPermutableMatrix<T> matrix, IPermutableVector<T> rhs, int eliminationStep, Func<T, double> magnitude);
+        public abstract void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude);
 
         /// <summary>
         /// Move the pivot to the diagonal for this elimination step.
@@ -45,7 +45,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="eliminationStep">The elimination step.</param>
-        public abstract void MovePivot(IPermutableMatrix<T> matrix, IPermutableVector<T> rhs, IMatrixElement<T> pivot, int eliminationStep);
+        public abstract void MovePivot(ISparseMatrix<T> matrix, ISparseVector<T> rhs, ISparseMatrixElement<T> pivot, int eliminationStep);
 
         /// <summary>
         /// Update the strategy after the pivot was moved.
@@ -53,14 +53,14 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="eliminationStep">The elimination step.</param>
-        public abstract void Update(IPermutableMatrix<T> matrix, IMatrixElement<T> pivot, int eliminationStep);
+        public abstract void Update(ISparseMatrix<T> matrix, ISparseMatrixElement<T> pivot, int eliminationStep);
 
         /// <summary>
         /// Notifies the strategy that a fill-in has been created
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="fillin">The fill-in.</param>
-        public abstract void CreateFillin(IPermutableMatrix<T> matrix, IMatrixElement<T> fillin);
+        public abstract void CreateFillin(ISparseMatrix<T> matrix, ISparseMatrixElement<T> fillin);
 
         /// <summary>
         /// Find a pivot in the matrix.
@@ -73,6 +73,6 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <returns></returns>
-        public abstract IMatrixElement<T> FindPivot(IPermutableMatrix<T> matrix, int eliminationStep);
+        public abstract ISparseMatrixElement<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep);
     }
 }

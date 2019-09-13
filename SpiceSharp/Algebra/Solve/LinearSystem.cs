@@ -10,7 +10,10 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IFormattable" />
-    public abstract partial class LinearSystem<T> : IMatrix<T>, IVector<T>, IFormattable where T : IFormattable
+    public abstract partial class LinearSystem<M, V, T> : IElementMatrix<T>, IElementVector<T>, IFormattable 
+        where M : IPermutableMatrix<T>, IElementMatrix<T>
+        where V : IPermutableVector<T>, IElementVector<T>
+        where T : IFormattable
     {
         /// <summary>
         /// Gets the order of the matrix (matrix size).
@@ -21,21 +24,15 @@ namespace SpiceSharp.Algebra
         public int Size { get; private set; }
 
         /// <summary>
-        /// Gets or sets the value at the specified index.
+        /// Gets the length of the vector.
         /// </summary>
         /// <value>
-        /// The value.
+        /// The length.
         /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns>The value.</returns>
-        T IVector<T>.this[int index]
-        {
-            get => GetVectorValue(index);
-            set => SetVectorValue(index, value);
-        }
+        int IVector<T>.Length => Vector.Length;
 
         /// <summary>
-        /// Gets or sets the value with the specified row.
+        /// Gets or sets the matrix value at the specified row and column.
         /// </summary>
         /// <value>
         /// The value.
@@ -43,19 +40,43 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The value.</returns>
-        T IMatrix<T>.this[int row, int column]
+        public T this[int row, int column]
         {
-            get => GetMatrixValue(row, column);
-            set => SetMatrixValue(row, column, value);
+            get
+            {
+                row = Row[row];
+                column = Column[column];
+                return Matrix[row, column];
+            }
+            set
+            {
+                row = Row[row];
+                column = Column[column];
+                Matrix[row, column] = value;
+            }
         }
 
         /// <summary>
-        /// Gets the length of the vector.
+        /// Gets or sets the vector value at the specified index.
         /// </summary>
         /// <value>
-        /// The length.
+        /// The value.
         /// </value>
-        int IVector<T>.Length => Vector.Length;
+        /// <param name="index">The index.</param>
+        /// <returns>Value</returns>
+        public T this[int index]
+        {
+            get
+            {
+                index = Row[index];
+                return Vector[index];
+            }
+            set
+            {
+                index = Row[index];
+                Vector[index] = value;
+            }
+        }
 
         /// <summary>
         /// Gets the row translation.
@@ -70,58 +91,21 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the matrix to work on.
         /// </summary>
-        protected IPermutableMatrix<T> Matrix { get; }
+        protected M Matrix { get; }
 
         /// <summary>
         /// Gets the right-hand side vector.
         /// </summary>
-        protected IPermutableVector<T> Vector { get; }
+        protected V Vector { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LinearSystem{T}"/> class.
+        /// Initializes a new instance of the <see cref="LinearSystem{M,V,T}"/> class.
         /// </summary>
-        protected LinearSystem()
+        protected LinearSystem(M matrix, V vector)
         {
-            Matrix = new SparseMatrix<T>();
-            Vector = new SparseVector<T>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LinearSystem{T}"/> class.
-        /// </summary>
-        /// <param name="size">The number of equations and variables.</param>
-        protected LinearSystem(int size)
-        {
-            Matrix = new SparseMatrix<T>(size);
-            Vector = new SparseVector<T>(size);
-        }
-
-        /// <summary>
-        /// Gets the value in the matrix at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The value at the specified row and column.
-        /// </returns>
-        public T GetMatrixValue(int row, int column)
-        {
-            row = Row[row];
-            column = Column[column];
-            return Matrix.GetMatrixValue(row, column);
-        }
-
-        /// <summary>
-        /// Sets the value in the matrix at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <param name="value">The value.</param>
-        public void SetMatrixValue(int row, int column, T value)
-        {
-            row = Row[row];
-            column = Column[column];
-            Matrix.SetMatrixValue(row, column, value);
+            Matrix = matrix;
+            Vector = vector;
+            Size = Math.Max(matrix.Size, vector.Length);
         }
 
         /// <summary>
@@ -135,7 +119,7 @@ namespace SpiceSharp.Algebra
         {
             int row = Row[index];
             int column = Column[index];
-            return Matrix.GetMatrixElement(row, column);
+            return Matrix.FindMatrixElement(row, column);
         }
 
         /// <summary>
@@ -152,7 +136,7 @@ namespace SpiceSharp.Algebra
         {
             row = Row[row];
             column = Column[column];
-            Size = Math.Max(Size, Math.Max(row, column));
+            Size = Math.Max(Math.Max(row, column), Size);
             return Matrix.GetMatrixElement(row, column);
         }
 
@@ -173,30 +157,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the value of the vector at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
-        public T GetVectorValue(int index)
-        {
-            index = Row[index];
-            return Vector.GetVectorValue(index);
-        }
-
-        /// <summary>
-        /// Sets the value of the vector at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="value">The value.</param>
-        public void SetVectorValue(int index, T value)
-        {
-            index = Row[index];
-            Vector.SetVectorValue(index, value);
-        }
-
-        /// <summary>
         /// Gets a vector element at the specified index. If
         /// it doesn't exist, a new one is created.
         /// </summary>
@@ -207,9 +167,12 @@ namespace SpiceSharp.Algebra
         /// <exception cref="SparseException">Linear system is fixed</exception>
         public IVectorElement<T> GetVectorElement(int index)
         {
-            index = Row[index];
-            Size = Math.Max(index, Size);
-            return Vector.GetVectorElement(index);
+            if (Vector is IElementVector<T> v)
+            {
+                index = Row[index];
+                return v.GetVectorElement(index);
+            }
+            return new ProxyVectorElement(this, index);
         }
 
         /// <summary>
@@ -221,8 +184,12 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public IVectorElement<T> FindVectorElement(int index)
         {
-            index = Row[index];
-            return Vector.FindVectorElement(index);
+            if (Vector is IElementVector<T> v)
+            {
+                index = Row[index];
+                return v.FindVectorElement(index);
+            }
+            return new ProxyVectorElement(this, index);
         }
 
         /// <summary>
@@ -235,7 +202,8 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Swap two (internal) rows in the linear system.
+        /// Swap two (internal) rows in the linear system. This method keeps
+        /// the matrix and vector synchronized.
         /// </summary>
         /// <param name="row1">The first row index.</param>
         /// <param name="row2">The second row index.</param>
@@ -297,60 +265,19 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            // Build a matrix of strings for each element of the matrix
-            var displayData = new string[Matrix.Size][];
-            var columnWidths = new int[Matrix.Size + 1];
-
-            var rhsElement = Vector.GetFirstInVector();
-            for (var r = 1; r <= Matrix.Size; r++)
+            StringBuilder sb = new StringBuilder();
+            for (var r = 1; r < Size; r++)
             {
-                var element = Matrix.GetFirstInRow(r);
-
-                // Get the matching external row index
-                var extRow = Row.Reverse(r) - 1;
-                displayData[extRow] = new string[Matrix.Size + 1];
-
-                for (var c = 1; c <= Matrix.Size; c++)
+                var row = Row[r];
+                sb.Append("[ ");
+                for (var c = 1; c < Size; c++)
                 {
-                    // Get the matching external column index
-                    var extColumn = Column.Reverse(c) - 1;
-
-                    // go to the next element if necessary
-                    if (element != null && element.Column < c)
-                        element = element.Right;
-
-                    // Show the element
-                    if (element == null || element.Column != c)
-                        displayData[extRow][extColumn] = "...";
-                    else
-                        displayData[extRow][extColumn] = element.Value.ToString(format, formatProvider);
-                    columnWidths[extColumn] = Math.Max(columnWidths[extColumn], displayData[extRow][extColumn].Length);
+                    var column = Column[c];
+                    sb.Append(Matrix[row, column].ToString(format, formatProvider));
+                    sb.Append(" ");
                 }
-
-                if (rhsElement != null && rhsElement.Index < r)
-                    rhsElement = rhsElement.Below;
-
-                // Show the element
-                if (rhsElement != null && rhsElement.Index == r)
-                    displayData[extRow][Matrix.Size] = rhsElement.Value.ToString(format, formatProvider);
-                else
-                    displayData[extRow][Matrix.Size] = "...";
-                columnWidths[Matrix.Size] = Math.Max(columnWidths[Matrix.Size], displayData[extRow][Matrix.Size].Length);
-            }
-
-            // Build the string
-            var sb = new StringBuilder();
-            for (var r = 0; r < Matrix.Size; r++)
-            {
-                for (var c = 0; c <= Matrix.Size; c++)
-                {
-                    if (c == Matrix.Size)
-                        sb.Append(" : ");
-
-                    var display = displayData[r][c];
-                    sb.Append(new string(' ', columnWidths[c] - display.Length + 2));
-                    sb.Append(display);
-                }
+                sb.Append(Vector[row].ToString(format, formatProvider));
+                sb.Append(" ]");
                 sb.Append(Environment.NewLine);
             }
             return sb.ToString();

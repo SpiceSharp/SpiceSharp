@@ -3,12 +3,22 @@
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Describes a matrix that is also permutable.
+    /// Describes a matrix that has permutable rows and columns.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.IMatrix{T}" />
+    /// <seealso cref="IMatrix{T}" />
     public interface IPermutableMatrix<T> : IMatrix<T> where T : IFormattable
     {
+        /// <summary>
+        /// Occurs when two rows are swapped.
+        /// </summary>
+        event EventHandler<PermutationEventArgs> RowsSwapped;
+
+        /// <summary>
+        /// Occurs when two columns are swapped.
+        /// </summary>
+        event EventHandler<PermutationEventArgs> ColumnsSwapped;
+
         /// <summary>
         /// Swaps two rows in the matrix.
         /// </summary>
@@ -22,33 +32,5 @@ namespace SpiceSharp.Algebra
         /// <param name="column1">The first column index.</param>
         /// <param name="column2">The second column index.</param>
         void SwapColumns(int column1, int column2);
-
-        /// <summary>
-        /// Gets the first <see cref="IMatrixElement{T}"/> in the specified row.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>The matrix element.</returns>
-        IMatrixElement<T> GetFirstInRow(int row);
-
-        /// <summary>
-        /// Gets the last <see cref="IMatrixElement{T}"/> in the specified row.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>The matrix element.</returns>
-        IMatrixElement<T> GetLastInRow(int row);
-
-        /// <summary>
-        /// Gets the first <see cref="IMatrixElement{T}"/> in the specified column.
-        /// </summary>
-        /// <param name="column">The column index.</param>
-        /// <returns>The matrix element.</returns>
-        IMatrixElement<T> GetFirstInColumn(int column);
-
-        /// <summary>
-        /// Gets the last <see cref="IMatrixElement{T}"/> in the specified column.
-        /// </summary>
-        /// <param name="column">The column index.</param>
-        /// <returns>The matrix element.</returns>
-        IMatrixElement<T> GetLastInColumn(int column);
     }
 }

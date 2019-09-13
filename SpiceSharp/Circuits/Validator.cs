@@ -198,7 +198,8 @@ namespace SpiceSharp.Circuits
             }
 
             // Determine the rank of the matrix
-            var solver = new RealSolver(Math.Max(_voltageDriven.Count, map.Count));
+            int size = Math.Max(_voltageDriven.Count, map.Count);
+            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(size), new SparseVector<double>(size));
             for (var i = 0; i < _voltageDriven.Count; i++)
             {
                 var pins = _voltageDriven[i];

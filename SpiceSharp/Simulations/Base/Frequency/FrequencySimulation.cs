@@ -101,9 +101,9 @@ namespace SpiceSharp.Simulations
                 States.Add(state);
             }
             ComplexState = state;
-            var strategy = ComplexState.Solver.Strategy;
+            /* var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
             ComplexState.Solver.Reset();
 
             // Setup the rest of the behaviors

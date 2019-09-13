@@ -16,6 +16,11 @@ namespace SpiceSharp.Algebra
     public partial class DenseVector<T> : IPermutableVector<T>, IFormattable where T : IFormattable
     {
         /// <summary>
+        /// Occurs when two elements have swapped.
+        /// </summary>
+        public event EventHandler<PermutationEventArgs> ElementsSwapped;
+
+        /// <summary>
         /// Gets the length of the vector.
         /// </summary>
         /// <value>
@@ -134,6 +139,8 @@ namespace SpiceSharp.Algebra
             var tmp = _values[index1];
             _values[index1] = _values[index2];
             _values[index2] = tmp;
+
+            OnElementsSwapped(new PermutationEventArgs(index1, index2));
         }
 
         /// <summary>
@@ -156,7 +163,7 @@ namespace SpiceSharp.Algebra
             if (target.Length != Length)
                 throw new ArgumentException("Vector lengths do not match");
             for (var i = 1; i <= Length; i++)
-                target.SetVectorValue(i, GetVectorValue(i));
+                target[i] = this[i];
         }
 
         /// <summary>
@@ -201,5 +208,11 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public IVectorElement<T> GetFirstInVector()
             => GetVectorElement(1);
+
+        /// <summary>
+        /// Raises the <see cref="ElementsSwapped" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnElementsSwapped(PermutationEventArgs args) => ElementsSwapped?.Invoke(this, args);
     }
 }

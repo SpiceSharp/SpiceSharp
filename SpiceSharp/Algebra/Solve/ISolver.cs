@@ -9,12 +9,12 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="SpiceSharp.Algebra.IMatrix{T}" />
     /// <seealso cref="SpiceSharp.Algebra.IVector{T}" />
-    public interface ISolver<T> : IMatrix<T>, IVector<T> where T : IFormattable, IEquatable<T>
+    public interface ISolver<T> : IElementMatrix<T>, IElementVector<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
-        /// Preconditions the current matrix and vector.
+        /// Preconditions the specified method.
         /// </summary>
-        /// <param name="method">The preconditioning method.</param>
+        /// <param name="method">The method.</param>
         void Precondition(PreconditionMethod<T> method);
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace SpiceSharp.Algebra
     }
 
     /// <summary>
-    /// A delegate for preconditioning a solver matrix and vector.
+    /// A method that can be used to precondition a solver.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    /// <param name="matrix">The matrix to be preconditioned.</param>
-    /// <param name="vector">The vector to be preconditioned.</param>
-    public delegate void PreconditionMethod<T>(IPermutableMatrix<T> matrix, IPermutableVector<T> vector) where T : IFormattable;
+    /// <param name="matrix">The (permutated) matrix.</param>
+    /// <param name="vector">The (permutated) vector.</param>
+    public delegate void PreconditionMethod<T>(IMatrix<T> matrix, IVector<T> vector) where T : IFormattable;
 }

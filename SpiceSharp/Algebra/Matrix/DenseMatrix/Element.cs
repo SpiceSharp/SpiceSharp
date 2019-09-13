@@ -44,13 +44,15 @@ namespace SpiceSharp.Algebra
             /// <value>
             /// The matrix element.
             /// </value>
-            /// <exception cref="NotImplementedException"></exception>
             public IMatrixElement<T> Left
             {
                 get
                 {
-                    if (Column > 1)
-                        return new Element(_parent, Row, Column - 1);
+                    var column = Column - 1;
+                    while (column > 0 && _parent.GetMatrixValue(Row, column) == default)
+                        column--;
+                    if (column > 0)
+                        return new Element(_parent, Row, column);
                     return null;
                 }
             }
@@ -65,8 +67,11 @@ namespace SpiceSharp.Algebra
             {
                 get
                 {
-                    if (Column < _parent.Size)
-                        return new Element(_parent, Row, Column + 1);
+                    var column = Column + 1;
+                    while (column <= _parent.Size && _parent.GetMatrixValue(Row, column) == default)
+                        column++;
+                    if (column <= _parent.Size)
+                        return new Element(_parent, Row, column);
                     return null;
                 }
             }
@@ -81,8 +86,11 @@ namespace SpiceSharp.Algebra
             {
                 get
                 {
-                    if (Row > 1)
-                        return new Element(_parent, Row - 1, Column);
+                    var row = Row - 1;
+                    while (row > 0 && _parent.GetMatrixValue(row, Column) == default)
+                        row--;
+                    if (row > 0)
+                        return new Element(_parent, row, Column);
                     return null;
                 }
             }
@@ -97,8 +105,11 @@ namespace SpiceSharp.Algebra
             {
                 get
                 {
-                    if (Row < _parent.Size)
-                        return new Element(_parent, Row + 1, Column);
+                    var row = Row + 1;
+                    while (row <= _parent.Size && _parent.GetMatrixValue(row, Column) == default)
+                        row++;
+                    if (row <= _parent.Size)
+                        return new Element(_parent, row, Column);
                     return null;
                 }
             }

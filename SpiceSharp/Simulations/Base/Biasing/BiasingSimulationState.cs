@@ -76,31 +76,31 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        public LUSolver<double> Solver
+        public ISolver<double> Solver
         {
             get => _solver;
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException();
-                _solver = value;
+                _solver = value ?? throw new ArgumentNullException();
             }
         }
-        private LUSolver<double> _solver;
+        private ISolver<double> _solver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
         /// </summary>
         public BiasingSimulationState()
         {
-            Solver = new RealSolver();
+            Solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+                new SparseMatrix<double>(),
+                new SparseVector<double>());
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
         /// </summary>
         /// <param name="solver">The solver.</param>
-        public BiasingSimulationState(LUSolver<double> solver)
+        public BiasingSimulationState(ISolver<double> solver)
         {
             Solver = solver.ThrowIfNull(nameof(solver));
         }

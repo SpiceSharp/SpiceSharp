@@ -118,7 +118,7 @@ namespace SpiceSharp.Algebra.Solve
                 ExpandTranslation(Math.Max(source.Length, target.Length));
 
             for (var i = 1; i < _extToInt.Length; i++)
-                target.SetVectorValue(_extToInt[i], source.GetVectorValue(i));
+                target[_extToInt[i]] = source[i];
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace SpiceSharp.Algebra.Solve
                 ExpandTranslation(Math.Max(source.Length - 1, target.Length));
 
             for (var i = 1; i < source.Length; i++)
-                target.SetVectorValue(_intToExt[i], source[i]);
+                target[_intToExt[i]] = source[i];
         }
 
         /// <summary>

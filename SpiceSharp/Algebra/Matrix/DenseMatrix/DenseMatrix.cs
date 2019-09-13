@@ -13,6 +13,16 @@ namespace SpiceSharp.Algebra
         // TODO: Need to update created elements for permutations.
 
         /// <summary>
+        /// Occurs when two rows are swapped.
+        /// </summary>
+        public event EventHandler<PermutationEventArgs> RowsSwapped;
+
+        /// <summary>
+        /// Occurs when two columns are swapped.
+        /// </summary>
+        public event EventHandler<PermutationEventArgs> ColumnsSwapped;
+
+        /// <summary>
         /// Gets the size of the matrix.
         /// </summary>
         /// <value>
@@ -208,6 +218,8 @@ namespace SpiceSharp.Algebra
                 _array[offset1 + i] = _array[offset2 + i];
                 _array[offset2 + i] = tmp;
             }
+
+            OnRowsSwapped(new PermutationEventArgs(row1, row2));
         }
 
         /// <summary>
@@ -230,6 +242,8 @@ namespace SpiceSharp.Algebra
                 _array[column1 + i] = _array[column2 + i];
                 _array[column2 + i] = tmp;
             }
+
+            OnColumnsSwapped(new PermutationEventArgs(column1, column2));
         }
 
         /// <summary>
@@ -280,5 +294,17 @@ namespace SpiceSharp.Algebra
             for (var i = 0; i < _array.Length; i++)
                 _array[i] = default;
         }
+
+        /// <summary>
+        /// Raises the <see cref="RowsSwapped" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnRowsSwapped(PermutationEventArgs args) => RowsSwapped?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="ColumnsSwapped" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnColumnsSwapped(PermutationEventArgs args) => ColumnsSwapped?.Invoke(this, args);
     }
 }

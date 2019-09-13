@@ -8,7 +8,9 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving real matrices
     /// </summary>
-    public class ComplexSolver : LUSolver<Complex>
+    public class ComplexSolver<M, V> : LUSolver<M, V, Complex>
+        where M : IPermutableMatrix<Complex>, ISparseMatrix<Complex>
+        where V : IPermutableVector<Complex>, ISparseVector<Complex>
     {
         /// <summary>
         /// Private variables
@@ -17,29 +19,23 @@ namespace SpiceSharp.Algebra
         private IMatrixElement<Complex>[] _dest;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexSolver"/> class.
+        /// Initializes a new instance of the <see cref="ComplexSolver{M,V}"/> class.
         /// </summary>
-        public ComplexSolver()
-            : base(new Markowitz<Complex>())
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="vector">The vector.</param>
+        public ComplexSolver(M matrix, V vector)
+            : base(matrix, vector, new Markowitz<Complex>())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexSolver"/> class.
+        /// Initializes a new instance of the <see cref="ComplexSolver{M,V}"/> class.
         /// </summary>
-        /// <param name="size">The number of equations and variables.</param>
-        public ComplexSolver(int size)
-            : base(new Markowitz<Complex>(), size)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexSolver"/> class.
-        /// </summary>
-        /// <param name="size">The number of equations and variables.</param>
-        /// <param name="strategy">The pivot strategy.</param>
-        public ComplexSolver(int size, PivotStrategy<Complex> strategy)
-            : base(strategy, size)
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="vector">The vector.</param>
+        /// <param name="strategy">The pivoting strategy.</param>
+        public ComplexSolver(M matrix, V vector, PivotStrategy<Complex> strategy)
+            : base(matrix, vector, strategy)
         {
         }
 
@@ -63,7 +59,7 @@ namespace SpiceSharp.Algebra
                 return false;
 
             // pivot = 1 / pivot
-            element.Value = 1.0 / element.Value; // Inverse(element.Value);
+            element.Value = Inverse(element.Value);
 
             // Start factorization
             for (var step = 2; step <= Matrix.Size; step++)
@@ -293,7 +289,7 @@ namespace SpiceSharp.Algebra
         /// Eliminate a row.
         /// </summary>
         /// <param name="pivot">The current pivot.</param>
-        private void Elimination(IMatrixElement<Complex> pivot)
+        private void Elimination(ISparseMatrixElement<Complex> pivot)
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))

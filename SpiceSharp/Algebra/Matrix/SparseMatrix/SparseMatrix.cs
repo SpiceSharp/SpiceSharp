@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
     /// <para>The matrix automatically expands size if necessary.</para>
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public partial class SparseMatrix<T> : IPermutableMatrix<T> where T : IFormattable
+    public partial class SparseMatrix<T> : IPermutableMatrix<T>, ISparseMatrix<T> where T : IFormattable
     {
         // TODO: Support removing ALL elements + do that at the end of the simulation.
 
@@ -23,6 +23,16 @@ namespace SpiceSharp.Algebra
         /// </summary>
         private const int InitialSize = 4;
         private const float ExpansionFactor = 1.5f;
+
+        /// <summary>
+        /// Occurs when two rows are swapped.
+        /// </summary>
+        public event EventHandler<PermutationEventArgs> RowsSwapped;
+
+        /// <summary>
+        /// Occurs when two columns are swapped.
+        /// </summary>
+        public event EventHandler<PermutationEventArgs> ColumnsSwapped;
 
         /// <summary>
         /// Gets or sets the size.
@@ -178,8 +188,29 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">The row/column index.</param>
         /// <returns>The matrix element at the specified diagonal index.</returns>
-        public IMatrixElement<T> FindDiagonalElement(int index) => _diagonal[index];
-        
+        public IMatrixElement<T> FindDiagonalElement(int index)
+        {
+            if (index < 0)
+                throw new IndexOutOfRangeException(nameof(index));
+            if (index > Size)
+                return null;
+            return _diagonal[index];
+        }
+
+        /// <summary>
+        /// Finds the <see cref="ISparseMatrixElement{T}" /> on the diagonal.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        ISparseMatrixElement<T> ISparseMatrix<T>.FindDiagonalElement(int index)
+        {
+            if (index < 0)
+                throw new IndexOutOfRangeException(nameof(index));
+            if (index > Size)
+                return null;
+            return _diagonal[index];
+        }
+
         /// <summary>
         /// Find an element. This method will not create a new element if it doesn't exist.
         /// </summary>
@@ -204,28 +235,28 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <returns>The first element in the row or null if there are none.</returns>
-        public IMatrixElement<T> GetFirstInRow(int row) => _rows[row].FirstInRow;
+        public ISparseMatrixElement<T> GetFirstInRow(int row) => _rows[row].FirstInRow;
 
         /// <summary>
         /// Gets the last element in a row.
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <returns>The last element in the row of null if there are none.</returns>
-        public IMatrixElement<T> GetLastInRow(int row) => _rows[row].LastInRow;
+        public ISparseMatrixElement<T> GetLastInRow(int row) => _rows[row].LastInRow;
 
         /// <summary>
         /// Gets the first element in a column.
         /// </summary>
         /// <param name="column">The column index.</param>
         /// <returns>The first element in the column or null if there are none.</returns>
-        public IMatrixElement<T> GetFirstInColumn(int column) => _columns[column].FirstInColumn;
+        public ISparseMatrixElement<T> GetFirstInColumn(int column) => _columns[column].FirstInColumn;
 
         /// <summary>
         /// Gets the last element in a column.
         /// </summary>
         /// <param name="column">The column index.</param>
         /// <returns>The last element in the column or null if there are none.</returns>
-        public IMatrixElement<T> GetLastInColumn(int column) => _columns[column].LastInColumn;
+        public ISparseMatrixElement<T> GetLastInColumn(int column) => _columns[column].LastInColumn;
 
         /// <summary>
         /// Swaps two rows in the matrix.
@@ -305,6 +336,8 @@ namespace SpiceSharp.Algebra
                     row2Element = row2Element.NextInRow;
                 }
             }
+
+            OnRowsSwapped(new PermutationEventArgs(row1, row2));
         }
 
         /// <summary>
@@ -385,6 +418,8 @@ namespace SpiceSharp.Algebra
                     column2Element = column2Element.NextInColumn;
                 }
             }
+
+            OnColumnsSwapped(new PermutationEventArgs(column1, column2));
         }
 
         /// <summary>
@@ -495,5 +530,17 @@ namespace SpiceSharp.Algebra
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Raises the <see cref="RowsSwapped" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnRowsSwapped(PermutationEventArgs args) => RowsSwapped?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="ColumnsSwapped" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnColumnsSwapped(PermutationEventArgs args) => ColumnsSwapped?.Invoke(this, args);
     }
 }

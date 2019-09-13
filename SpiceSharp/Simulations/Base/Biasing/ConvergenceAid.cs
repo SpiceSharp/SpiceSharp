@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the solver of the system of equations.
         /// </summary>
-        protected LUSolver<double> Solver { get; private set; }
+        protected ISolver<double> Solver { get; private set; }
 
         /// <summary>
         /// Gets the diagonal element.
