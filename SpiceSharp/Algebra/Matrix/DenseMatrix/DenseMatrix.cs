@@ -119,7 +119,7 @@ namespace SpiceSharp.Algebra
             else
             {
                 if (value != default && (row > Size || column > Size))
-                    ExpandMatrix(Math.Max(row, column));
+                    Expand(Math.Max(row, column));
                 row--;
                 column--;
                 _array[row * _allocatedSize + column] = value;
@@ -240,7 +240,7 @@ namespace SpiceSharp.Algebra
         /// Expands the matrix.
         /// </summary>
         /// <param name="newSize">The new matrix size.</param>
-        private void ExpandMatrix(int newSize)
+        private void Expand(int newSize)
         {
             var oldSize = Size;
             Size = newSize;
@@ -255,6 +255,37 @@ namespace SpiceSharp.Algebra
                     nArray[r * newSize + c] = _array[r * _allocatedSize + c];
             _array = nArray;
             _allocatedSize = newSize;
+        }
+
+        /// <summary>
+        /// Shrinks the matrix to the specified size.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        private void Shrink(int newSize)
+        {
+            // Let's only free resources if the size is drastically reduced
+            if (newSize > 10 && newSize < Size / 2)
+            {
+                var nArray = new T[newSize * newSize];
+                for (var r = 0; r < Size; r++)
+                    for (var c = 0; c < Size; c++)
+                        nArray[r * newSize + c] = _array[r * _allocatedSize + c];
+                _array = nArray;
+                _allocatedSize = newSize;
+            }
+            Size = newSize;
+        }
+
+        /// <summary>
+        /// Resizes the matrix.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        public void Resize(int newSize)
+        {
+            if (newSize > Size)
+                Expand(newSize);
+            else if (newSize < Size)
+                Shrink(newSize);
         }
 
         /// <summary>

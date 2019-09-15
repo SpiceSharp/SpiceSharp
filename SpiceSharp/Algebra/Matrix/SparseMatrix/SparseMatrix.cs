@@ -167,7 +167,7 @@ namespace SpiceSharp.Algebra
 
             // Expand our matrix if it is necessary!
             if (row > Size || column > Size)
-                ExpandMatrix(Math.Max(row, column));
+                Expand(Math.Max(row, column));
 
             // Quick access to diagonals
             if (row == column && _diagonal[row] != null)
@@ -443,8 +443,12 @@ namespace SpiceSharp.Algebra
         /// Expands the matrix.
         /// </summary>
         /// <param name="newSize">The new matrix size.</param>
-        private void ExpandMatrix(int newSize)
+        private void Expand(int newSize)
         {
+            // Only expanding here!
+            if (newSize <= Size)
+                return;
+
             // Current size
             Size = newSize;
 
@@ -469,6 +473,36 @@ namespace SpiceSharp.Algebra
             // Other
             Array.Resize(ref _diagonal, newSize + 1);
             _allocatedSize = newSize;
+        }
+
+        /// <summary>
+        /// Shrinks the matrix to the specified size.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        private void Shrink(int newSize)
+        {
+            // Only shrinking here!
+            if (newSize >= Size)
+                return;
+
+            for (var i = 1; i <= newSize; i++)
+            {
+                _rows[i].Shrink(newSize);
+                _columns[i].Shrink(newSize);
+            }
+            Size = newSize;
+        }
+
+        /// <summary>
+        /// Resizes the matrix.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        public void Resize(int newSize)
+        {
+            if (newSize > Size)
+                Expand(newSize);
+            else if (newSize < Size)
+                Shrink(newSize);
         }
 
         /// <summary>

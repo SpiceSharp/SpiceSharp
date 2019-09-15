@@ -133,6 +133,25 @@ namespace SpiceSharp.Algebra
             }
 
             /// <summary>
+            /// Removes the last elements in the row to fit the new size.
+            /// </summary>
+            /// <param name="newSize">The new size.</param>
+            public void Shrink(int newSize)
+            {
+                var elt = LastInRow;
+                while (elt != null && elt.Column > newSize)
+                {
+                    elt = elt.PreviousInRow;
+                    if (elt != null)
+                    {
+                        elt.NextInRow.PreviousInRow = null;
+                        elt.NextInRow = null;
+                    }
+                }
+                LastInRow = elt;
+            }
+
+            /// <summary>
             /// Swap two elements in the row, <paramref name="first"/> and <paramref name="columnFirst"/> 
             /// are supposed to come first in the row. Does not update column pointers!
             /// </summary>

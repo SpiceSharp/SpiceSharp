@@ -13,17 +13,17 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the integration coefficients.
         /// </summary>
-        protected double[] Coefficients { get; } = new double[7];
+        protected DenseVector<double> Coefficients { get; } = new DenseVector<double>(7);
 
         /// <summary>
         /// Gets the prediction coefficients.
         /// </summary>
-        protected double[] PredictionCoefficients { get; } = new double[7];
+        protected DenseVector<double> PredictionCoefficients { get; } = new DenseVector<double>(7);
 
         /// <summary>
         /// Matrix used to solve the integration coefficients.
         /// </summary>
-        protected DenseMatrix<double> Matrix { get; } = new DenseMatrix<double>(8);
+        protected DenseRealSolver<DenseMatrix<double>, DenseVector<double>> Solver { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Gear"/> class.
@@ -31,6 +31,10 @@ namespace SpiceSharp.IntegrationMethods
         public Gear()
             : base(6)
         {
+            Solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
+                new DenseMatrix<double>(8),
+                new DenseVector<double>(8)
+                );
         }
 
         /// <summary>
@@ -42,16 +46,11 @@ namespace SpiceSharp.IntegrationMethods
             base.Initialize(simulation);
 
             // Reset all coefficients
-            for (var i = 0; i < Coefficients.Length; i++)
+            for (var i = 1; i <= Coefficients.Length; i++)
             {
                 Coefficients[i] = 0.0;
                 PredictionCoefficients[i] = 0.0;
             }
-
-            // Clear the matrix
-            for (var i = 0; i < 8; i++)
-                for (var j = 0; j < 8; j++)
-                    Matrix[i, j] = 0.0;
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace SpiceSharp.IntegrationMethods
             base.Unsetup(simulation);
 
             // Reset coefficients
-            for (var i = 0; i < Coefficients.Length; i++)
+            for (var i = 1; i <= Coefficients.Length; i++)
             {
                 Coefficients[i] = 0.0;
                 PredictionCoefficients[i] = 0.0;
@@ -83,7 +82,7 @@ namespace SpiceSharp.IntegrationMethods
                 Prediction[i] = 0.0;
                 for (var k = 0; k <= Order; k++)
                 {
-                    Prediction[i] += PredictionCoefficients[k] * IntegrationStates[k + 1].Solution[i];
+                    Prediction[i] += PredictionCoefficients[k + 1] * IntegrationStates[k + 1].Solution[i];
                 }
             }
         }
@@ -141,104 +140,56 @@ namespace SpiceSharp.IntegrationMethods
         protected override void ComputeCoefficients()
         {
             var delta = IntegrationStates[0].Delta;
-            for (var i = 0; i < Coefficients.Length; i++)
-                Coefficients[i] = 0.0;
-            Coefficients[1] = -1.0 / delta;
 
-            // First, set up the matrix
-            var n = Order + 1;
-            double arg = 0, arg1;
-            for (var i = 0; i <= Order; i++)
-                Matrix[0, i] = 1.0;
-            for (var i = 1; i <= Order; i++)
-                Matrix[i, 0] = 0.0;
+            // Set up the matrix
+            int n = Order + 1;
+            Solver.Resize(n);
+            Coefficients.Resize(n);
+            PredictionCoefficients.Resize(n);
+            for (var i = 1; i <= n; i++)
+                Solver[i] = 0.0;
+            Solver[2] = -1 / delta;
+            for (var i = 1; i <= n; i++)
+                Solver[1, i] = 1.0;
+            for (var i = 2; i <= n; i++)
+                Solver[i, 1] = 0.0;
 
-            for (var i = 1; i <= Order; i++)
+            double arg = 0.0, arg1;
+            for (var i = 2; i <= n; i++)
+            {
+                arg += IntegrationStates[i - 2].Delta;
+                arg1 = 1.0;
+                for (var j = 2; j <= n; j++)
+                {
+                    arg1 *= arg / delta;
+                    Solver[j, i] = arg1;
+                }
+            }
+            Solver.Factor();
+            Solver.Solve(Coefficients);
+
+            // Predictor calculations
+            for (var i = 2; i <= n; i++)
+                Solver[i] = 0.0;
+            Solver[1] = 1.0;
+            for (var i = 1; i <= n; i++)
+                Solver[1, i] = 1.0;
+            arg = 0.0;
+            for (var i = 1; i <= n; i++)
             {
                 arg += IntegrationStates[i - 1].Delta;
                 arg1 = 1.0;
-                for (var j = 1; j <= Order; j++)
+                for (var j = 2; j <= n; j++)
                 {
                     arg1 *= arg / delta;
-                    Matrix[j, i] = arg1;
+                    Solver[j, i] = arg1;
                 }
             }
-
-            // LU decompose
-            // The first column is already decomposed!
-            for (var i = 1; i <= Order; i++)
-            {
-                for (var j = i + 1; j <= Order; j++)
-                {
-                    Matrix[j, i] /= Matrix[i, i];
-                    for (var k = i + 1; k <= Order; k++)
-                        Matrix[j, k] -= Matrix[j, i] * Matrix[i, k];
-                }
-            }
-
-            // Forward substitution
-            for (var i = 1; i <= Order; i++)
-            {
-                for (var j = i + 1; j <= Order; j++)
-                    Coefficients[j] = Coefficients[j] - Matrix[j, i] * Coefficients[i];
-            }
-
-            // Backward substitution
-            Coefficients[Order] /= Matrix[Order, Order];
-            for (var i = Order - 1; i >= 0; i--)
-            {
-                for (var j = i + 1; j <= Order; j++)
-                    Coefficients[i] = Coefficients[i] - Matrix[i, j] * Coefficients[j];
-                Coefficients[i] /= Matrix[i, i];
-            }
-
-            // Predictor calculations
-            for (var i = 1; i < PredictionCoefficients.Length; i++)
-                PredictionCoefficients[i] = 0.0;
-            PredictionCoefficients[0] = 1.0;
-            for (var i = 0; i <= Order; i++)
-                Matrix[0, i] = 1.0;
-            arg = 0.0;
-            for (var i = 0; i <= Order; i++)
-            {
-                arg += IntegrationStates[i].Delta;
-                arg1 = 1.0;
-                for (var j = 1; j <= Order; j++)
-                {
-                    arg1 *= arg / delta;
-                    Matrix[j, i] = arg1;
-                }
-            }
-
-            // LU decomposition
-            for (var i = 0; i <= Order; i++)
-            {
-                for (var j = i + 1; j <= Order; j++)
-                {
-                    Matrix[j, i] /= Matrix[i, i];
-                    for (var k = i + 1; k <= Order; k++)
-                        Matrix[j, k] -= Matrix[j, i] * Matrix[i, k];
-                }
-            }
-
-            // Forward substitution
-            for (var i = 0; i <= Order; i++)
-            {
-                for (var j = i + 1; j <= Order; j++)
-                    PredictionCoefficients[j] -= Matrix[j, i] * PredictionCoefficients[i];
-            }
-
-            // Backward substitution
-            PredictionCoefficients[Order] /= Matrix[Order, Order];
-            for (var i = Order - 1; i >= 0; i--)
-            {
-                for (var j = i + 1; j <= Order; j++)
-                    PredictionCoefficients[i] -= Matrix[i, j] * PredictionCoefficients[j];
-                PredictionCoefficients[i] /= Matrix[i, i];
-            }
+            Solver.Factor();
+            Solver.Solve(PredictionCoefficients);
 
             // Store the derivative w.r.t. the current timestep
-            Slope = Coefficients[0];
+            Slope = Coefficients[1];
         }
 
         /// <summary>

@@ -31,5 +31,11 @@ namespace SpiceSharp.Algebra
         /// Resets all elements in the matrix.
         /// </summary>
         void ResetMatrix();
+
+        /// <summary>
+        /// Resizes the matrix.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        void Resize(int newSize);
     }
 }

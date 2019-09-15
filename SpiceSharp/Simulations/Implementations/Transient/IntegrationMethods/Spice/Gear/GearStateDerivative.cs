@@ -86,7 +86,7 @@ namespace SpiceSharp.IntegrationMethods
                 var current = _states[0].State;
                 current[derivativeIndex] = 0.0;
                 for (var i = 0; i <= _method.Order; i++)
-                    current[derivativeIndex] += ag[i] * _states[i].State[_index];
+                    current[derivativeIndex] += ag[i + 1] * _states[i].State[_index];
             }
 
             /// <summary>
