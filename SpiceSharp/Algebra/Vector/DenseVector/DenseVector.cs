@@ -15,6 +15,9 @@ namespace SpiceSharp.Algebra
     /// </remarks>
     public partial class DenseVector<T> : IPermutableVector<T>, IFormattable where T : IFormattable
     {
+        private const float ExpansionFactor = 1.5f;
+        private const int InitialSize = 4;
+
         /// <summary>
         /// Occurs when two elements have swapped.
         /// </summary>
@@ -26,7 +29,7 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The length.
         /// </value>
-        public int Length { get; }
+        public int Length { get; private set; }
 
         /// <summary>
         /// Gets or sets the value at the specified index.
@@ -45,8 +48,16 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Values
         /// </summary>
-        private readonly T[] _values;
-        private readonly TrashCanElement _trashCan;
+        private T[] _values;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DenseVector{T}"/> class.
+        /// </summary>
+        public DenseVector()
+        {
+            Length = 0;
+            _values = new T[InitialSize];
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DenseVector{T}"/> class.
@@ -57,8 +68,7 @@ namespace SpiceSharp.Algebra
             if (length < 0 && length > int.MaxValue - 1)
                 throw new ArgumentException("Invalid length {0}".FormatString(length));
             Length = length;
-            _values = new T[length];
-            _trashCan = new TrashCanElement();
+            _values = new T[length + 1];
         }
 
         /// <summary>
@@ -71,11 +81,11 @@ namespace SpiceSharp.Algebra
         /// <exception cref="ArgumentOutOfRangeException">index</exception>
         public T GetVectorValue(int index)
         {
-            if (index < 0 || index > Length)
+            if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            if (index == 0)
-                return _trashCan.Value;
-            return _values[index - 1];
+            if (index > Length)
+                return default;
+            return _values[index];
         }
 
 
@@ -86,42 +96,12 @@ namespace SpiceSharp.Algebra
         /// <param name="value">The value.</param>
         public void SetVectorValue(int index, T value)
         {
-            if (index < 0 || index > Length)
+            if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            if (index == 0)
-                _trashCan.Value = value;
-            else
-                _values[index - 1] = value;
+            if (index > Length)
+                Expand(index);
+            _values[index] = value;
         }
-
-        /// <summary>
-        /// Gets a vector element at the specified index. If
-        /// it doesn't exist, a new one is created.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">index</exception>
-        public IVectorElement<T> GetVectorElement(int index)
-        {
-            if (index < 0 || index > Length)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            if (index == 0)
-                return _trashCan;
-            return new Element(this, index);
-        }
-
-        /// <summary>
-        /// Finds a vector element at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element; otherwise <c>null</c>.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">index</exception>
-        public IVectorElement<T> FindVectorElement(int index)
-            => GetVectorElement(index);
 
         /// <summary>
         /// Swaps two elements in the vector.
@@ -130,10 +110,12 @@ namespace SpiceSharp.Algebra
         /// <param name="index2">The second index.</param>
         public void SwapElements(int index1, int index2)
         {
-            if (index1 < 0 || index1 > Length)
+            if (index1 < 0)
                 throw new ArgumentOutOfRangeException(nameof(index1));
-            if (index2 < 0 || index2 > Length)
+            if (index2 < 0)
                 throw new ArgumentOutOfRangeException(nameof(index2));
+            if (index1 > Length || index2 > Length)
+                Expand(Math.Max(index1, index2));
             if (index1 == index2)
                 return;
             var tmp = _values[index1];
@@ -148,7 +130,6 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public void ResetVector()
         {
-            _trashCan.Value = default;
             for (var i = 0; i < _values.Length; i++)
                 _values[i] = default;
         }
@@ -201,18 +182,22 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the first <see cref="IVectorElement{T}" /> in the vector.
-        /// </summary>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        public IVectorElement<T> GetFirstInVector()
-            => GetVectorElement(1);
-
-        /// <summary>
         /// Raises the <see cref="ElementsSwapped" /> event.
         /// </summary>
         /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
         protected virtual void OnElementsSwapped(PermutationEventArgs args) => ElementsSwapped?.Invoke(this, args);
+
+        /// <summary>
+        /// Expands the vector to the specified new size.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        private void Expand(int newSize)
+        {
+            Length = newSize;
+            if (newSize + 1 <= _values.Length)
+                return;
+            newSize = Math.Max(newSize, (int)(_values.Length * ExpansionFactor));
+            Array.Resize(ref _values, newSize + 1);
+        }
     }
 }

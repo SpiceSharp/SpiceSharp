@@ -11,7 +11,7 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The right-hand side vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract partial class LUSolver<M, V, T> : LinearSystem<M, V, T>, ISolver<T>
+    public abstract partial class SparseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISolver<T>
         where M : IPermutableMatrix<T>, ISparseMatrix<T>
         where V : IPermutableVector<T>, ISparseVector<T>
         where T : IFormattable, IEquatable<T>
@@ -42,15 +42,15 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the pivoting strategy being used.
         /// </summary>
-        public PivotStrategy<T> Strategy { get; }
+        public SparsePivotStrategy<T> Strategy { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LUSolver{M, V, T}"/> class.
+        /// Initializes a new instance of the <see cref="SparseLUSolver{M, V, T}"/> class.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="vector">The vector.</param>
         /// <param name="strategy">The pivoting strategy that needs to be used.</param>
-        protected LUSolver(M matrix, V vector, PivotStrategy<T> strategy)
+        protected SparseLUSolver(M matrix, V vector, SparsePivotStrategy<T> strategy)
             : base(matrix, vector)
         {
             NeedsReordering = true;
@@ -125,22 +125,104 @@ namespace SpiceSharp.Algebra
         public abstract void OrderAndFactor();
 
         /// <summary>
+        /// Finds the diagonal element at the specified row/column.
+        /// </summary>
+        /// <param name="index">The row/column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        public override IMatrixElement<T> FindDiagonalElement(int index)
+        {
+            if (index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (index > Size)
+                return null;
+            int row = Row[index];
+            int column = Column[index];
+            return Matrix.FindMatrixElement(row, column);
+        }
+
+        /// <summary>
+        /// Gets a pointer to the matrix element at the specified row and column. A
+        /// non-zero element is always guaranteed with this method. The matrix is expanded
+        /// if necessary.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        public override IMatrixElement<T> GetMatrixElement(int row, int column)
+        {
+            row = Row[row];
+            column = Column[column];
+            return Matrix.GetMatrixElement(row, column);
+        }
+
+        /// <summary>
+        /// Finds a pointer to the matrix element at the specified row and column.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element; otherwise <c>null</c>.
+        /// </returns>
+        public override IMatrixElement<T> FindMatrixElement(int row, int column)
+        {
+            if (row < 0)
+                throw new ArgumentOutOfRangeException(nameof(row));
+            if (column < 0)
+                throw new ArgumentOutOfRangeException(nameof(column));
+            if (row > Size || column > Size)
+                return null;
+            row = Row[row];
+            column = Column[column];
+            return Matrix.FindMatrixElement(row, column);
+        }
+
+        /// <summary>
+        /// Gets a vector element at the specified index. A non-zero element is
+        /// always guaranteed with this method. The vector is expanded if
+        /// necessary.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        public override IVectorElement<T> GetVectorElement(int index)
+        {
+            if (index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            index = Row[index];
+            return Vector.GetVectorElement(index);
+        }
+
+        /// <summary>
+        /// Finds a vector element at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The vector element; otherwise <c>null</c>.
+        /// </returns>
+        public override IVectorElement<T> FindVectorElement(int index)
+        {
+            index = Row[index];
+            return Vector.FindVectorElement(index);
+        }
+
+        /// <summary>
         /// Move a chosen pivot to the diagonal.
         /// </summary>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="step">The current step of factoring.</param>
-        public void MovePivot(ISparseMatrixElement<T> pivot, int step)
+        protected void MovePivot(ISparseMatrixElement<T> pivot, int step)
         {
             pivot.ThrowIfNull(nameof(pivot));
             Strategy.MovePivot(Matrix, Vector, pivot, step);
 
             // Move the pivot in the matrix
-            var row = pivot.Row;
-            var column = pivot.Column;
-            if (row != step)
-                SwapRows(row, step);
-            if (column != step)
-                SwapColumns(column, step);
+            SwapRows(pivot.Row, step);
+            SwapColumns(pivot.Column, step);
 
             // Update the pivoting strategy
             Strategy.Update(Matrix, pivot, step);
@@ -167,30 +249,6 @@ namespace SpiceSharp.Algebra
         {
             base.ResetMatrix();
             IsFactored = false;
-        }
-
-        /// <summary>
-        /// Maps an external row/column tuple to an internal one.
-        /// </summary>
-        /// <param name="indices">The external row/column indices.</param>
-        /// <returns>
-        /// The internal row/column indices.
-        /// </returns>
-        public Tuple<int, int> ExternalToInternal(Tuple<int, int> indices)
-        {
-            return Tuple.Create(Row[indices.Item1], Column[indices.Item2]);
-        }
-
-        /// <summary>
-        /// Maps an internal row/column tuple to an external one.
-        /// </summary>
-        /// <param name="indices">The internal row/column indices.</param>
-        /// <returns>
-        /// The external row/column indices.
-        /// </returns>
-        public Tuple<int, int> InternalToExternal(Tuple<int, int> indices)
-        {
-            return Tuple.Create(Row.Reverse(indices.Item1), Column.Reverse(indices.Item2));
         }
     }
 }

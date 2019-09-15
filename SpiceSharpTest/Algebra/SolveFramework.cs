@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharpTest.Sparse
+namespace SpiceSharpTest.Algebra
 {
     public class SolveFramework
     {
@@ -29,7 +29,7 @@ namespace SpiceSharpTest.Sparse
                 if (int.Parse(match.Groups["columns"].Value) != size)
                     throw new Exception("Matrix is not square");
 
-                result = new RealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(size), new SparseVector<double>(size));
+                result = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(size), new SparseVector<double>(size));
 
                 // All subsequent lines are of the format [row] [column] [value]
                 while (!sr.EndOfStream)
@@ -62,7 +62,7 @@ namespace SpiceSharpTest.Sparse
         /// <returns></returns>
         protected ISolver<double> ReadSpice3f5File(string matFilename, string vecFilename)
         {
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(), new SparseVector<double>());
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(), new SparseVector<double>());
 
             // Read the spice file
             string line;

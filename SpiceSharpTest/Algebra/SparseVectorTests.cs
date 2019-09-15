@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharpTest.Sparse
+namespace SpiceSharpTest.Algebra
 {
     [TestFixture]
-    public class SparseVectorTest
+    public class SparseVectorTests
     {
         [Test]
         public void When_SwappingVectorElements_Expect_Reference()

@@ -8,11 +8,15 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// A class that represents a system of linear equations.
     /// </summary>
+    /// <typeparam name="M">The matrix type.</typeparam>
+    /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="IElementMatrix{T}"/>
+    /// <seealso cref="IElementVector{T}"/>
     /// <seealso cref="IFormattable" />
     public abstract partial class LinearSystem<M, V, T> : IElementMatrix<T>, IElementVector<T>, IFormattable 
-        where M : IPermutableMatrix<T>, IElementMatrix<T>
-        where V : IPermutableVector<T>, IElementVector<T>
+        where M : IPermutableMatrix<T>
+        where V : IPermutableVector<T>
         where T : IFormattable
     {
         /// <summary>
@@ -21,7 +25,15 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The order.
         /// </value>
-        public int Size { get; private set; }
+        public int Size => Math.Max(Matrix.Size, Vector.Length);
+
+        /// <summary>
+        /// Gets the size of the matrix.
+        /// </summary>
+        /// <value>
+        /// The matrix size.
+        /// </value>
+        int IMatrix<T>.Size => Matrix.Size;
 
         /// <summary>
         /// Gets the length of the vector.
@@ -105,75 +117,49 @@ namespace SpiceSharp.Algebra
         {
             Matrix = matrix;
             Vector = vector;
-            Size = Math.Max(matrix.Size, vector.Length);
         }
 
         /// <summary>
-        /// Gets the diagonal element at the specified row/column.
+        /// Finds the diagonal element at the specified row/column.
         /// </summary>
         /// <param name="index">The row/column index.</param>
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public IMatrixElement<T> FindDiagonalElement(int index)
-        {
-            int row = Row[index];
-            int column = Column[index];
-            return Matrix.FindMatrixElement(row, column);
-        }
+        public abstract IMatrixElement<T> FindDiagonalElement(int index);
 
         /// <summary>
-        /// Gets a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, it is created.
+        /// Gets a pointer to the matrix element at the specified row and column. A
+        /// non-zero element is always guaranteed with this method. The matrix is expanded
+        /// if necessary.
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>
         /// The matrix element.
         /// </returns>
-        /// <exception cref="SparseException">Linear system is fixed</exception>
-        public IMatrixElement<T> GetMatrixElement(int row, int column)
-        {
-            row = Row[row];
-            column = Column[column];
-            Size = Math.Max(Math.Max(row, column), Size);
-            return Matrix.GetMatrixElement(row, column);
-        }
+        public abstract IMatrixElement<T> GetMatrixElement(int row, int column);
 
         /// <summary>
-        /// Finds a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, <c>null</c> is returned.
+        /// Finds a pointer to the matrix element at the specified row and column.
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>
         /// The matrix element; otherwise <c>null</c>.
         /// </returns>
-        public IMatrixElement<T> FindMatrixElement(int row, int column)
-        {
-            row = Row[row];
-            column = Column[column];
-            return Matrix.FindMatrixElement(row, column);
-        }
+        public abstract IMatrixElement<T> FindMatrixElement(int row, int column);
 
         /// <summary>
-        /// Gets a vector element at the specified index. If
-        /// it doesn't exist, a new one is created.
+        /// Gets a vector element at the specified index. A non-zero element is
+        /// always guaranteed with this method. The vector is expanded if
+        /// necessary.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>
         /// The vector element.
         /// </returns>
-        /// <exception cref="SparseException">Linear system is fixed</exception>
-        public IVectorElement<T> GetVectorElement(int index)
-        {
-            if (Vector is IElementVector<T> v)
-            {
-                index = Row[index];
-                return v.GetVectorElement(index);
-            }
-            return new ProxyVectorElement(this, index);
-        }
+        public abstract IVectorElement<T> GetVectorElement(int index);
 
         /// <summary>
         /// Finds a vector element at the specified index.
@@ -182,24 +168,13 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element; otherwise <c>null</c>.
         /// </returns>
-        public IVectorElement<T> FindVectorElement(int index)
-        {
-            if (Vector is IElementVector<T> v)
-            {
-                index = Row[index];
-                return v.FindVectorElement(index);
-            }
-            return new ProxyVectorElement(this, index);
-        }
+        public abstract IVectorElement<T> FindVectorElement(int index);
 
         /// <summary>
         /// Copies the contents of the vector to another one.
         /// </summary>
         /// <param name="target">The target vector.</param>
-        void IVector<T>.CopyTo(IVector<T> target)
-        {
-            Vector.CopyTo(target);
-        }
+        void IVector<T>.CopyTo(IVector<T> target) => Vector.CopyTo(target);
 
         /// <summary>
         /// Swap two (internal) rows in the linear system. This method keeps
@@ -245,6 +220,30 @@ namespace SpiceSharp.Algebra
         public virtual void ResetVector() => Vector.ResetVector();
 
         /// <summary>
+        /// Maps an external row/column tuple to an internal one.
+        /// </summary>
+        /// <param name="indices">The external row/column indices.</param>
+        /// <returns>
+        /// The internal row/column indices.
+        /// </returns>
+        public Tuple<int, int> ExternalToInternal(Tuple<int, int> indices)
+        {
+            return Tuple.Create(Row[indices.Item1], Column[indices.Item2]);
+        }
+
+        /// <summary>
+        /// Maps an internal row/column tuple to an external one.
+        /// </summary>
+        /// <param name="indices">The internal row/column indices.</param>
+        /// <returns>
+        /// The external row/column indices.
+        /// </returns>
+        public Tuple<int, int> InternalToExternal(Tuple<int, int> indices)
+        {
+            return Tuple.Create(Row.Reverse(indices.Item1), Column.Reverse(indices.Item2));
+        }
+
+        /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
@@ -266,17 +265,15 @@ namespace SpiceSharp.Algebra
         public string ToString(string format, IFormatProvider formatProvider)
         {
             StringBuilder sb = new StringBuilder();
-            for (var r = 1; r < Size; r++)
+            for (var r = 1; r <= Size; r++)
             {
-                var row = Row[r];
                 sb.Append("[ ");
-                for (var c = 1; c < Size; c++)
+                for (var c = 1; c <= Size; c++)
                 {
-                    var column = Column[c];
-                    sb.Append(Matrix[row, column].ToString(format, formatProvider));
+                    sb.Append(this[r, c].ToString(format, formatProvider));
                     sb.Append(" ");
                 }
-                sb.Append(Vector[row].ToString(format, formatProvider));
+                sb.Append(this[r].ToString(format, formatProvider));
                 sb.Append(" ]");
                 sb.Append(Environment.NewLine);
             }

@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace SpiceSharp.Algebra
 {
-    public abstract partial class LinearSystem<M, V, T>
+    public abstract partial class DenseLUSolver<M, V, T>
     {
         /// <summary>
-        /// A matrix element that can be returned by <see cref="LinearSystem{T}"/>.
+        /// A <see cref="IMatrixElement{T}"/> returned by a <see cref="DenseLUSolver{M, V, T}"/>.
         /// </summary>
-        /// <seealso cref="IElementMatrix{T}" />
-        /// <seealso cref="IElementVector{T}" />
-        /// <seealso cref="IFormattable" />
-        protected class ProxyMatrixElement : IMatrixElement<T>
+        /// <seealso cref="SpiceSharp.Algebra.LinearSystem{M, V, T}" />
+        protected class MatrixElement : IMatrixElement<T>
         {
             /// <summary>
             /// Gets or sets the value of the matrix element.
@@ -20,8 +20,8 @@ namespace SpiceSharp.Algebra
             /// </value>
             public T Value
             {
-                get => _parent[Row, Column];
-                set => _parent[Row, Column] = value;
+                get => _parent.Matrix[Row, Column];
+                set => _parent.Matrix[Row, Column] = value;
             }
 
             /// <summary>
@@ -30,7 +30,7 @@ namespace SpiceSharp.Algebra
             /// <value>
             /// The row.
             /// </value>
-            public int Row { get; }
+            public int Row => _parent.Row[_row];
 
             /// <summary>
             /// Gets the column.
@@ -38,21 +38,22 @@ namespace SpiceSharp.Algebra
             /// <value>
             /// The column.
             /// </value>
-            public int Column { get; }
+            public int Column => _parent.Column[_column];
 
-            private LinearSystem<M, V, T> _parent;
+            private DenseLUSolver<M, V, T> _parent;
+            private int _row, _column;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ProxyMatrixElement"/> class.
+            /// Initializes a new instance of the <see cref="MatrixElement"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
             /// <param name="row">The row.</param>
             /// <param name="column">The column.</param>
-            public ProxyMatrixElement(LinearSystem<M, V, T> parent, int row, int column)
+            public MatrixElement(DenseLUSolver<M, V, T> parent, int row, int column)
             {
-                _parent = parent;
-                Row = row;
-                Column = column;
+                _parent = parent.ThrowIfNull(nameof(parent));
+                _row = row;
+                _column = column;
             }
         }
     }

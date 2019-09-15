@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharpTest.Sparse
+namespace SpiceSharpTest.Algebra
 {
     [TestFixture]
-    public class SparseMatrixTest
+    public class SparseMatrixTests
     {
         [Test]
         public void When_BuildingMatrix_Expect_CorrectLinks()

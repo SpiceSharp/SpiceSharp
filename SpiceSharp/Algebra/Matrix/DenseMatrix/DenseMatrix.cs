@@ -10,7 +10,11 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base value type.</typeparam>
     public partial class DenseMatrix<T> : IPermutableMatrix<T> where T : IFormattable
     {
-        // TODO: Need to update created elements for permutations.
+        /// <summary>
+        /// Constants
+        /// </summary>
+        private const int InitialSize = 4;
+        private const float ExpansionFactor = 1.25f; // 1.25^2 approx. 1.55
 
         /// <summary>
         /// Occurs when two rows are swapped.
@@ -33,8 +37,9 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly T[] _array;
-        private TrashCanElement _trashCan;
+        private T[] _array;
+        private T _trashCan;
+        private int _allocatedSize;
 
         /// <summary>
         /// Gets or sets the value with the specified row.
@@ -54,12 +59,24 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Initializes a new instance of the <see cref="DenseMatrix{T}"/> class.
         /// </summary>
+        public DenseMatrix()
+        {
+            Size = 0;
+            _allocatedSize = InitialSize;
+            _array = new T[_allocatedSize * _allocatedSize];
+            _trashCan = default;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DenseMatrix{T}"/> class.
+        /// </summary>
         /// <param name="size">The matrix size.</param>
         public DenseMatrix(int size)
         {
             Size = size;
-            _array = new T[size * size];
-            _trashCan = new TrashCanElement(this);
+            _allocatedSize = Math.Max(InitialSize, size);
+            _array = new T[_allocatedSize * _allocatedSize];
+            _trashCan = default;
         }
 
         /// <summary>
@@ -72,15 +89,17 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public T GetMatrixValue(int row, int column)
         {
-            if (row < 0 || row > Size)
+            if (row < 0)
                 throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0 || column > Size)
+            if (column < 0)
                 throw new ArgumentOutOfRangeException(nameof(column));
             if (row == 0 || column == 0)
-                return _trashCan.Value;
+                return _trashCan;
+            if (row > Size || column > Size)
+                return default;
             row--;
             column--;
-            return _array[row * Size + column];
+            return _array[row * _allocatedSize + column];
         }
 
         /// <summary>
@@ -91,61 +110,21 @@ namespace SpiceSharp.Algebra
         /// <param name="value">The value.</param>
         public void SetMatrixValue(int row, int column, T value)
         {
-            if (row < 0 || row > Size)
+            if (row < 0)
                 throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0 || column > Size)
+            if (column < 0)
                 throw new ArgumentOutOfRangeException(nameof(column));
             if (row == 0 || column == 0)
-                _trashCan.Value = value;
+                _trashCan = value;
             else
             {
+                if (value != default && (row > Size || column > Size))
+                    ExpandMatrix(Math.Max(row, column));
                 row--;
                 column--;
-                _array[row * Size + column] = value;
+                _array[row * _allocatedSize + column] = value;
             }
         }
-
-        /// <summary>
-        /// Gets a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, it is created.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public IMatrixElement<T> GetMatrixElement(int row, int column)
-        {
-            if (row < 0 || row > Size)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0 || column > Size)
-                throw new ArgumentOutOfRangeException(nameof(column));
-            if (row == 0 || column == 0)
-                return _trashCan;
-            return new Element(this, row, column);
-        }
-
-        /// <summary>
-        /// Finds a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, <c>null</c> is returned.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element; otherwise <c>null</c>.
-        /// </returns>
-        public IMatrixElement<T> FindMatrixElement(int row, int column)
-            => GetMatrixElement(row, column);
-
-        /// <summary>
-        /// Gets the diagonal element at the specified row/column.
-        /// </summary>
-        /// <param name="index">The row/column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public IMatrixElement<T> FindDiagonalElement(int index)
-            => GetMatrixElement(index, index);
 
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
@@ -174,7 +153,7 @@ namespace SpiceSharp.Algebra
                 displayData[r - 1] = new string[Size];
                 for (var c = 1; c <= Size; c++)
                 {
-                    displayData[r - 1][c - 1] = _array[(r - 1) * Size + c - 1].ToString(format, formatProvider);
+                    displayData[r - 1][c - 1] = _array[(r - 1) * _allocatedSize + c - 1].ToString(format, formatProvider);
                     columnWidths[c - 1] = Math.Max(columnWidths[c - 1], displayData[r - 1][c - 1].Length);
                 }
             }
@@ -210,9 +189,9 @@ namespace SpiceSharp.Algebra
             if (row1 == row2)
                 return;
 
-            var offset1 = (row1 - 1) * Size;
-            var offset2 = (row2 - 1) * Size;
-            for (var i = 1; i <= Size; i++)
+            var offset1 = (row1 - 1) * _allocatedSize;
+            var offset2 = (row2 - 1) * _allocatedSize;
+            for (var i = 0; i < Size; i++)
             {
                 var tmp = _array[offset1 + i];
                 _array[offset1 + i] = _array[offset2 + i];
@@ -236,7 +215,9 @@ namespace SpiceSharp.Algebra
             if (column1 == column2)
                 return;
 
-            for (var i = 0; i < Size * Size; i += Size)
+            column1--;
+            column2--;
+            for (var i = 0; i < _allocatedSize * _allocatedSize; i += _allocatedSize)
             {
                 var tmp = _array[column1 + i];
                 _array[column1 + i] = _array[column2 + i];
@@ -247,52 +228,33 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the first <see cref="IMatrixElement{T}" /> in the specified row.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public IMatrixElement<T> GetFirstInRow(int row)
-            => GetMatrixElement(row, 1);
-
-        /// <summary>
-        /// Gets the last <see cref="IMatrixElement{T}" /> in the specified row.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public IMatrixElement<T> GetLastInRow(int row)
-            => GetMatrixElement(row, Size);
-
-        /// <summary>
-        /// Gets the first <see cref="IMatrixElement{T}" /> in the specified column.
-        /// </summary>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public IMatrixElement<T> GetFirstInColumn(int column)
-            => GetMatrixElement(1, column);
-
-        /// <summary>
-        /// Gets the last <see cref="IMatrixElement{T}" /> in the specified column.
-        /// </summary>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public IMatrixElement<T> GetLastInColumn(int column)
-            => GetMatrixElement(Size, column);
-
-        /// <summary>
         /// Resets all elements in the matrix.
         /// </summary>
         public void ResetMatrix()
         {
             for (var i = 0; i < _array.Length; i++)
                 _array[i] = default;
+        }
+
+        /// <summary>
+        /// Expands the matrix.
+        /// </summary>
+        /// <param name="newSize">The new matrix size.</param>
+        private void ExpandMatrix(int newSize)
+        {
+            var oldSize = Size;
+            Size = newSize;
+            if (newSize <= _allocatedSize)
+                return;
+            newSize = Math.Max(newSize, (int)(_allocatedSize * ExpansionFactor));
+
+            // Create a new array and copy its contents
+            var nArray = new T[newSize * newSize];
+            for (var r = 0; r < oldSize; r++)
+                for (var c = 0; c < oldSize; c++)
+                    nArray[r * newSize + c] = _array[r * _allocatedSize + c];
+            _array = nArray;
+            _allocatedSize = newSize;
         }
 
         /// <summary>

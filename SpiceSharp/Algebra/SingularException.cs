@@ -5,8 +5,8 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Exception thrown when a matrix is singular.
     /// </summary>
-    /// <seealso cref="SparseException" />
-    public class SingularException : SparseException
+    /// <seealso cref="AlgebraException" />
+    public class SingularException : AlgebraException
     {
         /// <summary>
         /// Gets the index where the first zero-diagonal element was found.

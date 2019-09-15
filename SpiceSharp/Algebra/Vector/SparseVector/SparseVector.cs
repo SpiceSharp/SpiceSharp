@@ -65,7 +65,7 @@ namespace SpiceSharp.Algebra
         public SparseVector(int length)
         {
             if (length < 0)
-                throw new SparseException("Invalid length");
+                throw new AlgebraException("Invalid length");
             Length = length;
             _trashCan = new Element(0);
         }
@@ -232,7 +232,7 @@ namespace SpiceSharp.Algebra
         public void SwapElements(int index1, int index2)
         {
             if (index1 < 0 || index2 < 0)
-                throw new SparseException("Invalid indices {0} and {1}".FormatString(index1, index2));
+                throw new AlgebraException("Invalid indices {0} and {1}".FormatString(index1, index2));
             if (index1 == index2)
                 return;
             if (index2 < index1)

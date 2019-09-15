@@ -3,20 +3,24 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// A pivot strategy used by a <see cref="LUSolver{M,V,T}" />
+    /// A pivot strategy used by a <see cref="SparseLUSolver{M, V, T}" />
     /// </summary>
-    /// <typeparam name="T">The base value type</typeparam>
-    public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>
+    /// <typeparam name="T">The base value type.</typeparam>
+    public abstract class SparsePivotStrategy<T> where T : IFormattable
     {
         /// <summary>
-        /// Gets or sets the relative threshold for choosing a pivot.
+        /// Gets the magnitude method.
         /// </summary>
-        public double RelativePivotThreshold { get; set; } = 1e-3;
+        public Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
-        /// Gets or sets the absolute threshold for choosing a pivot.
+        /// Initializes a new instance of the <see cref="SparsePivotStrategy{T}"/> class.
         /// </summary>
-        public double AbsolutePivotThreshold { get; set; } = 1e-13;
+        /// <param name="magnitude">The magnitude function.</param>
+        protected SparsePivotStrategy(Func<T, double> magnitude)
+        {
+            Magnitude = magnitude.ThrowIfNull(nameof(magnitude));
+        }
 
         /// <summary>
         /// This method will check whether or not a pivot element is valid or not.
@@ -32,8 +36,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
-        /// <param name="magnitude">The method used to determine the magnitude of an element.</param>
-        public abstract void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude);
+        public abstract void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep);
 
         /// <summary>
         /// Move the pivot to the diagonal for this elimination step.
@@ -63,7 +66,7 @@ namespace SpiceSharp.Algebra.Solve
         public abstract void CreateFillin(ISparseMatrix<T> matrix, ISparseMatrixElement<T> fillin);
 
         /// <summary>
-        /// Find a pivot in the matrix.
+        /// Finds a pivot in the matrix.
         /// </summary>
         /// <remarks>
         /// The pivot should be searched for in the submatrix towards the right and down of the

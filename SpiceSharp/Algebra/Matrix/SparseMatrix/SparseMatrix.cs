@@ -440,7 +440,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Expand the matrix.
+        /// Expands the matrix.
         /// </summary>
         /// <param name="newSize">The new matrix size.</param>
         private void ExpandMatrix(int newSize)

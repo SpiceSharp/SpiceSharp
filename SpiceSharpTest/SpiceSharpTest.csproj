@@ -52,6 +52,10 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algebra\DenseFactorTests.cs" />
+    <Compile Include="Algebra\DenseMatrixTests.cs" />
+    <Compile Include="Algebra\DenseSolverTests.cs" />
+    <Compile Include="Algebra\DenseVectorTests.cs" />
     <Compile Include="BasicExampleTests.cs" />
     <Compile Include="Circuits\CircuitTests.cs" />
     <Compile Include="Circuits\ValidatorTests.cs" />
@@ -75,9 +79,9 @@
     <Compile Include="Models\Semiconductors\JFET\JFETTests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Tests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Tests.cs" />
-    <Compile Include="Algebra\NewSparseMatrixTest.cs" />
-    <Compile Include="Algebra\NewSparseSolveTest.cs" />
-    <Compile Include="Algebra\NewSparseVectorTest.cs" />
+    <Compile Include="Algebra\SparseMatrixTests.cs" />
+    <Compile Include="Algebra\SparseSolverTests.cs" />
+    <Compile Include="Algebra\SparseVectorTests.cs" />
     <Compile Include="Algebra\SolveFramework.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Tests.cs" />
     <Compile Include="Models\SubcircuitTests.cs" />
@@ -88,7 +92,7 @@
     <Compile Include="Models\Voltagesources\VSRC\VoltageSourceTests.cs" />
     <Compile Include="ParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Algebra\SparseFactorTest.cs" />
+    <Compile Include="Algebra\SparseFactorTests.cs" />
     <Compile Include="Simulations\ConcurrentSimulationsTests.cs" />
     <Compile Include="Simulations\DCTests.cs" />
     <Compile Include="Simulations\TransientTests.cs" />

@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public ComplexSimulationState()
         {
-            _solver = new ComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
+            _solver = new SparseComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
                 new SparseMatrix<Complex>(),
                 new SparseVector<Complex>());
         }

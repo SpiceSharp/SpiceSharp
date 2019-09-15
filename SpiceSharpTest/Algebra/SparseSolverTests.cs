@@ -6,10 +6,10 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Algebra.Solve;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Sparse
+namespace SpiceSharpTest.Algebra
 {
     [TestFixture]
-    public class SparseSolveTest : SolveFramework
+    public class SparseSolverTests : SolveFramework
     {
         [Test]
         public void When_BigMatrix_Expect_NoException()
@@ -42,7 +42,7 @@ namespace SpiceSharpTest.Sparse
         public void When_SingletonPivoting_Expect_NoException()
         {
             // Build the solver with only the singleton pivoting
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>()
                 );
@@ -78,7 +78,7 @@ namespace SpiceSharpTest.Sparse
         public void When_QuickDiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>()
                 );
@@ -114,7 +114,7 @@ namespace SpiceSharpTest.Sparse
         public void When_DiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>()
                 );
@@ -150,7 +150,7 @@ namespace SpiceSharpTest.Sparse
         public void When_EntireMatrixPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>()
                 );
@@ -211,7 +211,7 @@ namespace SpiceSharpTest.Sparse
             };
 
             // build the matrix
-            var solver = new ComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
+            var solver = new SparseComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
                 new SparseMatrix<Complex>(),
                 new SparseVector<Complex>()
                 );

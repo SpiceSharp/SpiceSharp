@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Attributes;
+using System;
 using System.Collections.ObjectModel;
 
 namespace SpiceSharp.Algebra.Solve
@@ -7,9 +8,21 @@ namespace SpiceSharp.Algebra.Solve
     /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.Solve.PivotStrategy{T}" />
-    public class Markowitz<T> : PivotStrategy<T> where T : IFormattable, IEquatable<T>
+    /// <seealso cref="SpiceSharp.Algebra.Solve.SparsePivotStrategy{T}" />
+    public class Markowitz<T> : SparsePivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
+        /// <summary>
+        /// Gets or sets the relative threshold for choosing a pivot.
+        /// </summary>
+        [ParameterName("relpiv"), ParameterInfo("The relative threshold for validating pivots")]
+        public double RelativePivotThreshold { get; set; } = 1e-3;
+
+        /// <summary>
+        /// Gets or sets the absolute threshold for choosing a pivot.
+        /// </summary>
+        [ParameterName("abspiv"), ParameterInfo("The absolute threshold for validating pivots")]
+        public double AbsolutePivotThreshold { get; set; } = 1e-13;
+
         /// <summary>
         /// Markowitz numbers
         /// </summary>
@@ -44,11 +57,6 @@ namespace SpiceSharp.Algebra.Solve
         public int Singletons { get; private set; }
 
         /// <summary>
-        /// Gets the magnitude method.
-        /// </summary>
-        public Func<T, double> Magnitude { get; private set; }
-
-        /// <summary>
         /// Gets the strategies used for finding a pivot.
         /// </summary>
         public Collection<MarkowitzSearchStrategy<T>> Strategies { get; } = new Collection<MarkowitzSearchStrategy<T>>();
@@ -56,7 +64,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Initializes a new instance of the <see cref="Markowitz{T}"/> class.
         /// </summary>
-        public Markowitz()
+        public Markowitz(Func<T, double> magnitude)
+            : base(magnitude)
         {
             // Register default strategies
             Strategies.Add(new MarkowitzSingleton<T>());
@@ -186,13 +195,10 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
-        /// <param name="magnitude">The method used to determine the magnitude of an element.</param>
-        public override void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep, Func<T, double> magnitude)
+        public override void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
             rhs.ThrowIfNull(nameof(rhs));
-
-            Magnitude = magnitude;
 
             // Initialize Markowitz row, column and product vectors if necessary
             if (_markowitzRow == null || _markowitzRow.Length != matrix.Size + 1)

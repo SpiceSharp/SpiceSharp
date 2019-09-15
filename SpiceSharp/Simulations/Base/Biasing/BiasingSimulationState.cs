@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public BiasingSimulationState()
         {
-            Solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            Solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>());
         }

@@ -4,10 +4,10 @@ using System;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharpTest.Sparse
+namespace SpiceSharpTest.Algebra
 {
     [TestFixture]
-    public class SparseFactorTest
+    public class SparseFactorTests
     {
         [Test]
         public void When_Factoring_Expect_Reference()
@@ -26,7 +26,7 @@ namespace SpiceSharpTest.Sparse
             };
 
             // Create matrix
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>()
                 );
@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Sparse
             // Factor
             solver.Factor();
 
-            // compare
+            // Compare
             for (var r = 0; r < matrixElements.Length; r++)
                 for (var c = 0; c < matrixElements[r].Length; c++)
                     Assert.AreEqual(expected[r][c], solver.GetMatrixElement(r + 1, c + 1).Value, 1e-12);
@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Sparse
         [Test]
         public void When_OrderAndFactoring_Expect_Reference()
         {
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(),
                 new SparseVector<double>()
                 );
@@ -82,7 +82,7 @@ namespace SpiceSharpTest.Sparse
         [Test]
         public void When_OrderAndFactoring2_Expect_Reference()
         {
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(5),
                 new SparseVector<double>(5)
                 );
@@ -117,7 +117,7 @@ namespace SpiceSharpTest.Sparse
         [Test]
         public void When_Preorder_Expect_Reference()
         {
-            var solver = new RealSolver<SparseMatrix<double>, SparseVector<double>>(
+            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
                 new SparseMatrix<double>(5),
                 new SparseVector<double>(5)
                 );
