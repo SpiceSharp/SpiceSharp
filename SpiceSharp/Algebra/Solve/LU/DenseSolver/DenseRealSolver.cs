@@ -38,14 +38,33 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Factors the matrix.
         /// </summary>
-        /// <returns>True if factoring was successful.</returns>
-        public override bool Factor()
+        /// <returns>
+        /// <c>true</c> if the matrix was succesfully factored; otherwise <c>false</c>.
+        /// </returns>
+        public override bool Factor() => Factor(Size);
+
+        /// <summary>
+        /// Factors the matrix for a number of steps.
+        /// </summary>
+        /// <remarks>
+        /// This method can be used as an optimization. Instead of reallocating a new matrix for varying
+        /// sizes, you can use this method to only factorize part of the matrix inexpensively. Beware,
+        /// when you have used <see cref="OrderAndFactor"/> the first steps may not coincide with the
+        /// first variables in the vector!
+        /// </remarks>
+        /// <param name="steps">The number of elimination steps.</param>
+        /// <returns>
+        /// <c>true</c> if the matrix was succesfully factored; otherwise <c>false</c>.
+        /// </returns>
+        public bool Factor(int steps)
         {
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
+            if (steps > Size)
+                throw new AlgebraException("Cannot factorize more than {0} steps".FormatString(Size));
 
             // Start factorization
-            for (var step = 1; step <= Size; step++)
+            for (var step = 1; step <= steps; step++)
             {
                 // Check for a singular matrix
                 if (Matrix[step, step].Equals(0.0))
@@ -57,10 +76,10 @@ namespace SpiceSharp.Algebra
                 Matrix[step, step] = diagonal;
 
                 // Doolittle algorithm
-                for (var r = step + 1; r <= Size; r++)
+                for (var r = step + 1; r <= steps; r++)
                 {
                     Matrix[r, step] *= diagonal;
-                    for (var c = step + 1; c <= Size; c++)
+                    for (var c = step + 1; c <= steps; c++)
                         Matrix[r, c] -= Matrix[r, step] * Matrix[step, c];
                 }
             }
@@ -74,17 +93,25 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
         public override void Solve(IVector<double> solution)
+            => Solve(solution, Size);
+
+        /// <summary>
+        /// Solves the system of equations with a matrix that was factored for a number of steps.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="steps">The steps.</param>
+        public void Solve(IVector<double> solution, int steps)
         {
             solution.ThrowIfNull(nameof(solution));
+            if (steps > Size || steps > solution.Length)
+                throw new AlgebraException("Cannot solve for more than {0} elements".FormatString(Math.Max(Size, solution.Length)));
             if (!IsFactored)
                 throw new AlgebraException("Solver is not yet factored");
-
-            // Scramble
-            for (var i = 1; i <= Size; i++)
-                _intermediate[i] = Vector[i];
+            if (solution.Length != Size)
+                throw new AlgebraException("Solution vector and solver order does not match");
 
             // Forward substitution
-            for (var i = 1; i <= Matrix.Size; i++)
+            for (var i = 1; i <= steps; i++)
             {
                 _intermediate[i] = Vector[i];
                 for (var j = 1; j < i; j++)
@@ -92,10 +119,10 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            _intermediate[Size] *= Matrix[Size, Size];
-            for (var i = Size - 1; i >= 1; i--)
+            _intermediate[steps] *= Matrix[steps, steps];
+            for (var i = steps - 1; i >= 1; i--)
             {
-                for (var j = i + 1; j <= Size; j++)
+                for (var j = i + 1; j <= steps; j++)
                     _intermediate[i] -= Matrix[i, j] * _intermediate[j];
                 _intermediate[i] *= Matrix[i, i];
             }
@@ -103,9 +130,52 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
+        /// <summary>
+        /// Solves the transposed.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
         public override void SolveTransposed(IVector<double> solution)
+            => SolveTransposed(solution, Size);
+
+        /// <summary>
+        /// Solves the transposed.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="steps">The steps.</param>
+        public void SolveTransposed(IVector<double> solution, int steps)
         {
-            throw new NotImplementedException();
+            solution.ThrowIfNull(nameof(solution));
+            if (steps > Size || steps > solution.Length)
+                throw new AlgebraException("Cannot solve for more than {0} elements".FormatString(Math.Max(Size, solution.Length)));
+            if (!IsFactored)
+                throw new AlgebraException("Solver is not yet factored");
+            if (solution.Length != Size)
+                throw new AlgebraException("Solution vector and solver order does not match");
+
+            // Scramble
+            for (var i = 1; i <= steps; i++)
+            {
+                var newIndex = Column[Row.Reverse(i)];
+                _intermediate[newIndex] = Vector[i];
+            }
+
+            // Forward substitution
+            for (var i = 1; i <= steps; i++)
+            {
+                for (var j = 1; j < i; j++)
+                    _intermediate[i] -= Matrix[i, j] * Vector[j];
+            }
+
+            // Backward substitution
+            _intermediate[steps] *= Matrix[steps, steps];
+            for (var i = steps - 1; i >= 1; i--)
+            {
+                for (var j = i + 1; j <= steps; j++)
+                    _intermediate[i] -= Matrix[i, j] * _intermediate[j];
+                _intermediate[i] *= Matrix[i, i];
+            }
+
+            Row.Unscramble(_intermediate, solution);
         }
 
         /// <summary>

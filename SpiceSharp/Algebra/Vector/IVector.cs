@@ -36,11 +36,5 @@ namespace SpiceSharp.Algebra
         /// Resets all elements in the vector.
         /// </summary>
         void ResetVector();
-
-        /// <summary>
-        /// Resizes the vector.
-        /// </summary>
-        /// <param name="newLength">The new length.</param>
-        void Resize(int newLength);
     }
 }

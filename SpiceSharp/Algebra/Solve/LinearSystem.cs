@@ -220,16 +220,6 @@ namespace SpiceSharp.Algebra
         public virtual void ResetVector() => Vector.ResetVector();
 
         /// <summary>
-        /// Resizes the linear system.
-        /// </summary>
-        /// <param name="newSize">The new size.</param>
-        public virtual void Resize(int newSize)
-        {
-            Matrix.Resize(newSize);
-            Vector.Resize(newSize);
-        }
-
-        /// <summary>
         /// Maps an external row/column tuple to an internal one.
         /// </summary>
         /// <param name="indices">The external row/column indices.</param>

@@ -199,26 +199,5 @@ namespace SpiceSharp.Algebra
             newSize = Math.Max(newSize, (int)(_values.Length * ExpansionFactor));
             Array.Resize(ref _values, newSize + 1);
         }
-
-        /// <summary>
-        /// Shrinks the specified new size.
-        /// </summary>
-        /// <param name="newSize">The new size.</param>
-        private void Shrink(int newSize)
-        {
-            Length = newSize;
-        }
-
-        /// <summary>
-        /// Resizes the vector.
-        /// </summary>
-        /// <param name="newLength">The new length.</param>
-        public void Resize(int newLength)
-        {
-            if (newLength > Length)
-                Expand(newLength);
-            else if (newLength < Length)
-                Shrink(newLength);
-        }
     }
 }

@@ -62,7 +62,7 @@ namespace SpiceSharp.Algebra
             element.Value = Inverse(element.Value);
 
             // Start factorization
-            for (var step = 2; step <= Matrix.Size; step++)
+            for (var step = 2; step <= Size; step++)
             {
                 // Scatter
                 element = Matrix.GetFirstInColumn(step);
@@ -78,14 +78,10 @@ namespace SpiceSharp.Algebra
                 {
                     element = Matrix.FindDiagonalElement(column.Row);
 
-                    // Mult = dest[row] / pivot
                     var mult = _dest[column.Row].Value * element.Value;
                     _dest[column.Row].Value = mult;
                     while ((element = element.Below) != null)
-                    {
-                        // dest[element.Row] -= mult * element
                         _dest[element.Row].Value -= mult * element.Value;
-                    }
                     column = column.Below;
                 }
 
@@ -127,7 +123,7 @@ namespace SpiceSharp.Algebra
                 _intermediate[index++] = 0.0;
 
             // Forward substitution
-            for (var i = 1; i <= Matrix.Size; i++)
+            for (var i = 1; i <= Size; i++)
             {
                 var temp = _intermediate[i];
 
@@ -142,7 +138,6 @@ namespace SpiceSharp.Algebra
                     var element = pivot.Below;
                     while (element != null)
                     {
-                        // intermediate[row] -= temp * element
                         _intermediate[element.Row] -= temp * element.Value;
                         element = element.Below;
                     }
@@ -150,7 +145,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (var i = Matrix.Size; i > 0; i--)
+            for (var i = Size; i > 0; i--)
             {
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
@@ -158,7 +153,6 @@ namespace SpiceSharp.Algebra
 
                 while (element != null)
                 {
-                    // temp -= element * intermediate[column]
                     temp -= element.Value * _intermediate[element.Column];
                     element = element.Right;
                 }

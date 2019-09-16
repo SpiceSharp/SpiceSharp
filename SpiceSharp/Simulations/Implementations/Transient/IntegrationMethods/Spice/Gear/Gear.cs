@@ -32,8 +32,8 @@ namespace SpiceSharp.IntegrationMethods
             : base(6)
         {
             Solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
-                new DenseMatrix<double>(8),
-                new DenseVector<double>(8)
+                new DenseMatrix<double>(7),
+                new DenseVector<double>(7)
                 );
         }
 
@@ -143,9 +143,6 @@ namespace SpiceSharp.IntegrationMethods
 
             // Set up the matrix
             int n = Order + 1;
-            Solver.Resize(n);
-            Coefficients.Resize(n);
-            PredictionCoefficients.Resize(n);
             for (var i = 1; i <= n; i++)
                 Solver[i] = 0.0;
             Solver[2] = -1 / delta;
@@ -165,8 +162,8 @@ namespace SpiceSharp.IntegrationMethods
                     Solver[j, i] = arg1;
                 }
             }
-            Solver.Factor();
-            Solver.Solve(Coefficients);
+            Solver.Factor(n);
+            Solver.Solve(Coefficients, n);
 
             // Predictor calculations
             for (var i = 2; i <= n; i++)
@@ -185,8 +182,8 @@ namespace SpiceSharp.IntegrationMethods
                     Solver[j, i] = arg1;
                 }
             }
-            Solver.Factor();
-            Solver.Solve(PredictionCoefficients);
+            Solver.Factor(n);
+            Solver.Solve(PredictionCoefficients, n);
 
             // Store the derivative w.r.t. the current timestep
             Slope = Coefficients[1];

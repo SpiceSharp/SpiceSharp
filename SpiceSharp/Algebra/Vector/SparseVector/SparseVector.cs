@@ -403,32 +403,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Resizes the vector.
-        /// </summary>
-        /// <param name="newLength">The new length.</param>
-        public void Resize(int newLength)
-        {
-            if (newLength > Length)
-            {
-                Length = newLength;
-            }
-            else if (newLength < Length)
-            {
-                var elt = _lastInVector;
-                while (elt != null && elt.Index > newLength)
-                {
-                    elt = elt.PreviousInVector;
-                    if (elt != null)
-                    {
-                        elt.NextInVector.PreviousInVector = null;
-                        elt.NextInVector = null;
-                    }
-                }
-                _lastInVector = elt;
-            }
-        }
-
-        /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>

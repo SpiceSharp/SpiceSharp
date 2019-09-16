@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
     /// <seealso cref="SpiceSharp.Algebra.IMatrix{T}" />
     /// <seealso cref="SpiceSharp.Algebra.IVector{T}" />
     /// <seealso cref="System.IFormattable" />
-    public abstract partial class DenseLUSolver<M, V, T> : LinearSystem<M, V, T>
+    public abstract partial class DenseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISolver<T>
         where M : IPermutableMatrix<T>
         where V : IPermutableVector<T>
         where T : IFormattable
@@ -107,15 +107,17 @@ namespace SpiceSharp.Algebra
         public abstract void Solve(IVector<T> solution);
 
         /// <summary>
-        /// Solves the transposed.
+        /// Solves the equations using the transposed Y-matrix.
         /// </summary>
         /// <param name="solution">The solution.</param>
         public abstract void SolveTransposed(IVector<T> solution);
 
         /// <summary>
-        /// Factors this instance.
+        /// Factors the matrix.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> if the matrix was succesfully factored; otherwise <c>false</c>.
+        /// </returns>
         public abstract bool Factor();
 
         /// <summary>

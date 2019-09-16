@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="SpiceSharp.Algebra.IElementMatrix{T}" />
     /// <seealso cref="SpiceSharp.Algebra.IElementVector{T}" />
-    public interface ISolver<T> : IElementMatrix<T>, IElementVector<T> where T : IFormattable, IEquatable<T>
+    public interface ISolver<T> : IElementMatrix<T>, IElementVector<T> where T : IFormattable
     {
         /// <summary>
         /// Preconditions the specified method.

@@ -258,37 +258,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Shrinks the matrix to the specified size.
-        /// </summary>
-        /// <param name="newSize">The new size.</param>
-        private void Shrink(int newSize)
-        {
-            // Let's only free resources if the size is drastically reduced
-            if (newSize > 10 && newSize < Size / 2)
-            {
-                var nArray = new T[newSize * newSize];
-                for (var r = 0; r < Size; r++)
-                    for (var c = 0; c < Size; c++)
-                        nArray[r * newSize + c] = _array[r * _allocatedSize + c];
-                _array = nArray;
-                _allocatedSize = newSize;
-            }
-            Size = newSize;
-        }
-
-        /// <summary>
-        /// Resizes the matrix.
-        /// </summary>
-        /// <param name="newSize">The new size.</param>
-        public void Resize(int newSize)
-        {
-            if (newSize > Size)
-                Expand(newSize);
-            else if (newSize < Size)
-                Shrink(newSize);
-        }
-
-        /// <summary>
         /// Raises the <see cref="RowsSwapped" /> event.
         /// </summary>
         /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>

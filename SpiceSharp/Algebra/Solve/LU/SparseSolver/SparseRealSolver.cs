@@ -203,7 +203,6 @@ namespace SpiceSharp.Algebra
                     var element = Matrix.FindDiagonalElement(i).Right;
                     while (element != null)
                     {
-                        // intermediate[col] -= temp * element
                         _intermediate[element.Column] -= temp * element.Value;
                         element = element.Right;
                     }
