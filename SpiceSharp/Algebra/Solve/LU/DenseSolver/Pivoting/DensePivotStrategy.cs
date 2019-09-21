@@ -19,6 +19,14 @@ namespace SpiceSharp.Algebra
         protected Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
+        /// Gets or sets the row/column limit for searching a pivot.
+        /// </summary>
+        /// <value>
+        /// The maximum row/column to search.
+        /// </value>
+        public int SearchLimit { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DensePivotStrategy{T}"/> class.
         /// </summary>
         /// <param name="magnitude">The magnitude.</param>

@@ -23,6 +23,7 @@ namespace SpiceSharp.Algebra.Solve
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
                 throw new ArgumentException("Invalid elimination step");
+            var limit = markowitz.SearchLimit;
 
             var minMarkowitzProduct = int.MaxValue;
             ISparseMatrixElement<T> chosen = null;
@@ -31,7 +32,7 @@ namespace SpiceSharp.Algebra.Solve
             for (var index = matrix.Size + 1; index > eliminationStep; index--)
             {
                 int i = index > matrix.Size ? eliminationStep : index; */
-            for (var i = eliminationStep; i <= matrix.Size; i++)
+            for (var i = eliminationStep; i <= limit; i++)
             {
                 // Skip diagonal elements with a Markowitz product worse than already found
                 var product = markowitz.Product(i);
@@ -79,7 +80,7 @@ namespace SpiceSharp.Algebra.Solve
                 // Find the biggest element above and below the pivot
                 var element = chosen.Below;
                 var largest = 0.0;
-                while (element != null)
+                while (element != null && element.Row <= limit)
                 {
                     largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                     element = element.Below;

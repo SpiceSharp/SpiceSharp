@@ -58,6 +58,8 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public bool Factor(int steps)
         {
+            OnBeforeFactor();
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             if (steps > Size)
@@ -70,6 +72,7 @@ namespace SpiceSharp.Algebra
                 if (Matrix[step, step].Equals(0.0))
                 {
                     IsFactored = false;
+                    OnAfterFactor();
                     return false;
                 }
                 var diagonal = 1.0 / Matrix[step, step];
@@ -78,13 +81,18 @@ namespace SpiceSharp.Algebra
                 // Doolittle algorithm
                 for (var r = step + 1; r <= steps; r++)
                 {
-                    Matrix[r, step] *= diagonal;
+                    var lead = Matrix[r, step];
+                    if (lead.Equals(0.0))
+                        continue;
+                    lead *= diagonal;
+                    Matrix[r, step] = lead;
                     for (var c = step + 1; c <= steps; c++)
-                        Matrix[r, c] -= Matrix[r, step] * Matrix[step, c];
+                        Matrix[r, c] -= lead * Matrix[step, c];
                 }
             }
 
             IsFactored = true;
+            OnAfterFactor();
             return true;
         }
 
@@ -110,6 +118,9 @@ namespace SpiceSharp.Algebra
             if (solution.Length != Size)
                 throw new AlgebraException("Solution vector and solver order does not match");
 
+            var ea = new SolveEventArgs<double>(solution);
+            OnBeforeSolve(ea);
+
             // Forward substitution
             for (var i = 1; i <= steps; i++)
             {
@@ -128,6 +139,8 @@ namespace SpiceSharp.Algebra
             }
 
             Column.Unscramble(_intermediate, solution);
+
+            OnAfterSolve(ea);
         }
 
         /// <summary>
@@ -151,6 +164,9 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Solver is not yet factored");
             if (solution.Length != Size)
                 throw new AlgebraException("Solution vector and solver order does not match");
+
+            var ea = new SolveEventArgs<double>(solution);
+            OnBeforeSolveTransposed(ea);
 
             // Scramble
             for (var i = 1; i <= steps; i++)
@@ -176,6 +192,8 @@ namespace SpiceSharp.Algebra
             }
 
             Row.Unscramble(_intermediate, solution);
+
+            OnAfterSolveTransposed(ea);
         }
 
         /// <summary>
@@ -183,6 +201,8 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public override void OrderAndFactor()
         {
+            OnBeforeOrderAndFactor();
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
 
@@ -205,6 +225,7 @@ namespace SpiceSharp.Algebra
                 if (!NeedsReordering)
                 {
                     IsFactored = true;
+                    OnAfterOrderAndFactor();
                     return;
                 }
             }
@@ -229,6 +250,7 @@ namespace SpiceSharp.Algebra
             // Flag the solver as factored
             IsFactored = true;
             NeedsReordering = false;
+            OnAfterOrderAndFactor();
         }
 
         /// <summary>

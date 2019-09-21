@@ -24,6 +24,7 @@ namespace SpiceSharp.Algebra.Solve
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
                 throw new ArgumentException("Invalid elimination step");
+            var limit = markowitz.SearchLimit;
 
             // No singletons left, so don't bother
             if (markowitz.Singletons == 0)
@@ -31,12 +32,12 @@ namespace SpiceSharp.Algebra.Solve
 
             // Find the first valid singleton we can use
             int singletons = 0, index;
-            for (var i = matrix.Size + 1; i >= eliminationStep; i--)
+            for (var i = limit + 1; i >= eliminationStep; i--)
             {
                 // First check the current pivot, else
                 // search from last to first as it tends to push the higher markowitz
                 // products downwards.
-                index = i > matrix.Size ? eliminationStep : i;
+                index = i > limit ? eliminationStep : i;
 
                 // Not a singleton, let's skip this one...
                 if (markowitz.Product(index) != 0)
@@ -94,7 +95,7 @@ namespace SpiceSharp.Algebra.Solve
                         element = element.Above;
                     }
                     element = chosen.Below;
-                    while (element != null)
+                    while (element != null && element.Row <= limit)
                     {
                         largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                         element = element.Below;

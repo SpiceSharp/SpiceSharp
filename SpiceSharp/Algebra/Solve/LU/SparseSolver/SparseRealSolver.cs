@@ -40,15 +40,17 @@ namespace SpiceSharp.Algebra
             : base(matrix, vector, strategy)
         {
         }
-        
+
         /// <summary>
-        /// Factor the matrix.
+        /// Factor the Y-matrix and Rhs-vector.
         /// </summary>
         /// <returns>
-        /// True if factoring was successful.
+        /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
         /// </returns>
         public override bool Factor()
         {
+            OnBeforeFactor();
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
             {
                 _intermediate = new double[Size + 1];
@@ -64,7 +66,7 @@ namespace SpiceSharp.Algebra
             element.Value = 1.0 / element.Value;
 
             // Start factorization
-            for (var step = 2; step <= Matrix.Size; step++)
+            for (var step = 2; step <= Order; step++)
             {
                 // Scatter
                 element = Matrix.GetFirstInColumn(step);
@@ -96,40 +98,45 @@ namespace SpiceSharp.Algebra
                 if (element == null || element.Value.Equals(0.0))
                 {
                     IsFactored = false;
+                    OnAfterFactor();
                     return false;
                 }
                 element.Value = 1.0 / element.Value;
             }
 
             IsFactored = true;
+            OnAfterFactor();
             return true;
         }
 
         /// <summary>
-        /// Solve the system of equations.
+        /// Solves the equations using the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
+        /// <param name="solution">The solution.</param>
         public override void Solve(IVector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new AlgebraException("Solver is not yet factored");
 
+            var ea = new SolveEventArgs<double>(solution);
+            OnBeforeSolve(ea);
+
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
             var index = 0;
-            while (rhsElement != null)
+            while (rhsElement != null && rhsElement.Index <= Order)
             {
                 while (index < rhsElement.Index)
                     _intermediate[index++] = 0.0;
                 _intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
-            while (index <= Size)
+            while (index <= Order)
                 _intermediate[index++] = 0.0;
 
             // Forward substitution
-            for (var i = 1; i <= Matrix.Size; i++)
+            for (var i = 1; i <= Order; i++)
             {
                 var temp = _intermediate[i];
 
@@ -142,7 +149,7 @@ namespace SpiceSharp.Algebra
                     temp *= pivot.Value;
                     _intermediate[i] = temp;
                     var element = pivot.Below;
-                    while (element != null)
+                    while (element != null && element.Row <= Order)
                     {
                         // intermediate[row] -= temp * element
                         _intermediate[element.Row] -= temp * element.Value;
@@ -152,13 +159,13 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (var i = Matrix.Size; i > 0; i--)
+            for (var i = Order; i > 0; i--)
             {
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Right;
 
-                while (element != null)
+                while (element != null && element.Column <= Order)
                 {
                     // temp -= element * intermediate[column]
                     temp -= element.Value * _intermediate[element.Column];
@@ -169,23 +176,28 @@ namespace SpiceSharp.Algebra
 
             // Unscramble
             Column.Unscramble(_intermediate, solution);
+
+            OnAfterSolve(ea);
         }
 
         /// <summary>
-        /// Solve the transposed problem.
+        /// Solves the equations using the transposed Y-matrix.
         /// </summary>
-        /// <param name="solution">The solution vector that will hold the solution to the transposed set of equations.</param>
+        /// <param name="solution">The solution.</param>
         public override void SolveTransposed(IVector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new AlgebraException("Solver is not yet factored");
 
+            var ea = new SolveEventArgs<double>(solution);
+            OnBeforeSolveTransposed(ea);
+
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
-            for (var i = 0; i <= Size; i++)
+            for (var i = 0; i <= Order; i++)
                 _intermediate[i] = 0.0;
-            while (rhsElement != null)
+            while (rhsElement != null && rhsElement.Index <= Order)
             {
                 var newIndex = Column[Row.Reverse(rhsElement.Index)];
                 _intermediate[newIndex] = rhsElement.Value;
@@ -193,7 +205,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Forward elimination
-            for (var i = 1; i <= Matrix.Size; i++)
+            for (var i = 1; i <= Order; i++)
             {
                 var temp = _intermediate[i];
 
@@ -201,7 +213,7 @@ namespace SpiceSharp.Algebra
                 if (!temp.Equals(0.0))
                 {
                     var element = Matrix.FindDiagonalElement(i).Right;
-                    while (element != null)
+                    while (element != null && element.Column <= Order)
                     {
                         _intermediate[element.Column] -= temp * element.Value;
                         element = element.Right;
@@ -210,32 +222,34 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (var i = Matrix.Size; i > 0; i--)
+            for (var i = Order; i > 0; i--)
             {
                 var temp = _intermediate[i];
 
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Below;
-                while (element != null)
+                while (element != null && element.Row <= Order)
                 {
-                    // temp -= intermediate[element.row] * element
                     temp -= _intermediate[element.Row] * element.Value;
                     element = element.Below;
                 }
 
-                // intermediate = temp / pivot
                 _intermediate[i] = temp * pivot.Value;
             }
 
             // Unscramble
             Row.Unscramble(_intermediate, solution);
+
+            OnAfterSolveTransposed(ea);
         }
 
         /// <summary>
-        /// Factor while reordering the matrix
+        /// Order and factor the Y-matrix and Rhs-vector.
         /// </summary>
         public override void OrderAndFactor()
         {
+            OnBeforeOrderAndFactor();
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
             {
                 _intermediate = new double[Size + 1];
@@ -246,7 +260,7 @@ namespace SpiceSharp.Algebra
             if (!NeedsReordering)
             {
                 // Matrix has been factored before and reordering is not required
-                for (step = 1; step <= Matrix.Size; step++)
+                for (step = 1; step <= Order; step++)
                 {
                     var pivot = Matrix.FindDiagonalElement(step);
                     if (Strategy.IsValidPivot(pivot))
@@ -262,6 +276,7 @@ namespace SpiceSharp.Algebra
                 if (!NeedsReordering)
                 {
                     IsFactored = true;
+                    OnAfterOrderAndFactor();
                     return;
                 }
             }
@@ -270,7 +285,7 @@ namespace SpiceSharp.Algebra
             Strategy.Setup(Matrix, Vector, step);
 
             // Perform reordering and factorization starting from where we stopped last time
-            for (; step <= Matrix.Size; step++)
+            for (; step <= Order; step++)
             {
                 var pivot = Strategy.FindPivot(Matrix, step);
                 if (pivot == null)
@@ -286,6 +301,8 @@ namespace SpiceSharp.Algebra
             // Flag the solver as factored
             IsFactored = true;
             NeedsReordering = false;
+
+            OnAfterOrderAndFactor();
         }
 
         /// <summary>

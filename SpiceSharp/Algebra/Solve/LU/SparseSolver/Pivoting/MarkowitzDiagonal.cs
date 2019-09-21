@@ -33,12 +33,13 @@ namespace SpiceSharp.Algebra.Solve
             ISparseMatrixElement<T> chosen = null;
             var ratioOfAccepted = 0.0;
             var ties = 0;
+            var limit = markowitz.SearchLimit;
 
             /* Used for debugging alongside Spice 3f5
             for (var index = matrix.Size + 1; index > eliminationStep; index--)
             {
                 var i = index > matrix.Size ? eliminationStep : index; */
-            for (var i = eliminationStep; i <= matrix.Size; i++)
+            for (var i = eliminationStep; i <= limit; i++)
             {
                 // Skip the diagonal if we already have a better one
                 if (markowitz.Product(i) > minMarkowitzProduct)
@@ -57,7 +58,7 @@ namespace SpiceSharp.Algebra.Solve
                 // Check that the pivot is eligible
                 var largest = 0.0;
                 var element = diagonal.Below;
-                while (element != null)
+                while (element != null && element.Row <= limit)
                 {
                     largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                     element = element.Below;

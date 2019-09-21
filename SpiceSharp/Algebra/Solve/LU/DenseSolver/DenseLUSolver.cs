@@ -19,6 +19,69 @@ namespace SpiceSharp.Algebra
         where V : IPermutableVector<T>
         where T : IFormattable
     {
+
+
+        /// <summary>
+        /// Gets or sets the order of the system that needs to be solved.
+        /// </summary>
+        /// <value>
+        /// The order.
+        /// </value>
+        /// <remarks>
+        /// This property can be used to limit the number of elimination steps.
+        /// </remarks>
+        public int Order
+        {
+            get
+            {
+                if (_order <= 0)
+                    return Size + _order;
+                return _order;
+            }
+            set => _order = value;
+        }
+        private int _order = 0;
+
+        /// <summary>
+        /// Occurs before the solver uses the decomposition to find the solution.
+        /// </summary>
+        public event EventHandler<SolveEventArgs<T>> BeforeSolve;
+
+        /// <summary>
+        /// Occurs after the solver used the decomposition to find a solution.
+        /// </summary>
+        public event EventHandler<SolveEventArgs<T>> AfterSolve;
+
+        /// <summary>
+        /// Occurs before the solver uses the transposed decomposition to find the solution.
+        /// </summary>
+        public event EventHandler<SolveEventArgs<T>> BeforeSolveTransposed;
+
+        /// <summary>
+        /// Occurs after the solver uses the transposed decomposition to find a solution.
+        /// </summary>
+        public event EventHandler<SolveEventArgs<T>> AfterSolveTransposed;
+
+        /// <summary>
+        /// Occurs before the solver is factored.
+        /// </summary>
+        public event EventHandler<EventArgs> BeforeFactor;
+
+        /// <summary>
+        /// Occurs after the solver has been factored.
+        /// </summary>
+        public event EventHandler<EventArgs> AfterFactor;
+
+        /// <summary>
+        /// Occurs before the solver is ordered and factored.
+        /// </summary>
+        public event EventHandler<EventArgs> BeforeOrderAndFactor;
+
+        /// <summary>
+        /// Occurs after the solver has been ordered and factored.
+        /// </summary>
+        public event EventHandler<EventArgs> AfterOrderAndFactor;
+
         /// <summary>
         /// Gets or sets a value indicating whether the matrix needs to be reordered.
         /// </summary>
@@ -101,9 +164,9 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Solves the system of equations.
+        /// Solves the equations using the Y-matrix and Rhs-vector.
         /// </summary>
-        /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
+        /// <param name="solution">The solution.</param>
         public abstract void Solve(IVector<T> solution);
 
         /// <summary>
@@ -113,15 +176,15 @@ namespace SpiceSharp.Algebra
         public abstract void SolveTransposed(IVector<T> solution);
 
         /// <summary>
-        /// Factors the matrix.
+        /// Factor the Y-matrix and Rhs-vector.
         /// </summary>
         /// <returns>
-        /// <c>true</c> if the matrix was succesfully factored; otherwise <c>false</c>.
+        /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
         /// </returns>
         public abstract bool Factor();
 
         /// <summary>
-        /// Orders and factors the matrix.
+        /// Order and factor the Y-matrix and Rhs-vector.
         /// </summary>
         public abstract void OrderAndFactor();
 
@@ -195,7 +258,7 @@ namespace SpiceSharp.Algebra
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (index > Size)
-                _ = Row[index];
+                _ = Row[index]; // Expand the vector
             return new VectorElement(this, index);
         }
 
@@ -223,5 +286,49 @@ namespace SpiceSharp.Algebra
             base.ResetMatrix();
             IsFactored = false;
         }
+
+        /// <summary>
+        /// Should be called before solving the decomposition.
+        /// </summary>
+        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
+        protected void OnBeforeSolve(SolveEventArgs<T> args) => BeforeSolve?.Invoke(this, args);
+
+        /// <summary>
+        /// Should be called after solving the decomposition.
+        /// </summary>
+        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
+        protected void OnAfterSolve(SolveEventArgs<T> args) => AfterSolve?.Invoke(this, args);
+
+        /// <summary>
+        /// Should be called before solving the transposed decomposition.
+        /// </summary>
+        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
+        protected void OnBeforeSolveTransposed(SolveEventArgs<T> args) => BeforeSolveTransposed?.Invoke(this, args);
+
+        /// <summary>
+        /// Should be called after solving the transposed decomposition.
+        /// </summary>
+        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
+        protected void OnAfterSolveTransposed(SolveEventArgs<T> args) => AfterSolveTransposed?.Invoke(this, args);
+
+        /// <summary>
+        /// Should be called before factoring.
+        /// </summary>
+        protected void OnBeforeFactor() => BeforeFactor?.Invoke(this, EventArgs.Empty);
+
+        /// <summary>
+        /// Should be called after factoring.
+        /// </summary>
+        protected void OnAfterFactor() => AfterFactor?.Invoke(this, EventArgs.Empty);
+
+        /// <summary>
+        /// Should be called before ordering and factoring.
+        /// </summary>
+        protected void OnBeforeOrderAndFactor() => BeforeOrderAndFactor?.Invoke(this, EventArgs.Empty);
+
+        /// <summary>
+        /// Should be called after ordering and factoring.
+        /// </summary>
+        protected void OnAfterOrderAndFactor() => AfterOrderAndFactor?.Invoke(this, EventArgs.Empty);
     }
 }

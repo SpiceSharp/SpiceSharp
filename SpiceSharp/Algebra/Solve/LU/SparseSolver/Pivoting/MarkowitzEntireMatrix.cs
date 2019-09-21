@@ -34,23 +34,31 @@ namespace SpiceSharp.Algebra.Solve
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
             ISparseMatrixElement<T> largestElement = null;
             var ties = 0;
+            var limit = markowitz.SearchLimit;
 
             // Start search of matrix on column by column basis
-            for (var i = eliminationStep; i <= matrix.Size; i++)
+            for (var i = eliminationStep; i <= limit; i++)
             {
                 // Find the biggest magnitude in the column for checking valid pivots later
                 var largest = 0.0;
-                var element = matrix.GetLastInColumn(i);
+                var diagonal = matrix.FindDiagonalElement(i);
+                var element = diagonal;
                 while (element != null && element.Row >= eliminationStep)
                 {
                     largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                     element = element.Above;
                 }
+                element = diagonal?.Below;
+                while (element != null && element.Row <= limit)
+                {
+                    largest = Math.Max(largest, markowitz.Magnitude(element.Value));
+                    element = element.Below;
+                }
                 if (largest.Equals(0.0))
                     continue;
 
                 // Restart search for a pivot
-                element = matrix.GetLastInColumn(i);
+                element = element?.Above ?? matrix.GetLastInColumn(i);
                 while (element != null && element.Row >= eliminationStep)
                 {
                     // Find the magnitude and Markowitz product

@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra
 {
@@ -10,12 +11,16 @@ namespace SpiceSharp.Algebra
     public class RookPivoting<T> : DensePivotStrategy<T> where T : IFormattable
     {
         /// <summary>
-        /// Gets the relative pivot threshold.
+        /// Gets or sets the relative threshold for choosing a pivot.
         /// </summary>
-        /// <value>
-        /// The relative pivot threshold.
-        /// </value>
-        public double RelativePivotThreshold { get; private set; } = 1e-3;
+        [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
+        public double RelativePivotThreshold { get; set; } = 1e-3;
+
+        /// <summary>
+        /// Gets or sets the absolute threshold for choosing a pivot.
+        /// </summary>
+        [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
+        public double AbsolutePivotThreshold { get; set; } = 1e-13;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RookPivoting{T}"/> class.
@@ -36,11 +41,13 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override bool FindPivot(IMatrix<T> matrix, int eliminationStep, out int row, out int column)
         {
+            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+
             // Find the largest element below and right of the pivot
             var largest = Magnitude(matrix[eliminationStep, eliminationStep]);
             row = eliminationStep;
             column = eliminationStep;
-            for (var i = eliminationStep + 1; i <= matrix.Size; i++)
+            for (var i = eliminationStep + 1; i <= limit; i++)
             {
                 var current = Magnitude(matrix[eliminationStep, i]);
                 if (current > largest)
@@ -71,12 +78,14 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public override bool IsValidPivot(IMatrix<T> matrix, int eliminationStep)
         {
+            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);
 
             // Search for the largest element below the pivot
             var largest = 0.0;
-            for (var i = eliminationStep + 1; i <= matrix.Size; i++)
+            for (var i = eliminationStep + 1; i <= limit; i++)
             {
                 largest = Math.Max(largest, Magnitude(matrix[eliminationStep, i]));
                 largest = Math.Max(largest, Magnitude(matrix[i, eliminationStep]));
