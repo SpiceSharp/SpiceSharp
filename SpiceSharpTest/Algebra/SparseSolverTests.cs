@@ -42,10 +42,7 @@ namespace SpiceSharpTest.Algebra
         public void When_SingletonPivoting_Expect_NoException()
         {
             // Build the solver with only the singleton pivoting
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(),
-                new SparseVector<double>()
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzSingleton<double>());
@@ -78,10 +75,7 @@ namespace SpiceSharpTest.Algebra
         public void When_QuickDiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(),
-                new SparseVector<double>()
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzQuickDiagonal<double>());
@@ -114,10 +108,7 @@ namespace SpiceSharpTest.Algebra
         public void When_DiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(),
-                new SparseVector<double>()
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzDiagonal<double>());
@@ -150,10 +141,7 @@ namespace SpiceSharpTest.Algebra
         public void When_EntireMatrixPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(),
-                new SparseVector<double>()
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzEntireMatrix<double>());
@@ -211,10 +199,7 @@ namespace SpiceSharpTest.Algebra
             };
 
             // build the matrix
-            var solver = new SparseComplexSolver<SparseMatrix<Complex>, SparseVector<Complex>>(
-                new SparseMatrix<Complex>(),
-                new SparseVector<Complex>()
-                );
+            var solver = LUHelper.CreateSparseComplexSolver();
             for (var r = 0; r < matrix.Length; r++)
             {
                 for (var c = 0; c < matrix[r].Length; c++)
@@ -246,6 +231,33 @@ namespace SpiceSharpTest.Algebra
                 Assert.AreEqual(reference[r].Real, solution[r + 1].Real, 1e-12);
                 Assert.AreEqual(reference[r].Imaginary, solution[r + 1].Imaginary, 1e-12);
             }
+        }
+
+        [Test]
+        public void When_PartialDecomposition_Expect_Reference()
+        {
+            var solver = LUHelper.CreateSparseRealSolver();
+            solver.Strategy.SearchLimit = 2; // Limit to only the 2 first elements
+            solver.Order = 2; // Only perform elimination on the first two rows
+
+            solver[1, 2] = 2;
+            solver[2, 1] = 1;
+            solver[1, 3] = 4;
+            solver[4, 2] = 4;
+            solver[3, 3] = 2;
+            solver[3, 4] = 4;
+            solver[4, 4] = 1;
+
+            solver.OrderAndFactor();
+
+            // We are testing two things here:
+            // - First, the solver should not have chosen a pivot in the lower-right submatrix
+            // - Second, the submatrix should be equal to A_cc - A_c1 * A^-1 * A_1c with A the top-left 
+            //   matrix, A_cc the bottom-right submatrix, A_1c and A_c1 the off-diagonal matrices
+            Assert.AreEqual(2.0, solver[3, 3], 1e-12);
+            Assert.AreEqual(4.0, solver[3, 4], 1e-12);
+            Assert.AreEqual(-8.0, solver[4, 3], 1e-12);
+            Assert.AreEqual(1.0, solver[4, 4], 1e-12);
         }
     }
 }

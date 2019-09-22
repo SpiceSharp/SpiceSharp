@@ -181,12 +181,90 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
         /// </returns>
-        public abstract bool Factor();
+        public bool Factor()
+        {
+            OnBeforeFactor();
+
+            for (var step = 1; step <= Order; step++)
+            {
+                if (!Elimination(Matrix.FindDiagonalElement(step)))
+                {
+                    IsFactored = false;
+                    OnAfterFactor();
+                    return false;
+                }
+            }
+            IsFactored = true;
+            OnAfterFactor();
+            return true;
+        }
 
         /// <summary>
         /// Order and factor the Y-matrix and Rhs-vector.
         /// </summary>
-        public abstract void OrderAndFactor();
+        public void OrderAndFactor()
+        {
+            OnBeforeOrderAndFactor();
+
+            int step = 1;
+            if (!NeedsReordering)
+            {
+                // Matrix has been factored before, and reordering is not required
+                for (step = 1; step <= Order; step++)
+                {
+                    var pivot = Matrix.FindDiagonalElement(step);
+                    if (Strategy.IsValidPivot(pivot))
+                    {
+                        if (!Elimination(pivot))
+                        {
+                            IsFactored = false;
+                            throw new AlgebraException("Elimination failed on accepted pivot");
+                        }
+                        else
+                        {
+                            NeedsReordering = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!NeedsReordering)
+                {
+                    IsFactored = true;
+                    OnAfterOrderAndFactor();
+                    return;
+                }
+            }
+
+            // Setup the pivot strategy
+            Strategy.Setup(Matrix, Vector, step);
+
+            for (; step <= Order; step++)
+            {
+                var pivot = Strategy.FindPivot(Matrix, step);
+                if (pivot == null)
+                    throw new SingularException(step);
+                MovePivot(pivot, step);
+                if (!Elimination(pivot))
+                {
+                    IsFactored = false;
+                    throw new SingularException(step);
+                }
+            }
+
+            IsFactored = true;
+            NeedsReordering = false;
+            OnAfterOrderAndFactor();
+        }
+
+        /// <summary>
+        /// Eliminate the matrix right and below the pivot.
+        /// </summary>
+        /// <param name="pivot">The pivot element.</param>
+        /// <returns>
+        /// <c>true</c> if the elimination was successful; otherwise <c>false</c>.
+        /// </returns>
+        protected abstract bool Elimination(ISparseMatrixElement<T> pivot);
 
         /// <summary>
         /// Finds the diagonal element at the specified row/column.

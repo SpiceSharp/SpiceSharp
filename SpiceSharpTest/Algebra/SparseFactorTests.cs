@@ -26,10 +26,7 @@ namespace SpiceSharpTest.Algebra
             };
 
             // Create matrix
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(),
-                new SparseVector<double>()
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             for (var r = 0; r < matrixElements.Length; r++)
                 for (var c = 0; c < matrixElements[r].Length; c++)
                     solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
@@ -46,10 +43,7 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_OrderAndFactoring_Expect_Reference()
         {
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(),
-                new SparseVector<double>()
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             solver.GetMatrixElement(1, 1).Value = 0.0001;
             solver.GetMatrixElement(1, 4).Value = -0.0001;
             solver.GetMatrixElement(1, 5).Value = 0.0;
@@ -82,11 +76,7 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_OrderAndFactoring2_Expect_Reference()
         {
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(5),
-                new SparseVector<double>(5)
-                );
-
+            var solver = LUHelper.CreateSparseRealSolver();
             solver.GetMatrixElement(1, 1).Value = 1.0;
             solver.GetMatrixElement(2, 1).Value = 0.0;
             solver.GetMatrixElement(2, 2).Value = 1.0;
@@ -117,10 +107,7 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_Preorder_Expect_Reference()
         {
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(
-                new SparseMatrix<double>(5),
-                new SparseVector<double>(5)
-                );
+            var solver = LUHelper.CreateSparseRealSolver();
             solver.GetMatrixElement(1, 1).Value = 1e-4;
             solver.GetMatrixElement(1, 2).Value = 0.0;
             solver.GetMatrixElement(1, 3).Value = -1e-4;
@@ -147,6 +134,28 @@ namespace SpiceSharpTest.Algebra
             AssertInternal(solver, 3, 4, 1e-4);
             AssertInternal(solver, 4, 4, 1.0);
             AssertInternal(solver, 5, 5, 1.0);
+        }
+
+        [Test]
+        public void When_PartialDecompositionSingular_Expect_Reference()
+        {
+            var solver = LUHelper.CreateSparseRealSolver();
+            solver[1, 1] = 1;
+            solver[2, 2] = 1;
+            solver[2, 3] = 1;
+            solver[3, 1] = 1;
+            solver[3, 2] = 1;
+            solver[3, 3] = 1;
+
+            solver.Order = -1;
+            Assert.AreEqual(true, solver.Factor());
+
+            AssertInternal(solver, 1, 1, 1);
+            AssertInternal(solver, 2, 2, 1);
+            AssertInternal(solver, 2, 3, 1);
+            AssertInternal(solver, 3, 1, 1);
+            AssertInternal(solver, 3, 2, 1);
+            AssertInternal(solver, 3, 3, 0);
         }
 
         /// <summary>

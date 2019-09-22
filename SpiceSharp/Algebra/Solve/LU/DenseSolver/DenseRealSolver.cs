@@ -36,67 +36,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Factors the matrix.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the matrix was succesfully factored; otherwise <c>false</c>.
-        /// </returns>
-        public override bool Factor() => Factor(Size);
-
-        /// <summary>
-        /// Factors the matrix for a number of steps.
-        /// </summary>
-        /// <remarks>
-        /// This method can be used as an optimization. Instead of reallocating a new matrix for varying
-        /// sizes, you can use this method to only factorize part of the matrix inexpensively. Beware,
-        /// when you have used <see cref="OrderAndFactor"/> the first steps may not coincide with the
-        /// first variables in the vector!
-        /// </remarks>
-        /// <param name="steps">The number of elimination steps.</param>
-        /// <returns>
-        /// <c>true</c> if the matrix was succesfully factored; otherwise <c>false</c>.
-        /// </returns>
-        public bool Factor(int steps)
-        {
-            OnBeforeFactor();
-
-            if (_intermediate == null || _intermediate.Length != Size + 1)
-                _intermediate = new double[Size + 1];
-            if (steps > Size)
-                throw new AlgebraException("Cannot factorize more than {0} steps".FormatString(Size));
-
-            // Start factorization
-            for (var step = 1; step <= steps; step++)
-            {
-                // Check for a singular matrix
-                if (Matrix[step, step].Equals(0.0))
-                {
-                    IsFactored = false;
-                    OnAfterFactor();
-                    return false;
-                }
-                var diagonal = 1.0 / Matrix[step, step];
-                Matrix[step, step] = diagonal;
-
-                // Doolittle algorithm
-                for (var r = step + 1; r <= steps; r++)
-                {
-                    var lead = Matrix[r, step];
-                    if (lead.Equals(0.0))
-                        continue;
-                    lead *= diagonal;
-                    Matrix[r, step] = lead;
-                    for (var c = step + 1; c <= steps; c++)
-                        Matrix[r, c] -= lead * Matrix[step, c];
-                }
-            }
-
-            IsFactored = true;
-            OnAfterFactor();
-            return true;
-        }
-
-        /// <summary>
         /// Solves the system of equations.
         /// </summary>
         /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
@@ -117,6 +56,8 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Solver is not yet factored");
             if (solution.Length != Size)
                 throw new AlgebraException("Solution vector and solver order does not match");
+            if (_intermediate == null || _intermediate.Length != Size + 1)
+                _intermediate = new double[Size + 1];
 
             var ea = new SolveEventArgs<double>(solution);
             OnBeforeSolve(ea);
@@ -164,6 +105,8 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Solver is not yet factored");
             if (solution.Length != Size)
                 throw new AlgebraException("Solution vector and solver order does not match");
+            if (_intermediate == null || _intermediate.Length != Size + 1)
+                _intermediate = new double[Size + 1];
 
             var ea = new SolveEventArgs<double>(solution);
             OnBeforeSolveTransposed(ea);
@@ -197,80 +140,33 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Orders and factors the matrix.
-        /// </summary>
-        public override void OrderAndFactor()
-        {
-            OnBeforeOrderAndFactor();
-
-            if (_intermediate == null || _intermediate.Length != Size + 1)
-                _intermediate = new double[Size + 1];
-
-            var step = 1;
-            if (!NeedsReordering)
-            {
-                // Matrix has been factored before and reordering is not required
-                for (step = 1; step <= Matrix.Size; step++)
-                {
-                    if (Strategy.IsValidPivot(Matrix, step))
-                        Elimination(step);
-                    else
-                    {
-                        NeedsReordering = true;
-                        break;
-                    }
-                }
-
-                // Done!
-                if (!NeedsReordering)
-                {
-                    IsFactored = true;
-                    OnAfterOrderAndFactor();
-                    return;
-                }
-            }
-
-            // Setup reordering
-            Strategy.Setup(Matrix, Vector, step);
-
-            // Perform reordering and factorization starting from where we stopped last
-            for (; step <= Matrix.Size; step++)
-            {
-                if (!Strategy.FindPivot(Matrix, step, out int row, out int column))
-                    throw new AlgebraException("Singular matrix");
-
-                // Move the pivot to the current diagonal
-                SwapRows(row, step);
-                SwapColumns(column, step);
-
-                // Elimination
-                Elimination(step);
-            }
-
-            // Flag the solver as factored
-            IsFactored = true;
-            NeedsReordering = false;
-            OnAfterOrderAndFactor();
-        }
-
-        /// <summary>
-        /// Eliminate a row.
+        /// Eliminate the submatrix right and below the pivot.
         /// </summary>
         /// <param name="step">The current elimination step.</param>
-        private void Elimination(int step)
+        /// <param name="size">The maximum row/column to be eliminated.</param>
+        /// <returns>
+        /// <c>true</c> if the elimination was succesful; otherwise <c>false</c>.
+        /// </returns>
+        protected override bool Elimination(int step, int size)
         {
             var diagonal = Matrix[step, step];
             if (diagonal.Equals(0.0))
-                throw new AlgebraException("Matrix is singular");
+                return false;
             diagonal = 1.0 / diagonal;
             Matrix[step, step] = diagonal;
 
-            for (var r = step + 1; r <= Size; r++)
+            for (var r = step + 1; r <= size; r++)
             {
-                Matrix[r, step] *= diagonal;
-                for (var c = step + 1; c <= Size; c++)
-                    Matrix[r, c] -= Matrix[r, step] * Matrix[step, c];
+                var lead = Matrix[r, step];
+                if (lead.Equals(0.0))
+                    continue;
+                lead *= diagonal;
+                Matrix[r, step] = lead;
+
+                for (var c = step + 1; c <= size; c++)
+                    Matrix[r, c] -= lead * Matrix[step, c];
             }
+            return true;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace SpiceSharpTest.Algebra
                 if (int.Parse(match.Groups["columns"].Value) != size)
                     throw new Exception("Matrix is not square");
 
-                result = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(size), new SparseVector<double>(size));
+                result = LUHelper.CreateSparseRealSolver(size);
 
                 // All subsequent lines are of the format [row] [column] [value]
                 while (!sr.EndOfStream)
@@ -62,7 +62,7 @@ namespace SpiceSharpTest.Algebra
         /// <returns></returns>
         protected ISolver<double> ReadSpice3f5File(string matFilename, string vecFilename)
         {
-            var solver = new SparseRealSolver<SparseMatrix<double>, SparseVector<double>>(new SparseMatrix<double>(), new SparseVector<double>());
+            var solver = LUHelper.CreateSparseRealSolver();
 
             // Read the spice file
             string line;

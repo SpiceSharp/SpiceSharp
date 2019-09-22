@@ -19,8 +19,6 @@ namespace SpiceSharp.Algebra
         where V : IPermutableVector<T>
         where T : IFormattable
     {
-
-
         /// <summary>
         /// Gets or sets the order of the system that needs to be solved.
         /// </summary>
@@ -181,12 +179,99 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
         /// </returns>
-        public abstract bool Factor();
+        public bool Factor() => Factor(Size);
+
+        /// <summary>
+        /// Factor they Y-matrix and Rhs-vector.
+        /// </summary>
+        /// <param name="size">The size of the matrix that should be factored.</param>
+        /// <returns>
+        /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
+        /// </returns>
+        public bool Factor(int size)
+        {
+            OnBeforeFactor();
+
+            int order = Math.Min(Order, size);
+            for (var step = 1; step <= order; step++)
+            {
+                if (!Elimination(step, size))
+                {
+                    IsFactored = false;
+                    OnAfterFactor();
+                    return false;
+                }
+            }
+            IsFactored = true;
+            OnAfterFactor();
+            return true;
+        }
 
         /// <summary>
         /// Order and factor the Y-matrix and Rhs-vector.
         /// </summary>
-        public abstract void OrderAndFactor();
+        public void OrderAndFactor()
+        {
+            OnBeforeOrderAndFactor();
+
+            var size = Size;
+            var step = 1;
+            if (!NeedsReordering)
+            {
+                for (step = 1; step <= Order; step++)
+                {
+                    if (Strategy.IsValidPivot(Matrix, step))
+                    {
+                        if (!Elimination(step, size))
+                        {
+                            IsFactored = false;
+                            throw new AlgebraException("Elimination failed on accepted pivot");
+                        }
+                    }
+                    else
+                    {
+                        NeedsReordering = true;
+                        break;
+                    }
+                }
+
+                if (!NeedsReordering)
+                {
+                    IsFactored = true;
+                    OnAfterOrderAndFactor();
+                    return;
+                }
+            }
+
+            // Setup pivoting strategy
+            Strategy.Setup(Matrix, Vector, step);
+
+            for (; step <= Order; step++)
+            {
+                if (!Strategy.FindPivot(Matrix, step, out int row, out int column))
+                    throw new SingularException(step);
+                SwapRows(row, step);
+                SwapColumns(column, step);
+                if (!Elimination(step, size))
+                {
+                    IsFactored = false;
+                    throw new SingularException(step);
+                }
+            }
+            IsFactored = true;
+            NeedsReordering = false;
+            OnAfterOrderAndFactor();
+        }
+
+        /// <summary>
+        /// Eliminate the submatrix right and below the pivot.
+        /// </summary>
+        /// <param name="step">The current elimination step.</param>
+        /// <param name="size">The maximum row/column to be eliminated.</param>
+        /// <returns>
+        /// <c>true</c> if the elimination was succesful; otherwise <c>false</c>.
+        /// </returns>
+        protected abstract bool Elimination(int step, int size);
 
         /// <summary>
         /// Finds the diagonal element at the specified row/column.
