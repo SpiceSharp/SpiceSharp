@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using SpiceSharp.Algebra;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -41,24 +40,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the (positive, positive) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegPosPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexOnePortElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -83,11 +70,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
-            CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-            CNegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
+            ComplexMatrixElements = new ComplexOnePortElementSet(ComplexState.Solver, PosNode, NegNode);
         }
 
         /// <summary>
@@ -98,10 +81,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
             base.Unbind();
 
             ComplexState = null;
-            CPosPosPtr = null;
-            CNegNegPtr = null;
-            CPosNegPtr = null;
-            CNegPosPtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -116,11 +97,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var conductance = Conductance;
-            CPosPosPtr.Value += conductance;
-            CNegNegPtr.Value += conductance;
-            CPosNegPtr.Value -= conductance;
-            CNegPosPtr.Value -= conductance;
+            ComplexMatrixElements.AddOnePort(Conductance);
         }
     }
 }

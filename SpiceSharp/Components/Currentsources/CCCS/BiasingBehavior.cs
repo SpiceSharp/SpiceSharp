@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Algebra;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -37,14 +36,12 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// The (pos, branch) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosControlBranchPtr { get; private set; }
-
-        /// <summary>
-        /// The (neg, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> NegControlBranchPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -99,9 +96,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 
             // Get matrix elements
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            PosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
-            NegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(PosNode, ControlBranchEq),
+                new MatrixPin(NegNode, ControlBranchEq)
+            );
         }
 
         /// <summary>
@@ -111,8 +109,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosControlBranchPtr = null;
-            NegControlBranchPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -120,8 +118,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            PosControlBranchPtr.Value += BaseParameters.Coefficient.Value;
-            NegControlBranchPtr.Value -= BaseParameters.Coefficient.Value;
+            var value = BaseParameters.Coefficient.Value;
+            MatrixElements.Add(value, -value);
         }
 
         /// <summary>

@@ -11,9 +11,12 @@ namespace SpiceSharp.Components.DelayBehaviors
     public class TransientBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Nodes
+        /// Gets the vector elements.
         /// </summary>
-        protected IVectorElement<double> BranchPtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the delayed signal.
@@ -40,9 +43,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             base.Bind(context);
 
-            var solver = BiasingState.Solver;
-            BranchPtr = solver.GetVectorElement(BranchEq);
-
+            VectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq);
             Signal = new DelayedSignal(1, BaseParameters.Delay);
         }
 
@@ -52,7 +53,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            BranchPtr = null;
+            VectorElements?.Destroy();
+            VectorElements = null;
         }
 
         /// <summary>
@@ -77,7 +79,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             var sol = BiasingState.Solution;
             var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
-            BranchPtr.Value += Signal.Values[0];
+            VectorElements.Add(Signal.Values[0]);
         }
     }
 }

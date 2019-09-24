@@ -29,49 +29,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// Gets the (external positive, positive) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosPosPrimePtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the (negative, positive) element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IMatrixElement<double> NegPosPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, external positive) element.
-        /// </summary>
-        protected IMatrixElement<double> PosPrimePosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> PosPrimeNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the external (positive, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> PosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> NegNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> PosPrimePosPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the positive RHS element.
-        /// </summary>
-        protected IVectorElement<double> PosPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the negative RHS element.
-        /// </summary>
-        protected IVectorElement<double> NegPtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the voltage.
@@ -111,30 +82,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             base.Bind(context);
 
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-            }
-
-            var solver = BiasingState.Solver;
+            var c = (ComponentBindingContext)context;
+                PosNode = c.Pins[0];
+                NegNode = c.Pins[1];
             var variables = context.Variables;
-
-            // Create
             PosPrimeNode = ModelParameters.Resistance > 0 ? variables.Create(Name.Combine("pos"), VariableType.Voltage).Index : PosNode;
 
             // Get matrix elements
-            PosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
-            NegPosPrimePtr = solver.GetMatrixElement(NegNode, PosPrimeNode);
-            PosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, PosNode);
-            PosPrimeNegPtr = solver.GetMatrixElement(PosPrimeNode, NegNode);
-            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
-            PosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
-
-            // Get RHS elements
-            NegPtr = solver.GetVectorElement(NegNode);
-            PosPrimePtr = solver.GetVectorElement(PosPrimeNode);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(PosNode, PosNode),
+                new MatrixPin(NegNode, NegNode),
+                new MatrixPin(PosPrimeNode, PosPrimeNode),
+                new MatrixPin(NegNode, PosPrimeNode),
+                new MatrixPin(PosPrimeNode, NegNode),
+                new MatrixPin(PosNode, PosPrimeNode),
+                new MatrixPin(PosPrimeNode, PosNode));
+            VectorElements = new RealVectorElementSet(BiasingState.Solver, NegNode, PosPrimeNode);
         }
 
         /// <summary>
@@ -192,17 +155,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Load Rhs vector
             var cdeq = cd - gd * vd;
-            NegPtr.Value += cdeq;
-            PosPrimePtr.Value -= cdeq;
+            VectorElements.Add(cdeq, -cdeq);
 
             // Load Y-matrix
-            PosPosPtr.Value += gspr;
-            NegNegPtr.Value += gd;
-            PosPrimePosPrimePtr.Value += gd + gspr;
-            PosPosPrimePtr.Value -= gspr;
-            PosPrimePosPtr.Value -= gspr;
-            NegPosPrimePtr.Value -= gd;
-            PosPrimeNegPtr.Value -= gd;
+            MatrixElements.Add(
+                gspr, gd, gd + gspr, -gd, -gd,
+                -gspr, -gspr);
         }
 
         /// <summary>

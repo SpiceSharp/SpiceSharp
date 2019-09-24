@@ -12,114 +12,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the external (drain, drain) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CDrainDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the external (source, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourceSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, bulk) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBulkBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, bulk) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external source, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBulkDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBulkSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, external drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBulkGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, external source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, bulk) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, bulk) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -144,29 +42,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
-            CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
-            CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
-            CBulkBulkPtr = solver.GetMatrixElement(BulkNode, BulkNode);
-            CDrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainNodePrime, DrainNodePrime);
-            CSourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourceNodePrime, SourceNodePrime);
-            CDrainDrainPrimePtr = solver.GetMatrixElement(DrainNode, DrainNodePrime);
-            CGateBulkPtr = solver.GetMatrixElement(GateNode, BulkNode);
-            CGateDrainPrimePtr = solver.GetMatrixElement(GateNode, DrainNodePrime);
-            CGateSourcePrimePtr = solver.GetMatrixElement(GateNode, SourceNodePrime);
-            CSourceSourcePrimePtr = solver.GetMatrixElement(SourceNode, SourceNodePrime);
-            CBulkDrainPrimePtr = solver.GetMatrixElement(BulkNode, DrainNodePrime);
-            CBulkSourcePrimePtr = solver.GetMatrixElement(BulkNode, SourceNodePrime);
-            CDrainPrimeSourcePrimePtr = solver.GetMatrixElement(DrainNodePrime, SourceNodePrime);
-            CDrainPrimeDrainPtr = solver.GetMatrixElement(DrainNodePrime, DrainNode);
-            CBulkGatePtr = solver.GetMatrixElement(BulkNode, GateNode);
-            CDrainPrimeGatePtr = solver.GetMatrixElement(DrainNodePrime, GateNode);
-            CSourcePrimeGatePtr = solver.GetMatrixElement(SourceNodePrime, GateNode);
-            CSourcePrimeSourcePtr = solver.GetMatrixElement(SourceNodePrime, SourceNode);
-            CDrainPrimeBulkPtr = solver.GetMatrixElement(DrainNodePrime, BulkNode);
-            CSourcePrimeBulkPtr = solver.GetMatrixElement(SourceNodePrime, BulkNode);
-            CSourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourceNodePrime, DrainNodePrime);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(GateNode, GateNode),
+                new MatrixPin(BulkNode, BulkNode),
+                new MatrixPin(DrainNodePrime, DrainNodePrime),
+                new MatrixPin(SourceNodePrime, SourceNodePrime),
+                new MatrixPin(GateNode, BulkNode),
+                new MatrixPin(GateNode, DrainNodePrime),
+                new MatrixPin(GateNode, SourceNodePrime),
+                new MatrixPin(BulkNode, GateNode),
+                new MatrixPin(BulkNode, DrainNodePrime),
+                new MatrixPin(BulkNode, SourceNodePrime),
+                new MatrixPin(DrainNodePrime, GateNode),
+                new MatrixPin(DrainNodePrime, BulkNode),
+                new MatrixPin(SourceNodePrime, GateNode),
+                new MatrixPin(SourceNodePrime, BulkNode),
+                new MatrixPin(DrainNode, DrainNode),
+                new MatrixPin(SourceNode, SourceNode),
+                new MatrixPin(DrainNode, DrainNodePrime),
+                new MatrixPin(SourceNode, SourceNodePrime),
+                new MatrixPin(DrainNodePrime, DrainNode),
+                new MatrixPin(DrainNodePrime, SourceNodePrime),
+                new MatrixPin(SourceNodePrime, SourceNode),
+                new MatrixPin(SourceNodePrime, DrainNodePrime));
         }
 
         /// <summary>
@@ -176,28 +74,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             base.Unbind();
             ComplexState = null;
-            CDrainDrainPtr = null;
-            CGateGatePtr = null;
-            CSourceSourcePtr = null;
-            CBulkBulkPtr = null;
-            CDrainPrimeDrainPrimePtr = null;
-            CSourcePrimeSourcePrimePtr = null;
-            CDrainDrainPrimePtr = null;
-            CGateBulkPtr = null;
-            CGateDrainPrimePtr = null;
-            CGateSourcePrimePtr = null;
-            CSourceSourcePrimePtr = null;
-            CBulkDrainPrimePtr = null;
-            CBulkSourcePrimePtr = null;
-            CDrainPrimeSourcePrimePtr = null;
-            CDrainPrimeDrainPtr = null;
-            CBulkGatePtr = null;
-            CDrainPrimeGatePtr = null;
-            CSourcePrimeGatePtr = null;
-            CSourcePrimeSourcePtr = null;
-            CDrainPrimeBulkPtr = null;
-            CSourcePrimeBulkPtr = null;
-            CSourcePrimeDrainPrimePtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -246,28 +124,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var xbs = CapBs * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
-            CGateGatePtr.Value += new Complex(0.0, xgd + xgs + xgb);
-            CBulkBulkPtr.Value += new Complex(CondBd + CondBs, xgb + xbd + xbs);
-            CDrainPrimeDrainPrimePtr.Value += new Complex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd);
-            CSourcePrimeSourcePrimePtr.Value += new Complex(SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs), xgs + xbs);
-            CGateBulkPtr.Value -= new Complex(0.0, xgb);
-            CGateDrainPrimePtr.Value -= new Complex(0.0, xgd);
-            CGateSourcePrimePtr.Value -= new Complex(0.0, xgs);
-            CBulkGatePtr.Value -= new Complex(0.0, xgb);
-            CBulkDrainPrimePtr.Value -= new Complex(CondBd, xbd);
-            CBulkSourcePrimePtr.Value -= new Complex(CondBs, xbs);
-            CDrainPrimeGatePtr.Value += new Complex((xnrm - xrev) * Transconductance, -xgd);
-            CDrainPrimeBulkPtr.Value += new Complex(-CondBd + (xnrm - xrev) * TransconductanceBs, -xbd);
-            CSourcePrimeGatePtr.Value -= new Complex((xnrm - xrev) * Transconductance, xgs);
-            CSourcePrimeBulkPtr.Value -= new Complex(CondBs + (xnrm - xrev) * TransconductanceBs, xbs);
-            CDrainDrainPtr.Value += DrainConductance;
-            CSourceSourcePtr.Value += SourceConductance;
-            CDrainDrainPrimePtr.Value -= DrainConductance;
-            CSourceSourcePrimePtr.Value -= SourceConductance;
-            CDrainPrimeDrainPtr.Value -= DrainConductance;
-            CDrainPrimeSourcePrimePtr.Value -= CondDs + xnrm * (Transconductance + TransconductanceBs);
-            CSourcePrimeSourcePtr.Value -= SourceConductance;
-            CSourcePrimeDrainPrimePtr.Value -= CondDs + xrev * (Transconductance + TransconductanceBs);
+            ComplexMatrixElements.Add(
+                new Complex(0.0, xgd + xgs + xgb),
+                new Complex(CondBd + CondBs, xgb + xbd + xbs),
+                new Complex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd),
+                new Complex(SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs), xgs + xbs),
+                -new Complex(0.0, xgb),
+                -new Complex(0.0, xgd),
+                -new Complex(0.0, xgs),
+                -new Complex(0.0, xgb),
+                -new Complex(CondBd, xbd),
+                -new Complex(CondBs, xbs),
+                new Complex((xnrm - xrev) * Transconductance, -xgd),
+                new Complex(-CondBd + (xnrm - xrev) * TransconductanceBs, -xbd),
+                -new Complex((xnrm - xrev) * Transconductance, xgs),
+                -new Complex(CondBs + (xnrm - xrev) * TransconductanceBs, xbs),
+                DrainConductance,
+                SourceConductance,
+                -DrainConductance,
+                -SourceConductance,
+                -DrainConductance,
+                -CondDs - xnrm * (Transconductance + TransconductanceBs),
+                -SourceConductance,
+                -CondDs - xrev * (Transconductance + TransconductanceBs));
         }
     }
 }

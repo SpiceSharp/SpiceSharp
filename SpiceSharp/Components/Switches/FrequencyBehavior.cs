@@ -12,24 +12,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (positive, positive) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegNegPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexOnePortElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -49,10 +37,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             base.Bind(context);
 
             var solver = context.States.GetValue<ComplexSimulationState>().Solver;
-            CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            CPosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-            CNegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
-            CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            ComplexMatrixElements = new ComplexOnePortElementSet(solver, PosNode, NegNode);
         }
 
         /// <summary>
@@ -61,10 +46,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            CPosPosPtr = null;
-            CPosNegPtr = null;
-            CNegPosPtr = null;
-            CNegNegPtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -79,15 +62,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
+            ComplexMatrixElements.ThrowIfNotBound(this);
+
             // Get the current state
             var currentState = CurrentState;
             var gNow = currentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
 
             // Load the Y-matrix
-            PosPosPtr.ThrowIfNotBound(this).Value += gNow;
-            PosNegPtr.Value -= gNow;
-            NegPosPtr.Value -= gNow;
-            NegNegPtr.Value += gNow;
+            ComplexMatrixElements.AddOnePort(gNow);
         }
     }
 }

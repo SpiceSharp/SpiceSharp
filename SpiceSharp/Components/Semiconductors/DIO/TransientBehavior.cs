@@ -78,14 +78,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
             Current += _capCharge.Derivative;
 
             // Load Rhs vector
-            NegPtr.Value += ceq;
-            PosPrimePtr.Value -= ceq;
+            VectorElements.Add(ceq, -ceq);
 
             // Load Y-matrix
-            NegNegPtr.Value += geq;
-            PosPrimePosPrimePtr.Value += geq;
-            NegPosPrimePtr.Value -= geq;
-            PosPrimeNegPtr.Value -= geq;
+            MatrixElements.Add(
+                0, geq, geq, -geq, -geq);
         }
     }
 }

@@ -44,24 +44,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, positive) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> NegNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> PosNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> NegPosPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealOnePortElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -79,17 +67,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             base.Bind(context);
 
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-            }
+            var c = (ComponentBindingContext)context;
+                PosNode = c.Pins[0];
+                NegNode = c.Pins[1];
 
-            var solver = BiasingState.Solver;
-            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
-            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
+            MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
         }
 
         /// <summary>
@@ -98,11 +80,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Unbind()
         {
             base.Unbind();
-
-            PosPosPtr = null;
-            NegNegPtr = null;
-            PosNegPtr = null;
-            NegPosPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -110,11 +89,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var conductance = Conductance;
-            PosPosPtr.Value += conductance;
-            NegNegPtr.Value += conductance;
-            PosNegPtr.Value -= conductance;
-            NegPosPtr.Value -= conductance;
+            MatrixElements.AddOnePort(Conductance);
         }
 
         /// <summary>

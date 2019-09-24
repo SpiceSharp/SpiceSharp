@@ -18,30 +18,20 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosBranchPtr { get; private set; }
-        
-        /// <summary>
-        /// Gets the (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegBranchPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the (branch, positive) element.
+        /// Gets the complex vector elements.
         /// </summary>
-        protected IMatrixElement<Complex> CBranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the branch RHS element.
-        /// </summary>
-        protected IVectorElement<Complex> CBranchPtr { get; private set; }
-
+        /// <value>
+        /// The complex vector elements.
+        /// </value>
+        protected ComplexVectorElementSet ComplexVectorElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -95,14 +85,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             // Get matrix elements
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-
-            // Get rhs elements
-            CBranchPtr = solver.GetVectorElement(BranchEq);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, NegNode));
+            ComplexVectorElements = new ComplexVectorElementSet(ComplexState.Solver, BranchEq);
         }
 
         /// <summary>
@@ -112,11 +100,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            CPosBranchPtr = null;
-            CBranchPosPtr = null;
-            CNegBranchPtr = null;
-            CBranchNegPtr = null;
-            CBranchPtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
+            ComplexVectorElements?.Destroy();
+            ComplexVectorElements = null;
         }
 
         /// <summary>
@@ -131,14 +118,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            // Load Y-matrix
-            CPosBranchPtr.ThrowIfNotBound(this).Value += 1.0;
-            CBranchPosPtr.Value += 1.0;
-            CNegBranchPtr.Value -= 1.0;
-            CBranchNegPtr.Value -= 1.0;
-
-            // Load Rhs-vector
-            CBranchPtr.Value += FrequencyParameters.Phasor;
+            ComplexMatrixElements.ThrowIfNotBound(this).Add(1, 1, -1, -1);
+            ComplexVectorElements.Add(FrequencyParameters.Phasor);
         }
     }
 }

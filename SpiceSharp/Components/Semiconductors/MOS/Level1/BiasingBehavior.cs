@@ -143,129 +143,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         protected int SourceNodePrime { get; private set; }
 
         /// <summary>
-        /// Gets the external (drain, drain) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> DrainDrainPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the (gate, gate) element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IMatrixElement<double> GateGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the external (source, source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourceSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, bulk) element.
-        /// </summary>
-        protected IMatrixElement<double> BulkBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, bulk) element.
-        /// </summary>
-        protected IMatrixElement<double> GateBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> GateDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, source) element.
-        /// </summary>
-        protected IMatrixElement<double> GateSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external source, source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourceSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> BulkDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, source) element.
-        /// </summary>
-        protected IMatrixElement<double> BulkSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, source) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, external drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (bulk, gate) element
-        /// </summary>
-        protected IMatrixElement<double> BulkGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, gate) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, gate) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, external source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, bulk) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, bulk) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeBulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the bulk RHS element.
-        /// </summary>
-        protected IVectorElement<double> BulkPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the drain RHS element.
-        /// </summary>
-        protected IVectorElement<double> DrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the source RHS element.
-        /// </summary>
-        protected IVectorElement<double> SourcePrimePtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         private TimeSimulationState _timeState;
 
@@ -294,15 +185,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             Von = 0;
             Mode = 1;
 
-            if (context is ComponentBindingContext cc)
-            {
-                DrainNode = cc.Pins[0];
-                GateNode = cc.Pins[1];
-                SourceNode = cc.Pins[2];
-                BulkNode = cc.Pins[3];
-            }
-
-            var solver = BiasingState.Solver;
+            var c = (ComponentBindingContext)context;
+            DrainNode = c.Pins[0];
+            GateNode = c.Pins[1];
+            SourceNode = c.Pins[2];
+            BulkNode = c.Pins[3];
             var variables = context.Variables;
 
             // Add series drain node if necessary
@@ -318,33 +205,26 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 SourceNodePrime = SourceNode;
 
             // Get matrix pointers
-            DrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
-            GateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
-            SourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
-            BulkBulkPtr = solver.GetMatrixElement(BulkNode, BulkNode);
-            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainNodePrime, DrainNodePrime);
-            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourceNodePrime, SourceNodePrime);
-            DrainDrainPrimePtr = solver.GetMatrixElement(DrainNode, DrainNodePrime);
-            GateBulkPtr = solver.GetMatrixElement(GateNode, BulkNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(GateNode, DrainNodePrime);
-            GateSourcePrimePtr = solver.GetMatrixElement(GateNode, SourceNodePrime);
-            SourceSourcePrimePtr = solver.GetMatrixElement(SourceNode, SourceNodePrime);
-            BulkDrainPrimePtr = solver.GetMatrixElement(BulkNode, DrainNodePrime);
-            BulkSourcePrimePtr = solver.GetMatrixElement(BulkNode, SourceNodePrime);
-            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(DrainNodePrime, SourceNodePrime);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(DrainNodePrime, DrainNode);
-            BulkGatePtr = solver.GetMatrixElement(BulkNode, GateNode);
-            DrainPrimeGatePtr = solver.GetMatrixElement(DrainNodePrime, GateNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(SourceNodePrime, GateNode);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(SourceNodePrime, SourceNode);
-            DrainPrimeBulkPtr = solver.GetMatrixElement(DrainNodePrime, BulkNode);
-            SourcePrimeBulkPtr = solver.GetMatrixElement(SourceNodePrime, BulkNode);
-            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourceNodePrime, DrainNodePrime);
-
-            // Get rhs pointers
-            BulkPtr = solver.GetVectorElement(BulkNode);
-            DrainPrimePtr = solver.GetVectorElement(DrainNodePrime);
-            SourcePrimePtr = solver.GetVectorElement(SourceNodePrime);
+            VectorElements = new RealVectorElementSet(BiasingState.Solver,
+                BulkNode, DrainNodePrime, SourceNodePrime);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(DrainNode, DrainNode),
+                new MatrixPin(SourceNode, SourceNode),
+                new MatrixPin(BulkNode, BulkNode),
+                new MatrixPin(DrainNodePrime, DrainNodePrime),
+                new MatrixPin(SourceNodePrime, SourceNodePrime),
+                new MatrixPin(DrainNode, DrainNodePrime),
+                new MatrixPin(SourceNode, SourceNodePrime),
+                new MatrixPin(BulkNode, DrainNodePrime),
+                new MatrixPin(BulkNode, SourceNodePrime),
+                new MatrixPin(DrainNodePrime, DrainNode),
+                new MatrixPin(DrainNodePrime, GateNode),
+                new MatrixPin(DrainNodePrime, BulkNode),
+                new MatrixPin(DrainNodePrime, SourceNodePrime),
+                new MatrixPin(SourceNodePrime, GateNode),
+                new MatrixPin(SourceNodePrime, SourceNode),
+                new MatrixPin(SourceNodePrime, BulkNode),
+                new MatrixPin(SourceNodePrime, DrainNodePrime));
         }
 
         /// <summary>
@@ -354,34 +234,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             base.Unbind();
 
-            // Get matrix pointers
-            DrainDrainPtr = null;
-            GateGatePtr = null;
-            SourceSourcePtr = null;
-            BulkBulkPtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
-            DrainDrainPrimePtr = null;
-            GateBulkPtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            SourceSourcePrimePtr = null;
-            BulkDrainPrimePtr = null;
-            BulkSourcePrimePtr = null;
-            DrainPrimeSourcePrimePtr = null;
-            DrainPrimeDrainPtr = null;
-            BulkGatePtr = null;
-            DrainPrimeGatePtr = null;
-            SourcePrimeGatePtr = null;
-            SourcePrimeSourcePtr = null;
-            DrainPrimeBulkPtr = null;
-            SourcePrimeBulkPtr = null;
-            SourcePrimeDrainPrimePtr = null;
-
-            // Get rhs pointers
-            BulkPtr = null;
-            DrainPrimePtr = null;
-            SourcePrimePtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
+            VectorElements?.Destroy();
+            VectorElements = null;
         }
 
         /// <summary>
@@ -474,28 +330,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 xrev = 1;
                 cdreq = -ModelParameters.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
             }
-            BulkPtr.Value -= ceqbs + ceqbd;
-            DrainPrimePtr.Value += ceqbd - cdreq;
-            SourcePrimePtr.Value += cdreq + ceqbs;
+            VectorElements.Add(-(ceqbs + ceqbd), ceqbd - cdreq, cdreq + ceqbs);
 
             // Load Y-matrix
-            DrainDrainPtr.Value += DrainConductance;
-            SourceSourcePtr.Value += SourceConductance;
-            BulkBulkPtr.Value += CondBd + CondBs;
-            DrainPrimeDrainPrimePtr.Value += DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs);
-            SourcePrimeSourcePrimePtr.Value += SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs);
-            DrainDrainPrimePtr.Value += -DrainConductance;
-            SourceSourcePrimePtr.Value += -SourceConductance;
-            BulkDrainPrimePtr.Value -= CondBd;
-            BulkSourcePrimePtr.Value -= CondBs;
-            DrainPrimeDrainPtr.Value += -DrainConductance;
-            DrainPrimeGatePtr.Value += (xnrm - xrev) * Transconductance;
-            DrainPrimeBulkPtr.Value += -CondBd + (xnrm - xrev) * TransconductanceBs;
-            DrainPrimeSourcePrimePtr.Value += -CondDs - xnrm * (Transconductance + TransconductanceBs);
-            SourcePrimeGatePtr.Value += -(xnrm - xrev) * Transconductance;
-            SourcePrimeSourcePtr.Value += -SourceConductance;
-            SourcePrimeBulkPtr.Value += -CondBs - (xnrm - xrev) * TransconductanceBs;
-            SourcePrimeDrainPrimePtr.Value += -CondDs - xrev * (Transconductance + TransconductanceBs);
+            MatrixElements.Add(
+                DrainConductance,
+                SourceConductance,
+                CondBd + CondBs,
+                DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs),
+                SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs),
+                -DrainConductance,
+                -SourceConductance,
+                -CondBd,
+                -CondBs,
+                -DrainConductance,
+                (xnrm - xrev) * Transconductance,
+                -CondBd + (xnrm - xrev) * TransconductanceBs,
+                -CondDs - xnrm * (Transconductance + TransconductanceBs),
+                -(xnrm - xrev) * Transconductance,
+                -SourceConductance,
+                -CondBs - (xnrm - xrev) * TransconductanceBs,
+                -CondDs - xrev * (Transconductance + TransconductanceBs));
         }
 
         /// <summary>

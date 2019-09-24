@@ -22,6 +22,14 @@ namespace SpiceSharp.Components.JFETBehaviors
         protected StateDerivative Qgd { get; private set; }
 
         /// <summary>
+        /// Gets the transient matrix elements.
+        /// </summary>
+        /// <value>
+        /// The transient matrix elements.
+        /// </value>
+        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
+
+        /// <summary>
         /// Gets the G-S capacitance.
         /// </summary>
         public double CapGs { get; private set; }
@@ -52,6 +60,15 @@ namespace SpiceSharp.Components.JFETBehaviors
             var method = context.States.GetValue<TimeSimulationState>().Method;
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
+
+            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(GateNode, DrainPrimeNode),
+                new MatrixPin(GateNode, SourcePrimeNode),
+                new MatrixPin(DrainPrimeNode, GateNode),
+                new MatrixPin(SourcePrimeNode, GateNode),
+                new MatrixPin(GateNode, GateNode),
+                new MatrixPin(DrainPrimeNode, DrainPrimeNode),
+                new MatrixPin(SourcePrimeNode, SourcePrimeNode));
         }
 
         /// <summary>
@@ -91,18 +108,17 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
             var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
             var cdreq = ModelParameters.JFETType * (cd + cgd);
-            GateNodePtr.Value += -ceqgs - ceqgd;
-            DrainPrimeNodePtr.Value += -cdreq + ceqgd;
-            SourcePrimeNodePtr.Value += cdreq + ceqgs;
+            VectorElements.Add(-ceqgs - ceqgd, -cdreq + ceqgd, cdreq + ceqgs);
 
             // Load Y-matrix
-            GateDrainPrimePtr.Value += -ggd;
-            GateSourcePrimePtr.Value += -ggs;
-            DrainPrimeGatePtr.Value += -ggd;
-            SourcePrimeGatePtr.Value += -ggs;
-            GateGatePtr.Value += ggd + ggs;
-            DrainPrimeDrainPrimePtr.Value += ggd;
-            SourcePrimeSourcePrimePtr.Value += ggs;
+            TransientMatrixElements.Add(
+                -ggd,
+                -ggs,
+                -ggd,
+                -ggs,
+                ggd + ggs,
+                ggd,
+                ggs);
         }
 
         /// <summary>

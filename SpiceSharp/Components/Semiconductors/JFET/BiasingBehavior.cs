@@ -45,94 +45,20 @@ namespace SpiceSharp.Components.JFETBehaviors
         public int SourcePrimeNode { get; private set; }
 
         /// <summary>
-        /// Gets the gate RHS element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IVectorElement<double> GateNodePtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the drain RHS element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IVectorElement<double> DrainPrimeNodePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the source RHS element.
-        /// </summary>
-        protected IVectorElement<double> SourcePrimeNodePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> GateDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, source) element.
-        /// </summary>
-        protected IMatrixElement<double> GateSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external source, source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourceSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, gate) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, source) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, gate) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, external source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, gate) element.
-        /// </summary>
-        protected IMatrixElement<double> GateGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external source, source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourceSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, source) element.
-        /// </summary>
-        protected IMatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
@@ -215,36 +141,32 @@ namespace SpiceSharp.Components.JFETBehaviors
             // Get states
             context.States.TryGetValue(out _timeState);
 
-            if (context is ComponentBindingContext cc)
-            {
-                DrainNode = cc.Pins[0];
-                GateNode = cc.Pins[1];
-                SourceNode = cc.Pins[2];
-            }
-
-            var solver = BiasingState.Solver;
+            var c = (ComponentBindingContext)context;
+                DrainNode = c.Pins[0];
+                GateNode = c.Pins[1];
+                SourceNode = c.Pins[2];
             var variables = context.Variables;
             SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source"), VariableType.Voltage).Index : SourceNode;
             DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain"), VariableType.Voltage).Index : DrainNode;
 
-            GateNodePtr = solver.GetVectorElement(GateNode);
-            DrainPrimeNodePtr = solver.GetVectorElement(DrainPrimeNode);
-            SourcePrimeNodePtr = solver.GetVectorElement(SourcePrimeNode);
-            DrainDrainPrimePtr = solver.GetMatrixElement(DrainNode, DrainPrimeNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(GateNode, DrainPrimeNode);
-            GateSourcePrimePtr = solver.GetMatrixElement(GateNode, SourcePrimeNode);
-            SourceSourcePrimePtr = solver.GetMatrixElement(SourceNode, SourcePrimeNode);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(DrainPrimeNode, DrainNode);
-            DrainPrimeGatePtr = solver.GetMatrixElement(DrainPrimeNode, GateNode);
-            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(DrainPrimeNode, SourcePrimeNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(SourcePrimeNode, GateNode);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(SourcePrimeNode, SourceNode);
-            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourcePrimeNode, DrainPrimeNode);
-            DrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
-            GateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
-            SourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
-            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainPrimeNode, DrainPrimeNode);
-            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourcePrimeNode, SourcePrimeNode);
+            VectorElements = new RealVectorElementSet(BiasingState.Solver,
+                GateNode, DrainPrimeNode, SourcePrimeNode);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(DrainNode, DrainPrimeNode),
+                new MatrixPin(GateNode, DrainPrimeNode),
+                new MatrixPin(GateNode, SourcePrimeNode),
+                new MatrixPin(SourceNode, SourcePrimeNode),
+                new MatrixPin(DrainPrimeNode, DrainNode),
+                new MatrixPin(DrainPrimeNode, GateNode),
+                new MatrixPin(DrainPrimeNode, SourcePrimeNode),
+                new MatrixPin(SourcePrimeNode, GateNode),
+                new MatrixPin(SourcePrimeNode, SourceNode),
+                new MatrixPin(SourcePrimeNode, DrainPrimeNode),
+                new MatrixPin(DrainNode, DrainNode),
+                new MatrixPin(GateNode, GateNode),
+                new MatrixPin(SourceNode, SourceNode),
+                new MatrixPin(DrainPrimeNode, DrainPrimeNode),
+                new MatrixPin(SourcePrimeNode, SourcePrimeNode));
         }
 
         /// <summary>
@@ -253,24 +175,10 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            GateNodePtr = null;
-            DrainPrimeNodePtr = null;
-            SourcePrimeNodePtr = null;
-            DrainDrainPrimePtr = null;
-            GateDrainPrimePtr = null;
-            GateSourcePrimePtr = null;
-            SourceSourcePrimePtr = null;
-            DrainPrimeDrainPtr = null;
-            DrainPrimeGatePtr = null;
-            DrainPrimeSourcePrimePtr = null;
-            SourcePrimeGatePtr = null;
-            SourcePrimeSourcePtr = null;
-            SourcePrimeDrainPrimePtr = null;
-            DrainDrainPtr = null;
-            GateGatePtr = null;
-            SourceSourcePtr = null;
-            DrainPrimeDrainPrimePtr = null;
-            SourcePrimeSourcePrimePtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
+            VectorElements?.Destroy();
+            VectorElements = null;
         }
 
         /// <summary>
@@ -422,26 +330,25 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
             var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
             var cdreq = ModelParameters.JFETType * (cd + cgd - gds * vds - gm * vgs);
-            GateNodePtr.Value += -ceqgs - ceqgd;
-            DrainPrimeNodePtr.Value += -cdreq + ceqgd;
-            SourcePrimeNodePtr.Value += cdreq + ceqgs;
+            VectorElements.Add(-ceqgs - ceqgd, -cdreq + ceqgd, cdreq + ceqgs);
 
             // Load Y-matrix
-            DrainDrainPrimePtr.Value += -gdpr;
-            GateDrainPrimePtr.Value += -ggd;
-            GateSourcePrimePtr.Value += -ggs;
-            SourceSourcePrimePtr.Value += -gspr;
-            DrainPrimeDrainPtr.Value += -gdpr;
-            DrainPrimeGatePtr.Value += gm - ggd;
-            DrainPrimeSourcePrimePtr.Value += -gds - gm;
-            SourcePrimeGatePtr.Value += -ggs - gm;
-            SourcePrimeSourcePtr.Value += -gspr;
-            SourcePrimeDrainPrimePtr.Value += -gds;
-            DrainDrainPtr.Value += gdpr;
-            GateGatePtr.Value += ggd + ggs;
-            SourceSourcePtr.Value += gspr;
-            DrainPrimeDrainPrimePtr.Value += gdpr + gds + ggd;
-            SourcePrimeSourcePrimePtr.Value += gspr + gds + gm + ggs;
+            MatrixElements.Add(
+                -gdpr,
+                -ggd,
+                -ggs,
+                -gspr,
+                -gdpr,
+                gm - ggd,
+                -gds - gm,
+                -ggs - gm,
+                -gspr,
+                -gds,
+                gdpr,
+                ggd + ggs,
+                gspr,
+                gdpr + gds + ggd,
+                gspr + gds + gm + ggs);
         }
 
         /// <summary>

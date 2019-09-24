@@ -13,24 +13,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// The (pos, ctrlpos) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosControlPosPtr { get; private set; }
-
-        /// <summary>
-        /// The (pos, ctrlneg) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosControlNegPtr { get; private set; }
-
-        /// <summary>
-        /// The (neg, ctrlpos) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegControlPosPtr { get; private set; }
-
-        /// <summary>
-        /// The (neg, ctrlneg) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegControlNegPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Get the voltage.
@@ -78,11 +66,22 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         {
             base.Bind(context);
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
-            CPosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);
-            CNegControlPosPtr = solver.GetMatrixElement(NegNode, ContPosNode);
-            CNegControlNegPtr = solver.GetMatrixElement(NegNode, ContNegNode);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, ContPosNode),
+                new MatrixPin(PosNode, ContNegNode),
+                new MatrixPin(NegNode, ContPosNode),
+                new MatrixPin(NegNode, ContNegNode));
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            ComplexState = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -98,10 +97,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         void IFrequencyBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
-            CPosControlPosPtr.Value += value;
-            CPosControlNegPtr.Value -= value;
-            CNegControlPosPtr.Value -= value;
-            CNegControlNegPtr.Value += value;
+            ComplexMatrixElements.Add(value, -value, -value, value);
         }
     }
 }

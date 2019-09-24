@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Algebra;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -20,14 +19,20 @@ namespace SpiceSharp.Components.InductorBehaviors
         public event EventHandler<UpdateFluxEventArgs> UpdateFlux;
 
         /// <summary>
-        /// Gets the (branch, branch) element.
+        /// Gets the transient matrix elements.
         /// </summary>
-        protected IMatrixElement<double> BranchBranchPtr { get; private set; }
+        /// <value>
+        /// The transient matrix elements.
+        /// </value>
+        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the branch RHS element.
+        /// Gets the transient vector elements.
         /// </summary>
-        protected IVectorElement<double> BranchPtr { get; private set; }
+        /// <value>
+        /// The transient vector elements.
+        /// </value>
+        protected RealVectorElementSet TransientVectorElements { get; private set; }
 
         /// <summary>
         /// The state tracking the flux.
@@ -55,6 +60,20 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
+            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(BranchEq, BranchEq));
+            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq);
+
+            var method = context.States.GetValue<TimeSimulationState>().Method;
+            _flux = method.CreateDerivative();
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
 
             // Clear all events
             if (UpdateFlux != null)
@@ -63,12 +82,11 @@ namespace SpiceSharp.Components.InductorBehaviors
                     UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
             }
 
-            var solver = context.States.GetValue<BiasingSimulationState>().Solver;
-            BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
-            BranchPtr = solver.GetVectorElement(BranchEq);
-
-            var method = context.States.GetValue<TimeSimulationState>().Method;
-            _flux = method.CreateDerivative();
+            TransientMatrixElements?.Destroy();
+            TransientMatrixElements = null;
+            TransientVectorElements?.Destroy();
+            TransientVectorElements = null;
+            _flux = null;
         }
 
         /// <summary>
@@ -100,8 +118,8 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Finally load the Y-matrix
             _flux.Integrate();
-            BranchPtr.Value += _flux.RhsCurrent();
-            BranchBranchPtr.Value -= _flux.Jacobian(BaseParameters.Inductance);
+            TransientMatrixElements.Add(-_flux.Jacobian(BaseParameters.Inductance));
+            TransientVectorElements.Add(_flux.RhsCurrent());
         }
     }
 }

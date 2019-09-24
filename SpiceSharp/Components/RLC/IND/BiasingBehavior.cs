@@ -55,24 +55,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> NegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchPosPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the state.
@@ -96,19 +84,17 @@ namespace SpiceSharp.Components.InductorBehaviors
             // Get parameters.
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
-            if (context is ComponentBindingContext cc)
-            {
-                PosNode = cc.Pins[0];
-                NegNode = cc.Pins[1];
-            }
+            var c = (ComponentBindingContext)context;
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, NegNode),
+                new MatrixPin(BranchEq, PosNode));
         }
 
         /// <summary>
@@ -118,10 +104,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchNegPtr = null;
-            BranchPosPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -129,10 +113,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            PosBranchPtr.Value += 1;
-            NegBranchPtr.Value -= 1;
-            BranchPosPtr.Value += 1;
-            BranchNegPtr.Value -= 1;
+            MatrixElements.Add(1, -1, -1, 1);
         }
 
         /// <summary>

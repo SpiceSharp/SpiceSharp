@@ -41,34 +41,12 @@ namespace SpiceSharp.Components.DelayBehaviors
         public int BranchEq { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> NegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, ctrlpos) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchControlPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, ctrlneg) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchControlNegPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the real state.
@@ -100,16 +78,16 @@ namespace SpiceSharp.Components.DelayBehaviors
             NegNode = c.Pins[1];
             ContPosNode = c.Pins[2];
             ContNegNode = c.Pins[3];
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            BranchControlPosPtr = solver.GetMatrixElement(BranchEq, ContPosNode);
-            BranchControlNegPtr = solver.GetMatrixElement(BranchEq, ContNegNode);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(BranchEq, NegNode),
+                new MatrixPin(BranchEq, ContPosNode),
+                new MatrixPin(BranchEq, ContNegNode));
         }
 
         /// <summary>
@@ -119,12 +97,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchPosPtr = null;
-            BranchNegPtr = null;
-            BranchControlPosPtr = null;
-            BranchControlNegPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -132,17 +106,10 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            PosBranchPtr.Value += 1;
-            BranchPosPtr.Value += 1;
-            NegBranchPtr.Value -= 1;
-            BranchNegPtr.Value -= 1;
-
-            // In DC, the delay should just copy input to output
             if (BiasingState.UseDc)
-            {
-                BranchControlPosPtr.Value -= 1.0;
-                BranchControlNegPtr.Value += 1.0;
-            }
+                MatrixElements.Add(1, -1, 1, -1, -1, 1);
+            else
+                MatrixElements.Add(1, -1, 1, -1);
         }
 
         /// <summary>

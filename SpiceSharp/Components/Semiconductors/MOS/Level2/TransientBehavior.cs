@@ -116,9 +116,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         private StateHistory _voltageBs;
 
         /// <summary>
-        /// Elements needed for transient behavior
+        /// Gets the matrix elements.
         /// </summary>
-        protected IVectorElement<double> GatePtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
+
+        /// <summary>
+        /// Gets the transient vector elements.
+        /// </summary>
+        /// <value>
+        /// The transient vector elements.
+        /// </value>
+        protected RealVectorElementSet TransientVectorElements { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -136,8 +147,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             base.Bind(context);
 
-            var solver = BiasingState.Solver;
-            GatePtr = solver.GetVectorElement(GateNode);
+            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver,
+                GateNode, BulkNode, DrainNodePrime, SourceNodePrime);
+            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(GateNode, GateNode),
+                new MatrixPin(BulkNode, BulkNode),
+                new MatrixPin(DrainNodePrime, DrainNodePrime),
+                new MatrixPin(SourceNodePrime, SourceNodePrime),
+                new MatrixPin(GateNode, BulkNode),
+                new MatrixPin(GateNode, DrainNodePrime),
+                new MatrixPin(GateNode, SourceNodePrime),
+                new MatrixPin(BulkNode, GateNode),
+                new MatrixPin(BulkNode, DrainNodePrime),
+                new MatrixPin(BulkNode, SourceNodePrime),
+                new MatrixPin(DrainNodePrime, GateNode),
+                new MatrixPin(DrainNodePrime, BulkNode),
+                new MatrixPin(SourceNodePrime, GateNode),
+                new MatrixPin(SourceNodePrime, BulkNode));
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();
@@ -159,6 +185,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void Unbind()
         {
             base.Unbind();
+            TransientVectorElements?.Destroy();
+            TransientVectorElements = null;
+            TransientMatrixElements?.Destroy();
+            TransientMatrixElements = null;
 
             _voltageGs = null;
             _voltageDs = null;
@@ -264,26 +294,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             // Load current vector
             var ceqbs = ModelParameters.MosfetType * (cbs - gbs * vbs);
             var ceqbd = ModelParameters.MosfetType * (cbd - gbd * vbd);
-            GatePtr.Value -= ModelParameters.MosfetType * (ceqgs + ceqgb + ceqgd);
-            BulkPtr.Value -= ceqbs + ceqbd - ModelParameters.MosfetType * ceqgb;
-            DrainPrimePtr.Value += ceqbd + ModelParameters.MosfetType * ceqgd;
-            SourcePrimePtr.Value += ceqbs + ModelParameters.MosfetType * ceqgs;
+            TransientVectorElements.Add(
+                -ModelParameters.MosfetType * (ceqgs + ceqgb + ceqgd),
+                -(ceqbs + ceqbd - ModelParameters.MosfetType * ceqgb),
+                ceqbd + ModelParameters.MosfetType * ceqgd,
+                ceqbs + ModelParameters.MosfetType * ceqgs);
 
             // Load Y-matrix
-            GateGatePtr.Value += gcgd + gcgs + gcgb;
-            BulkBulkPtr.Value += gbd + gbs + gcgb;
-            DrainPrimeDrainPrimePtr.Value += gbd + gcgd;
-            SourcePrimeSourcePrimePtr.Value += gbs + gcgs;
-            GateBulkPtr.Value -= gcgb;
-            GateDrainPrimePtr.Value -= gcgd;
-            GateSourcePrimePtr.Value -= gcgs;
-            BulkGatePtr.Value -= gcgb;
-            BulkDrainPrimePtr.Value -= gbd;
-            BulkSourcePrimePtr.Value -= gbs;
-            DrainPrimeGatePtr.Value -= gcgd;
-            DrainPrimeBulkPtr.Value -= gbd;
-            SourcePrimeGatePtr.Value -= gcgs;
-            SourcePrimeBulkPtr.Value -= gbs;
+            TransientMatrixElements.Add(
+                gcgd + gcgs + gcgb,
+                gbd + gbs + gcgb,
+                gbd + gcgd,
+                gbs + gcgs,
+                -gcgb,
+                -gcgd,
+                -gcgs,
+                -gcgb,
+                -gbd,
+                -gbs,
+                -gcgd,
+                -gbd,
+                -gcgs,
+                -gbs);
         }
     }
 }

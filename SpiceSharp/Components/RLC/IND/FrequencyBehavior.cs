@@ -12,29 +12,12 @@ namespace SpiceSharp.Components.InductorBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchBranchPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -59,12 +42,12 @@ namespace SpiceSharp.Components.InductorBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            CBranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, NegNode),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(BranchEq, BranchEq));
         }
 
         /// <summary>
@@ -74,11 +57,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            CPosBranchPtr = null;
-            CNegBranchPtr = null;
-            CBranchNegPtr = null;
-            CBranchPosPtr = null;
-            CBranchBranchPtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -94,11 +74,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         void IFrequencyBehavior.Load()
         {
             var val = ComplexState.Laplace * BaseParameters.Inductance.Value;
-            CPosBranchPtr.Value += 1.0;
-            CNegBranchPtr.Value -= 1.0;
-            CBranchNegPtr.Value -= 1.0;
-            CBranchPosPtr.Value += 1.0;
-            CBranchBranchPtr.Value -= val;
+            ComplexMatrixElements.Add(1, -1, -1, 1, -val);
         }
     }
 }

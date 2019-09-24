@@ -81,7 +81,7 @@ namespace SpiceSharp.IntegrationMethods
             }
             finally
             {
-                _lock.EnterWriteLock();
+                _lock.ExitWriteLock();
             }
         }
 

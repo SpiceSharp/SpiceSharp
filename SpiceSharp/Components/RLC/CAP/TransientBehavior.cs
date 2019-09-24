@@ -39,34 +39,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
 
         /// <summary>
-        /// Gets the (positive, positive) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosPosPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealOnePortElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the (negative, negative) element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IMatrixElement<double> NegNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> PosNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> NegPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the positive RHS element.
-        /// </summary>
-        protected IVectorElement<double> PosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the negative RHS element.
-        /// </summary>
-        protected IVectorElement<double> NegPtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the state tracking the charge.
@@ -96,13 +82,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             base.Bind(context);
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
-            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
-            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-            PosPtr = solver.GetVectorElement(PosNode);
-            NegPtr = solver.GetVectorElement(NegNode);
+            MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
+            VectorElements = new RealVectorElementSet(BiasingState.Solver, PosNode, NegNode);
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             QCap = method.CreateDerivative();
@@ -115,12 +96,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosPosPtr = null;
-            NegNegPtr = null;
-            NegPosPtr = null;
-            PosNegPtr = null;
-            PosPtr = null;
-            NegPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
+            VectorElements?.Destroy();
+            VectorElements = null;
         }
 
         /// <summary>
@@ -149,15 +128,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             var geq = QCap.Jacobian(Capacitance);
             var ceq = QCap.RhsCurrent();
 
-            // Load matrix
-            PosPosPtr.Value += geq;
-            NegNegPtr.Value += geq;
-            PosNegPtr.Value -= geq;
-            NegPosPtr.Value -= geq;
-
-            // Load Rhs vector
-            PosPtr.Value -= ceq;
-            NegPtr.Value += ceq;
+            // Load matrix and rhs vector
+            MatrixElements.AddOnePort(geq);
+            VectorElements.Add(-ceq, ceq);
         }
     }
 }

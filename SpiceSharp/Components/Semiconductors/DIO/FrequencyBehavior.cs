@@ -13,40 +13,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (external positive, positive) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosPosPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegPosPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, external positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosPrimePosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosPrimeNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the external (positive, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CPosPrimePosPrimePtr { get; private set; }
-
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        
         /// <summary>
         /// Gets the voltage.
         /// </summary>
@@ -101,14 +74,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosPosPrimePtr = solver.GetMatrixElement(PosNode, PosPrimeNode);
-            CNegPosPrimePtr = solver.GetMatrixElement(NegNode, PosPrimeNode);
-            CPosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, PosNode);
-            CPosPrimeNegPtr = solver.GetMatrixElement(PosPrimeNode, NegNode);
-            CPosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            CNegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
-            CPosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
+
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, PosNode),
+                new MatrixPin(NegNode, NegNode),
+                new MatrixPin(PosPrimeNode, PosPrimeNode),
+                new MatrixPin(PosNode, PosPrimeNode),
+                new MatrixPin(NegNode, PosPrimeNode),
+                new MatrixPin(PosPrimeNode, PosNode),
+                new MatrixPin(PosPrimeNode, NegNode));
         }
 
         /// <summary>
@@ -118,13 +92,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            CPosPosPrimePtr = null;
-            CNegPosPrimePtr = null;
-            CPosPrimePosPtr = null;
-            CPosPrimeNegPtr = null;
-            CPosPosPtr = null;
-            CNegNegPtr = null;
-            CPosPrimePosPrimePtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -148,13 +117,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var xceq = Capacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix
-            CPosPosPtr.Value += gspr;
-            CNegNegPtr.Value += new Complex(geq, xceq);
-            CPosPrimePosPrimePtr.Value += new Complex(geq + gspr, xceq);
-            CPosPosPrimePtr.Value -= gspr;
-            CNegPosPrimePtr.Value -= new Complex(geq, xceq);
-            CPosPrimePosPtr.Value -= gspr;
-            CPosPrimeNegPtr.Value -= new Complex(geq, xceq);
+            ComplexMatrixElements.Add(
+                gspr, new Complex(geq, xceq), new Complex(geq + gspr, xceq),
+                -gspr, -new Complex(geq, xceq), -gspr, -new Complex(geq, xceq));
         }
     }
 }

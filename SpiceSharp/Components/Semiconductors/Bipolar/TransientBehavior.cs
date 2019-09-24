@@ -12,15 +12,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Gets the base RHS element.
-        /// </summary>
-        protected IVectorElement<double> BasePtr { get; private set; }
 
         /// <summary>
-        /// Gets the substrate RHS element.
+        /// Gets the transient matrix elements.
         /// </summary>
-        protected IVectorElement<double> SubstratePtr { get; private set; }
+        /// <value>
+        /// The transient matrix elements.
+        /// </value>
+        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
+
+        /// <summary>
+        /// Gets the transient vector elements.
+        /// </summary>
+        /// <value>
+        /// The transient vector elements.
+        /// </value>
+        protected RealVectorElementSet TransientVectorElements { get; private set; }
 
         /// <summary>
         /// Gets the base-emitter capacitor current.
@@ -110,9 +117,23 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Bind(context);
 
-            var solver = BiasingState.Solver;
-            BasePtr = solver.GetVectorElement(BaseNode);
-            SubstratePtr = solver.GetVectorElement(SubstrateNode);
+            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver, 
+                BaseNode, SubstrateNode);
+            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(BaseNode, BaseNode),
+                new MatrixPin(CollectorPrimeNode, CollectorPrimeNode),
+                new MatrixPin(BasePrimeNode, BasePrimeNode),
+                new MatrixPin(EmitterPrimeNode, EmitterPrimeNode),
+                new MatrixPin(CollectorPrimeNode, BasePrimeNode),
+                new MatrixPin(BasePrimeNode, CollectorPrimeNode),
+                new MatrixPin(BasePrimeNode, EmitterPrimeNode),
+                new MatrixPin(EmitterPrimeNode, CollectorPrimeNode),
+                new MatrixPin(EmitterPrimeNode, BasePrimeNode),
+                new MatrixPin(SubstrateNode, SubstrateNode),
+                new MatrixPin(CollectorPrimeNode, SubstrateNode),
+                new MatrixPin(SubstrateNode, CollectorPrimeNode),
+                new MatrixPin(BaseNode, CollectorPrimeNode),
+                new MatrixPin(CollectorPrimeNode, BaseNode));
 
             _method = context.States.GetValue<TimeSimulationState>().Method;
             BiasingStateChargeBe = _method.CreateDerivative();
@@ -128,9 +149,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unbind()
         {
             base.Unbind();
-
-            BasePtr = null;
-            SubstratePtr = null;
+            TransientVectorElements?.Destroy();
+            TransientVectorElements = null;
+            TransientMatrixElements?.Destroy();
+            TransientMatrixElements = null;
             BiasingStateChargeBe = null;
             BiasingStateChargeBc = null;
             BiasingStateChargeCs = null;
@@ -188,30 +210,28 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var ceqcs = ModelParameters.BipolarType * (BiasingStateChargeCs.Derivative - vcs * gccs);
             var ceqbx = ModelParameters.BipolarType * (BiasingStateChargeBx.Derivative - vbx * geqbx);
             var ceqbe = ModelParameters.BipolarType * (cc + cb - vbe * gpi + vbc * -geqcb);
-            var ceqbc = ModelParameters.BipolarType * (-cc + - vbc * gmu);
+            var ceqbc = ModelParameters.BipolarType * (-cc + -vbc * gmu);
 
             // Load Rhs-vector
-            BasePtr.Value += -ceqbx;
-            CollectorPrimePtr.Value += ceqcs + ceqbx + ceqbc;
-            BasePrimePtr.Value += -ceqbe - ceqbc;
-            EmitterPrimePtr.Value += ceqbe;
-            SubstratePtr.Value += -ceqcs;
+            TransientVectorElements.Add(-ceqbx, -ceqcs);
+            VectorElements.Add(ceqcs + ceqbx + ceqbc, -ceqbe - ceqbc, ceqbe);
 
             // Load Y-matrix
-            BaseBasePtr.Value += geqbx;
-            CollectorPrimeCollectorPrimePtr.Value += gmu + gccs + geqbx;
-            BasePrimeBasePrimePtr.Value += gpi + gmu + geqcb;
-            EmitterPrimeEmitterPrimePtr.Value += gpi;
-            CollectorPrimeBasePrimePtr.Value += -gmu;
-            BasePrimeCollectorPrimePtr.Value += -gmu - geqcb;
-            BasePrimeEmitterPrimePtr.Value += -gpi;
-            EmitterPrimeCollectorPrimePtr.Value += geqcb;
-            EmitterPrimeBasePrimePtr.Value += -gpi - geqcb;
-            SubstrateSubstratePtr.Value += gccs;
-            CollectorPrimeSubstratePtr.Value += -gccs;
-            SubstrateCollectorPrimePtr.Value += -gccs;
-            BaseCollectorPrimePtr.Value += -geqbx;
-            CollectorPrimeBasePtr.Value += -geqbx;
+            TransientMatrixElements.Add(
+                geqbx,
+                gmu + gccs + geqbx,
+                gpi + gmu + geqcb,
+                gpi,
+                -gmu,
+                -gmu - geqcb,
+                -gpi,
+                geqcb,
+                -gpi - geqcb,
+                gccs,
+                -gccs,
+                -gccs,
+                -geqbx,
+                -geqbx);
         }
 
         /// <summary>

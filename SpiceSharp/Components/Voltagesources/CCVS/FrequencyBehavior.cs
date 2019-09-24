@@ -13,29 +13,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (controlling branch, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchControlBranchPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -45,9 +28,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
         public Complex GetVoltage(ComplexSimulationState state)
         {
-			state.ThrowIfNull(nameof(state));
-
-            return state.Solution[PosNode] - state.Solution[NegNode];
+            return state.ThrowIfNotBound(this).Solution[PosNode] - state.Solution[NegNode];
         }
 
         /// <summary>
@@ -58,9 +39,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
         public Complex GetCurrent(ComplexSimulationState state)
         {
-			state.ThrowIfNull(nameof(state));
-
-            return state.Solution[BranchEq];
+            return state.ThrowIfNotBound(this).Solution[BranchEq];
         }
 
         /// <summary>
@@ -71,8 +50,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
         public Complex GetPower(ComplexSimulationState state)
         {
-			state.ThrowIfNull(nameof(state));
-
+            state.ThrowIfNotBound(this);
             var v = state.Solution[PosNode] - state.Solution[NegNode];
             var i = state.Solution[BranchEq];
             return -v * Complex.Conjugate(i);
@@ -101,12 +79,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            CBranchControlBranchPtr = solver.GetMatrixElement(BranchEq, ContBranchEq);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(BranchEq, NegNode),
+                new MatrixPin(BranchEq, ContBranchEq));
         }
 
         /// <summary>
@@ -116,11 +94,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            CPosBranchPtr = null;
-            CNegBranchPtr = null;
-            CBranchPosPtr = null;
-            CBranchNegPtr = null;
-            CBranchControlBranchPtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -135,12 +110,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            // Load Y-matrix
-            CPosBranchPtr.Value += 1.0;
-            CBranchPosPtr.Value += 1.0;
-            CNegBranchPtr.Value -= 1.0;
-            CBranchNegPtr.Value -= 1.0;
-            CBranchControlBranchPtr.Value -= BaseParameters.Coefficient.Value;
+            ComplexMatrixElements.Add(1, -1, 1, -1, -BaseParameters.Coefficient);
         }
     }
 }

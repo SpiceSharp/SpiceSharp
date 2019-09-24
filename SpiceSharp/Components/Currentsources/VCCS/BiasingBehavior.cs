@@ -37,24 +37,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         protected int ContNegNode { get; private set; }
 
         /// <summary>
-        /// The (pos, ctrlpos) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosControlPosPtr { get; private set; }
-
-        /// <summary>
-        /// The (neg, ctrlneg) element.
-        /// </summary>
-        protected IMatrixElement<double> PosControlNegPtr { get; private set; }
-
-        /// <summary>
-        /// The (neg, ctrlpos) element.
-        /// </summary>
-        protected IMatrixElement<double> NegControlPosPtr { get; private set; }
-
-        /// <summary>
-        /// The (neg, ctrlneg) element.
-        /// </summary>
-        protected IMatrixElement<double> NegControlNegPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Get the voltage.
@@ -109,11 +97,11 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             ContNegNode = c.Pins[3];
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            PosControlPosPtr = solver.GetMatrixElement(PosNode, ContPosNode);
-            PosControlNegPtr = solver.GetMatrixElement(PosNode, ContNegNode);
-            NegControlPosPtr = solver.GetMatrixElement(NegNode, ContPosNode);
-            NegControlNegPtr = solver.GetMatrixElement(NegNode, ContNegNode);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(PosNode, ContPosNode),
+                new MatrixPin(PosNode, ContNegNode),
+                new MatrixPin(NegNode, ContPosNode),
+                new MatrixPin(NegNode, ContNegNode));
         }
 
         /// <summary>
@@ -123,10 +111,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosControlPosPtr = null;
-            PosControlNegPtr = null;
-            NegControlPosPtr = null;
-            NegControlNegPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -135,10 +121,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         void IBiasingBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
-            PosControlPosPtr.Value += value;
-            PosControlNegPtr.Value -= value;
-            NegControlPosPtr.Value -= value;
-            NegControlNegPtr.Value += value;
+            MatrixElements.Add(value, -value, -value, value);
         }
 
         /// <summary>

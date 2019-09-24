@@ -52,29 +52,20 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public int BranchEq { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosBranchPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the (negative, branch) element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IMatrixElement<double> NegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the branch RHS element.
-        /// </summary>
-        protected IVectorElement<double> BranchPtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -102,6 +93,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var c = (ComponentBindingContext)context;
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             BaseParameters.Waveform?.Bind(context);
 
@@ -120,15 +112,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             }
 
             // Get matrix elements
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
             context.States.TryGetValue(out _timeState);
-            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            BranchPtr = solver.GetVectorElement(BranchEq);
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, NegNode));
+            VectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq);
         }
 
         /// <summary>
@@ -138,11 +129,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosBranchPtr = null;
-            BranchPosPtr = null;
-            NegBranchPtr = null;
-            BranchNegPtr = null;
-            BranchPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -153,10 +141,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var state = BiasingState.ThrowIfNotBound(this);
             double value;
 
-            PosBranchPtr.Value += 1;
-            BranchPosPtr.Value += 1;
-            NegBranchPtr.Value -= 1;
-            BranchNegPtr.Value -= 1;
+            MatrixElements.Add(1, 1, -1, -1);
 
             if (_timeState != null)
             {
@@ -172,7 +157,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             }
 
             Voltage = value;
-            BranchPtr.Value += value;
+            VectorElements.Add(value);
         }
 
         /// <summary>

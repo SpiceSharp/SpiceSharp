@@ -26,85 +26,18 @@ namespace SpiceSharp.Components.JFETBehaviors
         public double CapGd { get; private set; }
 
         /// <summary>
-        /// Gets the external (drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the external (source, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourceSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external drain, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (gate, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CGateSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (external source, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourceSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, external drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeDrainPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (drain, source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CDrainPrimeSourcePrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, gate) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeGatePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, external source) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeSourcePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (source, drain) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CSourcePrimeDrainPrimePtr { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
+        /// Gets the complex matrix elements.
         /// </summary>
         /// <value>
-        /// The complex simulation state.
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+
+        /// <summary>
+        /// Gets the complex state.
+        /// </summary>
+        /// <value>
+        /// The complex state.
         /// </value>
         protected ComplexSimulationState ComplexState { get; private set; }
 
@@ -128,22 +61,22 @@ namespace SpiceSharp.Components.JFETBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CDrainDrainPtr = solver.GetMatrixElement(DrainNode, DrainNode);
-            CGateGatePtr = solver.GetMatrixElement(GateNode, GateNode);
-            CSourceSourcePtr = solver.GetMatrixElement(SourceNode, SourceNode);
-            CDrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainPrimeNode, DrainPrimeNode);
-            CSourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourcePrimeNode, SourcePrimeNode);
-            CDrainDrainPrimePtr = solver.GetMatrixElement(DrainNode, DrainPrimeNode);
-            CGateDrainPrimePtr = solver.GetMatrixElement(GateNode, DrainPrimeNode);
-            CGateSourcePrimePtr = solver.GetMatrixElement(GateNode, SourcePrimeNode);
-            CSourceSourcePrimePtr = solver.GetMatrixElement(SourceNode, SourcePrimeNode);
-            CDrainPrimeDrainPtr = solver.GetMatrixElement(DrainPrimeNode, DrainNode);
-            CDrainPrimeGatePtr = solver.GetMatrixElement(DrainPrimeNode, GateNode);
-            CDrainPrimeSourcePrimePtr = solver.GetMatrixElement(DrainPrimeNode, SourcePrimeNode);
-            CSourcePrimeGatePtr = solver.GetMatrixElement(SourcePrimeNode, GateNode);
-            CSourcePrimeSourcePtr = solver.GetMatrixElement(SourcePrimeNode, SourceNode);
-            CSourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourcePrimeNode, DrainPrimeNode);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(DrainNode, DrainNode),
+                new MatrixPin(GateNode, GateNode),
+                new MatrixPin(SourceNode, SourceNode),
+                new MatrixPin(DrainPrimeNode, DrainPrimeNode),
+                new MatrixPin(SourcePrimeNode, SourcePrimeNode),
+                new MatrixPin(DrainNode, DrainPrimeNode),
+                new MatrixPin(GateNode, DrainPrimeNode),
+                new MatrixPin(GateNode, SourcePrimeNode),
+                new MatrixPin(SourceNode, SourcePrimeNode),
+                new MatrixPin(DrainPrimeNode, DrainNode),
+                new MatrixPin(DrainPrimeNode, GateNode),
+                new MatrixPin(DrainPrimeNode, SourcePrimeNode),
+                new MatrixPin(SourcePrimeNode, GateNode),
+                new MatrixPin(SourcePrimeNode, SourceNode),
+                new MatrixPin(SourcePrimeNode, DrainPrimeNode));
         }
 
         /// <summary>
@@ -152,21 +85,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            CDrainDrainPtr = null;
-            CGateGatePtr = null;
-            CSourceSourcePtr = null;
-            CDrainPrimeDrainPrimePtr = null;
-            CSourcePrimeSourcePrimePtr = null;
-            CDrainDrainPrimePtr = null;
-            CGateDrainPrimePtr = null;
-            CGateSourcePrimePtr = null;
-            CSourceSourcePrimePtr = null;
-            CDrainPrimeDrainPtr = null;
-            CDrainPrimeGatePtr = null;
-            CDrainPrimeSourcePrimePtr = null;
-            CSourcePrimeGatePtr = null;
-            CSourcePrimeSourcePtr = null;
-            CSourcePrimeDrainPrimePtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -216,21 +136,22 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ggd = Ggd;
             var xgd = CapGd * omega;
 
-            CDrainDrainPtr.Value += gdpr;
-            CGateGatePtr.Value += new Complex(ggd + ggs, xgd + xgs);
-            CSourceSourcePtr.Value += gspr;
-            CDrainPrimeDrainPrimePtr.Value += new Complex(gdpr + gds + ggd, xgd);
-            CSourcePrimeSourcePrimePtr.Value += new Complex(gspr + gds + gm + ggs, xgs);
-            CDrainDrainPrimePtr.Value -= gdpr;
-            CGateDrainPrimePtr.Value -= new Complex(ggd, xgd);
-            CGateSourcePrimePtr.Value -= new Complex(ggs, xgs);
-            CSourceSourcePrimePtr.Value -= gspr;
-            CDrainPrimeDrainPtr.Value -= gdpr;
-            CDrainPrimeGatePtr.Value += new Complex(-ggd + gm, -xgd);
-            CDrainPrimeSourcePrimePtr.Value += (-gds - gm);
-            CSourcePrimeGatePtr.Value -= new Complex(ggs + gm, xgs);
-            CSourcePrimeSourcePtr.Value -= gspr;
-            CSourcePrimeDrainPrimePtr.Value -= gds;
+            ComplexMatrixElements.Add(
+                gdpr,
+                new Complex(ggd + ggs, xgd + xgs),
+                gspr,
+                new Complex(gdpr + gds + ggd, xgd),
+                new Complex(gspr + gds + gm + ggs, xgs),
+                -gdpr,
+                -new Complex(ggd, xgd),
+                -new Complex(ggs, xgs),
+                -gspr,
+                -gdpr,
+                new Complex(-ggd + gm, -xgd),
+                (-gds - gm),
+                -new Complex(ggs + gm, xgs),
+                -gspr,
+                -gds);
         }
     }
 }

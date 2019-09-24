@@ -49,14 +49,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// The positive RHS element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IVectorElement<double> PosPtr { get; private set; }
-
-        /// <summary>
-        /// The negative RHS element.
-        /// </summary>
-        protected IVectorElement<double> NegPtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -101,9 +99,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             }
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            PosPtr = solver.GetVectorElement(PosNode);
-            NegPtr = solver.GetVectorElement(NegNode);
+            VectorElements = new RealVectorElementSet(BiasingState.Solver, PosNode, NegNode);
         }
 
         /// <summary>
@@ -113,8 +109,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosPtr = null;
-            NegPtr = null;
+            VectorElements?.Destroy();
+            VectorElements = null;
         }
 
         /// <summary>
@@ -141,8 +137,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            PosPtr.Value -= value;
-            NegPtr.Value += value;
+            VectorElements.Add(-value, value);
             Current = value;
         }
 

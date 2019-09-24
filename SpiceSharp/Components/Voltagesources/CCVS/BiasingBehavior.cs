@@ -61,29 +61,20 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public int BranchEq { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosBranchPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the (negative, branch) element.
+        /// Gets the vector elements.
         /// </summary>
-        protected IMatrixElement<double> NegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (controlling branch, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> BranchControlBranchPtr { get; private set; }
+        /// <value>
+        /// The vector elements.
+        /// </value>
+        protected RealVectorElementSet VectorElements { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -112,15 +103,16 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
             ContBranchEq = VoltageLoad.BranchEq;
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             // Get matrix elements
             var solver = context.States.GetValue<BiasingSimulationState>().Solver;
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-            PosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            BranchControlBranchPtr = solver.GetMatrixElement(BranchEq, ContBranchEq);
+            MatrixElements = new RealMatrixElementSet(solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(BranchEq, NegNode),
+                new MatrixPin(BranchEq, ContBranchEq));
         }
 
         /// <summary>
@@ -130,11 +122,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosBranchPtr = null;
-            NegBranchPtr = null;
-            BranchPosPtr = null;
-            BranchNegPtr = null;
-            BranchControlBranchPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -142,11 +131,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            PosBranchPtr.Value += 1.0;
-            BranchPosPtr.Value += 1.0;
-            NegBranchPtr.Value -= 1.0;
-            BranchNegPtr.Value -= 1.0;
-            BranchControlBranchPtr.Value -= BaseParameters.Coefficient;
+            MatrixElements.Add(1, -1, 1, -1, -BaseParameters.Coefficient);
         }
 
         /// <summary>

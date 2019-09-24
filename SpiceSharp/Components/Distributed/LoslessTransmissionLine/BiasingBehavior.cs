@@ -56,109 +56,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public int BranchEq2 { get; private set; }
 
         /// <summary>
-        /// Gets the left (positive, positive) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> Pos1Pos1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (positive, internal) element.
-        /// </summary>
-        protected IMatrixElement<double> Pos1Int1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (internal, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> Int1Pos1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (internal, internal) element.
-        /// </summary>
-        protected IMatrixElement<double> Int1Int1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (internal, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> Int1Ibr1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (branch, internal) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr1Int1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> Neg1Ibr1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr1Neg1Ptr { get; private set; }
-        
-        /// <summary>
-        /// Gets the right (positive, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> Pos2Pos2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (positive, internal) element.
-        /// </summary>
-        protected IMatrixElement<double> Pos2Int2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (internal, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> Int2Pos2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (internal, internal) element.
-        /// </summary>
-        protected IMatrixElement<double> Int2Int2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (internal, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> Int2Ibr2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (branch, internal) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr2Int2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> Neg2Ibr2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr2Neg2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the left (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr1Pos1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the (left branch, right positive) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr1Pos2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the (left branch, right negative) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr1Neg2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the (right branch, left branch) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr2Ibr1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right (branch, branch) element.
-        /// </summary>
-        protected IMatrixElement<double> Ibr2Ibr2Ptr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the state.
@@ -194,41 +97,38 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Neg1 = c.Pins[1];
             Pos2 = c.Pins[2];
             Neg2 = c.Pins[3];
-
-            // Get matrix elements
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
             var variables = context.Variables;
-
             Internal1 = variables.Create(Name.Combine("int1"), VariableType.Voltage).Index;
             Internal2 = variables.Create(Name.Combine("int2"), VariableType.Voltage).Index;
             BranchEq1 = variables.Create(Name.Combine("branch1"), VariableType.Current).Index;
             BranchEq2 = variables.Create(Name.Combine("branch2"), VariableType.Current).Index;
 
-            Pos1Pos1Ptr = solver.GetMatrixElement(Pos1, Pos1);
-            Pos1Int1Ptr = solver.GetMatrixElement(Pos1, Internal1);
-            Int1Pos1Ptr = solver.GetMatrixElement(Internal1, Pos1);
-            Int1Int1Ptr = solver.GetMatrixElement(Internal1, Internal1);
-            Int1Ibr1Ptr = solver.GetMatrixElement(Internal1, BranchEq1);
-            Ibr1Int1Ptr = solver.GetMatrixElement(BranchEq1, Internal1);
-            Neg1Ibr1Ptr = solver.GetMatrixElement(Neg1, BranchEq1);
-            Ibr1Neg1Ptr = solver.GetMatrixElement(BranchEq1, Neg1);
+            // Get matrix elements
+            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(Pos1, Pos1),
+                new MatrixPin(Pos1, Internal1),
+                new MatrixPin(Internal1, Pos1),
+                new MatrixPin(Internal1, Internal1),
+                new MatrixPin(Internal1, BranchEq1),
+                new MatrixPin(BranchEq1, Internal1),
+                new MatrixPin(Neg1, BranchEq1),
+                new MatrixPin(BranchEq1, Neg1),
+                new MatrixPin(Pos2, Pos2),
+                new MatrixPin(Pos2, Internal2),
+                new MatrixPin(Internal2, Pos2),
+                new MatrixPin(Internal2, Internal2),
+                new MatrixPin(Internal2, BranchEq2),
+                new MatrixPin(BranchEq2, Internal2),
+                new MatrixPin(Neg2, BranchEq2),
+                new MatrixPin(BranchEq2, Neg2),
 
-            Pos2Pos2Ptr = solver.GetMatrixElement(Pos2, Pos2);
-            Pos2Int2Ptr = solver.GetMatrixElement(Pos2, Internal2);
-            Int2Pos2Ptr = solver.GetMatrixElement(Internal2, Pos2);
-            Int2Int2Ptr = solver.GetMatrixElement(Internal2, Internal2);
-            Int2Ibr2Ptr = solver.GetMatrixElement(Internal2, BranchEq2);
-            Ibr2Int2Ptr = solver.GetMatrixElement(BranchEq2, Internal2);
-            Neg2Ibr2Ptr = solver.GetMatrixElement(Neg2, BranchEq2);
-            Ibr2Neg2Ptr = solver.GetMatrixElement(BranchEq2, Neg2);
-
-            // These pointers are only used to calculate the DC operating point
-            Ibr1Pos1Ptr = solver.GetMatrixElement(BranchEq1, Pos1);
-            Ibr1Pos2Ptr = solver.GetMatrixElement(BranchEq1, Pos2);
-            Ibr1Neg2Ptr = solver.GetMatrixElement(BranchEq1, Neg2);
-            Ibr2Ibr1Ptr = solver.GetMatrixElement(BranchEq2, BranchEq1);
-            Ibr2Ibr2Ptr = solver.GetMatrixElement(BranchEq2, BranchEq2);
+                // These are only used to calculate the biasing point
+                new MatrixPin(BranchEq1, Pos1),
+                new MatrixPin(BranchEq1, Pos2),
+                new MatrixPin(BranchEq1, Neg2),
+                new MatrixPin(BranchEq2, BranchEq1),
+                new MatrixPin(BranchEq2, BranchEq2));
         }
 
         /// <summary>
@@ -238,27 +138,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            Pos1Pos1Ptr = null;
-            Pos1Int1Ptr = null;
-            Int1Pos1Ptr = null;
-            Int1Int1Ptr = null;
-            Int1Ibr1Ptr = null;
-            Ibr1Int1Ptr = null;
-            Neg1Ibr1Ptr = null;
-            Ibr1Neg1Ptr = null;
-            Pos2Pos2Ptr = null;
-            Pos2Int2Ptr = null;
-            Int2Pos2Ptr = null;
-            Int2Int2Ptr = null;
-            Int2Ibr2Ptr = null;
-            Ibr2Int2Ptr = null;
-            Neg2Ibr2Ptr = null;
-            Ibr2Neg2Ptr = null;
-            Ibr1Pos1Ptr = null;
-            Ibr1Pos2Ptr = null;
-            Ibr1Neg2Ptr = null;
-            Ibr2Ibr1Ptr = null;
-            Ibr2Ibr2Ptr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -266,47 +147,21 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            // Admittance between POS1 and INT1
-            Pos1Pos1Ptr.Value += BaseParameters.Admittance;
-            Pos1Int1Ptr.Value -= BaseParameters.Admittance;
-            Int1Pos1Ptr.Value -= BaseParameters.Admittance;
-            Int1Int1Ptr.Value += BaseParameters.Admittance;
-
-            // Admittance between POS2 and INT2
-            Pos2Pos2Ptr.Value += BaseParameters.Admittance;
-            Pos2Int2Ptr.Value -= BaseParameters.Admittance;
-            Int2Pos2Ptr.Value -= BaseParameters.Admittance;
-            Int2Int2Ptr.Value += BaseParameters.Admittance;
-
-            // Add the currents to the positive and negative nodes
-            Int1Ibr1Ptr.Value += 1.0;
-            Neg1Ibr1Ptr.Value -= 1.0;
-            Int2Ibr2Ptr.Value += 1.0;
-            Neg2Ibr2Ptr.Value -= 1.0;
-
+            var y = BaseParameters.Admittance;
             if (BiasingState.UseDc)
             {
-                // Assume DC operation
-                
-                // VPOS1 - VNEG1 = VPOS2 - VNEG2
-                Ibr1Pos1Ptr.Value += 1.0;
-                Ibr1Neg1Ptr.Value -= 1.0;
-                Ibr1Pos2Ptr.Value -= 1.0;
-                Ibr1Neg2Ptr.Value += 1.0;
-
-                // IBR1 = -IBR2
-                Ibr2Ibr1Ptr.Value += 1.0;
-                Ibr2Ibr2Ptr.Value += 1.0;
+                MatrixElements.Add(
+                    y, -y, -y, y, 1, 0, -1, -1,
+                    y, -y, -y, y, 1, 0, -1, 0,
+                    1, -1, 1, 1, 1
+                    );
             }
             else
             {
-                // INT1-NEG1 voltage source
-                Ibr1Int1Ptr.Value += 1.0;
-                Ibr1Neg1Ptr.Value -= 1.0;
-
-                // INT2-NEG2 voltage source
-                Ibr2Int2Ptr.Value += 1.0;
-                Ibr2Neg2Ptr.Value -= 1.0;
+                MatrixElements.Add(
+                    y, -y, -y, y, 1, 1, -1, -1,
+                    y, -y, -y, y, 1, 1, -1, -1
+                    );
             }
         }
 

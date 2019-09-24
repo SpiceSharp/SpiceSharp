@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using SpiceSharp.Algebra;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
@@ -23,15 +21,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         protected BiasingBehavior Bias2 { get; private set; }
 
         /// <summary>
-        /// Gets the (primary, secondary) branch element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> Branch1Branch2Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the (secondary, primary) branch element.
-        /// </summary>
-        protected IMatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
-
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -59,9 +54,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            Branch1Branch2Ptr = solver.GetMatrixElement(Bias1.BranchEq, Bias2.BranchEq);
-            Branch2Branch1Ptr = solver.GetMatrixElement(Bias2.BranchEq, Bias1.BranchEq);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(Bias1.BranchEq, Bias2.BranchEq),
+                new MatrixPin(Bias2.BranchEq, Bias1.BranchEq));
         }
 
         /// <summary>
@@ -77,10 +72,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void IFrequencyBehavior.Load()
         {
             var value = ComplexState.Laplace * Factor;
-
-            // Load Y-matrix
-            Branch1Branch2Ptr.Value -= value;
-            Branch2Branch1Ptr.Value -= value;
+            ComplexMatrixElements.Add(-value, -value);
         }
     }
 }

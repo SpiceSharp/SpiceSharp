@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using SpiceSharp.Algebra;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -37,14 +36,12 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// The (pos, branch) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosControlBranchPtr { get; private set; }
-
-        /// <summary>
-        /// the (neg, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegControlBranchPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -75,9 +72,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             base.Bind(context);
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosControlBranchPtr = solver.GetMatrixElement(PosNode, ControlBranchEq);
-            CNegControlBranchPtr = solver.GetMatrixElement(NegNode, ControlBranchEq);
+            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, ControlBranchEq),
+                new MatrixPin(NegNode, ControlBranchEq));
         }
 
         /// <summary>
@@ -87,8 +84,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            CPosControlBranchPtr = null;
-            CNegControlBranchPtr = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -96,8 +93,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            CPosControlBranchPtr.Value += BaseParameters.Coefficient.Value;
-            CNegControlBranchPtr.Value -= BaseParameters.Coefficient.Value;
+            var value = BaseParameters.Coefficient.Value;
+            ComplexMatrixElements.Add(value, -value);
         }
     }
 }

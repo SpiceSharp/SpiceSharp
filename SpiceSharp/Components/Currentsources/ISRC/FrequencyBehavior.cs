@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using SpiceSharp.Algebra;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -18,14 +17,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
 
         /// <summary>
-        /// The positive RHS element.
+        /// Gets the complex vector elements.
         /// </summary>
-        protected IVectorElement<Complex> CPosPtr { get; private set; }
-
-        /// <summary>
-        /// The negative RHS element.
-        /// </summary>
-        protected IVectorElement<Complex> CNegPtr { get; private set; }
+        /// <value>
+        /// The complex vector elements.
+        /// </value>
+        protected ComplexVectorElementSet ComplexVectorElements { get; private set; }
 
         /// <summary>
         /// Get the voltage.
@@ -75,9 +72,18 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             // Get matrix elements
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosPtr = solver.GetVectorElement(PosNode);
-            CNegPtr = solver.GetVectorElement(NegNode);
+            ComplexVectorElements = new ComplexVectorElementSet(ComplexState.Solver, PosNode, NegNode);
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            ComplexState = null;
+            ComplexVectorElements?.Destroy();
+            ComplexVectorElements = null;
         }
 
         /// <summary>
@@ -94,8 +100,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            CPosPtr.Value -= FrequencyParameters.Phasor;
-            CNegPtr.Value += FrequencyParameters.Phasor;
+            var value = FrequencyParameters.Phasor;
+            ComplexVectorElements.Add(-value, value);
         }
     }
 }

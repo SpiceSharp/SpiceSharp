@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using SpiceSharp.Algebra;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -13,24 +12,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (positive, positive) element.
+        /// Gets the complex matrix elements.
         /// </summary>
-        protected IMatrixElement<Complex> PosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> NegNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> PosNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> NegPosPtr { get; private set; }
+        /// <value>
+        /// The complex matrix elements.
+        /// </value>
+        protected ComplexOnePortElementSet ComplexMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the voltage.
@@ -84,11 +71,18 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
-            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
-            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
+            ComplexMatrixElements = new ComplexOnePortElementSet(ComplexState.Solver, PosNode, NegNode);
+        }
+
+        /// <summary>
+        /// Unbind the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            ComplexState = null;
+            ComplexMatrixElements?.Destroy();
+            ComplexMatrixElements = null;
         }
 
         /// <summary>
@@ -105,12 +99,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         void IFrequencyBehavior.Load()
         {
             var val = ComplexState.Laplace * Capacitance;
-
-            // Load the Y-matrix
-            PosPosPtr.Value += val;
-            NegNegPtr.Value += val;
-            PosNegPtr.Value -= val;
-            NegPosPtr.Value -= val;
+            ComplexMatrixElements.AddOnePort(val);
         }
     }
 }

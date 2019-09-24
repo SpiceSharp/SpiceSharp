@@ -20,19 +20,17 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Gets the transient behavior of secondary inductor.
         /// </summary>
         protected InductorBehaviors.TransientBehavior Load2 { get; private set; }
-        
-        /// <summary>
-        /// Gets the (primary, secondary) branch element.
-        /// </summary>
-        protected IMatrixElement<double> Branch1Branch2 { get; private set; }
 
         /// <summary>
-        /// Gets the (secondary, primary) branch element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> Branch2Branch1 { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealMatrixElementSet MatrixElements { get; private set; }
 
         /// <summary>
-        /// Gets the conductance.
+        /// Gets the equivalent conductance.
         /// </summary>
         protected double Conductance { get; private set; }
 
@@ -56,19 +54,19 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="context">The binding context.</param>
         public override void Bind(BindingContext context)
         {
-			base.Bind(context);
+            base.Bind(context);
             var c = (MutualInductanceBindingContext)context;
             Load1 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
             Load2 = c.Inductor2Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
-            
+
             // Register events for modifying the flux through the inductors
             Load1.UpdateFlux += UpdateFlux1;
             Load2.UpdateFlux += UpdateFlux2;
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            Branch1Branch2 = solver.GetMatrixElement(Load1.BranchEq, Load2.BranchEq);
-            Branch2Branch1 = solver.GetMatrixElement(Load2.BranchEq, Load1.BranchEq);
+            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
+                new MatrixPin(Load1.BranchEq, Load2.BranchEq),
+                new MatrixPin(Load2.BranchEq, Load1.BranchEq));
         }
 
         /// <summary>
@@ -83,8 +81,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load2.UpdateFlux -= UpdateFlux2;
 
             BiasingState = null;
-            Branch1Branch2 = null;
-            Branch2Branch1 = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -123,8 +121,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void ITimeBehavior.Load()
         {
             // Load Y-matrix
-            Branch1Branch2.Value -= Conductance;
-            Branch2Branch1.Value -= Conductance;
+            MatrixElements.Add(-Conductance, -Conductance);
         }
     }
 }

@@ -78,24 +78,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
         protected int NegNode { get; private set; }
 
         /// <summary>
-        /// Gets the (positive, positive) element.
+        /// Gets the matrix elements.
         /// </summary>
-        protected IMatrixElement<double> PosPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, positive) element.
-        /// </summary>
-        protected IMatrixElement<double> NegPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (positive, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> PosNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, negative) element.
-        /// </summary>
-        protected IMatrixElement<double> NegNegPtr { get; private set; }
+        /// <value>
+        /// The matrix elements.
+        /// </value>
+        protected RealOnePortElementSet MatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the method used for switching.
@@ -136,11 +124,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
 
             // Get matrix elements
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            var solver = BiasingState.Solver;
-            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
-            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
-            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
-            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
         }
 
         /// <summary>
@@ -150,10 +134,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            PosPosPtr = null;
-            PosNegPtr = null;
-            NegPosPtr = null;
-            NegNegPtr = null;
+            MatrixElements?.Destroy();
+            MatrixElements = null;
         }
 
         /// <summary>
@@ -232,10 +214,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             Conductance = gNow;
 
             // Load the Y-matrix
-            PosPosPtr.Value += gNow;
-            PosNegPtr.Value -= gNow;
-            NegPosPtr.Value -= gNow;
-            NegNegPtr.Value += gNow;
+            MatrixElements.AddOnePort(gNow);
         }
 
         /// <summary>

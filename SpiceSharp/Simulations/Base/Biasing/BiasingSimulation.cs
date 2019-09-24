@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
     /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="BiasingState" /> is always part of the simulation.
     /// </remarks>
     /// <seealso cref="Simulation" />
-    public abstract class BiasingSimulation : Simulation, IBiasingSimulation
+    public abstract class BiasingSimulation : Simulation
     {        
         /// <summary>
         /// Gets the variable that causes issues.
