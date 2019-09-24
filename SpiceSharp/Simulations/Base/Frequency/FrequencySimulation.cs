@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// A template for frequency-dependent analysis.
     /// </summary>
     /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
-    public abstract class FrequencySimulation : BiasingSimulation
+    public abstract class FrequencySimulation : BiasingSimulation, IFrequencySimulation
     {
         /// <summary>
         /// Private variables
