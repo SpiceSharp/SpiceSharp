@@ -1,11 +1,11 @@
 ﻿using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// Element set for a one-port for real numbers.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Circuits.RealMatrixElementSet" />
+    /// <seealso cref="RealMatrixElementSet" />
     public class RealOnePortElementSet : RealMatrixElementSet
     {
         /// <summary>

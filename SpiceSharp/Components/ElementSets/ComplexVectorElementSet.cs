@@ -1,19 +1,20 @@
 ﻿using SpiceSharp.Algebra;
+using System.Numerics;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A vector set for real numbers.
+    /// Vector elements for complex numbers.
     /// </summary>
     /// <seealso cref="VectorElementSet{T}" />
-    public class RealVectorElementSet : VectorElementSet<double>
+    public class ComplexVectorElementSet : VectorElementSet<Complex>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RealVectorElementSet"/> class.
+        /// Initializes a new instance of the <see cref="ComplexVectorElementSet"/> class.
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="pins">The pins.</param>
-        public RealVectorElementSet(ISolver<double> solver, params int[] pins)
+        public ComplexVectorElementSet(ISolver<Complex> solver, params int[] pins)
             : base(solver, pins)
         {
         }
@@ -22,7 +23,7 @@ namespace SpiceSharp.Circuits
         /// Adds the specified values.
         /// </summary>
         /// <param name="values">The values.</param>
-        public void Add(params double[] values)
+        public void Add(params Complex[] values)
         {
             for (var i = 0; i < values.Length; i++)
                 Elements[i].Value += values[i];

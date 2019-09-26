@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Algebra;
 using System;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Components
 {
     /// <summary>
-    /// 
+    /// A set of vector elements.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The base type.</typeparam>
     public class VectorElementSet<T> where T : IFormattable
     {
         /// <summary>

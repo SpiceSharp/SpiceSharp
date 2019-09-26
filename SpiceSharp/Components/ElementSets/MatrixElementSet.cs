@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Tracks a set of matrix elements for an <see cref="Entity"/>.
+    /// A set of matrix elements.
     /// </summary>
-    /// <typeparam name="T">The value type.</typeparam>
+    /// <typeparam name="T">The base type.</typeparam>
     public abstract class MatrixElementSet<T> where T : IFormattable
     {
         /// <summary>

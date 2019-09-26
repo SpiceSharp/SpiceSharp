@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SpiceSharp.Algebra
+﻿namespace SpiceSharp.Algebra
 {
     public abstract partial class DenseLUSolver<M, V, T>
     {

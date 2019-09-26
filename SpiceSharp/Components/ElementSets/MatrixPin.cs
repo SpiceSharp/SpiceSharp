@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SpiceSharp.Circuits
+﻿namespace SpiceSharp.Components
 {
     /// <summary>
     /// A structure keeping track of row and column indices.

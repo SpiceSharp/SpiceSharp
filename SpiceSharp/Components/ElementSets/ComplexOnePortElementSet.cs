@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Algebra;
 using System.Numerics;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// Element set for a one-port for complex numbers.
