@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <summary>
     /// Base parameters for a <see cref="Subcircuit"/>.
     /// </summary>
-    public class EntityBaseParameters : ParameterSet
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the entities.
@@ -41,11 +41,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public string[] Pins { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityBaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         /// <param name="entities">The entities.</param>
         /// <param name="pins">The pins.</param>
-        public EntityBaseParameters(IEntityCollection entities, params string[] pins)
+        public BaseParameters(IEntityCollection entities, params string[] pins)
         {
             Entities = entities;
             pins.ThrowIfNull(nameof(pins));

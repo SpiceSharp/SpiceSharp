@@ -112,15 +112,44 @@ namespace SpiceSharp.Circuits
                 return;
 
             // Create our entity behavior container
-            BehaviorContainer eb = CreateBehaviorContainer();
+            var eb = CreateBehaviorContainer(simulation);
+            if (eb != null)
+            {
+                if (eb.Count > 0)
+                    BindBehaviors(eb, simulation, entities);
+
+                // Register the behavior
+                if (eb.Parameters.Count > 0 || eb.Count > 0)
+                    simulation.EntityBehaviors.Add(Name, eb);
+            }
+        }
+
+        /// <summary>
+        /// Creates the <see cref="BehaviorContainer"/> containing the behaviors.
+        /// </summary>
+        /// <param name="simulation">The simulation that requests the behaviors.</param>
+        /// <returns>
+        /// A container with behaviors for the simulation.
+        /// </returns>
+        protected virtual BehaviorContainer CreateBehaviorContainer(ISimulation simulation)
+        {
+            BehaviorContainer eb = null;
+            if (Parameters.Count > 0)
+            {
+                eb = new BehaviorContainer(Name, LinkParameters ? Parameters : Parameters.Clone());
+                foreach (var p in eb.Parameters.Values)
+                    p.CalculateDefaults();
+            }
 
             // Create behaviors
             var factories = FindBehaviorFactory(GetType());
             if (factories != null)
             {
+                if (eb == null)
+                    eb = new BehaviorContainer(Name);
+
                 // We go through the types in reverse order to account for inheritance
                 var types = simulation.BehaviorTypes.ToArray();
-                var newBehaviors = new Stack<IBehavior>();
                 for (var i = types.Length - 1; i >= 0; i--)
                 {
                     // Don't create a behavior for a type that was already implemented by another behavior
@@ -131,50 +160,26 @@ namespace SpiceSharp.Circuits
                     {
                         var behavior = factory(this);
                         eb.Add(behavior);
-                        newBehaviors.Push(behavior);
                     }
                 }
-
-                if (eb.Count > 0)
-                    BindBehaviors(newBehaviors, eb, simulation, entities);
             }
-
-            // Register the behavior
-            if (eb.Parameters.Count > 0 || eb.Count > 0)
-                simulation.EntityBehaviors.Add(Name, eb);
-        }
-
-        /// <summary>
-        /// Creates the <see cref="BehaviorContainer"/> for storing the behaviors created by the entity.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual BehaviorContainer CreateBehaviorContainer()
-        {
-            if (Parameters.Count > 0)
-            {
-                var eb = new BehaviorContainer(Name, LinkParameters ? Parameters : Parameters.Clone());
-                foreach (var p in eb.Parameters.Values)
-                    p.CalculateDefaults();
-                return eb;
-            }
-
-            return new BehaviorContainer(Name);
+            eb.Order(simulation.BehaviorTypes);
+            return eb;
         }
 
         /// <summary>
         /// Binds the behaviors to the simulation.
         /// </summary>
-        /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected virtual void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
+        protected virtual void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             simulation.ThrowIfNull(nameof(simulation));
             var context = new BindingContext(simulation, eb);
 
             // Bind the behaviors
-            foreach (var behavior in behaviors)
+            foreach (var behavior in eb.Ordered)
                 behavior.Bind(context);
         }
 

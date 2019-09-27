@@ -24,7 +24,7 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<Type, List<IBehavior>> _behaviorLists = new Dictionary<Type, List<IBehavior>>();
 
         /// <summary>
-        /// Gets the number of behaviors in the pool.
+        /// Gets the number of behaviors in the collection.
         /// </summary>
         public int Count
         {
@@ -44,6 +44,14 @@ namespace SpiceSharp.Behaviors
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the number of entities in the collection.
+        /// </summary>
+        /// <value>
+        /// The entity count.
+        /// </value>
+        public int EntityCount => _entityBehaviors.Count;
 
         /// <summary>
         /// Enumerates all names in the pool.

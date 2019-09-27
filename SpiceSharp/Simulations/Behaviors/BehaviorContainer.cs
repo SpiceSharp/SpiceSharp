@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Simulations;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Behaviors
 {
@@ -23,6 +24,14 @@ namespace SpiceSharp.Behaviors
         public ParameterSetDictionary Parameters { get; }
 
         /// <summary>
+        /// Gets the (unique) values ordered, ordered by their type using <see cref="Order(IEnumerable{Type})"/>.
+        /// </summary>
+        /// <value>
+        /// The ordered behaviors.
+        /// </value>
+        public IEnumerable<IBehavior> Ordered { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
@@ -41,6 +50,26 @@ namespace SpiceSharp.Behaviors
         {
             Name = source.ThrowIfNull(nameof(source));
             Parameters = parameters.ThrowIfNull(nameof(parameters));
+        }
+
+        /// <summary>
+        /// Orders the behaviors in the container by their types. A behavior
+        /// only appears once in the list, even if it implements multiple
+        /// types.
+        /// </summary>
+        /// <param name="types">The types.</param>
+        public void Order(IEnumerable<Type> types)
+        {
+            var list = new List<IBehavior>();
+            foreach (var type in types)
+            {
+                if (!Dictionary.TryGetValue(type, out var behavior))
+                    continue;
+                if (list.Contains(behavior))
+                    continue;
+                list.Add(behavior);
+            }
+            Ordered = list;
         }
 
         #region Implementation of IParameterSet   

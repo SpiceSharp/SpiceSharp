@@ -90,6 +90,7 @@
     <Compile Include="Models\Voltagesources\CCVS\CurrentControlledVoltageSourceTests.cs" />
     <Compile Include="Models\Voltagesources\VCVS\VoltageControlledVoltageSourceTests.cs" />
     <Compile Include="Models\Voltagesources\VSRC\VoltageSourceTests.cs" />
+    <Compile Include="ParallelLoaders\ParallelLoaderTests.cs" />
     <Compile Include="ParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Algebra\SparseFactorTests.cs" />

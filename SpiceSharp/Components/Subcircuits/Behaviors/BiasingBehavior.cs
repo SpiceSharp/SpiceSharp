@@ -5,8 +5,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <summary>
     /// Biasing behavior for a <see cref="Subcircuit"/>
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SubcircuitBehaviors.SubcircuitBehavior{T}" />
-    /// <seealso cref="SpiceSharp.Behaviors.IBiasingBehavior" />
+    /// <seealso cref="SubcircuitBehavior{T}" />
+    /// <seealso cref="IBiasingBehavior" />
     public class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
     {
         /// <summary>

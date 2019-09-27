@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using System;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -67,8 +68,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
             base.Bind(context);
 
             var c = (ComponentBindingContext)context;
-                PosNode = c.Pins[0];
-                NegNode = c.Pins[1];
+            PosNode = c.Pins[0];
+            NegNode = c.Pins[1];
 
             MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
         }

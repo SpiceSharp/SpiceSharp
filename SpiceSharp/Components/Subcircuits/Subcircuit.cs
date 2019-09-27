@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.SubcircuitBehaviors;
 using System.Collections.Generic;
+using SpiceSharp.Entities.Local;
 
 namespace SpiceSharp.Components
 {
@@ -40,7 +41,7 @@ namespace SpiceSharp.Components
         public Subcircuit(string name, IEntityCollection entities, params string[] pins)
             : base(name, pins.Length)
         {
-            var bp = new EntityBaseParameters(entities, pins);
+            var bp = new BaseParameters(entities, pins);
             Parameters.Add(bp);
         }
 
@@ -64,7 +65,7 @@ namespace SpiceSharp.Components
                 return;
 
             // Create the behaviors inside our behaviors
-            var ebp = Parameters.GetValue<EntityBaseParameters>();
+            var ebp = Parameters.GetValue<BaseParameters>();
             var nodemap = new Dictionary<string, string>(simulation.Variables.Comparer);
             for (var i = 0; i < PinCount; i++)
                 nodemap.Add(ebp.Pins[i], GetNode(i));
@@ -76,7 +77,7 @@ namespace SpiceSharp.Components
 
             // We need to use a proxy simulation to create the behaviors
             _subcktSimulation = new SubcircuitSimulation(Name, simulation, nodemap);
-            var ec = new SubcircuitEntityCollection(entities, ebp.Entities, simulation);
+            var ec = new LocalEntityCollection(entities, ebp.Entities, simulation);
             _subcktSimulation.Run(ec);
 
             // Now let's create our own behaviors
@@ -86,17 +87,16 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Binds the behaviors to the simulation.
         /// </summary>
-        /// <param name="behaviors">The behaviors that needs to be bound to the simulation.</param>
         /// <param name="eb">The entity behaviors and parameters.</param>
         /// <param name="simulation">The simulation to be bound to.</param>
         /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(IEnumerable<IBehavior> behaviors, BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
+        protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             // We want to make sure that the behaviors are accessible through the behavior container
             eb.Parameters.Add(new BehaviorBaseParameters(_subcktSimulation.EntityBehaviors));
 
             var context = new SubcircuitBindingContext(simulation, eb, _subcktSimulation.EntityBehaviors);
-            foreach (var behavior in behaviors)
+            foreach (var behavior in eb.Ordered)
                 behavior.Bind(context);
         }
     }
