@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 using Transistor = SpiceSharp.Components.MosfetBehaviors.Transistor;
 
 namespace SpiceSharp.Components.JFETBehaviors
@@ -49,15 +50,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
@@ -148,24 +141,23 @@ namespace SpiceSharp.Components.JFETBehaviors
             SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source"), VariableType.Voltage).Index : SourceNode;
             DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain"), VariableType.Voltage).Index : DrainNode;
 
-            VectorElements = new RealVectorElementSet(BiasingState.Solver,
-                GateNode, DrainPrimeNode, SourcePrimeNode);
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(DrainNode, DrainPrimeNode),
-                new MatrixPin(GateNode, DrainPrimeNode),
-                new MatrixPin(GateNode, SourcePrimeNode),
-                new MatrixPin(SourceNode, SourcePrimeNode),
-                new MatrixPin(DrainPrimeNode, DrainNode),
-                new MatrixPin(DrainPrimeNode, GateNode),
-                new MatrixPin(DrainPrimeNode, SourcePrimeNode),
-                new MatrixPin(SourcePrimeNode, GateNode),
-                new MatrixPin(SourcePrimeNode, SourceNode),
-                new MatrixPin(SourcePrimeNode, DrainPrimeNode),
-                new MatrixPin(DrainNode, DrainNode),
-                new MatrixPin(GateNode, GateNode),
-                new MatrixPin(SourceNode, SourceNode),
-                new MatrixPin(DrainPrimeNode, DrainPrimeNode),
-                new MatrixPin(SourcePrimeNode, SourcePrimeNode));
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(DrainNode, DrainPrimeNode),
+                new MatrixLocation(GateNode, DrainPrimeNode),
+                new MatrixLocation(GateNode, SourcePrimeNode),
+                new MatrixLocation(SourceNode, SourcePrimeNode),
+                new MatrixLocation(DrainPrimeNode, DrainNode),
+                new MatrixLocation(DrainPrimeNode, GateNode),
+                new MatrixLocation(DrainPrimeNode, SourcePrimeNode),
+                new MatrixLocation(SourcePrimeNode, GateNode),
+                new MatrixLocation(SourcePrimeNode, SourceNode),
+                new MatrixLocation(SourcePrimeNode, DrainPrimeNode),
+                new MatrixLocation(DrainNode, DrainNode),
+                new MatrixLocation(GateNode, GateNode),
+                new MatrixLocation(SourceNode, SourceNode),
+                new MatrixLocation(DrainPrimeNode, DrainPrimeNode),
+                new MatrixLocation(SourcePrimeNode, SourcePrimeNode)
+            }, new[] { GateNode, DrainPrimeNode, SourcePrimeNode });
         }
 
         /// <summary>
@@ -174,10 +166,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            MatrixElements?.Destroy();
-            MatrixElements = null;
-            VectorElements?.Destroy();
-            VectorElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -329,10 +319,9 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
             var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
             var cdreq = ModelParameters.JFETType * (cd + cgd - gds * vds - gm * vgs);
-            VectorElements.Add(-ceqgs - ceqgd, -cdreq + ceqgd, cdreq + ceqgs);
 
-            // Load Y-matrix
-            MatrixElements.Add(
+            Elements.Add(
+                // Y-matrix
                 -gdpr,
                 -ggd,
                 -ggs,
@@ -347,7 +336,12 @@ namespace SpiceSharp.Components.JFETBehaviors
                 ggd + ggs,
                 gspr,
                 gdpr + gds + ggd,
-                gspr + gds + gm + ggs);
+                gspr + gds + gm + ggs,
+                // RHS
+                -ceqgs - ceqgd, 
+                -cdreq + ceqgd,
+                cdreq + ceqgs
+                );
         }
 
         /// <summary>

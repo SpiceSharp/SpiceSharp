@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System.Numerics;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -15,7 +17,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -40,12 +42,12 @@ namespace SpiceSharp.Components.InductorBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(BranchEq, BranchEq));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(BranchEq, BranchEq));
         }
 
         /// <summary>
@@ -55,8 +57,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         void IFrequencyBehavior.Load()
         {
             var val = ComplexState.Laplace * BaseParameters.Inductance.Value;
-            ComplexMatrixElements.Add(1, -1, -1, 1, -val);
+            ComplexElements.Add(1, -1, -1, 1, -val);
         }
     }
 }

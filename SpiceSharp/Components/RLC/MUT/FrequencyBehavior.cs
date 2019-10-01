@@ -2,6 +2,8 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
+using System.Numerics;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -26,7 +28,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -54,9 +56,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(Bias1.BranchEq, Bias2.BranchEq),
-                new MatrixPin(Bias2.BranchEq, Bias1.BranchEq));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(Bias1.BranchEq, Bias2.BranchEq),
+                new MatrixLocation(Bias2.BranchEq, Bias1.BranchEq));
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void IFrequencyBehavior.Load()
         {
             var value = ComplexState.Laplace * Factor;
-            ComplexMatrixElements.Add(-value, -value);
+            ComplexElements.Add(-value, -value);
         }
     }
 }

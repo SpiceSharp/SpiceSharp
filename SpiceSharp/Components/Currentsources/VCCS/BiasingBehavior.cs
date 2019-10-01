@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 {
@@ -41,7 +42,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Get the voltage.
@@ -96,11 +97,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
             ContNegNode = c.Pins[3];
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(PosNode, ContPosNode),
-                new MatrixPin(PosNode, ContNegNode),
-                new MatrixPin(NegNode, ContPosNode),
-                new MatrixPin(NegNode, ContNegNode));
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(PosNode, ContPosNode),
+                new MatrixLocation(PosNode, ContNegNode),
+                new MatrixLocation(NegNode, ContPosNode),
+                new MatrixLocation(NegNode, ContNegNode)
+            });
         }
 
         /// <summary>
@@ -110,8 +112,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         void IBiasingBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
-            MatrixElements.Add(value, -value, -value, value);
+            Elements.Add(value, -value, -value, value);
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
@@ -158,15 +159,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         private TimeSimulationState _timeState;
 
@@ -215,26 +208,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 SourceNodePrime = SourceNode;
 
             // Get matrix pointers
-            VectorElements = new RealVectorElementSet(BiasingState.Solver,
-                BulkNode, DrainNodePrime, SourceNodePrime);
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(DrainNode, DrainNode),
-                new MatrixPin(SourceNode, SourceNode),
-                new MatrixPin(BulkNode, BulkNode),
-                new MatrixPin(DrainNodePrime, DrainNodePrime),
-                new MatrixPin(SourceNodePrime, SourceNodePrime),
-                new MatrixPin(DrainNode, DrainNodePrime),
-                new MatrixPin(SourceNode, SourceNodePrime),
-                new MatrixPin(BulkNode, DrainNodePrime),
-                new MatrixPin(BulkNode, SourceNodePrime),
-                new MatrixPin(DrainNodePrime, DrainNode),
-                new MatrixPin(DrainNodePrime, GateNode),
-                new MatrixPin(DrainNodePrime, BulkNode),
-                new MatrixPin(DrainNodePrime, SourceNodePrime),
-                new MatrixPin(SourceNodePrime, GateNode),
-                new MatrixPin(SourceNodePrime, SourceNode),
-                new MatrixPin(SourceNodePrime, BulkNode),
-                new MatrixPin(SourceNodePrime, DrainNodePrime));
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(DrainNode, DrainNode),
+                new MatrixLocation(SourceNode, SourceNode),
+                new MatrixLocation(BulkNode, BulkNode),
+                new MatrixLocation(DrainNodePrime, DrainNodePrime),
+                new MatrixLocation(SourceNodePrime, SourceNodePrime),
+                new MatrixLocation(DrainNode, DrainNodePrime),
+                new MatrixLocation(SourceNode, SourceNodePrime),
+                new MatrixLocation(BulkNode, DrainNodePrime),
+                new MatrixLocation(BulkNode, SourceNodePrime),
+                new MatrixLocation(DrainNodePrime, DrainNode),
+                new MatrixLocation(DrainNodePrime, GateNode),
+                new MatrixLocation(DrainNodePrime, BulkNode),
+                new MatrixLocation(DrainNodePrime, SourceNodePrime),
+                new MatrixLocation(SourceNodePrime, GateNode),
+                new MatrixLocation(SourceNodePrime, SourceNode),
+                new MatrixLocation(SourceNodePrime, BulkNode),
+                new MatrixLocation(SourceNodePrime, DrainNodePrime)
+            }, new[] { BulkNode, DrainNodePrime, SourceNodePrime });
         }
 
         /// <summary>
@@ -243,11 +235,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void Unbind()
         {
             base.Unbind();
-
-            MatrixElements?.Destroy();
-            MatrixElements = null;
-            VectorElements?.Destroy();
-            VectorElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -340,10 +329,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 xrev = 1;
                 cdreq = -ModelParameters.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
             }
-            VectorElements.Add(-(ceqbs + ceqbd), ceqbd - cdreq, cdreq + ceqbs);
 
-            // Load Y-matrix
-            MatrixElements.Add(
+            Elements.Add(
+                // Y-matrix
                 DrainConductance,
                 SourceConductance,
                 CondBd + CondBs,
@@ -360,7 +348,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 -(xnrm - xrev) * Transconductance,
                 -SourceConductance,
                 -CondBs - (xnrm - xrev) * TransconductanceBs,
-                -CondDs - xrev * (Transconductance + TransconductanceBs));
+                -CondDs - xrev * (Transconductance + TransconductanceBs),
+                // RHS vector
+                -(ceqbs + ceqbd), 
+                ceqbd - cdreq, 
+                cdreq + ceqbs);
         }
 
         /// <summary>

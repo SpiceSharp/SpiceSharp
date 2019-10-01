@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -18,15 +19,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <value>
         /// The transient matrix elements.
         /// </value>
-        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the transient vector elements.
-        /// </summary>
-        /// <value>
-        /// The transient vector elements.
-        /// </value>
-        protected RealVectorElementSet TransientVectorElements { get; private set; }
+        protected ElementSet<double> TransientElements { get; private set; }
 
         /// <summary>
         /// Gets the base-emitter capacitor current.
@@ -116,23 +109,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Bind(context);
 
-            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver, 
-                BaseNode, SubstrateNode);
-            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(BaseNode, BaseNode),
-                new MatrixPin(CollectorPrimeNode, CollectorPrimeNode),
-                new MatrixPin(BasePrimeNode, BasePrimeNode),
-                new MatrixPin(EmitterPrimeNode, EmitterPrimeNode),
-                new MatrixPin(CollectorPrimeNode, BasePrimeNode),
-                new MatrixPin(BasePrimeNode, CollectorPrimeNode),
-                new MatrixPin(BasePrimeNode, EmitterPrimeNode),
-                new MatrixPin(EmitterPrimeNode, CollectorPrimeNode),
-                new MatrixPin(EmitterPrimeNode, BasePrimeNode),
-                new MatrixPin(SubstrateNode, SubstrateNode),
-                new MatrixPin(CollectorPrimeNode, SubstrateNode),
-                new MatrixPin(SubstrateNode, CollectorPrimeNode),
-                new MatrixPin(BaseNode, CollectorPrimeNode),
-                new MatrixPin(CollectorPrimeNode, BaseNode));
+            TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(BaseNode, BaseNode),
+                new MatrixLocation(CollectorPrimeNode, CollectorPrimeNode),
+                new MatrixLocation(BasePrimeNode, BasePrimeNode),
+                new MatrixLocation(EmitterPrimeNode, EmitterPrimeNode),
+                new MatrixLocation(CollectorPrimeNode, BasePrimeNode),
+                new MatrixLocation(BasePrimeNode, CollectorPrimeNode),
+                new MatrixLocation(BasePrimeNode, EmitterPrimeNode),
+                new MatrixLocation(EmitterPrimeNode, CollectorPrimeNode),
+                new MatrixLocation(EmitterPrimeNode, BasePrimeNode),
+                new MatrixLocation(SubstrateNode, SubstrateNode),
+                new MatrixLocation(CollectorPrimeNode, SubstrateNode),
+                new MatrixLocation(SubstrateNode, CollectorPrimeNode),
+                new MatrixLocation(BaseNode, CollectorPrimeNode),
+                new MatrixLocation(CollectorPrimeNode, BaseNode)
+            }, new[] { BaseNode, SubstrateNode, CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode });
 
             _method = context.States.GetValue<TimeSimulationState>().Method;
             BiasingStateChargeBe = _method.CreateDerivative();
@@ -148,10 +140,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            TransientVectorElements?.Destroy();
-            TransientVectorElements = null;
-            TransientMatrixElements?.Destroy();
-            TransientMatrixElements = null;
+            TransientElements?.Destroy();
+            TransientElements = null;
             BiasingStateChargeBe = null;
             BiasingStateChargeBc = null;
             BiasingStateChargeCs = null;
@@ -211,12 +201,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var ceqbe = ModelParameters.BipolarType * (cc + cb - vbe * gpi + vbc * -geqcb);
             var ceqbc = ModelParameters.BipolarType * (-cc + -vbc * gmu);
 
-            // Load Rhs-vector
-            TransientVectorElements.Add(-ceqbx, -ceqcs);
-            VectorElements.Add(ceqcs + ceqbx + ceqbc, -ceqbe - ceqbc, ceqbe);
-
-            // Load Y-matrix
-            TransientMatrixElements.Add(
+            TransientElements.Add(
+                // Y-matrix
                 geqbx,
                 gmu + gccs + geqbx,
                 gpi + gmu + geqcb,
@@ -230,7 +216,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 -gccs,
                 -gccs,
                 -geqbx,
-                -geqbx);
+                -geqbx,
+                // RHS vector
+                -ceqbx, 
+                -ceqcs,
+                ceqcs + ceqbx + ceqbc,
+                -ceqbe - ceqbc, 
+                ceqbe);
         }
 
         /// <summary>

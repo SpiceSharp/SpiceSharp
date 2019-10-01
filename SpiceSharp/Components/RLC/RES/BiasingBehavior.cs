@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using System;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealOnePortElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -71,7 +72,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
             PosNode = c.Pins[0];
             NegNode = c.Pins[1];
 
-            MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(PosNode, PosNode),
+                new MatrixLocation(PosNode, NegNode),
+                new MatrixLocation(NegNode, PosNode),
+                new MatrixLocation(NegNode, NegNode));
         }
 
         /// <summary>
@@ -80,8 +85,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -89,7 +94,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            MatrixElements.AddOnePort(Conductance);
+            Elements.Add(Conductance, -Conductance, -Conductance, Conductance);
         }
 
         /// <summary>

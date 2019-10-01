@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <value>
         /// The elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -48,13 +48,14 @@ namespace SpiceSharp.Components.DelayBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, ContPosNode),
-                new MatrixPin(BranchEq, ContNegNode));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, ContPosNode),
+                new MatrixLocation(BranchEq, ContNegNode)
+            });
         }
 
         /// <summary>

@@ -164,14 +164,14 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="indices">The internal row/column indices.</param>
         /// <returns>The external row/column indices.</returns>
-        Tuple<int, int> InternalToExternal(Tuple<int, int> indices);
+        MatrixLocation InternalToExternal(MatrixLocation indices);
 
         /// <summary>
         /// Maps an external row/column tuple to an internal one.
         /// </summary>
         /// <param name="indices">The external row/column indices.</param>
         /// <returns>The internal row/column indices.</returns>
-        Tuple<int, int> ExternalToInternal(Tuple<int, int> indices);
+        MatrixLocation ExternalToInternal(MatrixLocation indices);
     }
 
     /// <summary>

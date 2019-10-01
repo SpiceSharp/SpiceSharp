@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
@@ -41,7 +42,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -96,10 +97,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 
             // Get matrix elements
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(PosNode, ControlBranchEq),
-                new MatrixPin(NegNode, ControlBranchEq)
-            );
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(PosNode, ControlBranchEq),
+                new MatrixLocation(NegNode, ControlBranchEq));
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         void IBiasingBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
-            MatrixElements.Add(value, -value);
+            Elements.Add(value, -value);
         }
 
         /// <summary>

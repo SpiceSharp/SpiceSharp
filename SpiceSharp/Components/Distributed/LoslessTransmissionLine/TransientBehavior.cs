@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The transient vector elements.
         /// </value>
-        protected RealVectorElementSet TransientVectorElements { get; private set; }
+        protected ElementSet<double> TransientElements { get; private set; }
         
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Bind(context);
 
-            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq1, BranchEq2);
+            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { BranchEq1, BranchEq2 });
             Signals = new DelayedSignal(2, BaseParameters.Delay);
         }
 
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Signals.SetProbedValues(input1, input2);
 
             // Update the branch equations
-            TransientVectorElements.Add(Signals.Values[0], Signals.Values[1]);
+            TransientElements.Add(Signals.Values[0], Signals.Values[1]);
         }
     }
 }

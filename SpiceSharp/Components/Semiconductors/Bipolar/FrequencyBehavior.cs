@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -16,7 +17,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -41,30 +42,30 @@ namespace SpiceSharp.Components.BipolarBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(CollectorNode, CollectorNode),
-                new MatrixPin(BaseNode, BaseNode),
-                new MatrixPin(EmitterNode, EmitterNode),
-                new MatrixPin(CollectorPrimeNode, CollectorPrimeNode),
-                new MatrixPin(BasePrimeNode, BasePrimeNode),
-                new MatrixPin(EmitterPrimeNode, EmitterPrimeNode),
-                new MatrixPin(CollectorNode, CollectorPrimeNode),
-                new MatrixPin(BaseNode, BasePrimeNode),
-                new MatrixPin(EmitterNode, EmitterPrimeNode),
-                new MatrixPin(CollectorPrimeNode, CollectorNode),
-                new MatrixPin(CollectorPrimeNode, BasePrimeNode),
-                new MatrixPin(CollectorPrimeNode, EmitterPrimeNode),
-                new MatrixPin(BasePrimeNode, BaseNode),
-                new MatrixPin(BasePrimeNode, CollectorPrimeNode),
-                new MatrixPin(BasePrimeNode, EmitterPrimeNode),
-                new MatrixPin(EmitterPrimeNode, EmitterNode),
-                new MatrixPin(EmitterPrimeNode, CollectorPrimeNode),
-                new MatrixPin(EmitterPrimeNode, BasePrimeNode),
-                new MatrixPin(SubstrateNode, SubstrateNode),
-                new MatrixPin(CollectorPrimeNode, SubstrateNode),
-                new MatrixPin(SubstrateNode, CollectorPrimeNode),
-                new MatrixPin(BaseNode, CollectorPrimeNode),
-                new MatrixPin(CollectorPrimeNode, BaseNode));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(CollectorNode, CollectorNode),
+                new MatrixLocation(BaseNode, BaseNode),
+                new MatrixLocation(EmitterNode, EmitterNode),
+                new MatrixLocation(CollectorPrimeNode, CollectorPrimeNode),
+                new MatrixLocation(BasePrimeNode, BasePrimeNode),
+                new MatrixLocation(EmitterPrimeNode, EmitterPrimeNode),
+                new MatrixLocation(CollectorNode, CollectorPrimeNode),
+                new MatrixLocation(BaseNode, BasePrimeNode),
+                new MatrixLocation(EmitterNode, EmitterPrimeNode),
+                new MatrixLocation(CollectorPrimeNode, CollectorNode),
+                new MatrixLocation(CollectorPrimeNode, BasePrimeNode),
+                new MatrixLocation(CollectorPrimeNode, EmitterPrimeNode),
+                new MatrixLocation(BasePrimeNode, BaseNode),
+                new MatrixLocation(BasePrimeNode, CollectorPrimeNode),
+                new MatrixLocation(BasePrimeNode, EmitterPrimeNode),
+                new MatrixLocation(EmitterPrimeNode, EmitterNode),
+                new MatrixLocation(EmitterPrimeNode, CollectorPrimeNode),
+                new MatrixLocation(EmitterPrimeNode, BasePrimeNode),
+                new MatrixLocation(SubstrateNode, SubstrateNode),
+                new MatrixLocation(CollectorPrimeNode, SubstrateNode),
+                new MatrixLocation(SubstrateNode, CollectorPrimeNode),
+                new MatrixLocation(BaseNode, CollectorPrimeNode),
+                new MatrixLocation(CollectorPrimeNode, BaseNode));
         }
 
         /// <summary>
@@ -74,8 +75,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var xccs = CapCs * cstate.Laplace;
             var xcmcb = Geqcb * cstate.Laplace;
 
-            ComplexMatrixElements.Add(
+            ComplexElements.Add(
                 gcpr,
                 gx + xcbx,
                 gepr,

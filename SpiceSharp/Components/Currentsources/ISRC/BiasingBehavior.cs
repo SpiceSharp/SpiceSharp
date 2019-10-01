@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -53,7 +54,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <value>
         /// The vector elements.
         /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -98,7 +99,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             }
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            VectorElements = new RealVectorElementSet(BiasingState.Solver, PosNode, NegNode);
+            Elements = new ElementSet<double>(BiasingState.Solver, null, new[] { PosNode, NegNode });
         }
 
         /// <summary>
@@ -108,8 +109,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            VectorElements?.Destroy();
-            VectorElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            VectorElements.Add(-value, value);
+            Elements.Add(-value, value);
             Current = value;
         }
 

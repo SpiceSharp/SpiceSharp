@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -124,15 +125,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets or modifies the base-emitter current.
@@ -193,13 +186,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Get states
             context.States.TryGetValue(out _timeState);
 
-            if (context is ComponentBindingContext cc)
-            {
-                CollectorNode = cc.Pins[0];
-                BaseNode = cc.Pins[1];
-                EmitterNode = cc.Pins[2];
-                SubstrateNode = cc.Pins[3];
-            }
+            var c = (ComponentBindingContext)context;
+                CollectorNode = c.Pins[0];
+                BaseNode = c.Pins[1];
+                EmitterNode = c.Pins[2];
+                SubstrateNode = c.Pins[3];
 
             var solver = BiasingState.Solver;
             var variables = context.Variables;
@@ -214,26 +205,26 @@ namespace SpiceSharp.Components.BipolarBehaviors
             EmitterPrimeNode = ModelParameters.EmitterResistance.Value > 0 ? variables.Create(Name.Combine("emit"), VariableType.Voltage).Index : EmitterNode;
 
             // Get solver pointers
-            VectorElements = new RealVectorElementSet(BiasingState.Solver, CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode);
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(CollectorNode, CollectorNode),
-                new MatrixPin(BaseNode, BaseNode),
-                new MatrixPin(EmitterNode, EmitterNode),
-                new MatrixPin(CollectorPrimeNode, CollectorPrimeNode),
-                new MatrixPin(BasePrimeNode, BasePrimeNode),
-                new MatrixPin(EmitterPrimeNode, EmitterPrimeNode),
-                new MatrixPin(CollectorNode, CollectorPrimeNode),
-                new MatrixPin(BaseNode, BasePrimeNode),
-                new MatrixPin(EmitterNode, EmitterPrimeNode),
-                new MatrixPin(CollectorPrimeNode, CollectorNode),
-                new MatrixPin(CollectorPrimeNode, BasePrimeNode),
-                new MatrixPin(CollectorPrimeNode, EmitterPrimeNode),
-                new MatrixPin(BasePrimeNode, BaseNode),
-                new MatrixPin(BasePrimeNode, CollectorPrimeNode),
-                new MatrixPin(BasePrimeNode, EmitterPrimeNode),
-                new MatrixPin(EmitterPrimeNode, EmitterNode),
-                new MatrixPin(EmitterPrimeNode, CollectorPrimeNode),
-                new MatrixPin(EmitterPrimeNode, BasePrimeNode));
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(CollectorNode, CollectorNode),
+                new MatrixLocation(BaseNode, BaseNode),
+                new MatrixLocation(EmitterNode, EmitterNode),
+                new MatrixLocation(CollectorPrimeNode, CollectorPrimeNode),
+                new MatrixLocation(BasePrimeNode, BasePrimeNode),
+                new MatrixLocation(EmitterPrimeNode, EmitterPrimeNode),
+                new MatrixLocation(CollectorNode, CollectorPrimeNode),
+                new MatrixLocation(BaseNode, BasePrimeNode),
+                new MatrixLocation(EmitterNode, EmitterPrimeNode),
+                new MatrixLocation(CollectorPrimeNode, CollectorNode),
+                new MatrixLocation(CollectorPrimeNode, BasePrimeNode),
+                new MatrixLocation(CollectorPrimeNode, EmitterPrimeNode),
+                new MatrixLocation(BasePrimeNode, BaseNode),
+                new MatrixLocation(BasePrimeNode, CollectorPrimeNode),
+                new MatrixLocation(BasePrimeNode, EmitterPrimeNode),
+                new MatrixLocation(EmitterPrimeNode, EmitterNode),
+                new MatrixLocation(EmitterPrimeNode, CollectorPrimeNode),
+                new MatrixLocation(EmitterPrimeNode, BasePrimeNode)
+            }, new[] { CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode });
         }
 
         /// <summary>
@@ -242,10 +233,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            VectorElements?.Destroy();
-            VectorElements = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -385,13 +374,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Load current excitation vector
             var ceqbe = ModelParameters.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
             var ceqbc = ModelParameters.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
-            VectorElements.Add(ceqbc, -ceqbe - ceqbc, ceqbe);
 
-            // Load y matrix
-            MatrixElements.Add(
+            Elements.Add(
+                // Y-matrix
                 gcpr, gx, gepr, gmu + go + gcpr, gx + gpi + gmu, gpi + gepr + gm + go,
                 -gcpr, -gx, -gepr, -gcpr, -gmu + gm, -gm - go, -gx, -gmu, -gpi, -gepr, -go, 
-                -gpi - gm);
+                -gpi - gm,
+                // RHS vector
+                ceqbc, -ceqbe - ceqbc, ceqbe);
         }
 
         /// <summary>

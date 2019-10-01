@@ -12,8 +12,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
     public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         private int _nodeA, _nodeB;
-        private RealOnePortElementSet _matrixElements;
-        private RealVectorElementSet _vectorElements;
+        private ElementSet<double> _elements;
         private BaseParameters _bp;
         private BiasingSimulationState _state;
         private BiasingConfiguration _baseConfig;
@@ -45,12 +44,17 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
                 _nodeA = cbc.Pins[0];
                 _nodeB = cbc.Pins[1];
 
-            // We need 4 matrix elements here
+            // We need 4 matrix elements and 2 RHS vector elements
             var solver = c.States.GetValue<BiasingSimulationState>().Solver;
-            _matrixElements = new RealOnePortElementSet(solver, _nodeA, _nodeB);
-
-            // We also need 2 RHS vector elements
-            _vectorElements = new RealVectorElementSet(solver, _nodeA, _nodeB);
+            _elements = new ElementSet<double>(solver, new[] {
+                new MatrixLocation(_nodeA, _nodeA),
+                new MatrixLocation(_nodeA, _nodeB),
+                new MatrixLocation(_nodeB, _nodeA),
+                new MatrixLocation(_nodeB, _nodeB)
+            }, new[] {
+                _nodeA,
+                _nodeB
+            });
         }
 
         /// <summary>
@@ -62,10 +66,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _bp = null;
             _state = null;
             _baseConfig = null;
-            _matrixElements?.Destroy();
-            _matrixElements = null;
-            _vectorElements?.Destroy();
-            _vectorElements = null;
+            _elements?.Destroy();
+            _elements = null;
         }
 
         /// <summary>
@@ -96,10 +98,11 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
 
             // Load the RHS vector
             c -= g * v;
-            _vectorElements.Add(c, -c);
-
-            // Load the Y-matrix
-            _matrixElements.AddOnePort(g);
+            _elements.Add(
+                // Y-matrix
+                g, -g, -g, g,
+                // RHS-vector
+                c, -c);
         }
 
         /// <summary>

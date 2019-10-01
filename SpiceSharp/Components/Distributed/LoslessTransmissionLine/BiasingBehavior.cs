@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
@@ -60,7 +61,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the state.
@@ -104,30 +105,30 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 
             // Get matrix elements
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(Pos1, Pos1),
-                new MatrixPin(Pos1, Internal1),
-                new MatrixPin(Internal1, Pos1),
-                new MatrixPin(Internal1, Internal1),
-                new MatrixPin(Internal1, BranchEq1),
-                new MatrixPin(BranchEq1, Internal1),
-                new MatrixPin(Neg1, BranchEq1),
-                new MatrixPin(BranchEq1, Neg1),
-                new MatrixPin(Pos2, Pos2),
-                new MatrixPin(Pos2, Internal2),
-                new MatrixPin(Internal2, Pos2),
-                new MatrixPin(Internal2, Internal2),
-                new MatrixPin(Internal2, BranchEq2),
-                new MatrixPin(BranchEq2, Internal2),
-                new MatrixPin(Neg2, BranchEq2),
-                new MatrixPin(BranchEq2, Neg2),
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(Pos1, Pos1),
+                new MatrixLocation(Pos1, Internal1),
+                new MatrixLocation(Internal1, Pos1),
+                new MatrixLocation(Internal1, Internal1),
+                new MatrixLocation(Internal1, BranchEq1),
+                new MatrixLocation(BranchEq1, Internal1),
+                new MatrixLocation(Neg1, BranchEq1),
+                new MatrixLocation(BranchEq1, Neg1),
+                new MatrixLocation(Pos2, Pos2),
+                new MatrixLocation(Pos2, Internal2),
+                new MatrixLocation(Internal2, Pos2),
+                new MatrixLocation(Internal2, Internal2),
+                new MatrixLocation(Internal2, BranchEq2),
+                new MatrixLocation(BranchEq2, Internal2),
+                new MatrixLocation(Neg2, BranchEq2),
+                new MatrixLocation(BranchEq2, Neg2),
 
                 // These are only used to calculate the biasing point
-                new MatrixPin(BranchEq1, Pos1),
-                new MatrixPin(BranchEq1, Pos2),
-                new MatrixPin(BranchEq1, Neg2),
-                new MatrixPin(BranchEq2, BranchEq1),
-                new MatrixPin(BranchEq2, BranchEq2));
+                new MatrixLocation(BranchEq1, Pos1),
+                new MatrixLocation(BranchEq1, Pos2),
+                new MatrixLocation(BranchEq1, Neg2),
+                new MatrixLocation(BranchEq2, BranchEq1),
+                new MatrixLocation(BranchEq2, BranchEq2));
         }
 
         /// <summary>
@@ -137,8 +138,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var y = BaseParameters.Admittance;
             if (BiasingState.UseDc)
             {
-                MatrixElements.Add(
+                Elements.Add(
                     y, -y, -y, y, 1, 0, -1, -1,
                     y, -y, -y, y, 1, 0, -1, 0,
                     1, -1, 1, 1, 1
@@ -157,7 +158,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             }
             else
             {
-                MatrixElements.Add(
+                Elements.Add(
                     y, -y, -y, y, 1, 1, -1, -1,
                     y, -y, -y, y, 1, 1, -1, -1
                     );

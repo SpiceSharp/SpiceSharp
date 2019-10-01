@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
@@ -41,7 +42,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -72,9 +73,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             base.Bind(context);
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(PosNode, ControlBranchEq),
-                new MatrixPin(NegNode, ControlBranchEq));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(PosNode, ControlBranchEq),
+                new MatrixLocation(NegNode, ControlBranchEq));
         }
 
         /// <summary>
@@ -84,8 +85,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         void IFrequencyBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
-            ComplexMatrixElements.Add(value, -value);
+            ComplexElements.Add(value, -value);
         }
     }
 }

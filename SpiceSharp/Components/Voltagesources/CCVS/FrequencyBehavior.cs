@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 {
@@ -17,7 +18,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -78,12 +79,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, ContBranchEq));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, ContBranchEq));
         }
 
         /// <summary>
@@ -93,8 +94,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexMatrixElements.Add(1, -1, 1, -1, -BaseParameters.Coefficient);
+            ComplexElements.Add(1, -1, 1, -1, -BaseParameters.Coefficient);
         }
     }
 }

@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -26,7 +27,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the equivalent conductance.
@@ -63,9 +64,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load2.UpdateFlux += UpdateFlux2;
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(Load1.BranchEq, Load2.BranchEq),
-                new MatrixPin(Load2.BranchEq, Load1.BranchEq));
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(Load1.BranchEq, Load2.BranchEq),
+                new MatrixLocation(Load2.BranchEq, Load1.BranchEq));
         }
 
         /// <summary>
@@ -80,8 +81,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load2.UpdateFlux -= UpdateFlux2;
 
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void ITimeBehavior.Load()
         {
             // Load Y-matrix
-            MatrixElements.Add(-Conductance, -Conductance);
+            Elements.Add(-Conductance, -Conductance);
         }
     }
 }

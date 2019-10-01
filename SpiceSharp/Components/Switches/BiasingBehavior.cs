@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
@@ -82,7 +83,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealOnePortElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the method used for switching.
@@ -123,7 +124,11 @@ namespace SpiceSharp.Components.SwitchBehaviors
 
             // Get matrix elements
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(PosNode, PosNode),
+                new MatrixLocation(PosNode, NegNode),
+                new MatrixLocation(NegNode, PosNode),
+                new MatrixLocation(NegNode, NegNode));
         }
 
         /// <summary>
@@ -133,8 +138,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -213,7 +218,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             Conductance = gNow;
 
             // Load the Y-matrix
-            MatrixElements.AddOnePort(gNow);
+            Elements.Add(gNow, -gNow, -gNow, gNow);
         }
 
         /// <summary>

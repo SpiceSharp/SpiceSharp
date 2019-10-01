@@ -77,12 +77,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
             // Store the current
             Current += _capCharge.Derivative;
 
-            // Load Rhs vector
-            VectorElements.Add(ceq, -ceq);
-
-            // Load Y-matrix
-            MatrixElements.Add(
-                0, geq, geq, -geq, -geq);
+            Elements.Add(
+                // Y-matrix
+                0, geq, geq, -geq, -geq, 0, 0,
+                // RHS vector
+                ceq, -ceq);
         }
     }
 }

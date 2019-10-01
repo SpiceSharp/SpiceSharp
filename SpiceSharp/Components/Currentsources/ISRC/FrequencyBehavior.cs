@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -22,7 +23,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <value>
         /// The complex vector elements.
         /// </value>
-        protected ComplexVectorElementSet ComplexVectorElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Get the voltage.
@@ -72,7 +73,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             // Get matrix elements
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexVectorElements = new ComplexVectorElementSet(ComplexState.Solver, PosNode, NegNode);
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, null, new[] { PosNode, NegNode });
         }
 
         /// <summary>
@@ -82,8 +83,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexVectorElements?.Destroy();
-            ComplexVectorElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
             var value = FrequencyParameters.Phasor;
-            ComplexVectorElements.Add(-value, value);
+            ComplexElements.Add(-value, value);
         }
     }
 }

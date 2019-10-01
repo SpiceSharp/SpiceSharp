@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {
@@ -27,7 +28,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <value>
         /// The transient matrix elements.
         /// </value>
-        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
+        protected ElementSet<double> TransientMatrixElements { get; private set; }
 
         /// <summary>
         /// Gets the G-S capacitance.
@@ -61,14 +62,15 @@ namespace SpiceSharp.Components.JFETBehaviors
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
 
-            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(GateNode, DrainPrimeNode),
-                new MatrixPin(GateNode, SourcePrimeNode),
-                new MatrixPin(DrainPrimeNode, GateNode),
-                new MatrixPin(SourcePrimeNode, GateNode),
-                new MatrixPin(GateNode, GateNode),
-                new MatrixPin(DrainPrimeNode, DrainPrimeNode),
-                new MatrixPin(SourcePrimeNode, SourcePrimeNode));
+            TransientMatrixElements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(GateNode, DrainPrimeNode),
+                new MatrixLocation(GateNode, SourcePrimeNode),
+                new MatrixLocation(DrainPrimeNode, GateNode),
+                new MatrixLocation(SourcePrimeNode, GateNode),
+                new MatrixLocation(GateNode, GateNode),
+                new MatrixLocation(DrainPrimeNode, DrainPrimeNode),
+                new MatrixLocation(SourcePrimeNode, SourcePrimeNode)
+            }, new[] { GateNode, DrainPrimeNode, SourcePrimeNode });
         }
 
         /// <summary>
@@ -108,17 +110,20 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
             var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
             var cdreq = ModelParameters.JFETType * (cd + cgd);
-            VectorElements.Add(-ceqgs - ceqgd, -cdreq + ceqgd, cdreq + ceqgs);
 
-            // Load Y-matrix
             TransientMatrixElements.Add(
+                // Y-matrix
                 -ggd,
                 -ggs,
                 -ggd,
                 -ggs,
                 ggd + ggs,
                 ggd,
-                ggs);
+                ggs,
+                // RHS vector
+                -ceqgs - ceqgd, 
+                -cdreq + ceqgd, 
+                cdreq + ceqgs);
         }
 
         /// <summary>

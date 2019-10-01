@@ -117,7 +117,7 @@ namespace SpiceSharpTest.Algebra
                     if ((fill & 0x01) != 0)
                     {
                         var expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix.GetMatrixValue(crow, i + 1), 1e-12);
+                        Assert.AreEqual(expected, matrix[crow, i + 1], 1e-12);
                     }
                     else
                         Assert.AreEqual(null, matrix.FindMatrixElement(crow, i + 1));
@@ -168,7 +168,7 @@ namespace SpiceSharpTest.Algebra
                     if ((fill & 0x01) != 0)
                     {
                         var expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix.GetMatrixValue(i + 1, ccolumn), 1e-12);
+                        Assert.AreEqual(expected, matrix[i + 1, ccolumn], 1e-12);
                     }
                     else
                         Assert.AreEqual(null, matrix.FindMatrixElement(i + 1, ccolumn));

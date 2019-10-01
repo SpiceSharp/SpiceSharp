@@ -2,55 +2,62 @@
 
 namespace SpiceSharp.Algebra
 {
-    public abstract partial class DenseLUSolver<M, V, T>
+    public partial class DenseRealSolver<M, V> where M : IPermutableMatrix<double>
+        where V : IPermutableVector<double>
     {
         /// <summary>
-        /// An <see cref="ISolverElement{T}"/> that is returned by a <see cref="DenseLUSolver{M, V, T}"/>.
+        /// An <see cref="ISolverElement{T}"/> for matrix elements in a <see cref="DenseRealSolver{M, V}"/>.
         /// </summary>
-        protected abstract class VectorElement : ISolverElement<T>
+        /// <seealso cref="DenseLUSolver{M, V, T}" />
+        protected class RealSolverMatrixElement : ISolverElement<double>
         {
-            /// <summary>
-            /// Gets the index.
-            /// </summary>
-            /// <value>
-            /// The index.
-            /// </value>
-            public int Index => _parent.Row[_index];
-
-            private DenseLUSolver<M, V, T> _parent;
-            private int _index;
+            private DenseRealSolver<M, V> _parent;
+            private int _row, _column;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="VectorElement"/> class.
+            /// Initializes a new instance of the <see cref="RealSolverMatrixElement"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
-            /// <param name="index">The index.</param>
-            public VectorElement(DenseLUSolver<M, V, T> parent, int index)
+            /// <param name="row">The row.</param>
+            /// <param name="column">The column.</param>
+            public RealSolverMatrixElement(DenseRealSolver<M, V> parent, int row, int column)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
-                _index = index;
+                _row = row;
+                _column = column;
             }
 
             /// <summary>
             /// Adds the specified value to the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public abstract void Add(T value);
+            public void Add(double value)
+            {
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                _parent.Matrix[r, c] += value;
+            }
 
             /// <summary>
             /// Subtracts the specified value from the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public abstract void Subtract(T value);
+            public void Subtract(double value)
+            {
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                _parent.Matrix[r, c] -= value;
+            }
 
             /// <summary>
             /// Sets the specified value for the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public void SetValue(T value)
+            public void SetValue(double value)
             {
-                var r = _parent.Row[_index];
-                _parent.Vector[r] = value;
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                _parent.Matrix[r, c] = value;
             }
 
             /// <summary>
@@ -59,10 +66,11 @@ namespace SpiceSharp.Algebra
             /// <returns>
             /// The matrix element value.
             /// </returns>
-            public T GetValue()
+            public double GetValue()
             {
-                var r = _parent.Row[_index];
-                return _parent.Vector[r];
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                return _parent.Matrix[r, c];
             }
 
             /// <summary>
@@ -79,9 +87,6 @@ namespace SpiceSharp.Algebra
             /// </summary>
             /// <param name="format">The format.</param>
             /// <param name="provider">The provider.</param>
-            /// <returns>
-            /// A <see cref="String" /> that represents this instance.
-            /// </returns>
             public string ToString(string format, IFormatProvider provider)
                 => GetValue().ToString(format, provider);
         }

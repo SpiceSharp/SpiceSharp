@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -59,7 +60,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the state.
@@ -89,11 +90,11 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, PosNode));
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, PosNode));
         }
 
         /// <summary>
@@ -103,8 +104,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            MatrixElements.Add(1, -1, -1, 1);
+            Elements.Add(1, -1, -1, 1);
         }
 
         /// <summary>

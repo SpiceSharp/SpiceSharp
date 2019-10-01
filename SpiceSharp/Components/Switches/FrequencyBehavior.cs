@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System.Numerics;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
@@ -15,7 +17,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexOnePortElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -35,7 +37,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
             base.Bind(context);
 
             var solver = context.States.GetValue<ComplexSimulationState>().Solver;
-            ComplexMatrixElements = new ComplexOnePortElementSet(solver, PosNode, NegNode);
+            ComplexElements = new ElementSet<Complex>(solver, new[] {
+                new MatrixLocation(PosNode, PosNode),
+                new MatrixLocation(PosNode, NegNode),
+                new MatrixLocation(NegNode, PosNode),
+                new MatrixLocation(NegNode, NegNode)
+            });
         }
 
         /// <summary>
@@ -44,8 +51,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -60,14 +67,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexMatrixElements.ThrowIfNotBound(this);
+            ComplexElements.ThrowIfNotBound(this);
 
             // Get the current state
             var currentState = CurrentState;
             var gNow = currentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
 
             // Load the Y-matrix
-            ComplexMatrixElements.AddOnePort(gNow);
+            ComplexElements.Add(gNow, -gNow, -gNow, gNow);
         }
     }
 }

@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
@@ -56,15 +57,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -113,12 +106,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             // Get matrix elements
             context.States.TryGetValue(out _timeState);
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, NegNode));
-            VectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq);
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, NegNode)
+            }, new[] { BranchEq });
         }
 
         /// <summary>
@@ -128,8 +121,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -139,8 +132,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             var state = BiasingState.ThrowIfNotBound(this);
             double value;
-
-            MatrixElements.Add(1, 1, -1, -1);
 
             if (_timeState != null)
             {
@@ -156,7 +147,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             }
 
             Voltage = value;
-            VectorElements.Add(value);
+            Elements.Add(1, 1, -1, -1, value);
         }
 
         /// <summary>

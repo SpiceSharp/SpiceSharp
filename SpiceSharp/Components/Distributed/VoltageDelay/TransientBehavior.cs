@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
@@ -15,7 +16,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <value>
         /// The vector elements.
         /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> TransientElements { get; private set; }
 
         /// <summary>
         /// Gets the delayed signal.
@@ -42,7 +43,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             base.Bind(context);
 
-            VectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq);
+            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { BranchEq });
             Signal = new DelayedSignal(1, BaseParameters.Delay);
         }
 
@@ -52,8 +53,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            VectorElements?.Destroy();
-            VectorElements = null;
+            TransientElements?.Destroy();
+            TransientElements = null;
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             var sol = BiasingState.Solution;
             var input = sol[ContPosNode] - sol[ContNegNode];
             Signal.SetProbedValues(input);
-            VectorElements.Add(Signal.Values[0]);
+            TransientElements.Add(Signal.Values[0]);
         }
     }
 }

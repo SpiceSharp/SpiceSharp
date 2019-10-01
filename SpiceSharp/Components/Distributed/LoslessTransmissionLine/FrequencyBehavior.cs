@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
@@ -16,7 +17,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -47,29 +48,29 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(Pos1, Pos1),
-                new MatrixPin(Pos1, Internal1),
-                new MatrixPin(Neg1, BranchEq1),
-                new MatrixPin(Pos2, Pos2),
-                new MatrixPin(Neg2, BranchEq2),
-                new MatrixPin(Internal1, Pos1),
-                new MatrixPin(Internal1, Internal1),
-                new MatrixPin(Internal1, BranchEq1),
-                new MatrixPin(Internal2, Internal2),
-                new MatrixPin(Internal2, BranchEq2),
-                new MatrixPin(BranchEq1, Neg1),
-                new MatrixPin(BranchEq1, Pos2),
-                new MatrixPin(BranchEq1, Neg2),
-                new MatrixPin(BranchEq1, Internal1),
-                new MatrixPin(BranchEq1, BranchEq2),
-                new MatrixPin(BranchEq2, Pos1),
-                new MatrixPin(BranchEq2, Neg1),
-                new MatrixPin(BranchEq2, Neg2),
-                new MatrixPin(BranchEq2, Internal2),
-                new MatrixPin(BranchEq2, BranchEq1),
-                new MatrixPin(Pos2, Internal2),
-                new MatrixPin(Internal2, Pos2));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(Pos1, Pos1),
+                new MatrixLocation(Pos1, Internal1),
+                new MatrixLocation(Neg1, BranchEq1),
+                new MatrixLocation(Pos2, Pos2),
+                new MatrixLocation(Neg2, BranchEq2),
+                new MatrixLocation(Internal1, Pos1),
+                new MatrixLocation(Internal1, Internal1),
+                new MatrixLocation(Internal1, BranchEq1),
+                new MatrixLocation(Internal2, Internal2),
+                new MatrixLocation(Internal2, BranchEq2),
+                new MatrixLocation(BranchEq1, Neg1),
+                new MatrixLocation(BranchEq1, Pos2),
+                new MatrixLocation(BranchEq1, Neg2),
+                new MatrixLocation(BranchEq1, Internal1),
+                new MatrixLocation(BranchEq1, BranchEq2),
+                new MatrixLocation(BranchEq2, Pos1),
+                new MatrixLocation(BranchEq2, Neg1),
+                new MatrixLocation(BranchEq2, Neg2),
+                new MatrixLocation(BranchEq2, Internal2),
+                new MatrixLocation(BranchEq2, BranchEq1),
+                new MatrixLocation(Pos2, Internal2),
+                new MatrixLocation(Internal2, Pos2));
         }
 
         /// <summary>
@@ -79,8 +80,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var laplace = ComplexState.Laplace;
             var factor = Complex.Exp(-laplace * BaseParameters.Delay.Value);
             var y = BaseParameters.Admittance;
-            ComplexMatrixElements.Add(
+            ComplexElements.Add(
                 y, -y, -1, y, -1,
                 -y, y, 1, y, 1, -1, -factor,
                 factor, 1, -factor * BaseParameters.Impedance,

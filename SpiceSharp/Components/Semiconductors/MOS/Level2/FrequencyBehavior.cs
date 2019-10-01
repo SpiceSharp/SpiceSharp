@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
@@ -16,7 +17,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -41,29 +42,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(GateNode, GateNode),
-                new MatrixPin(BulkNode, BulkNode),
-                new MatrixPin(DrainNodePrime, DrainNodePrime),
-                new MatrixPin(SourceNodePrime, SourceNodePrime),
-                new MatrixPin(GateNode, BulkNode),
-                new MatrixPin(GateNode, DrainNodePrime),
-                new MatrixPin(GateNode, SourceNodePrime),
-                new MatrixPin(BulkNode, GateNode),
-                new MatrixPin(BulkNode, DrainNodePrime),
-                new MatrixPin(BulkNode, SourceNodePrime),
-                new MatrixPin(DrainNodePrime, GateNode),
-                new MatrixPin(DrainNodePrime, BulkNode),
-                new MatrixPin(SourceNodePrime, GateNode),
-                new MatrixPin(SourceNodePrime, BulkNode),
-                new MatrixPin(DrainNode, DrainNode),
-                new MatrixPin(SourceNode, SourceNode),
-                new MatrixPin(DrainNode, DrainNodePrime),
-                new MatrixPin(SourceNode, SourceNodePrime),
-                new MatrixPin(DrainNodePrime, DrainNode),
-                new MatrixPin(DrainNodePrime, SourceNodePrime),
-                new MatrixPin(SourceNodePrime, SourceNode),
-                new MatrixPin(SourceNodePrime, DrainNodePrime));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(GateNode, GateNode),
+                new MatrixLocation(BulkNode, BulkNode),
+                new MatrixLocation(DrainNodePrime, DrainNodePrime),
+                new MatrixLocation(SourceNodePrime, SourceNodePrime),
+                new MatrixLocation(GateNode, BulkNode),
+                new MatrixLocation(GateNode, DrainNodePrime),
+                new MatrixLocation(GateNode, SourceNodePrime),
+                new MatrixLocation(BulkNode, GateNode),
+                new MatrixLocation(BulkNode, DrainNodePrime),
+                new MatrixLocation(BulkNode, SourceNodePrime),
+                new MatrixLocation(DrainNodePrime, GateNode),
+                new MatrixLocation(DrainNodePrime, BulkNode),
+                new MatrixLocation(SourceNodePrime, GateNode),
+                new MatrixLocation(SourceNodePrime, BulkNode),
+                new MatrixLocation(DrainNode, DrainNode),
+                new MatrixLocation(SourceNode, SourceNode),
+                new MatrixLocation(DrainNode, DrainNodePrime),
+                new MatrixLocation(SourceNode, SourceNodePrime),
+                new MatrixLocation(DrainNodePrime, DrainNode),
+                new MatrixLocation(DrainNodePrime, SourceNodePrime),
+                new MatrixLocation(SourceNodePrime, SourceNode),
+                new MatrixLocation(SourceNodePrime, DrainNodePrime));
         }
 
         /// <summary>
@@ -73,8 +74,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var xbs = CapBs * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
-            ComplexMatrixElements.Add(
+            ComplexElements.Add(
                 new Complex(0.0, xgd + xgs + xgb),
                 new Complex(CondBd + CondBs, xgb + xbd + xbs),
                 new Complex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd),

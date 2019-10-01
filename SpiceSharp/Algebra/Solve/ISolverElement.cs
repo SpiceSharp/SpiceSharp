@@ -11,7 +11,7 @@ namespace SpiceSharp.Algebra
     /// to use <see cref="Add(T)"/> and <see cref="Subtract(T)"/> instead.
     /// </remarks>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface ISolverElement<T> where T : IFormattable
+    public interface ISolverElement<T> : IFormattable where T : IFormattable
     {
         /// <summary>
         /// Adds the specified value to the matrix element.

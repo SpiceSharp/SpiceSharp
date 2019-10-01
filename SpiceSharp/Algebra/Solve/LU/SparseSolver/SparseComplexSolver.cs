@@ -2,104 +2,15 @@
 using System.Numerics;
 using SpiceSharp.Algebra.Solve;
 
-// ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Class for solving real matrices
     /// </summary>
-    public class SparseComplexSolver<M, V> : SparseLUSolver<M, V, Complex>
+    public partial class SparseComplexSolver<M, V> : SparseLUSolver<M, V, Complex>
         where M : IPermutableMatrix<Complex>, ISparseMatrix<Complex>
         where V : IPermutableVector<Complex>, ISparseVector<Complex>
     {
-        /// <summary>
-        /// An <see cref="ISolverElement{T}"/> for matrix elements in a <see cref="SparseLUSolver{M, V, T}"/>.
-        /// </summary>
-        /// <seealso cref="SparseLUSolver{M, V, T}" />
-        protected class ComplexMatrixSolverElement : ISolverElement<Complex>
-        {
-            private Element<Complex> _element;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ComplexMatrixSolverElement"/> class.
-            /// </summary>
-            /// <param name="element">The element.</param>
-            public ComplexMatrixSolverElement(Element<Complex> element)
-            {
-                _element = element.ThrowIfNull(nameof(element));
-            }
-
-            /// <summary>
-            /// Adds the specified value to the matrix element.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void Add(Complex value) => _element.Value += value;
-
-            /// <summary>
-            /// Subtracts the specified value from the matrix element.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void Subtract(Complex value) => _element.Value -= value;
-
-            /// <summary>
-            /// Sets the specified value for the matrix element.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void SetValue(Complex value) => _element.Value = value;
-
-            /// <summary>
-            /// Gets the value of the matrix element.
-            /// </summary>
-            /// <returns>
-            /// The matrix element value.
-            /// </returns>
-            public Complex GetValue() => _element.Value;
-        }
-
-        /// <summary>
-        /// An <see cref="ISolverElement{T}"/> for RHS elements in a <see cref="SparseLUSolver{M, V, T}"/>
-        /// </summary>
-        /// <seealso cref="SparseLUSolver{M, V, T}" />
-        protected class ComplexVectorSolverElement : ISolverElement<Complex>
-        {
-            private Element<Complex> _element;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ComplexVectorSolverElement"/> class.
-            /// </summary>
-            /// <param name="element">The element.</param>
-            public ComplexVectorSolverElement(Element<Complex> element)
-            {
-                _element = element.ThrowIfNull(nameof(element));
-            }
-
-            /// <summary>
-            /// Adds the specified value.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void Add(Complex value) => _element.Value += value;
-
-            /// <summary>
-            /// Subtracts the specified value.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void Subtract(Complex value) => _element.Value -= value;
-
-            /// <summary>
-            /// Sets the specified value for the matrix element.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void SetValue(Complex value) => _element.Value = value;
-
-            /// <summary>
-            /// Gets the value of the matrix element.
-            /// </summary>
-            /// <returns>
-            /// The matrix element value.
-            /// </returns>
-            public Complex GetValue() => _element.Value;
-        }
-
         /// <summary>
         /// Private variables
         /// </summary>

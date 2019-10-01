@@ -2,54 +2,56 @@
 
 namespace SpiceSharp.Algebra
 {
-    public abstract partial class DenseLUSolver<M, V, T>
+    public partial class DenseRealSolver<M, V> where M : IPermutableMatrix<double>
+        where V : IPermutableVector<double>
     {
         /// <summary>
-        /// An <see cref="ISolverElement{T}"/> that is returned by a <see cref="DenseLUSolver{M, V, T}"/>.
+        /// An <see cref="ISolverElement{T}"/> for vector elements in a <see cref="DenseRealSolver{M, V}"/>.
         /// </summary>
-        protected abstract class VectorElement : ISolverElement<T>
+        /// <seealso cref="DenseLUSolver{M, V, T}"/>
+        protected class RealSolverVectorElement : ISolverElement<double>
         {
-            /// <summary>
-            /// Gets the index.
-            /// </summary>
-            /// <value>
-            /// The index.
-            /// </value>
-            public int Index => _parent.Row[_index];
-
-            private DenseLUSolver<M, V, T> _parent;
-            private int _index;
+            private DenseRealSolver<M, V> _parent;
+            private int _row;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="VectorElement"/> class.
+            /// 
             /// </summary>
-            /// <param name="parent">The parent.</param>
-            /// <param name="index">The index.</param>
-            public VectorElement(DenseLUSolver<M, V, T> parent, int index)
+            /// <param name="parent"></param>
+            /// <param name="row"></param>
+            public RealSolverVectorElement(DenseRealSolver<M, V> parent, int row)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
-                _index = index;
+                _row = row;
             }
 
             /// <summary>
             /// Adds the specified value to the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public abstract void Add(T value);
+            public void Add(double value)
+            {
+                int r = _parent.Row[_row];
+                _parent.Vector[r] += value;
+            }
 
             /// <summary>
             /// Subtracts the specified value from the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public abstract void Subtract(T value);
+            public void Subtract(double value)
+            {
+                int r = _parent.Row[_row];
+                _parent.Vector[r] -= value;
+            }
 
             /// <summary>
             /// Sets the specified value for the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public void SetValue(T value)
+            public void SetValue(double value)
             {
-                var r = _parent.Row[_index];
+                int r = _parent.Row[_row];
                 _parent.Vector[r] = value;
             }
 
@@ -59,9 +61,9 @@ namespace SpiceSharp.Algebra
             /// <returns>
             /// The matrix element value.
             /// </returns>
-            public T GetValue()
+            public double GetValue()
             {
-                var r = _parent.Row[_index];
+                int r = _parent.Row[_row];
                 return _parent.Vector[r];
             }
 

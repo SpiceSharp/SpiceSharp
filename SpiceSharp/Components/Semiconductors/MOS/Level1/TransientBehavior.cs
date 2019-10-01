@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
@@ -118,15 +119,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the transient vector elements.
-        /// </summary>
-        /// <value>
-        /// The transient vector elements.
-        /// </value>
-        protected RealVectorElementSet TransientVectorElements { get; private set; }
+        protected ElementSet<double> TransientElements { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -144,23 +137,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             base.Bind(context);
 
-            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver,
-                GateNode, BulkNode, DrainNodePrime, SourceNodePrime);
-            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(GateNode, GateNode),
-                new MatrixPin(BulkNode, BulkNode),
-                new MatrixPin(DrainNodePrime, DrainNodePrime),
-                new MatrixPin(SourceNodePrime, SourceNodePrime),
-                new MatrixPin(GateNode, BulkNode),
-                new MatrixPin(GateNode, DrainNodePrime),
-                new MatrixPin(GateNode, SourceNodePrime),
-                new MatrixPin(BulkNode, GateNode),
-                new MatrixPin(BulkNode, DrainNodePrime),
-                new MatrixPin(BulkNode, SourceNodePrime),
-                new MatrixPin(DrainNodePrime, GateNode),
-                new MatrixPin(DrainNodePrime, BulkNode),
-                new MatrixPin(SourceNodePrime, GateNode),
-                new MatrixPin(SourceNodePrime, BulkNode));
+            TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(GateNode, GateNode),
+                new MatrixLocation(BulkNode, BulkNode),
+                new MatrixLocation(DrainNodePrime, DrainNodePrime),
+                new MatrixLocation(SourceNodePrime, SourceNodePrime),
+                new MatrixLocation(GateNode, BulkNode),
+                new MatrixLocation(GateNode, DrainNodePrime),
+                new MatrixLocation(GateNode, SourceNodePrime),
+                new MatrixLocation(BulkNode, GateNode),
+                new MatrixLocation(BulkNode, DrainNodePrime),
+                new MatrixLocation(BulkNode, SourceNodePrime),
+                new MatrixLocation(DrainNodePrime, GateNode),
+                new MatrixLocation(DrainNodePrime, BulkNode),
+                new MatrixLocation(SourceNodePrime, GateNode),
+                new MatrixLocation(SourceNodePrime, BulkNode)
+            }, new[] { GateNode, BulkNode, DrainNodePrime, SourceNodePrime });
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();
@@ -182,10 +174,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public override void Unbind()
         {
             base.Unbind();
-            TransientVectorElements?.Destroy();
-            TransientVectorElements = null;
-            TransientMatrixElements?.Destroy();
-            TransientMatrixElements = null;
+            TransientElements?.Destroy();
+            TransientElements = null;
 
             _voltageGs = null;
             _voltageDs = null;
@@ -291,14 +281,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             // Load current vector
             var ceqbs = ModelParameters.MosfetType * (cbs - gbs * vbs);
             var ceqbd = ModelParameters.MosfetType * (cbd - gbd * vbd);
-            TransientVectorElements.Add(
-                -ModelParameters.MosfetType * (ceqgs + ceqgb + ceqgd),
-                -(ceqbs + ceqbd - ModelParameters.MosfetType * ceqgb),
-                ceqbd + ModelParameters.MosfetType * ceqgd,
-                ceqbs + ModelParameters.MosfetType * ceqgs);
 
-            // Load Y-matrix
-            TransientMatrixElements.Add(
+            TransientElements.Add(
+                // Y-matrix
                 gcgd + gcgs + gcgb,
                 gbd + gbs + gcgb,
                 gbd + gcgd,
@@ -312,7 +297,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 -gcgd,
                 -gbd,
                 -gcgs,
-                -gbs);
+                -gbs,
+                // RHS vector
+                -ModelParameters.MosfetType * (ceqgs + ceqgb + ceqgd),
+                -(ceqbs + ceqbd - ModelParameters.MosfetType * ceqgb),
+                ceqbd + ModelParameters.MosfetType * ceqgd,
+                ceqbs + ModelParameters.MosfetType * ceqgs
+                );
         }
     }
 }

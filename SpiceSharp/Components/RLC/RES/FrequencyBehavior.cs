@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexOnePortElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -70,7 +71,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexOnePortElementSet(ComplexState.Solver, PosNode, NegNode);
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(PosNode, PosNode),
+                new MatrixLocation(PosNode, NegNode),
+                new MatrixLocation(NegNode, PosNode),
+                new MatrixLocation(NegNode, NegNode)
+                );
         }
 
         /// <summary>
@@ -81,8 +87,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
             base.Unbind();
 
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -97,7 +103,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexMatrixElements.AddOnePort(Conductance);
+            ComplexElements.Add(Conductance, -Conductance, -Conductance, Conductance);
         }
     }
 }

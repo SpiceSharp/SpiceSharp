@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
@@ -33,15 +34,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the voltage.
@@ -88,15 +81,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
             PosPrimeNode = ModelParameters.Resistance > 0 ? variables.Create(Name.Combine("pos"), VariableType.Voltage).Index : PosNode;
 
             // Get matrix elements
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(PosNode, PosNode),
-                new MatrixPin(NegNode, NegNode),
-                new MatrixPin(PosPrimeNode, PosPrimeNode),
-                new MatrixPin(NegNode, PosPrimeNode),
-                new MatrixPin(PosPrimeNode, NegNode),
-                new MatrixPin(PosNode, PosPrimeNode),
-                new MatrixPin(PosPrimeNode, PosNode));
-            VectorElements = new RealVectorElementSet(BiasingState.Solver, NegNode, PosPrimeNode);
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(PosNode, PosNode),
+                new MatrixLocation(NegNode, NegNode),
+                new MatrixLocation(PosPrimeNode, PosPrimeNode),
+                new MatrixLocation(NegNode, PosPrimeNode),
+                new MatrixLocation(PosPrimeNode, NegNode),
+                new MatrixLocation(PosNode, PosPrimeNode),
+                new MatrixLocation(PosPrimeNode, PosNode)
+            }, new[] { NegNode, PosPrimeNode });
         }
 
         /// <summary>
@@ -152,14 +145,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
             Current = cd;
             Conductance = gd;
 
-            // Load Rhs vector
             var cdeq = cd - gd * vd;
-            VectorElements.Add(cdeq, -cdeq);
-
-            // Load Y-matrix
-            MatrixElements.Add(
-                gspr, gd, gd + gspr, -gd, -gd,
-                -gspr, -gspr);
+            Elements.Add(
+                // Y-matrix
+                gspr, gd, gd + gspr, -gd, -gd, -gspr, -gspr,
+                // RHS vector
+                cdeq, -cdeq);
         }
 
         /// <summary>

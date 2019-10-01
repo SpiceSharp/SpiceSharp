@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the real state.
@@ -80,13 +81,14 @@ namespace SpiceSharp.Components.DelayBehaviors
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, ContPosNode),
-                new MatrixPin(BranchEq, ContNegNode));
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, ContPosNode),
+                new MatrixLocation(BranchEq, ContNegNode)
+            });
         }
 
         /// <summary>
@@ -96,8 +98,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -106,9 +108,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         void IBiasingBehavior.Load()
         {
             if (BiasingState.UseDc)
-                MatrixElements.Add(1, -1, 1, -1, -1, 1);
+                Elements.Add(1, -1, 1, -1, -1, 1);
             else
-                MatrixElements.Add(1, -1, 1, -1);
+                Elements.Add(1, -1, 1, -1);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
 {
@@ -67,7 +68,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealMatrixElementSet MatrixElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the biasing simulation state.
@@ -102,13 +103,13 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
             var solver = context.States.GetValue<BiasingSimulationState>().Solver;
-            MatrixElements = new RealMatrixElementSet(solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, ContPosNode),
-                new MatrixPin(BranchEq, ContNegNode));
+            Elements = new ElementSet<double>(solver,
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, ContPosNode),
+                new MatrixLocation(BranchEq, ContNegNode));
         }
 
         /// <summary>
@@ -118,8 +119,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         void IBiasingBehavior.Load()
         {
             var val = BaseParameters.Coefficient;
-            MatrixElements.Add(1, -1, 1, -1, -val, val);
+            Elements.Add(1, -1, 1, -1, -val, val);
         }
 
         /// <summary>

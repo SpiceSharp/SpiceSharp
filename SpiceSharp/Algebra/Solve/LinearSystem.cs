@@ -151,9 +151,9 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The internal row/column indices.
         /// </returns>
-        public Tuple<int, int> ExternalToInternal(Tuple<int, int> indices)
+        public MatrixLocation ExternalToInternal(MatrixLocation indices)
         {
-            return Tuple.Create(Row[indices.Item1], Column[indices.Item2]);
+            return new MatrixLocation(Row[indices.Row], Column[indices.Column]);
         }
 
         /// <summary>
@@ -163,9 +163,9 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The external row/column indices.
         /// </returns>
-        public Tuple<int, int> InternalToExternal(Tuple<int, int> indices)
+        public MatrixLocation InternalToExternal(MatrixLocation indices)
         {
-            return Tuple.Create(Row.Reverse(indices.Item1), Column.Reverse(indices.Item2));
+            return new MatrixLocation(Row.Reverse(indices.Row), Column.Reverse(indices.Column));
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {
@@ -30,7 +31,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex state.
@@ -60,22 +61,22 @@ namespace SpiceSharp.Components.JFETBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(DrainNode, DrainNode),
-                new MatrixPin(GateNode, GateNode),
-                new MatrixPin(SourceNode, SourceNode),
-                new MatrixPin(DrainPrimeNode, DrainPrimeNode),
-                new MatrixPin(SourcePrimeNode, SourcePrimeNode),
-                new MatrixPin(DrainNode, DrainPrimeNode),
-                new MatrixPin(GateNode, DrainPrimeNode),
-                new MatrixPin(GateNode, SourcePrimeNode),
-                new MatrixPin(SourceNode, SourcePrimeNode),
-                new MatrixPin(DrainPrimeNode, DrainNode),
-                new MatrixPin(DrainPrimeNode, GateNode),
-                new MatrixPin(DrainPrimeNode, SourcePrimeNode),
-                new MatrixPin(SourcePrimeNode, GateNode),
-                new MatrixPin(SourcePrimeNode, SourceNode),
-                new MatrixPin(SourcePrimeNode, DrainPrimeNode));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+                new MatrixLocation(DrainNode, DrainNode),
+                new MatrixLocation(GateNode, GateNode),
+                new MatrixLocation(SourceNode, SourceNode),
+                new MatrixLocation(DrainPrimeNode, DrainPrimeNode),
+                new MatrixLocation(SourcePrimeNode, SourcePrimeNode),
+                new MatrixLocation(DrainNode, DrainPrimeNode),
+                new MatrixLocation(GateNode, DrainPrimeNode),
+                new MatrixLocation(GateNode, SourcePrimeNode),
+                new MatrixLocation(SourceNode, SourcePrimeNode),
+                new MatrixLocation(DrainPrimeNode, DrainNode),
+                new MatrixLocation(DrainPrimeNode, GateNode),
+                new MatrixLocation(DrainPrimeNode, SourcePrimeNode),
+                new MatrixLocation(SourcePrimeNode, GateNode),
+                new MatrixLocation(SourcePrimeNode, SourceNode),
+                new MatrixLocation(SourcePrimeNode, DrainPrimeNode));
         }
 
         /// <summary>
@@ -84,8 +85,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ggd = Ggd;
             var xgd = CapGd * omega;
 
-            ComplexMatrixElements.Add(
+            ComplexElements.Add(
                 gdpr,
                 new Complex(ggd + ggs, xgd + xgs),
                 gspr,

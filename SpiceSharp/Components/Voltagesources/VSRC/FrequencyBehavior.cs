@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
@@ -22,15 +23,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex vector elements.
-        /// </summary>
-        /// <value>
-        /// The complex vector elements.
-        /// </value>
-        protected ComplexVectorElementSet ComplexVectorElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -84,12 +77,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             // Get matrix elements
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, NegNode));
-            ComplexVectorElements = new ComplexVectorElementSet(ComplexState.Solver, BranchEq);
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, NegNode)
+            }, new[] { BranchEq });
         }
 
         /// <summary>
@@ -99,10 +92,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
-            ComplexVectorElements?.Destroy();
-            ComplexVectorElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -117,8 +108,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexMatrixElements.ThrowIfNotBound(this).Add(1, 1, -1, -1);
-            ComplexVectorElements.Add(FrequencyParameters.Phasor);
+            ComplexElements
+                .ThrowIfNotBound(this)
+                .Add(1, 1, -1, -1, FrequencyParameters.Phasor);
         }
     }
 }

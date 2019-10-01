@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
 {
@@ -48,7 +49,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <value>
         /// The complex matrix elements.
         /// </value>
-        protected ComplexMatrixElementSet ComplexMatrixElements { get; private set; }
+        protected ElementSet<Complex> ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -73,13 +74,14 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            ComplexMatrixElements = new ComplexMatrixElementSet(ComplexState.Solver,
-                new MatrixPin(PosNode, BranchEq),
-                new MatrixPin(BranchEq, PosNode),
-                new MatrixPin(NegNode, BranchEq),
-                new MatrixPin(BranchEq, NegNode),
-                new MatrixPin(BranchEq, ContPosNode),
-                new MatrixPin(BranchEq, ContNegNode));
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
+                new MatrixLocation(PosNode, BranchEq),
+                new MatrixLocation(BranchEq, PosNode),
+                new MatrixLocation(NegNode, BranchEq),
+                new MatrixLocation(BranchEq, NegNode),
+                new MatrixLocation(BranchEq, ContPosNode),
+                new MatrixLocation(BranchEq, ContNegNode)
+            });
         }
 
         /// <summary>
@@ -89,8 +91,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         {
             base.Unbind();
             ComplexState = null;
-            ComplexMatrixElements?.Destroy();
-            ComplexMatrixElements = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         void IFrequencyBehavior.Load()
         {
             var value = BaseParameters.Coefficient.Value;
-            ComplexMatrixElements.Add(1, 1, -1, -1, -value, value);
+            ComplexElements.Add(1, 1, -1, -1, -value, value);
         }
     }
 }

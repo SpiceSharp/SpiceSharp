@@ -167,9 +167,9 @@ namespace SpiceSharpTest.Algebra
         /// <param name="expected"></param>
         void AssertInternal(ISolver<double> solver, int row, int col, double expected)
         {
-            var indices = Tuple.Create(row, col);
+            var indices = new MatrixLocation(row, col);
             indices = solver.InternalToExternal(indices);
-            var elt = solver.FindElement(indices.Item1, indices.Item2);
+            var elt = solver.FindElement(indices.Row, indices.Column);
             Assert.AreNotEqual(null, elt);
             Assert.AreEqual(expected, elt.GetValue());
         }

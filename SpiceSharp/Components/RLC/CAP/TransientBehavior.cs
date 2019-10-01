@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
@@ -43,15 +44,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <value>
         /// The matrix elements.
         /// </value>
-        protected RealOnePortElementSet MatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected RealVectorElementSet VectorElements { get; private set; }
+        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the state tracking the charge.
@@ -81,8 +74,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             base.Bind(context);
 
             BiasingState = context.States.GetValue<BiasingSimulationState>();
-            MatrixElements = new RealOnePortElementSet(BiasingState.Solver, PosNode, NegNode);
-            VectorElements = new RealVectorElementSet(BiasingState.Solver, PosNode, NegNode);
+            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(PosNode, PosNode),
+                new MatrixLocation(PosNode, NegNode),
+                new MatrixLocation(NegNode, PosNode),
+                new MatrixLocation(NegNode, NegNode)
+            }, new[] { PosNode, NegNode });
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             QCap = method.CreateDerivative();
@@ -95,10 +92,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             base.Unbind();
             BiasingState = null;
-            MatrixElements?.Destroy();
-            MatrixElements = null;
-            VectorElements?.Destroy();
-            VectorElements = null;
+            Elements?.Destroy();
+            Elements = null;
         }
 
         /// <summary>
@@ -128,8 +123,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             var ceq = QCap.RhsCurrent();
 
             // Load matrix and rhs vector
-            MatrixElements.AddOnePort(geq);
-            VectorElements.Add(-ceq, ceq);
+            Elements.Add(geq, -geq, -geq, geq, -ceq, ceq);
         }
     }
 }

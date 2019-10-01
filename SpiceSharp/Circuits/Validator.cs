@@ -220,9 +220,9 @@ namespace SpiceSharp.Circuits
                  */
                 if (exception.Index <= _voltageDriven.Count)
                 {
-                    var indices = Tuple.Create(exception.Index, exception.Index);
+                    var indices = new MatrixLocation(exception.Index, exception.Index);
                     indices = solver.InternalToExternal(indices);
-                    return _voltageDriven[indices.Item1 - 1].Source;
+                    return _voltageDriven[indices.Row - 1].Source;
                 }
             }
             return null;

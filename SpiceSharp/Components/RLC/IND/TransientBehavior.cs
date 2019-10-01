@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -24,15 +25,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <value>
         /// The transient matrix elements.
         /// </value>
-        protected RealMatrixElementSet TransientMatrixElements { get; private set; }
-
-        /// <summary>
-        /// Gets the transient vector elements.
-        /// </summary>
-        /// <value>
-        /// The transient vector elements.
-        /// </value>
-        protected RealVectorElementSet TransientVectorElements { get; private set; }
+        protected ElementSet<double> TransientElements { get; private set; }
 
         /// <summary>
         /// The state tracking the flux.
@@ -60,9 +53,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            TransientMatrixElements = new RealMatrixElementSet(BiasingState.Solver,
-                new MatrixPin(BranchEq, BranchEq));
-            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq);
+            TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(BranchEq, BranchEq)
+            }, new[] { BranchEq });
 
             var method = context.States.GetValue<TimeSimulationState>().Method;
             _flux = method.CreateDerivative();
@@ -82,10 +75,8 @@ namespace SpiceSharp.Components.InductorBehaviors
                     UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
             }
 
-            TransientMatrixElements?.Destroy();
-            TransientMatrixElements = null;
-            TransientVectorElements?.Destroy();
-            TransientVectorElements = null;
+            TransientElements?.Destroy();
+            TransientElements = null;
             _flux = null;
         }
 
@@ -118,8 +109,10 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Finally load the Y-matrix
             _flux.Integrate();
-            TransientMatrixElements.Add(-_flux.Jacobian(BaseParameters.Inductance));
-            TransientVectorElements.Add(_flux.RhsCurrent());
+            TransientElements.Add(
+                -_flux.Jacobian(BaseParameters.Inductance),
+                _flux.RhsCurrent()
+                );
         }
     }
 }
