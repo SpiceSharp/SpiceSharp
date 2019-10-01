@@ -272,7 +272,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public override IMatrixElement<T> FindDiagonalElement(int index)
+        public IMatrixElement<T> FindDiagonalElement(int index)
         {
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -284,6 +284,46 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Finds the element at the specified position in the matrix.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public abstract ISolverElement<T> FindElement(int row, int column);
+
+        /// <summary>
+        /// Finds the element at the specified position in the right-hand side vector.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public abstract ISolverElement<T> FindElement(int row);
+
+        /// <summary>
+        /// Gets the element at the specified position in the matrix. A new element is
+        /// created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        public abstract ISolverElement<T> GetElement(int row, int column);
+
+        /// <summary>
+        /// Gets the element at the specified position in the right-hand side vector.
+        /// A new element is created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        public abstract ISolverElement<T> GetElement(int row);
+
+        /// <summary>
         /// Gets a pointer to the matrix element at the specified row and column. A
         /// non-zero element is always guaranteed with this method. The matrix is expanded
         /// if necessary.
@@ -293,7 +333,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public override IMatrixElement<T> GetMatrixElement(int row, int column)
+        public IMatrixElement<T> GetMatrixElement(int row, int column)
         {
             row = Row[row];
             column = Column[column];
@@ -308,7 +348,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element; otherwise <c>null</c>.
         /// </returns>
-        public override IMatrixElement<T> FindMatrixElement(int row, int column)
+        public IMatrixElement<T> FindMatrixElement(int row, int column)
         {
             if (row < 0)
                 throw new ArgumentOutOfRangeException(nameof(row));
@@ -330,7 +370,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element.
         /// </returns>
-        public override IVectorElement<T> GetVectorElement(int index)
+        public IVectorElement<T> GetVectorElement(int index)
         {
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -345,7 +385,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element; otherwise <c>null</c>.
         /// </returns>
-        public override IVectorElement<T> FindVectorElement(int index)
+        public IVectorElement<T> FindVectorElement(int index)
         {
             index = Row[index];
             return Vector.FindVectorElement(index);

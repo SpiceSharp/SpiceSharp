@@ -12,6 +12,138 @@ namespace SpiceSharp.Algebra
         where M : IPermutableMatrix<double>
         where V : IPermutableVector<double>
     {
+        /// <summary>
+        /// An <see cref="ISolverElement{T}"/> for matrix elements in a <see cref="DenseRealSolver{M, V}"/>.
+        /// </summary>
+        /// <seealso cref="DenseLUSolver{M, V, T}" />
+        protected class RealSolverMatrixElement : ISolverElement<double>
+        {
+            private DenseRealSolver<M, V> _parent;
+            private int _row, _column;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="RealSolverMatrixElement"/> class.
+            /// </summary>
+            /// <param name="parent">The parent.</param>
+            /// <param name="row">The row.</param>
+            /// <param name="column">The column.</param>
+            public RealSolverMatrixElement(DenseRealSolver<M, V> parent, int row, int column)
+            {
+                _parent = parent.ThrowIfNull(nameof(parent));
+                _row = row;
+                _column = column;
+            }
+
+            /// <summary>
+            /// Adds the specified value to the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Add(double value)
+            {
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                _parent.Matrix[r, c] += value;
+            }
+
+            /// <summary>
+            /// Subtracts the specified value from the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Subtract(double value)
+            {
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                _parent.Matrix[r, c] -= value;
+            }
+
+            /// <summary>
+            /// Sets the specified value for the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void SetValue(double value)
+            {
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                _parent.Matrix[r, c] = value;
+            }
+
+            /// <summary>
+            /// Gets the value of the matrix element.
+            /// </summary>
+            /// <returns>
+            /// The matrix element value.
+            /// </returns>
+            public double GetValue()
+            {
+                var r = _parent.Row[_row];
+                var c = _parent.Column[_column];
+                return _parent.Matrix[r, c];
+            }
+        }
+
+        /// <summary>
+        /// An <see cref="ISolverElement{T}"/> for vector elements in a <see cref="DenseRealSolver{M, V}"/>.
+        /// </summary>
+        /// <seealso cref="DenseLUSolver{M, V, T}"/>
+        protected class RealSolverVectorElement : ISolverElement<double>
+        {
+            private DenseRealSolver<M, V> _parent;
+            private int _row;
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="parent"></param>
+            /// <param name="row"></param>
+            public RealSolverVectorElement(DenseRealSolver<M, V> parent, int row)
+            {
+                _parent = parent.ThrowIfNull(nameof(parent));
+                _row = row;
+            }
+
+            /// <summary>
+            /// Adds the specified value to the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Add(double value)
+            {
+                int r = _parent.Row[_row];
+                _parent.Vector[r] += value;
+            }
+
+            /// <summary>
+            /// Subtracts the specified value from the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Subtract(double value)
+            {
+                int r = _parent.Row[_row];
+                _parent.Vector[r] -= value;
+            }
+
+            /// <summary>
+            /// Sets the specified value for the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void SetValue(double value)
+            {
+                int r = _parent.Row[_row];
+                _parent.Vector[r] = value;
+            }
+
+            /// <summary>
+            /// Gets the value of the matrix element.
+            /// </summary>
+            /// <returns>
+            /// The matrix element value.
+            /// </returns>
+            public double GetValue()
+            {
+                int r = _parent.Row[_row];
+                return _parent.Vector[r];
+            }
+        }
+
         private double[] _intermediate;
 
         /// <summary>
@@ -34,6 +166,50 @@ namespace SpiceSharp.Algebra
             : base(matrix, vector, strategy)
         {
         }
+
+        /// <summary>
+        /// Finds the element at the specified position in the matrix.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public override ISolverElement<double> FindElement(int row, int column)
+            => new RealSolverMatrixElement(this, row, column);
+
+        /// <summary>
+        /// Finds the element at the specified position in the right-hand side vector.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public override ISolverElement<double> FindElement(int row)
+            => new RealSolverVectorElement(this, row);
+
+        /// <summary>
+        /// Gets the element at the specified position in the matrix. A new element is
+        /// created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        public override ISolverElement<double> GetElement(int row, int column)
+            => new RealSolverMatrixElement(this, row, column);
+
+        /// <summary>
+        /// Gets the element at the specified position in the right-hand side vector.
+        /// A new element is created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        public override ISolverElement<double> GetElement(int row)
+            => new RealSolverVectorElement(this, row);
 
         /// <summary>
         /// Solves the system of equations.

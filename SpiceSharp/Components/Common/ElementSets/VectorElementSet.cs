@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The elements.
         /// </value>
-        protected IVectorElement<T>[] Elements { get; }
+        protected ISolverElement<T>[] Elements { get; }
 
         /// <summary>
         /// Gets the solver.
@@ -36,9 +36,9 @@ namespace SpiceSharp.Components
         public VectorElementSet(ISolver<T> solver, params int[] pins)
         {
             Solver = solver.ThrowIfNull(nameof(solver));
-            Elements = new IVectorElement<T>[pins.Length];
+            Elements = new ISolverElement<T>[pins.Length];
             for (var i = 0; i < pins.Length; i++)
-                Elements[i] = solver.GetVectorElement(pins[i]);
+                Elements[i] = solver.GetElement(pins[i]);
         }
 
         /// <summary>

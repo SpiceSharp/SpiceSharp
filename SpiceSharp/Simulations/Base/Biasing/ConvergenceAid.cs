@@ -40,12 +40,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the diagonal element.
         /// </summary>
-        protected IMatrixElement<double> Diagonal { get; private set; }
+        protected ISolverElement<double> Diagonal { get; private set; }
 
         /// <summary>
         /// Gets the right-hand side element.
         /// </summary>
-        protected IVectorElement<double> Rhs { get; private set; }
+        protected ISolverElement<double> Rhs { get; private set; }
 
         /// <summary>
         /// Gets the node for which the aid is meant.
@@ -87,8 +87,8 @@ namespace SpiceSharp.Simulations
             Node = node;
 
             // Get the necessary elements
-            Diagonal = Solver.GetMatrixElement(node.Index, node.Index);
-            Rhs = !Value.Equals(0.0) ? Solver.GetVectorElement(node.Index) : Solver.FindVectorElement(node.Index);
+            Diagonal = Solver.GetElement(node.Index, node.Index);
+            Rhs = !Value.Equals(0.0) ? Solver.GetElement(node.Index) : Solver.FindElement(node.Index);
 
             // Update the current solution to reflect our convergence aid value
             var state = simulation.States.GetValue<BiasingSimulationState>();
@@ -115,24 +115,24 @@ namespace SpiceSharp.Simulations
                     hasOtherTypes = true;
                 else
                 {
-                    var elt = Solver.FindMatrixElement(Node.Index, v.Index);
+                    var elt = Solver.FindElement(Node.Index, v.Index);
                     if (elt != null)
-                        elt.Value = 0.0;
+                        elt.SetValue(0);
                 }
             }
 
             // If there are current contributions, then we can't just hard-set the value
             if (hasOtherTypes)
             {
-                Diagonal.Value = Force;
+                Diagonal.SetValue(Force);
                 if (Rhs != null)
-                    Rhs.Value = Force * Value;
+                    Rhs.SetValue(Force * Value);
             }
             else
             {
-                Diagonal.Value = 1.0;
+                Diagonal.SetValue(1.0);
                 if (Rhs != null)
-                    Rhs.Value = Value;
+                    Rhs.SetValue(Value);
             }
         }
 

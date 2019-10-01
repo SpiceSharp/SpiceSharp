@@ -25,11 +25,8 @@ namespace SpiceSharp.Components
         /// <param name="values">The values.</param>
         public void Add(params Complex[] values)
         {
-            lock (Solver)
-            {
-                for (var i = 0; i < values.Length; i++)
-                    Elements[i].Value += values[i];
-            }
+            for (var i = 0; i < values.Length; i++)
+                Elements[i].Add(values[i]);
         }
     }
 }

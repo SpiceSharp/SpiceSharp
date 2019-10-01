@@ -169,9 +169,9 @@ namespace SpiceSharpTest.Algebra
         {
             var indices = Tuple.Create(row, col);
             indices = solver.InternalToExternal(indices);
-            var elt = solver.FindMatrixElement(indices.Item1, indices.Item2);
+            var elt = solver.FindElement(indices.Item1, indices.Item2);
             Assert.AreNotEqual(null, elt);
-            Assert.AreEqual(expected, elt.Value);
+            Assert.AreEqual(expected, elt.GetValue());
         }
     }
 }

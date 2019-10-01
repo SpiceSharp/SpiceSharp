@@ -16,14 +16,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public DelayedSignal Signals { get; private set; }
 
         /// <summary>
-        /// Gets the left branch RHS element.
+        /// Gets the transient vector elements.
         /// </summary>
-        protected IVectorElement<double> Ibr1Ptr { get; private set; }
-
-        /// <summary>
-        /// Gets the right branch RHS element.
-        /// </summary>
-        protected IVectorElement<double> Ibr2Ptr { get; private set; }
+        /// <value>
+        /// The transient vector elements.
+        /// </value>
+        protected RealVectorElementSet TransientVectorElements { get; private set; }
         
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -45,10 +43,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Bind(context);
 
-            var solver = BiasingState.Solver;
-            Ibr1Ptr = solver.GetVectorElement(BranchEq1);
-            Ibr2Ptr = solver.GetVectorElement(BranchEq2);
-
+            TransientVectorElements = new RealVectorElementSet(BiasingState.Solver, BranchEq1, BranchEq2);
             Signals = new DelayedSignal(2, BaseParameters.Delay);
         }
 
@@ -78,8 +73,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Signals.SetProbedValues(input1, input2);
 
             // Update the branch equations
-            Ibr1Ptr.Value += Signals.Values[0];
-            Ibr2Ptr.Value += Signals.Values[1];
+            TransientVectorElements.Add(Signals.Values[0], Signals.Values[1]);
         }
     }
 }

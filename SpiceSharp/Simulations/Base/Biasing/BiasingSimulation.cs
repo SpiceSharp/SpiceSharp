@@ -486,7 +486,7 @@ namespace SpiceSharp.Simulations
                 BaseSimulationStatistics.SolveTime.Stop();
 
                 // Reset ground nodes
-                solver.GetVectorElement(0).Value = 0.0;
+                solver.GetElement(0).SetValue(0);
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
 

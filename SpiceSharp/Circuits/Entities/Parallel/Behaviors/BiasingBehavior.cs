@@ -1,7 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using System;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SpiceSharp.Circuits.ParallelBehaviors
 {
@@ -25,18 +23,6 @@ namespace SpiceSharp.Circuits.ParallelBehaviors
         }
 
         /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            // We want to replace the solver of the state to avoid write conflicts
-            var state = context.States.GetValue<BiasingSimulationState>();
-            var oldSolver = state.Solver;
-            base.Bind(context);
-        }
-
-        /// <summary>
         /// Tests convergence at the device-level.
         /// </summary>
         /// <returns>
@@ -52,6 +38,7 @@ namespace SpiceSharp.Circuits.ParallelBehaviors
         /// </summary>
         public void Load()
         {
+            // Parallel.For(0, Behaviors.Count, (i) => Behaviors[i].Load());
             For(behavior => behavior.Load);
         }
     }

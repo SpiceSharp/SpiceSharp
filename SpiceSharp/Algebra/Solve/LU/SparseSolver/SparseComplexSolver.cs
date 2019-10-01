@@ -13,6 +13,94 @@ namespace SpiceSharp.Algebra
         where V : IPermutableVector<Complex>, ISparseVector<Complex>
     {
         /// <summary>
+        /// An <see cref="ISolverElement{T}"/> for matrix elements in a <see cref="SparseLUSolver{M, V, T}"/>.
+        /// </summary>
+        /// <seealso cref="SparseLUSolver{M, V, T}" />
+        protected class ComplexMatrixSolverElement : ISolverElement<Complex>
+        {
+            private IMatrixElement<Complex> _element;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ComplexMatrixSolverElement"/> class.
+            /// </summary>
+            /// <param name="element">The element.</param>
+            public ComplexMatrixSolverElement(IMatrixElement<Complex> element)
+            {
+                _element = element.ThrowIfNull(nameof(element));
+            }
+
+            /// <summary>
+            /// Adds the specified value to the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Add(Complex value) => _element.Value += value;
+
+            /// <summary>
+            /// Subtracts the specified value from the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Subtract(Complex value) => _element.Value -= value;
+
+            /// <summary>
+            /// Sets the specified value for the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void SetValue(Complex value) => _element.Value = value;
+
+            /// <summary>
+            /// Gets the value of the matrix element.
+            /// </summary>
+            /// <returns>
+            /// The matrix element value.
+            /// </returns>
+            public Complex GetValue() => _element.Value;
+        }
+
+        /// <summary>
+        /// An <see cref="ISolverElement{T}"/> for RHS elements in a <see cref="SparseLUSolver{M, V, T}"/>
+        /// </summary>
+        /// <seealso cref="SparseLUSolver{M, V, T}" />
+        protected class ComplexVectorSolverElement : ISolverElement<Complex>
+        {
+            private IVectorElement<Complex> _element;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ComplexVectorSolverElement"/> class.
+            /// </summary>
+            /// <param name="element">The element.</param>
+            public ComplexVectorSolverElement(IVectorElement<Complex> element)
+            {
+                _element = element.ThrowIfNull(nameof(element));
+            }
+
+            /// <summary>
+            /// Adds the specified value.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Add(Complex value) => _element.Value += value;
+
+            /// <summary>
+            /// Subtracts the specified value.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void Subtract(Complex value) => _element.Value -= value;
+
+            /// <summary>
+            /// Sets the specified value for the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void SetValue(Complex value) => _element.Value = value;
+
+            /// <summary>
+            /// Gets the value of the matrix element.
+            /// </summary>
+            /// <returns>
+            /// The matrix element value.
+            /// </returns>
+            public Complex GetValue() => _element.Value;
+        }
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private Complex[] _intermediate;
@@ -36,6 +124,66 @@ namespace SpiceSharp.Algebra
         public SparseComplexSolver(M matrix, V vector, SparsePivotStrategy<Complex> strategy)
             : base(matrix, vector, strategy)
         {
+        }
+
+        /// <summary>
+        /// Finds the element at the specified position in the matrix.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public override ISolverElement<Complex> FindElement(int row, int column)
+        {
+            var element = FindMatrixElement(row, column);
+            if (element == null)
+                return null;
+            return new ComplexMatrixSolverElement(element);
+        }
+
+        /// <summary>
+        /// Finds the element at the specified position in the right-hand side vector.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public override ISolverElement<Complex> FindElement(int row)
+        {
+            var element = FindVectorElement(row);
+            if (element == null)
+                return null;
+            return new ComplexVectorSolverElement(element);
+        }
+
+        /// <summary>
+        /// Gets the element at the specified position in the matrix. A new element is
+        /// created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        public override ISolverElement<Complex> GetElement(int row, int column)
+        {
+            var element = GetMatrixElement(row, column);
+            return new ComplexMatrixSolverElement(element);
+        }
+
+        /// <summary>
+        /// Gets the element at the specified position in the right-hand side vector.
+        /// A new element is created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        public override ISolverElement<Complex> GetElement(int row)
+        {
+            var element = GetVectorElement(row);
+            return new ComplexVectorSolverElement(element);
         }
 
         /// <summary>

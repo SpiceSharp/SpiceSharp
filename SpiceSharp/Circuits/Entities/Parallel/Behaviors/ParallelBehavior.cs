@@ -76,9 +76,19 @@ namespace SpiceSharp.Circuits.ParallelBehaviors
         {
             if (ExecuteInParallel)
             {
-                var tasks = new Task[Behaviors.Count];
-                for (var i = 0; i < Behaviors.Count; i++)
-                    tasks[i] = Task.Run(method(Behaviors[i]));
+                var cores = Environment.ProcessorCount;
+                var tasks = new Task[cores];
+                var count = Behaviors.Count / cores;
+                for (var k = 0; k < cores; k++)
+                {
+                    var start = k * count;
+                    var end = k == cores - 1 ? Behaviors.Count : (k + 1) * count;
+                    tasks[k] = Task.Run(() =>
+                    {
+                        for (var i = start; i < end; i++)
+                            method(Behaviors[i]).Invoke();
+                    });
+                }
                 Task.WaitAll(tasks);
             }
             else
@@ -99,9 +109,21 @@ namespace SpiceSharp.Circuits.ParallelBehaviors
         {
             if (ExecuteInParallel)
             {
-                var tasks = new Task<bool>[Behaviors.Count];
-                for (var i = 0; i < Behaviors.Count; i++)
-                    tasks[i] = Task.Run(method(Behaviors[i]));
+                var cores = Environment.ProcessorCount;
+                var tasks = new Task<bool>[cores];
+                var count = Behaviors.Count / cores;
+                for (var k = 0; k < cores; k++)
+                {
+                    var start = k * count;
+                    var end = k == cores - 1 ? Behaviors.Count : (k + 1) * count;
+                    tasks[k] = Task.Run(() =>
+                    {
+                        var localresult = true;
+                        for (var i = start; i < end; i++)
+                            localresult &= method(Behaviors[i]).Invoke();
+                        return localresult;
+                    });
+                }
                 Task.WaitAll(tasks);
 
                 // Combine all outputs

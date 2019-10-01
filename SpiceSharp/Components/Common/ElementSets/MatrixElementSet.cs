@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The elements.
         /// </value>
-        protected IMatrixElement<T>[] Elements { get; }
+        protected ISolverElement<T>[] Elements { get; }
 
         /// <summary>
         /// Gets the solver.
@@ -37,9 +37,9 @@ namespace SpiceSharp.Components
         public MatrixElementSet(ISolver<T> solver, params MatrixPin[] pins)
         {
             Solver = solver.ThrowIfNull(nameof(solver));
-            Elements = new IMatrixElement<T>[pins.Length];
+            Elements = new ISolverElement<T>[pins.Length];
             for (var i = 0; i < pins.Length; i++)
-                Elements[i] = solver.GetMatrixElement(pins[i].Row, pins[i].Column);
+                Elements[i] = solver.GetElement(pins[i].Row, pins[i].Column);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Entities.Local;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Circuits.ParallelBehaviors

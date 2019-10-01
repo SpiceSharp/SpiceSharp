@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
     /// <seealso cref="IElementMatrix{T}"/>
     /// <seealso cref="IElementVector{T}"/>
     /// <seealso cref="IFormattable" />
-    public abstract partial class LinearSystem<M, V, T> : IElementMatrix<T>, IElementVector<T>, IFormattable 
+    public abstract partial class LinearSystem<M, V, T> : IFormattable 
         where M : IPermutableMatrix<T>
         where V : IPermutableVector<T>
         where T : IFormattable
@@ -26,22 +26,6 @@ namespace SpiceSharp.Algebra
         /// The order.
         /// </value>
         public int Size => Math.Max(Matrix.Size, Vector.Length);
-
-        /// <summary>
-        /// Gets the size of the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix size.
-        /// </value>
-        int IMatrix<T>.Size => Matrix.Size;
-
-        /// <summary>
-        /// Gets the length of the vector.
-        /// </summary>
-        /// <value>
-        /// The length.
-        /// </value>
-        int IVector<T>.Length => Vector.Length;
 
         /// <summary>
         /// Gets or sets the matrix value at the specified row and column.
@@ -118,63 +102,6 @@ namespace SpiceSharp.Algebra
             Matrix = matrix;
             Vector = vector;
         }
-
-        /// <summary>
-        /// Finds the diagonal element at the specified row/column.
-        /// </summary>
-        /// <param name="index">The row/column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public abstract IMatrixElement<T> FindDiagonalElement(int index);
-
-        /// <summary>
-        /// Gets a pointer to the matrix element at the specified row and column. A
-        /// non-zero element is always guaranteed with this method. The matrix is expanded
-        /// if necessary.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public abstract IMatrixElement<T> GetMatrixElement(int row, int column);
-
-        /// <summary>
-        /// Finds a pointer to the matrix element at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element; otherwise <c>null</c>.
-        /// </returns>
-        public abstract IMatrixElement<T> FindMatrixElement(int row, int column);
-
-        /// <summary>
-        /// Gets a vector element at the specified index. A non-zero element is
-        /// always guaranteed with this method. The vector is expanded if
-        /// necessary.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        public abstract IVectorElement<T> GetVectorElement(int index);
-
-        /// <summary>
-        /// Finds a vector element at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element; otherwise <c>null</c>.
-        /// </returns>
-        public abstract IVectorElement<T> FindVectorElement(int index);
-
-        /// <summary>
-        /// Copies the contents of the vector to another one.
-        /// </summary>
-        /// <param name="target">The target vector.</param>
-        void IVector<T>.CopyTo(IVector<T> target) => Vector.CopyTo(target);
 
         /// <summary>
         /// Swap two (internal) rows in the linear system. This method keeps

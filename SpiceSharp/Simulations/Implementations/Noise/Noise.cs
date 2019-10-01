@@ -181,8 +181,8 @@ namespace SpiceSharp.Simulations
             solver.ResetVector();
 
             // Apply unit current excitation
-            solver.GetVectorElement(posDrive).Value = 1.0;
-            solver.GetVectorElement(negDrive).Value = -1.0;
+            solver.GetElement(posDrive).Add(1.0);
+            solver.GetElement(negDrive).Subtract(1.0);
 
             solver.SolveTransposed(ComplexState.Solution);
             ComplexState.Solution[0] = 0.0;

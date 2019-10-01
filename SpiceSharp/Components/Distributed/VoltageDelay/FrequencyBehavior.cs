@@ -12,34 +12,12 @@ namespace SpiceSharp.Components.DelayBehaviors
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the (positive, branch) element.
+        /// Gets the elements.
         /// </summary>
-        protected IMatrixElement<Complex> CPosBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (negative, branch) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CNegBranchPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, positive) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchPosPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, negative) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, ctrlneg) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchControlNegPtr { get; private set; }
-
-        /// <summary>
-        /// Gets the (branch, ctrlpos) element.
-        /// </summary>
-        protected IMatrixElement<Complex> CBranchControlPosPtr { get; private set; }
+        /// <value>
+        /// The elements.
+        /// </value>
+        protected ComplexMatrixElementSet ComplexElements { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -70,13 +48,13 @@ namespace SpiceSharp.Components.DelayBehaviors
             base.Bind(context);
 
             ComplexState = context.States.GetValue<ComplexSimulationState>();
-            var solver = ComplexState.Solver;
-            CPosBranchPtr = solver.GetMatrixElement(PosNode, BranchEq);
-            CNegBranchPtr = solver.GetMatrixElement(NegNode, BranchEq);
-            CBranchPosPtr = solver.GetMatrixElement(BranchEq, PosNode);
-            CBranchNegPtr = solver.GetMatrixElement(BranchEq, NegNode);
-            CBranchControlPosPtr = solver.GetMatrixElement(BranchEq, ContPosNode);
-            CBranchControlNegPtr = solver.GetMatrixElement(BranchEq, ContNegNode);
+            ComplexElements = new ComplexMatrixElementSet(ComplexState.Solver,
+                new MatrixPin(PosNode, BranchEq),
+                new MatrixPin(NegNode, BranchEq),
+                new MatrixPin(BranchEq, PosNode),
+                new MatrixPin(BranchEq, NegNode),
+                new MatrixPin(BranchEq, ContPosNode),
+                new MatrixPin(BranchEq, ContNegNode));
         }
 
         /// <summary>
@@ -85,12 +63,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            CPosBranchPtr = null;
-            CNegBranchPtr = null;
-            CBranchPosPtr = null;
-            CBranchNegPtr = null;
-            CBranchControlPosPtr = null;
-            CBranchControlNegPtr = null;
+            ComplexElements?.Destroy();
+            ComplexElements = null;
         }
 
         /// <summary>
@@ -109,12 +83,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             var factor = Complex.Exp(-laplace * BaseParameters.Delay);
 
             // Load the Y-matrix and RHS-vector
-            CPosBranchPtr.Value += 1.0;
-            CNegBranchPtr.Value -= 1.0;
-            CBranchPosPtr.Value += 1.0;
-            CBranchNegPtr.Value -= 1.0;
-            CBranchControlPosPtr.Value -= factor;
-            CBranchControlNegPtr.Value += factor;
+            ComplexElements.Add(1, -1, 1, -1, -factor, factor);
         }
     }
 }

@@ -26,13 +26,10 @@ namespace SpiceSharp.Components
         /// <param name="value">The value.</param>
         public void AddOnePort(Complex value)
         {
-            lock (Solver)
-            {
-                Elements[0].Value += value;
-                Elements[1].Value -= value;
-                Elements[2].Value -= value;
-                Elements[3].Value += value;
-            }
+            Elements[0].Add(value);
+            Elements[1].Subtract(value);
+            Elements[2].Subtract(value);
+            Elements[3].Add(value);
         }
     }
 }

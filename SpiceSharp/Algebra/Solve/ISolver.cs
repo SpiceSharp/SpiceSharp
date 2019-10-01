@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="IElementMatrix{T}" />
     /// <seealso cref="IElementVector{T}" />
-    public interface ISolver<T> : IElementMatrix<T>, IElementVector<T> where T : IFormattable
+    public interface ISolver<T> where T : IFormattable
     {
         /// <summary>
         /// Occurs before the solver uses the decomposition to find the solution.
@@ -73,6 +73,14 @@ namespace SpiceSharp.Algebra
         int Order { get; set; }
 
         /// <summary>
+        /// Gets the size of the matrix and right-hand side vector.
+        /// </summary>
+        /// <value>
+        /// The size.
+        /// </value>
+        int Size { get; }
+
+        /// <summary>
         /// Preconditions the specified method.
         /// </summary>
         /// <param name="method">The method.</param>
@@ -107,6 +115,56 @@ namespace SpiceSharp.Algebra
         /// Clears all matrix and vector elements.
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// Resets the right-hand side vector.
+        /// </summary>
+        void ResetVector();
+
+        /// <summary>
+        /// Resets the matrix.
+        /// </summary>
+        void ResetMatrix();
+
+        /// <summary>
+        /// Finds the element at the specified position in the matrix.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        ISolverElement<T> FindElement(int row, int column);
+
+        /// <summary>
+        /// Finds the element at the specified position in the right-hand side vector.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <returns>
+        /// The element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        ISolverElement<T> FindElement(int row);
+
+        /// <summary>
+        /// Gets the element at the specified position in the matrix. A new element is
+        /// created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row index.</param>
+        /// <param name="column">The column index.</param>
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        ISolverElement<T> GetElement(int row, int column);
+
+        /// <summary>
+        /// Gets the element at the specified position in the right-hand side vector.
+        /// A new element is created if it doesn't exist yet.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <returns>
+        /// The vector element.
+        /// </returns>
+        ISolverElement<T> GetElement(int row);
 
         /// <summary>
         /// Maps an internal row/column tuple to an external one.

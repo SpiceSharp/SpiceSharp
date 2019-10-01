@@ -12,8 +12,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
     public class BiasingBehavior : Behavior, IBiasingBehavior
     {
         private int _nodeA, _nodeB;
-        private IMatrixElement<double> _aaPtr, _abPtr, _baPtr, _bbPtr;
-        private IVectorElement<double> _aPtr, _bPtr;
+        private RealOnePortElementSet _matrixElements;
+        private RealVectorElementSet _vectorElements;
         private BaseParameters _bp;
         private BiasingSimulationState _state;
         private BiasingConfiguration _baseConfig;
@@ -41,22 +41,16 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _baseConfig = c.Configurations.GetValue<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
-            if (context is ComponentBindingContext cbc)
-            {
+            var cbc = (ComponentBindingContext)context;
                 _nodeA = cbc.Pins[0];
                 _nodeB = cbc.Pins[1];
-            }
 
             // We need 4 matrix elements here
             var solver = c.States.GetValue<BiasingSimulationState>().Solver;
-            _aaPtr = solver.GetMatrixElement(_nodeA, _nodeA);
-            _abPtr = solver.GetMatrixElement(_nodeA, _nodeB);
-            _baPtr = solver.GetMatrixElement(_nodeB, _nodeA);
-            _bbPtr = solver.GetMatrixElement(_nodeB, _nodeB);
+            _matrixElements = new RealOnePortElementSet(solver, _nodeA, _nodeB);
 
             // We also need 2 RHS vector elements
-            _aPtr = solver.GetVectorElement(_nodeA);
-            _bPtr = solver.GetVectorElement(_nodeB);
+            _vectorElements = new RealVectorElementSet(solver, _nodeA, _nodeB);
         }
 
         /// <summary>
@@ -68,12 +62,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _bp = null;
             _state = null;
             _baseConfig = null;
-            _aaPtr = null;
-            _abPtr = null;
-            _baPtr = null;
-            _bbPtr = null;
-            _aPtr = null;
-            _bPtr = null;
+            _matrixElements?.Destroy();
+            _matrixElements = null;
+            _vectorElements?.Destroy();
+            _vectorElements = null;
         }
 
         /// <summary>
@@ -104,14 +96,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
 
             // Load the RHS vector
             c -= g * v;
-            _aPtr.Value += c;
-            _bPtr.Value -= c;
+            _vectorElements.Add(c, -c);
 
             // Load the Y-matrix
-            _aaPtr.Value += g;
-            _abPtr.Value -= g;
-            _baPtr.Value -= g;
-            _bbPtr.Value += g;
+            _matrixElements.AddOnePort(g);
         }
 
         /// <summary>
