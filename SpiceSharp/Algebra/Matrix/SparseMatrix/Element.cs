@@ -5,46 +5,45 @@
         /// <summary>
         /// An element for a sparse matrix.
         /// </summary>
-        /// <seealso cref="IMatrixElement{T}" />
-        protected class Element : ISparseMatrixElement<T>
+        /// <seealso cref="Element{T}" />
+        /// <seealso cref="ISparseMatrixElement{T}"/>
+        protected class Element : Element<T>, ISparseMatrixElement<T>
         {
-            /// <summary>
-            /// Gets or sets the value of the matrix element.
-            /// </summary>
-            /// <value>
-            /// The value.
-            /// </value>
-            public T Value { get; set; }
-
             /// <summary>
             /// Gets or sets the row index.
             /// </summary>
+            /// <value>
+            /// The row index.
+            /// </value>
             public int Row { get; set; }
 
             /// <summary>
             /// Gets or sets the column index.
             /// </summary>
+            /// <value>
+            /// The column index.
+            /// </value>
             public int Column { get; set; }
 
             /// <summary>
             /// Gets or sets the next element in the row.
             /// </summary>
-            public Element NextInRow { get; set; }
+            public Element Right { get; set; }
 
             /// <summary>
             /// Gets or sets the next element in the column.
             /// </summary>
-            public Element NextInColumn { get; set; }
+            public Element Below { get; set; }
 
             /// <summary>
             /// Gets or sets the previous element in the row.
             /// </summary>
-            public Element PreviousInRow { get; set; }
+            public Element Left { get; set; }
 
             /// <summary>
             /// Gets or sets the previous element in the column.
             /// </summary>
-            public Element PreviousInColumn { get; set; }
+            public Element Above { get; set; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Element"/> class.
@@ -64,7 +63,7 @@
             /// <value>
             /// The matrix element.
             /// </value>
-            ISparseMatrixElement<T> ISparseMatrixElement<T>.Above => PreviousInColumn;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Above => Above;
 
             /// <summary>
             /// Gets the matrix element below this one.
@@ -72,7 +71,7 @@
             /// <value>
             /// The matrix element.
             /// </value>
-            ISparseMatrixElement<T> ISparseMatrixElement<T>.Below => NextInColumn;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Below => Below;
 
             /// <summary>
             /// Gets the right.
@@ -80,7 +79,7 @@
             /// <value>
             /// The right.
             /// </value>
-            ISparseMatrixElement<T> ISparseMatrixElement<T>.Right => NextInRow;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Right => Right;
 
             /// <summary>
             /// Gets the left.
@@ -88,7 +87,7 @@
             /// <value>
             /// The left.
             /// </value>
-            ISparseMatrixElement<T> ISparseMatrixElement<T>.Left => PreviousInRow;
+            ISparseMatrixElement<T> ISparseMatrixElement<T>.Left => Left;
         }
     }
 }

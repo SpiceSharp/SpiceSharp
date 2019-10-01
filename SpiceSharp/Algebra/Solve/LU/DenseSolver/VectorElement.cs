@@ -1,29 +1,12 @@
-﻿using System;
-
-namespace SpiceSharp.Algebra
+﻿namespace SpiceSharp.Algebra
 {
     public abstract partial class DenseLUSolver<M, V, T>
     {
         /// <summary>
-        /// A <see cref="IVectorElement{T}"/> that is returned by a <see cref="DenseLUSolver{M, V, T}"/>.
+        /// An <see cref="ISolverElement{T}"/> that is returned by a <see cref="DenseLUSolver{M, V, T}"/>.
         /// </summary>
-        /// <seealso cref="SpiceSharp.Algebra.LinearSystem{M, V, T}" />
-        protected class VectorElement : IVectorElement<T>
+        protected abstract class VectorElement : ISolverElement<T>
         {
-            /// <summary>
-            /// Gets or sets the value of the vector element.
-            /// </summary>
-            /// <value>
-            /// The value.
-            /// </value>
-            /// <exception cref="NotImplementedException">
-            /// </exception>
-            public T Value
-            {
-                get => _parent.Vector[Index];
-                set => _parent.Vector[Index] = value;
-            }
-
             /// <summary>
             /// Gets the index.
             /// </summary>
@@ -44,6 +27,40 @@ namespace SpiceSharp.Algebra
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
                 _index = index;
+            }
+
+            /// <summary>
+            /// Adds the specified value to the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public abstract void Add(T value);
+
+            /// <summary>
+            /// Subtracts the specified value from the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public abstract void Subtract(T value);
+
+            /// <summary>
+            /// Sets the specified value for the matrix element.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void SetValue(T value)
+            {
+                var r = _parent.Row[_index];
+                _parent.Vector[r] = value;
+            }
+
+            /// <summary>
+            /// Gets the value of the matrix element.
+            /// </summary>
+            /// <returns>
+            /// The matrix element value.
+            /// </returns>
+            public T GetValue()
+            {
+                var r = _parent.Row[_index];
+                return _parent.Vector[r];
             }
         }
     }

@@ -10,8 +10,8 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="V">The vector type.</typeparam>
     /// <seealso cref="SpiceSharp.Algebra.SparseLUSolver{M, V, T}" />
     public class SparseRealSolver<M, V> : SparseLUSolver<M, V, double>
-        where M : IPermutableMatrix<double>, ISparseMatrix<double>, IElementMatrix<double>
-        where V : IPermutableVector<double>, ISparseVector<double>, IElementVector<double>
+        where M : IPermutableMatrix<double>, ISparseMatrix<double>
+        where V : IPermutableVector<double>, ISparseVector<double>
     {
         /// <summary>
         /// An <see cref="ISolverElement{T}"/> for a <see cref="SparseRealSolver{M, V}"/>.
@@ -19,13 +19,13 @@ namespace SpiceSharp.Algebra
         /// <seealso cref="SparseLUSolver{M, V, T}" />
         protected class RealMatrixSolverElement : ISolverElement<double>
         {
-            private IMatrixElement<double> _element;
+            private Element<double> _element;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="RealMatrixSolverElement"/> class.
             /// </summary>
             /// <param name="element">The element.</param>
-            public RealMatrixSolverElement(IMatrixElement<double> element)
+            public RealMatrixSolverElement(Element<double> element)
             {
                 _element = element.ThrowIfNull(nameof(element));
             }
@@ -63,13 +63,13 @@ namespace SpiceSharp.Algebra
         /// <seealso cref="SparseLUSolver{M, V, T}" />
         protected class RealVectorSolverElement : ISolverElement<double>
         {
-            private IVectorElement<double> _element;
+            private Element<double> _element;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="RealVectorSolverElement"/> class.
             /// </summary>
             /// <param name="element">The element.</param>
-            public RealVectorSolverElement(IVectorElement<double> element)
+            public RealVectorSolverElement(Element<double> element)
             {
                 _element = element.ThrowIfNull(nameof(element));
             }

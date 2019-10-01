@@ -18,13 +18,13 @@ namespace SpiceSharp.Algebra
         /// <seealso cref="SparseLUSolver{M, V, T}" />
         protected class ComplexMatrixSolverElement : ISolverElement<Complex>
         {
-            private IMatrixElement<Complex> _element;
+            private Element<Complex> _element;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ComplexMatrixSolverElement"/> class.
             /// </summary>
             /// <param name="element">The element.</param>
-            public ComplexMatrixSolverElement(IMatrixElement<Complex> element)
+            public ComplexMatrixSolverElement(Element<Complex> element)
             {
                 _element = element.ThrowIfNull(nameof(element));
             }
@@ -62,13 +62,13 @@ namespace SpiceSharp.Algebra
         /// <seealso cref="SparseLUSolver{M, V, T}" />
         protected class ComplexVectorSolverElement : ISolverElement<Complex>
         {
-            private IVectorElement<Complex> _element;
+            private Element<Complex> _element;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ComplexVectorSolverElement"/> class.
             /// </summary>
             /// <param name="element">The element.</param>
-            public ComplexVectorSolverElement(IVectorElement<Complex> element)
+            public ComplexVectorSolverElement(Element<Complex> element)
             {
                 _element = element.ThrowIfNull(nameof(element));
             }

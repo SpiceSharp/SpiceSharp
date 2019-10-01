@@ -272,7 +272,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public IMatrixElement<T> FindDiagonalElement(int index)
+        public Element<T> FindDiagonalElement(int index)
         {
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -333,7 +333,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public IMatrixElement<T> GetMatrixElement(int row, int column)
+        public Element<T> GetMatrixElement(int row, int column)
         {
             row = Row[row];
             column = Column[column];
@@ -348,7 +348,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element; otherwise <c>null</c>.
         /// </returns>
-        public IMatrixElement<T> FindMatrixElement(int row, int column)
+        public Element<T> FindMatrixElement(int row, int column)
         {
             if (row < 0)
                 throw new ArgumentOutOfRangeException(nameof(row));
@@ -370,7 +370,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element.
         /// </returns>
-        public IVectorElement<T> GetVectorElement(int index)
+        public Element<T> GetVectorElement(int index)
         {
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -385,7 +385,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element; otherwise <c>null</c>.
         /// </returns>
-        public IVectorElement<T> FindVectorElement(int index)
+        public Element<T> FindVectorElement(int index)
         {
             index = Row[index];
             return Vector.FindVectorElement(index);

@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
             if (gmin <= 0.0)
                 return;
 
-            if (matrix is IElementMatrix<double> m)
+            if (matrix is ISparseMatrix<double> m)
             { 
                 // Add to the diagonal
                 for (var i = 1; i <= matrix.Size; i++)

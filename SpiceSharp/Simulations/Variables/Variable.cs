@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// This variable is used by simulations to aid convergence in specific situations.
         /// </remarks>
-        public IMatrixElement<double> Diagonal { get; set; }
+        public Element<double> Diagonal { get; set; }
 
         /// <summary>
         /// Gets the node type.

@@ -6,14 +6,7 @@ namespace SpiceSharp.Algebra
     /// Describes a linear system of equations. It tracks permutations of
     /// the equations and the variables.
     /// </summary>
-    /// <remarks>
-    /// The solver readily implements <see cref="IElementMatrix{T}"/> and <see cref="IElementVector{T}"/>.
-    /// This makes it easier for other objects to contribute to the solver Y-matrix or Rhs-vector without
-    /// the need to store a reference to the solver.
-    /// </remarks>
     /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="IElementMatrix{T}" />
-    /// <seealso cref="IElementVector{T}" />
     public interface ISolver<T> where T : IFormattable
     {
         /// <summary>

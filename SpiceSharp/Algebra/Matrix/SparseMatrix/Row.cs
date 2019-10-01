@@ -32,22 +32,22 @@ namespace SpiceSharp.Algebra
                     if (element.Column > column)
                         break;
                     lastElement = element;
-                    element = element.NextInRow;
+                    element = element.Right;
                 }
 
                 // Update links for last element
                 if (lastElement == null)
                     FirstInRow = newElement;
                 else
-                    lastElement.NextInRow = newElement;
-                newElement.PreviousInRow = lastElement;
+                    lastElement.Right = newElement;
+                newElement.Left = lastElement;
 
                 // Update links for next element
                 if (element == null)
                     LastInRow = newElement;
                 else
-                    element.PreviousInRow = newElement;
-                newElement.NextInRow = element;
+                    element.Left = newElement;
+                newElement.Right = element;
             }
 
             /// <summary>
@@ -72,7 +72,7 @@ namespace SpiceSharp.Algebra
                     }
 
                     lastElement = element;
-                    element = element.NextInRow;
+                    element = element.Right;
                 }
 
                 // Create a new element
@@ -82,15 +82,15 @@ namespace SpiceSharp.Algebra
                 if (lastElement == null)
                     FirstInRow = result;
                 else
-                    lastElement.NextInRow = result;
-                result.PreviousInRow = lastElement;
+                    lastElement.Right = result;
+                result.Left = lastElement;
 
                 // Update links for next element
                 if (element == null)
                     LastInRow = result;
                 else
-                    element.PreviousInRow = result;
-                result.NextInRow = element;
+                    element.Left = result;
+                result.Right = element;
 
                 // Could not find existing element
                 return false;
@@ -110,7 +110,7 @@ namespace SpiceSharp.Algebra
                         return element;
                     if (element.Column > column)
                         return null;
-                    element = element.NextInRow;
+                    element = element.Right;
                 }
 
                 return null;
@@ -122,14 +122,14 @@ namespace SpiceSharp.Algebra
             /// <param name="element">The element to be removed.</param>
             public void Remove(Element element)
             {
-                if (element.PreviousInRow == null)
-                    FirstInRow = element.NextInRow;
+                if (element.Left == null)
+                    FirstInRow = element.Right;
                 else
-                    element.PreviousInRow.NextInRow = element.NextInRow;
-                if (element.NextInRow == null)
-                    LastInRow = element.PreviousInRow;
+                    element.Left.Right = element.Right;
+                if (element.Right == null)
+                    LastInRow = element.Left;
                 else
-                    element.NextInRow.PreviousInRow = element.PreviousInRow;
+                    element.Right.Left = element.Left;
             }
 
             /// <summary>
@@ -149,98 +149,98 @@ namespace SpiceSharp.Algebra
                 if (first == null)
                 {
                     // Do we need to move the element?
-                    if (second.PreviousInRow == null || second.PreviousInRow.Column < columnFirst)
+                    if (second.Left == null || second.Left.Column < columnFirst)
                     {
                         second.Column = columnFirst;
                         return;
                     }
 
                     // Move the element back
-                    var element = second.PreviousInRow;
+                    var element = second.Left;
                     Remove(second);
-                    while (element.PreviousInRow != null && element.PreviousInRow.Column > columnFirst)
-                        element = element.PreviousInRow;
+                    while (element.Left != null && element.Left.Column > columnFirst)
+                        element = element.Left;
 
                     // We now have the first element below the insertion point
-                    if (element.PreviousInRow == null)
+                    if (element.Left == null)
                         FirstInRow = second;
                     else
-                        element.PreviousInRow.NextInRow = second;
-                    second.PreviousInRow = element.PreviousInRow;
-                    element.PreviousInRow = second;
-                    second.NextInRow = element;
+                        element.Left.Right = second;
+                    second.Left = element.Left;
+                    element.Left = second;
+                    second.Right = element;
                     second.Column = columnFirst;
                 }
                 else if (second == null)
                 {
                     // Do we need to move the element?
-                    if (first.NextInRow == null || first.NextInRow.Column > columnSecond)
+                    if (first.Right == null || first.Right.Column > columnSecond)
                     {
                         first.Column = columnSecond;
                         return;
                     }
 
                     // Move the element forward
-                    var element = first.NextInRow;
+                    var element = first.Right;
                     Remove(first);
-                    while (element.NextInRow != null && element.NextInRow.Column < columnSecond)
-                        element = element.NextInRow;
+                    while (element.Right != null && element.Right.Column < columnSecond)
+                        element = element.Right;
 
                     // We now have the first element above the insertion point
-                    if (element.NextInRow == null)
+                    if (element.Right == null)
                         LastInRow = first;
                     else
-                        element.NextInRow.PreviousInRow = first;
-                    first.NextInRow = element.NextInRow;
-                    element.NextInRow = first;
-                    first.PreviousInRow = element;
+                        element.Right.Left = first;
+                    first.Right = element.Right;
+                    element.Right = first;
+                    first.Left = element;
                     first.Column = columnSecond;
                 }
                 else
                 {
                     // Are they adjacent or not?
-                    if (first.NextInRow == second)
+                    if (first.Right == second)
                     {
                         // Correct surrounding links
-                        if (first.PreviousInRow == null)
+                        if (first.Left == null)
                             FirstInRow = second;
                         else
-                            first.PreviousInRow.NextInRow = second;
-                        if (second.NextInRow == null)
+                            first.Left.Right = second;
+                        if (second.Right == null)
                             LastInRow = first;
                         else
-                            second.NextInRow.PreviousInRow = first;
+                            second.Right.Left = first;
 
                         // Correct element links
-                        first.NextInRow = second.NextInRow;
-                        second.PreviousInRow = first.PreviousInRow;
-                        first.PreviousInRow = second;
-                        second.NextInRow = first;
+                        first.Right = second.Right;
+                        second.Left = first.Left;
+                        first.Left = second;
+                        second.Right = first;
                         first.Column = columnSecond;
                         second.Column = columnFirst;
                     }
                     else
                     {
                         // Swap surrounding links
-                        if (first.PreviousInRow == null)
+                        if (first.Left == null)
                             FirstInRow = second;
                         else
-                            first.PreviousInRow.NextInRow = second;
-                        first.NextInRow.PreviousInRow = second;
-                        if (second.NextInRow == null)
+                            first.Left.Right = second;
+                        first.Right.Left = second;
+                        if (second.Right == null)
                             LastInRow = first;
                         else
-                            second.NextInRow.PreviousInRow = first;
-                        second.PreviousInRow.NextInRow = first;
+                            second.Right.Left = first;
+                        second.Left.Right = first;
 
                         // Swap element links
-                        var element = first.PreviousInRow;
-                        first.PreviousInRow = second.PreviousInRow;
-                        second.PreviousInRow = element;
+                        var element = first.Left;
+                        first.Left = second.Left;
+                        second.Left = element;
 
-                        element = first.NextInRow;
-                        first.NextInRow = second.NextInRow;
-                        second.NextInRow = element;
+                        element = first.Right;
+                        first.Right = second.Right;
+                        second.Right = element;
                         first.Column = columnSecond;
                         second.Column = columnFirst;
                     }

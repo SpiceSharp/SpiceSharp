@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra
     /// Describes a vector that is also permutable.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.IVector{T}" />
+    /// <seealso cref="IVector{T}" />
     public interface IPermutableVector<T> : IVector<T> where T : IFormattable
     {
         /// <summary>

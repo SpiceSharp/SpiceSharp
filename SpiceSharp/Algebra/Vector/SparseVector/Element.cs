@@ -5,16 +5,8 @@
         /// <summary>
         /// A vector element for <see cref="SparseVector{T}"/>
         /// </summary>
-        protected class Element : ISparseVectorElement<T>
+        protected class Element : Element<T>, ISparseVectorElement<T>
         {
-            /// <summary>
-            /// Gets or sets the value of the vector element.
-            /// </summary>
-            /// <value>
-            /// The value.
-            /// </value>
-            public T Value { get; set; }
-
             /// <summary>
             /// Gets or sets the index.
             /// </summary>

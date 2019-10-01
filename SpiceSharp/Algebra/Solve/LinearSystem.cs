@@ -11,8 +11,6 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="IElementMatrix{T}"/>
-    /// <seealso cref="IElementVector{T}"/>
     /// <seealso cref="IFormattable" />
     public abstract partial class LinearSystem<M, V, T> : IFormattable 
         where M : IPermutableMatrix<T>

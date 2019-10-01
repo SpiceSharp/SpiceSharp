@@ -10,11 +10,11 @@ namespace SpiceSharp.Algebra
     /// <seealso cref="IFormattable" />
     /// <remarks>
     /// <para>The element at index 0 is considered a "trashcan" element under the hood, consistent to <see cref="SparseMatrix{T}" />.
-    /// This doesn't really make a difference for indexing the vector, but it does give different meanings to the length of
-    /// the vector.</para>
+    /// This doesn't really make a difference for indexing the vector though.
+    /// </para>
     /// <para>This vector automatically expands size if necessary.</para>
     /// </remarks>
-    public partial class SparseVector<T> : IPermutableVector<T>, ISparseVector<T>, IFormattable where T : IFormattable
+    public partial class SparseVector<T> : IPermutableVector<T>, ISparseVector<T> where T : IFormattable
     {
         /// <summary>
         /// Occurs when two elements have swapped.
@@ -111,7 +111,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">Index in the vector</param>
         /// <returns>The vector element at the specified index</returns>
-        public IVectorElement<T> GetVectorElement(int index)
+        public Element<T> GetVectorElement(int index)
         {
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));
@@ -158,7 +158,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">The index in the vector.</param>
         /// <returns>The element at the specified index, or null if the element does not exist.</returns>
-        public IVectorElement<T> FindVectorElement(int index)
+        public Element<T> FindVectorElement(int index)
         {
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));
