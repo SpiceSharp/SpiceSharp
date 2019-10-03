@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Entities;
 using System;
 using System.Collections.Generic;
 

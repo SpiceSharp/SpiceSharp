@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Simulations;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using NUnit.Framework;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components;

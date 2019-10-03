@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// Context for binding an <see cref="IBehavior"/> to an <see cref="SpiceSharp.Simulations.ISimulation"/>.

@@ -5,7 +5,7 @@ using System.Threading;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// Base class for any circuit object that can take part in simulations.

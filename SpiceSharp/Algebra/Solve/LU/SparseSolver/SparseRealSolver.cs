@@ -112,7 +112,6 @@ namespace SpiceSharp.Algebra
                 _intermediate = new double[Size + 1];
 
             var ea = new SolveEventArgs<double>(solution);
-            OnBeforeSolve(ea);
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
@@ -161,8 +160,6 @@ namespace SpiceSharp.Algebra
 
             // Unscramble
             Column.Unscramble(_intermediate, solution);
-
-            OnAfterSolve(ea);
         }
 
         /// <summary>
@@ -178,7 +175,6 @@ namespace SpiceSharp.Algebra
                 _intermediate = new double[Size + 1];
 
             var ea = new SolveEventArgs<double>(solution);
-            OnBeforeSolveTransposed(ea);
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
@@ -222,8 +218,6 @@ namespace SpiceSharp.Algebra
 
             // Unscramble
             Row.Unscramble(_intermediate, solution);
-
-            OnAfterSolveTransposed(ea);
         }
 
         /// <summary>

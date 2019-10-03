@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Entities.Local;
+﻿using SpiceSharp.Entities.Local;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors

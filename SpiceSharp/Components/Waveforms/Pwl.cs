@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 

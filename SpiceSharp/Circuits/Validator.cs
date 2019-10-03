@@ -5,9 +5,10 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Entities;
 using System.Reflection;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp
 {
     /// <summary>
     /// A class that describes methods for validating a circuit.

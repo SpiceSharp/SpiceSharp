@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// Factory for behaviors

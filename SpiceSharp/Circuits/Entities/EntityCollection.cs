@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// A class that manages a collection of entities.

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations

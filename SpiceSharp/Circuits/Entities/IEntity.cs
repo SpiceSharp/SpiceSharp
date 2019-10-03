@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.

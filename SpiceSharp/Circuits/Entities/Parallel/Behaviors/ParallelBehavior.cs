@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SpiceSharp.Circuits.ParallelBehaviors
+namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
     /// A behavior that stores a list of sub-behaviors.
@@ -27,6 +27,8 @@ namespace SpiceSharp.Circuits.ParallelBehaviors
         /// </value>
         protected bool ExecuteInParallel { get; private set; }
 
+        private Task[] _tasks;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelBehavior{T}"/> class.
         /// </summary>
@@ -50,7 +52,9 @@ namespace SpiceSharp.Circuits.ParallelBehaviors
             Behaviors = pc.Concurrent.GetBehaviorList<T>();
 
             if (context.Behaviors.Parameters.TryGetValue<BaseParameters>(out var bp))
+            {
                 ExecuteInParallel = bp.ParallelBehaviors.Contains(typeof(T));
+            }
         }
 
         /// <summary>

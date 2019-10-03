@@ -158,8 +158,6 @@ namespace SpiceSharp.Algebra
 
             // Unscrable
             Column.Unscramble(_intermediate, solution);
-
-            OnAfterSolve(ea);
         }
 
         /// <summary>
@@ -175,7 +173,6 @@ namespace SpiceSharp.Algebra
                 _intermediate = new Complex[Size + 1];
 
             var ea = new SolveEventArgs<Complex>(solution);
-            OnBeforeSolveTransposed(ea);
 
             // Scramble
             for (var i = 0; i <= Size; i++)
@@ -219,8 +216,6 @@ namespace SpiceSharp.Algebra
 
             // Unscramble
             Row.Unscramble(_intermediate, solution);
-
-            OnAfterSolveTransposed(ea);
         }
 
         /// <summary>

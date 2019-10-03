@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Circuits.ParallelBehaviors
+namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="ParallelLoader"/>.

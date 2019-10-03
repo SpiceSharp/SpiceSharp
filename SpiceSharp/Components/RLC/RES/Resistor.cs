@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using SpiceSharp.Components.ResistorBehaviors;
 
 namespace SpiceSharp.Components

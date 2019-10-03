@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpiceSharp.Circuits.ParallelBehaviors
+namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="ParallelLoader"/>.

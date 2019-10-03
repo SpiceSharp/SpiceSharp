@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using System.Collections;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 
 namespace SpiceSharp.Entities.Local
 {

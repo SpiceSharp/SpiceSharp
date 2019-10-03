@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 
 namespace SpiceSharp.Simulations
 {

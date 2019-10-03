@@ -10,46 +10,6 @@ namespace SpiceSharp.Algebra
     public interface ISolver<T> where T : IFormattable
     {
         /// <summary>
-        /// Occurs before the solver uses the decomposition to find the solution.
-        /// </summary>
-        event EventHandler<SolveEventArgs<T>> BeforeSolve;
-
-        /// <summary>
-        /// Occurs after the solver used the decomposition to find a solution.
-        /// </summary>
-        event EventHandler<SolveEventArgs<T>> AfterSolve;
-
-        /// <summary>
-        /// Occurs before the solver uses the transposed decomposition to find the solution.
-        /// </summary>
-        event EventHandler<SolveEventArgs<T>> BeforeSolveTransposed;
-
-        /// <summary>
-        /// Occurs after the solver uses the transposed decomposition to find a solution.
-        /// </summary>
-        event EventHandler<SolveEventArgs<T>> AfterSolveTransposed;
-
-        /// <summary>
-        /// Occurs before the solver is factored.
-        /// </summary>
-        event EventHandler<EventArgs> BeforeFactor;
-
-        /// <summary>
-        /// Occurs after the solver has been factored.
-        /// </summary>
-        event EventHandler<EventArgs> AfterFactor;
-
-        /// <summary>
-        /// Occurs before the solver is ordered and factored.
-        /// </summary>
-        event EventHandler<EventArgs> BeforeOrderAndFactor;
-
-        /// <summary>
-        /// Occurs after the solver has been ordered and factored.
-        /// </summary>
-        event EventHandler<EventArgs> AfterOrderAndFactor;
-
-        /// <summary>
         /// Gets or sets the order of the system that needs to be solved.
         /// </summary>
         /// <remarks>

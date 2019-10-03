@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors;
 using SpiceSharp.Simulations;
 

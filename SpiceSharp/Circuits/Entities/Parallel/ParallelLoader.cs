@@ -1,10 +1,13 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits.ParallelBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Entities.Local;
 using SpiceSharp.Entities.ParallelLoaderBehaviors;
+using System.Collections.Generic;
+using System;
+using System.Linq;
+using SpiceSharp.Entities;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// An entity that will allow multiple entities to be loaded in parallel.
@@ -16,11 +19,23 @@ namespace SpiceSharp.Circuits
         {
             RegisterBehaviorFactory(typeof(ParallelLoader), new BehaviorFactoryDictionary
             {
+                { typeof(IInitialConditionBehavior), e => new InitialConditionBehavior(e.Name) },
                 { typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name) },
                 { typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name) },
-                { typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name) }
+                { typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name) },
+                { typeof(ITimeBehavior), e => new TimeBehavior(e.Name) },
+                { typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name) },
+                { typeof(INoiseBehavior), e => new NoiseBehavior(e.Name) }
             });
         }
+
+        /// <summary>
+        /// Gets the preparers that act on the <see cref="ParallelSimulation"/> before and after binding behaviors.
+        /// </summary>
+        /// <value>
+        /// The preparers.
+        /// </value>
+        public Dictionary<Type, IParallelPreparer> Preparers { get; } = new Dictionary<Type, IParallelPreparer>();
 
         /// <summary>
         /// Gets or sets the entities.
@@ -40,6 +55,9 @@ namespace SpiceSharp.Circuits
             : base(name)
         {
             Parameters.Add(new BaseParameters());
+
+            Preparers.Add(typeof(IBiasingBehavior), new BiasingPreparer());
+            Preparers.Add(typeof(IFrequencyBehavior), new FrequencyPreparer());
         }
 
         /// <summary>
@@ -77,7 +95,17 @@ namespace SpiceSharp.Circuits
             // Intercept the local behaviors to add them to our own behaviors
             _simulation = new ParallelSimulation(simulation);
             var ec = new LocalEntityCollection(entities, Entities, simulation);
+            foreach (var type in simulation.BehaviorTypes)
+            {
+                if (Preparers.TryGetValue(type, out var preparer))
+                    preparer.Prepare(_simulation);
+            }
             _simulation.Run(ec);
+            foreach (var type in simulation.BehaviorTypes.Reverse())
+            {
+                if (Preparers.TryGetValue(type, out var preparer))
+                    preparer.Restore(_simulation);
+            }
 
             // Create our own behaviors
             base.CreateBehaviors(simulation, entities);

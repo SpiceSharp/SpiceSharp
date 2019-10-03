@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Entities.Local;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Circuits.ParallelBehaviors
+namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
     /// Binding context for a <see cref="ParallelLoader"/>.

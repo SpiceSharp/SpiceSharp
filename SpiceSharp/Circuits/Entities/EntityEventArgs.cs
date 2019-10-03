@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Entities
 {
     /// <summary>
     /// Event arguments for passing an entity.

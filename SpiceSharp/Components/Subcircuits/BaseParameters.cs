@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors

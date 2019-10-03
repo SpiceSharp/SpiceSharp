@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
@@ -31,7 +31,9 @@ namespace SpiceSharpTest.ParallelLoaders
             }
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
-                new ParallelLoader("P1", sub).SetParameter(typeof(SpiceSharp.Behaviors.IFrequencyBehavior))
+                new ParallelLoader("P1", sub)
+                    .SetParameter(typeof(SpiceSharp.Behaviors.IBiasingBehavior))
+                    .SetParameter(typeof(SpiceSharp.Behaviors.IFrequencyBehavior))
                 );
 
             // Build the simulation
@@ -61,34 +63,6 @@ namespace SpiceSharpTest.ParallelLoaders
             }
             ac.ExportSimulationData += CompareReference;
             ac.Run(ckt);
-        }
-
-        [Test]
-        public void When_ParallelInverter_Expect_NoException()
-        {
-            var model = new Mosfet1Model("MM1")
-                .SetParameter("kp", 1e-3)
-                .SetParameter("vto", 0.5);
-            var p = new Circuit();
-            for (var i = 0; i < 512; i++)
-            {
-                var m = new Mosfet1("M" + i, "out" + i, "in", "0", "0", "MM1");
-                m.LinkParameters = false;
-                p.Add(m);
-            }
-            var ckt = new Circuit(
-                new VoltageSource("Vin", "in", "0", 0.0),
-                new VoltageSource("Vdd", "vdd", "0", 5.0),
-                model,
-                new ParallelLoader("P1", p).SetParameter(typeof(SpiceSharp.Behaviors.IBiasingBehavior))
-                );
-            for (var i = 0; i < 512; i++)
-            {
-                ckt.Add(new Resistor("R" + i, "out" + i, "vdd", 1e3));
-            }
-
-            var dc = new DC("dc", "Vin", 0, 5, 1e-3);
-            dc.Run(ckt);
         }
     }
 }

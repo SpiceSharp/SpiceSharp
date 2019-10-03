@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Algebra;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
 

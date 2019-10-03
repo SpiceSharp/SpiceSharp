@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using System.Threading.Tasks;
 
-namespace SpiceSharp.Circuits.ParallelBehaviors
+namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
     /// Biasing behavior for a <see cref="ParallelLoader"/>.
