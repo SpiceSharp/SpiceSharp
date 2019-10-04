@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
@@ -116,7 +116,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Bind(context);
             _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
         }
 
         /// <summary>

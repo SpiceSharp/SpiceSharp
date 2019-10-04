@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 new MatrixLocation(CollectorPrimeNode, BaseNode)
             }, new[] { BaseNode, SubstrateNode, CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode });
 
-            _method = context.States.GetValue<TimeSimulationState>().Method;
+            _method = context.States.GetValue<ITimeSimulationState>().Method;
             BiasingStateChargeBe = _method.CreateDerivative();
             BiasingStateChargeBc = _method.CreateDerivative();
             BiasingStateChargeCs = _method.CreateDerivative();

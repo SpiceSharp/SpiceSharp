@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             if (c.ModelBehaviors != null)
                 ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
         }
 
         /// <summary>

@@ -98,7 +98,7 @@ namespace SpiceSharp.Simulations
         {
             // Create our extractor!
             var simulation = (Simulation)sender;
-            var state = simulation.States.GetValue<ComplexSimulationState>();
+            var state = simulation.States.GetValue<IComplexSimulationState>();
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 PosIndex = posNode.Index;

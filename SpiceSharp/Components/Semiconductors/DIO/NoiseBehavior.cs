@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             new NoiseGain("1overf", 1, 2));
 
         
-        private NoiseSimulationState _state;
+        private INoiseSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             base.Bind(context);
             var c = (ComponentBindingContext)context;
             _mnp = c.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
-            _state = context.States.GetValue<NoiseSimulationState>();
+            _state = context.States.GetValue<INoiseSimulationState>();
             DiodeNoise.Bind(context, PosNode, PosPrimeNode, NegNode);
         }
 

@@ -25,6 +25,14 @@ namespace SpiceSharp
         protected ReaderWriterLockSlim Lock { get; }
 
         /// <summary>
+        /// Gets a value indicating whether or not to look up values by their parent types.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if searchable by parent types; otherwise, <c>false</c>.
+        /// </value>
+        protected bool StoreHierarchy { get; }
+
+        /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="TypeDictionary{T}" />.
         /// </summary>
         public ICollection<Type> Keys
@@ -160,6 +168,17 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TypeDictionary{T}"/> class.
+        /// </summary>
+        /// <param name="hierarchy">if set to <c>true</c>, the dictionary can be searched by parent classes and interfaces.</param>
+        public TypeDictionary(bool hierarchy)
+        {
+            Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            Dictionary = new Dictionary<Type, T>();
+            StoreHierarchy = hierarchy;
+        }
+
+        /// <summary>
         /// Finalizes an instance of the <see cref="TypeDictionary{T}"/> class.
         /// </summary>
         ~TypeDictionary()
@@ -171,46 +190,62 @@ namespace SpiceSharp
         /// Adds an element with the provided key and value to the <see cref="TypeDictionary{T}"/>.
         /// </summary>
         /// <param name="value">The added value.</param>
-        public virtual void Add(T value)
+        public virtual void Add<V>(V value) where V : T
         {
-            var key = value.GetType();
-            Lock.EnterWriteLock();
-            try
+            if (StoreHierarchy)
             {
-                // This may seem a bit tricky:
-                // - If 'isChild' is true, then that means the new added class has not been implemented yet
-                //   by any other class. It will not overwrite any base classes that already have been
-                //   implemented as it may remove references to "simpler" base classes".
-                // - if 'isChild' is false, then a class has been added that already implements the type.
-                //   The new value is considered to be a "simpler" type and it will overwrite the existing
-                //   types.
-                var isChild = !Dictionary.ContainsKey(key);
-
-                // Add the regular class hierarchy that this instance implements.
-                var currentType = key;
-                while (currentType != null && currentType != typeof(T))
+                var key = value.GetType();
+                Lock.EnterWriteLock();
+                try
                 {
-                    if (!isChild)
-                        Dictionary[currentType] = value;
-                    else if (!Dictionary.ContainsKey(currentType))
-                        Dictionary.Add(currentType, value);
-                    else
-                        break;
-                    currentType = currentType.GetTypeInfo().BaseType;
+                    // This may seem a bit tricky:
+                    // - If 'isChild' is true, then that means the new added class has not been implemented yet
+                    //   by any other class. It will not overwrite any base classes that already have been
+                    //   implemented as it may remove references to "simpler" base classes".
+                    // - if 'isChild' is false, then a class has been added that already implements the type.
+                    //   The new value is considered to be a "simpler" type and it will overwrite the existing
+                    //   types.
+                    var isChild = !Dictionary.ContainsKey(key);
+
+                    // Add the regular class hierarchy that this instance implements.
+                    var currentType = key;
+                    while (currentType != null && currentType != typeof(T))
+                    {
+                        if (!isChild)
+                            Dictionary[currentType] = value;
+                        else if (!Dictionary.ContainsKey(currentType))
+                            Dictionary.Add(currentType, value);
+                        else
+                            break;
+                        currentType = currentType.GetTypeInfo().BaseType;
+                    }
+
+                    // Also add all interfaces this instance implements.
+                    foreach (var itf in key.GetTypeInfo().GetInterfaces())
+                    {
+                        if (!isChild)
+                            Dictionary[itf] = value;
+                        else if (!Dictionary.ContainsKey(itf))
+                            Dictionary.Add(itf, value);
+                    }
                 }
-
-                // Also add all interfaces this instance implements.
-                foreach (var itf in key.GetTypeInfo().GetInterfaces())
+                finally
                 {
-                    if (!isChild)
-                        Dictionary[itf] = value;
-                    else if (!Dictionary.ContainsKey(itf))
-                        Dictionary.Add(itf, value);
+                    Lock.ExitWriteLock();
                 }
             }
-            finally
+            else
             {
-                Lock.ExitWriteLock();
+                var key = typeof(V);
+                Lock.EnterWriteLock();
+                try
+                {
+                    Dictionary.Add(key, value);
+                }
+                finally
+                {
+                    Lock.ExitWriteLock();
+                }
             }
         }
 

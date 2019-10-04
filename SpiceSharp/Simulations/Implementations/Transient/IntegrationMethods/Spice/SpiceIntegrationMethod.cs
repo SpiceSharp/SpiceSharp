@@ -96,7 +96,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Setup(TimeSimulation simulation)
+        public override void Setup(ISimulation simulation)
         {
             base.Setup(simulation);
 
@@ -275,9 +275,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Destroys the integration method.
         /// </summary>
-        public override void Unsetup(TimeSimulation simulation)
+        public override void Unsetup()
         {
-            base.Unsetup(simulation);
+            base.Unsetup();
 
             // Clear prediction
             Prediction = null;

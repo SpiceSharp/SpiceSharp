@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for frequency-dependent analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
-    public abstract class FrequencySimulation : BiasingSimulation
+    /// <seealso cref="BiasingSimulation" />
+    public abstract partial class FrequencySimulation : BiasingSimulation
     {
         /// <summary>
         /// Private variables
@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected ComplexSimulationState ComplexState { get; }
 
         /// <summary>
         /// Gets the frequency sweep.
@@ -57,7 +57,8 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
-        protected FrequencySimulation(string name) : base(name)
+        protected FrequencySimulation(string name) 
+            : base(name)
         {
             Configurations.Add(new FrequencyConfiguration());
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
@@ -65,6 +66,9 @@ namespace SpiceSharp.Simulations
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(IFrequencyBehavior));
+
+            ComplexState = new ComplexSimulationState();
+            States.Add<IComplexSimulationState>(ComplexState);
         }
 
         /// <summary>
@@ -72,7 +76,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        protected FrequencySimulation(string name, Sweep<double> frequencySweep) : base(name)
+        protected FrequencySimulation(string name, Sweep<double> frequencySweep) 
+            : base(name)
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
@@ -80,6 +85,9 @@ namespace SpiceSharp.Simulations
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(IFrequencyBehavior));
+
+            ComplexState = new ComplexSimulationState();
+            States.Add<IComplexSimulationState>(ComplexState);
         }
 
         /// <summary>
@@ -95,17 +103,10 @@ namespace SpiceSharp.Simulations
             FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
             // Create the state for complex numbers
-            if (!States.TryGetValue<ComplexSimulationState>(out var state))
-            {
-                state = new ComplexSimulationState();
-                States.Add(state);
-            }
-            ComplexState = state;
             /* var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
-            ComplexState.Solver.Reset();
-
+            
             // Setup the rest of the behaviors
             base.Setup(entities);
 
@@ -113,7 +114,7 @@ namespace SpiceSharp.Simulations
             _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
 
-            ComplexState.Setup(Variables);
+            ComplexState.Setup(this);
         }
 
         /// <summary>
@@ -139,7 +140,6 @@ namespace SpiceSharp.Simulations
 
             // Remove the state
             ComplexState.Unsetup();
-            ComplexState = null;
 
             // Configuration
             FrequencySweep = null;

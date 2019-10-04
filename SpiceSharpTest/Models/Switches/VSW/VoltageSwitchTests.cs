@@ -215,7 +215,7 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var transient = new Transient("Tran 1", 0.1e-3, 3e-3);
-            Export<double>[] exports = { new GenericExport<double>(transient, () => transient.Method.Time),  new RealVoltageExport(transient, "OUT") };
+            Export<double>[] exports = { new GenericExport<double>(transient, () => transient.States.GetValue<ITimeSimulationState>().Method.Time),  new RealVoltageExport(transient, "OUT") };
             double[][] references =
             {
                 new[]

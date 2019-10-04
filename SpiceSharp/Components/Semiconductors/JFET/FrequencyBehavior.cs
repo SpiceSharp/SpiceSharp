@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <value>
         /// The complex state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(DrainNode, DrainNode),
                 new MatrixLocation(GateNode, GateNode),

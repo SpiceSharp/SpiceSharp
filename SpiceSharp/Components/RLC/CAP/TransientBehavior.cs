@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             base.Bind(context);
 
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(PosNode, PosNode),
                 new MatrixLocation(PosNode, NegNode),
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 new MatrixLocation(NegNode, NegNode)
             }, new[] { PosNode, NegNode });
 
-            var method = context.States.GetValue<TimeSimulationState>().Method;
+            var method = context.States.GetValue<ITimeSimulationState>().Method;
             QCap = method.CreateDerivative();
         }
 

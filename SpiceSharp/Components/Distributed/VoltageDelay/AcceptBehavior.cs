@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             base.Bind(context);
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
             _tran = context.Behaviors.GetValue<TransientBehavior>();
-            _method = ((ComponentBindingContext)context).States.GetValue<TimeSimulationState>().Method;
+            _method = ((ComponentBindingContext)context).States.GetValue<ITimeSimulationState>().Method;
         }
 
         /// <summary>

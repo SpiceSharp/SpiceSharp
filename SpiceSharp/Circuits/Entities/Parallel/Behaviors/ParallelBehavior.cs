@@ -27,7 +27,13 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// </value>
         protected bool ExecuteInParallel { get; private set; }
 
-        private Task[] _tasks;
+        /// <summary>
+        /// Gets the number of tasks.
+        /// </summary>
+        /// <value>
+        /// The number of tasks.
+        /// </value>
+        protected int Tasks { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelBehavior{T}"/> class.
@@ -54,6 +60,12 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
             if (context.Behaviors.Parameters.TryGetValue<BaseParameters>(out var bp))
             {
                 ExecuteInParallel = bp.ParallelBehaviors.Contains(typeof(T));
+                if (bp.Tasks == 0)
+                    Tasks = Behaviors.Count;
+                else if (bp.Tasks < 0)
+                    Tasks = Environment.ProcessorCount;
+                else
+                    Tasks = bp.Tasks;
             }
         }
 
@@ -80,13 +92,18 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         {
             if (ExecuteInParallel)
             {
-                var cores = Environment.ProcessorCount;
-                var tasks = new Task[cores];
-                var count = Behaviors.Count / cores;
-                for (var k = 0; k < cores; k++)
+                var taskCount = Tasks;
+                var count = Behaviors.Count / Tasks;
+                if (count <= 0)
+                {
+                    count = 1;
+                    taskCount = Behaviors.Count;
+                }
+                var tasks = new Task[taskCount];
+                for (var k = 0; k < taskCount; k++)
                 {
                     var start = k * count;
-                    var end = k == cores - 1 ? Behaviors.Count : (k + 1) * count;
+                    var end = k == taskCount - 1 ? Behaviors.Count : (k + 1) * count;
                     tasks[k] = Task.Run(() =>
                     {
                         for (var i = start; i < end; i++)
@@ -113,13 +130,19 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         {
             if (ExecuteInParallel)
             {
-                var cores = Environment.ProcessorCount;
-                var tasks = new Task<bool>[cores];
-                var count = Behaviors.Count / cores;
-                for (var k = 0; k < cores; k++)
+                var taskCount = Tasks;
+                var count = Behaviors.Count / taskCount;
+                if (count <= 0)
+                {
+                    count = 1;
+                    taskCount = Behaviors.Count;
+                }
+                var tasks = new Task<bool>[taskCount];
+                
+                for (var k = 0; k < taskCount; k++)
                 {
                     var start = k * count;
-                    var end = k == cores - 1 ? Behaviors.Count : (k + 1) * count;
+                    var end = k == taskCount - 1 ? Behaviors.Count : (k + 1) * count;
                     tasks[k] = Task.Run(() =>
                     {
                         var localresult = true;

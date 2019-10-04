@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.Waveforms
         private bool _breakPointAdded;
         private long _currentLineIndex;
         private readonly long _pwlPoints;
-        private TimeSimulationState _state;
+        private ITimeSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="Pwl"/> class.
@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="context">The binding context.</param>
         public override void Bind(BindingContext context)
         {
-            _state = context.States.GetValue<TimeSimulationState>();
+            _state = context.States.GetValue<ITimeSimulationState>();
 
             // Set value for time = 0.0
             Value = GetLineValue(0.0);

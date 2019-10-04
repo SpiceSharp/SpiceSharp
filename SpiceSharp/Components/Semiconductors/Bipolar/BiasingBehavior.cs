@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the dissipated power.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power dissipation")]
-        public virtual double GetPower(BiasingSimulationState state)
+        public virtual double GetPower(IBiasingSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
             var value = CollectorCurrent * state.Solution[CollectorNode];
@@ -164,7 +164,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public double Dqbdve { get; protected set; }
 
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.

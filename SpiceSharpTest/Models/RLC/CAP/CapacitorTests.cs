@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Components.CapacitorBehaviors;
+using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -101,7 +102,7 @@ namespace SpiceSharpTest.Models
 
             tran.BeforeTemperature += (sender, args) =>
                 {
-                    ((BiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
+                    ((IBiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
@@ -148,7 +149,7 @@ namespace SpiceSharpTest.Models
 
             tran.BeforeTemperature += (sender, args) =>
                 {
-                    ((BiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
+                    ((IBiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
@@ -166,7 +167,7 @@ namespace SpiceSharpTest.Models
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
              * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
              */
-            /* double dcVoltage = 10;
+            double dcVoltage = 10;
             var resistorResistance = 10e3; // 10000;
             var capacitance = 1e-6; // 0.000001;
             var tau = resistorResistance * capacitance;
@@ -180,13 +181,14 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.ParameterSets.Get<TimeConfiguration>().Method = new Gear();
-            tran.Nodes.InitialConditions["OUT"] = 0.0;
+            var config = tran.Configurations.GetValue<TimeConfiguration>();
+            config.Method = new Gear();
+            config.InitialConditions["OUT"] = 0.0;
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
             // Run
-            AnalyzeTransient(tran, ckt, exports, references); */
+            AnalyzeTransient(tran, ckt, exports, references);
         }
 
         [Test]

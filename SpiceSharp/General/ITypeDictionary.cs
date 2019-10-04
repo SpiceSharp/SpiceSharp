@@ -31,7 +31,7 @@ namespace SpiceSharp
         /// Adds the specified value to the dictionary.
         /// </summary>
         /// <param name="value">The value.</param>
-        void Add(T value);
+        void Add<V>(V value) where V : T;
 
         /// <summary>
         /// Clears all items in the dictionary.

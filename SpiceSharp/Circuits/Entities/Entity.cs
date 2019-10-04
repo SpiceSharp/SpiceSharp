@@ -63,7 +63,7 @@ namespace SpiceSharp.Entities
         /// <summary>
         /// Gets a collection of parameters.
         /// </summary>
-        public ParameterSetDictionary Parameters { get; } = new ParameterSetDictionary();
+        public ParameterSetDictionary Parameters { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the parameters should reference that of the entity.
@@ -86,6 +86,18 @@ namespace SpiceSharp.Entities
         protected Entity(string name)
         {
             Name = name;
+            Parameters = new ParameterSetDictionary();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entity"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="parameters">The parameters.</param>
+        protected Entity(string name, ParameterSetDictionary parameters)
+        {
+            Name = name;
+            Parameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
         /// <summary>

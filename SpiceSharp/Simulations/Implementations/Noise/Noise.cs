@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     /// A class that implements a noise analysis.
     /// </summary>
     /// <seealso cref="FrequencySimulation" />
-    public class Noise : FrequencySimulation
+    public partial class Noise : FrequencySimulation
     {
         /// <summary>
         /// Gets the currently active noise configuration.
@@ -19,7 +19,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the noise simulation state.
         /// </summary>
-        protected NoiseSimulationState NoiseState { get; private set; }
+        protected NoiseSimulationState NoiseState { get; }
 
         /// <summary>
         /// Noise behaviors
@@ -36,6 +36,9 @@ namespace SpiceSharp.Simulations
             
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(INoiseBehavior));
+
+            NoiseState = new NoiseSimulationState();
+            States.Add<INoiseSimulationState>(NoiseState);
         }
 
         /// <summary>
@@ -45,12 +48,16 @@ namespace SpiceSharp.Simulations
         /// <param name="output">The output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(string name, string output, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Noise(string name, string output, string input, Sweep<double> frequencySweep) 
+            : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, null, input));
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(INoiseBehavior));
+
+            NoiseState = new NoiseSimulationState();
+            States.Add<INoiseSimulationState>(NoiseState);
         }
 
         /// <summary>
@@ -61,12 +68,16 @@ namespace SpiceSharp.Simulations
         /// <param name="reference">The reference output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(string name, string output, string reference, string input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Noise(string name, string output, string reference, string input, Sweep<double> frequencySweep) 
+            : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, reference, input));
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(INoiseBehavior));
+
+            NoiseState = new NoiseSimulationState();
+            States.Add<INoiseSimulationState>(NoiseState);
         }
 
         /// <summary>
@@ -79,15 +90,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, parameters and states
             NoiseConfiguration = Configurations.GetValue<NoiseConfiguration>();
-
-            if (!States.TryGetValue<NoiseSimulationState>(out var state))
-            {
-                state = new NoiseSimulationState();
-                States.Add(state);
-            }
-            NoiseState = state;
-            NoiseState.Setup(Variables);
-
+            NoiseState.Setup(this);
             base.Setup(entities);
 
             // Cache local variables
@@ -101,7 +104,6 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             NoiseState.Unsetup();
-            NoiseState = null;
             for (var i = 0; i < _noiseBehaviors.Count; i++)
                 _noiseBehaviors[i].Unbind();
             _noiseBehaviors = null;

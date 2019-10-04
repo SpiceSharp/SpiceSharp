@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -89,7 +89,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             NegNode = c.Pins[1];
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(PosNode, BranchEq),
                 new MatrixLocation(NegNode, BranchEq),

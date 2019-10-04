@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             base.Bind(context);
 
-            var solver = context.States.GetValue<ComplexSimulationState>().Solver;
+            var solver = context.States.GetValue<IComplexSimulationState>().Solver;
             ComplexElements = new ElementSet<Complex>(solver, new[] {
                 new MatrixLocation(PosNode, PosNode),
                 new MatrixLocation(PosNode, NegNode),

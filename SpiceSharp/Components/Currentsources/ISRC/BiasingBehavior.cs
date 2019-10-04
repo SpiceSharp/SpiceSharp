@@ -62,9 +62,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                         : "{0} has no value, DC 0 assumed".FormatString(Name));
             }
 
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver, null, new[] { PosNode, NegNode });
         }
 

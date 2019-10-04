@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
                 ContNegNode = c.Pins[3];
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
-            var solver = context.States.GetValue<BiasingSimulationState>().Solver;
+            var solver = context.States.GetValue<IBiasingSimulationState>().Solver;
             Elements = new ElementSet<double>(solver,
                 new MatrixLocation(PosNode, BranchEq),
                 new MatrixLocation(NegNode, BranchEq),

@@ -27,12 +27,12 @@ namespace SpiceSharp.Simulations
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
 
         /// <summary>
-        /// Gets a set of <see cref="SimulationState" /> instances used by the <see cref="ISimulation" />.
+        /// Gets a set of <see cref="ISimulationState" /> instances used by the <see cref="ISimulation" />.
         /// </summary>
         /// <value>
         /// The states.
         /// </value>
-        public TypeDictionary<SimulationState> States { get; } = new TypeDictionary<SimulationState>();
+        public TypeDictionary<ISimulationState> States { get; } = new TypeDictionary<ISimulationState>();
 
         /// <summary>
         /// Gets a set of <see cref="Statistics" /> instances tracked by the <see cref="ISimulation" />.

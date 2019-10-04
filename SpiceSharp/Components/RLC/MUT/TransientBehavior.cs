@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load1.UpdateFlux += UpdateFlux1;
             Load2.UpdateFlux += UpdateFlux2;
 
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(Load1.BranchEq, Load2.BranchEq),
                 new MatrixLocation(Load2.BranchEq, Load1.BranchEq));

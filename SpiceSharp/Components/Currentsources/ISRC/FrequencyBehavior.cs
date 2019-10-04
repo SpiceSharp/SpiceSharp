@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, null, new[] { PosNode, NegNode });
         }
 

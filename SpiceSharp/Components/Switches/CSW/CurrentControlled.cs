@@ -28,7 +28,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Gets the value that is controlling the switch.
         /// </summary>
         /// <param name="state">The state.</param>
-        /// <returns></returns>
-        public override double GetValue(BiasingSimulationState state) => state.Solution[_loadBehavior.BranchEq];
+        /// <returns>
+        /// The controlling value.
+        /// </returns>
+        public override double GetValue(IBiasingSimulationState state) => state.Solution[_loadBehavior.BranchEq];
     }
 }

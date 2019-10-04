@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             base.Bind(context);
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
             _tran = context.Behaviors.GetValue<TransientBehavior>();
-            _method = context.States.GetValue<TimeSimulationState>().Method;
+            _method = context.States.GetValue<ITimeSimulationState>().Method;
         }
 
         /// <summary>

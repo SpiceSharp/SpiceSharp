@@ -1,81 +1,75 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Simulations
 {
-    /// <summary>
-    /// A simulation state using complex numbers.
-    /// </summary>
-    /// <seealso cref="SimulationState" />
-    public class ComplexSimulationState : SimulationState
+    public abstract partial class FrequencySimulation
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the solution converges.
+        /// A simulation state using complex numbers.
         /// </summary>
-        public bool IsConvergent { get; set; }
-
-        /// <summary>
-        /// Gets the solution.
-        /// </summary>
-        public IVector<Complex> Solution { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the current laplace variable.
-        /// </summary>
-        public Complex Laplace { get; set; } = new Complex();
-
-        /// <summary>
-        /// Gets or sets the solver.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
-        public ISolver<Complex> Solver
+        /// <seealso cref="IComplexSimulationState" />
+        protected class ComplexSimulationState : IComplexSimulationState
         {
-            get => _solver;
-            set
+            /// <summary>
+            /// Gets or sets a value indicating whether the solution converges.
+            /// </summary>
+            public bool IsConvergent { get; set; }
+
+            /// <summary>
+            /// Gets the solution.
+            /// </summary>
+            public IVector<Complex> Solution { get; protected set; }
+
+            /// <summary>
+            /// Gets or sets the current laplace variable.
+            /// </summary>
+            public Complex Laplace { get; set; } = new Complex();
+
+            /// <summary>
+            /// Gets the solver.
+            /// </summary>
+            /// <value>
+            /// The solver.
+            /// </value>
+            public ISolver<Complex> Solver { get; }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
+            /// </summary>
+            public ComplexSimulationState()
             {
-                _solver = value ?? throw new ArgumentNullException();
+                Solver = LUHelper.CreateSparseComplexSolver();
             }
-        }
-        private ISolver<Complex> _solver;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
-        /// </summary>
-        public ComplexSimulationState()
-        {
-            _solver = LUHelper.CreateSparseComplexSolver();
-        }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
+            /// </summary>
+            /// <param name="solver">The solver.</param>
+            public ComplexSimulationState(ISolver<Complex> solver)
+            {
+                Solver = solver.ThrowIfNull(nameof(solver));
+            }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
-        /// </summary>
-        /// <param name="solver">The solver.</param>
-        public ComplexSimulationState(ISolver<Complex> solver)
-        {
-            _solver = solver.ThrowIfNull(nameof(solver));
-        }
+            /// <summary>
+            /// Set up the simulation state for the simulation.
+            /// </summary>
+            /// <param name="simulation">The simulation.</param>
+            public void Setup(ISimulation simulation)
+            {
+                Solution = new DenseVector<Complex>(Solver.Size);
+            }
 
-        /// <summary>
-        /// Sets up the simulation state.
-        /// </summary>
-        /// <param name="nodes">The unknown variables for which the state is used.</param>
-        public override void Setup(IVariableSet nodes)
-        {
-            nodes.ThrowIfNull(nameof(nodes));
-            Solution = new DenseVector<Complex>(Solver.Size);
-            base.Setup(nodes);
-        }
+            /// <summary>
+            /// Unsetup the state.
+            /// </summary>
+            public void Unsetup()
+            {
+                Solution = null;
 
-        /// <summary>
-        /// Unsetup the state.
-        /// </summary>
-        public override void Unsetup()
-        {
-            Solution = null;
-            base.Unsetup();
+                // TODO: Clear all for the matrix
+                Solver.Reset();
+            }
         }
     }
 }

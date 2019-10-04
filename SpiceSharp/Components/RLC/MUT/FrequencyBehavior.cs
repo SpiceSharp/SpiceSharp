@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Bias1 = c.Inductor1Behaviors.GetValue<BiasingBehavior>();
             Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
 
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(Bias1.BranchEq, Bias2.BranchEq),
                 new MatrixLocation(Bias2.BranchEq, Bias1.BranchEq));

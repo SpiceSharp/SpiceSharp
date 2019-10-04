@@ -9,14 +9,30 @@ namespace SpiceSharp
     public class ParameterSetDictionary : TypeDictionary<ParameterSet>, ICloneable, ICloneable<ParameterSetDictionary>, IParameterSet<ParameterSetDictionary>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
+        /// </summary>
+        public ParameterSetDictionary()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
+        /// </summary>
+        /// <param name="hierarchy">if set to <c>true</c>, the dictionary can be searched by parent classes and interfaces.</param>
+        public ParameterSetDictionary(bool hierarchy)
+            : base(hierarchy)
+        {
+        }
+
+        /// <summary>
         /// Clone the dictionary.
         /// </summary>
         /// <returns></returns>
         public virtual ParameterSetDictionary Clone()
         {
-            var clone = (ParameterSetDictionary)Activator.CreateInstance(GetType());
-            foreach (var p in Values)
-                clone.Add(p.Clone());
+            var clone = (ParameterSetDictionary)Activator.CreateInstance(GetType(), StoreHierarchy);
+            foreach (var p in Dictionary)
+                clone.Dictionary.Add(p.Key, p.Value.Clone());
             return clone;
         }
 

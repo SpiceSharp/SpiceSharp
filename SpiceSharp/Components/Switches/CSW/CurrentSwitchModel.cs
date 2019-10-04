@@ -13,8 +13,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the model</param>
         public CurrentSwitchModel(string name) : base(name)
         {
-            // Add parameters
-            Parameters.Add(new CurrentModelParameters());
+            Parameters.Add<ModelBaseParameters>(new CurrentModelParameters());
         }
     }
 }

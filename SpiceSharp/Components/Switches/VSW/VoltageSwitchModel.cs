@@ -14,8 +14,7 @@ namespace SpiceSharp.Components
         public VoltageSwitchModel(string name)
             : base(name)
         {
-            // Add parameters
-            Parameters.Add(new VoltageModelParameters());
+            Parameters.Add<ModelBaseParameters>(new VoltageModelParameters());
         }
     }
 }

@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         private int _nodeA, _nodeB;
         private ElementSet<double> _elements;
         private BaseParameters _bp;
-        private BiasingSimulationState _state;
+        private IBiasingSimulationState _state;
         private BiasingConfiguration _baseConfig;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             // Cache some objects that we will use often
             var c = (ComponentBindingContext)context;
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            _state = c.States.GetValue<BiasingSimulationState>();
+            _state = c.States.GetValue<IBiasingSimulationState>();
             _baseConfig = c.Configurations.GetValue<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
@@ -45,8 +45,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
                 _nodeB = cbc.Pins[1];
 
             // We need 4 matrix elements and 2 RHS vector elements
-            var solver = c.States.GetValue<BiasingSimulationState>().Solver;
-            _elements = new ElementSet<double>(solver, new[] {
+            _elements = new ElementSet<double>(_state.Solver, new[] {
                 new MatrixLocation(_nodeA, _nodeA),
                 new MatrixLocation(_nodeA, _nodeB),
                 new MatrixLocation(_nodeB, _nodeA),

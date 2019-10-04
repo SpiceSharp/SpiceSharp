@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             BranchEq2 = variables.Create(Name.Combine("branch2"), VariableType.Current).Index;
 
             // Get matrix elements
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(Pos1, Pos1),
                 new MatrixLocation(Pos1, Internal1),

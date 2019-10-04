@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
         {
             // Create our extractor!
             var simulation = (Simulation)sender;
-            var state = simulation.States.GetValue<BiasingSimulationState>();
+            var state = simulation.States.GetValue<IBiasingSimulationState>();
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.BiasingBehavior), out var behavior))

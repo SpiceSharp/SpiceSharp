@@ -19,6 +19,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        public abstract double GetValue(BiasingSimulationState state);
+        public abstract double GetValue(IBiasingSimulationState state);
     }
 }

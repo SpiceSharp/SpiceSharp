@@ -488,15 +488,16 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">The circuit.</param>
         protected void DumpTransientState(Transient tran, Circuit ckt)
         {
+            var state = tran.States.GetValue<ITimeSimulationState>();
             Console.WriteLine("----------- Dumping transient information -------------");
-            Console.WriteLine($"Base time: {tran.Method.BaseTime}");
-            Console.WriteLine($"Target time: {tran.Method.Time}");
+            Console.WriteLine($"Base time: {state.Method.BaseTime}");
+            Console.WriteLine($"Target time: {state.Method.Time}");
             Console.Write($"Last timesteps (current first):");
-            for (var i = 0; i <= tran.Method.MaxOrder; i++)
-                Console.Write("{0}{1}", i > 0 ? ", " : "", tran.Method.GetTimestep(i));
+            for (var i = 0; i <= state.Method.MaxOrder; i++)
+                Console.Write("{0}{1}", i > 0 ? ", " : "", state.Method.GetTimestep(i));
             Console.WriteLine();
             Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
-            Console.WriteLine("Problem variable value: {0}", tran.States.GetValue<BiasingSimulationState>().Solution[tran.ProblemVariable.Index]);
+            Console.WriteLine("Problem variable value: {0}", tran.States.GetValue<IBiasingSimulationState>().Solution[tran.ProblemVariable.Index]);
             Console.WriteLine();
 
             // Dump the circuit contents
@@ -518,10 +519,10 @@ namespace SpiceSharpTest.Models
             Console.WriteLine("- Solutions");
             Dictionary<int, string> variables = new Dictionary<int, string>();
             foreach (var variable in tran.Variables)
-                variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.States.GetValue<BiasingSimulationState>().Solution[variable.Index]}");
-            for (var i = 0; i <= tran.Method.MaxOrder; i++)
+                variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.States.GetValue<IBiasingSimulationState>().Solution[variable.Index]}");
+            for (var i = 0; i <= state.Method.MaxOrder; i++)
             {
-                var oldsolution = tran.Method.GetSolution(i);
+                var oldsolution = state.Method.GetSolution(i);
                 for (var k = 1; k <= variables.Count; k++)
                     variables[k] += $", {oldsolution[k]}";
             }
@@ -537,15 +538,15 @@ namespace SpiceSharpTest.Models
             // Dump the states used by the transient
             #if DEBUG
             Console.WriteLine("- States");
-            var state = tran.Method.GetStates(0);
-            string[] output = new string[state.Length];
-            for (var i = 0; i < state.Length; i++)
-                output[i] = $"{state[i]}";
-            for (var k = 1; k <= tran.Method.MaxOrder; k++)
+            var intstate = state.Method.GetStates(0);
+            string[] output = new string[intstate.Length];
+            for (var i = 0; i < intstate.Length; i++)
+                output[i] = $"{intstate[i]}";
+            for (var k = 1; k <= state.Method.MaxOrder; k++)
             {
-                state = tran.Method.GetStates(k);
-                for (var i = 0; i < state.Length; i++)
-                    output[i] += $", {state[i]}";
+                intstate = state.Method.GetStates(k);
+                for (var i = 0; i < intstate.Length; i++)
+                    output[i] += $", {intstate[i]}";
             }
             for (var i = 0; i < output.Length; i++)
                 Console.WriteLine(output[i]);

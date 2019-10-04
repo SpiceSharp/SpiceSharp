@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            var method = context.States.GetValue<TimeSimulationState>().Method;
+            var method = context.States.GetValue<ITimeSimulationState>().Method;
             _capCharge = method.CreateDerivative();
         }
 

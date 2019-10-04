@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
         public CurrentSource(string name, string pos, string neg, double dc)
-            : this(name)
+            : base(name, CurrentSourcePinCount)
         {
             Parameters.Add(new CommonBehaviors.IndependentSourceParameters(dc));
             Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The Waveform-object</param>
         public CurrentSource(string name, string pos, string neg, Waveform waveform)
-            : this(name)
+            : base(name, CurrentSourcePinCount)
         {
             Parameters.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
             Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());

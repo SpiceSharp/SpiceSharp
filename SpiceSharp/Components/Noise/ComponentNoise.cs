@@ -37,8 +37,8 @@ namespace SpiceSharp.Components
         public NoiseGeneratorCollection Generators { get; }
 
         // States
-        private ComplexSimulationState _cstate;
-        private NoiseSimulationState _nstate;
+        private IComplexSimulationState _cstate;
+        private INoiseSimulationState _nstate;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ComponentNoise"/> class.
@@ -67,8 +67,8 @@ namespace SpiceSharp.Components
         /// <param name="pins">The pins the noise sources are connected to.</param>
         public void Bind(BindingContext context, params int[] pins)
         {
-            _cstate = context.States.GetValue<ComplexSimulationState>();
-            _nstate = context.States.GetValue<NoiseSimulationState>();
+            _cstate = context.States.GetValue<IComplexSimulationState>();
+            _nstate = context.States.GetValue<INoiseSimulationState>();
 
             foreach (var generator in Generators)
                 generator.Bind(context, pins);

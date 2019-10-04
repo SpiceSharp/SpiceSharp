@@ -32,7 +32,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             var simulation = (Simulation)sender;
-            var state = simulation.States.GetValue<NoiseSimulationState>();
+            var state = simulation.States.GetValue<INoiseSimulationState>();
             Extractor = () => state.OutputNoiseDensity;
         }
     }

@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         );
 
         
-        private NoiseSimulationState _state;
+        private INoiseSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             base.Bind(context);
             var c = (ComponentBindingContext)context;
             NoiseParameters = c.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
-            _state = context.States.GetValue<NoiseSimulationState>();
+            _state = context.States.GetValue<INoiseSimulationState>();
             MosfetNoise.Bind(context, DrainNode,
                 GateNode,
                 SourceNode,

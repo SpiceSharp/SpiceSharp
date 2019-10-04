@@ -106,7 +106,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// <summary>
     /// Binding context for a <see cref="MutualInductance"/>.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Circuits.BindingContext" />
+    /// <seealso cref="BindingContext" />
     public class MutualInductanceBindingContext : BindingContext
     {
         /// <summary>

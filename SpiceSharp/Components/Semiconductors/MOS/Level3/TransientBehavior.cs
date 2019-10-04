@@ -156,7 +156,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 new MatrixLocation(SourceNodePrime, BulkNode)
             }, new[] { GateNode, BulkNode, DrainNodePrime, SourceNodePrime });
 
-            var method = context.States.GetValue<TimeSimulationState>().Method;
+            var method = context.States.GetValue<ITimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();
             _voltageDs = method.CreateHistory();
             _voltageBs = method.CreateHistory();

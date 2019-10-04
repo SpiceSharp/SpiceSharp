@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the real state.
         /// </summary>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             ContNegNode = c.Pins[3];
             BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(PosNode, BranchEq),
                 new MatrixLocation(NegNode, BranchEq),

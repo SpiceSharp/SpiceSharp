@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Gets the state.
         /// </summary>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -147,7 +147,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             ModelTemperature = c.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
         }
 
         /// <summary>

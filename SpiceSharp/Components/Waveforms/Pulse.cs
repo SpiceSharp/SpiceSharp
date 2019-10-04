@@ -94,7 +94,7 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double _v1, _v2, _td, _tr, _tf, _pw, _per;
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Pulse"/> class.

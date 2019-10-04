@@ -76,7 +76,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationMethod"/> class.
@@ -96,10 +96,10 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        public virtual void Setup(TimeSimulation simulation)
+        public virtual void Setup(ISimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            BiasingState = simulation.States.GetValue<BiasingSimulationState>();
+            BiasingState = simulation.States.GetValue<IBiasingSimulationState>();
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
                 new DenseVector<double>(BiasingState.Solver.Size), 
                 StateManager.Build()));
@@ -257,8 +257,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Destroys the integration method.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public virtual void Unsetup(TimeSimulation simulation)
+        public virtual void Unsetup()
         {
             StateManager.Unsetup();
 

@@ -96,7 +96,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <value>
         /// The state of the biasing.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             Method.Bind(context);
 
             // Get matrix elements
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(PosNode, PosNode),
                 new MatrixLocation(PosNode, NegNode),

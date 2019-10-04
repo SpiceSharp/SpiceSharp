@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The transconductance gain</param>
         public VoltageControlledCurrentSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain)
-            : this(name)
+            : base(name, VoltageControlledCurrentSourcePinCount)
         {
             Parameters.Add(new BaseParameters(gain));
             Connect(pos, neg, controlPos, controlNeg);

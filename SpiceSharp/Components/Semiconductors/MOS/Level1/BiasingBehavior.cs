@@ -150,7 +150,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </value>
         protected ElementSet<double> Elements { get; private set; }
 
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -170,7 +170,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
-            context.States.TryGetValue<TimeSimulationState>(out _timeState);
+            context.States.TryGetValue<ITimeSimulationState>(out _timeState);
 
             // Reset
             SaturationVoltageDs = 0;

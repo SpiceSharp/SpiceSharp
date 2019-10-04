@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Gets the noise simulation state.
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <value>
         /// The noise simulation state.
         /// </value>
-        protected NoiseSimulationState NoiseState { get; private set; }
+        protected INoiseSimulationState NoiseState { get; private set; }
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseGenerator"/> class.
@@ -98,9 +98,9 @@ namespace SpiceSharp.Components.NoiseSources
             }
             Nodes = new NodeCollection(mapped);
 
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
-            NoiseState = context.States.GetValue<NoiseSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            NoiseState = context.States.GetValue<INoiseSimulationState>();
         }
 
         /// <summary>

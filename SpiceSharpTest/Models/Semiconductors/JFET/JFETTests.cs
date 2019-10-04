@@ -470,7 +470,7 @@ namespace SpiceSharpTest.Models
             // Build the exports
             var exports = new Export<double>[]
             {
-                new GenericExport<double>(tran, () => tran.Method.Time),
+                new GenericExport<double>(tran, () => tran.States.GetValue<ITimeSimulationState>().Method.Time),
                 new RealPropertyExport(tran, "V1", "i"),
                 new RealPropertyExport(tran, "V2", "i")
             };

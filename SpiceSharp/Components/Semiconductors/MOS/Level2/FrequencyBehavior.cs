@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             base.Bind(context);
 
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(GateNode, GateNode),
                 new MatrixLocation(BulkNode, BulkNode),

@@ -9,13 +9,8 @@ namespace SpiceSharp.Simulations
     /// A base class for time-domain analysis.
     /// </summary>
     /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
-    public abstract class TimeSimulation : BiasingSimulation
+    public abstract partial class TimeSimulation : BiasingSimulation
     {
-        /// <summary>
-        /// Gets the active integration method.
-        /// </summary>
-        public IntegrationMethod Method { get; protected set; }
-
         /// <summary>
         /// Time-domain behaviors.
         /// </summary>
@@ -28,6 +23,14 @@ namespace SpiceSharp.Simulations
         /// Time simulation statistics.
         /// </summary>
         protected TimeSimulationStatistics TimeSimulationStatistics { get; }
+
+        /// <summary>
+        /// Gets the state of the time.
+        /// </summary>
+        /// <value>
+        /// The state of the time.
+        /// </value>
+        protected TimeSimulationState TimeState { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -66,6 +69,9 @@ namespace SpiceSharp.Simulations
                 typeof(ITimeBehavior),
                 typeof(IAcceptBehavior)
             });
+
+            TimeState = new TimeSimulationState();
+            States.Add<ITimeSimulationState>(TimeState);
         }
 
         /// <summary>
@@ -88,6 +94,9 @@ namespace SpiceSharp.Simulations
                 typeof(ITimeBehavior),
                 typeof(IAcceptBehavior)
             });
+
+            TimeState = new TimeSimulationState();
+            States.Add<ITimeSimulationState>(TimeState);
         }
 
         /// <summary>
@@ -101,13 +110,7 @@ namespace SpiceSharp.Simulations
             // Get behaviors and configurations
             var config = Configurations.GetValue<TimeConfiguration>().ThrowIfNull("time configuration");
             _useIc = config.UseIc;
-            Method = config.Method.ThrowIfNull("method");
-
-            if (!States.TryGetValue<TimeSimulationState>(out var state))
-            {
-                state = new TimeSimulationState(Method);
-                States.Add(state);
-            }
+            TimeState.Method = config.Method.ThrowIfNull("method");
 
             // Setup
             base.Setup(entities);
@@ -116,7 +119,7 @@ namespace SpiceSharp.Simulations
             _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 
-            Method.Setup(this);
+            TimeState.Setup(this);
 
             // Set up initial conditions
             foreach (var ic in config.InitialConditions)
@@ -166,8 +169,7 @@ namespace SpiceSharp.Simulations
             _acceptBehaviors = null;
 
             // Destroy the integration method
-            Method.Unsetup(this);
-            Method = null;
+            TimeState.Unsetup();
 
             // Destroy the initial conditions
             AfterLoad -= LoadInitialConditions;
@@ -190,7 +192,7 @@ namespace SpiceSharp.Simulations
             var solver = BiasingState.Solver;
             // var pass = false;
             var iterno = 0;
-            var initTransient = Method.BaseTime.Equals(0.0);
+            var initTransient = TimeState.Method.BaseTime.Equals(0.0);
             var state = BiasingState;
 
             // Ignore operating condition point, just use the solution as-is
@@ -324,7 +326,7 @@ namespace SpiceSharp.Simulations
         {
             for (var i = 0; i < _transientBehaviors.Count; i++)
                 _transientBehaviors[i].InitializeStates();
-            Method.Initialize(this);
+            TimeState.Method.Initialize(this);
         }
 
         /// <summary>
@@ -360,7 +362,7 @@ namespace SpiceSharp.Simulations
         {
             for (var i = 0; i < _acceptBehaviors.Count; i++)
                 _acceptBehaviors[i].Accept();
-            Method.Accept(this);
+            TimeState.Method.Accept(this);
             TimeSimulationStatistics.Accepted++;
         }
 
@@ -370,7 +372,7 @@ namespace SpiceSharp.Simulations
         /// <param name="delta">The timestep.</param>
         protected void Probe(double delta)
         {
-            Method.Probe(this, delta);
+            TimeState.Method.Probe(this, delta);
             for (var i = 0; i < _acceptBehaviors.Count; i++)
                 _acceptBehaviors[i].Probe();
         }

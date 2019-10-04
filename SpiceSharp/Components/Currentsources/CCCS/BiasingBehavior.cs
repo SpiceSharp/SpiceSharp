@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -96,7 +96,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             ControlBranchEq = VoltageLoad.BranchEq;
 
             // Get matrix elements
-            BiasingState = context.States.GetValue<BiasingSimulationState>();
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(PosNode, ControlBranchEq),
                 new MatrixLocation(NegNode, ControlBranchEq));

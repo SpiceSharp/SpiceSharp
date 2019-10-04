@@ -2,27 +2,38 @@
 
 namespace SpiceSharp.Simulations
 {
-    /// <summary>
-    /// Describes the state of a <see cref="TimeSimulation"/>.
-    /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.SimulationState" />
-    public class TimeSimulationState : SimulationState
+    public abstract partial class TimeSimulation
     {
         /// <summary>
-        /// Gets the integration method.
+        /// Describes the state of a <see cref="TimeSimulation"/>.
         /// </summary>
-        /// <value>
-        /// The method.
-        /// </value>
-        public IntegrationMethod Method { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSimulationState"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        public TimeSimulationState(IntegrationMethod method)
+        /// <seealso cref="ITimeSimulationState" />
+        protected class TimeSimulationState : ITimeSimulationState
         {
-            Method = method.ThrowIfNull(nameof(method));
+            /// <summary>
+            /// Gets the integration method.
+            /// </summary>
+            /// <value>
+            /// The integration method.
+            /// </value>
+            public IntegrationMethod Method { get; set; }
+
+            /// <summary>
+            /// Set up the simulation state for the simulation.
+            /// </summary>
+            /// <param name="simulation">The simulation.</param>
+            public void Setup(ISimulation simulation)
+            {
+                Method.Setup(simulation);
+            }
+
+            /// <summary>
+            /// Destroys the simulation state.
+            /// </summary>
+            public void Unsetup()
+            {
+                Method.Unsetup();
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Bind(context);
 
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(Pos1, Pos1),
                 new MatrixLocation(Pos1, Internal1),

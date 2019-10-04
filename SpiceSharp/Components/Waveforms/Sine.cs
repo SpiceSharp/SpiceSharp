@@ -85,7 +85,7 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double _vo, _va, _freq, _td, _theta, _phase;
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sine"/> class.

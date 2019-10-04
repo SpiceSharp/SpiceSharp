@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
             Variables = simulation.Variables;
 
             // Get the real solver
-            Solver = simulation.States.GetValue<BiasingSimulationState>().Solver;
+            Solver = simulation.States.GetValue<IBiasingSimulationState>().Solver;
 
             // Get the node
             if (!simulation.Variables.TryGetNode(Name, out var node))
@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
             Rhs = !Value.Equals(0.0) ? Solver.GetElement(node.Index) : Solver.FindElement(node.Index);
 
             // Update the current solution to reflect our convergence aid value
-            var state = simulation.States.GetValue<BiasingSimulationState>();
+            var state = simulation.States.GetValue<IBiasingSimulationState>();
             state.Solution[node.Index] = Value;
         }
 

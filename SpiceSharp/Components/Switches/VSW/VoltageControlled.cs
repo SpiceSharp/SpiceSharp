@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        public override double GetValue(BiasingSimulationState state) =>
+        public override double GetValue(IBiasingSimulationState state) =>
             state.Solution[ContPosNode] - state.Solution[ContNegNode];
     }
 }

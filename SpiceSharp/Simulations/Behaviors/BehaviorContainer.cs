@@ -36,6 +36,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
         public BehaviorContainer(string source)
+            : base(true)
         {
             Name = source.ThrowIfNull(nameof(source));
             Parameters = new ParameterSetDictionary();
@@ -47,6 +48,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="source">The source.</param>
         /// <param name="parameters">The parameters.</param>
         public BehaviorContainer(string source, ParameterSetDictionary parameters)
+            : base(true)
         {
             Name = source.ThrowIfNull(nameof(source));
             Parameters = parameters.ThrowIfNull(nameof(parameters));

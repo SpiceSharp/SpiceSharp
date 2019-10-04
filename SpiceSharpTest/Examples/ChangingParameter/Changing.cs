@@ -47,7 +47,7 @@ namespace SpiceSharpTest.Examples
             tran.BeforeLoad += (sender, args) =>
             {
                 // First we need to figure out the timepoint that will be loaded
-                var time = tran.Method.Time;
+                var time = tran.States.GetValue<ITimeSimulationState>().Method.Time;
 
                 // Then we need to calculate the resistance for "R2"
                 var resistance = 1.0e3 * (1 + time * 1.0e5);

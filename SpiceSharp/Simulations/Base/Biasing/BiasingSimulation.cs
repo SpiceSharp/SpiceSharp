@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
     /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="BiasingState" /> is always part of the simulation.
     /// </remarks>
     /// <seealso cref="Simulation" />
-    public abstract class BiasingSimulation : Simulation
+    public abstract partial class BiasingSimulation : Simulation
     {        
         /// <summary>
         /// Gets the variable that causes issues.
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        protected BiasingSimulationState BiasingState { get; }
         
         /// <summary>
         /// Gets the maximum number of allowed iterations for DC analysis.
@@ -119,6 +119,10 @@ namespace SpiceSharp.Simulations
                 typeof(IBiasingBehavior),
                 typeof(IInitialConditionBehavior)
             });
+
+            // Create our states
+            BiasingState = new BiasingSimulationState();
+            States.Add<IBiasingSimulationState>(BiasingState);
         }
 
         /// <summary>
@@ -136,12 +140,6 @@ namespace SpiceSharp.Simulations
             RelTol = config.RelativeTolerance;
 
             // Create the state for this simulation
-            if (!States.TryGetValue<BiasingSimulationState>(out var state))
-            {
-                state = new BiasingSimulationState();
-                States.Add(state);
-            }
-            BiasingState = state;
             BiasingState.Gmin = config.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
@@ -158,7 +156,7 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
             _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
-            BiasingState.Setup(Variables);
+            BiasingState.Setup(this);
 
             // Set up nodesets
             foreach (var ns in config.Nodesets)
@@ -218,7 +216,6 @@ namespace SpiceSharp.Simulations
 
             // Clear the state
             BiasingState.Unsetup();
-            BiasingState = null;
             _realStateLoadArgs = null;
 
             // Remove behavior and configuration references

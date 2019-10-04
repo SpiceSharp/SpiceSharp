@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
+        protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Gets the complex voltage applied by the source.
@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
-            ComplexState = context.States.GetValue<ComplexSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
                 new MatrixLocation(PosNode, BranchEq),
                 new MatrixLocation(BranchEq, PosNode),

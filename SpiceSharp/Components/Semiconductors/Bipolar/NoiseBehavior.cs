@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             new NoiseGain("1overf", 5, 6)
             );
 
-        private NoiseSimulationState _state;
+        private INoiseSimulationState _state;
 
         /// <summary>
         /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             base.Bind(context);
             var c = (ComponentBindingContext)context;
             NoiseParameters = c.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
-            _state = context.States.GetValue<NoiseSimulationState>();
+            _state = context.States.GetValue<INoiseSimulationState>();
             BipolarJunctionTransistorNoise.Bind(context, CollectorNode, BaseNode, EmitterNode, SubstrateNode,
                 CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode);
         }

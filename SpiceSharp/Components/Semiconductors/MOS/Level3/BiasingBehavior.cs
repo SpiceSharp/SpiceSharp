@@ -155,7 +155,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </value>
         protected ElementSet<double> Elements { get; private set; }
 
-        private TimeSimulationState _timeState;
+        private ITimeSimulationState _timeState;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.

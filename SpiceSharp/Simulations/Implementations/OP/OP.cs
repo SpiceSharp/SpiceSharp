@@ -22,7 +22,7 @@
             base.Execute();
 
             // Setup the state
-            var state = States.GetValue<BiasingSimulationState>();
+            var state = BiasingState;
             state.UseIc = false; // UseIC is only used in transient simulations
             state.UseDc = true;
 

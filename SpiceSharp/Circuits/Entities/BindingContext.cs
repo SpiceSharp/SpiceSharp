@@ -46,7 +46,7 @@ namespace SpiceSharp.Entities
         /// <value>
         /// The states.
         /// </value>
-        public virtual TypeDictionary<SimulationState> States => Simulation.States;
+        public virtual TypeDictionary<ISimulationState> States => Simulation.States;
 
         /// <summary>
         /// Gets the simulation configurations.
