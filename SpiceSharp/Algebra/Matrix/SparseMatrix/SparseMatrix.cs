@@ -425,7 +425,7 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the matrix.
         /// </summary>
-        public void ResetMatrix()
+        public void Reset()
         {
             _trashCan.Value = default;
             for (var r = 1; r <= Size; r++)
@@ -437,6 +437,25 @@ namespace SpiceSharp.Algebra
                     elt = elt.Right;
                 }
             }
+        }
+
+        /// <summary>
+        /// Clears the matrix of any elements. The size of the matrix becomes 0.
+        /// </summary>
+        public void Clear()
+        {
+            _trashCan.Value = default;
+            for (var i = 1; i < _columns.Length; i++)
+                _columns[i].Clear();
+            for (var i = 1; i < _rows.Length; i++)
+                _rows[i].Clear();
+            for (var i = 0; i < _diagonal.Length; i++)
+                _diagonal[i] = null;
+            Array.Resize(ref _columns, InitialSize + 1);
+            Array.Resize(ref _rows, InitialSize + 1);
+            Array.Resize(ref _diagonal, InitialSize + 1);
+            _allocatedSize = InitialSize;
+            Size = 0;
         }
 
         /// <summary>

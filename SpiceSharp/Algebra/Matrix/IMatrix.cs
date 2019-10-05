@@ -30,6 +30,11 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the matrix.
         /// </summary>
-        void ResetMatrix();
+        void Reset();
+
+        /// <summary>
+        /// Clears the matrix of any elements. The size of the matrix becomes 0.
+        /// </summary>
+        void Clear();
     }
 }

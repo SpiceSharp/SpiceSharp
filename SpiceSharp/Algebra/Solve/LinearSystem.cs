@@ -137,12 +137,12 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the matrix.
         /// </summary>
-        public virtual void ResetMatrix() => Matrix.ResetMatrix();
+        public virtual void ResetMatrix() => Matrix.Reset();
 
         /// <summary>
         /// Resets all elements in the vector.
         /// </summary>
-        public virtual void ResetVector() => Vector.ResetVector();
+        public virtual void ResetVector() => Vector.Reset();
 
         /// <summary>
         /// Maps an external row/column tuple to an internal one.

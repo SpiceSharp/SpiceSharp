@@ -132,6 +132,23 @@ namespace SpiceSharp.Algebra
             }
 
             /// <summary>
+            /// Clears all matrix elements in the column.
+            /// </summary>
+            public void Clear()
+            {
+                var elt = FirstInColumn;
+                while (elt != null)
+                {
+                    elt.Above = null;
+                    elt = elt.Below;
+                    if (elt != null)
+                        elt.Above.Below = null;
+                }
+                LastInColumn = null;
+                FirstInColumn = null;
+            }
+
+            /// <summary>
             /// Swap two elements in the row, <paramref name="first"/> and <paramref name="rowFirst"/> 
             /// are supposed to come first in the row. Does not update row pointers!
             /// </summary>

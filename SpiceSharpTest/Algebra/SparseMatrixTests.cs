@@ -73,6 +73,8 @@ namespace SpiceSharpTest.Algebra
                     element = element.Above;
                 }
             }
+
+            matrix.Clear();
         }
 
         [Test]
@@ -124,6 +126,8 @@ namespace SpiceSharpTest.Algebra
                     fill = (fill >> 1) & 0b011111;
                 }
             }
+
+            matrix.Clear();
         }
 
         [Test]
@@ -175,6 +179,8 @@ namespace SpiceSharpTest.Algebra
                     fill = (fill >> 1) & 0b011111;
                 }
             }
+
+            matrix.Clear();
         }
     }
 }

@@ -35,6 +35,11 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the vector.
         /// </summary>
-        void ResetVector();
+        void Reset();
+
+        /// <summary>
+        /// Clears all elements in the vector. The size of the vector becomes 0.
+        /// </summary>
+        void Clear();
     }
 }

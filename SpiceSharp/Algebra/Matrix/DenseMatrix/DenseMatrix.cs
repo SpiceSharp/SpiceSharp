@@ -230,10 +230,21 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the matrix.
         /// </summary>
-        public void ResetMatrix()
+        public void Reset()
         {
             for (var i = 0; i < _array.Length; i++)
                 _array[i] = default;
+        }
+
+        /// <summary>
+        /// Clears the matrix of any elements. The size of the matrix becomes 0.
+        /// </summary>
+        public void Clear()
+        {
+            _trashCan = default;
+            _array = new T[InitialSize * InitialSize];
+            _allocatedSize = InitialSize;
+            Size = 0;
         }
 
         /// <summary>

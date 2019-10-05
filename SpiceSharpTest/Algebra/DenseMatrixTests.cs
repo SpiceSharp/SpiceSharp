@@ -14,6 +14,11 @@ namespace SpiceSharpTest.Algebra
 
             Assert.AreEqual(10, n.Size);
             Assert.AreEqual(3.0, n[10, 10], 1e-12);
+
+            n.Clear();
+
+            Assert.AreEqual(0, n.Size);
+            Assert.AreEqual(0.0, n[10, 10], 1e-12);
         }
 
         [Test]
@@ -32,6 +37,8 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 1; c < 10; c++)
                     Assert.AreEqual((row - 1) * 10 + c, n[r, c], 1e-12);
             }
+
+            n.Clear();
         }
 
         [Test]
@@ -52,6 +59,8 @@ namespace SpiceSharpTest.Algebra
                     Assert.AreEqual((r - 1) * 10 + col, n[r, c], 1e-12);
                 }
             }
+
+            n.Clear();
         }
     }
 }

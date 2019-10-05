@@ -128,10 +128,19 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the vector.
         /// </summary>
-        public void ResetVector()
+        public void Reset()
         {
             for (var i = 0; i < _values.Length; i++)
                 _values[i] = default;
+        }
+
+        /// <summary>
+        /// Clears all elements in the vector. The size of the vector becomes 0.
+        /// </summary>
+        public void Clear()
+        {
+            _values = new T[InitialSize + 1];
+            Length = 0;
         }
 
         /// <summary>
