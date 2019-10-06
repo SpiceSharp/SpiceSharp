@@ -16,6 +16,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         public ParallelSimulation(ISimulation parent)
             : base(parent)
         {
+            States = new TypeDictionary<ISimulationState>();
             EntityBehaviors = new LocalBehaviorContainerCollection(parent.EntityBehaviors);
         }
     }

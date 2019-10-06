@@ -17,7 +17,7 @@ namespace SpiceSharp.Entities.Local
         /// <value>
         /// The parent.
         /// </value>
-        protected ISimulation Parent { get; }
+        public ISimulation Parent { get; }
 
         /// <summary>
         /// Gets the name of the <see cref="ISimulation" />.

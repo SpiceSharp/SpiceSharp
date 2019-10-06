@@ -5,7 +5,7 @@ using SpiceSharp.Entities.ParallelLoaderBehaviors;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using SpiceSharp.Entities;
+using System.Threading;
 
 namespace SpiceSharp.Entities
 {
@@ -27,6 +27,11 @@ namespace SpiceSharp.Entities
                 { typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name) },
                 { typeof(INoiseBehavior), e => new NoiseBehavior(e.Name) }
             });
+
+            RegisterSimulationPreparers(typeof(IBiasingBehavior), new BiasingPreparer());
+            RegisterSimulationPreparers(typeof(IFrequencyBehavior), new FrequencyPreparer());
+            RegisterSimulationPreparers(typeof(ITimeBehavior), new TimePreparer());
+            RegisterSimulationPreparers(typeof(INoiseBehavior), new NoisePreparer());
         }
 
         /// <summary>
@@ -35,7 +40,26 @@ namespace SpiceSharp.Entities
         /// <value>
         /// The preparers.
         /// </value>
-        public Dictionary<Type, IParallelPreparer> Preparers { get; } = new Dictionary<Type, IParallelPreparer>();
+        private readonly static Dictionary<Type, IParallelPreparer> Preparers = new Dictionary<Type, IParallelPreparer>();
+        private readonly static ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+        /// <summary>
+        /// Registers the simulation preparers.
+        /// </summary>
+        /// <param name="behaviorType">Type of the behavior.</param>
+        /// <param name="preparer">The preparer.</param>
+        public static void RegisterSimulationPreparers(Type behaviorType, IParallelPreparer preparer)
+        {
+            Lock.EnterWriteLock();
+            try
+            {
+                Preparers.Add(behaviorType, preparer);
+            }
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the entities.
@@ -55,9 +79,6 @@ namespace SpiceSharp.Entities
             : base(name)
         {
             Parameters.Add(new BaseParameters());
-
-            Preparers.Add(typeof(IBiasingBehavior), new BiasingPreparer());
-            Preparers.Add(typeof(IFrequencyBehavior), new FrequencyPreparer());
         }
 
         /// <summary>

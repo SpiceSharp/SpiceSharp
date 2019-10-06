@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits.Entities.Local;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
@@ -15,6 +17,9 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <param name="simulation">The simulation.</param>
         public void Prepare(ISimulation simulation)
         {
+            var psim = (ParallelSimulation)simulation;
+            var state = psim.Parent.States.GetValue<IBiasingSimulationState>();
+            psim.States.Add<IBiasingSimulationState>(new BiasingSimulationState(state));
         }
 
         /// <summary>
