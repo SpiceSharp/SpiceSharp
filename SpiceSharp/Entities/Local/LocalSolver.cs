@@ -29,6 +29,14 @@ namespace SpiceSharp.Circuits.Entities.Local
             /// </value>
             public object Lock { get; set; }
 
+            /// <summary>
+            /// The task that the local solver element is used in.
+            /// </summary>
+            public int Task { get; set; }
+
+            /// <summary>
+            /// The parent solver element.
+            /// </summary>
             private ISolverElement<T> _parent;
 
             /// <summary>
@@ -141,6 +149,11 @@ namespace SpiceSharp.Circuits.Entities.Local
         }
 
         /// <summary>
+        /// The task that the solver runs with.
+        /// </summary>
+        public int Task { get; }
+
+        /// <summary>
         /// Gets the size of the matrix and right-hand side vector.
         /// </summary>
         /// <value>
@@ -152,9 +165,11 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// Initializes a new instance of the <see cref="LocalSolver{T}"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public LocalSolver(ISolver<T> parent)
+        /// <param name="task">The task that the solver runs with.</param>
+        public LocalSolver(ISolver<T> parent, int task)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
+            Task = task;
         }
 
         /// <summary>
@@ -198,7 +213,7 @@ namespace SpiceSharp.Circuits.Entities.Local
             if (_matrixElements.TryGetValue(loc, out var le))
             {
                 // Second time asking for this element, let's lock it
-                if (le.Lock == null)
+                if (le.Lock == null && le.Task != Task)
                     le.Lock = new object();
             }
             else

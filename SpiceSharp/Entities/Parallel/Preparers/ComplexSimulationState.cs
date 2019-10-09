@@ -41,10 +41,11 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public ComplexSimulationState(IComplexSimulationState parent)
+        /// <param name="task">The task identifier.</param>
+        public ComplexSimulationState(IComplexSimulationState parent, int task)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
-            Solver = new LocalSolver<Complex>(_parent.Solver);
+            Solver = new LocalSolver<Complex>(_parent.Solver, task);
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <value>
         /// The simulations.
         /// </value>
-        public ParallelSimulation[] Simulations { get; }
+        public IParallelSimulation[] Simulations { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelBindingContext"/> class.
@@ -23,7 +23,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <param name="simulation">The simulation.</param>
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="simulations">The simulations used for each task.</param>
-        public ParallelBindingContext(ISimulation simulation, BehaviorContainer behaviors, ParallelSimulation[] simulations)
+        public ParallelBindingContext(ISimulation simulation, BehaviorContainer behaviors, IParallelSimulation[] simulations)
             : base(simulation, behaviors)
         {
             Simulations = simulations.ThrowIfEmpty(nameof(simulations));

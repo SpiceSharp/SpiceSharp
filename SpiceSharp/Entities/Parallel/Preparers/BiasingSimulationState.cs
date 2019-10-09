@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Algebra;
-using SpiceSharp.Circuits.Entities.Local;
 using SpiceSharp.Simulations;
+using SpiceSharp.Circuits.Entities.Local;
 
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
@@ -85,10 +85,11 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public BiasingSimulationState(IBiasingSimulationState parent)
+        /// <param name="solver">The solver.</param>
+        public BiasingSimulationState(IBiasingSimulationState parent, LocalSolver<double> solver)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
-            Solver = new LocalSolver<double>(_parent.Solver);
+            Solver = solver.ThrowIfNull(nameof(solver));
         }
 
         /// <summary>

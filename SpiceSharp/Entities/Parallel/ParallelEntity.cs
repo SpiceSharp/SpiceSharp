@@ -69,7 +69,7 @@ namespace SpiceSharp.Entities
         /// </value>
         public IEntityCollection Entities { get; set; }
 
-        private ParallelSimulation[] _simulations;
+        private IParallelSimulation[] _simulations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelEntity"/> class.
@@ -114,17 +114,20 @@ namespace SpiceSharp.Entities
                 return;
 
             // Intercept the local behaviors to add them to our own behaviors
-            _simulations = new ParallelSimulation[GetTaskCount(entities)];
-            for (var i = 0; i < _simulations.Length; i++)
-                _simulations[i] = new ParallelSimulation(simulation);
+            _simulations = new IParallelSimulation[GetTaskCount(entities)];
             var ec = new LocalEntityCollection(entities, Entities, simulation);
-            foreach (var type in simulation.BehaviorTypes)
+            for (var i = 0; i < _simulations.Length; i++)
             {
-                if (Preparers.TryGetValue(type, out var preparer))
-                    preparer.Prepare(_simulations, simulation, Parameters, entities);
+                _simulations[i] = new ParallelSimulation(simulation, i);
+                foreach (var type in simulation.BehaviorTypes)
+                {
+                    if (Preparers.TryGetValue(type, out var preparer))
+                        preparer.Prepare(_simulations[i], simulation, Parameters);
+                }
+
+                // Basically creates the behaviors for the simulation
+                _simulations[i].Run(ec);
             }
-            foreach (var sim in _simulations)
-                sim.Run(ec);
 
             // Create our own behaviors
             base.CreateBehaviors(simulation, entities);
