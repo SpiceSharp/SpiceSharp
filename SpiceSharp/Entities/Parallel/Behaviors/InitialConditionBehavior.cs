@@ -3,7 +3,7 @@
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Initial condition behavior for a <see cref="ParallelLoader"/>.
+    /// Initial condition behavior for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="ParallelBehavior{IInitialConditionBehavior}" />
     /// <seealso cref="IInitialConditionBehavior" />

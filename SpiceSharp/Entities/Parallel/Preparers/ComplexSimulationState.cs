@@ -7,7 +7,7 @@ using System.Numerics;
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// A <see cref="IComplexSimulationState"/> for a <see cref="ParallelLoader"/>.
+    /// A <see cref="IComplexSimulationState"/> for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="SpiceSharp.Simulations.IComplexSimulationState" />
     public class ComplexSimulationState : IComplexSimulationState

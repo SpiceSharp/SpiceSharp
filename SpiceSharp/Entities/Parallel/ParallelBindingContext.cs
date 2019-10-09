@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Binding context for a <see cref="ParallelLoader"/>.
+    /// Binding context for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="BindingContext" />
     public class ParallelBindingContext : BindingContext

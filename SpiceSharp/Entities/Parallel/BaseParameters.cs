@@ -6,7 +6,7 @@ using System.Text;
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="ParallelLoader"/>.
+    /// Base parameters for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
     public class BaseParameters : ParameterSet

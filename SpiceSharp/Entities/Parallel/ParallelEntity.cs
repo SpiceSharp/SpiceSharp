@@ -13,11 +13,11 @@ namespace SpiceSharp.Entities
     /// An entity that will allow multiple entities to be loaded in parallel.
     /// </summary>
     /// <seealso cref="Entity" />
-    public class ParallelLoader : Entity
+    public class ParallelEntity : Entity
     {
-        static ParallelLoader()
+        static ParallelEntity()
         {
-            RegisterBehaviorFactory(typeof(ParallelLoader), new BehaviorFactoryDictionary
+            RegisterBehaviorFactory(typeof(ParallelEntity), new BehaviorFactoryDictionary
             {
                 { typeof(IInitialConditionBehavior), e => new InitialConditionBehavior(e.Name) },
                 { typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name) },
@@ -72,21 +72,21 @@ namespace SpiceSharp.Entities
         private ParallelSimulation[] _simulations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelLoader"/> class.
+        /// Initializes a new instance of the <see cref="ParallelEntity"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
-        public ParallelLoader(string name)
+        public ParallelEntity(string name)
             : base(name)
         {
             Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelLoader"/> class.
+        /// Initializes a new instance of the <see cref="ParallelEntity"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="entities">The entities.</param>
-        public ParallelLoader(string name, EntityCollection entities)
+        public ParallelEntity(string name, EntityCollection entities)
             : this(name)
         {
             Entities = entities;

@@ -3,7 +3,7 @@
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Frequency behavior for a <see cref="ParallelLoader"/>.
+    /// Frequency behavior for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="ParallelBehavior{T}" />
     /// <seealso cref="IFrequencyBehavior" />

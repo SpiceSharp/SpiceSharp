@@ -5,7 +5,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Biasing state for <see cref="ParallelLoader"/>.
+    /// Biasing state for <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="IBiasingSimulationState" />
     public class BiasingSimulationState : IBiasingSimulationState

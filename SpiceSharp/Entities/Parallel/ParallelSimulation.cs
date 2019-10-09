@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Local simulation for a <see cref="ParallelLoader"/>
+    /// Local simulation for a <see cref="ParallelEntity"/>
     /// </summary>
     /// <seealso cref="LocalSimulation" />
     public class ParallelSimulation : LocalSimulation

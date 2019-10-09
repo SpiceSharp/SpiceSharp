@@ -3,7 +3,7 @@
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="ParallelLoader"/>.
+    /// Temperature behavior for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="ParallelBehavior{T}" />
     /// <seealso cref="ITemperatureBehavior" />

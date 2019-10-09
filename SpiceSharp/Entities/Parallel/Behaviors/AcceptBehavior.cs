@@ -3,7 +3,7 @@
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Accept behavior for a <see cref="ParallelLoader"/>
+    /// Accept behavior for a <see cref="ParallelEntity"/>
     /// </summary>
     /// <seealso cref="ParallelBehavior{T}" />
     /// <seealso cref="IAcceptBehavior" />

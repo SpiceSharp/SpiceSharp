@@ -3,7 +3,7 @@
 namespace SpiceSharp.Entities.ParallelLoaderBehaviors
 {
     /// <summary>
-    /// Biasing behavior for a <see cref="ParallelLoader"/>.
+    /// Biasing behavior for a <see cref="ParallelEntity"/>.
     /// </summary>
     /// <seealso cref="ParallelBehavior{T}" />
     /// <seealso cref="IBiasingBehavior" />

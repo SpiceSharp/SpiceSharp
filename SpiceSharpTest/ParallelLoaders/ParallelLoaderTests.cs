@@ -31,7 +31,7 @@ namespace SpiceSharpTest.ParallelLoaders
             }
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
-                new ParallelLoader("P1", sub)
+                new ParallelEntity("P1", sub)
                     .SetParameter(typeof(SpiceSharp.Behaviors.IBiasingBehavior))
                     .SetParameter(typeof(SpiceSharp.Behaviors.IFrequencyBehavior))
                 );
