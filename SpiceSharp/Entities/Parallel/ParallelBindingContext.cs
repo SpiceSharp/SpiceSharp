@@ -10,23 +10,23 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
     public class ParallelBindingContext : BindingContext
     {
         /// <summary>
-        /// Gets the pool of local behaviors.
+        /// Gets the simulations.
         /// </summary>
         /// <value>
-        /// The pool.
+        /// The simulations.
         /// </value>
-        public BehaviorContainerCollection Concurrent { get; }
+        public ParallelSimulation[] Simulations { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelBindingContext"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="behaviors">The behaviors.</param>
-        /// <param name="collection">The behaviors inside the parallel loader.</param>
-        public ParallelBindingContext(ISimulation simulation, BehaviorContainer behaviors, BehaviorContainerCollection collection) 
+        /// <param name="simulations">The simulations used for each task.</param>
+        public ParallelBindingContext(ISimulation simulation, BehaviorContainer behaviors, ParallelSimulation[] simulations)
             : base(simulation, behaviors)
         {
-            Concurrent = collection.ThrowIfNull(nameof(collection));
+            Simulations = simulations.ThrowIfEmpty(nameof(simulations));
         }
     }
 }

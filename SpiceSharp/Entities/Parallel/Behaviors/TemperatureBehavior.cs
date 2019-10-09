@@ -9,6 +9,8 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
     /// <seealso cref="ITemperatureBehavior" />
     public class TemperatureBehavior : ParallelBehavior<ITemperatureBehavior>, ITemperatureBehavior
     {
+        private TemperatureParameters _tp;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
@@ -22,15 +24,31 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         }
 
         /// <summary>
+        /// Bind the behavior to a simulation.
+        /// </summary>
+        /// <param name="context">The binding context.</param>
+        public override void Bind(BindingContext context)
+        {
+            base.Bind(context);
+            context.Behaviors.Parameters.TryGetValue(out _tp);
+        }
+
+        /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
         public void Temperature()
         {
-            /*
-             * Temperature behaviors do temperature-dependent calculations. These behaviors
-             * do not change the state in any way, so we can just run these in parallel.
-             */
-            For(behavior => behavior.Temperature);
+            if (_tp != null && _tp.ParallelTemperature)
+                For(behavior => behavior.Temperature);
+            else
+            {
+                for (var t = 0; t < Behaviors.Length; t++)
+                {
+                    var b = Behaviors[t];
+                    for (var i = 0; i < b.Count; i++)
+                        b[i].Temperature();
+                }
+            }
         }
     }
 }

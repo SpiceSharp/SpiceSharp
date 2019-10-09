@@ -69,7 +69,7 @@ namespace SpiceSharp.Entities
         /// </value>
         public IEntityCollection Entities { get; set; }
 
-        private ParallelSimulation _simulation;
+        private ParallelSimulation[] _simulations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelLoader"/> class.
@@ -114,22 +114,40 @@ namespace SpiceSharp.Entities
                 return;
 
             // Intercept the local behaviors to add them to our own behaviors
-            _simulation = new ParallelSimulation(simulation);
+            _simulations = new ParallelSimulation[GetTaskCount(entities)];
+            for (var i = 0; i < _simulations.Length; i++)
+                _simulations[i] = new ParallelSimulation(simulation);
             var ec = new LocalEntityCollection(entities, Entities, simulation);
             foreach (var type in simulation.BehaviorTypes)
             {
                 if (Preparers.TryGetValue(type, out var preparer))
-                    preparer.Prepare(_simulation);
+                    preparer.Prepare(_simulations, simulation, Parameters, entities);
             }
-            _simulation.Run(ec);
-            foreach (var type in simulation.BehaviorTypes.Reverse())
-            {
-                if (Preparers.TryGetValue(type, out var preparer))
-                    preparer.Restore(_simulation);
-            }
+            foreach (var sim in _simulations)
+                sim.Run(ec);
 
             // Create our own behaviors
             base.CreateBehaviors(simulation, entities);
+        }
+
+        /// <summary>
+        /// Gets the task count.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns>
+        /// The number of tasks that will be allocated.
+        /// </returns>
+        private int GetTaskCount(IEntityCollection entities)
+        {
+            if (Parameters.TryGetValue<BaseParameters>(out var bp))
+            {
+                if (bp.Tasks == 0)
+                    return entities.Count;
+                if (bp.Tasks > 0)
+                    return bp.Tasks;
+                return Environment.ProcessorCount;
+            }
+            return 1;
         }
 
         /// <summary>
@@ -140,7 +158,7 @@ namespace SpiceSharp.Entities
         /// <param name="entities">The entities that the entity may be connected to.</param>
         protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
-            var context = new ParallelBindingContext(simulation, eb, _simulation.EntityBehaviors);
+            var context = new ParallelBindingContext(simulation, eb, _simulations);
             foreach (var behavior in eb.Ordered)
                 behavior.Bind(context);
         }
