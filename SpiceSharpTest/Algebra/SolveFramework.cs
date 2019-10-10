@@ -47,7 +47,7 @@ namespace SpiceSharpTest.Algebra
                     var value = double.Parse(match.Groups["value"].Value, System.Globalization.CultureInfo.InvariantCulture);
 
                     // Set the value in the matrix
-                    result.GetMatrixElement(row, column).Value = value;
+                    result.GetElement(row, column).Value = value;
                 }
             }
 
@@ -82,7 +82,7 @@ namespace SpiceSharpTest.Algebra
                         int row = int.Parse(match.Groups["row"].Value);
                         int col = int.Parse(match.Groups["col"].Value);
                         var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
-                        solver.GetMatrixElement(row, col).Value = value;
+                        solver.GetElement(row, col).Value = value;
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace SpiceSharpTest.Algebra
                 while (!reader.EndOfStream && (line = reader.ReadLine()) != null)
                 {
                     var value = double.Parse(line, CultureInfo.InvariantCulture);
-                    solver.GetVectorElement(index).Value = value;
+                    solver.GetElement(index).Value = value;
                     index++;
                 }
             }

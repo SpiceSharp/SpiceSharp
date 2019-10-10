@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Algebra
                     if ((fill & 0x01) != 0)
                         Assert.AreEqual(k, vector[realk], 1e-12);
                     else
-                        Assert.AreEqual(vector.FindVectorElement(realk), null);
+                        Assert.AreEqual(vector.FindElement(realk), null);
                     fill = (fill >> 1) & 0b011111;
                 }
             }

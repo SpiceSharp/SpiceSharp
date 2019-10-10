@@ -40,66 +40,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Finds the element at the specified position in the matrix.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        public override ISolverElement<double> FindElement(int row, int column)
-        {
-            var element = base.FindMatrixElement(row, column);
-            if (element == null)
-                return null;
-            return new RealMatrixSolverElement(element);
-        }
-
-        /// <summary>
-        /// Finds the element at the specified position in the right-hand side vector.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        public override ISolverElement<double> FindElement(int row)
-        {
-            var element = FindVectorElement(row);
-            if (element == null)
-                return null;
-            return new RealVectorSolverElement(element);
-        }
-
-        /// <summary>
-        /// Gets the element at the specified position in the matrix. A new element is
-        /// created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public override ISolverElement<double> GetElement(int row, int column)
-        {
-            var element = GetMatrixElement(row, column);
-            return new RealMatrixSolverElement(element);
-        }
-
-        /// <summary>
-        /// Gets the element at the specified position in the right-hand side vector.
-        /// A new element is created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        public override ISolverElement<double> GetElement(int row)
-        {
-            var element = GetVectorElement(row);
-            return new RealVectorSolverElement(element);
-        }
-
-        /// <summary>
         /// Solves the equations using the Y-matrix and Rhs-vector.
         /// </summary>
         /// <param name="solution">The solution.</param>

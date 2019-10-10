@@ -11,7 +11,7 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The right-hand side vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract partial class SparseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISolver<T>
+    public abstract partial class SparseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISparseSolver<T>
         where M : IPermutableMatrix<T>, ISparseMatrix<T>
         where V : IPermutableVector<T>, ISparseVector<T>
         where T : IFormattable, IEquatable<T>
@@ -232,7 +232,7 @@ namespace SpiceSharp.Algebra
                 return null;
             int row = Row[index];
             int column = Column[index];
-            return Matrix.FindMatrixElement(row, column);
+            return Matrix.FindElement(row, column);
         }
 
         /// <summary>
@@ -243,7 +243,18 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
-        public abstract ISolverElement<T> FindElement(int row, int column);
+        public Element<T> FindElement(int row, int column)
+        {
+            if (row < 0)
+                throw new ArgumentOutOfRangeException(nameof(row));
+            if (column < 0)
+                throw new ArgumentOutOfRangeException(nameof(column));
+            if (row > Size || column > Size)
+                return null;
+            row = Row[row];
+            column = Column[column];
+            return Matrix.FindElement(row, column);
+        }
 
         /// <summary>
         /// Finds the element at the specified position in the right-hand side vector.
@@ -252,7 +263,11 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
-        public abstract ISolverElement<T> FindElement(int row);
+        public Element<T> FindElement(int row)
+        {
+            row = Row[row];
+            return Vector.FindElement(row);
+        }
 
         /// <summary>
         /// Gets the element at the specified position in the matrix. A new element is
@@ -263,7 +278,12 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public abstract ISolverElement<T> GetElement(int row, int column);
+        public Element<T> GetElement(int row, int column)
+        {
+            row = Row[row];
+            column = Column[column];
+            return Matrix.GetElement(row, column);
+        }
 
         /// <summary>
         /// Gets the element at the specified position in the right-hand side vector.
@@ -273,74 +293,12 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element.
         /// </returns>
-        public abstract ISolverElement<T> GetElement(int row);
-
-        /// <summary>
-        /// Gets a pointer to the matrix element at the specified row and column. A
-        /// non-zero element is always guaranteed with this method. The matrix is expanded
-        /// if necessary.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public Element<T> GetMatrixElement(int row, int column)
-        {
-            row = Row[row];
-            column = Column[column];
-            return Matrix.GetMatrixElement(row, column);
-        }
-
-        /// <summary>
-        /// Finds a pointer to the matrix element at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element; otherwise <c>null</c>.
-        /// </returns>
-        public Element<T> FindMatrixElement(int row, int column)
+        public Element<T> GetElement(int row)
         {
             if (row < 0)
                 throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0)
-                throw new ArgumentOutOfRangeException(nameof(column));
-            if (row > Size || column > Size)
-                return null;
             row = Row[row];
-            column = Column[column];
-            return Matrix.FindMatrixElement(row, column);
-        }
-
-        /// <summary>
-        /// Gets a vector element at the specified index. A non-zero element is
-        /// always guaranteed with this method. The vector is expanded if
-        /// necessary.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        public Element<T> GetVectorElement(int index)
-        {
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            index = Row[index];
-            return Vector.GetVectorElement(index);
-        }
-
-        /// <summary>
-        /// Finds a vector element at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The vector element; otherwise <c>null</c>.
-        /// </returns>
-        public Element<T> FindVectorElement(int index)
-        {
-            index = Row[index];
-            return Vector.FindVectorElement(index);
+            return Vector.GetElement(row);
         }
 
         /// <summary>
@@ -369,7 +327,7 @@ namespace SpiceSharp.Algebra
         /// <returns>The created element.</returns>
         protected virtual ISparseMatrixElement<T> CreateFillin(int row, int column)
         {
-            var result = (ISparseMatrixElement<T>)Matrix.GetMatrixElement(row, column);
+            var result = (ISparseMatrixElement<T>)Matrix.GetElement(row, column);
             Strategy.CreateFillin(Matrix, result);
             Fillins++;
             return result;

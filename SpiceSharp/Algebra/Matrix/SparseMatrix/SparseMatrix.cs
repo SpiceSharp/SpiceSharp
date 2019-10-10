@@ -123,7 +123,7 @@ namespace SpiceSharp.Algebra
         /// </returns>
         protected T GetMatrixValue(int row, int column)
         {
-            var element = FindMatrixElement(row, column);
+            var element = FindElement(row, column);
             if (element == null)
                 return default;
             return element.Value;
@@ -140,14 +140,14 @@ namespace SpiceSharp.Algebra
             if (value.Equals(default))
             {
                 // We don't need to create a new element unnecessarily
-                var element = FindMatrixElement(row, column);
+                var element = FindElement(row, column);
                 if (element != null)
                     element.Value = default;
             }
             else
             {
                 // We have to create an element if it doesn't exist yet
-                var element = GetMatrixElement(row, column);
+                var element = GetElement(row, column);
                 element.Value = value;
             }
         }
@@ -158,7 +158,7 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The matrix element at the specified row and column.</returns>
-        public Element<T> GetMatrixElement(int row, int column)
+        public Element<T> GetElement(int row, int column)
         {
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
@@ -217,7 +217,7 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The element at the specified row and column, or null if it doesn't exist.</returns>
-        public Element<T> FindMatrixElement(int row, int column)
+        public Element<T> FindElement(int row, int column)
         {
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));

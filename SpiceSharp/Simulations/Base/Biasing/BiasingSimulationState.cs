@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
             /// <value>
             /// The solver.
             /// </value>
-            public ISolver<double> Solver { get; }
+            public ISparseSolver<double> Solver { get; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
@@ -92,7 +92,7 @@ namespace SpiceSharp.Simulations
             /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            public BiasingSimulationState(ISolver<double> solver)
+            public BiasingSimulationState(ISparseSolver<double> solver)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
             }

@@ -51,7 +51,7 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The matrix element.</returns>
-        Element<T> GetMatrixElement(int row, int column);
+        Element<T> GetElement(int row, int column);
 
         /// <summary>
         /// Finds a pointer to the matrix element at the specified row and column. If
@@ -62,6 +62,6 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The matrix element if it exists; otherwise <c>null</c>.
         /// </returns>
-        Element<T> FindMatrixElement(int row, int column);
+        Element<T> FindElement(int row, int column);
     }
 }

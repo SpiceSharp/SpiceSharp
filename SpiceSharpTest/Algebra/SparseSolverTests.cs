@@ -61,10 +61,10 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetVectorElement(r + 1).Value = rhs[r];
+                    solver.GetElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -94,10 +94,10 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetVectorElement(r + 1).Value = rhs[r];
+                    solver.GetElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -127,10 +127,10 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetVectorElement(r + 1).Value = rhs[r];
+                    solver.GetElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -160,10 +160,10 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
-                    solver.GetVectorElement(r + 1).Value = rhs[r];
+                    solver.GetElement(r + 1).Value = rhs[r];
             }
 
             // This should run without throwing an exception
@@ -205,19 +205,19 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(Complex.Zero))
-                        solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
                 }
             }
 
             // Add some zero elements
-            solver.GetMatrixElement(7, 7);
-            solver.GetVectorElement(5);
+            solver.GetElement(7, 7);
+            solver.GetElement(5);
 
             // Build the Rhs vector
             for (var r = 0; r < rhs.Length; r++)
             {
                 if (!rhs[r].Equals(Complex.Zero))
-                    solver.GetVectorElement(r + 1).Value = rhs[r];
+                    solver.GetElement(r + 1).Value = rhs[r];
             }
 
             // Solver

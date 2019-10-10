@@ -30,6 +30,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        ISolver<Complex> Solver { get; }
+        ISparseSolver<Complex> Solver { get; }
     }
 }

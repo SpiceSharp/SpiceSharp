@@ -79,7 +79,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public ISolver<double> Solver { get; private set; }
+        public ISparseSolver<double> Solver { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.

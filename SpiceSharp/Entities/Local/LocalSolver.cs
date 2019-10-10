@@ -9,9 +9,9 @@ namespace SpiceSharp.Circuits.Entities.Local
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="ISolver{T}" />
-    public class LocalSolver<T> : ISolver<T> where T : IFormattable
+    public class LocalSolver<T> : ISparseSolver<T> where T : IFormattable
     {
-        private ISolver<T> _parent;
+        private ISparseSolver<T> _parent;
         private Dictionary<MatrixLocation, LocalSolverElement> _matrixElements = new Dictionary<MatrixLocation, LocalSolverElement>(new MatrixLocation.Comparer());
         private Dictionary<int, LocalSolverElement> _vectorElements = new Dictionary<int, LocalSolverElement>();
 
@@ -19,7 +19,7 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// A local solver element that accomodates concurrent add/subtract
         /// </summary>
         /// <seealso cref="ISolver{T}" />
-        protected class LocalSolverElement : ISolverElement<T>
+        protected class LocalSolverElement : Element<T>
         {
             /// <summary>
             /// Gets or sets the lock.
@@ -37,13 +37,13 @@ namespace SpiceSharp.Circuits.Entities.Local
             /// <summary>
             /// The parent solver element.
             /// </summary>
-            private ISolverElement<T> _parent;
+            private Element<T> _parent;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="LocalSolverElement"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
-            public LocalSolverElement(ISolverElement<T> parent)
+            public LocalSolverElement(Element<T> parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
             }
@@ -52,7 +52,7 @@ namespace SpiceSharp.Circuits.Entities.Local
             /// Adds the specified value to the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public void Add(T value)
+            public override void Add(T value)
             {
                 if (Lock != null)
                 {
@@ -66,43 +66,10 @@ namespace SpiceSharp.Circuits.Entities.Local
             }
 
             /// <summary>
-            /// Gets the value of the matrix element.
-            /// </summary>
-            /// <returns>
-            /// The matrix element value.
-            /// </returns>
-            public T GetValue()
-            {
-                if (Lock != null)
-                {
-                    lock (Lock)
-                    {
-                        return _parent.GetValue();
-                    }
-                }
-                return _parent.GetValue();
-            }
-
-            /// <summary>
-            /// Sets the specified value for the matrix element.
-            /// </summary>
-            /// <param name="value">The value.</param>
-            public void SetValue(T value)
-            {
-                if (Lock != null)
-                {
-                    lock (Lock)
-                        _parent.SetValue(value);
-                }
-                else
-                    _parent.SetValue(value);
-            }
-
-            /// <summary>
             /// Subtracts the specified value from the matrix element.
             /// </summary>
             /// <param name="value">The value.</param>
-            public void Subtract(T value)
+            public override void Subtract(T value)
             {
                 if (Lock != null)
                 {
@@ -114,26 +81,6 @@ namespace SpiceSharp.Circuits.Entities.Local
                 else
                     _parent.Subtract(value);
             }
-
-            /// <summary>
-            /// Converts to string.
-            /// </summary>
-            /// <returns>
-            /// A <see cref="String" /> that represents this instance.
-            /// </returns>
-            public override string ToString()
-                => _parent.ToString();
-
-            /// <summary>
-            /// Converts to string.
-            /// </summary>
-            /// <param name="format">The format.</param>
-            /// <param name="formatProvider">The format provider.</param>
-            /// <returns>
-            /// A <see cref="String" /> that represents this instance.
-            /// </returns>
-            public string ToString(string format, IFormatProvider formatProvider)
-                => _parent.ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -166,7 +113,7 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="task">The task that the solver runs with.</param>
-        public LocalSolver(ISolver<T> parent, int task)
+        public LocalSolver(ISparseSolver<T> parent, int task)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
             Task = task;
@@ -199,7 +146,7 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
-        public ISolverElement<T> FindElement(int row, int column)
+        public Element<T> FindElement(int row, int column)
         {
             var elt = _parent.FindElement(row, column);
             if (elt == null)
@@ -231,7 +178,7 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
-        public ISolverElement<T> FindElement(int row)
+        public Element<T> FindElement(int row)
         {
             var elt = _parent.FindElement(row);
             if (elt == null)
@@ -264,7 +211,7 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public ISolverElement<T> GetElement(int row, int column)
+        public Element<T> GetElement(int row, int column)
         {
             var elt = _parent.GetElement(row, column);
 
@@ -295,7 +242,7 @@ namespace SpiceSharp.Circuits.Entities.Local
         /// <returns>
         /// The vector element.
         /// </returns>
-        public ISolverElement<T> GetElement(int row)
+        public Element<T> GetElement(int row)
         {
             var elt = _parent.GetElement(row);
 

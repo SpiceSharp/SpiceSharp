@@ -79,7 +79,7 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public T GetVectorValue(int index)
         {
-            var element = FindVectorElement(index);
+            var element = FindElement(index);
             if (element == null)
                 return default;
             return element.Value;
@@ -95,13 +95,13 @@ namespace SpiceSharp.Algebra
             if (value.Equals(default))
             {
                 // We don't need to create a new element unnecessarily
-                var element = FindVectorElement(index);
+                var element = FindElement(index);
                 if (element != null)
                     element.Value = default;
             }
             else
             {
-                var element = GetVectorElement(index);
+                var element = GetElement(index);
                 element.Value = value;
             }
         }
@@ -111,7 +111,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">Index in the vector</param>
         /// <returns>The vector element at the specified index</returns>
-        public Element<T> GetVectorElement(int index)
+        public Element<T> GetElement(int index)
         {
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));
@@ -158,7 +158,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">The index in the vector.</param>
         /// <returns>The element at the specified index, or null if the element does not exist.</returns>
-        public Element<T> FindVectorElement(int index)
+        public Element<T> FindElement(int index)
         {
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));

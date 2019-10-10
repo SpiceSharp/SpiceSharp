@@ -80,46 +80,6 @@ namespace SpiceSharp.Algebra
         void ResetMatrix();
 
         /// <summary>
-        /// Finds the element at the specified position in the matrix.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        ISolverElement<T> FindElement(int row, int column);
-
-        /// <summary>
-        /// Finds the element at the specified position in the right-hand side vector.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        ISolverElement<T> FindElement(int row);
-
-        /// <summary>
-        /// Gets the element at the specified position in the matrix. A new element is
-        /// created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        ISolverElement<T> GetElement(int row, int column);
-
-        /// <summary>
-        /// Gets the element at the specified position in the right-hand side vector.
-        /// A new element is created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        ISolverElement<T> GetElement(int row);
-
-        /// <summary>
         /// Maps an internal row/column tuple to an external one.
         /// </summary>
         /// <param name="indices">The internal row/column indices.</param>

@@ -37,50 +37,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Finds the element at the specified position in the matrix.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        public override ISolverElement<double> FindElement(int row, int column)
-            => new RealSolverMatrixElement(this, row, column);
-
-        /// <summary>
-        /// Finds the element at the specified position in the right-hand side vector.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        public override ISolverElement<double> FindElement(int row)
-            => new RealSolverVectorElement(this, row);
-
-        /// <summary>
-        /// Gets the element at the specified position in the matrix. A new element is
-        /// created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public override ISolverElement<double> GetElement(int row, int column)
-            => new RealSolverMatrixElement(this, row, column);
-
-        /// <summary>
-        /// Gets the element at the specified position in the right-hand side vector.
-        /// A new element is created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        public override ISolverElement<double> GetElement(int row)
-            => new RealSolverVectorElement(this, row);
-
-        /// <summary>
         /// Solves the system of equations.
         /// </summary>
         /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>

@@ -35,17 +35,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the solver of the system of equations.
         /// </summary>
-        protected ISolver<double> Solver { get; private set; }
+        protected ISparseSolver<double> Solver { get; private set; }
 
         /// <summary>
         /// Gets the diagonal element.
         /// </summary>
-        protected ISolverElement<double> Diagonal { get; private set; }
+        protected Element<double> Diagonal { get; private set; }
 
         /// <summary>
         /// Gets the right-hand side element.
         /// </summary>
-        protected ISolverElement<double> Rhs { get; private set; }
+        protected Element<double> Rhs { get; private set; }
 
         /// <summary>
         /// Gets the node for which the aid is meant.
@@ -117,22 +117,22 @@ namespace SpiceSharp.Simulations
                 {
                     var elt = Solver.FindElement(Node.Index, v.Index);
                     if (elt != null)
-                        elt.SetValue(0);
+                        elt.Value = 0.0;
                 }
             }
 
             // If there are current contributions, then we can't just hard-set the value
             if (hasOtherTypes)
             {
-                Diagonal.SetValue(Force);
+                Diagonal.Value = Force;
                 if (Rhs != null)
-                    Rhs.SetValue(Force * Value);
+                    Rhs.Value = Force * Value;
             }
             else
             {
-                Diagonal.SetValue(1.0);
+                Diagonal.Value = 1.0;
                 if (Rhs != null)
-                    Rhs.SetValue(Value);
+                    Rhs.Value = Value;
             }
         }
 

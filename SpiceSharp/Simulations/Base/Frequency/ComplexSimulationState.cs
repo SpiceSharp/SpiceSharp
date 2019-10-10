@@ -32,7 +32,7 @@ namespace SpiceSharp.Simulations
             /// <value>
             /// The solver.
             /// </value>
-            public ISolver<Complex> Solver { get; }
+            public ISparseSolver<Complex> Solver { get; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
             /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            public ComplexSimulationState(ISolver<Complex> solver)
+            public ComplexSimulationState(ISparseSolver<Complex> solver)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
             }

@@ -204,8 +204,8 @@ namespace SpiceSharp
             for (var i = 0; i < _voltageDriven.Count; i++)
             {
                 var pins = _voltageDriven[i];
-                solver.GetMatrixElement(i + 1, map[pins.Node1]).Value += 1.0;
-                solver.GetMatrixElement(i + 1, map[pins.Node2]).Value += 1.0;
+                solver.GetElement(i + 1, map[pins.Node1]).Add(1.0);
+                solver.GetElement(i + 1, map[pins.Node2]).Add(1.0);
             }
             try
             {

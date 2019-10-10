@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Algebra;
-using System;
+﻿using System;
 using System.Text;
 
 namespace SpiceSharp.Algebra
@@ -16,7 +15,7 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The elements.
         /// </value>
-        private readonly ISolverElement<T>[] _elements;
+        private readonly Element<T>[] _elements;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementSet{T}"/> class.
@@ -24,10 +23,10 @@ namespace SpiceSharp.Algebra
         /// <param name="solver">The solver.</param>
         /// <param name="matrixPins">The Y-matrix indices.</param>
         /// <param name="rhsPins">The right-hand side vector indices.</param>
-        public ElementSet(ISolver<T> solver, MatrixLocation[] matrixPins, int[] rhsPins = null)
+        public ElementSet(ISparseSolver<T> solver, MatrixLocation[] matrixPins, int[] rhsPins = null)
         {
             int length = (rhsPins?.Length ?? 0) + (matrixPins?.Length ?? 0);
-            _elements = new ISolverElement<T>[length];
+            _elements = new Element<T>[length];
             int offset = 0;
             if (matrixPins != null)
             {
@@ -47,7 +46,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="matrixPins">The matrix pins.</param>
-        public ElementSet(ISolver<T> solver, params MatrixLocation[] matrixPins)
+        public ElementSet(ISparseSolver<T> solver, params MatrixLocation[] matrixPins)
             : this(solver, matrixPins, null)
         {
         }
@@ -57,7 +56,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="rhsPins">The RHS pins.</param>
-        public ElementSet(ISolver<T> solver, params int[] rhsPins)
+        public ElementSet(ISparseSolver<T> solver, params int[] rhsPins)
             : this(solver, null, rhsPins)
         {
         }

@@ -29,7 +29,7 @@ namespace SpiceSharpTest.Algebra
             var solver = LUHelper.CreateSparseRealSolver();
             for (var r = 0; r < matrixElements.Length; r++)
                 for (var c = 0; c < matrixElements[r].Length; c++)
-                    solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
+                    solver.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
 
             // Factor
             solver.Factor();
@@ -37,57 +37,57 @@ namespace SpiceSharpTest.Algebra
             // Compare
             for (var r = 0; r < matrixElements.Length; r++)
                 for (var c = 0; c < matrixElements[r].Length; c++)
-                    Assert.AreEqual(expected[r][c], solver.GetMatrixElement(r + 1, c + 1).Value, 1e-12);
+                    Assert.AreEqual(expected[r][c], solver.GetElement(r + 1, c + 1).Value, 1e-12);
         }
 
         [Test]
         public void When_OrderAndFactoring_Expect_Reference()
         {
             var solver = LUHelper.CreateSparseRealSolver();
-            solver.GetMatrixElement(1, 1).Value = 0.0001;
-            solver.GetMatrixElement(1, 4).Value = -0.0001;
-            solver.GetMatrixElement(1, 5).Value = 0.0;
-            solver.GetMatrixElement(2, 1).Value = 0.0;
-            solver.GetMatrixElement(2, 2).Value = 1.0;
-            solver.GetMatrixElement(2, 5).Value = 0.0;
-            solver.GetMatrixElement(3, 1).Value = -0.0001;
-            solver.GetMatrixElement(3, 3).Value = 1.0;
-            solver.GetMatrixElement(3, 4).Value = 0.0001;
-            solver.GetMatrixElement(4, 4).Value = 1.0;
-            solver.GetMatrixElement(5, 5).Value = 1.0;
+            solver.GetElement(1, 1).Value = 0.0001;
+            solver.GetElement(1, 4).Value = -0.0001;
+            solver.GetElement(1, 5).Value = 0.0;
+            solver.GetElement(2, 1).Value = 0.0;
+            solver.GetElement(2, 2).Value = 1.0;
+            solver.GetElement(2, 5).Value = 0.0;
+            solver.GetElement(3, 1).Value = -0.0001;
+            solver.GetElement(3, 3).Value = 1.0;
+            solver.GetElement(3, 4).Value = 0.0001;
+            solver.GetElement(4, 4).Value = 1.0;
+            solver.GetElement(5, 5).Value = 1.0;
             
             // Order and factor
             solver.OrderAndFactor();
 
             // Compare
-            Assert.AreEqual(solver.GetMatrixElement(1, 1).Value, 1.0e4);
-            Assert.AreEqual(solver.GetMatrixElement(1, 4).Value, -0.0001);
-            Assert.AreEqual(solver.GetMatrixElement(1, 5).Value, 0.0);
-            Assert.AreEqual(solver.GetMatrixElement(2, 1).Value, 0.0);
-            Assert.AreEqual(solver.GetMatrixElement(2, 2).Value, 1.0);
-            Assert.AreEqual(solver.GetMatrixElement(2, 5).Value, 0.0);
-            Assert.AreEqual(solver.GetMatrixElement(3, 1).Value, -0.0001);
-            Assert.AreEqual(solver.GetMatrixElement(3, 3).Value, 1.0);
-            Assert.AreEqual(solver.GetMatrixElement(3, 4).Value, 0.0001);
-            Assert.AreEqual(solver.GetMatrixElement(4, 4).Value, 1.0);
-            Assert.AreEqual(solver.GetMatrixElement(5, 5).Value, 1.0);
+            Assert.AreEqual(solver.GetElement(1, 1).Value, 1.0e4);
+            Assert.AreEqual(solver.GetElement(1, 4).Value, -0.0001);
+            Assert.AreEqual(solver.GetElement(1, 5).Value, 0.0);
+            Assert.AreEqual(solver.GetElement(2, 1).Value, 0.0);
+            Assert.AreEqual(solver.GetElement(2, 2).Value, 1.0);
+            Assert.AreEqual(solver.GetElement(2, 5).Value, 0.0);
+            Assert.AreEqual(solver.GetElement(3, 1).Value, -0.0001);
+            Assert.AreEqual(solver.GetElement(3, 3).Value, 1.0);
+            Assert.AreEqual(solver.GetElement(3, 4).Value, 0.0001);
+            Assert.AreEqual(solver.GetElement(4, 4).Value, 1.0);
+            Assert.AreEqual(solver.GetElement(5, 5).Value, 1.0);
         }
 
         [Test]
         public void When_OrderAndFactoring2_Expect_Reference()
         {
             var solver = LUHelper.CreateSparseRealSolver();
-            solver.GetMatrixElement(1, 1).Value = 1.0;
-            solver.GetMatrixElement(2, 1).Value = 0.0;
-            solver.GetMatrixElement(2, 2).Value = 1.0;
-            solver.GetMatrixElement(2, 5).Value = 0.0;
-            solver.GetMatrixElement(3, 3).Value = 1.0;
-            solver.GetMatrixElement(3, 4).Value = 1e-4;
-            solver.GetMatrixElement(3, 5).Value = -1e-4;
-            solver.GetMatrixElement(4, 4).Value = 1.0;
-            solver.GetMatrixElement(5, 1).Value = 5.38e-23;
-            solver.GetMatrixElement(5, 4).Value = -1e-4;
-            solver.GetMatrixElement(5, 5).Value = 1e-4;
+            solver.GetElement(1, 1).Value = 1.0;
+            solver.GetElement(2, 1).Value = 0.0;
+            solver.GetElement(2, 2).Value = 1.0;
+            solver.GetElement(2, 5).Value = 0.0;
+            solver.GetElement(3, 3).Value = 1.0;
+            solver.GetElement(3, 4).Value = 1e-4;
+            solver.GetElement(3, 5).Value = -1e-4;
+            solver.GetElement(4, 4).Value = 1.0;
+            solver.GetElement(5, 1).Value = 5.38e-23;
+            solver.GetElement(5, 4).Value = -1e-4;
+            solver.GetElement(5, 5).Value = 1e-4;
 
             solver.OrderAndFactor();
 
@@ -108,17 +108,17 @@ namespace SpiceSharpTest.Algebra
         public void When_Preorder_Expect_Reference()
         {
             var solver = LUHelper.CreateSparseRealSolver();
-            solver.GetMatrixElement(1, 1).Value = 1e-4;
-            solver.GetMatrixElement(1, 2).Value = 0.0;
-            solver.GetMatrixElement(1, 3).Value = -1e-4;
-            solver.GetMatrixElement(2, 1).Value = 0.0;
-            solver.GetMatrixElement(2, 2).Value = 0.0;
-            solver.GetMatrixElement(2, 5).Value = 1.0;
-            solver.GetMatrixElement(3, 1).Value = -1e-4;
-            solver.GetMatrixElement(3, 3).Value = 1e-4;
-            solver.GetMatrixElement(3, 4).Value = 1.0;
-            solver.GetMatrixElement(4, 3).Value = 1.0;
-            solver.GetMatrixElement(5, 2).Value = 1.0;
+            solver.GetElement(1, 1).Value = 1e-4;
+            solver.GetElement(1, 2).Value = 0.0;
+            solver.GetElement(1, 3).Value = -1e-4;
+            solver.GetElement(2, 1).Value = 0.0;
+            solver.GetElement(2, 2).Value = 0.0;
+            solver.GetElement(2, 5).Value = 1.0;
+            solver.GetElement(3, 1).Value = -1e-4;
+            solver.GetElement(3, 3).Value = 1e-4;
+            solver.GetElement(3, 4).Value = 1.0;
+            solver.GetElement(4, 3).Value = 1.0;
+            solver.GetElement(5, 2).Value = 1.0;
 
             SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
             solver.Precondition((matrix, vector) => SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
@@ -165,13 +165,13 @@ namespace SpiceSharpTest.Algebra
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <param name="expected"></param>
-        void AssertInternal(ISolver<double> solver, int row, int col, double expected)
+        void AssertInternal(ISparseSolver<double> solver, int row, int col, double expected)
         {
             var indices = new MatrixLocation(row, col);
             indices = solver.InternalToExternal(indices);
             var elt = solver.FindElement(indices.Row, indices.Column);
             Assert.AreNotEqual(null, elt);
-            Assert.AreEqual(expected, elt.GetValue());
+            Assert.AreEqual(expected, elt.Value);
         }
     }
 }

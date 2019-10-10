@@ -9,9 +9,9 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.IMatrix{T}" />
-    /// <seealso cref="SpiceSharp.Algebra.IVector{T}" />
-    /// <seealso cref="System.IFormattable" />
+    /// <seealso cref="IMatrix{T}" />
+    /// <seealso cref="IVector{T}" />
+    /// <seealso cref="IFormattable" />
     public abstract partial class DenseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISolver<T>
         where M : IPermutableMatrix<T>
         where V : IPermutableVector<T>
@@ -114,46 +114,6 @@ namespace SpiceSharp.Algebra
             NeedsReordering = true;
             Strategy = strategy.ThrowIfNull(nameof(strategy));
         }
-
-        /// <summary>
-        /// Finds the element at the specified position in the matrix.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        public abstract ISolverElement<T> FindElement(int row, int column);
-
-        /// <summary>
-        /// Finds the element at the specified position in the right-hand side vector.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        public abstract ISolverElement<T> FindElement(int row);
-
-        /// <summary>
-        /// Gets the element at the specified position in the matrix. A new element is
-        /// created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        public abstract ISolverElement<T> GetElement(int row, int column);
-
-        /// <summary>
-        /// Gets the element at the specified position in the right-hand side vector.
-        /// A new element is created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        public abstract ISolverElement<T> GetElement(int row);
 
         /// <summary>
         /// Preconditions the specified method.

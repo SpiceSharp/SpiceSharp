@@ -9,7 +9,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
     /// <summary>
     /// A <see cref="IComplexSimulationState"/> for a <see cref="ParallelEntity"/>.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.IComplexSimulationState" />
+    /// <seealso cref="IComplexSimulationState" />
     public class ComplexSimulationState : IComplexSimulationState
     {
         private IComplexSimulationState _parent;
@@ -35,7 +35,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public ISolver<Complex> Solver { get; private set; }
+        public ISparseSolver<Complex> Solver { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.

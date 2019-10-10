@@ -27,7 +27,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element.
         /// </returns>
-        Element<T> GetVectorElement(int index);
+        Element<T> GetElement(int index);
 
         /// <summary>
         /// Finds a vector element at the specified index.
@@ -36,6 +36,6 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element; otherwise <c>null</c>.
         /// </returns>
-        Element<T> FindVectorElement(int index);
+        Element<T> FindElement(int index);
     }
 }

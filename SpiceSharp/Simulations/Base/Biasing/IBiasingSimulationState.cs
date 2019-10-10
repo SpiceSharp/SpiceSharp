@@ -75,6 +75,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        ISolver<double> Solver { get; }
+        ISparseSolver<double> Solver { get; }
     }
 }
