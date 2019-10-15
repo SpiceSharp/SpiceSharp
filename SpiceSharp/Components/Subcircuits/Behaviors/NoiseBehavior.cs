@@ -25,8 +25,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void Noise()
         {
-            for (var i = 0; i < Behaviors.Count; i++)
-                Behaviors[i].Noise();
+            foreach (var bs in Behaviors)
+            {
+                for (var i = 0; i < bs.Count; i++)
+                    bs[i].Noise();
+            }
         }
     }
 }

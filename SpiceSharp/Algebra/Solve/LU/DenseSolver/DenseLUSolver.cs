@@ -39,46 +39,6 @@ namespace SpiceSharp.Algebra
         private int _order = 0;
 
         /// <summary>
-        /// Occurs before the solver uses the decomposition to find the solution.
-        /// </summary>
-        public event EventHandler<SolveEventArgs<T>> BeforeSolve;
-
-        /// <summary>
-        /// Occurs after the solver used the decomposition to find a solution.
-        /// </summary>
-        public event EventHandler<SolveEventArgs<T>> AfterSolve;
-
-        /// <summary>
-        /// Occurs before the solver uses the transposed decomposition to find the solution.
-        /// </summary>
-        public event EventHandler<SolveEventArgs<T>> BeforeSolveTransposed;
-
-        /// <summary>
-        /// Occurs after the solver uses the transposed decomposition to find a solution.
-        /// </summary>
-        public event EventHandler<SolveEventArgs<T>> AfterSolveTransposed;
-
-        /// <summary>
-        /// Occurs before the solver is factored.
-        /// </summary>
-        public event EventHandler<EventArgs> BeforeFactor;
-
-        /// <summary>
-        /// Occurs after the solver has been factored.
-        /// </summary>
-        public event EventHandler<EventArgs> AfterFactor;
-
-        /// <summary>
-        /// Occurs before the solver is ordered and factored.
-        /// </summary>
-        public event EventHandler<EventArgs> BeforeOrderAndFactor;
-
-        /// <summary>
-        /// Occurs after the solver has been ordered and factored.
-        /// </summary>
-        public event EventHandler<EventArgs> AfterOrderAndFactor;
-
-        /// <summary>
         /// Gets or sets a value indicating whether the matrix needs to be reordered.
         /// </summary>
         /// <value>
@@ -188,20 +148,16 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public bool Factor(int size)
         {
-            OnBeforeFactor();
-
             int order = Math.Min(Order, size);
             for (var step = 1; step <= order; step++)
             {
                 if (!Elimination(step, size))
                 {
                     IsFactored = false;
-                    OnAfterFactor();
                     return false;
                 }
             }
             IsFactored = true;
-            OnAfterFactor();
             return true;
         }
 
@@ -210,8 +166,6 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public void OrderAndFactor()
         {
-            OnBeforeOrderAndFactor();
-
             var size = Size;
             var step = 1;
             if (!NeedsReordering)
@@ -236,7 +190,6 @@ namespace SpiceSharp.Algebra
                 if (!NeedsReordering)
                 {
                     IsFactored = true;
-                    OnAfterOrderAndFactor();
                     return;
                 }
             }
@@ -258,7 +211,6 @@ namespace SpiceSharp.Algebra
             }
             IsFactored = true;
             NeedsReordering = false;
-            OnAfterOrderAndFactor();
         }
 
         /// <summary>
@@ -279,49 +231,5 @@ namespace SpiceSharp.Algebra
             base.ResetMatrix();
             IsFactored = false;
         }
-
-        /// <summary>
-        /// Should be called before solving the decomposition.
-        /// </summary>
-        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
-        protected void OnBeforeSolve(SolveEventArgs<T> args) => BeforeSolve?.Invoke(this, args);
-
-        /// <summary>
-        /// Should be called after solving the decomposition.
-        /// </summary>
-        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
-        protected void OnAfterSolve(SolveEventArgs<T> args) => AfterSolve?.Invoke(this, args);
-
-        /// <summary>
-        /// Should be called before solving the transposed decomposition.
-        /// </summary>
-        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
-        protected void OnBeforeSolveTransposed(SolveEventArgs<T> args) => BeforeSolveTransposed?.Invoke(this, args);
-
-        /// <summary>
-        /// Should be called after solving the transposed decomposition.
-        /// </summary>
-        /// <param name="args">The <see cref="SolveEventArgs{T}"/> instance containing the event data.</param>
-        protected void OnAfterSolveTransposed(SolveEventArgs<T> args) => AfterSolveTransposed?.Invoke(this, args);
-
-        /// <summary>
-        /// Should be called before factoring.
-        /// </summary>
-        protected void OnBeforeFactor() => BeforeFactor?.Invoke(this, EventArgs.Empty);
-
-        /// <summary>
-        /// Should be called after factoring.
-        /// </summary>
-        protected void OnAfterFactor() => AfterFactor?.Invoke(this, EventArgs.Empty);
-
-        /// <summary>
-        /// Should be called before ordering and factoring.
-        /// </summary>
-        protected void OnBeforeOrderAndFactor() => BeforeOrderAndFactor?.Invoke(this, EventArgs.Empty);
-
-        /// <summary>
-        /// Should be called after ordering and factoring.
-        /// </summary>
-        protected void OnAfterOrderAndFactor() => AfterOrderAndFactor?.Invoke(this, EventArgs.Empty);
     }
 }

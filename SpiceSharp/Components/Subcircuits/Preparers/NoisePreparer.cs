@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Entities.ParallelLoaderBehaviors
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// Noise preparer for a <see cref="ParallelEntity"/>
+    /// Noise preparer for a <see cref="SubcircuitSimulation"/>
     /// </summary>
-    /// <seealso cref="IParallelPreparer" />
-    public class NoisePreparer : IParallelPreparer
+    /// <seealso cref="ISimulationPreparer" />
+    public class NoisePreparer : ISimulationPreparer
     {
         /// <summary>
         /// Prepares the task's simulation for the behavior.
@@ -14,7 +14,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <param name="taskSimulation">The task simulation to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        public void Prepare(IParallelSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters)
+        public void Prepare(SubcircuitSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters)
         {
             var state = parent.States.GetValue<INoiseSimulationState>();
             taskSimulation.States.Add(state);

@@ -49,8 +49,6 @@ namespace SpiceSharp.Algebra
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
 
-            var ea = new SolveEventArgs<Complex>(solution);
-
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
             var index = 0;
@@ -111,8 +109,6 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Solver is not factored yet");
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
-
-            var ea = new SolveEventArgs<Complex>(solution);
 
             // Scramble
             for (var i = 0; i <= Size; i++)

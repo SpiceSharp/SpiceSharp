@@ -25,8 +25,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void SetInitialCondition()
         {
-            for (var i = 0; i < Behaviors.Count; i++)
-                Behaviors[i].SetInitialCondition();
+            foreach (var bs in Behaviors)
+            {
+                for (var i = 0; i < bs.Count; i++)
+                    bs[i].SetInitialCondition();
+            }
         }
     }
 }

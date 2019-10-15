@@ -8,7 +8,7 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The vector type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.SparseLUSolver{M, V, T}" />
+    /// <seealso cref="SparseLUSolver{M, V, T}" />
     public partial class SparseRealSolver<M, V> : SparseLUSolver<M, V, double>
         where M : IPermutableMatrix<double>, ISparseMatrix<double>
         where V : IPermutableVector<double>, ISparseVector<double>
@@ -50,8 +50,6 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Solver is not yet factored");
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
-
-            var ea = new SolveEventArgs<double>(solution);
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
@@ -113,8 +111,6 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Solver is not yet factored");
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
-
-            var ea = new SolveEventArgs<double>(solution);
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();

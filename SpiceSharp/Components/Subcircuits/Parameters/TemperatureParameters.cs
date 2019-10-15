@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Entities.ParallelLoaderBehaviors
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
     /// Parameters for <see cref="ITemperatureBehavior"/>

@@ -73,7 +73,12 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public Variable this[string id]
         {
-            get => Unknowns.FirstOrDefault(node => node.Name.Equals(id));
+            get
+            {
+                if (Map.TryGetValue(id, out var node))
+                    return node;
+                throw new CircuitException("Node '{0}' does not exist".FormatString(id));
+            }
         }
 
         /// <summary>

@@ -4,10 +4,10 @@ using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
 
-namespace SpiceSharp.Entities.ParallelLoaderBehaviors
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// A <see cref="IComplexSimulationState"/> for a <see cref="ParallelEntity"/>.
+    /// A <see cref="IComplexSimulationState"/> for a <see cref="SubcircuitSimulation"/>.
     /// </summary>
     /// <seealso cref="IComplexSimulationState" />
     public class ComplexSimulationState : IComplexSimulationState
@@ -17,7 +17,11 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <summary>
         /// Gets or sets a value indicating whether the solution converges.
         /// </summary>
-        public bool IsConvergent { get => _parent.IsConvergent; set => _parent.IsConvergent = value; }
+        public bool IsConvergent 
+        {
+            get => _parent.IsConvergent; 
+            set => _parent.IsConvergent = value; 
+        }
 
         /// <summary>
         /// Gets the solution.
@@ -41,11 +45,11 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        /// <param name="task">The task identifier.</param>
-        public ComplexSimulationState(IComplexSimulationState parent, int task)
+        /// <param name="solver">The solver.</param>
+        public ComplexSimulationState(IComplexSimulationState parent, ISparseSolver<Complex> solver)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
-            Solver = new LocalSolver<Complex>(_parent.Solver, task);
+            Solver = solver.ThrowIfNull(nameof(solver));
         }
 
         /// <summary>
@@ -59,10 +63,8 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <summary>
         /// Destroys the simulation state.
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public void Unsetup()
         {
-            throw new NotImplementedException();
         }
     }
 }

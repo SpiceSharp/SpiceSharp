@@ -25,8 +25,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void Temperature()
         {
-            for (var i = 0; i < Behaviors.Count; i++)
-                Behaviors[i].Temperature();
+            foreach (var bs in Behaviors)
+            {
+                for (var i = 0; i < bs.Count; i++)
+                    bs[i].Temperature();
+            }
         }
     }
 }

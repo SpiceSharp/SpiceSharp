@@ -29,8 +29,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </remarks>
         public void InitializeStates()
         {
-            for (var i = 0; i < Behaviors.Count; i++)
-                Behaviors[i].InitializeStates();
+            foreach (var bs in Behaviors)
+            {
+                for (var i = 0; i < bs.Count; i++)
+                    bs[i].InitializeStates();
+            }
         }
 
         /// <summary>
@@ -38,8 +41,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void Load()
         {
-            for (var i = 0; i < Behaviors.Count; i++)
-                Behaviors[i].Load();
+            foreach (var bs in Behaviors)
+            {
+                for (var i = 0; i < bs.Count; i++)
+                    bs[i].Load();
+            }
         }
     }
 }

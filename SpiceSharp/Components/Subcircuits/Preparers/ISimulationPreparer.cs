@@ -1,11 +1,11 @@
 ﻿using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Entities.ParallelLoaderBehaviors
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// An interface that can prepare simulations for a <see cref="ParallelEntity"/>.
+    /// An interface that can prepare a <see cref="SubcircuitSimulation"/> for a specified behavior type.
     /// </summary>
-    public interface IParallelPreparer
+    public interface ISimulationPreparer
     {
         /// <summary>
         /// Prepares the task's simulation for the behavior.
@@ -13,6 +13,6 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// <param name="taskSimulation">The task simulation to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        void Prepare(IParallelSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters);
+        void Prepare(SubcircuitSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters);
     }
 }

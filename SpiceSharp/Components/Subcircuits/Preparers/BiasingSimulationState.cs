@@ -1,11 +1,10 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
-using SpiceSharp.Circuits.Entities.Local;
 
-namespace SpiceSharp.Entities.ParallelLoaderBehaviors
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// Biasing state for <see cref="ParallelEntity"/>.
+    /// Biasing state for <see cref="SubcircuitSimulation"/>.
     /// </summary>
     /// <seealso cref="IBiasingSimulationState" />
     public class BiasingSimulationState : IBiasingSimulationState
@@ -86,7 +85,7 @@ namespace SpiceSharp.Entities.ParallelLoaderBehaviors
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="solver">The solver.</param>
-        public BiasingSimulationState(IBiasingSimulationState parent, LocalSolver<double> solver)
+        public BiasingSimulationState(IBiasingSimulationState parent, ISparseSolver<double> solver)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
             Solver = solver.ThrowIfNull(nameof(solver));

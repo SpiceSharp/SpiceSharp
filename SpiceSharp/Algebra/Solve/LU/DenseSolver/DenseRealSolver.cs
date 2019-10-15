@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The vector type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.DenseLUSolver{M, V, T}" />
+    /// <seealso cref="DenseLUSolver{M, V, T}" />
     public partial class DenseRealSolver<M, V> : DenseLUSolver<M, V, double>
         where M : IPermutableMatrix<double>
         where V : IPermutableVector<double>
@@ -60,9 +60,6 @@ namespace SpiceSharp.Algebra
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
 
-            var ea = new SolveEventArgs<double>(solution);
-            OnBeforeSolve(ea);
-
             // Forward substitution
             for (var i = 1; i <= steps; i++)
             {
@@ -81,8 +78,6 @@ namespace SpiceSharp.Algebra
             }
 
             Column.Unscramble(_intermediate, solution);
-
-            OnAfterSolve(ea);
         }
 
         /// <summary>
@@ -109,9 +104,6 @@ namespace SpiceSharp.Algebra
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
 
-            var ea = new SolveEventArgs<double>(solution);
-            OnBeforeSolveTransposed(ea);
-
             // Scramble
             for (var i = 1; i <= steps; i++)
             {
@@ -136,8 +128,6 @@ namespace SpiceSharp.Algebra
             }
 
             Row.Unscramble(_intermediate, solution);
-
-            OnAfterSolveTransposed(ea);
         }
 
         /// <summary>

@@ -4,13 +4,15 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Components.SubcircuitBehaviors;
 using System.Collections.Generic;
 using SpiceSharp.Entities.Local;
+using System.Threading;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A component that can contain other entities and group them.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.Component" />
+    /// <seealso cref="Component" />
     public class Subcircuit : Component
     {
         static Subcircuit()
@@ -25,12 +27,54 @@ namespace SpiceSharp.Components
                 { typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name) },
                 { typeof(INoiseBehavior), e => new NoiseBehavior(e.Name) }
             });
+
+            RegisterPreparer(typeof(IBiasingBehavior), new BiasingPreparer());
+            RegisterPreparer(typeof(IFrequencyBehavior), new FrequencyPreparer());
+            RegisterPreparer(typeof(ITimeBehavior), new TimePreparer());
+            RegisterPreparer(typeof(INoiseBehavior), new NoisePreparer());
         }
+
+        private readonly static Dictionary<Type, ISimulationPreparer> Preparers = new Dictionary<Type, ISimulationPreparer>();
+        private readonly static ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+        /// <summary>
+        /// Registers the simulation preparers.
+        /// </summary>
+        /// <param name="behaviorType">Type of the behavior.</param>
+        /// <param name="preparer">The preparer.</param>
+        public static void RegisterPreparer(Type behaviorType, ISimulationPreparer preparer)
+        {
+            Lock.EnterWriteLock();
+            try
+            {
+                Preparers.Add(behaviorType, preparer);
+            }
+            finally
+            {
+                Lock.ExitWriteLock();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the entities in the subcircuit.
+        /// </summary>
+        /// <value>
+        /// The entities.
+        /// </value>
+        public IEntityCollection Entities { get; set; }
+
+        /// <summary>
+        /// Gets the local pin names. These will globally look like other pin names.
+        /// </summary>
+        /// <value>
+        /// The local pin names.
+        /// </value>
+        public string[] Pins { get; }
 
         /// <summary>
         /// The mock simulation used to create behaviors inside the subcircuit
         /// </summary>
-        private SubcircuitSimulation _subcktSimulation;
+        private SubcircuitSimulation[] _simulations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subcircuit"/> class.
@@ -41,8 +85,8 @@ namespace SpiceSharp.Components
         public Subcircuit(string name, IEntityCollection entities, params string[] pins)
             : base(name, pins.Length)
         {
-            var bp = new BaseParameters(entities, pins);
-            Parameters.Add(bp);
+            Entities = entities;
+            Pins = pins;
         }
 
         /// <summary>
@@ -63,22 +107,35 @@ namespace SpiceSharp.Components
             // If our behaviors are already created, skip this
             if (simulation.EntityBehaviors.ContainsKey(Name))
                 return;
+            if (Entities == null || Entities.Count == 0)
+                return;
 
             // Create the behaviors inside our behaviors
-            var ebp = Parameters.GetValue<BaseParameters>();
             var nodemap = new Dictionary<string, string>(simulation.Variables.Comparer);
             for (var i = 0; i < PinCount; i++)
-                nodemap.Add(ebp.Pins[i], GetNode(i));
-            if (ebp.GlobalNodes != null)
+                nodemap.Add(Pins[i], GetNode(i));
+            if (Parameters.TryGetValue<BaseParameters>(out var ebp))
             {
-                foreach (var g in ebp.GlobalNodes)
-                    nodemap.Add(g, g);
+                if (ebp.GlobalNodes != null)
+                {
+                    foreach (var g in ebp.GlobalNodes)
+                        nodemap.Add(g, g);
+                }
             }
 
             // We need to use a proxy simulation to create the behaviors
-            _subcktSimulation = new SubcircuitSimulation(Name, simulation, nodemap);
-            var ec = new LocalEntityCollection(entities, ebp.Entities, simulation);
-            _subcktSimulation.Run(ec);
+            _simulations = new SubcircuitSimulation[GetTaskCount(Entities)];
+            var ec = new LocalEntityCollection(entities, Entities, simulation);
+            for (var i = 0; i < _simulations.Length; i++)
+            {
+                _simulations[i] = new SubcircuitSimulation(Name, simulation, nodemap, i, _simulations.Length);
+                foreach (var type in simulation.BehaviorTypes)
+                {
+                    if (Preparers.TryGetValue(type, out var preparer))
+                        preparer.Prepare(_simulations[i], simulation, Parameters);
+                }
+                _simulations[i].Run(ec);
+            }
 
             // Now let's create our own behaviors
             base.CreateBehaviors(simulation, entities);
@@ -93,11 +150,29 @@ namespace SpiceSharp.Components
         protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
         {
             // We want to make sure that the behaviors are accessible through the behavior container
-            eb.Parameters.Add(new BehaviorBaseParameters(_subcktSimulation.EntityBehaviors));
-
-            var context = new SubcircuitBindingContext(simulation, eb, _subcktSimulation.EntityBehaviors);
+            var context = new SubcircuitBindingContext(simulation, eb, _simulations);
             foreach (var behavior in eb.Ordered)
                 behavior.Bind(context);
+        }
+
+        /// <summary>
+        /// Gets the task count.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns>
+        /// The number of tasks that will be allocated.
+        /// </returns>
+        private int GetTaskCount(IEntityCollection entities)
+        {
+            if (Parameters.TryGetValue<BaseParameters>(out var bp))
+            {
+                if (bp.Tasks == -1)
+                    return entities.Count;
+                if (bp.Tasks > 0)
+                    return Math.Min(bp.Tasks, entities.Count);
+                return Math.Min(Environment.ProcessorCount, entities.Count);
+            }
+            return 1;
         }
     }
 }

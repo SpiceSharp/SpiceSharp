@@ -6,27 +6,27 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <summary>
     /// Binding context for <see cref="Subcircuit"/> components.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.ComponentBindingContext" />
+    /// <seealso cref="ComponentBindingContext" />
     public class SubcircuitBindingContext : ComponentBindingContext
     {
         /// <summary>
-        /// Gets the pool of behaviors.
+        /// Gets the simulations.
         /// </summary>
         /// <value>
-        /// The pool.
+        /// The simulations.
         /// </value>
-        public BehaviorContainerCollection Pool { get; }
+        public SubcircuitSimulation[] Simulations { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitBindingContext"/> class.
         /// </summary>
         /// <param name="simulation">The simulation to bind to.</param>
         /// <param name="eb">The entity behaviors.</param>
-        /// <param name="pool">The pool of behaviors in the subcircuit.</param>
-        public SubcircuitBindingContext(ISimulation simulation, BehaviorContainer eb, BehaviorContainerCollection pool)
+        /// <param name="simulations">The pool of behaviors in the subcircuit.</param>
+        public SubcircuitBindingContext(ISimulation simulation, BehaviorContainer eb, SubcircuitSimulation[] simulations)
             : base(simulation, eb, new int[] { }, null)
         {
-            Pool = pool;
+            Simulations = simulations.ThrowIfNull(nameof(simulation));
         }
     }
 }

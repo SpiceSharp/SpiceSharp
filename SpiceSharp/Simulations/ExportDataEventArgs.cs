@@ -144,7 +144,6 @@ namespace SpiceSharp.Simulations
 
             if (_simulation.States.TryGetValue<IComplexSimulationState>(out var state))
             {
-
                 // Get the voltage of the positive node
                 var index = _simulation.Variables[positive].Index;
                 var voltage = state.Solution[index];

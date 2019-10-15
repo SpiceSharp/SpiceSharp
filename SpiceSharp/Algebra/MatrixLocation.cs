@@ -1,49 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// A simple struct for describing a matrix row/column location.
     /// </summary>
-    public struct MatrixLocation
+    public struct MatrixLocation : IEquatable<MatrixLocation>
     {
-        /// <summary>
-        /// An <see cref="IEqualityComparer{T}"/> for <see cref="MatrixLocation"/>.
-        /// </summary>
-        /// <seealso cref="IEqualityComparer{T}" />
-        public class Comparer : IEqualityComparer<MatrixLocation>
-        {
-            /// <summary>
-            /// Determines whether the specified objects are equal.
-            /// </summary>
-            /// <param name="x">The first object to compare.</param>
-            /// <param name="y">The second object to compare.</param>
-            /// <returns>
-            /// true if the specified objects are equal; otherwise, false.
-            /// </returns>
-            public bool Equals(MatrixLocation x, MatrixLocation y)
-            {
-                if (x.Row != y.Row)
-                    return false;
-                if (x.Column != y.Column)
-                    return false;
-                return true;
-            }
-
-            /// <summary>
-            /// Returns a hash code for this instance.
-            /// </summary>
-            /// <param name="obj">The object.</param>
-            /// <returns>
-            /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-            /// </returns>
-            public int GetHashCode(MatrixLocation obj)
-            {
-                return (obj.Row.GetHashCode() * 13) ^ obj.Column.GetHashCode();
-            }
-        }
-
         /// <summary>
         /// The row index.
         /// </summary>
@@ -97,6 +60,22 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+        /// </returns>
+        public bool Equals(MatrixLocation other)
+        {
+            if (Row != other.Row)
+                return false;
+            if (Column != other.Column)
+                return false;
+            return true;
+        }
+
+        /// <summary>
         /// Converts to string.
         /// </summary>
         /// <returns>
@@ -106,5 +85,27 @@ namespace SpiceSharp.Algebra
         {
             return "({0},{1})".FormatString(Row, Column);
         }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator ==(MatrixLocation left, MatrixLocation right)
+            => left.Equals(right);
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator !=(MatrixLocation left, MatrixLocation right)
+            => !left.Equals(right);
     }
 }
