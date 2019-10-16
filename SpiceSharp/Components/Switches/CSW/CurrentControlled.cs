@@ -6,13 +6,10 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <summary>
     /// Controller for making a switch current-controlled.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SwitchBehaviors.Controller" />
+    /// <seealso cref="Controller" />
     public class CurrentControlled : Controller
     {
-        /// <summary>
-        /// The load behavior of the voltage source that measures the current
-        /// </summary>
-        private VoltageSourceBehaviors.BiasingBehavior _loadBehavior;
+        private int _brNode;
 
         /// <summary>
         /// Bind the behavior. for the specified simulation.
@@ -21,7 +18,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Bind(BindingContext context)
         {
             var c = (CommonBehaviors.ControlledBindingContext)context;
-            _loadBehavior = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            var state = context.States.GetValue<IBiasingSimulationState>();
+            var behavior = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            _brNode = state.Map[behavior.Branch];
         }
 
         /// <summary>
@@ -31,6 +30,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <returns>
         /// The controlling value.
         /// </returns>
-        public override double GetValue(IBiasingSimulationState state) => state.Solution[_loadBehavior.BranchEq];
+        public override double GetValue(IBiasingSimulationState state) => state.Solution[_brNode];
     }
 }

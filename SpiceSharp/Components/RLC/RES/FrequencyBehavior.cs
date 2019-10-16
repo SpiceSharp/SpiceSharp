@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
         [ParameterName("v_c"), ParameterInfo("Complex voltage across the capacitor.")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posNode] - ComplexState.Solution[_negNode];
 
         /// <summary>
         /// Gets the (complex) current through the resistor.
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public Complex GetComplexCurrent()
         {
             ComplexState.ThrowIfNotBound(this);
-            var voltage = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
             return voltage * Conductance;
         }
 
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public Complex GetComplexPower()
         {
             ComplexState.ThrowIfNotBound(this);
-            var voltage = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
             return voltage * Complex.Conjugate(voltage) * Conductance;
         }
 
@@ -56,6 +56,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _posNode, _negNode;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -70,12 +72,15 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            _posNode = ComplexState.Map[c.Nodes[0]];
+            _negNode = ComplexState.Map[c.Nodes[1]];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(PosNode, NegNode),
-                new MatrixLocation(NegNode, PosNode),
-                new MatrixLocation(NegNode, NegNode)
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_posNode, _negNode),
+                new MatrixLocation(_negNode, _posNode),
+                new MatrixLocation(_negNode, _negNode)
                 );
         }
 

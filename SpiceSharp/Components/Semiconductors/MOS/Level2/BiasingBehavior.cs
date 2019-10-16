@@ -124,34 +124,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public virtual double VoltageBd { get; protected set; }
 
         /// <summary>
-        /// Gets the external drain node.
-        /// </summary>
-        protected int DrainNode { get; private set; }
-
-        /// <summary>
-        /// Gets the gate node.
-        /// </summary>
-        protected int GateNode { get; private set; }
-
-        /// <summary>
-        /// Gets the external source node.
-        /// </summary>
-        protected int SourceNode { get; private set; }
-
-        /// <summary>
-        /// Gets the bulk node.
-        /// </summary>
-        protected int BulkNode { get; private set; }
-
-        /// <summary>
         /// Gets the (internal) drain node.
         /// </summary>
-        protected int DrainNodePrime { get; private set; }
+        protected Variable DrainPrime { get; private set; }
 
         /// <summary>
         /// Gets the (internal) source node.
         /// </summary>
-        protected int SourceNodePrime { get; private set; }
+        protected Variable SourcePrime { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -162,6 +142,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         protected ElementSet<double> Elements { get; private set; }
 
         private ITimeSimulationState _timeState;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -189,44 +170,46 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Mode = 1;
 
             var c = (ComponentBindingContext)context;
-            DrainNode = c.Pins[0];
-            GateNode = c.Pins[1];
-            SourceNode = c.Pins[2];
-            BulkNode = c.Pins[3];
+            _drainNode = BiasingState.Map[c.Nodes[0]];
+            _gateNode = BiasingState.Map[c.Nodes[1]];
+            _sourceNode = BiasingState.Map[c.Nodes[2]];
+            _bulkNode = BiasingState.Map[c.Nodes[3]];
             var variables = context.Variables;
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
-                DrainNodePrime = variables.Create(Name.Combine("drain"), VariableType.Voltage).Index;
+                DrainPrime = variables.Create(Name.Combine("drain"), VariableType.Voltage);
             else
-                DrainNodePrime = DrainNode;
+                DrainPrime = c.Nodes[0];
+            _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
             if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.SourceSquares > 0)
-                SourceNodePrime = variables.Create(Name.Combine("source"), VariableType.Voltage).Index;
+                SourcePrime = variables.Create(Name.Combine("source"), VariableType.Voltage);
             else
-                SourceNodePrime = SourceNode;
+                SourcePrime = c.Nodes[2];
+            _sourceNodePrime = BiasingState.Map[SourcePrime];
 
             // Get matrix pointers
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(DrainNode, DrainNode),
-                new MatrixLocation(SourceNode, SourceNode),
-                new MatrixLocation(BulkNode, BulkNode),
-                new MatrixLocation(DrainNodePrime, DrainNodePrime),
-                new MatrixLocation(SourceNodePrime, SourceNodePrime),
-                new MatrixLocation(DrainNode, DrainNodePrime),
-                new MatrixLocation(SourceNode, SourceNodePrime),
-                new MatrixLocation(BulkNode, DrainNodePrime),
-                new MatrixLocation(BulkNode, SourceNodePrime),
-                new MatrixLocation(DrainNodePrime, DrainNode),
-                new MatrixLocation(DrainNodePrime, GateNode),
-                new MatrixLocation(DrainNodePrime, BulkNode),
-                new MatrixLocation(DrainNodePrime, SourceNodePrime),
-                new MatrixLocation(SourceNodePrime, GateNode),
-                new MatrixLocation(SourceNodePrime, SourceNode),
-                new MatrixLocation(SourceNodePrime, BulkNode),
-                new MatrixLocation(SourceNodePrime, DrainNodePrime)
-            }, new[] { BulkNode, DrainNodePrime, SourceNodePrime });
+                new MatrixLocation(_drainNode, _drainNode),
+                new MatrixLocation(_sourceNode, _sourceNode),
+                new MatrixLocation(_bulkNode, _bulkNode),
+                new MatrixLocation(_drainNodePrime, _drainNodePrime),
+                new MatrixLocation(_sourceNodePrime, _sourceNodePrime),
+                new MatrixLocation(_drainNode, _drainNodePrime),
+                new MatrixLocation(_sourceNode, _sourceNodePrime),
+                new MatrixLocation(_bulkNode, _drainNodePrime),
+                new MatrixLocation(_bulkNode, _sourceNodePrime),
+                new MatrixLocation(_drainNodePrime, _drainNode),
+                new MatrixLocation(_drainNodePrime, _gateNode),
+                new MatrixLocation(_drainNodePrime, _bulkNode),
+                new MatrixLocation(_drainNodePrime, _sourceNodePrime),
+                new MatrixLocation(_sourceNodePrime, _gateNode),
+                new MatrixLocation(_sourceNodePrime, _sourceNode),
+                new MatrixLocation(_sourceNodePrime, _bulkNode),
+                new MatrixLocation(_sourceNodePrime, _drainNodePrime)
+            }, new[] { _bulkNode, _drainNodePrime, _sourceNodePrime });
         }
 
         /// <summary>
@@ -371,9 +354,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 state.Init == InitializationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration
-                vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
-                vgs = ModelParameters.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
-                vds = ModelParameters.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+                vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
+                vgs = ModelParameters.MosfetType * (state.Solution[_gateNode] - state.Solution[_sourceNodePrime]);
+                vds = ModelParameters.MosfetType * (state.Solution[_drainNodePrime] - state.Solution[_sourceNodePrime]);
 
                 // now some common crunching for some more useful quantities
                 var vbd = vbs - vds;
@@ -999,9 +982,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var state = BiasingState.ThrowIfNotBound(this);
             double cdhat;
 
-            var vbs = ModelParameters.MosfetType * (state.Solution[BulkNode] - state.Solution[SourceNodePrime]);
-            var vgs = ModelParameters.MosfetType * (state.Solution[GateNode] - state.Solution[SourceNodePrime]);
-            var vds = ModelParameters.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+            var vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
+            var vgs = ModelParameters.MosfetType * (state.Solution[_gateNode] - state.Solution[_sourceNodePrime]);
+            var vds = ModelParameters.MosfetType * (state.Solution[_drainNodePrime] - state.Solution[_sourceNodePrime]);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
             var vgdo = VoltageGs - VoltageDs;

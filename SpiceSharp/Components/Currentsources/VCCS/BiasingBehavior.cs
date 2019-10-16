@@ -17,26 +17,6 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// The positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// The negative index.
-        /// </summary>
-        protected int NegNode { get; private set; }
-
-        /// <summary>
-        /// The controlling positive node.
-        /// </summary>
-        protected int ContPosNode { get; private set; }
-
-        /// <summary>
-        /// The controlling negative node.
-        /// </summary>
-        protected int ContNegNode { get; private set; }
-
-        /// <summary>
         /// Gets the matrix elements.
         /// </summary>
         /// <value>
@@ -48,13 +28,13 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[ContPosNode] - BiasingState.Solution[ContNegNode]) * BaseParameters.Coefficient;
+        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[_contPosNode] - BiasingState.Solution[_contNegNode]) * BaseParameters.Coefficient;
 
         /// <summary>
         /// Get the power dissipation.
@@ -63,8 +43,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public double GetPower()
         {
             BiasingState.ThrowIfNotBound(this);
-            var v = BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode];
-            var i = (BiasingState.Solution[ContPosNode] - BiasingState.Solution[ContNegNode]) * BaseParameters.Coefficient;
+            var v = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
+            var i = (BiasingState.Solution[_contPosNode] - BiasingState.Solution[_contNegNode]) * BaseParameters.Coefficient;
             return -v * i;
         }
 
@@ -75,6 +55,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// The state of the biasing.
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
+
+        private int _posNode, _negNode, _contPosNode, _contNegNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -89,19 +71,20 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
+            
+            // Connections
             var c = (ComponentBindingContext)context;
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            ContPosNode = c.Pins[2];
-            ContNegNode = c.Pins[3];
-
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
+            _contPosNode = BiasingState.Map[c.Nodes[2]];
+            _contNegNode = BiasingState.Map[c.Nodes[3]];
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(PosNode, ContPosNode),
-                new MatrixLocation(PosNode, ContNegNode),
-                new MatrixLocation(NegNode, ContPosNode),
-                new MatrixLocation(NegNode, ContNegNode)
+                new MatrixLocation(_posNode, _contPosNode),
+                new MatrixLocation(_posNode, _contNegNode),
+                new MatrixLocation(_negNode, _contPosNode),
+                new MatrixLocation(_negNode, _contNegNode)
             });
         }
 

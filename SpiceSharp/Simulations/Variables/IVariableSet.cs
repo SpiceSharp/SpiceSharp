@@ -5,8 +5,24 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for a set of variables.
     /// </summary>
-    public interface IVariableSet : IReadOnlyCollection<Variable>
+    public interface IVariableSet : IEnumerable<Variable>
     {
+        /// <summary>
+        /// Gets the number of variables.
+        /// </summary>
+        /// <value>
+        /// The number of variables.
+        /// </value>
+        int Count { get; }
+
+        /// <summary>
+        /// Gets the ground variable.
+        /// </summary>
+        /// <value>
+        /// The ground.
+        /// </value>
+        Variable Ground { get; }
+
         /// <summary>
         /// Gets the comparer used for variables.
         /// </summary>
@@ -24,16 +40,6 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Variable this[string id] { get; }
-
-        /// <summary>
-        /// Gets the <see cref="Variable"/> with the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="Variable"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
-        Variable this[int index] { get; }
 
         /// <summary>
         /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.

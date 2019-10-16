@@ -76,5 +76,13 @@ namespace SpiceSharp.Simulations
         /// The solver.
         /// </value>
         ISparseSolver<double> Solver { get; }
+
+        /// <summary>
+        /// Gets the variable to index map.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        public IVariableMap Map { get; }
     }
 }

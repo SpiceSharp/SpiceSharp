@@ -103,9 +103,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 for (var t = 0; t < Behaviors.Length; t++)
                 {
                     var bs = Behaviors[t];
+                    var solver = _solvers[t];
                     tasks[t] = Task.Run(() =>
                     {
-                        _solvers[t].Reset();
+                        solver.Reset();
                         for (var i = 0; i < bs.Count; i++)
                             bs[i].Load();
                     });

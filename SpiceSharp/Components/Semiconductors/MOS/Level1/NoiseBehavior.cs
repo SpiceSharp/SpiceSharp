@@ -66,12 +66,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var c = (ComponentBindingContext)context;
             NoiseParameters = c.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
             _state = context.States.GetValue<INoiseSimulationState>();
-            MosfetNoise.Bind((ComponentBindingContext)context, DrainNode,
-                GateNode,
-                SourceNode,
-                BulkNode,
-                DrainNodePrime,
-                SourceNodePrime);
+            MosfetNoise.Bind(c, c.Nodes[0], c.Nodes[1], c.Nodes[2], c.Nodes[3], DrainPrime, SourcePrime);
         }
 
         /// <summary>

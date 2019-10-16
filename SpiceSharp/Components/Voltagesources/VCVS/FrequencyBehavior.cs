@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         public new Complex GetVoltage()
         {
             var state = ComplexState.ThrowIfNotBound(this);
-            return state.Solution[PosNode] - state.Solution[NegNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
         public new Complex GetCurrent()
         {
-            return ComplexState.ThrowIfNotBound(this).Solution[BranchEq];
+            return ComplexState.ThrowIfNotBound(this).Solution[_branchEq];
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         public new Complex GetPower()
         {
             var state = ComplexState.ThrowIfNotBound(this);
-            var v = state.Solution[PosNode] - state.Solution[NegNode];
-            var i = state.Solution[BranchEq];
+            var v = state.Solution[_posNode] - state.Solution[_negNode];
+            var i = state.Solution[_branchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -59,6 +59,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -73,14 +75,20 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            _posNode = ComplexState.Map[c.Nodes[0]];
+            _negNode = ComplexState.Map[c.Nodes[1]];
+            _contPosNode = ComplexState.Map[c.Nodes[2]];
+            _contNegNode = ComplexState.Map[c.Nodes[3]];
+            _branchEq = ComplexState.Map[Branch];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
-                new MatrixLocation(PosNode, BranchEq),
-                new MatrixLocation(BranchEq, PosNode),
-                new MatrixLocation(NegNode, BranchEq),
-                new MatrixLocation(BranchEq, NegNode),
-                new MatrixLocation(BranchEq, ContPosNode),
-                new MatrixLocation(BranchEq, ContNegNode)
+                new MatrixLocation(_posNode, _branchEq),
+                new MatrixLocation(_branchEq, _posNode),
+                new MatrixLocation(_negNode, _branchEq),
+                new MatrixLocation(_branchEq, _negNode),
+                new MatrixLocation(_branchEq, _contPosNode),
+                new MatrixLocation(_branchEq, _contNegNode)
             });
         }
 

@@ -38,6 +38,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _br1, _br2;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -51,14 +53,18 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public override void Bind(BindingContext context)
         {
 			base.Bind(context);
-            var c = (MutualInductanceBindingContext)context;
-            Bias1 = c.Inductor1Behaviors.GetValue<BiasingBehavior>();
-            Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
 
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+
+            var c = (MutualInductanceBindingContext)context;
+            Bias1 = c.Inductor1Behaviors.GetValue<BiasingBehavior>();
+            _br1 = ComplexState.Map[Bias1.Branch];
+            Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
+            _br2 = ComplexState.Map[Bias2.Branch];
+
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(Bias1.BranchEq, Bias2.BranchEq),
-                new MatrixLocation(Bias2.BranchEq, Bias1.BranchEq));
+                new MatrixLocation(_br1, _br2),
+                new MatrixLocation(_br2, _br1));
         }
 
         /// <summary>

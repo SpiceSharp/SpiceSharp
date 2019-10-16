@@ -78,46 +78,26 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public virtual double GetPower(IBiasingSimulationState state)
         {
             state.ThrowIfNull(nameof(state));
-            var value = CollectorCurrent * state.Solution[CollectorNode];
-            value += BaseCurrent * state.Solution[BaseNode];
-            value -= (CollectorCurrent + BaseCurrent) * state.Solution[EmitterNode];
+            var value = CollectorCurrent * state.Solution[_collectorNode];
+            value += BaseCurrent * state.Solution[_baseNode];
+            value -= (CollectorCurrent + BaseCurrent) * state.Solution[_emitterNode];
             return value;
         }
 
         /// <summary>
         /// Gets the collector prime node index.
         /// </summary>
-        public int CollectorPrimeNode { get; private set; }
+        public Variable CollectorPrime { get; private set; }
 
         /// <summary>
         /// Gets the base prime node index.
         /// </summary>
-        public int BasePrimeNode { get; private set; }
+        public Variable BasePrime { get; private set; }
 
         /// <summary>
         /// Gets the emitter prime node index.
         /// </summary>
-        public int EmitterPrimeNode { get; private set; }
-
-        /// <summary>
-        /// Gets the collect node.
-        /// </summary>
-        protected int CollectorNode { get; private set; }
-
-        /// <summary>
-        /// Gets the base node.
-        /// </summary>
-        protected int BaseNode { get; private set; }
-
-        /// <summary>
-        /// Gets the emitter node.
-        /// </summary>
-        protected int EmitterNode { get; private set; }
-        
-        /// <summary>
-        /// Gets the substrate node.
-        /// </summary>
-        protected int SubstrateNode { get; private set; }
+        public Variable EmitterPrime { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -165,6 +145,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double Dqbdve { get; protected set; }
 
         private ITimeSimulationState _timeState;
+        private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -187,44 +168,50 @@ namespace SpiceSharp.Components.BipolarBehaviors
             context.States.TryGetValue(out _timeState);
 
             var c = (ComponentBindingContext)context;
-                CollectorNode = c.Pins[0];
-                BaseNode = c.Pins[1];
-                EmitterNode = c.Pins[2];
-                SubstrateNode = c.Pins[3];
-
-            var solver = BiasingState.Solver;
+            _collectorNode = BiasingState.Map[c.Nodes[0]];
+            _baseNode = BiasingState.Map[c.Nodes[1]];
+            _emitterNode = BiasingState.Map[c.Nodes[2]];
             var variables = context.Variables;
 
             // Add a series collector node if necessary
-            CollectorPrimeNode = ModelParameters.CollectorResistance.Value > 0 ? variables.Create(Name.Combine("col"), VariableType.Voltage).Index : CollectorNode;
+            CollectorPrime = ModelParameters.CollectorResistance.Value > 0 ? 
+                variables.Create(Name.Combine("col"), VariableType.Voltage) : 
+                c.Nodes[0];
+            _collectorPrimeNode = BiasingState.Map[CollectorPrime];
 
             // Add a series base node if necessary
-            BasePrimeNode = ModelParameters.BaseResist.Value > 0 ? variables.Create(Name.Combine("base"), VariableType.Voltage).Index : BaseNode;
+            BasePrime = ModelParameters.BaseResist.Value > 0 ?
+                variables.Create(Name.Combine("base"), VariableType.Voltage) :
+                c.Nodes[1];
+            _basePrimeNode = BiasingState.Map[BasePrime];
 
             // Add a series emitter node if necessary
-            EmitterPrimeNode = ModelParameters.EmitterResistance.Value > 0 ? variables.Create(Name.Combine("emit"), VariableType.Voltage).Index : EmitterNode;
+            EmitterPrime = ModelParameters.EmitterResistance.Value > 0 ? 
+                variables.Create(Name.Combine("emit"), VariableType.Voltage) : 
+                c.Nodes[2];
+            _emitterPrimeNode = BiasingState.Map[EmitterPrime];
 
             // Get solver pointers
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(CollectorNode, CollectorNode),
-                new MatrixLocation(BaseNode, BaseNode),
-                new MatrixLocation(EmitterNode, EmitterNode),
-                new MatrixLocation(CollectorPrimeNode, CollectorPrimeNode),
-                new MatrixLocation(BasePrimeNode, BasePrimeNode),
-                new MatrixLocation(EmitterPrimeNode, EmitterPrimeNode),
-                new MatrixLocation(CollectorNode, CollectorPrimeNode),
-                new MatrixLocation(BaseNode, BasePrimeNode),
-                new MatrixLocation(EmitterNode, EmitterPrimeNode),
-                new MatrixLocation(CollectorPrimeNode, CollectorNode),
-                new MatrixLocation(CollectorPrimeNode, BasePrimeNode),
-                new MatrixLocation(CollectorPrimeNode, EmitterPrimeNode),
-                new MatrixLocation(BasePrimeNode, BaseNode),
-                new MatrixLocation(BasePrimeNode, CollectorPrimeNode),
-                new MatrixLocation(BasePrimeNode, EmitterPrimeNode),
-                new MatrixLocation(EmitterPrimeNode, EmitterNode),
-                new MatrixLocation(EmitterPrimeNode, CollectorPrimeNode),
-                new MatrixLocation(EmitterPrimeNode, BasePrimeNode)
-            }, new[] { CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode });
+                new MatrixLocation(_collectorNode, _collectorNode),
+                new MatrixLocation(_baseNode, _baseNode),
+                new MatrixLocation(_emitterNode, _emitterNode),
+                new MatrixLocation(_collectorPrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_basePrimeNode, _basePrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_collectorNode, _collectorPrimeNode),
+                new MatrixLocation(_baseNode, _basePrimeNode),
+                new MatrixLocation(_emitterNode, _emitterPrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _collectorNode),
+                new MatrixLocation(_collectorPrimeNode, _basePrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_basePrimeNode, _baseNode),
+                new MatrixLocation(_basePrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_basePrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _emitterNode),
+                new MatrixLocation(_emitterPrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _basePrimeNode)
+            }, new[] { _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode });
         }
 
         /// <summary>
@@ -424,8 +411,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
             {
                 // Compute new nonlinear branch voltages
-                vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
-                vbc = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
+                vbe = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_emitterPrimeNode]);
+                vbc = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_collectorPrimeNode]);
 
                 // Limit nonlinear branch voltages
                 var limited = false;
@@ -444,8 +431,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         bool IBiasingBehavior.IsConvergent()
         {
             var state = BiasingState;
-            var vbe = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
-            var vbc = ModelParameters.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
+            var vbe = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_emitterPrimeNode]);
+            var vbc = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_collectorPrimeNode]);
             var delvbe = vbe - VoltageBe;
             var delvbc = vbc - VoltageBe;
             var cchat = CollectorCurrent + (Transconductance + OutputConductance) * delvbe - (OutputConductance + ConductanceMu) * delvbc;

@@ -118,6 +118,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Create all behaviors for the simulation.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        protected override void CreateBehaviors(IEntityCollection entities)
+        {
+            ComplexState.Initialize(this);
+            base.CreateBehaviors(entities);
+        }
+
+        /// <summary>
         /// Executes the simulation.
         /// </summary>
         protected override void Execute()

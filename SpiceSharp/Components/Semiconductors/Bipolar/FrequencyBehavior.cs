@@ -27,6 +27,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode, _substrateNode;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -41,31 +43,39 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            _collectorNode = ComplexState.Map[c.Nodes[0]];
+            _baseNode = ComplexState.Map[c.Nodes[1]];
+            _emitterNode = ComplexState.Map[c.Nodes[2]];
+            _substrateNode = ComplexState.Map[c.Nodes[3]];
+            _collectorPrimeNode = ComplexState.Map[CollectorPrime];
+            _basePrimeNode = ComplexState.Map[BasePrime];
+            _emitterPrimeNode = ComplexState.Map[EmitterPrime];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(CollectorNode, CollectorNode),
-                new MatrixLocation(BaseNode, BaseNode),
-                new MatrixLocation(EmitterNode, EmitterNode),
-                new MatrixLocation(CollectorPrimeNode, CollectorPrimeNode),
-                new MatrixLocation(BasePrimeNode, BasePrimeNode),
-                new MatrixLocation(EmitterPrimeNode, EmitterPrimeNode),
-                new MatrixLocation(CollectorNode, CollectorPrimeNode),
-                new MatrixLocation(BaseNode, BasePrimeNode),
-                new MatrixLocation(EmitterNode, EmitterPrimeNode),
-                new MatrixLocation(CollectorPrimeNode, CollectorNode),
-                new MatrixLocation(CollectorPrimeNode, BasePrimeNode),
-                new MatrixLocation(CollectorPrimeNode, EmitterPrimeNode),
-                new MatrixLocation(BasePrimeNode, BaseNode),
-                new MatrixLocation(BasePrimeNode, CollectorPrimeNode),
-                new MatrixLocation(BasePrimeNode, EmitterPrimeNode),
-                new MatrixLocation(EmitterPrimeNode, EmitterNode),
-                new MatrixLocation(EmitterPrimeNode, CollectorPrimeNode),
-                new MatrixLocation(EmitterPrimeNode, BasePrimeNode),
-                new MatrixLocation(SubstrateNode, SubstrateNode),
-                new MatrixLocation(CollectorPrimeNode, SubstrateNode),
-                new MatrixLocation(SubstrateNode, CollectorPrimeNode),
-                new MatrixLocation(BaseNode, CollectorPrimeNode),
-                new MatrixLocation(CollectorPrimeNode, BaseNode));
+                new MatrixLocation(_collectorNode, _collectorNode),
+                new MatrixLocation(_baseNode, _baseNode),
+                new MatrixLocation(_emitterNode, _emitterNode),
+                new MatrixLocation(_collectorPrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_basePrimeNode, _basePrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_collectorNode, _collectorPrimeNode),
+                new MatrixLocation(_baseNode, _basePrimeNode),
+                new MatrixLocation(_emitterNode, _emitterPrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _collectorNode),
+                new MatrixLocation(_collectorPrimeNode, _basePrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_basePrimeNode, _baseNode),
+                new MatrixLocation(_basePrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_basePrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _emitterNode),
+                new MatrixLocation(_emitterPrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _basePrimeNode),
+                new MatrixLocation(_substrateNode, _substrateNode),
+                new MatrixLocation(_collectorPrimeNode, _substrateNode),
+                new MatrixLocation(_substrateNode, _collectorPrimeNode),
+                new MatrixLocation(_baseNode, _collectorPrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _baseNode));
         }
 
         /// <summary>
@@ -86,8 +96,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             var vbe = VoltageBe;
             var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[BaseNode] - BiasingState.Solution[CollectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[SubstrateNode] - BiasingState.Solution[CollectorPrimeNode]);
+            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 

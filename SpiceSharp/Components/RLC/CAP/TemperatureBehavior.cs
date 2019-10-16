@@ -27,19 +27,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public double Capacitance { get; private set; }
 
         /// <summary>
-        /// The positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// The negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
-
-        /// <summary>
         /// Gets the state.
         /// </summary>
-        protected IBiasingSimulationState State { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -53,14 +43,15 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="context">The binding context.</param>
         public override void Bind(BindingContext context)
         {
+            var c = (ComponentBindingContext)context;
+
             // Get parameters
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            var c = (ComponentBindingContext)context;
             if (c.ModelBehaviors != null)
                 ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            State = context.States.GetValue<IBiasingSimulationState>();
+
+            // Connections
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
         }
 
         /// <summary>
@@ -69,7 +60,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            State = null;
+            BiasingState = null;
         }
 
         /// <summary>
@@ -78,7 +69,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = State.Temperature;
+                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
 
             double capacitance;
             if (!BaseParameters.Capacitance.Given)

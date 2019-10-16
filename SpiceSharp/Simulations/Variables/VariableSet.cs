@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -45,13 +44,6 @@ namespace SpiceSharp.Simulations
         /// Gets the <see cref="IEqualityComparer{T}"/> that is used to determine equality of keys.
         /// </summary>
         public IEqualityComparer<string> Comparer => Map.Comparer;
-
-        /// <summary>
-        /// Gets the <see cref="Variable"/> at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>The variable at the specified index.</returns>
-        public Variable this[int index] => Unknowns[index];
 
         /// <summary>
         /// Gets the number of variables.
@@ -134,7 +126,7 @@ namespace SpiceSharp.Simulations
             if (Map.ContainsKey(id))
                 return Map[id];
 
-            var node = new Variable(id, type, Unknowns.Count + 1);
+            var node = new Variable(id, type);
             Unknowns.Add(node);
             Map.Add(id, node);
 
@@ -174,8 +166,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
 
             // Create the node
-            var index = Unknowns.Count + 1;
-            var node = new Variable(id, type, index);
+            var node = new Variable(id, type);
             Unknowns.Add(node);
 
             // Call the event
@@ -200,7 +191,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(string id) => Unknowns.Exists(node => node.Name.Equals(id));
+        public bool Contains(string id) => Unknowns.Exists(node => Map.Comparer.Equals(id, node.Name));
 
         /// <summary>
         /// Tries to get a variable.
@@ -226,11 +217,6 @@ namespace SpiceSharp.Simulations
                 return result;
             throw new CircuitException("Could not find node {0}".FormatString(id));
         }
-
-        /// <summary>
-        /// Enumerates all variables.
-        /// </summary>
-        public IEnumerable<Variable> GetVariables() => Unknowns;
 
         /// <summary>
         /// Avoids any further additions of variables.

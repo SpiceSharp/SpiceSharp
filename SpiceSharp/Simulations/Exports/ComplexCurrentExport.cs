@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))
                 {
-                    Index = ((Components.VoltageSourceBehaviors.FrequencyBehavior) behavior).BranchEq;
+                    Index = state.Map[((Components.VoltageSourceBehaviors.FrequencyBehavior) behavior).Branch];
                     Extractor = () => state.Solution[Index];
                 }
             }

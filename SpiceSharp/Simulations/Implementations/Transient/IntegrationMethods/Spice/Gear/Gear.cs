@@ -104,12 +104,12 @@ namespace SpiceSharp.IntegrationMethods
             for (var i = 0; i <= Order; i++)
                 delsum += IntegrationStates[i].Delta;
 
-            for (var i = 0; i < nodes.Count; i++)
+            foreach (var v in BiasingState.Map)
             {
-                var node = nodes[i];
-                var index = node.Index;
+                var node = v.Key;
+                var index = v.Value;
                 var tol = Math.Max(Math.Abs(BiasingState.Solution[index]), Math.Abs(Prediction[index])) * RelTol + AbsTol;
-                var diff = BiasingState.Solution[index] - Prediction[i];
+                var diff = BiasingState.Solution[index] - Prediction[index];
 
                 if (!diff.Equals(0.0))
                 {

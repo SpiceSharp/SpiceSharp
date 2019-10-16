@@ -40,6 +40,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         public double CapGd { get; private set; }
 
+        private int _gateNode, _drainPrimeNode, _sourcePrimeNode;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
@@ -62,15 +64,19 @@ namespace SpiceSharp.Components.JFETBehaviors
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
 
+            var c = (ComponentBindingContext)context;
+            _gateNode = BiasingState.Map[c.Nodes[1]];
+            _drainPrimeNode = BiasingState.Map[DrainPrime];
+            _sourcePrimeNode = BiasingState.Map[SourcePrime];
             TransientMatrixElements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(GateNode, DrainPrimeNode),
-                new MatrixLocation(GateNode, SourcePrimeNode),
-                new MatrixLocation(DrainPrimeNode, GateNode),
-                new MatrixLocation(SourcePrimeNode, GateNode),
-                new MatrixLocation(GateNode, GateNode),
-                new MatrixLocation(DrainPrimeNode, DrainPrimeNode),
-                new MatrixLocation(SourcePrimeNode, SourcePrimeNode)
-            }, new[] { GateNode, DrainPrimeNode, SourcePrimeNode });
+                new MatrixLocation(_gateNode, _drainPrimeNode),
+                new MatrixLocation(_gateNode, _sourcePrimeNode),
+                new MatrixLocation(_drainPrimeNode, _gateNode),
+                new MatrixLocation(_sourcePrimeNode, _gateNode),
+                new MatrixLocation(_gateNode, _gateNode),
+                new MatrixLocation(_drainPrimeNode, _drainPrimeNode),
+                new MatrixLocation(_sourcePrimeNode, _sourcePrimeNode)
+            }, new[] { _gateNode, _drainPrimeNode, _sourcePrimeNode });
         }
 
         /// <summary>
@@ -78,7 +84,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
+        /// and the result is stored in each respective <see cref="StateDerivative" /> or <see cref="StateHistory" />.
         /// </remarks>
         void ITimeBehavior.InitializeStates()
         {

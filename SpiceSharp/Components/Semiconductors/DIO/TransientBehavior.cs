@@ -31,6 +31,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// The charge on the junction capacitance
         /// </summary>
         private StateDerivative _capCharge;
+        private int _negNode, _posPrimeNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -45,6 +46,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
+
+            var c = (ComponentBindingContext)context;
+            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posPrimeNode = BiasingState.Map[PosPrime];
+
             var method = context.States.GetValue<ITimeSimulationState>().Method;
             _capCharge = method.CreateDerivative();
         }
@@ -54,8 +60,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            var state = BiasingState;
-            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+            double vd = BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode];
             CalculateCapacitance(vd);
         }
 
@@ -66,7 +71,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             // Calculate the capacitance
             var state = BiasingState;
-            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
             CalculateCapacitance(vd);
 
             // Integrate

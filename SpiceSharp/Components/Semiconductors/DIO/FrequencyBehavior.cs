@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosPrimeNode] - ComplexState.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posPrimeNode] - ComplexState.Solution[_negNode];
 
         /// <summary>
         /// Gets the current.
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             ComplexState.ThrowIfNotBound(this);
             var geq = Capacitance * ComplexState.Laplace + Conductance;
-            var voltage = ComplexState.Solution[PosPrimeNode] - ComplexState.Solution[NegNode];
+            var voltage = ComplexState.Solution[_posPrimeNode] - ComplexState.Solution[_negNode];
             return voltage * geq;
         }
 
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             ComplexState.ThrowIfNotBound(this);
             var geq = Capacitance * ComplexState.Laplace + Conductance;
-            var current = (ComplexState.Solution[PosPrimeNode] - ComplexState.Solution[NegNode]) * geq;
-            var voltage = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var current = (ComplexState.Solution[_posPrimeNode] - ComplexState.Solution[_negNode]) * geq;
+            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
             return voltage * -Complex.Conjugate(current);
         }
 
@@ -58,6 +58,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// The complex simulation state.
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
+
+        private int _posNode, _negNode, _posPrimeNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -73,16 +75,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-
+            _posNode = ComplexState.Map[c.Nodes[0]];
+            _negNode = ComplexState.Map[c.Nodes[1]];
+            _posPrimeNode = ComplexState.Map[PosPrime];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(NegNode, NegNode),
-                new MatrixLocation(PosPrimeNode, PosPrimeNode),
-                new MatrixLocation(PosNode, PosPrimeNode),
-                new MatrixLocation(NegNode, PosPrimeNode),
-                new MatrixLocation(PosPrimeNode, PosNode),
-                new MatrixLocation(PosPrimeNode, NegNode));
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_negNode, _negNode),
+                new MatrixLocation(_posPrimeNode, _posPrimeNode),
+                new MatrixLocation(_posNode, _posPrimeNode),
+                new MatrixLocation(_negNode, _posPrimeNode),
+                new MatrixLocation(_posPrimeNode, _posNode),
+                new MatrixLocation(_posPrimeNode, _negNode));
         }
 
         /// <summary>
@@ -101,8 +106,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void IFrequencyBehavior.InitializeParameters()
         {
-            var vd = BiasingState.Solution[PosPrimeNode] - BiasingState.Solution[NegNode];
-            CalculateCapacitance(vd);
+            CalculateCapacitance(Voltage);
         }
 
         /// <summary>

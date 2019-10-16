@@ -10,8 +10,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="Capacitor" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.ITimeBehavior" />
+    /// <seealso cref="TemperatureBehavior" />
+    /// <seealso cref="ITimeBehavior" />
     public class TransientBehavior : TemperatureBehavior, ITimeBehavior
     {
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public double GetPower()
         {
             BiasingState.ThrowIfNotBound(this);
-            return QCap.Derivative * (BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode]);
+            return QCap.Derivative * (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Gets the matrix elements.
@@ -51,13 +51,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         protected StateDerivative QCap { get; private set; }
 
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
+        private int _posNode, _negNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -73,13 +67,15 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             base.Bind(context);
 
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            var c = (ComponentBindingContext)context;
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(PosNode, NegNode),
-                new MatrixLocation(NegNode, PosNode),
-                new MatrixLocation(NegNode, NegNode)
-            }, new[] { PosNode, NegNode });
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_posNode, _negNode),
+                new MatrixLocation(_negNode, _posNode),
+                new MatrixLocation(_negNode, _negNode)
+            }, new[] { _posNode, _negNode });
 
             var method = context.States.GetValue<ITimeSimulationState>().Method;
             QCap = method.CreateDerivative();
@@ -91,7 +87,6 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            BiasingState = null;
             Elements?.Destroy();
             Elements = null;
         }
@@ -106,7 +101,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (BaseParameters.InitialCondition.Given)
                 QCap.Current = BaseParameters.InitialCondition;
             else
-                QCap.Current = Capacitance * (sol[PosNode] - sol[NegNode]);
+                QCap.Current = Capacitance * (sol[_posNode] - sol[_negNode]);
         }
         
         /// <summary>
@@ -114,7 +109,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         void ITimeBehavior.Load()
         {
-            var vcap = BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode];
+            var vcap = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
 
             // Integrate
             QCap.Current = Capacitance * vcap;

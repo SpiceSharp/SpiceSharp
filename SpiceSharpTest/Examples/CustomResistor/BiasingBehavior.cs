@@ -40,20 +40,19 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
             _baseConfig = c.Configurations.GetValue<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
-            var cbc = (ComponentBindingContext)context;
-                _nodeA = cbc.Pins[0];
-                _nodeB = cbc.Pins[1];
+            _nodeA = _state.Map[c.Nodes[0]];
+            _nodeB = _state.Map[c.Nodes[1]];
 
             // We need 4 matrix elements and 2 RHS vector elements
             _elements = new ElementSet<double>(_state.Solver, new[] {
-                new MatrixLocation(_nodeA, _nodeA),
-                new MatrixLocation(_nodeA, _nodeB),
-                new MatrixLocation(_nodeB, _nodeA),
-                new MatrixLocation(_nodeB, _nodeB)
-            }, new[] {
-                _nodeA,
-                _nodeB
-            });
+                    new MatrixLocation(_nodeA, _nodeA),
+                    new MatrixLocation(_nodeA, _nodeB),
+                    new MatrixLocation(_nodeB, _nodeA),
+                    new MatrixLocation(_nodeB, _nodeB)
+                }, new[] {
+                    _nodeA,
+                    _nodeB
+                });
         }
 
         /// <summary>

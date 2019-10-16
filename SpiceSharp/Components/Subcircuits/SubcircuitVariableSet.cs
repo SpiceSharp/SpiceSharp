@@ -7,10 +7,18 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <summary>
     /// A <see cref="VariableSet"/> that will map unknowns in such a way that the subcircuit does not interfere with the rest of the circuit.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.VariableSet" />
+    /// <seealso cref="VariableSet" />
     public class SubcircuitVariableSet : IVariableSet
     {
         private IVariableSet _variables;
+
+        /// <summary>
+        /// Gets the ground variable.
+        /// </summary>
+        /// <value>
+        /// The ground.
+        /// </value>
+        public Variable Ground => _variables.Ground;
 
         /// <summary>
         /// Gets the name of the subcircuit.
@@ -32,16 +40,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Gets the number of elements in the collection.
         /// </summary>
         public int Count => _variables.Count;
-
-        /// <summary>
-        /// Gets the <see cref="Variable"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="Variable"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
-        public Variable this[int index] => _variables[index];
 
         /// <summary>
         /// Gets the <see cref="Variable"/> with the specified identifier.
@@ -78,7 +76,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public Variable MapNode(string id, VariableType type)
         {
             // We need to check if the node is ground
-            if (_variables.TryGetNode(id, out var result) && result.Index == 0)
+            if (_variables.TryGetNode(id, out var result) && result == _variables.Ground)
                 return result;
 
             // Else just map the node

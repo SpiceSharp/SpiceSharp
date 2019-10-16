@@ -19,6 +19,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </value>
         protected ElementSet<Complex> ComplexElements { get; private set; }
 
+        private int _posNode, _negNode;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -36,12 +38,15 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             base.Bind(context);
 
-            var solver = context.States.GetValue<IComplexSimulationState>().Solver;
-            ComplexElements = new ElementSet<Complex>(solver, new[] {
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(PosNode, NegNode),
-                new MatrixLocation(NegNode, PosNode),
-                new MatrixLocation(NegNode, NegNode)
+            var c = (ComponentBindingContext)context;
+            var state = context.States.GetValue<IComplexSimulationState>();
+            _posNode = state.Map[c.Nodes[0]];
+            _negNode = state.Map[c.Nodes[1]];
+            ComplexElements = new ElementSet<Complex>(state.Solver, new[] {
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_posNode, _negNode),
+                new MatrixLocation(_negNode, _posNode),
+                new MatrixLocation(_negNode, _negNode)
             });
         }
 

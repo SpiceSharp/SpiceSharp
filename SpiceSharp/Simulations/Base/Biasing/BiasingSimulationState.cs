@@ -73,6 +73,14 @@ namespace SpiceSharp.Simulations
             public IVector<double> OldSolution { get; protected set; }
 
             /// <summary>
+            /// Gets the map.
+            /// </summary>
+            /// <value>
+            /// The map.
+            /// </value>
+            public IVariableMap Map { get; private set; }
+
+            /// <summary>
             /// Gets the sparse solver.
             /// </summary>
             /// <value>
@@ -95,6 +103,16 @@ namespace SpiceSharp.Simulations
             public BiasingSimulationState(ISparseSolver<double> solver)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
+            }
+
+            /// <summary>
+            /// Initializes the specified simulation.
+            /// </summary>
+            /// <param name="simulation">The simulation.</param>
+            public void Initialize(ISimulation simulation)
+            {
+                simulation.ThrowIfNull(nameof(simulation));
+                Map = new VariableMap(simulation.Variables);
             }
 
             /// <summary>

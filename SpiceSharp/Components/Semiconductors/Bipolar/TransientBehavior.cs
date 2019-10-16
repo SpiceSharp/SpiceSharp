@@ -94,6 +94,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private StateDerivative BiasingStateChargeBx;
         private StateHistory BiasingStateExcessPhaseCurrentBc;
         private IntegrationMethod _method;
+        private int _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="TransientBehavior"/> class.
@@ -109,22 +110,28 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
+            _baseNode = BiasingState.Map[c.Nodes[1]];
+            _substrateNode = BiasingState.Map[c.Nodes[3]];
+            _collectorPrimeNode = BiasingState.Map[CollectorPrime];
+            _basePrimeNode = BiasingState.Map[BasePrime];
+            _emitterPrimeNode = BiasingState.Map[EmitterPrime];
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(BaseNode, BaseNode),
-                new MatrixLocation(CollectorPrimeNode, CollectorPrimeNode),
-                new MatrixLocation(BasePrimeNode, BasePrimeNode),
-                new MatrixLocation(EmitterPrimeNode, EmitterPrimeNode),
-                new MatrixLocation(CollectorPrimeNode, BasePrimeNode),
-                new MatrixLocation(BasePrimeNode, CollectorPrimeNode),
-                new MatrixLocation(BasePrimeNode, EmitterPrimeNode),
-                new MatrixLocation(EmitterPrimeNode, CollectorPrimeNode),
-                new MatrixLocation(EmitterPrimeNode, BasePrimeNode),
-                new MatrixLocation(SubstrateNode, SubstrateNode),
-                new MatrixLocation(CollectorPrimeNode, SubstrateNode),
-                new MatrixLocation(SubstrateNode, CollectorPrimeNode),
-                new MatrixLocation(BaseNode, CollectorPrimeNode),
-                new MatrixLocation(CollectorPrimeNode, BaseNode)
-            }, new[] { BaseNode, SubstrateNode, CollectorPrimeNode, BasePrimeNode, EmitterPrimeNode });
+                new MatrixLocation(_baseNode, _baseNode),
+                new MatrixLocation(_collectorPrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_basePrimeNode, _basePrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _basePrimeNode),
+                new MatrixLocation(_basePrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_basePrimeNode, _emitterPrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _collectorPrimeNode),
+                new MatrixLocation(_emitterPrimeNode, _basePrimeNode),
+                new MatrixLocation(_substrateNode, _substrateNode),
+                new MatrixLocation(_collectorPrimeNode, _substrateNode),
+                new MatrixLocation(_substrateNode, _collectorPrimeNode),
+                new MatrixLocation(_baseNode, _collectorPrimeNode),
+                new MatrixLocation(_collectorPrimeNode, _baseNode)
+            }, new[] { _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode });
 
             _method = context.States.GetValue<ITimeSimulationState>().Method;
             BiasingStateChargeBe = _method.CreateDerivative();
@@ -157,8 +164,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Calculate capacitances
             var vbe = VoltageBe;
             var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[BaseNode] - BiasingState.Solution[CollectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[SubstrateNode] - BiasingState.Solution[CollectorPrimeNode]);
+            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
             BiasingStateExcessPhaseCurrentBc.Current = CapCurrentBe / BaseCharge;
         }
@@ -176,8 +183,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             var vbe = VoltageBe;
             var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (state.Solution[BaseNode] - state.Solution[CollectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (state.Solution[SubstrateNode] - state.Solution[CollectorPrimeNode]);
+            var vbx = ModelParameters.BipolarType * (state.Solution[_baseNode] - state.Solution[_collectorPrimeNode]);
+            var vcs = ModelParameters.BipolarType * (state.Solution[_substrateNode] - state.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
 
             BiasingStateChargeBe.Integrate();

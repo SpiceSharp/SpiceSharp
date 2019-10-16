@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="eb">The entity behaviors.</param>
         /// <param name="simulations">The pool of behaviors in the subcircuit.</param>
         public SubcircuitBindingContext(ISimulation simulation, BehaviorContainer eb, SubcircuitSimulation[] simulations)
-            : base(simulation, eb, new int[] { }, null)
+            : base(simulation, eb, new Variable[] { }, null)
         {
             Simulations = simulations.ThrowIfNull(nameof(simulation));
         }

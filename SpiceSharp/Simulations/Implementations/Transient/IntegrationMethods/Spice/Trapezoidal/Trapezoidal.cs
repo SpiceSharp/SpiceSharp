@@ -114,11 +114,11 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    foreach (var node in nodes)
+                    foreach (var node in BiasingState.Map)
                     {
-                        if (node.UnknownType != VariableType.Voltage)
+                        if (node.Key.UnknownType != VariableType.Voltage)
                             continue;
-                        index = node.Index;
+                        index = node.Value;
 
                         // Milne's estimate for the second-order derivative using a Forward Euler predictor and Backward Euler corrector
                         diff = BiasingState.Solution[index] - Prediction[index];
@@ -134,11 +134,11 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 case 2:
-                    foreach (var node in nodes)
+                    foreach (var node in BiasingState.Map)
                     {
-                        if (node.UnknownType != VariableType.Voltage)
+                        if (node.Key.UnknownType != VariableType.Voltage)
                             continue;
-                        index = node.Index;
+                        index = node.Value;
 
                         // Milne's estimate for the third-order derivative using an Adams-Bashforth predictor and Trapezoidal corrector
                         diff = BiasingState.Solution[index] - Prediction[index];

@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[BranchEq];
+        public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[_brNode];
 
         /// <summary>
         /// Gets the power through the source.
@@ -54,10 +54,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public Complex GetComplexPower()
         {
             ComplexState.ThrowIfNotBound(this);
-            var v = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
-            var i = ComplexState.Solution[BranchEq];
+            var v = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
+            var i = ComplexState.Solution[_brNode];
             return -v * Complex.Conjugate(i);
         }
+
+        private int _posNode, _negNode, _brNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -75,14 +77,17 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var c = (ComponentBindingContext)context;
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
-            // Get matrix elements
+            // Connections
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            _posNode = ComplexState.Map[c.Nodes[0]];
+            _negNode = ComplexState.Map[c.Nodes[1]];
+            _brNode = ComplexState.Map[Branch];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
-                new MatrixLocation(PosNode, BranchEq),
-                new MatrixLocation(BranchEq, PosNode),
-                new MatrixLocation(NegNode, BranchEq),
-                new MatrixLocation(BranchEq, NegNode)
-            }, new[] { BranchEq });
+                new MatrixLocation(_posNode, _brNode),
+                new MatrixLocation(_brNode, _posNode),
+                new MatrixLocation(_negNode, _brNode),
+                new MatrixLocation(_brNode, _negNode)
+            }, new[] { _brNode });
         }
 
         /// <summary>

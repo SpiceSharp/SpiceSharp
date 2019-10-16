@@ -16,44 +16,36 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Gets the left-side positive node.
-        /// </summary>
-        protected int Pos1 { get; private set; }
-
-        /// <summary>
-        /// Gets the left-side negative node.
-        /// </summary>
-        protected int Neg1 { get; private set; }
-
-        /// <summary>
-        /// Gets the right-side positive node.
-        /// </summary>
-        protected int Pos2 { get; private set; }
-
-        /// <summary>
-        /// Gets the right-side negative node.
-        /// </summary>
-        protected int Neg2 { get; private set; }
-
-        /// <summary>
         /// Gets the left-side internal node.
         /// </summary>
-        public int Internal1 { get; private set; }
+        /// <value>
+        /// The left internal node.
+        /// </value>
+        public Variable Internal1 { get; private set; }
 
         /// <summary>
         /// Gets the right-side internal node.
         /// </summary>
-        public int Internal2 { get; private set; }
+        /// <value>
+        /// The right internal node.
+        /// </value>
+        public Variable Internal2 { get; private set; }
 
         /// <summary>
-        /// Gets the left-side branch equation row.
+        /// Gets the left-side branch.
         /// </summary>
-        public int BranchEq1 { get; private set; }
+        /// <value>
+        /// The left branch.
+        /// </value>
+        public Variable Branch1 { get; private set; }
 
         /// <summary>
-        /// Gets the right-side branch equation row.
+        /// Gets the right-side branch.
         /// </summary>
-        public int BranchEq2 { get; private set; }
+        /// <value>
+        /// The right branch.
+        /// </value>
+        public Variable Branch2 { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -67,6 +59,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
+
+        private int _pos1, _neg1, _pos2, _neg2, _int1, _int2, _br1, _br2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -92,43 +86,47 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             // Connect
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             var c = (ComponentBindingContext)context;
-            Pos1 = c.Pins[0];
-            Neg1 = c.Pins[1];
-            Pos2 = c.Pins[2];
-            Neg2 = c.Pins[3];
+            _pos1 = BiasingState.Map[c.Nodes[0]];
+            _neg1 = BiasingState.Map[c.Nodes[1]];
+            _pos2 = BiasingState.Map[c.Nodes[2]];
+            _neg2 = BiasingState.Map[c.Nodes[3]];
             var variables = context.Variables;
-            Internal1 = variables.Create(Name.Combine("int1"), VariableType.Voltage).Index;
-            Internal2 = variables.Create(Name.Combine("int2"), VariableType.Voltage).Index;
-            BranchEq1 = variables.Create(Name.Combine("branch1"), VariableType.Current).Index;
-            BranchEq2 = variables.Create(Name.Combine("branch2"), VariableType.Current).Index;
+            Internal1 = variables.Create(Name.Combine("int1"), VariableType.Voltage);
+            _int1 = BiasingState.Map[Internal1];
+            Internal2 = variables.Create(Name.Combine("int2"), VariableType.Voltage);
+            _int2 = BiasingState.Map[Internal2];
+            Branch1 = variables.Create(Name.Combine("branch1"), VariableType.Current);
+            _br1 = BiasingState.Map[Branch1];
+            Branch2 = variables.Create(Name.Combine("branch2"), VariableType.Current);
+            _br2 = BiasingState.Map[Branch2];
 
             // Get matrix elements
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(Pos1, Pos1),
-                new MatrixLocation(Pos1, Internal1),
-                new MatrixLocation(Internal1, Pos1),
-                new MatrixLocation(Internal1, Internal1),
-                new MatrixLocation(Internal1, BranchEq1),
-                new MatrixLocation(BranchEq1, Internal1),
-                new MatrixLocation(Neg1, BranchEq1),
-                new MatrixLocation(BranchEq1, Neg1),
-                new MatrixLocation(Pos2, Pos2),
-                new MatrixLocation(Pos2, Internal2),
-                new MatrixLocation(Internal2, Pos2),
-                new MatrixLocation(Internal2, Internal2),
-                new MatrixLocation(Internal2, BranchEq2),
-                new MatrixLocation(BranchEq2, Internal2),
-                new MatrixLocation(Neg2, BranchEq2),
-                new MatrixLocation(BranchEq2, Neg2),
+                new MatrixLocation(_pos1, _pos1),
+                new MatrixLocation(_pos1, _int1),
+                new MatrixLocation(_int1, _pos1),
+                new MatrixLocation(_int1, _int1),
+                new MatrixLocation(_int1, _br1),
+                new MatrixLocation(_br1, _int1),
+                new MatrixLocation(_neg1, _br1),
+                new MatrixLocation(_br1, _neg1),
+                new MatrixLocation(_pos2, _pos2),
+                new MatrixLocation(_pos2, _int2),
+                new MatrixLocation(_int2, _pos2),
+                new MatrixLocation(_int2, _int2),
+                new MatrixLocation(_int2, _br2),
+                new MatrixLocation(_br2, _int2),
+                new MatrixLocation(_neg2, _br2),
+                new MatrixLocation(_br2, _neg2),
 
                 // These are only used to calculate the biasing point
-                new MatrixLocation(BranchEq1, Pos1),
-                new MatrixLocation(BranchEq1, Pos2),
-                new MatrixLocation(BranchEq1, Neg2),
-                new MatrixLocation(BranchEq2, BranchEq1),
-                new MatrixLocation(BranchEq2, BranchEq2));
+                new MatrixLocation(_br1, _pos1),
+                new MatrixLocation(_br1, _pos2),
+                new MatrixLocation(_br1, _neg2),
+                new MatrixLocation(_br2, _br1),
+                new MatrixLocation(_br2, _br2));
         }
 
         /// <summary>

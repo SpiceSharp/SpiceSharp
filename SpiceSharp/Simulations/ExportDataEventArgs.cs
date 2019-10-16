@@ -104,13 +104,15 @@ namespace SpiceSharp.Simulations
             if (_simulation.States.TryGetValue<IBiasingSimulationState>(out var state))
             {
                 // Get the voltage of the positive node
-                var index = _simulation.Variables[positive].Index;
+                var node = _simulation.Variables[positive];
+                var index = state.Map[node];
                 var voltage = state.Solution[index];
 
                 // Subtract negative node if necessary
                 if (negative != null)
                 {
-                    index = _simulation.Variables[negative].Index;
+                    node = _simulation.Variables[negative];
+                    index = state.Map[node];
                     voltage -= state.Solution[index];
                 }
 
@@ -141,17 +143,18 @@ namespace SpiceSharp.Simulations
         public Complex GetComplexVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
-
             if (_simulation.States.TryGetValue<IComplexSimulationState>(out var state))
             {
                 // Get the voltage of the positive node
-                var index = _simulation.Variables[positive].Index;
+                var node = _simulation.Variables[positive];
+                var index = state.Map[node];
                 var voltage = state.Solution[index];
 
                 // Subtract negative node if necessary
                 if (negative != null)
                 {
-                    index = _simulation.Variables[negative].Index;
+                    node = _simulation.Variables[negative];
+                    index = state.Map[node];
                     voltage -= state.Solution[index];
                 }
 

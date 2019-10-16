@@ -101,12 +101,12 @@ namespace SpiceSharp.Simulations
             var state = simulation.States.GetValue<IComplexSimulationState>();
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
-                PosIndex = posNode.Index;
+                PosIndex = state.Map[posNode];
                 if (NegNode == null)
                     Extractor = () => state.Solution[PosIndex];
                 else if (Simulation.Variables.TryGetNode(NegNode, out var negNode))
                 {
-                    NegIndex = negNode.Index;
+                    NegIndex = state.Map[negNode];
                     Extractor = () => state.Solution[PosIndex] - state.Solution[NegIndex];
                 }
             }

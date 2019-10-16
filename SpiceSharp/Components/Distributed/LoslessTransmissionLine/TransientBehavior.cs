@@ -22,6 +22,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// The transient vector elements.
         /// </value>
         protected ElementSet<double> TransientElements { get; private set; }
+
+        private int _pos1, _neg1, _pos2, _neg2, _br1, _br2;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -43,7 +45,14 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Bind(context);
 
-            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { BranchEq1, BranchEq2 });
+            var c = (ComponentBindingContext)context;
+            _pos1 = BiasingState.Map[c.Nodes[0]];
+            _neg1 = BiasingState.Map[c.Nodes[1]];
+            _pos2 = BiasingState.Map[c.Nodes[2]];
+            _neg2 = BiasingState.Map[c.Nodes[3]];
+            _br1 = BiasingState.Map[Branch1];
+            _br2 = BiasingState.Map[Branch2];
+            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { _br1, _br2 });
             Signals = new DelayedSignal(2, BaseParameters.Delay);
         }
 
@@ -55,8 +64,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var sol = BiasingState.ThrowIfNotBound(this).Solution;
 
             // Calculate the inputs
-            var input1 = sol[Pos2] - sol[Neg2] + BaseParameters.Impedance * sol[BranchEq2];
-            var input2 = sol[Pos1] - sol[Neg1] + BaseParameters.Impedance * sol[BranchEq1];
+            var input1 = sol[_pos2] - sol[_neg2] + BaseParameters.Impedance * sol[_br2];
+            var input2 = sol[_pos1] - sol[_neg1] + BaseParameters.Impedance * sol[_br1];
             Signals.SetProbedValues(input1, input2);
         }
 
@@ -68,8 +77,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var sol = BiasingState.Solution;
 
             // Calculate inputs
-            var input1 = sol[Pos2] - sol[Neg2] + BaseParameters.Impedance * sol[BranchEq2];
-            var input2 = sol[Pos1] - sol[Neg1] + BaseParameters.Impedance * sol[BranchEq1];
+            var input1 = sol[_pos2] - sol[_neg2] + BaseParameters.Impedance * sol[_br2];
+            var input2 = sol[_pos1] - sol[_neg1] + BaseParameters.Impedance * sol[_br1];
             Signals.SetProbedValues(input1, input2);
 
             // Update the branch equations

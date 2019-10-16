@@ -21,8 +21,8 @@ namespace SpiceSharp
         private class VoltageDriver
         {
             public Component Source;
-            public int Node1;
-            public int Node2;
+            public Variable Node1;
+            public Variable Node2;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SpiceSharp
         private bool _hasSource;
         private bool _hasGround;
         private readonly List<VoltageDriver> _voltageDriven = new List<VoltageDriver>();
-        private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
+        private readonly Dictionary<Variable, int> _connectedGroups = new Dictionary<Variable, int>();
         private int _cgroup;
         private readonly VariableSet _nodes = new VariableSet();
         
@@ -47,9 +47,9 @@ namespace SpiceSharp
             _hasSource = false;
             _voltageDriven.Clear();
             _connectedGroups.Clear();
-            _connectedGroups.Add(0, 0);
             _cgroup = 1;
             _nodes.Clear();
+            _connectedGroups.Add(_nodes.Ground, 0);
 
             // Check all entities
             foreach (var c in entities)
@@ -75,8 +75,7 @@ namespace SpiceSharp
                 var un = new List<string>();
                 foreach (var n in _nodes)
                 {
-                    var index = n.Index;
-                    if (unconnected.Contains(index))
+                    if (unconnected.Contains(n))
                         un.Add(n.Name);
                 }
                 throw new CircuitException("{0}: Floating nodes found".FormatString(string.Join(",", un)));
@@ -93,13 +92,13 @@ namespace SpiceSharp
             if (c is Component icc)
             {
                 var i = 0;
-                var nodes = new int[icc.PinCount];
-                foreach (var index in icc.GetNodeIndexes(_nodes))
+                var nodes = new Variable[icc.PinCount];
+                foreach (var node in icc.GetNodes(_nodes))
                 {
                     // Group indices
-                    nodes[i++] = index;
-                    if (!_connectedGroups.ContainsKey(index))
-                        _connectedGroups.Add(index, _cgroup++);
+                    nodes[i++] = node;
+                    if (!_connectedGroups.ContainsKey(node))
+                        _connectedGroups.Add(node, _cgroup++);
                 }
 
                 if (IsShortCircuited(icc))
@@ -148,22 +147,22 @@ namespace SpiceSharp
         private bool IsShortCircuited(Component component)
         {
             // Check for ground node and for short-circuited components
-            var n = -1;
+            Variable n = null;
             var isShortcircuit = false;
-            foreach (var index in component.GetNodeIndexes(_nodes))
+            foreach (var node in component.GetNodes(_nodes))
             {
                 // Check for a connection to ground
-                if (index == 0)
+                if (node == _nodes.Ground)
                     _hasGround = true;
 
                 // Check for short-circuited devices
-                if (n < 0)
+                if (n == null)
                 {
                     // We have at least one node, so we potentially have a short-circuited component
-                    n = index;
+                    n = node;
                     isShortcircuit = true;
                 }
-                else if (n != index)
+                else if (n != node)
                 {
                     // Is not short-circuited, so OK!
                     isShortcircuit = false;
@@ -183,15 +182,15 @@ namespace SpiceSharp
         {
             // Remove the ground node and make a map for reducing the matrix complexity
             var index = 1;
-            var map = new Dictionary<int, int> {{0, 0}};
+            var map = new Dictionary<Variable, int> {{_nodes.Ground, 0}};
             foreach (var vd in _voltageDriven)
             {
-                if (vd.Node1 != 0)
+                if (vd.Node1 != null)
                 {
                     if (!map.ContainsKey(vd.Node1))
                         map.Add(vd.Node1, index++);
                 }
-                if (vd.Node2 != 0)
+                if (vd.Node2 != null)
                 {
                     if (!map.ContainsKey(vd.Node2))
                         map.Add(vd.Node2, index++);
@@ -233,7 +232,7 @@ namespace SpiceSharp
         /// Add connected nodes that will be used to find floating nodes.
         /// </summary>
         /// <param name="nodes">The nodes that are connected together.</param>
-        private void AddConnections(int[] nodes)
+        private void AddConnections(Variable[] nodes)
         {
             if (nodes == null || nodes.Length == 0)
                 return;
@@ -251,7 +250,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="a">The first node index.</param>
         /// <param name="b">The second node index.</param>
-        private void AddConnection(int a, int b)
+        private void AddConnection(Variable a, Variable b)
         {
             if (a == b)
                 return;
@@ -281,16 +280,14 @@ namespace SpiceSharp
         /// Find a node that has no path to ground anywhere (open-circuited).
         /// </summary>
         /// <returns>A set of node indices that has no DC path to ground.</returns>
-        private HashSet<int> FindFloatingNodes()
+        private HashSet<Variable> FindFloatingNodes()
         {
-            var unconnected = new HashSet<int>();
-
+            var unconnected = new HashSet<Variable>();
             foreach (var key in _connectedGroups.Keys)
             {
                 if (_connectedGroups[key] != 0)
                     unconnected.Add(key);
             }
-
             return unconnected;
         }
     }

@@ -85,22 +85,22 @@ namespace SpiceSharp.Components.NoiseSources
         /// Connect the noise generator in the circuit
         /// </summary>
         /// <param name="context">The binding context.</param>
-        /// <param name="nodes">The nodes the generator can connect to.</param>
-        public virtual void Bind(BindingContext context, params int[] nodes)
+        /// <param name="nodes">The nodes.</param>
+        public virtual void Bind(ComponentBindingContext context, Variable[] nodes)
         {
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            NoiseState = context.States.GetValue<INoiseSimulationState>();
+
             // Get the nodes
-            var mapped = new int[nodes.Length];
+            var mapped = new int[_pins.Length];
             for (var i = 0; i < _pins.Length; i++)
             {
                 if (_pins[i] >= nodes.Length)
                     throw new CircuitException("Not enough pins to find node {0}".FormatString(_pins[i]));
-                mapped[i] = nodes[_pins[i]];
+                mapped[i] = ComplexState.Map[nodes[_pins[i]]];
             }
             Nodes = new NodeCollection(mapped);
-
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
-            NoiseState = context.States.GetValue<INoiseSimulationState>();
         }
 
         /// <summary>

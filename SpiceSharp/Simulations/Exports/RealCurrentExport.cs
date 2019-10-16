@@ -51,7 +51,7 @@ namespace SpiceSharp.Simulations
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.BiasingBehavior), out var behavior))
                 {
-                    Index = ((Components.VoltageSourceBehaviors.BiasingBehavior) behavior).BranchEq;
+                    Index = state.Map[((Components.VoltageSourceBehaviors.BiasingBehavior) behavior).Branch];
                     Extractor = () => state.Solution[Index];
                 }
             }

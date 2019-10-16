@@ -20,29 +20,14 @@ namespace SpiceSharp.Components.JFETBehaviors
         protected BiasingConfiguration BaseConfiguration { get; private set; }
 
         /// <summary>
-        /// Gets the external drain node.
-        /// </summary>
-        protected int DrainNode { get; private set; }
-
-        /// <summary>
-        /// Gets the external gate node.
-        /// </summary>
-        protected int GateNode { get; private set; }
-
-        /// <summary>
-        /// Gets the external source node.
-        /// </summary>
-        protected int SourceNode { get; private set; }
-
-        /// <summary>
         /// Gets the drain node.
         /// </summary>
-        public int DrainPrimeNode { get; private set; }
+        public Variable DrainPrime { get; private set; }
 
         /// <summary>
         /// Gets the source node.
         /// </summary>
-        public int SourcePrimeNode { get; private set; }
+        public Variable SourcePrime { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -107,6 +92,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         public double Ggd { get; private set; }
 
         private ITimeSimulationState _timeState;
+        private int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -133,31 +119,38 @@ namespace SpiceSharp.Components.JFETBehaviors
             // Get states
             context.States.TryGetValue(out _timeState);
 
+            // Connections
             var c = (ComponentBindingContext)context;
-                DrainNode = c.Pins[0];
-                GateNode = c.Pins[1];
-                SourceNode = c.Pins[2];
+            _drainNode = BiasingState.Map[c.Nodes[0]];
+            _gateNode = BiasingState.Map[c.Nodes[1]];
+            _sourceNode = BiasingState.Map[c.Nodes[2]];
             var variables = context.Variables;
-            SourcePrimeNode = ModelParameters.SourceResistance > 0 ? variables.Create(Name.Combine("source"), VariableType.Voltage).Index : SourceNode;
-            DrainPrimeNode = ModelParameters.DrainResistance > 0 ? variables.Create(Name.Combine("drain"), VariableType.Voltage).Index : DrainNode;
-
+            DrainPrime = ModelParameters.DrainResistance > 0 ?
+                variables.Create(Name.Combine("drain"), VariableType.Voltage) :
+                c.Nodes[0];
+            _drainPrimeNode = BiasingState.Map[DrainPrime];
+            SourcePrime = ModelParameters.SourceResistance > 0 ? 
+                variables.Create(Name.Combine("source"), VariableType.Voltage) :
+                c.Nodes[2];
+            _sourcePrimeNode = BiasingState.Map[SourcePrime];
+            
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(DrainNode, DrainPrimeNode),
-                new MatrixLocation(GateNode, DrainPrimeNode),
-                new MatrixLocation(GateNode, SourcePrimeNode),
-                new MatrixLocation(SourceNode, SourcePrimeNode),
-                new MatrixLocation(DrainPrimeNode, DrainNode),
-                new MatrixLocation(DrainPrimeNode, GateNode),
-                new MatrixLocation(DrainPrimeNode, SourcePrimeNode),
-                new MatrixLocation(SourcePrimeNode, GateNode),
-                new MatrixLocation(SourcePrimeNode, SourceNode),
-                new MatrixLocation(SourcePrimeNode, DrainPrimeNode),
-                new MatrixLocation(DrainNode, DrainNode),
-                new MatrixLocation(GateNode, GateNode),
-                new MatrixLocation(SourceNode, SourceNode),
-                new MatrixLocation(DrainPrimeNode, DrainPrimeNode),
-                new MatrixLocation(SourcePrimeNode, SourcePrimeNode)
-            }, new[] { GateNode, DrainPrimeNode, SourcePrimeNode });
+                new MatrixLocation(_drainNode, _drainPrimeNode),
+                new MatrixLocation(_gateNode, _drainPrimeNode),
+                new MatrixLocation(_gateNode, _sourcePrimeNode),
+                new MatrixLocation(_sourceNode, _sourcePrimeNode),
+                new MatrixLocation(_drainPrimeNode, _drainNode),
+                new MatrixLocation(_drainPrimeNode, _gateNode),
+                new MatrixLocation(_drainPrimeNode, _sourcePrimeNode),
+                new MatrixLocation(_sourcePrimeNode, _gateNode),
+                new MatrixLocation(_sourcePrimeNode, _sourceNode),
+                new MatrixLocation(_sourcePrimeNode, _drainPrimeNode),
+                new MatrixLocation(_drainNode, _drainNode),
+                new MatrixLocation(_gateNode, _gateNode),
+                new MatrixLocation(_sourceNode, _sourceNode),
+                new MatrixLocation(_drainPrimeNode, _drainPrimeNode),
+                new MatrixLocation(_sourcePrimeNode, _sourcePrimeNode)
+            }, new[] { _gateNode, _drainPrimeNode, _sourcePrimeNode });
         }
 
         /// <summary>
@@ -375,8 +368,8 @@ namespace SpiceSharp.Components.JFETBehaviors
             else
             {
                 // Compute new nonlinear branch voltages
-                vgs = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[SourcePrimeNode]);
-                vgd = ModelParameters.JFETType * (state.Solution[GateNode] - state.Solution[DrainPrimeNode]);
+                vgs = ModelParameters.JFETType * (state.Solution[_gateNode] - state.Solution[_sourcePrimeNode]);
+                vgd = ModelParameters.JFETType * (state.Solution[_gateNode] - state.Solution[_drainPrimeNode]);
 
                 // Limit nonlinear branch voltages
                 check = false;

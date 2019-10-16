@@ -16,29 +16,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
-
-        /// <summary>
-        /// Gets the controlling positive node.
-        /// </summary>
-        protected int ContPosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the controlling negative node.
-        /// </summary>
-        protected int ContNegNode { get; private set; }
-
-        /// <summary>
         /// Gets the branch equation row.
         /// </summary>
-        public int BranchEq { get; private set; }
+        public Variable Branch { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -52,6 +32,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// Gets the real state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
+
+        private int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -73,21 +55,22 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             base.Bind(context);
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            var c = (ComponentBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            ContPosNode = c.Pins[2];
-            ContNegNode = c.Pins[3];
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            var c = (ComponentBindingContext)context;
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
+            _contPosNode = BiasingState.Map[c.Nodes[2]];
+            _contNegNode = BiasingState.Map[c.Nodes[3]];
+            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            _branchEq = BiasingState.Map[Branch];
+
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(PosNode, BranchEq),
-                new MatrixLocation(NegNode, BranchEq),
-                new MatrixLocation(BranchEq, PosNode),
-                new MatrixLocation(BranchEq, NegNode),
-                new MatrixLocation(BranchEq, ContPosNode),
-                new MatrixLocation(BranchEq, ContNegNode)
+                new MatrixLocation(_posNode, _branchEq),
+                new MatrixLocation(_negNode, _branchEq),
+                new MatrixLocation(_branchEq, _posNode),
+                new MatrixLocation(_branchEq, _negNode),
+                new MatrixLocation(_branchEq, _contPosNode),
+                new MatrixLocation(_branchEq, _contNegNode)
             });
         }
 

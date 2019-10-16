@@ -27,6 +27,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _pos1, _neg1, _pos2, _neg2, _int1, _int2, _br1, _br2;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -47,30 +49,39 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            _pos1 = ComplexState.Map[c.Nodes[0]];
+            _neg1 = ComplexState.Map[c.Nodes[1]];
+            _pos2 = ComplexState.Map[c.Nodes[2]];
+            _neg2 = ComplexState.Map[c.Nodes[3]];
+            _int1 = ComplexState.Map[Internal1];
+            _int2 = ComplexState.Map[Internal2];
+            _br1 = ComplexState.Map[Branch1];
+            _br2 = ComplexState.Map[Branch2];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(Pos1, Pos1),
-                new MatrixLocation(Pos1, Internal1),
-                new MatrixLocation(Neg1, BranchEq1),
-                new MatrixLocation(Pos2, Pos2),
-                new MatrixLocation(Neg2, BranchEq2),
-                new MatrixLocation(Internal1, Pos1),
-                new MatrixLocation(Internal1, Internal1),
-                new MatrixLocation(Internal1, BranchEq1),
-                new MatrixLocation(Internal2, Internal2),
-                new MatrixLocation(Internal2, BranchEq2),
-                new MatrixLocation(BranchEq1, Neg1),
-                new MatrixLocation(BranchEq1, Pos2),
-                new MatrixLocation(BranchEq1, Neg2),
-                new MatrixLocation(BranchEq1, Internal1),
-                new MatrixLocation(BranchEq1, BranchEq2),
-                new MatrixLocation(BranchEq2, Pos1),
-                new MatrixLocation(BranchEq2, Neg1),
-                new MatrixLocation(BranchEq2, Neg2),
-                new MatrixLocation(BranchEq2, Internal2),
-                new MatrixLocation(BranchEq2, BranchEq1),
-                new MatrixLocation(Pos2, Internal2),
-                new MatrixLocation(Internal2, Pos2));
+                new MatrixLocation(_pos1, _pos1),
+                new MatrixLocation(_pos1, _int1),
+                new MatrixLocation(_neg1, _br1),
+                new MatrixLocation(_pos2, _pos2),
+                new MatrixLocation(_neg2, _br2),
+                new MatrixLocation(_int1, _pos1),
+                new MatrixLocation(_int1, _int1),
+                new MatrixLocation(_int1, _br1),
+                new MatrixLocation(_int2, _int2),
+                new MatrixLocation(_int2, _br2),
+                new MatrixLocation(_br1, _neg1),
+                new MatrixLocation(_br1, _pos2),
+                new MatrixLocation(_br1, _neg2),
+                new MatrixLocation(_br1, _int1),
+                new MatrixLocation(_br1, _br2),
+                new MatrixLocation(_br2, _pos1),
+                new MatrixLocation(_br2, _neg1),
+                new MatrixLocation(_br2, _neg2),
+                new MatrixLocation(_br2, _int2),
+                new MatrixLocation(_br2, _br1),
+                new MatrixLocation(_pos2, _int2),
+                new MatrixLocation(_int2, _pos2));
         }
 
         /// <summary>

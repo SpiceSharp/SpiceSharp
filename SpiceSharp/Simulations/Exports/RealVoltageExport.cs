@@ -75,18 +75,16 @@ namespace SpiceSharp.Simulations
             var state = ((Simulation)sender).States.GetValue<IBiasingSimulationState>();
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
-                var posNodeIndex = posNode.Index;
-                PosIndex = posNodeIndex;
+                PosIndex = state.Map[posNode];
                 if (NegNode == null)
                 {
-                    Extractor = () => state.Solution[posNodeIndex];
                     NegIndex = 0;
+                    Extractor = () => state.Solution[PosIndex];
                 }
                 else if (Simulation.Variables.TryGetNode(NegNode, out var negNode))
                 {
-                    var negNodeIndex = negNode.Index;
-                    Extractor = () => state.Solution[posNodeIndex] - state.Solution[negNodeIndex];
-                    NegIndex = negNodeIndex;
+                    NegIndex = state.Map[negNode];
+                    Extractor = () => state.Solution[PosIndex] - state.Solution[NegIndex];                    
                 }
             }
         }

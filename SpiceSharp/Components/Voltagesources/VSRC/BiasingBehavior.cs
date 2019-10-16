@@ -21,14 +21,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("i_r"), ParameterInfo("Voltage source current")]
-        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq];
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[_brNode];
 
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Instantaneous power")]
-        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * -BiasingState.Solution[BranchEq];
+        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode]) * -BiasingState.Solution[_brNode];
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -37,19 +37,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public double Voltage { get; private set; }
 
         /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
-
-        /// <summary>
         /// Gets the branch equation.
         /// </summary>
-        public int BranchEq { get; private set; }
+        public Variable Branch { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -68,6 +58,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         protected IBiasingSimulationState BiasingState { get; private set; }
 
         private ITimeSimulationState _timeState;
+        private int _posNode, _negNode, _brNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -82,10 +73,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            var c = (ComponentBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
+
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             BaseParameters.Waveform?.Bind(context);
 
@@ -103,15 +91,20 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 }
             }
 
-            // Get matrix elements
-            context.States.TryGetValue(out _timeState);
+            // Connections
+            var c = (ComponentBindingContext)context;
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            context.States.TryGetValue(out _timeState);
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
+            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            _brNode = BiasingState.Map[Branch];
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(PosNode, BranchEq),
-                new MatrixLocation(BranchEq, PosNode),
-                new MatrixLocation(NegNode, BranchEq),
-                new MatrixLocation(BranchEq, NegNode)
-            }, new[] { BranchEq });
+                new MatrixLocation(_posNode, _brNode),
+                new MatrixLocation(_brNode, _posNode),
+                new MatrixLocation(_negNode, _brNode),
+                new MatrixLocation(_brNode, _negNode)
+            }, new[] { _brNode });
         }
 
         /// <summary>

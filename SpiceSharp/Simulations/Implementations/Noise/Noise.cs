@@ -127,8 +127,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? Variables[noiseconfig.Output].Index : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? Variables[noiseconfig.OutputRef].Index : 0;
+            var posOutNode = noiseconfig.Output != null ? state.Map[Variables[noiseconfig.Output]] : 0;
+            var negOutNode = noiseconfig.OutputRef != null ? state.Map[Variables[noiseconfig.OutputRef]] : 0;
 
             // Initialize
             nstate.Reset(FrequencySweep.Initial);

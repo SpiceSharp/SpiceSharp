@@ -23,6 +23,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         public DelayedSignal Signal { get; private set; }
 
+        private int _contPosNode, _contNegNode, _branchEq;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
@@ -43,7 +45,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             base.Bind(context);
 
-            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { BranchEq });
+            var c = (ComponentBindingContext)context;
+            _contPosNode = BiasingState.Map[c.Nodes[2]];
+            _contNegNode = BiasingState.Map[c.Nodes[3]];
+            _branchEq = BiasingState.Map[Branch];
+            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { _branchEq });
             Signal = new DelayedSignal(1, BaseParameters.Delay);
         }
 
@@ -67,7 +73,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         void ITimeBehavior.InitializeStates()
         {
             var sol = BiasingState.Solution;
-            var input = sol[ContPosNode] - sol[ContNegNode];
+            var input = sol[_contPosNode] - sol[_contNegNode];
             Signal.SetProbedValues(input);
         }
 
@@ -77,7 +83,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         void ITimeBehavior.Load()
         {
             var sol = BiasingState.Solution;
-            var input = sol[ContPosNode] - sol[ContNegNode];
+            var input = sol[_contPosNode] - sol[_contNegNode];
             Signal.SetProbedValues(input);
             TransientElements.Add(Signal.Values[0]);
         }

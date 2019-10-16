@@ -27,6 +27,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -41,30 +43,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            _drainNode = ComplexState.Map[c.Nodes[0]];
+            _gateNode = ComplexState.Map[c.Nodes[1]];
+            _sourceNode = ComplexState.Map[c.Nodes[2]];
+            _bulkNode = ComplexState.Map[c.Nodes[3]];
+            _drainNodePrime = ComplexState.Map[DrainPrime];
+            _sourceNodePrime = ComplexState.Map[SourcePrime];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(GateNode, GateNode),
-                new MatrixLocation(BulkNode, BulkNode),
-                new MatrixLocation(DrainNodePrime, DrainNodePrime),
-                new MatrixLocation(SourceNodePrime, SourceNodePrime),
-                new MatrixLocation(GateNode, BulkNode),
-                new MatrixLocation(GateNode, DrainNodePrime),
-                new MatrixLocation(GateNode, SourceNodePrime),
-                new MatrixLocation(BulkNode, GateNode),
-                new MatrixLocation(BulkNode, DrainNodePrime),
-                new MatrixLocation(BulkNode, SourceNodePrime),
-                new MatrixLocation(DrainNodePrime, GateNode),
-                new MatrixLocation(DrainNodePrime, BulkNode),
-                new MatrixLocation(SourceNodePrime, GateNode),
-                new MatrixLocation(SourceNodePrime, BulkNode),
-                new MatrixLocation(DrainNode, DrainNode),
-                new MatrixLocation(SourceNode, SourceNode),
-                new MatrixLocation(DrainNode, DrainNodePrime),
-                new MatrixLocation(SourceNode, SourceNodePrime),
-                new MatrixLocation(DrainNodePrime, DrainNode),
-                new MatrixLocation(DrainNodePrime, SourceNodePrime),
-                new MatrixLocation(SourceNodePrime, SourceNode),
-                new MatrixLocation(SourceNodePrime, DrainNodePrime));
+                new MatrixLocation(_gateNode, _gateNode),
+                new MatrixLocation(_bulkNode, _bulkNode),
+                new MatrixLocation(_drainNodePrime, _drainNodePrime),
+                new MatrixLocation(_sourceNodePrime, _sourceNodePrime),
+                new MatrixLocation(_gateNode, _bulkNode),
+                new MatrixLocation(_gateNode, _drainNodePrime),
+                new MatrixLocation(_gateNode, _sourceNodePrime),
+                new MatrixLocation(_bulkNode, _gateNode),
+                new MatrixLocation(_bulkNode, _drainNodePrime),
+                new MatrixLocation(_bulkNode, _sourceNodePrime),
+                new MatrixLocation(_drainNodePrime, _gateNode),
+                new MatrixLocation(_drainNodePrime, _bulkNode),
+                new MatrixLocation(_sourceNodePrime, _gateNode),
+                new MatrixLocation(_sourceNodePrime, _bulkNode),
+                new MatrixLocation(_drainNode, _drainNode),
+                new MatrixLocation(_sourceNode, _sourceNode),
+                new MatrixLocation(_drainNode, _drainNodePrime),
+                new MatrixLocation(_sourceNode, _sourceNodePrime),
+                new MatrixLocation(_drainNodePrime, _drainNode),
+                new MatrixLocation(_drainNodePrime, _sourceNodePrime),
+                new MatrixLocation(_sourceNodePrime, _sourceNode),
+                new MatrixLocation(_sourceNodePrime, _drainNodePrime));
         }
 
         /// <summary>

@@ -47,14 +47,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Gets the current through the switch.
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterInfo("Switch current")]
-        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * Conductance;
+        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the switch.
@@ -63,19 +63,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double GetPower()
         {
-            var v = (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]);
+            var v = (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode]);
             return v * v * Conductance;
         }
-
-        /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -89,6 +79,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Gets the method used for switching.
         /// </summary>
         protected Controller Method { get; }
+
+        private int _posNode, _negNode;
 
         /// <summary>
         /// Gets the state of the biasing.
@@ -116,19 +108,17 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             base.Bind(context);
             var c = (ComponentBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
             ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             Method.Bind(context);
-
-            // Get matrix elements
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
             Elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(PosNode, NegNode),
-                new MatrixLocation(NegNode, PosNode),
-                new MatrixLocation(NegNode, NegNode));
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_posNode, _negNode),
+                new MatrixLocation(_negNode, _posNode),
+                new MatrixLocation(_negNode, _negNode));
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the unknown variables.
         /// </summary>
-        protected IVariableSet Variables { get; private set; }
+        protected IVariableMap Variables { get; private set; }
 
         /// <summary>
         /// Gets the solver of the system of equations.
@@ -48,9 +48,12 @@ namespace SpiceSharp.Simulations
         protected Element<double> Rhs { get; private set; }
 
         /// <summary>
-        /// Gets the node for which the aid is meant.
+        /// Gets the variable index.
         /// </summary>
-        protected Variable Node { get; private set; }
+        /// <value>
+        /// The index.
+        /// </value>
+        protected int Index { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConvergenceAid"/> class.
@@ -71,28 +74,30 @@ namespace SpiceSharp.Simulations
         {
             simulation.ThrowIfNull(nameof(simulation));
 
-            // Get the unknown variables
-            Variables = simulation.Variables;
+            // Get the state
+            var state = simulation.States.GetValue<IBiasingSimulationState>();
+            Variables = state.Map;
 
             // Get the real solver
             Solver = simulation.States.GetValue<IBiasingSimulationState>().Solver;
 
             // Get the node
-            if (!simulation.Variables.TryGetNode(Name, out var node))
+            if (!simulation.Variables.TryGetNode(Name, out var node) || !Variables.Contains(node))
             {
                 CircuitWarning.Warning(this, "Could not set convergence aid: variable {0} not found.".FormatString(Name));
-                Node = null;
+                Index = 0;
+                Diagonal = null;
+                Rhs = null;
                 return;
             }
-            Node = node;
 
             // Get the necessary elements
-            Diagonal = Solver.GetElement(node.Index, node.Index);
-            Rhs = !Value.Equals(0.0) ? Solver.GetElement(node.Index) : Solver.FindElement(node.Index);
+            Index = state.Map[node];
+            Diagonal = Solver.GetElement(Index, Index);
+            Rhs = !Value.Equals(0.0) ? Solver.GetElement(Index) : Solver.FindElement(Index);
 
             // Update the current solution to reflect our convergence aid value
-            var state = simulation.States.GetValue<IBiasingSimulationState>();
-            state.Solution[node.Index] = Value;
+            state.Solution[Index] = Value;
         }
 
         /// <summary>
@@ -111,11 +116,11 @@ namespace SpiceSharp.Simulations
             foreach (var v in Variables)
             {
                 // If the variable is a current, then we can't just set it to 0... 
-                if (v.UnknownType == VariableType.Current)
+                if (v.Key.UnknownType == VariableType.Current)
                     hasOtherTypes = true;
                 else
                 {
-                    var elt = Solver.FindElement(Node.Index, v.Index);
+                    var elt = Solver.FindElement(Index, v.Value);
                     if (elt != null)
                         elt.Value = 0.0;
                 }
@@ -144,7 +149,6 @@ namespace SpiceSharp.Simulations
             // Clear all variables
             Variables = null;
             Solver = null;
-            Node = null;
             Diagonal = null;
             Rhs = null;
         }

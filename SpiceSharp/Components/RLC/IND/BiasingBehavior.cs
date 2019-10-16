@@ -19,19 +19,19 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the branch equation index.
         /// </summary>
-        public int BranchEq { get; private set; }
+        public Variable Branch { get; private set; }
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
-        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq];
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[_branchEq];
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Gets the power dissipated by the inductor.
@@ -40,19 +40,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         public double GetPower()
         {
             BiasingState.ThrowIfNotBound(this);
-            var v = BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode];
-            return v * BiasingState.Solution[BranchEq];
+            var v = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
+            return v * BiasingState.Solution[_branchEq];
         }
-
-        /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -66,6 +56,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
+
+        private int _posNode, _negNode, _branchEq;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -83,18 +75,18 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Get parameters.
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-
-            var c = (ComponentBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
-
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            var c = (ComponentBindingContext)context;
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
+            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            _branchEq = BiasingState.Map[Branch];
+            
             Elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(PosNode, BranchEq),
-                new MatrixLocation(NegNode, BranchEq),
-                new MatrixLocation(BranchEq, NegNode),
-                new MatrixLocation(BranchEq, PosNode));
+                new MatrixLocation(_posNode, _branchEq),
+                new MatrixLocation(_negNode, _branchEq),
+                new MatrixLocation(_branchEq, _negNode),
+                new MatrixLocation(_branchEq, _posNode));
         }
 
         /// <summary>

@@ -146,7 +146,6 @@ namespace SpiceSharp.Simulations
             /* var strategy = BiasingState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
-            BiasingState.Solver.Reset();
 
             // Setup the rest of the circuit.
             base.Setup(circuit);
@@ -161,6 +160,16 @@ namespace SpiceSharp.Simulations
             // Set up nodesets
             foreach (var ns in config.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
+        }
+
+        /// <summary>
+        /// Create all behaviors for the simulation.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        protected override void CreateBehaviors(IEntityCollection entities)
+        {
+            BiasingState.Initialize(this);
+            base.CreateBehaviors(entities);
         }
 
         /// <summary>
@@ -594,11 +603,11 @@ namespace SpiceSharp.Simulations
             var rstate = BiasingState;
 
             // Check convergence for each node
-            for (var i = 0; i < Variables.Count; i++)
+            foreach (var v in rstate.Map)
             {
-                var node = Variables[i];
-                var n = rstate.Solution[node.Index];
-                var o = rstate.OldSolution[node.Index];
+                var node = v.Key;
+                var n = rstate.Solution[v.Value];
+                var o = rstate.OldSolution[v.Value];
 
                 if (double.IsNaN(n))
                     throw new CircuitException("Non-convergence, node {0} is not a number.".FormatString(node));
@@ -684,16 +693,5 @@ namespace SpiceSharp.Simulations
         protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
-
-        #if DEBUG
-        /// <summary>
-        /// Lists all variables to the debugger
-        /// </summary>
-        public void ListVariables()
-        {
-            foreach (var variable in Variables)
-                System.Diagnostics.Debug.WriteLine(variable.Name + " (" + variable.Index + ") = " + BiasingState.Solution[variable.Index]);
-        }
-        #endif
     }
 }

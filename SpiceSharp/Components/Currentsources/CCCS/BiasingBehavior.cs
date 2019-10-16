@@ -24,17 +24,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        public int ControlBranchEq { get; protected set; }
-
-        /// <summary>
-        /// The positive node index.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// The negative node index.
-        /// </summary>
-        protected int NegNode { get; private set; }
+        public Variable ControlBranch { get; protected set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -48,13 +38,13 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[ControlBranchEq] * BaseParameters.Coefficient;
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[_brNode] * BaseParameters.Coefficient;
 
         /// <summary>
         /// Gets the volage over the source.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// The power dissipation by the source.
@@ -63,7 +53,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public double GetPower()
         {
             BiasingState.ThrowIfNotBound(this);
-            return (BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode]) * BiasingState.Solution[ControlBranchEq] * BaseParameters.Coefficient;
+            return (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]) * BiasingState.Solution[_brNode] * BaseParameters.Coefficient;
         }
 
         /// <summary>
@@ -73,6 +63,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// The biasing simulation state.
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
+
+        private int _posNode, _negNode, _brNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -89,17 +81,17 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             base.Bind(context);
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
+            // Connections
             var c = (CommonBehaviors.ControlledBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
-            ControlBranchEq = VoltageLoad.BranchEq;
-
-            // Get matrix elements
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
+            VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            ControlBranch = VoltageLoad.Branch;
+            _brNode = BiasingState.Map[ControlBranch];
             Elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(PosNode, ControlBranchEq),
-                new MatrixLocation(NegNode, ControlBranchEq));
+                new MatrixLocation(_posNode, _brNode),
+                new MatrixLocation(_negNode, _brNode));
         }
 
         /// <summary>

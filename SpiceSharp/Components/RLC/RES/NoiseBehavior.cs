@@ -27,7 +27,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            ResistorNoise.Bind((ComponentBindingContext)context, PosNode, NegNode);
+            var c = (ComponentBindingContext)context;
+            ResistorNoise.Bind(c, c.Nodes[0], c.Nodes[1]);
         }
 
         /// <summary>

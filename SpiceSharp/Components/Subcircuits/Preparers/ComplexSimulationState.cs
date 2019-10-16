@@ -1,7 +1,5 @@
 ﻿using SpiceSharp.Algebra;
-using SpiceSharp.Circuits.Entities.Local;
 using SpiceSharp.Simulations;
-using System;
 using System.Numerics;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
@@ -40,6 +38,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// The solver.
         /// </value>
         public ISparseSolver<Complex> Solver { get; private set; }
+
+        /// <summary>
+        /// Gets the variable to index map.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        public IVariableMap Map => _parent.Map;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.

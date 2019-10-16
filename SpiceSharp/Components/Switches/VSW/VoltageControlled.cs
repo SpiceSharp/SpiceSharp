@@ -26,8 +26,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void Bind(BindingContext context)
         {
             var c = (ComponentBindingContext)context;
-            ContPosNode = c.Pins[2];
-            ContNegNode = c.Pins[3];
+            var state = context.States.GetValue<IBiasingSimulationState>();
+            ContPosNode = state.Map[c.Nodes[2]];
+            ContNegNode = state.Map[c.Nodes[3]];
         }
 
         /// <summary>

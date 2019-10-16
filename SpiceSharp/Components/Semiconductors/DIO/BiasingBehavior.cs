@@ -16,17 +16,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the positive internal node.
         /// </summary>
-        public int PosPrimeNode { get; private set; }
-
-        /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
+        public Variable PosPrime { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -60,6 +50,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public double GetPower() => Current * Voltage;
 
+        private int _posNode, _negNode, _posPrimeNode;
+
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -75,21 +67,24 @@ namespace SpiceSharp.Components.DiodeBehaviors
             base.Bind(context);
 
             var c = (ComponentBindingContext)context;
-                PosNode = c.Pins[0];
-                NegNode = c.Pins[1];
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
             var variables = context.Variables;
-            PosPrimeNode = ModelParameters.Resistance > 0 ? variables.Create(Name.Combine("pos"), VariableType.Voltage).Index : PosNode;
+            PosPrime = ModelParameters.Resistance > 0 ? 
+                variables.Create(Name.Combine("pos"), VariableType.Voltage) :
+                c.Nodes[0];
+            _posPrimeNode = BiasingState.Map[PosPrime];
 
             // Get matrix elements
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(NegNode, NegNode),
-                new MatrixLocation(PosPrimeNode, PosPrimeNode),
-                new MatrixLocation(NegNode, PosPrimeNode),
-                new MatrixLocation(PosPrimeNode, NegNode),
-                new MatrixLocation(PosNode, PosPrimeNode),
-                new MatrixLocation(PosPrimeNode, PosNode)
-            }, new[] { NegNode, PosPrimeNode });
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_negNode, _negNode),
+                new MatrixLocation(_posPrimeNode, _posPrimeNode),
+                new MatrixLocation(_negNode, _posPrimeNode),
+                new MatrixLocation(_posPrimeNode, _negNode),
+                new MatrixLocation(_posNode, _posPrimeNode),
+                new MatrixLocation(_posPrimeNode, _posNode)
+            }, new[] { _negNode, _posPrimeNode });
         }
 
         /// <summary>
@@ -171,7 +166,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Get voltage over the diode (without series resistance)
-                vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+                vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
                 // limit new junction voltage
                 if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
@@ -194,7 +189,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         bool IBiasingBehavior.IsConvergent()
         {
             var state = BiasingState;
-            var vd = state.Solution[PosPrimeNode] - state.Solution[NegNode];
+            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             var delvd = vd - Voltage;
             var cdhat = Current + Conductance * delvd;

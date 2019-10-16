@@ -123,6 +123,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </value>
         protected ElementSet<double> TransientElements { get; private set; }
 
+        private int _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
@@ -139,22 +141,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             base.Bind(context);
 
+            var c = (ComponentBindingContext)context;
+            _gateNode = BiasingState.Map[c.Nodes[1]];
+            _bulkNode = BiasingState.Map[c.Nodes[3]];
+            _drainNodePrime = BiasingState.Map[DrainPrime];
+            _sourceNodePrime = BiasingState.Map[SourcePrime];
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(GateNode, GateNode),
-                new MatrixLocation(BulkNode, BulkNode),
-                new MatrixLocation(DrainNodePrime, DrainNodePrime),
-                new MatrixLocation(SourceNodePrime, SourceNodePrime),
-                new MatrixLocation(GateNode, BulkNode),
-                new MatrixLocation(GateNode, DrainNodePrime),
-                new MatrixLocation(GateNode, SourceNodePrime),
-                new MatrixLocation(BulkNode, GateNode),
-                new MatrixLocation(BulkNode, DrainNodePrime),
-                new MatrixLocation(BulkNode, SourceNodePrime),
-                new MatrixLocation(DrainNodePrime, GateNode),
-                new MatrixLocation(DrainNodePrime, BulkNode),
-                new MatrixLocation(SourceNodePrime, GateNode),
-                new MatrixLocation(SourceNodePrime, BulkNode)
-            }, new[] { GateNode, BulkNode, DrainNodePrime, SourceNodePrime });
+                new MatrixLocation(_gateNode, _gateNode),
+                new MatrixLocation(_bulkNode, _bulkNode),
+                new MatrixLocation(_drainNodePrime, _drainNodePrime),
+                new MatrixLocation(_sourceNodePrime, _sourceNodePrime),
+                new MatrixLocation(_gateNode, _bulkNode),
+                new MatrixLocation(_gateNode, _drainNodePrime),
+                new MatrixLocation(_gateNode, _sourceNodePrime),
+                new MatrixLocation(_bulkNode, _gateNode),
+                new MatrixLocation(_bulkNode, _drainNodePrime),
+                new MatrixLocation(_bulkNode, _sourceNodePrime),
+                new MatrixLocation(_drainNodePrime, _gateNode),
+                new MatrixLocation(_drainNodePrime, _bulkNode),
+                new MatrixLocation(_sourceNodePrime, _gateNode),
+                new MatrixLocation(_sourceNodePrime, _bulkNode)
+            }, new[] { _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime });
 
             var method = context.States.GetValue<ITimeSimulationState>().Method;
             _voltageGs = method.CreateHistory();

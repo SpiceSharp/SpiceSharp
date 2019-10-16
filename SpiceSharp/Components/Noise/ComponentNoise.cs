@@ -64,14 +64,14 @@ namespace SpiceSharp.Components
         /// Binds the component noise generators to the simulation.
         /// </summary>
         /// <param name="context">The binding context.</param>
-        /// <param name="pins">The pins the noise sources are connected to.</param>
-        public void Bind(BindingContext context, params int[] pins)
+        /// <param name="nodes">The nodes.</param>
+        public void Bind(ComponentBindingContext context, params Variable[] nodes)
         {
             _cstate = context.States.GetValue<IComplexSimulationState>();
             _nstate = context.States.GetValue<INoiseSimulationState>();
-
+            
             foreach (var generator in Generators)
-                generator.Bind(context, pins);
+                generator.Bind(context, nodes);
         }
 
         /// <summary>

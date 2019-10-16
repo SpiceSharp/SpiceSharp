@@ -109,35 +109,35 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Update the indices for the component.
         /// </summary>
-        /// <param name="nodes">The variable set.</param>
+        /// <param name="variables">The variable set.</param>
         /// <returns>The node indices.</returns>
-        protected virtual int[] ApplyConnections(IVariableSet nodes)
+        protected virtual Variable[] ApplyConnections(IVariableSet variables)
         {
-            nodes.ThrowIfNull(nameof(nodes));
+            variables.ThrowIfNull(nameof(variables));
             if (_connections == null)
-                return new int[0];
+                return new Variable[0];
 
             // Map connected nodes
-            var indexes = new int[_connections.Length];
+            var nodes = new Variable[_connections.Length];
             for (var i = 0; i < _connections.Length; i++)
-                indexes[i] = nodes.MapNode(_connections[i], VariableType.Voltage).Index;
-            return indexes;
+                nodes[i] = variables.MapNode(_connections[i], VariableType.Voltage);
+            return nodes;
         }
 
         /// <summary>
         /// Gets the node indexes (in order).
         /// </summary>
-        /// <param name="nodes">The nodes.</param>
+        /// <param name="variables">The set of variables.</param>
         /// <returns>An enumerable for all nodes.</returns>
-        public virtual IEnumerable<int> GetNodeIndexes(IVariableSet nodes)
+        public virtual IEnumerable<Variable> GetNodes(IVariableSet variables)
         {
-            nodes.ThrowIfNull(nameof(nodes));
+            variables.ThrowIfNull(nameof(variables));
 
             // Map connected nodes
-            foreach (var node in _connections)
+            foreach (var c in _connections)
             {
-                var index = nodes.MapNode(node, VariableType.Voltage).Index;
-                yield return index;
+                var node = variables.MapNode(c, VariableType.Voltage);
+                yield return node;
             }
         }
 

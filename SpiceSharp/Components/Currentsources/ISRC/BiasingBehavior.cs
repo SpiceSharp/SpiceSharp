@@ -24,29 +24,19 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
-        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[PosNode]) * -Current;
+        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_posNode]) * -Current;
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("c"), ParameterName("i"), ParameterName("i_r"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
-
-        /// <summary>
-        /// The positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// The negative index.
-        /// </summary>
-        protected int NegNode { get; private set; }
 
         /// <summary>
         /// Gets the vector elements.
@@ -65,6 +55,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected IBiasingSimulationState BiasingState { get; private set; }
 
         private ITimeSimulationState _timeState;
+        private int _posNode, _negNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -81,8 +72,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             base.Bind(context);
 
             var c = (ComponentBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             context.States.TryGetValue(out _timeState);
@@ -98,8 +90,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                         : "{0} has no value, DC 0 assumed".FormatString(Name));
             }
 
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            Elements = new ElementSet<double>(BiasingState.Solver, null, new[] { PosNode, NegNode });
+            Elements = new ElementSet<double>(BiasingState.Solver, null, new[] { _posNode, _negNode });
         }
 
         /// <summary>

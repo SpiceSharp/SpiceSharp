@@ -17,48 +17,36 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Gets the voltage biasing behavior.
-        /// </summary>
-        protected VoltageSourceBehaviors.BiasingBehavior VoltageLoad { get; private set; }
-
-        /// <summary>
         /// Gets the current through the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Output current")]
-        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq];
+        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[_brNode];
 
         /// <summary>
         /// Gets the voltage applied by the source.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Output voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
-        public double GetPower() => BiasingState.ThrowIfNotBound(this).Solution[BranchEq] * (BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode]);
-
-        /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
+        public double GetPower() => BiasingState.ThrowIfNotBound(this).Solution[_brNode] * (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]);
 
         /// <summary>
         /// Gets the controlling branch equation row.
         /// </summary>
-        protected int ContBranchEq { get; private set; }
+        protected Variable ControlBranch { get; private set; }
 
         /// <summary>
-        /// Gets the branch equation row.
+        /// Gets the branch equation.
         /// </summary>
-        public int BranchEq { get; private set; }
+        /// <value>
+        /// The branch.
+        /// </value>
+        protected Variable Branch { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -76,6 +64,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
+        private int _posNode, _negNode, _cbrNode, _brNode;
+
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -89,22 +79,27 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
-            var c = (CommonBehaviors.ControlledBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-            VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
-            ContBranchEq = VoltageLoad.BranchEq;
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BranchEq = context.Variables.Create(Name.Combine("branch"), VariableType.Current).Index;
 
-            // Get matrix elements
-            var solver = context.States.GetValue<IBiasingSimulationState>().Solver;
-            Elements = new ElementSet<double>(solver,
-                new MatrixLocation(PosNode, BranchEq),
-                new MatrixLocation(NegNode, BranchEq),
-                new MatrixLocation(BranchEq, PosNode),
-                new MatrixLocation(BranchEq, NegNode),
-                new MatrixLocation(BranchEq, ContBranchEq));
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+
+            var c = (CommonBehaviors.ControlledBindingContext)context;
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
+
+            var behavior = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            ControlBranch = behavior.Branch;
+            _cbrNode = BiasingState.Map[ControlBranch];
+            
+            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            _brNode = BiasingState.Map[Branch];
+
+            Elements = new ElementSet<double>(BiasingState.Solver,
+                new MatrixLocation(_posNode, _brNode),
+                new MatrixLocation(_negNode, _brNode),
+                new MatrixLocation(_brNode, _posNode),
+                new MatrixLocation(_brNode, _negNode),
+                new MatrixLocation(_brNode, _cbrNode));
         }
 
         /// <summary>

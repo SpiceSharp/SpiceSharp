@@ -35,6 +35,14 @@ namespace SpiceSharp.Simulations
             public ISparseSolver<Complex> Solver { get; }
 
             /// <summary>
+            /// Gets the variable to index map.
+            /// </summary>
+            /// <value>
+            /// The map.
+            /// </value>
+            public IVariableMap Map { get; private set; }
+
+            /// <summary>
             /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
             /// </summary>
             public ComplexSimulationState()
@@ -52,6 +60,16 @@ namespace SpiceSharp.Simulations
             }
 
             /// <summary>
+            /// Initializes the specified simulation.
+            /// </summary>
+            /// <param name="simulation">The simulation.</param>
+            public void Initialize(ISimulation simulation)
+            {
+                simulation.ThrowIfNull(nameof(simulation));
+                Map = new VariableMap(simulation.Variables);
+            }
+
+            /// <summary>
             /// Set up the simulation state for the simulation.
             /// </summary>
             /// <param name="simulation">The simulation.</param>
@@ -66,6 +84,8 @@ namespace SpiceSharp.Simulations
             public void Unsetup()
             {
                 Solution = null;
+                Map.Clear();
+                Map = null;
 
                 // TODO: Clear all for the matrix
                 Solver.Reset();

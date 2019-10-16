@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Algebra;
+﻿using System;
 
 namespace SpiceSharp.Simulations
 {
@@ -13,22 +13,6 @@ namespace SpiceSharp.Simulations
         public string Name { get; }
 
         /// <summary>
-        /// Gets the index of the node.
-        /// </summary>
-        /// <remarks>
-        /// This index is typically used as the row index for the KCL law of this node voltage.
-        /// </remarks>
-        public int Index { get; }
-
-        /// <summary>
-        /// Gets or sets the diagonal matrix element associated with the node.
-        /// </summary>
-        /// <remarks>
-        /// This variable is used by simulations to aid convergence in specific situations.
-        /// </remarks>
-        public Element<double> Diagonal { get; set; }
-
-        /// <summary>
         /// Gets the node type.
         /// </summary>
         public VariableType UnknownType { get; }
@@ -37,12 +21,10 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Variable"/> class.
         /// </summary>
         /// <param name="name">The identifier of the variable.</param>
-        /// <param name="index">The index of the unknown variable.</param>
-        public Variable(string name, int index)
+        public Variable(string name)
         {
             Name = name;
             UnknownType = VariableType.Voltage;
-            Index = index;
         }
 
         /// <summary>
@@ -50,19 +32,17 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the variable.</param>
         /// <param name="type">The type of variable.</param>
-        /// <param name="index">The index of the unknown variable.</param>
-        public Variable(string name, VariableType type, int index)
+        public Variable(string name, VariableType type)
         {
             Name = name;
             UnknownType = type;
-            Index = index;
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="String" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="String" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {
@@ -73,6 +53,6 @@ namespace SpiceSharp.Simulations
         /// Clones this variable.
         /// </summary>
         /// <returns>A clone of this variable.</returns>
-        public Variable Clone() => new Variable(Name, UnknownType, Index);
+        public Variable Clone() => new Variable(Name, UnknownType);
     }
 }

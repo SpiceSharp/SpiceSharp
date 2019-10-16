@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[PosNode] - ComplexState.Solution[NegNode];
+        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posNode] - ComplexState.Solution[_negNode];
 
         /// <summary>
         /// Get the power dissipation.
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public Complex GetComplexPower()
         {
             ComplexState.ThrowIfNotBound(this);
-            var v = ComplexState.Solution[PosNode] - ComplexState.Solution[NegNode];
+            var v = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
             return -v * Complex.Conjugate(FrequencyParameters.Phasor);
         }
 
@@ -56,6 +56,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
+        private int _posNode, _negNode;
+
         /// <summary>
         /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -72,8 +74,11 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Get matrix elements
+            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, null, new[] { PosNode, NegNode });
+            _posNode = ComplexState.Map[c.Nodes[0]];
+            _negNode = ComplexState.Map[c.Nodes[1]];
+            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, null, new[] { _posNode, _negNode });
         }
 
         /// <summary>

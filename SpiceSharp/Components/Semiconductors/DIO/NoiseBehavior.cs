@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var c = (ComponentBindingContext)context;
             _mnp = c.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
             _state = context.States.GetValue<INoiseSimulationState>();
-            DiodeNoise.Bind(context, PosNode, PosPrimeNode, NegNode);
+            DiodeNoise.Bind(c, c.Nodes[0], PosPrime, c.Nodes[1]);
         }
 
         /// <summary>

@@ -489,6 +489,8 @@ namespace SpiceSharpTest.Models
         protected void DumpTransientState(Transient tran, Circuit ckt)
         {
             var state = tran.States.GetValue<ITimeSimulationState>();
+            var rstate = tran.States.GetValue<IBiasingSimulationState>();
+
             Console.WriteLine("----------- Dumping transient information -------------");
             Console.WriteLine($"Base time: {state.Method.BaseTime}");
             Console.WriteLine($"Target time: {state.Method.Time}");
@@ -497,7 +499,7 @@ namespace SpiceSharpTest.Models
                 Console.Write("{0}{1}", i > 0 ? ", " : "", state.Method.GetTimestep(i));
             Console.WriteLine();
             Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
-            Console.WriteLine("Problem variable value: {0}", tran.States.GetValue<IBiasingSimulationState>().Solution[tran.ProblemVariable.Index]);
+            Console.WriteLine("Problem variable value: {0}", tran.States.GetValue<IBiasingSimulationState>().Solution[rstate.Map[tran.ProblemVariable]]);
             Console.WriteLine();
 
             // Dump the circuit contents
@@ -509,7 +511,7 @@ namespace SpiceSharpTest.Models
                 {
                     for (var i = 0; i < c.PinCount; i++)
                         Console.Write($"{c.GetNode(i)} ");
-                    Console.Write($"({string.Join(", ", c.GetNodeIndexes(tran.Variables))})");
+                    Console.Write($"({string.Join(", ", c.GetNodes(tran.Variables))})");
                 }
                 Console.WriteLine();
             }
@@ -518,8 +520,8 @@ namespace SpiceSharpTest.Models
             // Dump the current iteration solution
             Console.WriteLine("- Solutions");
             Dictionary<int, string> variables = new Dictionary<int, string>();
-            foreach (var variable in tran.Variables)
-                variables.Add(variable.Index, $"{variable.Index} - {variable.Name} ({variable.UnknownType}): {tran.States.GetValue<IBiasingSimulationState>().Solution[variable.Index]}");
+            foreach (var variable in rstate.Map)
+                variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.UnknownType}): {tran.States.GetValue<IBiasingSimulationState>().Solution[variable.Value]}");
             for (var i = 0; i <= state.Method.MaxOrder; i++)
             {
                 var oldsolution = state.Method.GetSolution(i);

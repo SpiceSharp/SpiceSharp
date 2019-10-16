@@ -81,6 +81,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public ISparseSolver<double> Solver { get; private set; }
 
         /// <summary>
+        /// Gets the variable to index map.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        public IVariableMap Map => _parent.Map;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>

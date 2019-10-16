@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the voltage across the resistor.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode];
+        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
 
         /// <summary>
         /// Gets the current through the resistor.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Current")]
-        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[PosNode] - BiasingState.Solution[NegNode]) * Conductance;
+        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the resistor.
@@ -30,19 +30,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double GetPower()
         {
             BiasingState.ThrowIfNotBound(this);
-            var v = BiasingState.Solution[PosNode] - BiasingState.Solution[NegNode];
+            var v = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
             return v * v * Conductance;
         }
-
-        /// <summary>
-        /// Gets the positive node.
-        /// </summary>
-        protected int PosNode { get; private set; }
-
-        /// <summary>
-        /// Gets the negative node.
-        /// </summary>
-        protected int NegNode { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -51,6 +41,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// The matrix elements.
         /// </value>
         protected ElementSet<double> Elements { get; private set; }
+
+        private int _posNode, _negNode;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -68,15 +60,15 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             base.Bind(context);
 
+            // Connections
             var c = (ComponentBindingContext)context;
-            PosNode = c.Pins[0];
-            NegNode = c.Pins[1];
-
+            _posNode = BiasingState.Map[c.Nodes[0]];
+            _negNode = BiasingState.Map[c.Nodes[1]];
             Elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(PosNode, PosNode),
-                new MatrixLocation(PosNode, NegNode),
-                new MatrixLocation(NegNode, PosNode),
-                new MatrixLocation(NegNode, NegNode));
+                new MatrixLocation(_posNode, _posNode),
+                new MatrixLocation(_posNode, _negNode),
+                new MatrixLocation(_negNode, _posNode),
+                new MatrixLocation(_negNode, _negNode));
         }
 
         /// <summary>
