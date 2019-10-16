@@ -36,30 +36,28 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             base.Bind(context);
 
             // Figure out if we need to compute something in parallel
+            _solvers = null;
             if (Simulations.Length > 1 &&
                 context.Behaviors.Parameters.TryGetValue<FrequencyParameters>(out var fp))
             {
                 _parallelInitialize = fp.ParallelInitialize;
                 _parallelLoading = fp.ParallelLoad;
+
+                if (_parallelLoading)
+                {
+                    _solvers = new ISolverElementProvider[Simulations.Length];
+                    for (var i = 0; i < Simulations.Length; i++)
+                    {
+                        var state = Simulations[i].States.GetValue<IComplexSimulationState>();
+                        _solvers[i] = (ISolverElementProvider)state.Solver;
+                    }
+                }
             }
             else
             {
                 _parallelInitialize = false;
                 _parallelLoading = false;
             }
-
-            // Deal with solvers
-            var solvers = new List<ISolverElementProvider>(Simulations.Length);
-            foreach (var simulation in Simulations)
-            {
-                var state = simulation.States.GetValue<IComplexSimulationState>();
-                if (state.Solver is ISolverElementProvider solver)
-                    solvers.Add(solver);
-            }
-            if (solvers.Count > 0)
-                _solvers = solvers.ToArray();
-            else
-                _solvers = null;
         }
 
         /// <summary>
@@ -98,13 +96,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void Load()
         {
-            // Reset local solvers
-            if (_solvers != null)
-            {
-                foreach (var solver in _solvers)
-                    solver.Reset();
-            }
-
             if (_parallelLoading && Behaviors.Length > 1)
             {
                 // Execute multiple tasks
@@ -114,11 +105,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var bs = Behaviors[t];
                     tasks[t] = Task.Run(() =>
                     {
+                        _solvers[t].Reset();
                         for (var i = 0; i < bs.Count; i++)
                             bs[i].Load();
                     });
                 }
                 Task.WaitAll(tasks);
+                foreach (var solver in _solvers)
+                    solver.ApplyElements();
             }
             else
             {
@@ -128,13 +122,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     for (var i = 0; i < bs.Count; i++)
                         bs[i].Load();
                 }
-            }
-
-            // Apply local solvers
-            if (_solvers != null)
-            {
-                foreach (var solver in _solvers)
-                    solver.ApplyElements();
             }
         }
     }
