@@ -259,5 +259,36 @@ namespace SpiceSharpTest.Algebra
             Assert.AreEqual(-8.0, solver[4, 3], 1e-12);
             Assert.AreEqual(1.0, solver[4, 4], 1e-12);
         }
+
+        [Test]
+        public void When_PartialSolve_Expect_Reference()
+        {
+            var solver = LUHelper.CreateSparseRealSolver();
+            solver.Strategy.SearchLimit = 2; // Limit to only the 2 first elements
+            solver.Order = 2; // Only perform elimination on the first two rows
+
+            solver[1, 1] = 1;
+            solver[1, 3] = 2;
+            solver[1, 4] = 3;
+            solver[1] = 1;
+            solver[2, 2] = 2;
+            solver[2, 3] = 4;
+            solver[2] = 2;
+            solver.Factor();
+
+            // We should now be able to solve for multiple solutions, where the last two elements
+            // will determine the result.
+            var solution = new DenseVector<double>(4);
+            solution[3] = 0;
+            solution[4] = 0;
+            solver.Solve(solution);
+            Assert.AreEqual(1.0, solution[1], 1e-12);
+            Assert.AreEqual(1.0, solution[2], 1e-12);
+            solution[3] = 1.0;
+            solution[4] = 2.0;
+            solver.Solve(solution);
+            Assert.AreEqual(-7.0, solution[1], 1e-12);
+            Assert.AreEqual(-1.0, solution[2], 1e-12);
+        }
     }
 }

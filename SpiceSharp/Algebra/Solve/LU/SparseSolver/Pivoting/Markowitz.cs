@@ -116,7 +116,6 @@ namespace SpiceSharp.Algebra.Solve
             _markowitzRow = new int[matrix.Size + 1];
             _markowitzColumn = new int[matrix.Size + 1];
             _markowitzProduct = new int[matrix.Size + 2];
-            SearchLimit = 0;
         }
 
         /// <summary>
@@ -355,6 +354,9 @@ namespace SpiceSharp.Algebra.Solve
         {
             matrix.ThrowIfNull(nameof(matrix));
             fillin.ThrowIfNull(nameof(fillin));
+
+            if (_markowitzProduct == null)
+                return;
 
             // Update the markowitz row count
             int index = fillin.Row;

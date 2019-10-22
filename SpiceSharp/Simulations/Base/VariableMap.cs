@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SpiceSharp.Simulations
 {
@@ -20,7 +19,14 @@ namespace SpiceSharp.Simulations
         /// We just want to search by reference!
         /// </remarks>
         private Dictionary<Variable, int> _map = new Dictionary<Variable, int>();
-        private Variable _gnd;
+
+        /// <summary>
+        /// Gets the ground node.
+        /// </summary>
+        /// <value>
+        /// The ground.
+        /// </value>
+        public Variable Ground { get; }
 
         /// <summary>
         /// Gets the index associated with the specified variable.
@@ -58,12 +64,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableMap"/> class.
         /// </summary>
-        /// <param name="parent">The parent.</param>
-        public VariableMap(IVariableSet parent)
+        /// <param name="ground">The ground variable.</param>
+        public VariableMap(Variable ground)
         {
-            parent.ThrowIfNull(nameof(parent));
-            _gnd = parent.Ground;
-            _map.Add(_gnd, 0);
+            Ground = ground.ThrowIfNull(nameof(ground));
+            _map.Add(Ground, 0);
         }
 
         /// <summary>
@@ -74,6 +79,17 @@ namespace SpiceSharp.Simulations
         ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
         /// </returns>
         public bool Contains(Variable variable) => _map.ContainsKey(variable);
+
+        /// <summary>
+        /// Tries to get the associated index of the specified variable.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <param name="index">The associated index.</param>
+        /// <returns>
+        ///   <c>true</c> if the variable has been found; otherwise, <c>false</c>.
+        /// </returns>
+        public bool TryGetIndex(Variable variable, out int index)
+            => _map.TryGetValue(variable, out index);
 
         /// <summary>
         /// Clears the map.

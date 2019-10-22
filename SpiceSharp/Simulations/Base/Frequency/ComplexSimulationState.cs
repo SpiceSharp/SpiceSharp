@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
             public void Initialize(ISimulation simulation)
             {
                 simulation.ThrowIfNull(nameof(simulation));
-                Map = new VariableMap(simulation.Variables);
+                Map = new VariableMap(simulation.Variables.Ground);
             }
 
             /// <summary>

@@ -2,6 +2,7 @@
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
@@ -14,7 +15,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class FrequencyBehavior : SubcircuitBehavior<IFrequencyBehavior>, IFrequencyBehavior
     {
         private bool _parallelInitialize, _parallelLoading;
-        private ISolverElementProvider[] _solvers;
+        private SolverElementProvider<Complex>[] _solvers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -45,11 +46,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
 
                 if (_parallelLoading)
                 {
-                    _solvers = new ISolverElementProvider[Simulations.Length];
+                    _solvers = new SolverElementProvider<Complex>[Simulations.Length];
                     for (var i = 0; i < Simulations.Length; i++)
                     {
                         var state = Simulations[i].States.GetValue<IComplexSimulationState>();
-                        _solvers[i] = (ISolverElementProvider)state.Solver;
+                        _solvers[i] = (SolverElementProvider<Complex>)state.Solver;
                     }
                 }
             }

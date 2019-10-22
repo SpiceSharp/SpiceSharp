@@ -173,11 +173,11 @@ namespace SpiceSharp.Algebra
                             IsFactored = false;
                             throw new AlgebraException("Elimination failed on accepted pivot");
                         }
-                        else
-                        {
-                            NeedsReordering = true;
-                            break;
-                        }
+                    }
+                    else
+                    {
+                        NeedsReordering = true;
+                        break;
                     }
                 }
 

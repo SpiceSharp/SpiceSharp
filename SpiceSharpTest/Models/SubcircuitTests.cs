@@ -147,7 +147,7 @@ namespace SpiceSharpTest.Models
              * This is just a test to check that the multithreading works correctly.
              */
             int count = 1000;
-            var sub = new Subcircuit("X1", new Circuit(), "in", "out");
+            var sub = new Subcircuit("X1", new[] { new Circuit(), new Circuit() }, "in", "out");
             sub.Connect("in", "out");
             string input = "in";
             for (var i = 1; i <= count; i++)
@@ -155,8 +155,9 @@ namespace SpiceSharpTest.Models
                 string output = "out";
                 if (i < count)
                     output += i;
-                sub.Entities.Add(new Resistor("R" + i, input, output, 0.5));
-                sub.Entities.Add(new Capacitor("C" + i, output, "0", 1e-6));
+                int task = i <= count / 2 ? 0 : 1;
+                sub.Entities[task].Add(new Resistor("R" + i, input, output, 0.5));
+                sub.Entities[task].Add(new Capacitor("C" + i, output, "0", 1e-6));
                 input = output;
             }
             var ckt = new Circuit(
@@ -164,11 +165,11 @@ namespace SpiceSharpTest.Models
                 sub
                 );
             ckt["X1"].Parameters.Add(
-                new SpiceSharp.Components.SubcircuitBehaviors.BiasingParameters().SetParameter("biasing.load", true));
+                new SpiceSharp.Components.SubcircuitBehaviors.BiasingParameters()
+                    .SetParameter("biasing.load", true)
+                    .SetParameter("biasing.solve", true));
             ckt["X1"].Parameters.Add(
                 new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
-            ckt["X1"].Parameters.Add(
-                new SpiceSharp.Components.SubcircuitBehaviors.BaseParameters().SetParameter("tasks", 2));
 
             // Build the simulation
             var ac = new AC("ac", new LinearSweep(0, 1, 3));

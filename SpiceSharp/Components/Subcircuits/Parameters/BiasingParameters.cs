@@ -19,6 +19,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public bool ParallelLoad { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether solving should be done in parallel.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if solving is done in parallel; otherwise, <c>false</c>.
+        /// </value>
+        [ParameterName("biasing.solve"), ParameterInfo("Flag indicating whether solving should be done in parallel")]
+        public bool ParallelSolve { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether convergence should be tested in parallel.
         /// </summary>
         /// <value>

@@ -434,7 +434,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var vbe = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_emitterPrimeNode]);
             var vbc = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_collectorPrimeNode]);
             var delvbe = vbe - VoltageBe;
-            var delvbc = vbc - VoltageBe;
+            var delvbc = vbc - VoltageBc;
             var cchat = CollectorCurrent + (Transconductance + OutputConductance) * delvbe - (OutputConductance + ConductanceMu) * delvbc;
             var cbhat = BaseCurrent + ConductancePi * delvbe + ConductanceMu * delvbc;
             var cc = CollectorCurrent;

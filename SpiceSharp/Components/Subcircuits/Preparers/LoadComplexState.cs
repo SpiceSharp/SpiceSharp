@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// A <see cref="IComplexSimulationState"/> for a <see cref="SubcircuitSimulation"/>.
     /// </summary>
     /// <seealso cref="IComplexSimulationState" />
-    public class ComplexSimulationState : IComplexSimulationState
+    public class LoadComplexState : IComplexSimulationState
     {
         private IComplexSimulationState _parent;
 
@@ -37,7 +37,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public ISparseSolver<Complex> Solver { get; private set; }
+        public ISparseSolver<Complex> Solver => _solver;
+        private SolverElementProvider<Complex> _solver;
 
         /// <summary>
         /// Gets the variable to index map.
@@ -48,14 +49,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public IVariableMap Map => _parent.Map;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
+        /// Initializes a new instance of the <see cref="LoadComplexState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        /// <param name="solver">The solver.</param>
-        public ComplexSimulationState(IComplexSimulationState parent, ISparseSolver<Complex> solver)
+        public LoadComplexState(IComplexSimulationState parent)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
-            Solver = solver.ThrowIfNull(nameof(solver));
+            _solver = new SolverElementProvider<Complex>(parent.Solver);
         }
 
         /// <summary>

@@ -12,25 +12,32 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Prepares the task's simulation for the behavior.
         /// </summary>
-        /// <param name="taskSimulation">The task simulation to be prepared.</param>
+        /// <param name="simulations">The task simulations to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        public void Prepare(SubcircuitSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters)
+        public void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
             var state = parent.States.GetValue<IBiasingSimulationState>();
-            if (parameters.TryGetValue<BiasingParameters>(out var bp) && 
-                bp.ParallelLoad && taskSimulation.Tasks > 1)
+            if (parameters.TryGetValue<BiasingParameters>(out var bp) &&
+                (bp.ParallelLoad || bp.ParallelSolve) &&
+                simulations.Length > 1)
             {
-                // We need to prepare for multithreading
-                taskSimulation.States.Add<IBiasingSimulationState>(
-                    new BiasingSimulationState(
-                        state,
-                        new SolverElementProvider<double>(state.Solver)
-                        )
-                    );
+                if (bp.ParallelSolve)
+                {
+                    foreach (var sim in simulations)
+                        sim.States.Add<IBiasingSimulationState>(new SolveBiasingState(state));
+                }
+                else
+                {
+                    foreach (var sim in simulations)
+                        sim.States.Add<IBiasingSimulationState>(new LoadBiasingState(state));
+                }
             }
             else
-                taskSimulation.States.Add(state);
+            {
+                foreach (var sim in simulations)
+                    sim.States.Add(state);
+            }
         }
     }
 }

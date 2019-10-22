@@ -14,7 +14,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
     {
         private bool _parallelIsConvergent, _parallelLoading;
-        private ISolverElementProvider[] _solvers;
+        private SubcircuitBiasingState[] _states;
+        private HashSet<Variable> _common = new HashSet<Variable>();
+
+        /// <summary>
+        /// Gets the common variables.
+        /// </summary>
+        /// <value>
+        /// The common variables.
+        /// </value>
+        public IEnumerable<Variable> CommonVariables => _common;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -34,27 +43,68 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             base.Bind(context);
 
             // Figure out if we need to compute something in parallel
-            _solvers = null;
             if (Simulations.Length > 1 &&
                 context.Behaviors.Parameters.TryGetValue<BiasingParameters>(out var bp))
             {
                 _parallelIsConvergent = bp.ParallelConvergences;
                 _parallelLoading = bp.ParallelLoad;
 
-                if (_parallelLoading)
+                _states = new SubcircuitBiasingState[Simulations.Length];
+                for (var i = 0; i < Simulations.Length; i++)
                 {
-                    _solvers = new ISolverElementProvider[Simulations.Length];
-                    for (var i = 0; i < Simulations.Length; i++)
-                    {
-                        var state = Simulations[i].States.GetValue<IBiasingSimulationState>();
-                        _solvers[i] = (ISolverElementProvider)state.Solver;
-                    }
+                    var state = Simulations[i].States.GetValue<IBiasingSimulationState>();
+                    _states[i] = (SubcircuitBiasingState)state;
+                    state.Setup(Simulations[i]);
                 }
             }
             else
             {
                 _parallelIsConvergent = false;
                 _parallelLoading = false;
+                _states = null;
+            }
+
+            // Get the common variables if there are more entity groups
+            _common.Clear();
+            if (Simulations.Length > 1)
+            {
+                var all = new HashSet<Variable>();
+                foreach (var sim in Simulations)
+                {
+                    foreach (var variable in sim.Variables)
+                    {
+                        if (all.Contains(variable))
+                            _common.Add(variable);
+                        else
+                            all.Add(variable);
+                    }
+                }
+
+                // Add our own nodes as well
+                var c = (ComponentBindingContext)context;
+                for (var i = 0; i < c.Nodes.Length; i++)
+                    _common.Add(c.Nodes[i]);
+
+                // Notify the states that they should share these variables with other states
+                foreach (var state in _states)
+                    state.ShareVariables(_common);
+            }
+        }
+
+        /// <summary>
+        /// Destroy the behavior.
+        /// </summary>
+        public override void Unbind()
+        {
+            base.Unbind();
+            if (_states != null)
+            {
+                for (var i = 0; i < _states.Length; i++)
+                {
+                    var state = (IBiasingSimulationState)_states[i];
+                    state.Unsetup();
+                }
+                _states = null;
             }
         }
 
@@ -72,11 +122,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 for (var t = 0; t < tasks.Length; t++)
                 {
                     var bs = Behaviors[t];
+                    var state = _states[t];
                     tasks[t] = Task.Run(() =>
                     {
                         var result = true;
                         for (var i = 0; i < bs.Count; i++)
                             result &= bs[i].IsConvergent();
+                        if (result)
+                            result &= state.CheckConvergence();
                         return result;
                     });
                 }
@@ -94,6 +147,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     for (var i = 0; i < bs.Count; i++)
                         isConvergent &= bs[i].IsConvergent();
                 }
+                if (_states != null)
+                {
+                    foreach (var state in _states)
+                        isConvergent &= state.CheckConvergence();
+                }
                 return isConvergent;
             }
         }
@@ -110,25 +168,42 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 for (var t = 0; t < Behaviors.Length; t++)
                 {
                     var bs = Behaviors[t];
-                    var solver = _solvers[t];
+                    var state = _states[t];
                     tasks[t] = Task.Run(() =>
                     {
-                        solver.Reset();
+                        state.Reset();
                         for (var i = 0; i < bs.Count; i++)
                             bs[i].Load();
+                        state.ApplyAsynchroneously();
                     });
                 }
                 Task.WaitAll(tasks);
-                foreach (var solver in _solvers)
-                    solver.ApplyElements();
+                foreach (var state in _states)
+                    state.ApplySynchroneously();
             }
             else
             {
-                // Use single thread
-                foreach (var bs in Behaviors)
+                if (_states != null)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].Load();
+                    for (var t = 0; t < Behaviors.Length; t++)
+                    {
+                        var bs = Behaviors[t];
+                        _states[t].Reset();
+                        for (var i = 0; i < bs.Count; i++)
+                            bs[i].Load();
+                        _states[t].ApplyAsynchroneously();
+                    }
+                    foreach (var state in _states)
+                        state.ApplySynchroneously();
+                }
+                else
+                {
+                    // Use single thread
+                    foreach (var bs in Behaviors)
+                    {
+                        for (var i = 0; i < bs.Count; i++)
+                            bs[i].Load();
+                    }
                 }
             }
         }

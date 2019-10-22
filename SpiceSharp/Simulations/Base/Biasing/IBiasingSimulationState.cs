@@ -32,12 +32,12 @@ namespace SpiceSharp.Simulations
         /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
         /// without having non-convergence.
         /// </remarks>
-        double SourceFactor { get; set; }
+        double SourceFactor { get; }
 
         /// <summary>
         /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
         /// </summary>
-        double Gmin { get; set; }
+        double Gmin { get; }
 
         /// <summary>
         /// Is the current iteration convergent?

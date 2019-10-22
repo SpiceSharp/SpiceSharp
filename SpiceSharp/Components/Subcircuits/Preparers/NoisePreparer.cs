@@ -11,13 +11,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Prepares the task's simulation for the behavior.
         /// </summary>
-        /// <param name="taskSimulation">The task simulation to be prepared.</param>
+        /// <param name="simulations">The task simulations to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        public void Prepare(SubcircuitSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters)
+        public void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
-            var state = parent.States.GetValue<INoiseSimulationState>();
-            taskSimulation.States.Add(state);
+            foreach (var sim in simulations)
+            {
+                var state = parent.States.GetValue<INoiseSimulationState>();
+                sim.States.Add(state);
+            }
         }
     }
 }

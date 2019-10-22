@@ -100,5 +100,5 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base type.</typeparam>
     /// <param name="matrix">The (permutated) matrix.</param>
     /// <param name="vector">The (permutated) vector.</param>
-    public delegate void PreconditionMethod<T>(IMatrix<T> matrix, IVector<T> vector) where T : IFormattable;
+    public delegate void PreconditionMethod<T>(IPermutableMatrix<T> matrix, IPermutableVector<T> vector) where T : IFormattable;
 }

@@ -13,24 +13,23 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Prepares the task's simulation for the behavior.
         /// </summary>
-        /// <param name="taskSimulation">The task simulation to be prepared.</param>
+        /// <param name="simulations">The task simulations to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        public void Prepare(SubcircuitSimulation taskSimulation, ISimulation parent, ParameterSetDictionary parameters)
+        public void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
             var state = parent.States.GetValue<IComplexSimulationState>();
             if (parameters.TryGetValue<FrequencyParameters>(out var fp) &&
-                fp.ParallelLoad && taskSimulation.Tasks > 1)
+                fp.ParallelLoad && simulations.Length > 1)
             {
-                taskSimulation.States.Add<IComplexSimulationState>(
-                    new ComplexSimulationState(
-                        state,
-                        new SolverElementProvider<Complex>(state.Solver)
-                        )
-                    );
+                foreach (var sim in simulations)
+                    sim.States.Add<IComplexSimulationState>(new LoadComplexState(state));
             }
             else
-                taskSimulation.States.Add(state);
+            {
+                foreach (var sim in simulations)
+                    sim.States.Add(state);
+            }
         }
     }
 }

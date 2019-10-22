@@ -63,6 +63,11 @@ namespace SpiceSharp.Algebra
             }
             while (index <= Order)
                 _intermediate[index++] = 0.0;
+            while (index <= Size)
+            {
+                _intermediate[index] = solution[Row.Reverse(index)];
+                index++;
+            }
 
             // Forward substitution
             for (var i = 1; i <= Order; i++)
@@ -88,7 +93,7 @@ namespace SpiceSharp.Algebra
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Right;
-                while (element != null && element.Column <= Order)
+                while (element != null)
                 {
                     temp -= element.Value * _intermediate[element.Column];
                     element = element.Right;

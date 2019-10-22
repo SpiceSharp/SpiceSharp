@@ -11,6 +11,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class SubcircuitVariableSet : IVariableSet
     {
         private IVariableSet _variables;
+        private HashSet<Variable> _local;
 
         /// <summary>
         /// Gets the ground variable.
@@ -49,7 +50,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </value>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Variable this[string id] => _variables[Name.Combine(id)];
+        public Variable this[string id]
+        {
+            get
+            {
+                var result = _variables[Name.Combine(id)];
+                if (result != null)
+                    _local.Add(result);
+                return result;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitVariableSet"/> class.
@@ -60,6 +70,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
             Name = name.ThrowIfNull(nameof(name));
             _variables = variableSet.ThrowIfNull(nameof(variableSet));
+            _local = new HashSet<Variable>();
         }
 
         /// <summary>
@@ -76,11 +87,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public Variable MapNode(string id, VariableType type)
         {
             // We need to check if the node is ground
-            if (_variables.TryGetNode(id, out var result) && result == _variables.Ground)
-                return result;
-
-            // Else just map the node
-            return _variables.MapNode(Name.Combine(id), type);
+            if (!_variables.TryGetNode(id, out var result) || result != _variables.Ground)
+                result = _variables.MapNode(Name.Combine(id), type);
+            _local.Add(result);
+            return result;
         }
 
         /// <summary>
@@ -94,7 +104,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <remarks>
         /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)" />.
         /// </remarks>
-        public Variable Create(string id, VariableType type) => _variables.Create(Name.Combine(id), type);
+        public Variable Create(string id, VariableType type)
+        {
+            var result = _variables.Create(Name.Combine(id), type);
+            _local.Add(result);
+            return result;
+        }
 
         /// <summary>
         /// Determines whether the set contains a mapped variable by a specified identifier.
@@ -122,7 +137,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(string id, out Variable node) => _variables.TryGetNode(Name.Combine(id), out node);
+        public bool TryGetNode(string id, out Variable node)
+        {
+            if (_variables.TryGetNode(Name.Combine(id), out node))
+            {
+                _local.Add(node);
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Make an alias for a variable identifier.
@@ -138,7 +161,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Clears the set from any variables.
         /// </summary>
-        public void Clear() => _variables.Clear();
+        public void Clear()
+        {
+            _local.Clear();
+            _variables.Clear();
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -146,7 +173,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Variable> GetEnumerator() => _variables.GetEnumerator();
+        public IEnumerator<Variable> GetEnumerator() => _local.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.

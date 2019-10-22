@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Algebra;
+﻿using System.Collections.Generic;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
@@ -7,7 +8,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// Biasing state for <see cref="SubcircuitSimulation"/>.
     /// </summary>
     /// <seealso cref="IBiasingSimulationState" />
-    public class BiasingSimulationState : IBiasingSimulationState
+    public class LoadBiasingState : SubcircuitBiasingState, IBiasingSimulationState
     {
         private IBiasingSimulationState _parent;
 
@@ -35,23 +36,28 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
         /// without having non-convergence.
         /// </remarks>
-        public double SourceFactor { get => _parent.SourceFactor; set => _parent.SourceFactor = value; }
+        public double SourceFactor => _parent.SourceFactor;
 
         /// <summary>
         /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
         /// </summary>
-        public double Gmin { get => _parent.Gmin; set => _parent.Gmin = value; }
+        public double Gmin => _parent.Gmin;
 
         /// <summary>
         /// Is the current iteration convergent?
         /// This parameter is used to communicate convergence.
         /// </summary>
-        public bool IsConvergent { get => _parent.IsConvergent; set => _parent.IsConvergent = value; }
+        public bool IsConvergent
+        {
+            get => _parent.IsConvergent && _isConvergent;
+            set => _isConvergent = value; 
+        }
+        private bool _isConvergent;
 
         /// <summary>
         /// The current temperature for this circuit in Kelvin.
         /// </summary>
-        public double Temperature { get => _parent.Temperature; set => _parent.Temperature = value; }
+        public double Temperature { get; set; }
 
         /// <summary>
         /// The nominal temperature for the circuit in Kelvin.
@@ -78,7 +84,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public ISparseSolver<double> Solver { get; private set; }
+        public ISparseSolver<double> Solver => _solver;
+        private SolverElementProvider<double> _solver;
 
         /// <summary>
         /// Gets the variable to index map.
@@ -89,14 +96,21 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public IVariableMap Map => _parent.Map;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
+        /// Initializes a new instance of the <see cref="LoadBiasingState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        /// <param name="solver">The solver.</param>
-        public BiasingSimulationState(IBiasingSimulationState parent, ISparseSolver<double> solver)
+        public LoadBiasingState(IBiasingSimulationState parent)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
-            Solver = solver.ThrowIfNull(nameof(solver));
+            _solver = new SolverElementProvider<double>(parent.Solver);
+        }
+
+        /// <summary>
+        /// Notifies the state that these variables can be shared with other states.
+        /// </summary>
+        /// <param name="common">The common.</param>
+        public override void ShareVariables(HashSet<Variable> common)
+        {
         }
 
         /// <summary>
@@ -105,6 +119,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="simulation">The simulation.</param>
         public void Setup(ISimulation simulation)
         {
+            Temperature = _parent.Temperature;
         }
 
         /// <summary>
@@ -112,6 +127,43 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void Unsetup()
         {
+        }
+
+        /// <summary>
+        /// Resets the biasing state for loading the local behaviors.
+        /// </summary>
+        public override void Reset()
+        {
+            Solver.Reset();
+            _isConvergent = true;
+        }
+
+        /// <summary>
+        /// Apply changes locally.
+        /// </summary>
+        public override void ApplyAsynchroneously()
+        {
+        }
+
+        /// <summary>
+        /// Apply changes to the parent biasing state.
+        /// </summary>
+        public override void ApplySynchroneously()
+        {
+            _solver.ApplyElements();
+            _parent.IsConvergent &= _isConvergent;
+        }
+
+        /// <summary>
+        /// Determines whether the state solution is convergent.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is convergent; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool CheckConvergence()
+        {
+            // Nothing to do here
+            return true;
         }
     }
 }

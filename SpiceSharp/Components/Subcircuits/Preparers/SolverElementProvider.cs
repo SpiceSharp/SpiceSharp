@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ISparseSolver{T}" />
-    public class SolverElementProvider<T> : ISparseSolver<T>, ISolverElementProvider where T : IFormattable
+    public class SolverElementProvider<T> : ISparseSolver<T> where T : IFormattable
     {
         private ISparseSolver<T> _parent;
         private Dictionary<MatrixLocation, LocalElement> _elements = new Dictionary<MatrixLocation, LocalElement>();

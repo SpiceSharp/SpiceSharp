@@ -9,6 +9,14 @@ namespace SpiceSharp.Simulations
     public interface IVariableMap : IEnumerable<KeyValuePair<Variable, int>>
     {
         /// <summary>
+        /// Gets the ground node variable.
+        /// </summary>
+        /// <value>
+        /// The ground node variable.
+        /// </value>
+        Variable Ground { get; }
+
+        /// <summary>
         /// Gets the index associated with the specified variable.
         /// </summary>
         /// <value>
@@ -36,6 +44,16 @@ namespace SpiceSharp.Simulations
         ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
         /// </returns>
         bool Contains(Variable variable);
+
+        /// <summary>
+        /// Tries to get the associated index of the specified variable.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <param name="index">The associated index.</param>
+        /// <returns>
+        ///     <c>true</c> if the variable has been found; otherwise, <c>false</c>.
+        /// </returns>
+        bool TryGetIndex(Variable variable, out int index);
 
         /// <summary>
         /// Clears the map.

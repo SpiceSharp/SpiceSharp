@@ -20,15 +20,11 @@ namespace SpiceSharp.Simulations
         /// Preorders the modified nodal analysis.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
-        public static void PreorderModifiedNodalAnalysis(IMatrix<T> matrix)
+        public static void PreorderModifiedNodalAnalysis(IPermutableMatrix<T> matrix)
         {
             // We can't deal with non-sparse matrices
             if (!(matrix is ISparseMatrix<T> sparse))
                 return;
-            // We can't deal with non-permutatable matrices
-            if (!(matrix is IPermutableMatrix<T> permutable))
-                return;
-
             /*
              * MNA often has patterns that we can already use for pivoting
              * 
@@ -68,7 +64,7 @@ namespace SpiceSharp.Simulations
                         if (twins == 1)
                         {
                             // Lone twins found, swap columns
-                            permutable.SwapColumns(twin2.Column, j);
+                            matrix.SwapColumns(twin2.Column, j);
                             swapped = true;
                         }
                         else if (twins > 1 && !anotherPassNeeded)
@@ -87,7 +83,7 @@ namespace SpiceSharp.Simulations
                         if (sparse.FindDiagonalElement(j) == null)
                         {
                             CountTwins(sparse, j, ref twin1, ref twin2);
-                            permutable.SwapColumns(twin2.Column, j);
+                            matrix.SwapColumns(twin2.Column, j);
                             swapped = true;
                         }
                     }
