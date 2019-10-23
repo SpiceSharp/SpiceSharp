@@ -113,8 +113,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
 
         /// <summary>
         /// Notifies the state that these variables can be shared with other states.
+        /// If <paramref name="common"/> is null, all variables are considered to be shared.
         /// </summary>
-        /// <param name="common">The common.</param>
+        /// <param name="common">The common variables.</param>
         public override void ShareVariables(HashSet<Variable> common)
         {
             _solver.Order = 0;

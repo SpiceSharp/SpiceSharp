@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// Simulation state for a <see cref="BiasingSimulation"/>.
     /// </summary>
     /// <seealso cref="ISimulationState" />
-    public interface  IBiasingSimulationState : ISimulationState
+    public interface  IBiasingSimulationState : ISolverSimulationState<double>
     {
         /// <summary>
         /// Gets or sets the initialization flag.

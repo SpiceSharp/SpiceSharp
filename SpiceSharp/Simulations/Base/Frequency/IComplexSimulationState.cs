@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// A simulation state using complex numbers.
     /// </summary>
     /// <seealso cref="ISimulationState"/>
-    public interface IComplexSimulationState : ISimulationState
+    public interface IComplexSimulationState : ISolverSimulationState<Complex>
     {
         /// <summary>
         /// Gets or sets a value indicating whether the solution converges.
