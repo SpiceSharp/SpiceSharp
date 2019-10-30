@@ -31,7 +31,7 @@ namespace SpiceSharpTest.Algebra
 
             // Order and factor
             ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
-            solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
+            solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, matrix.Size));
             solver.OrderAndFactor();
 
             IVector<double> solution = new DenseVector<double>(solver.Size);

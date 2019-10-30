@@ -121,7 +121,7 @@ namespace SpiceSharpTest.Algebra
             solver.GetElement(5, 2).Value = 1.0;
 
             SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
-            solver.Precondition((matrix, vector) => SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
+            solver.Precondition((matrix, vector) => SpiceSharp.Simulations.ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, matrix.Size));
 
             AssertInternal(solver, 1, 1, 1e-4);
             AssertInternal(solver, 1, 4, -1e-4);

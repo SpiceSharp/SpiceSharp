@@ -171,10 +171,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var state = _states[t];
                     tasks[t] = Task.Run(() =>
                     {
-                        state.Reset();
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].Load();
-                        state.ApplyAsynchroneously();
+                        do
+                        {
+                            state.Reset();
+                            for (var i = 0; i < bs.Count; i++)
+                                bs[i].Load();
+                        }
+                        while (!state.ApplyAsynchroneously());
                     });
                 }
                 Task.WaitAll(tasks);

@@ -455,7 +455,7 @@ namespace SpiceSharp.Simulations
                     if (ModifiedNodalAnalysisHelper<double>.Magnitude == null)
                         ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
                     solver.Precondition((matrix, vector)
-                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix));
+                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Order));
                     _isPreordered = true;
                 }
                 if (state.Init == InitializationModes.Junction)

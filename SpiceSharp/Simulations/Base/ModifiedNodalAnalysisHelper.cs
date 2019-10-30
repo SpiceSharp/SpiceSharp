@@ -20,7 +20,8 @@ namespace SpiceSharp.Simulations
         /// Preorders the modified nodal analysis.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
-        public static void PreorderModifiedNodalAnalysis(IPermutableMatrix<T> matrix)
+        /// <param name="size">The submatrix size to be preordered.</param>
+        public static void PreorderModifiedNodalAnalysis(IPermutableMatrix<T> matrix, int size)
         {
             // We can't deal with non-sparse matrices
             if (!(matrix is ISparseMatrix<T> sparse))
@@ -56,11 +57,11 @@ namespace SpiceSharp.Simulations
                 anotherPassNeeded = swapped = false;
 
                 // Search for zero diagonals with lone twins. 
-                for (var j = start; j <= matrix.Size; j++)
+                for (var j = start; j <= size; j++)
                 {
                     if (sparse.FindDiagonalElement(j) == null)
                     {
-                        var twins = CountTwins(sparse, j, ref twin1, ref twin2);
+                        var twins = CountTwins(sparse, j, ref twin1, ref twin2, size);
                         if (twins == 1)
                         {
                             // Lone twins found, swap columns
@@ -78,11 +79,11 @@ namespace SpiceSharp.Simulations
                 // All lone twins are gone, look for zero diagonals with multiple twins. 
                 if (anotherPassNeeded)
                 {
-                    for (var j = start; !swapped && j <= matrix.Size; j++)
+                    for (var j = start; !swapped && j <= size; j++)
                     {
                         if (sparse.FindDiagonalElement(j) == null)
                         {
-                            CountTwins(sparse, j, ref twin1, ref twin2);
+                            CountTwins(sparse, j, ref twin1, ref twin2, size);
                             matrix.SwapColumns(twin2.Column, j);
                             swapped = true;
                         }
@@ -133,15 +134,16 @@ namespace SpiceSharp.Simulations
         /// <param name="column">The column index.</param>
         /// <param name="twin1">The first twin element.</param>
         /// <param name="twin2">The second twin element.</param>
+        /// <param name="size">The size of the submatrix to search.</param>
         /// <returns>The number of twins found.</returns>
-        private static int CountTwins<M>(M matrix, int column, ref ISparseMatrixElement<T> twin1, ref ISparseMatrixElement<T> twin2)
+        private static int CountTwins<M>(M matrix, int column, ref ISparseMatrixElement<T> twin1, ref ISparseMatrixElement<T> twin2, int size)
             where M : ISparseMatrix<T>
         {
             var twins = 0;
 
             // Begin `CountTwins'.
             var cTwin1 = matrix.GetFirstInColumn(column);
-            while (cTwin1 != null)
+            while (cTwin1 != null && cTwin1.Row <= size)
             {
                 // if (Math.Abs(pTwin1.Element.Magnitude) == 1.0)
                 if (Magnitude(cTwin1.Value).Equals(1.0))

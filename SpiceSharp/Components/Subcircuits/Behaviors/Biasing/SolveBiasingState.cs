@@ -13,14 +13,19 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     {
         private List<ElementPair> _syncPairs = new List<ElementPair>();
         private Dictionary<int, int> _commonIndices = new Dictionary<int, int>();
+        private bool _isPreordered = false;
+        private bool _shouldReorder = true;
+        private double _relTol, _absTol;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SolveBiasingState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public SolveBiasingState(IBiasingSimulationState parent)
+        public SolveBiasingState(IBiasingSimulationState parent, ParameterSetDictionary parameters)
             : base(parent)
         {
+            _relTol = 1e-3;
+            _absTol = 1e-12;
         }
 
         /// <summary>
@@ -31,6 +36,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public override void ShareVariables(HashSet<Variable> common)
         {
             int target = Solver.Size;
+            _isPreordered = false;
 
             // We need to move any shared variables to the end of the solver
             foreach (var node in common)
@@ -91,12 +97,38 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Apply changes locally.
         /// </summary>
-        public override void ApplyAsynchroneously()
+        /// <returns>
+        /// True if the application was succesful.
+        /// </returns>
+        public override bool ApplyAsynchroneously()
         {
             // Do a partial solve of the solver
             try
             {
-                Solver.OrderAndFactor();
+                if (!_isPreordered)
+                {
+                    if (ModifiedNodalAnalysisHelper<double>.Magnitude == null)
+                        ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
+                    Solver.Precondition((matrix, vector)
+                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, LocalSolver.Order));
+                    _isPreordered = true;
+                }
+
+                if (_shouldReorder)
+                {
+                    Solver.OrderAndFactor();
+                    _shouldReorder = false;
+                }
+                else
+                {
+                    var success = Solver.Factor();
+                    if (!success)
+                    {
+                        _shouldReorder = true;
+                        return false;
+                    }
+                }
+                return true;
             }
             catch (AlgebraException)
             {
@@ -128,6 +160,30 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
 
             // Solve to our local solution for the other elements
             Solver.Solve(Solution);
+
+            // Check convergence for each node
+            foreach (var v in Map)
+            {
+                var node = v.Key;
+                var n = Solution[v.Value];
+                var o = OldSolution[v.Value];
+
+                if (double.IsNaN(n))
+                    throw new CircuitException("Non-convergence, node {0} is not a number".FormatString(node.Name));
+
+                if (node.UnknownType == VariableType.Voltage)
+                {
+                    var tol = _relTol * Math.Max(Math.Abs(n), Math.Abs(o)) + _absTol;
+                    if (Math.Abs(n - o) > tol)
+                        return false;
+                }
+                else
+                {
+                    var tol = _relTol * Math.Max(Math.Abs(n), Math.Abs(o)) + _absTol;
+                    if (Math.Abs(n - o) > tol)
+                        return false;
+                }
+            }
 
             // Check for convergence on the variables, similar to BiasingSimulation.
             return true;

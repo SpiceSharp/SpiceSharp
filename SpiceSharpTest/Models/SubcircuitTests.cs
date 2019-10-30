@@ -131,21 +131,8 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
-        [Test]
-        public void When_ParallelRC_Expect_Reference()
+        private Circuit CreateParallelRC()
         {
-            /*
-             * It doesn't really make sense to load resistors and capacitors in parallel,
-             * their loading methods are incredibly short and cheap. Multithreading would only become more
-             * interesting for longer loading methods, such as the BSIM models.
-             * 
-             * This example actually works with reduced performance, because it creates new objects to
-             * avoid concurrent writes and it takes some overhead to create the multiple tasks every
-             * time the matrix is loaded (which is very often). The performance benefits will only 
-             * become apparent if the CPU work is the limiting factor.
-             * 
-             * This is just a test to check that the multithreading works correctly.
-             */
             int count = 1000;
             var sub = new Subcircuit("X1", new[] { new Circuit(), new Circuit() }, "in", "out");
             sub.Connect("in", "out");
@@ -160,14 +147,50 @@ namespace SpiceSharpTest.Models
                 sub.Entities[task].Add(new Capacitor("C" + i, output, "0", 1e-6));
                 input = output;
             }
-            var ckt = new Circuit(
+            return new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
                 sub
                 );
+        }
+
+        [Test]
+        public void When_ParallelSolverRC_Expect_Reference()
+        {
+            var ckt = CreateParallelRC();
             ckt["X1"].Parameters.Add(
                 new SpiceSharp.Components.SubcircuitBehaviors.BiasingParameters()
                     .SetParameter("biasing.load", true)
                     .SetParameter("biasing.solve", true)
+                    );
+            ckt["X1"].Parameters.Add(
+                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
+
+            // Build the simulation
+            var ac = new AC("ac", new LinearSweep(0, 1, 3));
+            double[] reference = new[] { 1.00000000000083, 0, 0.80621270646045, -0.441463380433918, 0.469677271946689, -0.595014538138315 };
+
+            // Track the current values
+            Complex[] current = new Complex[3];
+            int index = 0;
+            void TrackCurrent(object sender, ExportDataEventArgs args)
+            {
+                var actual = args.GetComplexVoltage("out");
+                Assert.AreEqual(reference[index++], actual.Real, 1e-12);
+                Assert.AreEqual(reference[index++], actual.Imaginary, 1e-12);
+            }
+            ac.ExportSimulationData += TrackCurrent;
+            ac.Run(ckt);
+            ac.ExportSimulationData -= TrackCurrent;
+        }
+
+        [Test]
+        public void When_ParallelLoaderRC_Expect_Reference()
+        {
+            var ckt = CreateParallelRC();
+            ckt["X1"].Parameters.Add(
+                new SpiceSharp.Components.SubcircuitBehaviors.BiasingParameters()
+                    .SetParameter("biasing.load", true)
+                    .SetParameter("biasing.solve", false)
                     );
             ckt["X1"].Parameters.Add(
                 new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));

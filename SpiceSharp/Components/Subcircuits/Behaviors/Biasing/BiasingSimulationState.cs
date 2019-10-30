@@ -178,7 +178,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Apply changes locally.
         /// </summary>
-        public abstract void ApplyAsynchroneously();
+        /// <returns>True if the application was succesful.</returns>
+        public abstract bool ApplyAsynchroneously();
 
         /// <summary>
         /// Apply changes to the parent biasing state.

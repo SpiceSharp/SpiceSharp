@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes a new instance of the <see cref="LoadBiasingState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public LoadBiasingState(IBiasingSimulationState parent)
+        /// <param name="parameters">The parameters for the state.</param>
+        public LoadBiasingState(IBiasingSimulationState parent, ParameterSetDictionary parameters)
             : base(parent)
         {
         }
@@ -100,10 +101,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Apply changes locally.
         /// </summary>
-        public override void ApplyAsynchroneously()
+        /// <returns>
+        /// True if the application was succesful.
+        /// </returns>
+        public override bool ApplyAsynchroneously()
         {
             foreach (var pair in _asyncPairs)
                 pair.Parent.Add(pair.Local.Value);
+            return true;
         }
 
         /// <summary>
