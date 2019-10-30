@@ -35,6 +35,14 @@ namespace SpiceSharp.Algebra
         public event EventHandler<PermutationEventArgs> ColumnsSwapped;
 
         /// <summary>
+        /// Gets the number of elements in the matrix.
+        /// </summary>
+        /// <value>
+        /// The element count.
+        /// </value>
+        public int ElementCount { get; private set; }
+
+        /// <summary>
         /// Gets or sets the size.
         /// </summary>
         /// <value>
@@ -87,6 +95,7 @@ namespace SpiceSharp.Algebra
             // Other
             _diagonal = new Element[InitialSize + 1];
             _trashCan = new Element(0, 0);
+            ElementCount = 1;
         }
 
         /// <summary>
@@ -111,6 +120,7 @@ namespace SpiceSharp.Algebra
             // Other
             _diagonal = new Element[_allocatedSize + 1];
             _trashCan = new Element(0, 0);
+            ElementCount = 1;
         }
 
         /// <summary>
@@ -175,6 +185,7 @@ namespace SpiceSharp.Algebra
 
             if (!_rows[row].CreateGetElement(row, column, out var element))
             {
+                ElementCount++;
                 _columns[column].Insert(element);
                 if (row == column)
                     _diagonal[row] = element;
@@ -456,6 +467,7 @@ namespace SpiceSharp.Algebra
             Array.Resize(ref _diagonal, InitialSize + 1);
             _allocatedSize = InitialSize;
             Size = 0;
+            ElementCount = 1;
         }
 
         /// <summary>

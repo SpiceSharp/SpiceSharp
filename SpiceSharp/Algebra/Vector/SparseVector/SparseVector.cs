@@ -30,6 +30,14 @@ namespace SpiceSharp.Algebra
         public int Length { get; private set; }
 
         /// <summary>
+        /// Gets the number of elements in the vector.
+        /// </summary>
+        /// <value>
+        /// The element count.
+        /// </value>
+        public int ElementCount { get; private set; }
+
+        /// <summary>
         /// Gets or sets the value at the specified index.
         /// </summary>
         /// <value>
@@ -56,6 +64,7 @@ namespace SpiceSharp.Algebra
         {
             Length = 0;
             _trashCan = new Element(0);
+            ElementCount = 1;
         }
 
         /// <summary>
@@ -68,6 +77,7 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException("Invalid length");
             Length = length;
             _trashCan = new Element(0);
+            ElementCount = 1;
         }
 
         /// <summary>
@@ -150,6 +160,8 @@ namespace SpiceSharp.Algebra
             else
                 element.PreviousInVector = result;
             result.NextInVector = element;
+
+            ElementCount++;
             return result;
         }
 
@@ -209,6 +221,7 @@ namespace SpiceSharp.Algebra
                 _lastInVector = element.PreviousInVector;
             else
                 element.NextInVector.PreviousInVector = element.PreviousInVector;
+            ElementCount--;
         }
 
         /// <summary>
@@ -418,6 +431,7 @@ namespace SpiceSharp.Algebra
             }
             _firstInVector = null;
             _lastInVector = null;
+            ElementCount = 1;
         }
 
         /// <summary>

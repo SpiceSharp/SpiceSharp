@@ -8,6 +8,14 @@ namespace SpiceSharp.Algebra
     public interface ISparseMatrix<T> : IMatrix<T> where T : IFormattable
     {
         /// <summary>
+        /// Gets the number of elements in the matrix.
+        /// </summary>
+        /// <value>
+        /// The element count.
+        /// </value>
+        int ElementCount { get; }
+
+        /// <summary>
         /// Gets the first non-default <see cref="ISparseMatrixElement{T}"/> in the specified row.
         /// </summary>
         /// <param name="row">The row index.</param>

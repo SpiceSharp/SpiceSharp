@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
     {
         private bool _parallelIsConvergent, _parallelLoading;
-        private SubcircuitBiasingState[] _states;
+        private BiasingSimulationState[] _states;
         private HashSet<Variable> _common = new HashSet<Variable>();
 
         /// <summary>
@@ -49,11 +49,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 _parallelIsConvergent = bp.ParallelConvergences;
                 _parallelLoading = bp.ParallelLoad;
 
-                _states = new SubcircuitBiasingState[Simulations.Length];
+                _states = new BiasingSimulationState[Simulations.Length];
                 for (var i = 0; i < Simulations.Length; i++)
                 {
                     var state = Simulations[i].States.GetValue<IBiasingSimulationState>();
-                    _states[i] = (SubcircuitBiasingState)state;
+                    _states[i] = (BiasingSimulationState)state;
                     state.Setup(Simulations[i]);
                 }
             }

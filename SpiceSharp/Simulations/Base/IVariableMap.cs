@@ -17,6 +17,14 @@ namespace SpiceSharp.Simulations
         Variable Ground { get; }
 
         /// <summary>
+        /// Gets the number of mapped variables.
+        /// </summary>
+        /// <value>
+        /// The number of mapped variables.
+        /// </value>
+        int Count { get; }
+
+        /// <summary>
         /// Gets the index associated with the specified variable.
         /// </summary>
         /// <value>

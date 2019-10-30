@@ -167,7 +167,8 @@ namespace SpiceSharpTest.Models
             ckt["X1"].Parameters.Add(
                 new SpiceSharp.Components.SubcircuitBehaviors.BiasingParameters()
                     .SetParameter("biasing.load", true)
-                    .SetParameter("biasing.solve", true));
+                    .SetParameter("biasing.solve", true)
+                    );
             ckt["X1"].Parameters.Add(
                 new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
 
