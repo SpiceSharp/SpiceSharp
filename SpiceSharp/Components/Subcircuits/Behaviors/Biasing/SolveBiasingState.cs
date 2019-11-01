@@ -21,11 +21,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes a new instance of the <see cref="SolveBiasingState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public SolveBiasingState(IBiasingSimulationState parent, ParameterSetDictionary parameters)
+        /// <param name="bp">The parameters for the state.</param>
+        public SolveBiasingState(IBiasingSimulationState parent, BiasingParameters bp)
             : base(parent)
         {
-            _relTol = 1e-3;
-            _absTol = 1e-12;
+            _relTol = bp.RelativeTolerance;
+            _absTol = bp.AbsoluteTolerance;
         }
 
         /// <summary>

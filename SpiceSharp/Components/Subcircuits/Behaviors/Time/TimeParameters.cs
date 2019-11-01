@@ -15,13 +15,5 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         ///   <c>true</c> if states are initialized in parallel; otherwise, <c>false</c>.
         /// </value>
         public bool ParallelInitialize { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether loading should be done in parallel.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if loading is done in parallel; otherwise, <c>false</c>.
-        /// </value>
-        public bool ParallelLoad { get; set; }
     }
 }

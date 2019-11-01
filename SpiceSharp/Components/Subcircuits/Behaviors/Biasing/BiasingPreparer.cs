@@ -25,12 +25,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 if (bp.ParallelSolve)
                 {
                     foreach (var sim in simulations)
-                        sim.States.Add<IBiasingSimulationState>(new SolveBiasingState(state, parameters));
+                        sim.States.Add<IBiasingSimulationState>(new SolveBiasingState(state, bp));
                 }
                 else
                 {
                     foreach (var sim in simulations)
-                        sim.States.Add<IBiasingSimulationState>(new LoadBiasingState(state, parameters));
+                        sim.States.Add<IBiasingSimulationState>(new LoadBiasingState(state));
                 }
             }
             else

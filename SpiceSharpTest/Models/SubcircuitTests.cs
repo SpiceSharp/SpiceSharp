@@ -154,7 +154,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ParallelSolverRC_Expect_Reference()
+        public void When_ACParallelSolverRC_Expect_Reference()
         {
             var ckt = CreateParallelRC();
             ckt["X1"].Parameters.Add(
@@ -184,7 +184,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ParallelLoaderRC_Expect_Reference()
+        public void When_ACParallelLoaderRC_Expect_Reference()
         {
             var ckt = CreateParallelRC();
             ckt["X1"].Parameters.Add(
@@ -211,6 +211,27 @@ namespace SpiceSharpTest.Models
             ac.ExportSimulationData += TrackCurrent;
             ac.Run(ckt);
             ac.ExportSimulationData -= TrackCurrent;
+        }
+
+        [Test]
+        public void When_TransientParallelSolverRC_Expect_Reference()
+        {
+            var ckt = CreateParallelRC();
+            ckt["X1"].Parameters.Add(
+                new SpiceSharp.Components.SubcircuitBehaviors.BiasingParameters()
+                    .SetParameter("biasing.load", true)
+                    .SetParameter("biasing.solve", true)
+                    );
+            ckt["X1"].Parameters.Add(
+                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
+
+            // Build the simulation
+            var tran = new Transient("tran", 1e-6, 1e-3);
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                System.Console.WriteLine(args.GetVoltage("out"));
+            };
+            tran.Run(ckt);
         }
     }
 }

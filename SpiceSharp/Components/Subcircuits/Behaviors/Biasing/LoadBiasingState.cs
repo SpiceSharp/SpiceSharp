@@ -17,8 +17,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes a new instance of the <see cref="LoadBiasingState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        /// <param name="parameters">The parameters for the state.</param>
-        public LoadBiasingState(IBiasingSimulationState parent, ParameterSetDictionary parameters)
+        public LoadBiasingState(IBiasingSimulationState parent)
             : base(parent)
         {
         }

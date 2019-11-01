@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,17 +14,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <seealso cref="IBiasingBehavior" />
     public class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
     {
-        private bool _parallelIsConvergent, _parallelLoading;
+        private BiasingParameters _bp;
         private BiasingSimulationState[] _states;
-        private HashSet<Variable> _common = new HashSet<Variable>();
 
         /// <summary>
-        /// Gets the common variables.
+        /// Occurs when the Y-matrix and Rhs-vector has been loaded by the behavior.
         /// </summary>
-        /// <value>
-        /// The common variables.
-        /// </value>
-        public IEnumerable<Variable> CommonVariables => _common;
+        public event EventHandler<BiasingEventArgs> AfterLoad;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -41,54 +38,53 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public override void Bind(BindingContext context)
         {
             base.Bind(context);
+            _states = null;
 
-            // Figure out if we need to compute something in parallel
-            if (Simulations.Length > 1 &&
-                context.Behaviors.Parameters.TryGetValue<BiasingParameters>(out var bp))
-            {
-                _parallelIsConvergent = bp.ParallelConvergences;
-                _parallelLoading = bp.ParallelLoad;
-
-                _states = new BiasingSimulationState[Simulations.Length];
-                for (var i = 0; i < Simulations.Length; i++)
-                {
-                    var state = Simulations[i].States.GetValue<IBiasingSimulationState>();
-                    _states[i] = (BiasingSimulationState)state;
-                    state.Setup(Simulations[i]);
-                }
-            }
-            else
-            {
-                _parallelIsConvergent = false;
-                _parallelLoading = false;
-                _states = null;
-            }
-
-            // Get the common variables if there are more entity groups
-            _common.Clear();
             if (Simulations.Length > 1)
             {
-                var all = new HashSet<Variable>();
-                foreach (var sim in Simulations)
+                // Figure out if we need to compute something in parallel
+                if (context.Behaviors.Parameters.TryGetValue(out _bp))
                 {
-                    foreach (var variable in sim.Variables)
+                    _states = new BiasingSimulationState[Simulations.Length];
+                    for (var i = 0; i < Simulations.Length; i++)
                     {
-                        if (all.Contains(variable))
-                            _common.Add(variable);
-                        else
-                            all.Add(variable);
+                        var state = Simulations[i].States.GetValue<IBiasingSimulationState>();
+                        _states[i] = (BiasingSimulationState)state;
+                        state.Setup(Simulations[i]);
                     }
+
+                    // Get all shared variables between different tasks
+                    var common = GetCommonVariables();
+                    var c = (ComponentBindingContext)context;
+                    for (var i = 0; i < c.Nodes.Length; i++)
+                        common.Add(c.Nodes[i]);
+
+                    // Notify the states that they should share these variables with other states
+                    foreach (var state in _states)
+                        state.ShareVariables(common);
                 }
-
-                // Add our own nodes as well
-                var c = (ComponentBindingContext)context;
-                for (var i = 0; i < c.Nodes.Length; i++)
-                    _common.Add(c.Nodes[i]);
-
-                // Notify the states that they should share these variables with other states
-                foreach (var state in _states)
-                    state.ShareVariables(_common);
             }
+        }
+
+        /// <summary>
+        /// Gets the common variables.
+        /// </summary>
+        /// <returns></returns>
+        public HashSet<Variable> GetCommonVariables()
+        {
+            var common = new HashSet<Variable>();
+            var all = new HashSet<Variable>();
+            foreach (var sim in Simulations)
+            {
+                foreach (var variable in sim.Variables)
+                {
+                    if (all.Contains(variable))
+                        common.Add(variable);
+                    else
+                        all.Add(variable);
+                }
+            }
+            return common;
         }
 
         /// <summary>
@@ -116,7 +112,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </returns>
         public bool IsConvergent()
         {
-            if (_parallelIsConvergent && Behaviors.Length > 1)
+            if (_bp != null && _bp.ParallelConvergences && Behaviors.Length > 1)
             {
                 var tasks = new Task<bool>[Behaviors.Length];
                 for (var t = 0; t < tasks.Length; t++)
@@ -161,21 +157,20 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         public void Load()
         {
-            if (_parallelLoading && Behaviors.Length > 1)
+            if (_bp != null && (_bp.ParallelLoad || _bp.ParallelSolve) && Behaviors.Length > 1)
             {
                 // Execute multiple tasks
                 var tasks = new Task[Behaviors.Length];
                 for (var t = 0; t < Behaviors.Length; t++)
                 {
-                    var bs = Behaviors[t];
-                    var state = _states[t];
+                    var task = t;
                     tasks[t] = Task.Run(() =>
                     {
+                        var state = _states[task];
                         do
                         {
                             state.Reset();
-                            for (var i = 0; i < bs.Count; i++)
-                                bs[i].Load();
+                            LoadSubcircuitBehaviors(task);
                         }
                         while (!state.ApplyAsynchroneously());
                     });
@@ -190,10 +185,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 {
                     for (var t = 0; t < Behaviors.Length; t++)
                     {
-                        var bs = Behaviors[t];
                         _states[t].Reset();
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].Load();
+                        LoadSubcircuitBehaviors(t);
                         _states[t].ApplyAsynchroneously();
                     }
                     foreach (var state in _states)
@@ -202,13 +195,22 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 else
                 {
                     // Use single thread
-                    foreach (var bs in Behaviors)
-                    {
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].Load();
-                    }
+                    for (var t = 0; t < Behaviors.Length; t++)
+                        LoadSubcircuitBehaviors(t);
                 }
             }
+        }
+
+        /// <summary>
+        /// Loads the subcircuit behaviors.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        private void LoadSubcircuitBehaviors(int task)
+        {
+            var bs = Behaviors[task];
+            for (var i = 0; i < bs.Count; i++)
+                bs[i].Load();
+            AfterLoad?.Invoke(this, new BiasingEventArgs(task));
         }
     }
 }

@@ -35,5 +35,23 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </value>
         [ParameterName("biasing.convergence"), ParameterInfo("Flag indicating whether convergence testing should be done in parallel")]
         public bool ParallelConvergences { get; set; }
+
+        /// <summary>
+        /// Gets or sets the absolute tolerance.
+        /// </summary>
+        /// <value>
+        /// The absolute tolerance.
+        /// </value>
+        [ParameterName("biasing.abstol"), ParameterInfo("The absolute tolerance when solving in parallel")]
+        public double AbsoluteTolerance { get; set; } = 1e-12;
+
+        /// <summary>
+        /// Gets or sets the relative tolerance.
+        /// </summary>
+        /// <value>
+        /// The relative tolerance.
+        /// </value>
+        [ParameterName("biasing.reltol"), ParameterInfo("The relative tolerance when solving in parallel")]
+        public double RelativeTolerance { get; set; } = 1e-3;
     }
 }
