@@ -14,6 +14,7 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
+        private BehaviorList<IFrequencyUpdateBehavior> _frequencyUpdateBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
 
@@ -66,6 +67,7 @@ namespace SpiceSharp.Simulations
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(IFrequencyBehavior));
+            Types.Add(typeof(IFrequencyUpdateBehavior));
 
             ComplexState = new ComplexSimulationState();
             States.Add<IComplexSimulationState>(ComplexState);
@@ -85,6 +87,7 @@ namespace SpiceSharp.Simulations
 
             // Add behavior types in the order they are (usually) called
             Types.Add(typeof(IFrequencyBehavior));
+            Types.Add(typeof(IFrequencyUpdateBehavior));
 
             ComplexState = new ComplexSimulationState();
             States.Add<IComplexSimulationState>(ComplexState);
@@ -112,6 +115,7 @@ namespace SpiceSharp.Simulations
 
             // Cache local variables
             _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
+            _frequencyUpdateBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyUpdateBehavior>();
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
 
             ComplexState.Setup(this);
@@ -195,6 +199,10 @@ namespace SpiceSharp.Simulations
             FrequencySimulationStatistics.ComplexSolveTime.Start();
             solver.Solve(cstate.Solution);
             FrequencySimulationStatistics.ComplexSolveTime.Stop();
+
+            // Update with the found solution
+            for (var i = 0; i < _frequencyUpdateBehaviors.Count; i++)
+                _frequencyUpdateBehaviors[i].Update();
 
             // Reset values
             cstate.Solution[0] = 0.0;

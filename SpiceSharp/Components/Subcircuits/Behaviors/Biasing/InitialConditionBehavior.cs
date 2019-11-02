@@ -24,6 +24,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
         }
 
+        /// <summary>
+        /// Bind the behavior to a simulation.
+        /// </summary>
+        /// <param name="context">The binding context.</param>
         public override void Bind(BindingContext context)
         {
             base.Bind(context);

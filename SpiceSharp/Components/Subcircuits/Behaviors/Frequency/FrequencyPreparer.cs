@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using System.Numerics;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
@@ -20,10 +19,18 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
             var state = parent.States.GetValue<IComplexSimulationState>();
             if (parameters.TryGetValue<FrequencyParameters>(out var fp) &&
-                fp.ParallelLoad && simulations.Length > 1)
+                (fp.ParallelLoad || fp.ParallelSolve) && simulations.Length > 1)
             {
-                foreach (var sim in simulations)
-                    sim.States.Add<IComplexSimulationState>(new LoadComplexState(state));
+                if (fp.ParallelSolve)
+                {
+                    foreach (var sim in simulations)
+                        sim.States.Add<IComplexSimulationState>(new SolveComplexState(state));
+                }
+                else
+                {
+                    foreach (var sim in simulations)
+                        sim.States.Add<IComplexSimulationState>(new LoadComplexState(state));
+                }
             }
             else
             {

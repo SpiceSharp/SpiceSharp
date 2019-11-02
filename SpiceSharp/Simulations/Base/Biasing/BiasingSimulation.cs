@@ -67,6 +67,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
         private BehaviorList<IBiasingBehavior> _loadBehaviors;
+        private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
         private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
         private BehaviorList<IInitialConditionBehavior> _initialConditionBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
@@ -117,6 +118,7 @@ namespace SpiceSharp.Simulations
             {
                 typeof(ITemperatureBehavior),
                 typeof(IBiasingBehavior),
+                typeof(IBiasingUpdateBehavior),
                 typeof(IInitialConditionBehavior)
             });
 
@@ -153,6 +155,7 @@ namespace SpiceSharp.Simulations
             // Cache local variables
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
+            _updateBehaviors = EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
             _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
             _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
             BiasingState.Setup(this);
@@ -495,6 +498,9 @@ namespace SpiceSharp.Simulations
                 solver.GetElement(0).Value = 0.0;
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
+
+                for (var i = 0; i < _updateBehaviors.Count; i++)
+                    _updateBehaviors[i].Update();
 
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)

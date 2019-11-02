@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface that describes frequency-dependent behaviors.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.IBehavior" />
+    /// <seealso cref="IBehavior" />
     public interface IFrequencyBehavior : IBehavior
     {
         /// <summary>

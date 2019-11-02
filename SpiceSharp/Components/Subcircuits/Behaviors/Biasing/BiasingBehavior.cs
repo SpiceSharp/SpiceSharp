@@ -12,10 +12,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IBiasingBehavior" />
-    public class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
+    public class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingUpdateBehavior
     {
         private BiasingParameters _bp;
-        private BiasingSimulationState[] _states;
+        private ISubcircuitBiasingSimulationState[] _states;
 
         /// <summary>
         /// Occurs when the Y-matrix and Rhs-vector has been loaded by the behavior.
@@ -29,7 +29,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <remarks>
         /// The identifier of the behavior should be the same as that of the entity creating it.
         /// </remarks>
-        public BiasingBehavior(string name) : base(name) { }
+        public BiasingBehavior(string name) : base(name)
+        {
+        }
 
         /// <summary>
         /// Bind the behavior to a simulation.
@@ -45,11 +47,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 // Figure out if we need to compute something in parallel
                 if (context.Behaviors.Parameters.TryGetValue(out _bp))
                 {
-                    _states = new BiasingSimulationState[Simulations.Length];
+                    _states = new ISubcircuitBiasingSimulationState[Simulations.Length];
                     for (var i = 0; i < Simulations.Length; i++)
                     {
                         var state = Simulations[i].States.GetValue<IBiasingSimulationState>();
-                        _states[i] = (BiasingSimulationState)state;
+                        _states[i] = (ISubcircuitBiasingSimulationState)state;
                         state.Setup(Simulations[i]);
                     }
 
@@ -95,11 +97,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             base.Unbind();
             if (_states != null)
             {
-                for (var i = 0; i < _states.Length; i++)
-                {
-                    var state = (IBiasingSimulationState)_states[i];
+                foreach (var state in _states)
                     state.Unsetup();
-                }
                 _states = null;
             }
         }
@@ -110,7 +109,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsConvergent()
+        bool IBiasingBehavior.IsConvergent()
         {
             if (_bp != null && _bp.ParallelConvergences && Behaviors.Length > 1)
             {
@@ -155,7 +154,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        public void Load()
+        void IBiasingBehavior.Load()
         {
             if (_bp != null && (_bp.ParallelLoad || _bp.ParallelSolve) && Behaviors.Length > 1)
             {
@@ -172,33 +171,40 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                             state.Reset();
                             LoadSubcircuitBehaviors(task);
                         }
-                        while (!state.ApplyAsynchroneously());
+                        while (!state.ApplyAsynchronously());
                     });
                 }
                 Task.WaitAll(tasks);
                 foreach (var state in _states)
-                    state.ApplySynchroneously();
+                    state.ApplySynchronously();
             }
-            else
+            else if (_states != null)
             {
-                if (_states != null)
+                for (var t = 0; t < Behaviors.Length; t++)
                 {
-                    for (var t = 0; t < Behaviors.Length; t++)
+                    do
                     {
                         _states[t].Reset();
                         LoadSubcircuitBehaviors(t);
-                        _states[t].ApplyAsynchroneously();
                     }
-                    foreach (var state in _states)
-                        state.ApplySynchroneously();
+                    while (!_states[t].ApplyAsynchronously());
                 }
-                else
-                {
-                    // Use single thread
-                    for (var t = 0; t < Behaviors.Length; t++)
-                        LoadSubcircuitBehaviors(t);
-                }
+                foreach (var state in _states)
+                    state.ApplySynchronously();
             }
+            else
+            {
+                // Use single thread
+                for (var t = 0; t < Behaviors.Length; t++)
+                    LoadSubcircuitBehaviors(t);
+            }
+        }
+
+        /// <summary>
+        /// Updates the behavior with the new solution.
+        /// </summary>
+        void IBiasingUpdateBehavior.Update()
+        {
         }
 
         /// <summary>

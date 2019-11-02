@@ -57,32 +57,11 @@ namespace SpiceSharp.Simulations
         double NominalTemperature { get; }
 
         /// <summary>
-        /// Gets the solution vector.
-        /// </summary>
-        IVector<double> Solution { get; }
-
-        /// <summary>
         /// Gets the previous solution vector.
         /// </summary>
         /// <remarks>
         /// This vector is needed for determining convergence.
         /// </remarks>
         IVector<double> OldSolution { get; }
-
-        /// <summary>
-        /// Gets the sparse solver.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
-        ISparseSolver<double> Solver { get; }
-
-        /// <summary>
-        /// Gets the variable to index map.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
-        public IVariableMap Map { get; }
     }
 }

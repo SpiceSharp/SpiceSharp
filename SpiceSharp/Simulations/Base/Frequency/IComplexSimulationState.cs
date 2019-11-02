@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Algebra;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -15,29 +14,8 @@ namespace SpiceSharp.Simulations
         bool IsConvergent { get; set; }
 
         /// <summary>
-        /// Gets the solution.
-        /// </summary>
-        IVector<Complex> Solution { get; }
-
-        /// <summary>
         /// Gets or sets the current laplace variable.
         /// </summary>
         Complex Laplace { get; }
-
-        /// <summary>
-        /// Gets the solver.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
-        ISparseSolver<Complex> Solver { get; }
-
-        /// <summary>
-        /// Gets the variable to index map.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
-        IVariableMap Map { get; }
     }
 }

@@ -1,21 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// Biasing state for <see cref="SubcircuitSimulation"/>.
+    /// An <see cref="IBiasingSimulationState"/> for <see cref="BiasingBehavior"/> that can solve in parallel.
     /// </summary>
-    /// <seealso cref="BiasingSimulationState" />
-    public class SolveBiasingState : BiasingSimulationState
+    /// <seealso cref="ISubcircuitBiasingSimulationState" />
+    public class SolveBiasingState : ParallelSolveSolverState<double>, ISubcircuitBiasingSimulationState
     {
-        private List<ElementPair> _syncPairs = new List<ElementPair>();
-        private Dictionary<int, int> _commonIndices = new Dictionary<int, int>();
-        private bool _isPreordered = false;
-        private bool _shouldReorder = true;
         private double _relTol, _absTol;
+        private IBiasingSimulationState _parent;
+        private bool _isConvergent;
+
+        /// <summary>
+        /// Gets or sets the initialization flag.
+        /// </summary>
+        public InitializationModes Init => _parent.Init;
+
+        /// <summary>
+        /// The current temperature for this circuit in Kelvin.
+        /// </summary>
+        public double Temperature { get; set; }
+
+        /// <summary>
+        /// The nominal temperature for the circuit in Kelvin.
+        /// Used by models as the default temperature where the parameters were measured.
+        /// </summary>
+        public double NominalTemperature => _parent.NominalTemperature;
+
+        /// <summary>
+        /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
+        /// </summary>
+        public bool UseDc => _parent.UseDc;
+
+        /// <summary>
+        /// Gets or sets the flag for using initial conditions. If true, the operating point will not be calculated, and initial conditions will be used instead.
+        /// </summary>
+        public bool UseIc => _parent.UseIc;
+
+        /// <summary>
+        /// The current source factor.
+        /// This parameter is changed when doing source stepping for aiding convergence.
+        /// </summary>
+        /// <remarks>
+        /// In source stepping, all sources are considered to be at 0 which has typically only one single solution (all nodes and
+        /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
+        /// without having non-convergence.
+        /// </remarks>
+        public double SourceFactor => _parent.SourceFactor;
+
+        /// <summary>
+        /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
+        /// </summary>
+        public double Gmin => _parent.Gmin;
+
+        /// <summary>
+        /// Is the current iteration convergent?
+        /// This parameter is used to communicate convergence.
+        /// </summary>
+        public bool IsConvergent
+        {
+            get => _parent.IsConvergent && _isConvergent;
+            set => _isConvergent = value;
+        }
+
+        /// <summary>
+        /// Gets the previous solution vector.
+        /// </summary>
+        /// <remarks>
+        /// This vector is needed for determining convergence.
+        /// </remarks>
+        public IVector<double> OldSolution { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SolveBiasingState"/> class.
@@ -23,128 +80,31 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="parent">The parent.</param>
         /// <param name="bp">The parameters for the state.</param>
         public SolveBiasingState(IBiasingSimulationState parent, BiasingParameters bp)
-            : base(parent)
+            : base(parent, LUHelper.CreateSparseRealSolver())
         {
+            _parent = parent;
             _relTol = bp.RelativeTolerance;
             _absTol = bp.AbsoluteTolerance;
         }
 
         /// <summary>
-        /// Notifies the state that these variables can be shared with other states.
-        /// If <paramref name="common"/> is null, all variables are considered to be shared.
+        /// Set up the simulation state for the simulation.
         /// </summary>
-        /// <param name="common">The common variables.</param>
-        public override void ShareVariables(HashSet<Variable> common)
+        /// <param name="simulation">The simulation.</param>
+        public override void Setup(ISimulation simulation)
         {
-            int target = Solver.Size;
-            _isPreordered = false;
-
-            // We need to move any shared variables to the end of the solver
-            foreach (var node in common)
-            {
-                if (node == Map.Ground)
-                    continue;
-
-                // Only apply for nodes that this state is using
-                if (!Map.TryGetIndex(node, out var local_index))
-                    continue;
-                if (!Parent.Map.TryGetIndex(node, out var global_index))
-                    global_index = Parent.Map[node];
-                _commonIndices.Add(local_index, global_index);
-
-                // Move the row and column to the last one
-                Solver.Precondition((matrix, rhs) =>
-                {
-                    var loc = Solver.ExternalToInternal(new MatrixLocation(local_index, local_index));
-                    matrix.SwapRows(loc.Row, target);
-                    matrix.SwapColumns(loc.Column, target);
-                    target--;
-                });
-            }
-            LocalSolver.Order = target;
-            LocalSolver.Strategy.SearchLimit = target;
-
-            // Map matrix elements
-            foreach (var row in _commonIndices)
-            {
-                foreach (var column in _commonIndices)
-                {
-                    var local_elt = LocalSolver.GetElement(row.Key, column.Key);
-                    var global_elt = Parent.Solver.GetElement(row.Value, column.Value);
-                    _syncPairs.Add(new ElementPair(local_elt, global_elt));
-                }
-            }
-
-            // Map vector elements
-            bool createFillins = true;
-            LocalSolver.Precondition((m, v) =>
-                createFillins = (((ISparseVector<double>)v).GetFirstInVector()?.Index ?? LocalSolver.Size) < LocalSolver.Order);
-            foreach (var row in _commonIndices)
-            {
-                Element<double> local_elt;
-                if (createFillins)
-                    local_elt = LocalSolver.GetElement(row.Key);
-                else
-                {
-                    local_elt = LocalSolver.FindElement(row.Key);
-                    if (local_elt == null)
-                        continue;
-                }
-                var global_elt = Parent.Solver.GetElement(row.Value);
-                _syncPairs.Add(new ElementPair(local_elt, global_elt));
-            }
+            base.Setup(simulation);
+            OldSolution = new DenseVector<double>(Solver.Size);
+            Temperature = _parent.Temperature;
         }
 
         /// <summary>
-        /// Apply changes locally.
+        /// Resets the biasing state for loading the local behaviors.
         /// </summary>
-        /// <returns>
-        /// True if the application was succesful.
-        /// </returns>
-        public override bool ApplyAsynchroneously()
+        public override void Reset()
         {
-            // Do a partial solve of the solver
-            try
-            {
-                if (!_isPreordered)
-                {
-                    if (ModifiedNodalAnalysisHelper<double>.Magnitude == null)
-                        ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
-                    Solver.Precondition((matrix, vector)
-                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, LocalSolver.Order));
-                    _isPreordered = true;
-                }
-
-                if (_shouldReorder)
-                {
-                    Solver.OrderAndFactor();
-                    _shouldReorder = false;
-                }
-                else
-                {
-                    var success = Solver.Factor();
-                    if (!success)
-                    {
-                        _shouldReorder = true;
-                        return false;
-                    }
-                }
-                return true;
-            }
-            catch (AlgebraException)
-            {
-                throw new CircuitException("Cannot parallelize subcircuit");
-            }
-        }
-
-        /// <summary>
-        /// Apply changes to the parent biasing state.
-        /// </summary>
-        public override void ApplySynchroneously()
-        {
-            // Add the contributions to the parent solver
-            foreach (var pairs in _syncPairs)
-                pairs.Parent.Add(pairs.Local.Value);
+            base.Reset();
+            _isConvergent = true;
         }
 
         /// <summary>
@@ -153,14 +113,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if this instance is convergent; otherwise, <c>false</c>.
         /// </returns>
-        public override bool CheckConvergence()
+        public bool CheckConvergence()
         {
-            // Copy the solution from the previous iteration to the local solution
-            foreach (var pair in _commonIndices)
-                Solution[pair.Key] = Parent.Solution[pair.Value];
-
-            // Solve to our local solution for the other elements
-            Solver.Solve(Solution);
+            Update();
 
             // Check convergence for each node
             foreach (var v in Map)
@@ -188,17 +143,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
 
             // Check for convergence on the variables, similar to BiasingSimulation.
             return true;
-        }
-
-        /// <summary>
-        /// Set up the simulation state for the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void Setup(ISimulation simulation)
-        {
-            base.Setup(simulation);
-            Solution = new DenseVector<double>(Solver.Size);
-            OldSolution = new DenseVector<double>(Solver.Size);
         }
     }
 }

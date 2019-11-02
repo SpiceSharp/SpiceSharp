@@ -14,7 +14,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="name">The identifier of the subcircuit simulation.</param>
         /// <param name="parent">The parent simulation.</param>
-        /// <param name="nodemap">The structure that maps the internal to external nodes.</param>
         public SubcircuitSimulation(string name, ISimulation parent)
             : base(parent)
         {

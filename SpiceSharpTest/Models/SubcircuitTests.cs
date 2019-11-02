@@ -3,6 +3,7 @@ using SpiceSharp;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
@@ -163,11 +164,13 @@ namespace SpiceSharpTest.Models
                     .SetParameter("biasing.solve", true)
                     );
             ckt["X1"].Parameters.Add(
-                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
+                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters()
+                    .SetParameter("frequency.load", true)
+                    .SetParameter("frequency.solve", true));
 
             // Build the simulation
             var ac = new AC("ac", new LinearSweep(0, 1, 3));
-            double[] reference = new[] { 1.00000000000083, 0, 0.80621270646045, -0.441463380433918, 0.469677271946689, -0.595014538138315 };
+            double[] reference = new[] { 1.000000000000, 0, 0.80621270646045, -0.441463380433918, 0.469677271946689, -0.595014538138315 };
 
             // Track the current values
             Complex[] current = new Complex[3];
@@ -175,8 +178,8 @@ namespace SpiceSharpTest.Models
             void TrackCurrent(object sender, ExportDataEventArgs args)
             {
                 var actual = args.GetComplexVoltage("out");
-                Assert.AreEqual(reference[index++], actual.Real, 1e-12);
-                Assert.AreEqual(reference[index++], actual.Imaginary, 1e-12);
+                Assert.AreEqual(reference[index++], actual.Real, 1e-9);
+                Assert.AreEqual(reference[index++], actual.Imaginary, 1e-9);
             }
             ac.ExportSimulationData += TrackCurrent;
             ac.Run(ckt);
@@ -193,7 +196,9 @@ namespace SpiceSharpTest.Models
                     .SetParameter("biasing.solve", false)
                     );
             ckt["X1"].Parameters.Add(
-                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
+                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters()
+                    .SetParameter("frequency.load", true)
+                    .SetParameter("frequency.solve", false));
 
             // Build the simulation
             var ac = new AC("ac", new LinearSweep(0, 1, 3));
@@ -205,8 +210,8 @@ namespace SpiceSharpTest.Models
             void TrackCurrent(object sender, ExportDataEventArgs args)
             {
                 var actual = args.GetComplexVoltage("out");
-                Assert.AreEqual(reference[index++], actual.Real, 1e-12);
-                Assert.AreEqual(reference[index++], actual.Imaginary, 1e-12);
+                Assert.AreEqual(reference[index++], actual.Real, 1e-9);
+                Assert.AreEqual(reference[index++], actual.Imaginary, 1e-9);
             }
             ac.ExportSimulationData += TrackCurrent;
             ac.Run(ckt);
@@ -222,14 +227,12 @@ namespace SpiceSharpTest.Models
                     .SetParameter("biasing.load", true)
                     .SetParameter("biasing.solve", true)
                     );
-            ckt["X1"].Parameters.Add(
-                new SpiceSharp.Components.SubcircuitBehaviors.FrequencyParameters().SetParameter("frequency.load", true));
 
             // Build the simulation
             var tran = new Transient("tran", 1e-6, 1e-3);
             tran.ExportSimulationData += (sender, args) =>
             {
-                System.Console.WriteLine(args.GetVoltage("out"));
+                Console.WriteLine(args.GetVoltage("out"));
             };
             tran.Run(ckt);
         }

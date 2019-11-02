@@ -1,122 +1,88 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// Biasing state for <see cref="SubcircuitSimulation"/>.
+    /// An <see cref="IBiasingSimulationState"/> for a <see cref="BiasingBehavior"/> that can load in parallel.
     /// </summary>
-    /// <seealso cref="IBiasingSimulationState" />
-    public class LoadBiasingState : BiasingSimulationState, IBiasingSimulationState
+    /// <seealso cref="ParallelLoadSolverState{T}" />
+    /// <seealso cref="ISubcircuitBiasingSimulationState" />
+    public class LoadBiasingState : ParallelLoadSolverState<double>, ISubcircuitBiasingSimulationState
     {
-        private List<ElementPair> _syncPairs = new List<ElementPair>();
-        private List<ElementPair> _asyncPairs = new List<ElementPair>();
+        /// <summary>
+        /// The parent simulation state.
+        /// </summary>
+        private IBiasingSimulationState _parent;
+
+        /// <summary>
+        /// Gets or sets the initialization flag.
+        /// </summary>
+        public InitializationModes Init => _parent.Init;
+
+        /// <summary>
+        /// The current temperature for this circuit in Kelvin.
+        /// </summary>
+        public double Temperature { get; set; }
+
+        /// <summary>
+        /// The nominal temperature for the circuit in Kelvin.
+        /// Used by models as the default temperature where the parameters were measured.
+        /// </summary>
+        public double NominalTemperature => _parent.NominalTemperature;
+
+        /// <summary>
+        /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
+        /// </summary>
+        public bool UseDc => _parent.UseDc;
+
+        /// <summary>
+        /// Gets or sets the flag for using initial conditions. If true, the operating point will not be calculated, and initial conditions will be used instead.
+        /// </summary>
+        public bool UseIc => _parent.UseIc;
+
+        /// <summary>
+        /// The current source factor.
+        /// This parameter is changed when doing source stepping for aiding convergence.
+        /// </summary>
+        /// <remarks>
+        /// In source stepping, all sources are considered to be at 0 which has typically only one single solution (all nodes and
+        /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
+        /// without having non-convergence.
+        /// </remarks>
+        public double SourceFactor => _parent.SourceFactor;
+
+        /// <summary>
+        /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
+        /// </summary>
+        public double Gmin => _parent.Gmin;
+
+        /// <summary>
+        /// Is the current iteration convergent?
+        /// This parameter is used to communicate convergence.
+        /// </summary>
+        public bool IsConvergent
+        {
+            get => _parent.IsConvergent;
+            set => _parent.IsConvergent = value;
+        }
+
+        /// <summary>
+        /// Gets the previous solution vector.
+        /// </summary>
+        /// <remarks>
+        /// This vector is needed for determining convergence.
+        /// </remarks>
+        public IVector<double> OldSolution => _parent.OldSolution;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadBiasingState"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
         public LoadBiasingState(IBiasingSimulationState parent)
-            : base(parent)
+            : base(parent, LUHelper.CreateSparseRealSolver())
         {
-        }
-
-        /// <summary>
-        /// Notifies the state that these variables can be shared with other states.
-        /// </summary>
-        /// <param name="common">The common.</param>
-        public override void ShareVariables(HashSet<Variable> common)
-        {
-            Variable[] elts = new Variable[Map.Count];
-            foreach (var elt in Map)
-                elts[elt.Value] = elt.Key;
-
-            _syncPairs.Clear();
-            _asyncPairs.Clear();
-
-            // Make pairs of elements for all solver elements
-            LocalSolver.Precondition((m, v) =>
-            {
-                var matrix = (ISparseMatrix<double>)m;
-                var vector = (ISparseVector<double>)v;
-
-                // Make pairs for all elements
-                for (var r = 1; r <= LocalSolver.Size; r++)
-                {
-                    var mElt = matrix.GetFirstInRow(r);
-                    while (mElt != null)
-                    {
-                        // Get the row and column variables
-                        var loc = new MatrixLocation(mElt.Row, mElt.Column);
-                        loc = LocalSolver.InternalToExternal(loc);
-                        var rowVariable = elts[loc.Row];
-                        var colVariable = elts[loc.Column];
-
-                        // Get the local element and the parent element
-                        var localElt = (Element<double>)mElt;
-                        var parentElt = Parent.Solver.GetElement(Parent.Map[rowVariable], Parent.Map[colVariable]);
-
-                        if (common.Contains(rowVariable) || common.Contains(colVariable))
-                            _syncPairs.Add(new ElementPair(localElt, parentElt));
-                        else
-                            _asyncPairs.Add(new ElementPair(localElt, parentElt));
-
-                        // Go to the next element
-                        mElt = mElt.Right;
-                    }
-                }
-
-                var vElt = vector.GetFirstInVector();
-                while (vElt != null)
-                {
-                    // Get the row variable
-                    var loc = new MatrixLocation(vElt.Index, 1);
-                    loc = LocalSolver.InternalToExternal(loc);
-                    var rowVariable = elts[loc.Row];
-
-                    // Get the local element and the parent element
-                    var localElt = (Element<double>)vElt;
-                    var parentElt = Parent.Solver.GetElement(Parent.Map[rowVariable]);
-
-                    if (common.Contains(rowVariable))
-                        _syncPairs.Add(new ElementPair(localElt, parentElt));
-                    else
-                        _asyncPairs.Add(new ElementPair(localElt, parentElt));
-                }
-            });
-        }
-
-        /// <summary>
-        /// Resets the biasing state for loading the local behaviors.
-        /// </summary>
-        public override void Reset()
-        {
-            base.Reset();
-            Solution = Parent.Solution;
-            OldSolution = Parent.OldSolution;
-        }
-
-        /// <summary>
-        /// Apply changes locally.
-        /// </summary>
-        /// <returns>
-        /// True if the application was succesful.
-        /// </returns>
-        public override bool ApplyAsynchroneously()
-        {
-            foreach (var pair in _asyncPairs)
-                pair.Parent.Add(pair.Local.Value);
-            return true;
-        }
-
-        /// <summary>
-        /// Apply changes to the parent biasing state.
-        /// </summary>
-        public override void ApplySynchroneously()
-        {
-            foreach (var pair in _syncPairs)
-                pair.Parent.Add(pair.Local.Value);
+            _parent = parent.ThrowIfNull(nameof(parent));
         }
 
         /// <summary>
@@ -125,9 +91,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if this instance is convergent; otherwise, <c>false</c>.
         /// </returns>
-        public override bool CheckConvergence()
+        public bool CheckConvergence()
         {
-            // Nothing to do here
+            Update();
             return true;
         }
     }
