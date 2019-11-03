@@ -132,7 +132,7 @@ namespace SpiceSharp.Simulations
         private double ComplexMagnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
         /// <summary>
-        /// Create all behaviors for the simulation.
+        /// Creates all behaviors for the simulation.
         /// </summary>
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)

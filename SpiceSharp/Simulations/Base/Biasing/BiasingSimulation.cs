@@ -166,7 +166,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create all behaviors for the simulation.
+        /// Creates all behaviors for the simulation.
         /// </summary>
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)

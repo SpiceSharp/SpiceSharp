@@ -131,7 +131,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Eliminate the submatrix right and below the pivot.
+        /// Eliminates the submatrix right and below the pivot.
         /// </summary>
         /// <param name="step">The current elimination step.</param>
         /// <param name="size">The maximum row/column to be eliminated.</param>

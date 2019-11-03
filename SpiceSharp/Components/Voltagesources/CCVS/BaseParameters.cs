@@ -14,12 +14,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public GivenParameter<double> Coefficient { get; } = new GivenParameter<double>();
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         public BaseParameters() { }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         /// <param name="gain"></param>
         public BaseParameters(double gain)

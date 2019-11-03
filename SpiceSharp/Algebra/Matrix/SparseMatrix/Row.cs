@@ -51,7 +51,7 @@ namespace SpiceSharp.Algebra
             }
 
             /// <summary>
-            /// Create or get an element in the row.
+            /// Creates or get an element in the row.
             /// </summary>
             /// <param name="row">The row index used for creating a new element</param>
             /// <param name="column">The column index.</param>

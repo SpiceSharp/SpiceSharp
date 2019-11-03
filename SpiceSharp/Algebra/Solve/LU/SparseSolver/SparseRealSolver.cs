@@ -162,7 +162,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Eliminate the matrix right and below the pivot.
+        /// Eliminates the matrix right and below the pivot.
         /// </summary>
         /// <param name="pivot">The pivot element.</param>
         /// <returns>

@@ -109,6 +109,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
             base.Bind(context);
             var c = (ComponentBindingContext)context;
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            if (c.Nodes.Length < 2)
+                throw new CircuitException("Invalid number of nodes");
             _posNode = BiasingState.Map[c.Nodes[0]];
             _negNode = BiasingState.Map[c.Nodes[1]];
             ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();

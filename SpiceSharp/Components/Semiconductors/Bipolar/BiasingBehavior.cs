@@ -148,7 +148,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }
@@ -168,6 +168,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             context.States.TryGetValue(out _timeState);
 
             var c = (ComponentBindingContext)context;
+            c.Nodes.ThrowIfNot("nodes", 4);
             _collectorNode = BiasingState.Map[c.Nodes[0]];
             _baseNode = BiasingState.Map[c.Nodes[1]];
             _emitterNode = BiasingState.Map[c.Nodes[2]];

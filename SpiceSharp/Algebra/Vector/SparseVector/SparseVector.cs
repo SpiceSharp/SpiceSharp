@@ -117,7 +117,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Create or get an element in the vector.
+        /// Creates or get an element in the vector.
         /// </summary>
         /// <param name="index">Index in the vector</param>
         /// <returns>The vector element at the specified index</returns>

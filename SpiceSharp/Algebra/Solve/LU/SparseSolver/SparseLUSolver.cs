@@ -209,7 +209,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Eliminate the matrix right and below the pivot.
+        /// Eliminates the matrix right and below the pivot.
         /// </summary>
         /// <param name="pivot">The pivot element.</param>
         /// <returns>
@@ -320,7 +320,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Create a fill-in element.
+        /// Creates a fill-in element.
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>

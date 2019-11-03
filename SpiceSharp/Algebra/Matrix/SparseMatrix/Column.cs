@@ -25,6 +25,7 @@ namespace SpiceSharp.Algebra
             /// <param name="newElement">The new element to insert.</param>
             public void Insert(Element newElement)
             {
+                newElement.ThrowIfNull(nameof(newElement));
                 var row = newElement.Row;
                 Element element = FirstInColumn, lastElement = null;
                 while (element != null)
@@ -51,7 +52,7 @@ namespace SpiceSharp.Algebra
             }
 
             /// <summary>
-            /// Create or get an element in the column.
+            /// Creates or get an element in the column.
             /// </summary>
             /// <param name="row">The row index used for creating a new element</param>
             /// <param name="column">The column index.</param>

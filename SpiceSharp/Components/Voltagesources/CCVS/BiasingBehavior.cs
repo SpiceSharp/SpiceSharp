@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         private int _posNode, _negNode, _cbrNode, _brNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }
@@ -83,6 +83,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             var c = (CommonBehaviors.ControlledBindingContext)context;
+            c.Nodes.ThrowIfNot("nodes", 2);
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
             _posNode = BiasingState.Map[c.Nodes[0]];
             _negNode = BiasingState.Map[c.Nodes[1]];

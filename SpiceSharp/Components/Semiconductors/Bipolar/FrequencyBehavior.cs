@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode, _substrateNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

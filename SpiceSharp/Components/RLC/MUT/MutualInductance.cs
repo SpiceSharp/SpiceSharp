@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
         public string InductorName2 { get; set; }
 
         /// <summary>
-        /// Create a new instance of the <see cref="MutualInductance"/> class.
+        /// Initializes a new instance of the <see cref="MutualInductance"/> class.
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
         public MutualInductance(string name) : base(name, 0)
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Create a new instance of the <see cref="MutualInductance"/> class.
+        /// Initializes a new instance of the <see cref="MutualInductance"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="inductorName1">Inductor 1</param>

@@ -134,7 +134,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }
@@ -159,6 +159,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             Mode = 1;
 
             var c = (ComponentBindingContext)context;
+            c.Nodes.ThrowIfNot("nodes", 4);
             _drainNode = BiasingState.Map[c.Nodes[0]];
             _gateNode = BiasingState.Map[c.Nodes[1]];
             _sourceNode = BiasingState.Map[c.Nodes[2]];

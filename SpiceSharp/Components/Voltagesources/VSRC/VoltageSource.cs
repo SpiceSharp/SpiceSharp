@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
 		public const int VoltageSourcePinCount = 2;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="VoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name</param>
         public VoltageSource(string name) : base(name, VoltageSourcePinCount)
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="VoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="VoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>

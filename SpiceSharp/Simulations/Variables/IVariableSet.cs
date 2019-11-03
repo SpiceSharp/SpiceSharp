@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
         Variable MapNode(string id, VariableType type);
 
         /// <summary>
-        /// Create a new variable.
+        /// Creates a new variable.
         /// </summary>
         /// <remarks>
         /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.

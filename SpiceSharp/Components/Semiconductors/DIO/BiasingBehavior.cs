@@ -53,7 +53,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private int _posNode, _negNode, _posPrimeNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public BiasingBehavior(string name) : base(name) { }
@@ -67,6 +67,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             base.Bind(context);
 
             var c = (ComponentBindingContext)context;
+            c.Nodes.ThrowIfNot("nodes", 2);
             _posNode = BiasingState.Map[c.Nodes[0]];
             _negNode = BiasingState.Map[c.Nodes[1]];
             var variables = context.Variables;

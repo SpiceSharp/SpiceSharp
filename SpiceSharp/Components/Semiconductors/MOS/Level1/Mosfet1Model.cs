@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Mosfet1Model"/> class.
+        /// Initializes a new instance of the <see cref="Mosfet1Model"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public Mosfet1Model(string name) : base(name)

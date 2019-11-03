@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         private int _posNode, _negNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

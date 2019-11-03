@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         private INoiseSimulationState _nstate;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ComponentNoise"/> class.
+        /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
         /// <param name="generators">Names of the generators</param>
         public ComponentNoise(params NoiseGenerator[] generators)
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ComponentNoise"/> class.
+        /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
         /// <param name="generators"></param>
         public ComponentNoise(IEnumerable<NoiseGenerator> generators)
@@ -67,6 +67,7 @@ namespace SpiceSharp.Components
         /// <param name="nodes">The nodes.</param>
         public void Bind(ComponentBindingContext context, params Variable[] nodes)
         {
+            context.ThrowIfNull(nameof(context));
             _cstate = context.States.GetValue<IComplexSimulationState>();
             _nstate = context.States.GetValue<INoiseSimulationState>();
             

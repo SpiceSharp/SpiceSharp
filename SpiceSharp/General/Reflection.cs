@@ -554,7 +554,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a setter for a member.
+        /// Creates a setter for a member.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="source">The source object.</param>
@@ -578,7 +578,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a getter for a member.
+        /// Creates a getter for a member.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="source">The source object.</param>
@@ -722,7 +722,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a getter for a field.
+        /// Creates a getter for a field.
         /// </summary>
         /// <typeparam name="T">The base value type.</typeparam>
         /// <param name="source">The source object.</param>

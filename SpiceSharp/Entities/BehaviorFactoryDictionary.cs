@@ -22,7 +22,7 @@ namespace SpiceSharp.Entities
     }
 
     /// <summary>
-    /// Create a behavior for an entity
+    /// Creates a behavior for an entity
     /// </summary>
     /// <param name="entity">The entity creating the behavior.</param>
     /// <returns></returns>

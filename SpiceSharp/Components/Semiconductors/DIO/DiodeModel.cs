@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="DiodeModel"/> class.
+        /// Initializes a new instance of the <see cref="DiodeModel"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public DiodeModel(string name) : base(name)

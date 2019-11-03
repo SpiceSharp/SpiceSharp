@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         private int _posNode, _negNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }
@@ -75,6 +75,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 
             var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
+            c.Nodes.ThrowIfNot("nodes", 2);
             _posNode = ComplexState.Map[c.Nodes[0]];
             _negNode = ComplexState.Map[c.Nodes[1]];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,

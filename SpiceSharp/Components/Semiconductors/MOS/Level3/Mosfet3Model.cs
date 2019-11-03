@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Mosfet3Model"/> class.
+        /// Initializes a new instance of the <see cref="Mosfet3Model"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public Mosfet3Model(string name) : base(name)
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Mosfet3Model"/> class.
+        /// Initializes a new instance of the <see cref="Mosfet3Model"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>

@@ -36,7 +36,7 @@ namespace SpiceSharp
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom((Parameter<T>)source);
 
         /// <summary>
-        /// Clone the current parameter.
+        /// Clones the current parameter.
         /// </summary>
         /// <returns>A clone of the parameter.</returns>
         public virtual Parameter<T> Clone()
@@ -47,7 +47,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Clone the current object.
+        /// Clones the current object.
         /// </summary>
         /// <returns>A clone of the object.</returns>
         ICloneable ICloneable.Clone() => Clone();

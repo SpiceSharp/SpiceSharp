@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.NoiseSources
         public double Current { get; set; }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="NoiseShot"/> class.
+        /// Initializes a new instance of the <see cref="NoiseShot"/> class.
         /// </summary>
         /// <param name="name">Name of the noise source</param>
         /// <param name="node1">Node 1</param>

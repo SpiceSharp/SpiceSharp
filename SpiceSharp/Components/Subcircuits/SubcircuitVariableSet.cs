@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Create a new variable.
+        /// Creates a new variable.
         /// </summary>
         /// <param name="id">The identifier of the new variable.</param>
         /// <param name="type">The type of the variable.</param>

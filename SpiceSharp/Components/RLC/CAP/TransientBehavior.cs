@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         private int _posNode, _negNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name of the behavior</param>
         public TransientBehavior(string name) : base(name) { }
@@ -68,6 +68,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             base.Bind(context);
 
             var c = (ComponentBindingContext)context;
+            c.Nodes.ThrowIfNot("nodes", 2);
             _posNode = BiasingState.Map[c.Nodes[0]];
             _negNode = BiasingState.Map[c.Nodes[1]];
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {

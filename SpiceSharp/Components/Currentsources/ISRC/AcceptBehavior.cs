@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         private CommonBehaviors.IndependentSourceParameters _bp;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="AcceptBehavior"/> class.
+        /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public AcceptBehavior(string name) : base(name) { }

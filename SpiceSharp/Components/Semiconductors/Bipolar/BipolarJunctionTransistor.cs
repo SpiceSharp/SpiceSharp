@@ -30,7 +30,7 @@ namespace SpiceSharp.Components
 		public const int BipolarJunctionTransistorPinCount = 4;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BipolarJunctionTransistor"/> class.
+        /// Initializes a new instance of the <see cref="BipolarJunctionTransistor"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public BipolarJunctionTransistor(string name) 

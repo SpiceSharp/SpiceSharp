@@ -27,6 +27,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             var c = (ComponentBindingContext)context;
             var state = context.States.GetValue<IBiasingSimulationState>();
+            c.Nodes.ThrowIfNot("nodes", 4);
             ContPosNode = state.Map[c.Nodes[2]];
             ContNegNode = state.Map[c.Nodes[3]];
         }

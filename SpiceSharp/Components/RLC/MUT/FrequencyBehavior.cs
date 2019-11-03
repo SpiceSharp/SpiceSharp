@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         private int _br1, _br2;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

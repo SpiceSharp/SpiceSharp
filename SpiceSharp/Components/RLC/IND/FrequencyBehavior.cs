@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         private int _posNode, _negNode, _branchEq;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

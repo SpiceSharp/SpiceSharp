@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ModelTemperatureBehavior"/> class.
+        /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public ModelTemperatureBehavior(string name) : base(name) { }

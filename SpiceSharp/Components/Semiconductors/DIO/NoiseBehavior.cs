@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private INoiseSimulationState _state;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="NoiseBehavior"/> class.
+        /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public NoiseBehavior(string name) : base(name) { }

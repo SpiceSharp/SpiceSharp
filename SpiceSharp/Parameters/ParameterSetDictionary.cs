@@ -25,7 +25,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Clone the dictionary.
+        /// Clones the dictionary.
         /// </summary>
         /// <returns></returns>
         public virtual ParameterSetDictionary Clone()
@@ -37,7 +37,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Clone the object.
+        /// Clones the object.
         /// </summary>
         /// <returns></returns>
         ICloneable ICloneable.Clone() => Clone();

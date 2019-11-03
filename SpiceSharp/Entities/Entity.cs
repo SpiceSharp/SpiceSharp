@@ -196,7 +196,7 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Clone the entity
+        /// Clones the entity
         /// </summary>
         /// <returns></returns>
         public virtual IEntity Clone()
@@ -207,7 +207,7 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Clone this object.
+        /// Clones this object.
         /// </summary>
         ICloneable ICloneable.Clone() => Clone();
 

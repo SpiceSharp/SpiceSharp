@@ -3,7 +3,7 @@
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// Describes a sparse matrix.
+    /// Describes a matrix.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
     public interface IMatrix<T> : IFormattable where T : IFormattable

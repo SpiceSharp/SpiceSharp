@@ -30,7 +30,7 @@ namespace SpiceSharp.Components
 		public const int DiodePinCount = 2;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Diode"/> class.
+        /// Initializes a new instance of the <see cref="Diode"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public Diode(string name) : base(name, DiodePinCount)

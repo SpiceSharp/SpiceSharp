@@ -47,14 +47,14 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         public BaseParameters()
         {
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         /// <param name="cap">Capacitance</param>
         public BaseParameters(double cap)

@@ -57,6 +57,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
             var c = (ComponentBindingContext)context;
+            c.Nodes.ThrowIfNot("nodes", 4);
             _posNode = BiasingState.Map[c.Nodes[0]];
             _negNode = BiasingState.Map[c.Nodes[1]];
             _contPosNode = BiasingState.Map[c.Nodes[2]];

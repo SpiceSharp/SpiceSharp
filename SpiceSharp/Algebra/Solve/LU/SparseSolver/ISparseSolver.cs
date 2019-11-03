@@ -3,7 +3,7 @@
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// An <see cref="ISolver{T}"/> that can provide elements.
+    /// An <see cref="ISolver{T}"/> that uses sparse elements internally.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ISolver{T}" />

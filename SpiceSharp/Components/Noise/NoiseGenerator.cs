@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.NoiseSources
         protected IComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="NoiseGenerator"/> class.
+        /// Initializes a new instance of the <see cref="NoiseGenerator"/> class.
         /// </summary>
         /// <param name="name">Name of the noise source</param>
         /// <param name="pins">Pins</param>
@@ -88,6 +88,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="nodes">The nodes.</param>
         public virtual void Bind(ComponentBindingContext context, Variable[] nodes)
         {
+            context.ThrowIfNull(nameof(context));
+            nodes.ThrowIfNull(nameof(nodes));
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
             ComplexState = context.States.GetValue<IComplexSimulationState>();
             NoiseState = context.States.GetValue<INoiseSimulationState>();

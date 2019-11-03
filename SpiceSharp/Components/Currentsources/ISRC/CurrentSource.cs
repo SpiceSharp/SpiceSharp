@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
 		public const int CurrentSourcePinCount = 2;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current source</param>
         public CurrentSource(string name) 
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current source</param>
         /// <param name="pos">The positive node</param>
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current source</param>
         /// <param name="pos">The positive node</param>

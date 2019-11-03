@@ -29,9 +29,9 @@ namespace SpiceSharp.Components
 		public const int ResistorPinCount = 2;
 
         /// <summary>
-        /// Create a new instance of the <see cref="Resistor"/> class.
+        /// Initializes a new instance of the <see cref="Resistor"/> class.
         /// </summary>
-        /// <param name="name">The name of the resistor</param>
+        /// <param name="name">The name of the entity.</param>
         public Resistor(string name) 
             : base(name, ResistorPinCount)
         {
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Resistor"/> class.
+        /// Initializes a new instance of the <see cref="Resistor"/> class.
         /// </summary>
         /// <param name="name">The name of the resistor</param>
         /// <param name="pos">The positive node</param>

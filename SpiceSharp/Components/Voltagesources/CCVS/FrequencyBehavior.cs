@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         private int _posNode, _negNode, _cbrNode, _brNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(string name) : base(name) { }

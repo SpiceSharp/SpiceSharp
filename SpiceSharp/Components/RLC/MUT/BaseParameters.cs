@@ -14,14 +14,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public GivenParameter<double> Coupling { get; } = new GivenParameter<double>();
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         public BaseParameters()
         {
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BaseParameters"/> class.
+        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         /// <param name="coupling">Mutual inductance</param>
         public BaseParameters(double coupling)

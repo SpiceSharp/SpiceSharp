@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private int _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         public TransientBehavior(string name) : base(name) { }
