@@ -185,7 +185,6 @@ namespace SpiceSharp.Entities
             {
                 _lock.ExitUpgradeableReadLock();
             }
-
         }
 
         /// <summary>

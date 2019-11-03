@@ -88,7 +88,6 @@ namespace SpiceSharp.Algebra
             return _values[index];
         }
 
-
         /// <summary>
         /// Sets the value of the vector at the specified index.
         /// </summary>

@@ -31,7 +31,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
             new NoiseShot("id", 1, 2),
             new NoiseGain("1overf", 1, 2));
 
-        
         private INoiseSimulationState _state;
 
         /// <summary>

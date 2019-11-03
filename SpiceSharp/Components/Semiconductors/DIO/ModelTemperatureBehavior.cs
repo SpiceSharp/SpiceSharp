@@ -42,7 +42,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         public double F3 { get; protected set; }
 
-
         /// <summary>
         /// Gets the biasing simulation state.
         /// </summary>

@@ -43,7 +43,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         public double Cjfact { get; private set; }
 
-
         /// <summary>
         /// Gets the biasing simulation state.
         /// </summary>

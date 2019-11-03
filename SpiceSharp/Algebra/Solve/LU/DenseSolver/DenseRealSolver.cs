@@ -12,7 +12,6 @@ namespace SpiceSharp.Algebra
         where M : IPermutableMatrix<double>
         where V : IPermutableVector<double>
     {
-
         private double[] _intermediate;
 
         /// <summary>

@@ -53,7 +53,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         public double PbFactor1 { get; private set; }
 
-
         /// <summary>
         /// Gets the biasing simulation state.
         /// </summary>

@@ -69,7 +69,6 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Load1.UpdateFlux += UpdateFlux1;
             Load2.UpdateFlux += UpdateFlux2;
 
-            
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_br1, _br2),
                 new MatrixLocation(_br2, _br1));

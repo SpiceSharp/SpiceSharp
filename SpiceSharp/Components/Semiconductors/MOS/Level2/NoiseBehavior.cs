@@ -47,7 +47,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             new NoiseGain("1overf", 4, 5)
         );
 
-        
         private INoiseSimulationState _state;
 
         /// <summary>

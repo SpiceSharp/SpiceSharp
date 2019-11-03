@@ -44,7 +44,6 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         private readonly int[] _pins;
 
-
         /// <summary>
         /// Gets the biasing simulation state.
         /// </summary>
