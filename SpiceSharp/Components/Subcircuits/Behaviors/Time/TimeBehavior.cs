@@ -69,11 +69,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 var tasks = new Task[Behaviors.Length];
                 for (var t = 0; t < tasks.Length; t++)
                 {
-                    var bs = Behaviors[t];
+                    var task = t;
                     tasks[t] = Task.Run(() =>
                     {
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].InitializeStates();
+                        foreach (var behavior in Behaviors[task])
+                            behavior.InitializeStates();
                     });
                 }
                 Task.WaitAll(tasks);
@@ -82,8 +82,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             {
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].InitializeStates();
+                    foreach (var behavior in bs)
+                        behavior.InitializeStates();
                 }
             }
         }
@@ -97,9 +97,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
             if (_state.UseDc)
                 return;
-            var bs = Behaviors[args.Task];
-            for (var i = 0; i < bs.Count; i++)
-                bs[i].Load();
+            foreach (var behavior in Behaviors[args.Task])
+                behavior.Load();
         }
 
         /// <summary>

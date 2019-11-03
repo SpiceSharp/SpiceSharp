@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 
@@ -105,6 +106,8 @@ namespace SpiceSharp.Simulations
             var config = Configurations.GetValue<FrequencyConfiguration>();
             FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
 
+            ModifiedNodalAnalysisHelper<Complex>.Magnitude = ComplexMagnitude;
+
             // Create the state for complex numbers
             /* var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
@@ -120,6 +123,13 @@ namespace SpiceSharp.Simulations
 
             ComplexState.Setup(this);
         }
+
+        /// <summary>
+        /// Default complex magnitude.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        private double ComplexMagnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
         /// <summary>
         /// Create all behaviors for the simulation.
@@ -148,9 +158,12 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (var i = 0; i < _frequencyBehaviors.Count; i++)
-                _frequencyBehaviors[i].Unbind();
+            foreach (var behavior in _frequencyBehaviors)
+                behavior.Unbind();
+            foreach (var behavior in _frequencyUpdateBehaviors)
+                behavior.Unbind();
             _frequencyBehaviors = null;
+            _frequencyUpdateBehaviors = null;
 
             // Remove the state
             ComplexState.Unsetup();
@@ -201,8 +214,8 @@ namespace SpiceSharp.Simulations
             FrequencySimulationStatistics.ComplexSolveTime.Stop();
 
             // Update with the found solution
-            for (var i = 0; i < _frequencyUpdateBehaviors.Count; i++)
-                _frequencyUpdateBehaviors[i].Update();
+            foreach (var behavior in _frequencyUpdateBehaviors)
+                behavior.Update();
 
             // Reset values
             cstate.Solution[0] = 0.0;
@@ -216,7 +229,7 @@ namespace SpiceSharp.Simulations
         protected virtual void OnBeforeFrequencyLoad(LoadStateEventArgs args) => BeforeFrequencyLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterFrequencyLoad" /> event.
+        /// Raises the <see cref="AfterFrequencyLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterFrequencyLoad(LoadStateEventArgs args) => AfterFrequencyLoad?.Invoke(this, args);
@@ -228,11 +241,8 @@ namespace SpiceSharp.Simulations
         {
             BiasingState.UseDc = false;
             Load();
-            for (var i = 0; i < _frequencyBehaviors.Count; i++)
-            {
-                // _frequencyBehaviors[i].Load(this);
-                _frequencyBehaviors[i].InitializeParameters();
-            }
+            foreach (var behavior in _frequencyBehaviors)
+                behavior.InitializeParameters();
         }
 
         /// <summary>
@@ -253,8 +263,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected virtual void LoadFrequencyBehaviors()
         {
-            for (var i = 0; i < _frequencyBehaviors.Count; i++)
-                _frequencyBehaviors[i].Load();
+            foreach (var behavior in _frequencyBehaviors)
+                behavior.Load();
         }
     }
 }

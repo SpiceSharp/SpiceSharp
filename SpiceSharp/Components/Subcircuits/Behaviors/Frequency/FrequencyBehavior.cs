@@ -110,9 +110,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var task = t;
                     tasks[t] = Task.Run(() =>
                     {
-                        var bs = Behaviors[task];
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].InitializeParameters();
+                        foreach (var behavior in Behaviors[task])
+                            behavior.InitializeParameters();
                     });
                 }
                 Task.WaitAll(tasks);
@@ -122,8 +121,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 // Use single thread
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].InitializeParameters();
+                    foreach (var behavior in bs)
+                        behavior.InitializeParameters();
                 }
             }
         }
@@ -142,13 +141,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var task = t;
                     tasks[t] = Task.Run(() =>
                     {
-                        var bs = Behaviors[task];
                         var state = _states[task];
                         do
                         {
                             state.Reset();
-                            for (var i = 0; i < bs.Count; i++)
-                                bs[i].Load();
+                            foreach (var behavior in Behaviors[task])
+                                behavior.Load();
                         }
                         while (!state.ApplyAsynchronously());
                     });
@@ -164,9 +162,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     do
                     {
                         _states[t].Reset();
-                        var bs = Behaviors[t];
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].Load();
+                        foreach (var behavior in Behaviors[t])
+                            behavior.Load();
                     }
                     while (!_states[t].ApplyAsynchronously());
                 }
@@ -178,8 +175,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 // Use single thread
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].Load();
+                    foreach (var behavior in bs)
+                        behavior.Load();
                 }
             }
         }

@@ -116,15 +116,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 var tasks = new Task<bool>[Behaviors.Length];
                 for (var t = 0; t < tasks.Length; t++)
                 {
-                    var bs = Behaviors[t];
-                    var state = _states[t];
+                    var task = t;
                     tasks[t] = Task.Run(() =>
                     {
                         var result = true;
-                        for (var i = 0; i < bs.Count; i++)
-                            result &= bs[i].IsConvergent();
+                        foreach (var behavior in Behaviors[task])
+                            result &= behavior.IsConvergent();
                         if (result)
-                            result &= state.CheckConvergence();
+                            result &= _states[task].CheckConvergence();
                         return result;
                     });
                 }
@@ -139,8 +138,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 var isConvergent = true;
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        isConvergent &= bs[i].IsConvergent();
+                    foreach (var behavior in bs)
+                        isConvergent &= behavior.IsConvergent();
                 }
                 if (_states != null)
                 {
@@ -213,9 +212,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="task">The task.</param>
         private void LoadSubcircuitBehaviors(int task)
         {
-            var bs = Behaviors[task];
-            for (var i = 0; i < bs.Count; i++)
-                bs[i].Load();
+            foreach (var behavior in Behaviors[task])
+                behavior.Load();
             AfterLoad?.Invoke(this, new BiasingEventArgs(task));
         }
     }

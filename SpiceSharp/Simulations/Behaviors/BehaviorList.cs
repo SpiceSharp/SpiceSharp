@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SpiceSharp.Behaviors
@@ -7,7 +8,7 @@ namespace SpiceSharp.Behaviors
     /// Class representing an ordered list of behaviors.
     /// </summary>
     /// <typeparam name="T">The base behavior type.</typeparam>
-    public class BehaviorList<T> where T : IBehavior
+    public class BehaviorList<T> : IEnumerable<T> where T : IBehavior
     {
         /// <summary>
         /// Behaviors
@@ -38,5 +39,21 @@ namespace SpiceSharp.Behaviors
             _behaviors = behaviors.ToArray();
             Count = _behaviors.Length;
         }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<T> GetEnumerator() => ((IEnumerable<T>)_behaviors).GetEnumerator();
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator() => _behaviors.GetEnumerator();
     }
 }

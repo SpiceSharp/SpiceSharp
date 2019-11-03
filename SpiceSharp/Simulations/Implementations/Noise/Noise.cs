@@ -104,8 +104,8 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             NoiseState.Unsetup();
-            for (var i = 0; i < _noiseBehaviors.Count; i++)
-                _noiseBehaviors[i].Unbind();
+            foreach (var behavior in _noiseBehaviors)
+                behavior.Unbind();
             _noiseBehaviors = null;
             NoiseConfiguration = null;
 
@@ -156,8 +156,8 @@ namespace SpiceSharp.Simulations
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 nstate.OutputNoiseDensity = 0.0;
-                for (var i = 0; i < _noiseBehaviors.Count; i++)
-                    _noiseBehaviors[i].Noise();
+                foreach (var behavior in _noiseBehaviors)
+                    behavior.Noise();
 
                 // Export the data
                 OnExport(exportargs);

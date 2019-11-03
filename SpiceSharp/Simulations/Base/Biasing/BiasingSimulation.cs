@@ -8,7 +8,6 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// The base simulation.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.Simulation" />
     /// <remarks>
     /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="BiasingState" /> is always part of the simulation.
     /// </remarks>
@@ -142,6 +141,7 @@ namespace SpiceSharp.Simulations
             RelTol = config.RelativeTolerance;
 
             // Create the state for this simulation
+            ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
             BiasingState.Gmin = config.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
@@ -200,8 +200,8 @@ namespace SpiceSharp.Simulations
         {
             var args = new LoadStateEventArgs(BiasingState);
             OnBeforeTemperature(args);
-            for (var i = 0; i < _temperatureBehaviors.Count; i++)
-                _temperatureBehaviors[i].Temperature();
+            foreach (var behavior in _temperatureBehaviors)
+                behavior.Temperature();
             OnAfterTemperature(args);
         }
 
@@ -219,12 +219,12 @@ namespace SpiceSharp.Simulations
             _nodesets.Clear();
 
             // Unsetup all behaviors
-            for (var i = 0; i < _initialConditionBehaviors.Count; i++)
-                _initialConditionBehaviors[i].Unbind();
-            for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].Unbind();
-            for (var i = 0; i < _temperatureBehaviors.Count; i++)
-                _temperatureBehaviors[i].Unbind();
+            foreach (var behavior in _initialConditionBehaviors)
+                behavior.Unbind();
+            foreach (var behavior in _loadBehaviors)
+                behavior.Unbind();
+            foreach (var behavior in _temperatureBehaviors)
+                behavior.Unbind();
 
             // Clear the state
             BiasingState.Unsetup();
@@ -455,8 +455,6 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!_isPreordered)
                 {
-                    if (ModifiedNodalAnalysisHelper<double>.Magnitude == null)
-                        ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
                     solver.Precondition((matrix, vector)
                         => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Order));
                     _isPreordered = true;
@@ -499,8 +497,8 @@ namespace SpiceSharp.Simulations
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
 
-                for (var i = 0; i < _updateBehaviors.Count; i++)
-                    _updateBehaviors[i].Update();
+                foreach (var behavior in _updateBehaviors)
+                    behavior.Update();
 
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
@@ -575,8 +573,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected virtual void LoadBehaviors()
         {
-            for (var i = 0; i < _loadBehaviors.Count; i++)
-                _loadBehaviors[i].Load();
+            foreach (var behavior in _loadBehaviors)
+                behavior.Load();
         }
 
         /// <summary>
@@ -589,8 +587,7 @@ namespace SpiceSharp.Simulations
             var state = BiasingState;
 
             // Consider doing nodeset assignments when we're starting out or in trouble
-            if ((state.Init & (InitializationModes.Junction | InitializationModes.Fix)) ==
-                0) 
+            if ((state.Init & (InitializationModes.Junction | InitializationModes.Fix)) == 0) 
                 return;
 
             // Aid in convergence
@@ -639,9 +636,9 @@ namespace SpiceSharp.Simulations
             }
 
             // Device-level convergence tests
-            for (var i = 0; i < _loadBehaviors.Count; i++)
+            foreach (var behavior in _loadBehaviors)
             {
-                if (!_loadBehaviors[i].IsConvergent())
+                if (!behavior.IsConvergent())
                 {
                     // I believe this should be false, but Spice 3f5 doesn't...
 
@@ -675,25 +672,25 @@ namespace SpiceSharp.Simulations
         #region Methods for calling events
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeLoad" /> event.
+        /// Raises the <see cref="BeforeLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeLoad(LoadStateEventArgs args) => BeforeLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterLoad" /> event.
+        /// Raises the <see cref="AfterLoad" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterLoad(LoadStateEventArgs args) => AfterLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeTemperature" /> event.
+        /// Raises the <see cref="BeforeTemperature" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeTemperature(LoadStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterTemperature" /> event.
+        /// Raises the <see cref="AfterTemperature" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);

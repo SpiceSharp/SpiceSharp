@@ -47,9 +47,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var task = t;
                     tasks[t] = Task.Run(() =>
                     {
-                        var bs = Behaviors[task];
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].Accept();
+                        foreach (var behavior in Behaviors[task])
+                            behavior.Accept();
                     });
                 }
                 Task.WaitAll(tasks);
@@ -58,8 +57,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             {
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].Accept();
+                    foreach (var behavior in bs)
+                        behavior.Accept();
                 }
             }
         }
@@ -77,9 +76,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var task = t;
                     tasks[t] = Task.Run(() =>
                     {
-                        var bs = Behaviors[task];
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].Probe();
+                        foreach (var behavior in Behaviors[task])
+                            behavior.Probe();
                     });
                 }
                 Task.WaitAll(tasks);
@@ -88,8 +86,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             {
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].Probe();
+                    foreach (var behavior in bs)
+                        behavior.Probe();
                 }
             }
         }

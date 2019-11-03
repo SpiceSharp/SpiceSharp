@@ -47,9 +47,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     var task = t;
                     tasks[t] = Task.Run(() =>
                     {
-                        var bs = Behaviors[task];
-                        for (var i = 0; i < bs.Count; i++)
-                            bs[i].SetInitialCondition();
+                        foreach (var behavior in Behaviors[task])
+                            behavior.SetInitialCondition();
                     });
                 }
                 Task.WaitAll(tasks);
@@ -58,8 +57,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             {
                 foreach (var bs in Behaviors)
                 {
-                    for (var i = 0; i < bs.Count; i++)
-                        bs[i].SetInitialCondition();
+                    foreach (var behavior in bs)
+                        behavior.SetInitialCondition();
                 }
             }
         }

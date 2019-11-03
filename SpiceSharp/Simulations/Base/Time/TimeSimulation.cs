@@ -161,11 +161,11 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            for (var i = 0; i < _transientBehaviors.Count; i++)
-                _transientBehaviors[i].Unbind();
+            foreach (var behavior in _transientBehaviors)
+                behavior.Unbind();
             _transientBehaviors = null;
-            for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Unbind();
+            foreach (var behavior in _acceptBehaviors)
+                behavior.Unbind();
             _acceptBehaviors = null;
 
             // Destroy the integration method
@@ -304,7 +304,6 @@ namespace SpiceSharp.Simulations
                         case InitializationModes.Fix:
                             if (state.IsConvergent)
                                 state.Init = InitializationModes.Float;
-                            // pass = true;
                             break;
 
                         case InitializationModes.None:
@@ -324,8 +323,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected virtual void InitializeStates()
         {
-            for (var i = 0; i < _transientBehaviors.Count; i++)
-                _transientBehaviors[i].InitializeStates();
+            foreach (var behavior in _transientBehaviors)
+                behavior.InitializeStates();
             TimeState.Method.Initialize(this);
         }
 
@@ -350,8 +349,8 @@ namespace SpiceSharp.Simulations
             // Not calculating DC behavior
             if (!BiasingState.UseDc)
             {
-                for (var i = 0; i < _transientBehaviors.Count; i++)
-                    _transientBehaviors[i].Load();
+                foreach (var behavior in _transientBehaviors)
+                    behavior.Load();
             }
         }
 
@@ -360,8 +359,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Accept()
         {
-            for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Accept();
+            foreach (var behavior in _acceptBehaviors)
+                behavior.Accept();
             TimeState.Method.Accept(this);
             TimeSimulationStatistics.Accepted++;
         }
@@ -373,8 +372,8 @@ namespace SpiceSharp.Simulations
         protected void Probe(double delta)
         {
             TimeState.Method.Probe(this, delta);
-            for (var i = 0; i < _acceptBehaviors.Count; i++)
-                _acceptBehaviors[i].Probe();
+            foreach (var behavior in _acceptBehaviors)
+                behavior.Probe();
         }
     }
 }

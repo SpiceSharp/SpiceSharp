@@ -78,10 +78,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public override void Unbind()
         {
             base.Unbind();
-            foreach (var bs in Behaviors)
+            if (Behaviors != null)
             {
-                for (var i = 0; i < bs.Count; i++)
-                    bs[i].Unbind();
+                foreach (var bs in Behaviors)
+                {
+                    foreach (var behavior in bs)
+                        behavior.Unbind();
+                }
             }
             Behaviors = null;
         }
