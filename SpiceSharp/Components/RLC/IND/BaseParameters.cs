@@ -20,6 +20,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         public GivenParameter<double> InitialCondition { get; } = new GivenParameter<double>();
 
         /// <summary>
+        /// Gets or sets the parallel multiplier.
+        /// </summary>
+        [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        public double ParallelMultiplier { get; set; } = 1.0;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         public BaseParameters()

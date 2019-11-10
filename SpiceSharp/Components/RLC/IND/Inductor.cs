@@ -15,6 +15,7 @@ namespace SpiceSharp.Components
         {
             RegisterBehaviorFactory(typeof(Inductor), new BehaviorFactoryDictionary
             {
+                {typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name)},
                 {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
                 {typeof(ITimeBehavior), e => new TransientBehavior(e.Name)},
                 {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)}

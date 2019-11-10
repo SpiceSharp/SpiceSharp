@@ -32,6 +32,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public GivenParameter<double> Length { get; } = new GivenParameter<double>();
 
         /// <summary>
+        /// Gets or sets the parallel multiplier.
+        /// </summary>
+        [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        public double ParallelMultiplier { get; set; } = 1.0;
+
+        /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Interesting = false)]

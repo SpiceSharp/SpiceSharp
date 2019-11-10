@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 factor = 1.0 + ModelParameters.TemperatureCoefficient1 * temperatureDiff + ModelParameters.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
             }
 
-            Capacitance = factor * capacitance;
+            Capacitance = factor * capacitance * BaseParameters.ParallelMultiplier;
         }
     }
 }

@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Gets the base parameters of inductor 1.
+        /// Gets the temperature behavior of inductor 1.
         /// </summary>
-        protected InductorBehaviors.BaseParameters BaseParameters1 { get; private set; }
+        protected InductorBehaviors.TemperatureBehavior TemperatureBehavior1 { get; private set; }
 
         /// <summary>
-        /// Gets the base parameters of inductor 2.
+        /// Gets the temperature behavior of inductor 2.
         /// </summary>
-        protected InductorBehaviors.BaseParameters BaseParameters2 { get; private set; }
+        protected InductorBehaviors.TemperatureBehavior TemperatureBehavior2 { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             base.Bind(context);
             var c = (MutualInductanceBindingContext)context;
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BaseParameters1 = c.Inductor1Behaviors.Parameters.GetValue<InductorBehaviors.BaseParameters>();
-            BaseParameters2 = c.Inductor2Behaviors.Parameters.GetValue<InductorBehaviors.BaseParameters>();
+            TemperatureBehavior1 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TemperatureBehavior>();
+            TemperatureBehavior2 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TemperatureBehavior>();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void ITemperatureBehavior.Temperature()
         {
             // Calculate coupling factor
-            Factor = BaseParameters.Coupling * Math.Sqrt(BaseParameters1.Inductance * BaseParameters2.Inductance);
+            Factor = BaseParameters.Coupling * Math.Sqrt(TemperatureBehavior1.Inductance * TemperatureBehavior2.Inductance);
         }
     }
 }

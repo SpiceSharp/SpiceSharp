@@ -79,7 +79,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var val = ComplexState.Laplace * BaseParameters.Inductance.Value;
+            var val = ComplexState.Laplace * Inductance;
             ComplexElements.Add(1, -1, -1, 1, -val);
         }
     }

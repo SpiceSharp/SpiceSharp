@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         [ParameterName("flux"), ParameterInfo("The flux through the inductor.")]
         public double Flux => _flux.Current;
 
-        private int _posNode, _negNode, _branchEq;
+        private int _branchEq;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
@@ -57,8 +57,8 @@ namespace SpiceSharp.Components.InductorBehaviors
             base.Bind(context);
 
             var c = (ComponentBindingContext)context;
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            var _posNode = BiasingState.Map[c.Nodes[0]];
+            var _negNode = BiasingState.Map[c.Nodes[1]];
             _branchEq = BiasingState.Map[Branch];
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_branchEq, _branchEq)
@@ -94,9 +94,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             // Get the current through
             if (BaseParameters.InitialCondition.Given)
-                _flux.Current = BaseParameters.InitialCondition * BaseParameters.Inductance;
+                _flux.Current = BaseParameters.InitialCondition * Inductance;
             else
-                _flux.Current = BiasingState.Solution[_branchEq] * BaseParameters.Inductance;
+                _flux.Current = BiasingState.Solution[_branchEq] * Inductance;
         }
 
         /// <summary>
@@ -105,19 +105,19 @@ namespace SpiceSharp.Components.InductorBehaviors
         void ITimeBehavior.Load()
         {
             // Initialize
-            _flux.ThrowIfNotBound(this).Current = BaseParameters.Inductance * BiasingState.Solution[_branchEq];
+            _flux.ThrowIfNotBound(this).Current = Inductance * BiasingState.Solution[_branchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                var args = new UpdateFluxEventArgs(BaseParameters.Inductance, BiasingState.Solution[_branchEq], _flux, BiasingState);
+                var args = new UpdateFluxEventArgs(Inductance, BiasingState.Solution[_branchEq], _flux, BiasingState);
                 UpdateFlux.Invoke(this, args);
             }
 
             // Finally load the Y-matrix
             _flux.Integrate();
             TransientElements.Add(
-                -_flux.Jacobian(BaseParameters.Inductance),
+                -_flux.Jacobian(Inductance),
                 _flux.RhsCurrent()
                 );
         }

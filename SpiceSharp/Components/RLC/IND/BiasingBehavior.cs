@@ -9,13 +9,8 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="Inductor"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
-        /// <summary>
-        /// Necessary behaviors and parameters
-        /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
-
         /// <summary>
         /// Gets the branch equation index.
         /// </summary>
@@ -74,7 +69,6 @@ namespace SpiceSharp.Components.InductorBehaviors
             base.Bind(context);
 
             // Get parameters.
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
             var c = (ComponentBindingContext)context;
             c.Nodes.ThrowIfNot("nodes", 2);
