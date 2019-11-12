@@ -63,16 +63,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
         {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
+            context.Nodes.ThrowIfNot("nodes", 2);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             BaseParameters.Waveform?.Bind(context);
@@ -92,12 +88,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             }
 
             // Connections
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 2);
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
             context.States.TryGetValue(out _timeState);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
             _brNode = BiasingState.Map[Branch];
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
@@ -106,17 +100,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 new MatrixLocation(_negNode, _brNode),
                 new MatrixLocation(_brNode, _negNode)
             }, new[] { _brNode });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

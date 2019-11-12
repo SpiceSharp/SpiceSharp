@@ -2,10 +2,6 @@
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.SubcircuitBehaviors;
-using System.Collections.Generic;
-using SpiceSharp.Entities.Local;
-using System.Threading;
-using System;
 
 namespace SpiceSharp.Components
 {
@@ -15,46 +11,6 @@ namespace SpiceSharp.Components
     /// <seealso cref="Component" />
     public class Subcircuit : Component
     {
-        static Subcircuit()
-        {
-            RegisterBehaviorFactory(typeof(Subcircuit), new BehaviorFactoryDictionary()
-            {
-                { typeof(IInitialConditionBehavior), e => new InitialConditionBehavior(e.Name) },
-                { typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name) },
-                { typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name) },
-                { typeof(ITimeBehavior), e => new TimeBehavior(e.Name) },
-                { typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name) },
-                { typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name) },
-                { typeof(INoiseBehavior), e => new NoiseBehavior(e.Name) }
-            });
-
-            RegisterPreparer(typeof(IBiasingBehavior), new BiasingPreparer());
-            RegisterPreparer(typeof(IFrequencyBehavior), new FrequencyPreparer());
-            RegisterPreparer(typeof(ITimeBehavior), new TimePreparer());
-            RegisterPreparer(typeof(INoiseBehavior), new NoisePreparer());
-        }
-
-        private readonly static Dictionary<Type, ISimulationPreparer> Preparers = new Dictionary<Type, ISimulationPreparer>();
-        private readonly static ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-
-        /// <summary>
-        /// Registers the simulation preparers.
-        /// </summary>
-        /// <param name="behaviorType">Type of the behavior.</param>
-        /// <param name="preparer">The preparer.</param>
-        public static void RegisterPreparer(Type behaviorType, ISimulationPreparer preparer)
-        {
-            Lock.EnterWriteLock();
-            try
-            {
-                Preparers.Add(behaviorType, preparer);
-            }
-            finally
-            {
-                Lock.ExitWriteLock();
-            }
-        }
-
         /// <summary>
         /// Gets or sets the entities in the subcircuit.
         /// </summary>
@@ -104,67 +60,13 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
+        /// Create one or more behaviors for the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
-        /// <remarks>
-        /// The order typically indicates hierarchy. The entity will create the behaviors in reverse order, allowing
-        /// the most specific child class to be used that is necessary. For example, the <see cref="OP" /> simulation needs
-        /// <see cref="ITemperatureBehavior" /> and an <see cref="IBiasingBehavior" />. The entity will first look for behaviors
-        /// of type <see cref="IBiasingBehavior" />, and then for the behaviors of type <see cref="ITemperatureBehavior" />. However,
-        /// if the behavior that was created for <see cref="IBiasingBehavior" /> also implements <see cref="ITemperatureBehavior" />,
-        /// then then entity will not create a new instance of the behavior.
-        /// </remarks>
-        public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
-            // If our behaviors are already created, skip this
-            if (simulation.EntityBehaviors.ContainsKey(Name))
-                return;
-            if (Entities == null || Entities.Length == 0)
-                return;
-
-            // First create simulations for each entity collection
-            _simulations = new SubcircuitSimulation[Entities.Length];
-            for (var i = 0; i < _simulations.Length; i++)
-                _simulations[i] = new SubcircuitSimulation(Name, simulation);
-
-            // Alias the nodes for each simulation
-            _nodes = ApplyConnections(simulation.Variables);
-            for (var i = 0; i < PinCount; i++)
-                _simulations[0].Variables.AliasNode(_nodes[i].Name, Pins[i]);
-
-            // Prepare the simulations
-            foreach (var type in simulation.BehaviorTypes)
-            {
-                if (Preparers.TryGetValue(type, out var preparer))
-                    preparer.Prepare(_simulations, simulation, Parameters);
-            }
-
-            // Create all behaviors
-            for (var i = 0; i < _simulations.Length; i++)
-            {
-                // Create the behaviors
-                var ec = new LocalEntityCollection(entities, Entities[i], simulation);
-                _simulations[i].Run(ec);
-            }
-
-            // Now let's create our own behaviors
-            base.CreateBehaviors(simulation, entities);
-        }
-
-        /// <summary>
-        /// Binds the behaviors to the simulation.
-        /// </summary>
-        /// <param name="eb">The entity behaviors and parameters.</param>
-        /// <param name="simulation">The simulation to be bound to.</param> 
-        /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
-        {
-            // We want to make sure that the behaviors are accessible through the behavior container
-            var context = new SubcircuitBindingContext(simulation, _nodes, eb, _simulations);
-            foreach (var behavior in eb.Ordered)
-                behavior.Bind(context);
         }
     }
 }

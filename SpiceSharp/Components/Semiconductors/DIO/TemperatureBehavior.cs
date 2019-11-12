@@ -83,19 +83,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public TemperatureBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TemperatureBehavior(string name, ComponentBindingContext context) : base(name) 
         {
-            base.Bind(context);
-            var c = (ComponentBindingContext)context;
-            ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
-            ModelTemperature = c.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
+            context.ThrowIfNull(nameof(context));
+
+            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();

@@ -68,34 +68,15 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public TemperatureBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TemperatureBehavior(string name, ComponentBindingContext context) : base(name)
         {
-        }
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-            var c = (ComponentBindingContext)context;
-            ModelTemperature = c.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
+            context.ThrowIfNull(nameof(context));
+            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
         }
 
         /// <summary>

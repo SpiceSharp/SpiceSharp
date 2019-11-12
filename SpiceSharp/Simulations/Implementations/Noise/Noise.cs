@@ -9,7 +9,8 @@ namespace SpiceSharp.Simulations
     /// A class that implements a noise analysis.
     /// </summary>
     /// <seealso cref="FrequencySimulation" />
-    public partial class Noise : FrequencySimulation
+    public partial class Noise : FrequencySimulation,
+        IBehavioral<INoiseBehavior>
     {
         /// <summary>
         /// Gets the currently active noise configuration.
@@ -104,8 +105,6 @@ namespace SpiceSharp.Simulations
         {
             // Remove references
             NoiseState.Unsetup();
-            foreach (var behavior in _noiseBehaviors)
-                behavior.Unbind();
             _noiseBehaviors = null;
             NoiseConfiguration = null;
 

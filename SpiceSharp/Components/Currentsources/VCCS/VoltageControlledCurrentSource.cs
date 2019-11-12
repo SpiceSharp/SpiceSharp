@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -11,15 +12,6 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected(0, 1)]
     public class VoltageControlledCurrentSource : Component
     {
-        static VoltageControlledCurrentSource()
-        {
-            RegisterBehaviorFactory(typeof(VoltageControlledCurrentSource), new BehaviorFactoryDictionary
-            {
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Private constants
         /// </summary>
@@ -50,6 +42,21 @@ namespace SpiceSharp.Components
         {
             Parameters.Add(new BaseParameters(gain));
             Connect(pos, neg, controlPos, controlNeg);
+        }
+
+        /// <summary>
+        /// Create one or more behaviors for the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        {
+            var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), null);
+            if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            else if (simulation is IBehavioral<IBiasingBehavior>)
+                behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
 }

@@ -47,22 +47,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public TransientBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name of the behavior.</param>
+        /// <param name="context"></param>
+        public TransientBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
         {
-            base.Bind(context);
-
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            var c = (MutualInductanceBindingContext)context;
-            Load1 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
+            Load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
             _br1 = BiasingState.Map[Load1.Branch];
-            Load2 = c.Inductor2Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
+            Load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
             _br2 = BiasingState.Map[Load2.Branch];
 
             // Register events for modifying the flux through the inductors
@@ -72,22 +64,6 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_br1, _br2),
                 new MatrixLocation(_br2, _br1));
-        }
-
-        /// <summary>
-        /// Unsetup the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-
-            // Remove events
-            Load1.UpdateFlux -= UpdateFlux1;
-            Load2.UpdateFlux -= UpdateFlux2;
-
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

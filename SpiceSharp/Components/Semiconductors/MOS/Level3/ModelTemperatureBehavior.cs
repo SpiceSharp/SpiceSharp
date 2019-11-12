@@ -64,16 +64,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public ModelTemperatureBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name) 
         {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
             ModelParameters = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
         }

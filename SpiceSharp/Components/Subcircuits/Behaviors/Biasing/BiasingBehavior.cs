@@ -25,21 +25,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public BiasingBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, SubcircuitBindingContext context) : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
             _states = null;
 
             if (Simulations.Length > 1)
@@ -87,20 +77,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 }
             }
             return common;
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            if (_states != null)
-            {
-                foreach (var state in _states)
-                    state.Unsetup();
-                _states = null;
-            }
         }
 
         /// <summary>

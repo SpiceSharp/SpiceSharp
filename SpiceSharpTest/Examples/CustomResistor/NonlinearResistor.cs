@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.NonlinearResistorBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -10,14 +11,6 @@ namespace SpiceSharp.Components
     /// <seealso cref="Component" />
     public class NonlinearResistor : Component
     {
-        static NonlinearResistor()
-        {
-            RegisterBehaviorFactory(typeof(NonlinearResistor), new BehaviorFactoryDictionary
-            {
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NonlinearResistor"/> class.
         /// </summary>
@@ -31,6 +24,19 @@ namespace SpiceSharp.Components
 
             // Connect the entity
             Connect(nodeA, nodeB);
+        }
+
+        /// <summary>
+        /// Create one or more behaviors for the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        {
+            var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model);
+            if (simulation is IBehavioral<IBiasingBehavior>)
+                behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
 }

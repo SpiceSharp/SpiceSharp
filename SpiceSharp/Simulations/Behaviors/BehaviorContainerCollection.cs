@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace SpiceSharp.Behaviors
@@ -105,37 +106,29 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorContainerCollection" /> class.
         /// </summary>
-        /// <param name="types">The types for which a list will be kept which can be retrieved later.</param>
-        public BehaviorContainerCollection(IEnumerable<Type> types)
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        public BehaviorContainerCollection(ISimulation simulation)
+            : this(EqualityComparer<string>.Default, simulation)
         {
-            types.ThrowIfNull(nameof(types));
-            _entityBehaviors = new Dictionary<string, IBehaviorContainer>();
-            foreach (var type in types)
-                _behaviorLists.Add(type, new List<IBehavior>());
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
-        /// </summary>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing entity names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
-        public BehaviorContainerCollection(IEqualityComparer<string> comparer)
-        {
-            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(comparer);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
         /// </summary>
-        /// <param name="comparer">The comparer.</param>
-        /// <param name="types">The types.</param>
-        public BehaviorContainerCollection(IEqualityComparer<string> comparer, IEnumerable<Type> types)
+        /// <param name="comparer">The comparer for behaviors.</param>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        public BehaviorContainerCollection(IEqualityComparer<string> comparer, ISimulation simulation)
         {
-            types.ThrowIfNull(nameof(types));
             _entityBehaviors = new Dictionary<string, IBehaviorContainer>(comparer);
-            foreach (var type in types)
-                _behaviorLists.Add(type, new List<IBehavior>());
+            var ifs = simulation.GetType().GetTypeInfo().GetInterfaces();
+            foreach (var type in ifs)
+            {
+                var info = type.GetTypeInfo();
+                if (info.IsGenericType && (info.GetGenericTypeDefinition() == typeof(IBehavioral<>)))
+                    _behaviorLists.Add(info.GetGenericArguments()[0], new List<IBehavior>());
+            }
         }
 
         /// <summary>

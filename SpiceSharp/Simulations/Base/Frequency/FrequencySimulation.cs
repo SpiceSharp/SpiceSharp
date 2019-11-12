@@ -9,7 +9,8 @@ namespace SpiceSharp.Simulations
     /// A template for frequency-dependent analysis.
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
-    public abstract partial class FrequencySimulation : BiasingSimulation
+    public abstract partial class FrequencySimulation : BiasingSimulation,
+        IBehavioral<IFrequencyBehavior>, IBehavioral<IFrequencyUpdateBehavior>
     {
         /// <summary>
         /// Private variables
@@ -158,10 +159,6 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in _frequencyBehaviors)
-                behavior.Unbind();
-            foreach (var behavior in _frequencyUpdateBehaviors)
-                behavior.Unbind();
             _frequencyBehaviors = null;
             _frequencyUpdateBehaviors = null;
 

@@ -46,27 +46,14 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public FrequencyBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _drainNode = ComplexState.Map[c.Nodes[0]];
-            _gateNode = ComplexState.Map[c.Nodes[1]];
-            _sourceNode = ComplexState.Map[c.Nodes[2]];
+            _drainNode = ComplexState.Map[context.Nodes[0]];
+            _gateNode = ComplexState.Map[context.Nodes[1]];
+            _sourceNode = ComplexState.Map[context.Nodes[2]];
             _drainPrimeNode = ComplexState.Map[DrainPrime];
             _sourcePrimeNode = ComplexState.Map[SourcePrime];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
@@ -85,16 +72,6 @@ namespace SpiceSharp.Components.JFETBehaviors
                 new MatrixLocation(_sourcePrimeNode, _gateNode),
                 new MatrixLocation(_sourcePrimeNode, _sourceNode),
                 new MatrixLocation(_sourcePrimeNode, _drainPrimeNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

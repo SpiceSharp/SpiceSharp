@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.VoltageSourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -11,16 +12,6 @@ namespace SpiceSharp.Components
     [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
     public class VoltageSource : Component
     {
-        static VoltageSource()
-        {
-            RegisterBehaviorFactory(typeof(VoltageSource), new BehaviorFactoryDictionary
-            {
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Constants
         /// </summary>
@@ -65,6 +56,25 @@ namespace SpiceSharp.Components
             Parameters.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
             Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
             Connect(pos, neg);
+        }
+
+        /// <summary>
+        /// Create one or more behaviors for the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        {
+            var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model);
+
+            if (simulation is IBehavioral<IAcceptBehavior>)
+                behaviors.Add(new AcceptBehavior(Name, context));
+            if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+
+            if (simulation is IBehavioral<IBiasingBehavior> && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
+                behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
 }

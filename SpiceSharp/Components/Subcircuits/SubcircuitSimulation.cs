@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
             Name = name.ThrowIfNull(nameof(name));
             Variables = new SubcircuitVariableSet(name, parent.Variables);
-            EntityBehaviors = new LocalBehaviorContainerCollection(parent.EntityBehaviors);
+            EntityBehaviors = new LocalBehaviorContainerCollection(parent.EntityBehaviors, parent);
             States = new TypeDictionary<ISimulationState>();
         }
     }

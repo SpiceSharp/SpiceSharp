@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.InductorBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -11,17 +12,6 @@ namespace SpiceSharp.Components
     [Pin(0, "L+"), Pin(1, "L-")]
     public class Inductor : Component
     {
-        static Inductor()
-        {
-            RegisterBehaviorFactory(typeof(Inductor), new BehaviorFactoryDictionary
-            {
-                {typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name)},
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(ITimeBehavior), e => new TransientBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Constants
         /// </summary>
@@ -50,6 +40,28 @@ namespace SpiceSharp.Components
         {
             Parameters.Add(new BaseParameters(inductance));
             Connect(pos, neg);
+        }
+
+        /// <summary>
+        /// Create one or more behaviors for the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        {
+            var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model);
+            if (simulation is IBehavioral<ITimeBehavior>)
+                behaviors.Add(new TransientBehavior(Name, context));
+            if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            else if (simulation is IBehavioral<IBiasingBehavior>)
+            {
+                if (!behaviors.ContainsKey(typeof(IBiasingBehavior)))
+                    behaviors.Add(new BiasingBehavior(Name, context));
+            }
+            else if (simulation is IBehavioral<ITemperatureBehavior> && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
+                behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
 }

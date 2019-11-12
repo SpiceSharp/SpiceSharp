@@ -28,39 +28,16 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public TransientBehavior(string name)
-            : base(name)
-        {
-        }
-
-        /// <summary>
-        /// Binds the specified simulation.
-        /// </summary>
+        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public override void Bind(BindingContext context)
+        public TransientBehavior(string name, ComponentBindingContext context)
+            : base(name, context)
         {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
-            _contPosNode = BiasingState.Map[c.Nodes[2]];
-            _contNegNode = BiasingState.Map[c.Nodes[3]];
+            _contPosNode = BiasingState.Map[context.Nodes[2]];
+            _contNegNode = BiasingState.Map[context.Nodes[3]];
             _branchEq = BiasingState.Map[Branch];
             TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { _branchEq });
             Signal = new DelayedSignal(1, BaseParameters.Delay);
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            TransientElements?.Destroy();
-            TransientElements = null;
         }
 
         /// <summary>

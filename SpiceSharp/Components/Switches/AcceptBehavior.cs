@@ -11,8 +11,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="method">The method.</param>
-        public AcceptBehavior(string name, Controller method) : base(name, method)
+        /// <param name="context">The context.</param>
+        public AcceptBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
         }
 

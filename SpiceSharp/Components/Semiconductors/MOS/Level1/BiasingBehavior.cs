@@ -136,48 +136,36 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
+            context.Nodes.ThrowIfNot("nodes", 4);
 
-            // Get configurations
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-
-            // Get states
-            context.States.TryGetValue(out _timeState);
-
-            // Reset
+            context.States.TryGetValue<global::SpiceSharp.Simulations.ITimeSimulationState>(out this._timeState);
             SaturationVoltageDs = 0;
             Von = 0;
             Mode = 1;
 
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 4);
-            _drainNode = BiasingState.Map[c.Nodes[0]];
-            _gateNode = BiasingState.Map[c.Nodes[1]];
-            _sourceNode = BiasingState.Map[c.Nodes[2]];
-            _bulkNode = BiasingState.Map[c.Nodes[3]];
+            _drainNode = BiasingState.Map[context.Nodes[0]];
+            _gateNode = BiasingState.Map[context.Nodes[1]];
+            _sourceNode = BiasingState.Map[context.Nodes[2]];
+            _bulkNode = BiasingState.Map[context.Nodes[3]];
             var variables = context.Variables;
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
                 DrainPrime = variables.Create(Name.Combine("drain"), VariableType.Voltage);
             else
-                DrainPrime = c.Nodes[0];
+                DrainPrime = context.Nodes[0];
             _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
             if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.SourceSquares > 0)
                 SourcePrime = variables.Create(Name.Combine("source"), VariableType.Voltage);
             else
-                SourcePrime = c.Nodes[2];
+                SourcePrime = context.Nodes[2];
             _sourceNodePrime = BiasingState.Map[SourcePrime];
 
             // Get matrix pointers
@@ -200,16 +188,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 new MatrixLocation(_sourceNodePrime, _bulkNode),
                 new MatrixLocation(_sourceNodePrime, _drainNodePrime)
             }, new[] { _bulkNode, _drainNodePrime, _sourceNodePrime });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

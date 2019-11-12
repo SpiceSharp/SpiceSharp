@@ -1,8 +1,8 @@
-﻿using SpiceSharp.Entities;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
@@ -17,14 +17,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// The <see cref="VoltageSourceBehaviors.BiasingBehavior"/> that handles the controlling voltage source current.
-        /// </summary>
-        protected VoltageSourceBehaviors.BiasingBehavior VoltageLoad { get; private set; }
-
-        /// <summary>
         /// Nodes
         /// </summary>
-        public Variable ControlBranch { get; protected set; }
+        public Variable ControlBranch { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -69,41 +64,23 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind behavior.
-        /// </summary>
-        /// <param name="context">Data provider</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ControlledBindingContext context) : base(name)
         {
-            base.Bind(context);
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            context.ThrowIfNull(nameof(context));
+            context.Nodes.ThrowIfNot("nodes", 2);
 
-            // Connections
-            var c = (CommonBehaviors.ControlledBindingContext)context;
+            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            c.Nodes.ThrowIfNot("nodes", 2);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
-            VoltageLoad = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
-            ControlBranch = VoltageLoad.Branch;
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
+            var load = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            ControlBranch = load.Branch;
             _brNode = BiasingState.Map[ControlBranch];
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_negNode, _brNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

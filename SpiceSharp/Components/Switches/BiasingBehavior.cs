@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
@@ -94,44 +95,27 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="controller">The controller.</param>
-        public BiasingBehavior(string name, Controller controller) : base(name)
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
         {
-            Method = controller.ThrowIfNull(nameof(controller));
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-            var c = (ComponentBindingContext)context;
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            if (c.Nodes.Length < 2)
+            context.ThrowIfNull(nameof(context));
+            if (context.Nodes.Length < 2)
                 throw new CircuitException("Invalid number of nodes");
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
-            ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+
+            if (context is ControlledBindingContext ctx)
+                Method = new CurrentControlled(ctx);
+            else
+                Method = new VoltageControlled(context);
+            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
+            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            Method.Bind(context);
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
                 new MatrixLocation(_negNode, _negNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

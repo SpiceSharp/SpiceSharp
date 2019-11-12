@@ -5,18 +5,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <summary>
     /// Noise behavior for a <see cref="Subcircuit"/>.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SubcircuitBehaviors.SubcircuitBehavior{T}" />
-    /// <seealso cref="SpiceSharp.Behaviors.INoiseBehavior" />
+    /// <seealso cref="SubcircuitBehavior{T}" />
+    /// <seealso cref="INoiseBehavior" />
     public class NoiseBehavior : SubcircuitBehavior<INoiseBehavior>, INoiseBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public NoiseBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public NoiseBehavior(string name, SubcircuitBindingContext context) : base(name, context)
         {
         }
 

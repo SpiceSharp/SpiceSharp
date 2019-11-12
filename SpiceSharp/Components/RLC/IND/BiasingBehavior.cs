@@ -57,42 +57,23 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
+            context.Nodes.ThrowIfNot("nodes", 2);
 
-            // Get parameters.
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 2);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
             _branchEq = BiasingState.Map[Branch];
-            
+
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),
                 new MatrixLocation(_branchEq, _negNode),
                 new MatrixLocation(_branchEq, _posNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

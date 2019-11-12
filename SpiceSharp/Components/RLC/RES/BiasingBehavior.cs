@@ -47,39 +47,19 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-        }
+            context.Nodes.ThrowIfNot("nodes", 2);
 
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            // Connections
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 2);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
                 new MatrixLocation(_negNode, _negNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

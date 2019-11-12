@@ -26,20 +26,5 @@ namespace SpiceSharp.Behaviors
         {
             Name = name;
         }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public virtual void Bind(BindingContext context)
-        {
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        public virtual void Unbind()
-        {
-        }
     }
 }

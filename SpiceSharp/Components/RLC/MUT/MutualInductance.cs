@@ -12,15 +12,6 @@ namespace SpiceSharp.Components
     /// </summary>
     public class MutualInductance : Component
     {
-        static MutualInductance()
-        {
-            RegisterBehaviorFactory(typeof(MutualInductance), new BehaviorFactoryDictionary
-            {
-                {typeof(ITimeBehavior), e => new TransientBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Gets or sets the name of the primary inductor.
         /// </summary>
@@ -78,16 +69,20 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Binds the behaviors to the simulation.
+        /// Create one or more behaviors for the simulation.
         /// </summary>
-        /// <param name="eb">The entity behaviors and parameters.</param>
-        /// <param name="simulation">The simulation to be bound to.</param>
-        /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
-            var context = new MutualInductanceBindingContext(simulation, eb, InductorName1, InductorName2);
-            foreach (var behavior in eb.Ordered)
-                behavior.Bind(context);
+            var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
+            if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            if (simulation is IBehavioral<ITimeBehavior>)
+                behaviors.Add(new TransientBehavior(Name, context));
+            if (simulation is IBehavioral<ITemperatureBehavior> && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
+                behaviors.Add(new TemperatureBehavior(Name, context));
         }
     }
 }

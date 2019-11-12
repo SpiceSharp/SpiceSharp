@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Entities;
+﻿using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
@@ -12,14 +13,13 @@ namespace SpiceSharp.Components.SwitchBehaviors
         private int _brNode;
 
         /// <summary>
-        /// Bind the behavior. for the specified simulation.
+        /// Initializes a new instance of the <see cref="CurrentControlled"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        public override void Bind(BindingContext context)
+        public CurrentControlled(ControlledBindingContext context)
         {
-            var c = (CommonBehaviors.ControlledBindingContext)context;
             var state = context.States.GetValue<IBiasingSimulationState>();
-            var behavior = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            var behavior = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
             _brNode = state.Map[behavior.Branch];
         }
 

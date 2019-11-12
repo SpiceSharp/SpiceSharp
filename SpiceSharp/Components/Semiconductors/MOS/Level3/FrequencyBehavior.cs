@@ -33,22 +33,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencyBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="context"></param>
+        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _drainNode = ComplexState.Map[c.Nodes[0]];
-            _gateNode = ComplexState.Map[c.Nodes[1]];
-            _sourceNode = ComplexState.Map[c.Nodes[2]];
-            _bulkNode = ComplexState.Map[c.Nodes[3]];
+            _drainNode = ComplexState.Map[context.Nodes[0]];
+            _gateNode = ComplexState.Map[context.Nodes[1]];
+            _sourceNode = ComplexState.Map[context.Nodes[2]];
+            _bulkNode = ComplexState.Map[context.Nodes[3]];
             _drainNodePrime = ComplexState.Map[DrainPrime];
             _sourceNodePrime = ComplexState.Map[SourcePrime];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
@@ -74,17 +66,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 new MatrixLocation(_drainNodePrime, _sourceNodePrime),
                 new MatrixLocation(_sourceNodePrime, _sourceNode),
                 new MatrixLocation(_sourceNodePrime, _drainNodePrime));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexState = null;
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

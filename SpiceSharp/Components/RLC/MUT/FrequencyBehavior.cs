@@ -13,16 +13,6 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
         /// <summary>
-        /// Gets the <see cref="BiasingBehavior"/> of the primary inductor.
-        /// </summary>
-        protected BiasingBehavior Bias1 { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="BiasingBehavior"/> of the secondary inductor.
-        /// </summary>
-        protected BiasingBehavior Bias2 { get; private set; }
-
-        /// <summary>
         /// Gets the complex matrix elements.
         /// </summary>
         /// <value>
@@ -43,24 +33,15 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public FrequencyBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public FrequencyBehavior(string name, MutualInductanceBindingContext context) : base(name, context) 
         {
-			base.Bind(context);
-
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-
-            var c = (MutualInductanceBindingContext)context;
-            Bias1 = c.Inductor1Behaviors.GetValue<BiasingBehavior>();
-            _br1 = ComplexState.Map[Bias1.Branch];
-            Bias2 = c.Inductor2Behaviors.GetValue<BiasingBehavior>();
-            _br2 = ComplexState.Map[Bias2.Branch];
+            var bias = context.Inductor1Behaviors.GetValue<BiasingBehavior>();
+            _br1 = ComplexState.Map[bias.Branch];
+            bias = context.Inductor2Behaviors.GetValue<BiasingBehavior>();
+            _br2 = ComplexState.Map[bias.Branch];
 
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(_br1, _br2),

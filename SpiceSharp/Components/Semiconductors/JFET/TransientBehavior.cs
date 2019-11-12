@@ -45,27 +45,15 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public TransientBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
             var method = context.States.GetValue<ITimeSimulationState>().Method;
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
 
-            var c = (ComponentBindingContext)context;
-            _gateNode = BiasingState.Map[c.Nodes[1]];
+            _gateNode = BiasingState.Map[context.Nodes[1]];
             _drainPrimeNode = BiasingState.Map[DrainPrime];
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
             TransientMatrixElements = new ElementSet<double>(BiasingState.Solver, new[] {

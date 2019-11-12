@@ -60,22 +60,16 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name) 
         {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
+            context.Nodes.ThrowIfNot("nodes", 2);
 
-            var c = (ComponentBindingContext)context;
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            c.Nodes.ThrowIfNot("nodes", 2);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             context.States.TryGetValue(out _timeState);
@@ -92,17 +86,6 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             }
 
             Elements = new ElementSet<double>(BiasingState.Solver, null, new[] { _posNode, _negNode });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

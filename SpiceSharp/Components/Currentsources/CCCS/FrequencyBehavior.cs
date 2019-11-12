@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
-using SpiceSharp.Entities;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
@@ -57,29 +57,13 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public FrequencyBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
-        public void InitializeParameters()
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public FrequencyBehavior(string name, ControlledBindingContext context) : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind behavior.
-        /// </summary>
-        /// <param name="context">Data provider</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            // Connections
-            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _posNode = ComplexState.Map[c.Nodes[0]];
-            _negNode = ComplexState.Map[c.Nodes[1]];
+            _posNode = ComplexState.Map[context.Nodes[0]];
+            _negNode = ComplexState.Map[context.Nodes[1]];
             _brNode = ComplexState.Map[ControlBranch];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(_posNode, _brNode),
@@ -87,14 +71,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         }
 
         /// <summary>
-        /// Unbind the behavior.
+        /// Initializes the parameters.
         /// </summary>
-        public override void Unbind()
+        public void InitializeParameters()
         {
-            base.Unbind();
-            ComplexState = null;
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

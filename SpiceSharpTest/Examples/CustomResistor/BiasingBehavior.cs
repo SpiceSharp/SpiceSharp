@@ -21,27 +21,17 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
-        public BiasingBehavior(string name) : base(name)
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            // Cache some objects that we will use often
-            var c = (ComponentBindingContext)context;
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            _state = c.States.GetValue<IBiasingSimulationState>();
-            _baseConfig = c.Configurations.GetValue<BiasingConfiguration>();
+            _state = context.States.GetValue<IBiasingSimulationState>();
+            _baseConfig = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
-            _nodeA = _state.Map[c.Nodes[0]];
-            _nodeB = _state.Map[c.Nodes[1]];
+            _nodeA = _state.Map[context.Nodes[0]];
+            _nodeB = _state.Map[context.Nodes[1]];
 
             // We need 4 matrix elements and 2 RHS vector elements
             _elements = new ElementSet<double>(_state.Solver, new[] {
@@ -53,19 +43,6 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
                     _nodeA,
                     _nodeB
                 });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            _bp = null;
-            _state = null;
-            _baseConfig = null;
-            _elements?.Destroy();
-            _elements = null;
         }
 
         /// <summary>

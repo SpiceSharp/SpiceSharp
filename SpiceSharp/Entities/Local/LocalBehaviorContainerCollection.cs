@@ -19,8 +19,9 @@ namespace SpiceSharp.Entities.Local
         /// Initializes a new instance of the <see cref="LocalBehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public LocalBehaviorContainerCollection(BehaviorContainerCollection parent)
-            : base(parent.Comparer, parent.Types)
+        /// <param name="parentSimulation">The parent simulation.</param>
+        public LocalBehaviorContainerCollection(BehaviorContainerCollection parent, ISimulation parentSimulation)
+            : base(parent.Comparer, parentSimulation)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
         }

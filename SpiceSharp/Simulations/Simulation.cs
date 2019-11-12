@@ -98,14 +98,6 @@ namespace SpiceSharp.Simulations
         public BehaviorContainerCollection EntityBehaviors { get; protected set; }
 
         /// <summary>
-        /// Gets the <see cref="IBehavior" /> types used by the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The behavior types.
-        /// </value>
-        public IEnumerable<Type> BehaviorTypes => Types;
-
-        /// <summary>
         /// A reference to the regular simulation statistics (cached)
         /// </summary>
         protected SimulationStatistics SimulationStatistics { get; } = new SimulationStatistics();
@@ -231,7 +223,7 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected virtual void CreateBehaviors(IEntityCollection entities)
         {
-            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer, Types.ToArray());
+            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer, this);
 
             // Create the behaviors
             SimulationStatistics.BehaviorCreationTime.Start();

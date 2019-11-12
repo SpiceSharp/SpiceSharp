@@ -34,33 +34,19 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public TemperatureBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TemperatureBehavior(string name, ComponentBindingContext context) : base(name) 
         {
-            var c = (ComponentBindingContext)context;
+            context.ThrowIfNull(nameof(context));
 
             // Get parameters
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            if (c.ModelBehaviors != null)
-                ModelParameters = c.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            if (context.ModelBehaviors != null)
+                ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
 
             // Connections
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
         }
 
         /// <summary>

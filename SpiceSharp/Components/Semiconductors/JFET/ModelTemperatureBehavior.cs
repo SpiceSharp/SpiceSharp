@@ -54,21 +54,11 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public ModelTemperatureBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
             _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
         }

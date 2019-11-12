@@ -55,25 +55,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
+            context.Nodes.ThrowIfNot("nodes", 2);
 
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 2);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
             var variables = context.Variables;
             PosPrime = ModelParameters.Resistance > 0 ? 
                 variables.Create(Name.Combine("pos"), VariableType.Voltage) :
-                c.Nodes[0];
+                context.Nodes[0];
             _posPrimeNode = BiasingState.Map[PosPrime];
 
             // Get matrix elements

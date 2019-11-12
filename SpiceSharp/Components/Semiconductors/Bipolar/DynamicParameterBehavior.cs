@@ -65,8 +65,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicParameterBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        protected DynamicParameterBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        protected DynamicParameterBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
         }
 

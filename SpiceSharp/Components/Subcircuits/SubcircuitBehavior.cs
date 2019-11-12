@@ -47,46 +47,17 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitBehavior{T}"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public SubcircuitBehavior(string name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public SubcircuitBehavior(string name, SubcircuitBindingContext context)
             : base(name)
         {
-        }
+            context.ThrowIfNull(nameof(context));
 
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            // Bind the behaviors in the subcircuit here
-            var sc = (SubcircuitBindingContext)context;
-            Simulations = sc.Simulations;
+            Simulations = context.Simulations;
             Behaviors = new BehaviorList<T>[Simulations.Length];
             for (var i = 0; i < Simulations.Length; i++)
                 Behaviors[i] = Simulations[i].EntityBehaviors.GetBehaviorList<T>();
-        }
-
-        /// <summary>
-        /// Destroy the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            if (Behaviors != null)
-            {
-                foreach (var bs in Behaviors)
-                {
-                    foreach (var behavior in bs)
-                        behavior.Unbind();
-                }
-            }
-            Behaviors = null;
         }
     }
 }

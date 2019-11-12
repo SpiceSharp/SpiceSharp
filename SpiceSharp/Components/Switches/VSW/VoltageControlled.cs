@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <summary>
     /// Controller for making a switch voltage-controlled.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SwitchBehaviors.Controller" />
+    /// <seealso cref="Controller" />
     public class VoltageControlled : Controller
     {
         /// <summary>
@@ -20,16 +20,15 @@ namespace SpiceSharp.Components.SwitchBehaviors
         protected int ContNegNode { get; private set; }
 
         /// <summary>
-        /// Bind the behavior. for the specified simulation.
+        /// Initializes a new instance of the <see cref="VoltageControlled"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        public override void Bind(BindingContext context)
+        public VoltageControlled(ComponentBindingContext context)
         {
-            var c = (ComponentBindingContext)context;
+            context.Nodes.ThrowIfNot("nodes", 4);
             var state = context.States.GetValue<IBiasingSimulationState>();
-            c.Nodes.ThrowIfNot("nodes", 4);
-            ContPosNode = state.Map[c.Nodes[2]];
-            ContNegNode = state.Map[c.Nodes[3]];
+            ContPosNode = state.Map[context.Nodes[2]];
+            ContNegNode = state.Map[context.Nodes[3]];
         }
 
         /// <summary>

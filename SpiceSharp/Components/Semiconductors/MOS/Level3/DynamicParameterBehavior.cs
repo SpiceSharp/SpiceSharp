@@ -127,7 +127,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Initializes a new instance of the <see cref="DynamicParameterBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
-        protected DynamicParameterBehavior(string name) : base(name)
+        /// <param name="context"></param>
+        protected DynamicParameterBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
         }
 

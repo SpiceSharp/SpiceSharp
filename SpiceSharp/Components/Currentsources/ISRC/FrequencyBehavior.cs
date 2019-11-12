@@ -62,34 +62,14 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencyBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="context"></param>
+        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
-
-            // Get matrix elements
-            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _posNode = ComplexState.Map[c.Nodes[0]];
-            _negNode = ComplexState.Map[c.Nodes[1]];
+            _posNode = ComplexState.Map[context.Nodes[0]];
+            _negNode = ComplexState.Map[context.Nodes[1]];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, null, new[] { _posNode, _negNode });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexState = null;
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

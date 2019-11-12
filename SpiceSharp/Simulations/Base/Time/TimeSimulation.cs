@@ -8,8 +8,9 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A base class for time-domain analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
-    public abstract partial class TimeSimulation : BiasingSimulation
+    /// <seealso cref="BiasingSimulation" />
+    public abstract partial class TimeSimulation : BiasingSimulation,
+        IBehavioral<ITimeBehavior>, IBehavioral<IAcceptBehavior>
     {
         /// <summary>
         /// Time-domain behaviors.
@@ -161,11 +162,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in _transientBehaviors)
-                behavior.Unbind();
             _transientBehaviors = null;
-            foreach (var behavior in _acceptBehaviors)
-                behavior.Unbind();
             _acceptBehaviors = null;
 
             // Destroy the integration method

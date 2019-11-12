@@ -18,17 +18,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
-        public NoiseBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="context"></param>
+        public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
-            var c = (ComponentBindingContext)context;
-            ResistorNoise.Bind(c, c.Nodes[0], c.Nodes[1]);
+            ResistorNoise.Bind(context, context.Nodes[0], context.Nodes[1]);
         }
 
         /// <summary>

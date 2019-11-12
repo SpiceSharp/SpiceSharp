@@ -36,20 +36,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public NoiseBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
-            var c = (ComponentBindingContext)context;
-            _mnp = c.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
+            _mnp = context.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
             _state = context.States.GetValue<INoiseSimulationState>();
-            DiodeNoise.Bind(c, c.Nodes[0], PosPrime, c.Nodes[1]);
+            DiodeNoise.Bind(context, context.Nodes[0], PosPrime, context.Nodes[1]);
         }
 
         /// <summary>

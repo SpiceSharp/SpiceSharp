@@ -30,31 +30,18 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         private int _pos1, _neg1, _pos2, _neg2, _int1, _int2, _br1, _br2;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyBehavior" /> class.
         /// </summary>
         /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public FrequencyBehavior(string name)
-            : base(name)
+        /// <param name="context">The context.</param>
+        public FrequencyBehavior(string name, ComponentBindingContext context)
+            : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _pos1 = ComplexState.Map[c.Nodes[0]];
-            _neg1 = ComplexState.Map[c.Nodes[1]];
-            _pos2 = ComplexState.Map[c.Nodes[2]];
-            _neg2 = ComplexState.Map[c.Nodes[3]];
+            _pos1 = ComplexState.Map[context.Nodes[0]];
+            _neg1 = ComplexState.Map[context.Nodes[1]];
+            _pos2 = ComplexState.Map[context.Nodes[2]];
+            _neg2 = ComplexState.Map[context.Nodes[3]];
             _int1 = ComplexState.Map[Internal1];
             _int2 = ComplexState.Map[Internal2];
             _br1 = ComplexState.Map[Branch1];
@@ -82,17 +69,6 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                 new MatrixLocation(_br2, _br1),
                 new MatrixLocation(_pos2, _int2),
                 new MatrixLocation(_int2, _pos2));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexState = null;
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

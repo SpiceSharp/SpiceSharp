@@ -32,28 +32,15 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public FrequencyBehavior(string name)
-            : base(name)
-        {
-        }
-
-        /// <summary>
-        /// Binds the specified simulation.
-        /// </summary>
+        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public override void Bind(BindingContext context)
+        public FrequencyBehavior(string name, ComponentBindingContext context)
+            : base(name, context)
         {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
-            _contPosNode = BiasingState.Map[c.Nodes[2]];
-            _contNegNode = BiasingState.Map[c.Nodes[3]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
+            _contPosNode = BiasingState.Map[context.Nodes[2]];
+            _contNegNode = BiasingState.Map[context.Nodes[3]];
             _branchEq = BiasingState.Map[Branch];
             ComplexState = context.States.GetValue<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
@@ -64,16 +51,6 @@ namespace SpiceSharp.Components.DelayBehaviors
                 new MatrixLocation(_branchEq, _contPosNode),
                 new MatrixLocation(_branchEq, _contNegNode)
             });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

@@ -150,46 +150,38 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
+            context.Nodes.ThrowIfNot("nodes", 4);
 
             // Get configurations
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
             context.States.TryGetValue(out _timeState);
-
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 4);
-            _collectorNode = BiasingState.Map[c.Nodes[0]];
-            _baseNode = BiasingState.Map[c.Nodes[1]];
-            _emitterNode = BiasingState.Map[c.Nodes[2]];
+            _collectorNode = BiasingState.Map[context.Nodes[0]];
+            _baseNode = BiasingState.Map[context.Nodes[1]];
+            _emitterNode = BiasingState.Map[context.Nodes[2]];
             var variables = context.Variables;
 
             // Add a series collector node if necessary
-            CollectorPrime = ModelParameters.CollectorResistance.Value > 0 ? 
-                variables.Create(Name.Combine("col"), VariableType.Voltage) : 
-                c.Nodes[0];
+            CollectorPrime = ModelParameters.CollectorResistance.Value > 0 ?
+                variables.Create(Name.Combine("col"), VariableType.Voltage) :
+                context.Nodes[0];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
 
             // Add a series base node if necessary
             BasePrime = ModelParameters.BaseResist.Value > 0 ?
                 variables.Create(Name.Combine("base"), VariableType.Voltage) :
-                c.Nodes[1];
+                context.Nodes[1];
             _basePrimeNode = BiasingState.Map[BasePrime];
 
             // Add a series emitter node if necessary
-            EmitterPrime = ModelParameters.EmitterResistance.Value > 0 ? 
-                variables.Create(Name.Combine("emit"), VariableType.Voltage) : 
-                c.Nodes[2];
+            EmitterPrime = ModelParameters.EmitterResistance.Value > 0 ?
+                variables.Create(Name.Combine("emit"), VariableType.Voltage) :
+                context.Nodes[2];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
 
             // Get solver pointers
@@ -213,16 +205,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 new MatrixLocation(_emitterPrimeNode, _collectorPrimeNode),
                 new MatrixLocation(_emitterPrimeNode, _basePrimeNode)
             }, new[] { _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

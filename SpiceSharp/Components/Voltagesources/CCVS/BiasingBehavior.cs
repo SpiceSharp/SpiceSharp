@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 {
@@ -69,26 +70,19 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public BiasingBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ControlledBindingContext context) : base(name)
         {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
+            context.Nodes.ThrowIfNot("nodes", 2);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-
-            var c = (CommonBehaviors.ControlledBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 2);
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
 
-            var behavior = c.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            var behavior = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
             ControlBranch = behavior.Branch;
             _cbrNode = BiasingState.Map[ControlBranch];
             
@@ -101,17 +95,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
                 new MatrixLocation(_brNode, _posNode),
                 new MatrixLocation(_brNode, _negNode),
                 new MatrixLocation(_brNode, _cbrNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

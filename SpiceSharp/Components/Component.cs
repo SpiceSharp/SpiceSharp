@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
@@ -73,22 +74,6 @@ namespace SpiceSharp.Components
             if (Model != null)
                 entities[Model].CreateBehaviors(simulation, entities);
             base.CreateBehaviors(simulation, entities);
-        }
-
-        /// <summary>
-        /// Binds the behaviors to the simulation.
-        /// </summary>
-        /// <param name="eb">The entity behaviors and parameters.</param>
-        /// <param name="simulation">The simulation to be bound to.</param>
-        /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
-        {
-            simulation.ThrowIfNull(nameof(simulation));
-            var context = new ComponentBindingContext(simulation, eb, ApplyConnections(simulation.Variables), Model);
-
-            // Bind the behaviors
-            foreach (var behavior in eb.Ordered)
-                behavior.Bind(context);
         }
 
         /// <summary>

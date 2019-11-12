@@ -43,22 +43,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public TransientBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
-            var _posNode = BiasingState.Map[c.Nodes[0]];
-            var _negNode = BiasingState.Map[c.Nodes[1]];
             _branchEq = BiasingState.Map[Branch];
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_branchEq, _branchEq)
@@ -66,25 +54,6 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             var method = context.States.GetValue<ITimeSimulationState>().Method;
             _flux = method.CreateDerivative();
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-
-            // Clear all events
-            if (UpdateFlux != null)
-            {
-                foreach (var inv in UpdateFlux.GetInvocationList())
-                    UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
-            }
-
-            TransientElements?.Destroy();
-            TransientElements = null;
-            _flux = null;
         }
 
         /// <summary>

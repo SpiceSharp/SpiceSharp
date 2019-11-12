@@ -32,22 +32,15 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
-        public TemperatureBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TemperatureBehavior(string name, MutualInductanceBindingContext context) : base(name)
         {
-        }
+            context.ThrowIfNull(nameof(context));
 
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-            var c = (MutualInductanceBindingContext)context;
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            TemperatureBehavior1 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TemperatureBehavior>();
-            TemperatureBehavior2 = c.Inductor1Behaviors.GetValue<InductorBehaviors.TemperatureBehavior>();
+            TemperatureBehavior1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TemperatureBehavior>();
+            TemperatureBehavior2 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TemperatureBehavior>();
         }
 
         /// <summary>

@@ -106,19 +106,6 @@ namespace SpiceSharp.Entities.Local
         private BehaviorContainerCollection _entityBehaviors = null;
 
         /// <summary>
-        /// Gets the <see cref="IBehavior" /> types used by the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The behavior types.
-        /// </value>
-        public IEnumerable<Type> BehaviorTypes
-        {
-            get => _types ?? Parent.BehaviorTypes;
-            protected set => _types = value;
-        }
-        private IEnumerable<Type> _types = null;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="LocalSimulation"/> class.
         /// </summary>
         /// <param name="parent">The parent simulation.</param>

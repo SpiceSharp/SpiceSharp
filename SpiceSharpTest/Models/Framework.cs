@@ -20,22 +20,13 @@ namespace SpiceSharpTest.Models
     {
         protected class NodeMapper : Entity
         {
-            static NodeMapper()
-            {
-                RegisterBehaviorFactory(typeof(NodeMapper), new BehaviorFactoryDictionary
-                {
-                    {typeof(Mapper), e => new Mapper(((NodeMapper)e)._nodes)}
-                });
-            }
             private class Mapper : Behavior, IBiasingBehavior
             {
                 private List<string> _nodes;
-                public Mapper(List<string> nodes) : base("Mapper")
+                public Mapper(List<string> nodes, BindingContext context) : base("Mapper")
                 {
+                    context.ThrowIfNull(nameof(context));
                     _nodes = nodes;
-                }
-                public override void Bind(BindingContext context)
-                {
                     var variables = context.Variables;
                     foreach (var node in _nodes)
                         variables.MapNode(node, VariableType.Voltage);
@@ -51,6 +42,11 @@ namespace SpiceSharpTest.Models
             public NodeMapper(IEnumerable<string> nodes) : base("Mapper")
             {
                 _nodes.AddRange(nodes);
+            }
+            protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+            {
+                var context = new ModelBindingContext(simulation, behaviors);
+                behaviors.Add(new Mapper(_nodes, context));
             }
         }
 

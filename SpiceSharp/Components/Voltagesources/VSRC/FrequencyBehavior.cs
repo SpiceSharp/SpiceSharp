@@ -64,23 +64,16 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public FrequencyBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            base.Bind(context);
-            var c = (ComponentBindingContext)context;
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Connections
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _posNode = ComplexState.Map[c.Nodes[0]];
-            _negNode = ComplexState.Map[c.Nodes[1]];
+            _posNode = ComplexState.Map[context.Nodes[0]];
+            _negNode = ComplexState.Map[context.Nodes[1]];
             _brNode = ComplexState.Map[Branch];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
                 new MatrixLocation(_posNode, _brNode),
@@ -88,17 +81,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 new MatrixLocation(_negNode, _brNode),
                 new MatrixLocation(_brNode, _negNode)
             }, new[] { _brNode });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexState = null;
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

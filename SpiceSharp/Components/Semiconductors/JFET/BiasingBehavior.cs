@@ -97,42 +97,25 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public BiasingBehavior(string name) : base(name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-        }
+            context.Nodes.ThrowIfNot("nodes", 3);
 
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            // Get configuration
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-
-            // Get states
             context.States.TryGetValue(out _timeState);
-
-            // Connections
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 3);
-            _drainNode = BiasingState.Map[c.Nodes[0]];
-            _gateNode = BiasingState.Map[c.Nodes[1]];
-            _sourceNode = BiasingState.Map[c.Nodes[2]];
+            _drainNode = BiasingState.Map[context.Nodes[0]];
+            _gateNode = BiasingState.Map[context.Nodes[1]];
+            _sourceNode = BiasingState.Map[context.Nodes[2]];
             var variables = context.Variables;
             DrainPrime = ModelParameters.DrainResistance > 0 ?
                 variables.Create(Name.Combine("drain"), VariableType.Voltage) :
-                c.Nodes[0];
+                context.Nodes[0];
             _drainPrimeNode = BiasingState.Map[DrainPrime];
             SourcePrime = ModelParameters.SourceResistance > 0 ? 
                 variables.Create(Name.Combine("source"), VariableType.Voltage) :
-                c.Nodes[2];
+                context.Nodes[2];
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
             
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
@@ -152,16 +135,6 @@ namespace SpiceSharp.Components.JFETBehaviors
                 new MatrixLocation(_drainPrimeNode, _drainPrimeNode),
                 new MatrixLocation(_sourcePrimeNode, _sourcePrimeNode)
             }, new[] { _gateNode, _drainPrimeNode, _sourcePrimeNode });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

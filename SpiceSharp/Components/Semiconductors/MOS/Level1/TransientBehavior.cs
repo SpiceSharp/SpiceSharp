@@ -127,21 +127,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
-        public TransientBehavior(string name) : base(name)
+        /// <param name="context"></param>
+        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
-            _gateNode = BiasingState.Map[c.Nodes[1]];
-            _bulkNode = BiasingState.Map[c.Nodes[3]];
+            _gateNode = BiasingState.Map[context.Nodes[1]];
+            _bulkNode = BiasingState.Map[context.Nodes[3]];
             _drainNodePrime = BiasingState.Map[DrainPrime];
             _sourceNodePrime = BiasingState.Map[SourcePrime];
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
@@ -176,33 +166,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         }
 
         /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            TransientElements?.Destroy();
-            TransientElements = null;
-
-            _voltageGs = null;
-            _voltageDs = null;
-            _voltageBs = null;
-            _capGs = null;
-            _capGd = null;
-            _capGb = null;
-            _chargeGs = null;
-            _chargeGd = null;
-            _chargeGb = null;
-            _chargeBd = null;
-            _chargeBs = null;
-        }
-
-        /// <summary>
         /// Calculates the state values from the current DC solution.
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
+        /// and the result is stored in each respective <see cref="StateDerivative" /> or <see cref="StateHistory" />.
         /// </remarks>
         void ITimeBehavior.InitializeStates()
         {

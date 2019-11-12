@@ -36,19 +36,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public TransientBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
-            _negNode = BiasingState.Map[c.Nodes[1]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
             _posPrimeNode = BiasingState.Map[PosPrime];
 
             var method = context.States.GetValue<ITimeSimulationState>().Method;

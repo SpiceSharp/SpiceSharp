@@ -38,30 +38,20 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public BiasingBehavior(string name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context)
             : base(name)
         {
-        }
+            context.ThrowIfNull(nameof(context));
+            context.Nodes.ThrowIfNot("nodes", 4);
 
-        /// <summary>
-        /// Binds the specified simulation.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 4);
-            _posNode = BiasingState.Map[c.Nodes[0]];
-            _negNode = BiasingState.Map[c.Nodes[1]];
-            _contPosNode = BiasingState.Map[c.Nodes[2]];
-            _contNegNode = BiasingState.Map[c.Nodes[3]];
+            _posNode = BiasingState.Map[context.Nodes[0]];
+            _negNode = BiasingState.Map[context.Nodes[1]];
+            _contPosNode = BiasingState.Map[context.Nodes[2]];
+            _contNegNode = BiasingState.Map[context.Nodes[3]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
             _branchEq = BiasingState.Map[Branch];
 
@@ -73,17 +63,6 @@ namespace SpiceSharp.Components.DelayBehaviors
                 new MatrixLocation(_branchEq, _contPosNode),
                 new MatrixLocation(_branchEq, _contNegNode)
             });
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

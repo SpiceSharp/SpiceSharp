@@ -12,7 +12,9 @@ namespace SpiceSharp.Simulations
     /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="BiasingState" /> is always part of the simulation.
     /// </remarks>
     /// <seealso cref="Simulation" />
-    public abstract partial class BiasingSimulation : Simulation
+    public abstract partial class BiasingSimulation : Simulation,
+        IBehavioral<IBiasingBehavior>, IBehavioral<IBiasingUpdateBehavior>,
+        IBehavioral<ITemperatureBehavior>, IBehavioral<IInitialConditionBehavior>
     {        
         /// <summary>
         /// Gets the variable that causes issues.
@@ -112,15 +114,6 @@ namespace SpiceSharp.Simulations
             BaseSimulationStatistics = new BiasingSimulationStatistics();
             Statistics.Add(BaseSimulationStatistics);
 
-            // Add the necessary behaviors in the order that they are (usually) called
-            Types.AddRange(new []
-            {
-                typeof(ITemperatureBehavior),
-                typeof(IBiasingBehavior),
-                typeof(IBiasingUpdateBehavior),
-                typeof(IInitialConditionBehavior)
-            });
-
             // Create our states
             BiasingState = new BiasingSimulationState();
             States.Add<IBiasingSimulationState>(BiasingState);
@@ -217,14 +210,6 @@ namespace SpiceSharp.Simulations
             foreach (var aid in _nodesets)
                 aid.Unsetup();
             _nodesets.Clear();
-
-            // Unsetup all behaviors
-            foreach (var behavior in _initialConditionBehaviors)
-                behavior.Unbind();
-            foreach (var behavior in _loadBehaviors)
-                behavior.Unbind();
-            foreach (var behavior in _temperatureBehaviors)
-                behavior.Unbind();
 
             // Clear the state
             BiasingState.Unsetup();

@@ -23,29 +23,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
-        public TemperatureBehavior(string name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TemperatureBehavior(string name, ComponentBindingContext context)
             : base(name)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BaseParameters = null;
         }
 
         /// <summary>

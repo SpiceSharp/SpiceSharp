@@ -11,16 +11,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public AcceptBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public AcceptBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            base.Bind(context);
             BaseParameters.Waveform?.Bind(context);
         }
 

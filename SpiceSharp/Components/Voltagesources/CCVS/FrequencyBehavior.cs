@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 {
@@ -74,20 +75,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencyBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="context"></param>
+        public FrequencyBehavior(string name, ControlledBindingContext context) : base(name, context)
         {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
             ComplexState = context.States.GetValue<IComplexSimulationState>();
-            _posNode = ComplexState.Map[c.Nodes[0]];
-            _negNode = ComplexState.Map[c.Nodes[1]];
+            _posNode = ComplexState.Map[context.Nodes[0]];
+            _negNode = ComplexState.Map[context.Nodes[1]];
             _cbrNode = ComplexState.Map[ControlBranch];
             _brNode = ComplexState.Map[Branch];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
@@ -96,17 +89,6 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
                 new MatrixLocation(_brNode, _posNode),
                 new MatrixLocation(_brNode, _negNode),
                 new MatrixLocation(_brNode, _cbrNode));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            ComplexState = null;
-            ComplexElements?.Destroy();
-            ComplexElements = null;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.BipolarBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -11,18 +12,6 @@ namespace SpiceSharp.Components
     [Pin(0, "Collector"), Pin(1, "Base"), Pin(2, "Emitter"), Pin(3, "Substrate")]
     public class BipolarJunctionTransistor : Component
     {
-        static BipolarJunctionTransistor()
-        {
-            RegisterBehaviorFactory(typeof(BipolarJunctionTransistor), new BehaviorFactoryDictionary
-            {
-                {typeof(ITemperatureBehavior), e => new TemperatureBehavior(e.Name)},
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(ITimeBehavior), e => new TransientBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(INoiseBehavior), e => new NoiseBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Constants
         /// </summary>
@@ -53,6 +42,31 @@ namespace SpiceSharp.Components
         {
             Connect(c, b, e, s);
             Model = model;
+        }
+
+        /// <summary>
+        /// Create one or more behaviors for the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        {
+            var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model);
+            if (simulation is IBehavioral<INoiseBehavior>)
+                behaviors.Add(new NoiseBehavior(Name, context));
+            else if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            if (simulation is IBehavioral<ITimeBehavior>)
+                behaviors.Add(new TransientBehavior(Name, context));
+
+            if (simulation is IBehavioral<IBiasingBehavior>)
+            {
+                if (!behaviors.ContainsKey(typeof(IBiasingBehavior)))
+                    behaviors.Add(new BiasingBehavior(Name, context));
+            }
+            else if (simulation is IBehavioral<ITemperatureBehavior> && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
+                behaviors.Add(new TemperatureBehavior(Name, context));
         }
     }
 }

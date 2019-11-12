@@ -65,34 +65,24 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
-        /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
-        /// </remarks>
-        public BiasingBehavior(string name)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context)
             : base(name)
         {
-        }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
-        {
-            base.Bind(context);
+            context.ThrowIfNull(nameof(context));
+            context.Nodes.ThrowIfNot("nodes", 4);
 
             // Get parameters
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             // Connect
             BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            var c = (ComponentBindingContext)context;
-            c.Nodes.ThrowIfNot("nodes", 4);
-            _pos1 = BiasingState.Map[c.Nodes[0]];
-            _neg1 = BiasingState.Map[c.Nodes[1]];
-            _pos2 = BiasingState.Map[c.Nodes[2]];
-            _neg2 = BiasingState.Map[c.Nodes[3]];
+
+            _pos1 = BiasingState.Map[context.Nodes[0]];
+            _neg1 = BiasingState.Map[context.Nodes[1]];
+            _pos2 = BiasingState.Map[context.Nodes[2]];
+            _neg2 = BiasingState.Map[context.Nodes[3]];
             var variables = context.Variables;
             Internal1 = variables.Create(Name.Combine("int1"), VariableType.Voltage);
             _int1 = BiasingState.Map[Internal1];
@@ -128,17 +118,6 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                 new MatrixLocation(_br1, _neg2),
                 new MatrixLocation(_br2, _br1),
                 new MatrixLocation(_br2, _br2));
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            BiasingState = null;
-            Elements?.Destroy();
-            Elements = null;
         }
 
         /// <summary>

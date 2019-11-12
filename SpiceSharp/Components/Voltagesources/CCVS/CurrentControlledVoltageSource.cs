@@ -4,6 +4,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -13,15 +14,6 @@ namespace SpiceSharp.Components
     [Pin(0, "H+"), Pin(1, "H-"), VoltageDriver(0, 1)]
     public class CurrentControlledVoltageSource : Component
     {
-        static CurrentControlledVoltageSource()
-        {
-            RegisterBehaviorFactory(typeof(CurrentControlledVoltageSource), new BehaviorFactoryDictionary
-            {
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Controlling source name
         /// </summary>
@@ -81,19 +73,19 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Binds the behaviors to the simulation.
+        /// Create one or more behaviors for the simulation.
         /// </summary>
-        /// <param name="eb">The entity behaviors and parameters.</param>
-        /// <param name="simulation">The simulation to be bound to.</param>
-        /// <param name="entities">The entities that the entity may be connected to.</param>
-        protected override void BindBehaviors(BehaviorContainer eb, ISimulation simulation, IEntityCollection entities)
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
-            var context = new CommonBehaviors.ControlledBindingContext(
-                simulation, eb, ApplyConnections(simulation.Variables), 
-                Model, ControllingName);
+            var context = new ControlledBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model, ControllingName);
 
-            foreach (var behavior in eb.Ordered)
-                behavior.Bind(context);
+            if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            else if (simulation is IBehavioral<IBiasingBehavior>)
+                behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
 }

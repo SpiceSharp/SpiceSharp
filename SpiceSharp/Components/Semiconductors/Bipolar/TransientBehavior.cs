@@ -97,20 +97,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        public TransientBehavior(string name) : base(name) { }
-
-        /// <summary>
-        /// Bind the behavior to a simulation.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        public override void Bind(BindingContext context)
+        /// <param name="name">The name.</param>
+        /// <param name="context">The context.</param>
+        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            base.Bind(context);
-
-            var c = (ComponentBindingContext)context;
-            _baseNode = BiasingState.Map[c.Nodes[1]];
-            _substrateNode = BiasingState.Map[c.Nodes[3]];
+            _baseNode = BiasingState.Map[context.Nodes[1]];
+            _substrateNode = BiasingState.Map[context.Nodes[3]];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
             _basePrimeNode = BiasingState.Map[BasePrime];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
@@ -137,21 +129,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             _biasingStateChargeCs = _method.CreateDerivative();
             _biasingStateChargeBx = _method.CreateDerivative(false); // Spice 3f5 does not include this state for LTE calculations
             _biasingStateExcessPhaseCurrentBc = _method.CreateHistory();
-        }
-
-        /// <summary>
-        /// Unbind the behavior.
-        /// </summary>
-        public override void Unbind()
-        {
-            base.Unbind();
-            TransientElements?.Destroy();
-            TransientElements = null;
-            _biasingStateChargeBe = null;
-            _biasingStateChargeBc = null;
-            _biasingStateChargeCs = null;
-            _biasingStateChargeBx = null; // Spice 3f5 does not include this state for LTE calculations
-            _biasingStateExcessPhaseCurrentBc = null;
         }
 
         /// <summary>

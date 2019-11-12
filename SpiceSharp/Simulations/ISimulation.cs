@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -65,14 +64,6 @@ namespace SpiceSharp.Simulations
         /// The entity behaviors.
         /// </value>
         BehaviorContainerCollection EntityBehaviors { get; }
-
-        /// <summary>
-        /// Gets the <see cref="IBehavior"/> types used by the <see cref="ISimulation"/>.
-        /// </summary>
-        /// <value>
-        /// The behavior types.
-        /// </value>
-        IEnumerable<Type> BehaviorTypes { get; }
 
         /// <summary>
         /// Runs the <see cref="ISimulation"/> on the specified <see cref="IEntityCollection"/>.

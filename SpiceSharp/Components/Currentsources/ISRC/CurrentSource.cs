@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.CurrentSourceBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -11,16 +12,6 @@ namespace SpiceSharp.Components
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
     public class CurrentSource : Component
     {
-        static CurrentSource()
-        {
-            RegisterBehaviorFactory(typeof(CurrentSource), new BehaviorFactoryDictionary
-            {
-                {typeof(IBiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(IFrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(IAcceptBehavior), e => new AcceptBehavior(e.Name)}
-            });
-        }
-
         /// <summary>
         /// Constants
         /// </summary>
@@ -66,6 +57,23 @@ namespace SpiceSharp.Components
             Parameters.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
             Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
             Connect(pos, neg);
+        }
+
+        /// <summary>
+        /// Create one or more behaviors for the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
+        /// <param name="entities">The other entities.</param>
+        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        {
+            var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), null);
+            if (simulation is IBehavioral<IAcceptBehavior>)
+                behaviors.Add(new AcceptBehavior(Name, context));
+            if (simulation is IBehavioral<IFrequencyBehavior>)
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            else if (simulation is IBehavioral<IBiasingBehavior>)
+                behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
 }
