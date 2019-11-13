@@ -4,10 +4,9 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// An <see cref="ISimulationPreparer"/> for the <see cref="IBiasingBehavior"/>.
+    /// Prepares <see cref="SubcircuitSimulation"/> for <see cref="IBiasingBehavior"/>.
     /// </summary>
-    /// <seealso cref="ISimulationPreparer" />
-    public class BiasingPreparer : ISimulationPreparer
+    public static class BiasingPreparer
     {
         /// <summary>
         /// Prepares the task's simulation for the behavior.
@@ -15,7 +14,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="simulations">The task simulations to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        public void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
+        public static void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
             var state = parent.States.GetValue<IBiasingSimulationState>();
             if (parameters.TryGetValue<BiasingParameters>(out var bp) &&

@@ -35,5 +35,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </value>
         [ParameterName("frequency.solve"), ParameterInfo("Flag indicating whether solving is done in parallel")]
         public bool ParallelSolve { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether updates are done in parallel.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if update are done in parallel; otherwise, <c>false</c>.
+        /// </value>
+        [ParameterName("frequency.update"), ParameterInfo("Flag indicating whether updates are done in parallel")]
+        public bool ParallelUpdate { get; set; }
     }
 }

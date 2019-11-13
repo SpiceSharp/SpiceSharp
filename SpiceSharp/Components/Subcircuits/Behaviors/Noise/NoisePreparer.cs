@@ -1,12 +1,12 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// Noise preparer for a <see cref="SubcircuitSimulation"/>
+    /// Prepares <see cref="SubcircuitSimulation"/> for <see cref="INoiseBehavior"/>.
     /// </summary>
-    /// <seealso cref="ISimulationPreparer" />
-    public class NoisePreparer : ISimulationPreparer
+    public static class NoisePreparer
     {
         /// <summary>
         /// Prepares the task's simulation for the behavior.
@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="simulations">The task simulations to be prepared.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parameters.</param>
-        public void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
+        public static void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
             foreach (var sim in simulations)
             {

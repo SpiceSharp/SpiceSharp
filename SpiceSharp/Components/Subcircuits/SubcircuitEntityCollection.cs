@@ -26,13 +26,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             /// </summary>
             /// <param name="parent">The parent.</param>
             /// <param name="parentEntities">The parent entities.</param>
-            /// <param name="simulation">The simulation.</param>
-            public ProxyEntity(IEntity parent, IEntityCollection parentEntities, ISimulation simulation)
+            /// <param name="parentSimulation">The simulation.</param>
+            public ProxyEntity(IEntity parent, IEntityCollection parentEntities, ISimulation parentSimulation)
                 : base(parent.Name)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
                 _parentEntities = parentEntities.ThrowIfNull(nameof(parentEntities));
-                _parentSimulation = _parentSimulation.ThrowIfNull(nameof(_parentSimulation));
+                _parentSimulation = parentSimulation.ThrowIfNull(nameof(_parentSimulation));
             }
 
             /// <summary>

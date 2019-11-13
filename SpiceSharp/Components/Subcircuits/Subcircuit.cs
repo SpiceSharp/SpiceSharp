@@ -70,13 +70,49 @@ namespace SpiceSharp.Components
             if (Entities == null || Entities.Length == 0)
                 return;
 
+            // Create subcircuit simulations
             _simulations = new SubcircuitSimulation[Entities.Length];
             for (var i = 0; i < Entities.Length; i++)
-            {
                 _simulations[i] = new SubcircuitSimulation(Name, simulation);
+
+            // Let us alias the local nodes to parent nodes
+            _nodes = ApplyConnections(simulation.Variables);
+            for (var i = 0; i < PinCount; i++)
+                _simulations[0].Variables.AliasNode(_nodes[i].Name, Pins[i]);
+
+            // Prepare the simulations
+            var eb = simulation.EntityBehaviors;
+            if (eb.Tracks<IBiasingBehavior>())
+                BiasingPreparer.Prepare(_simulations, simulation, Parameters);
+            if (eb.Tracks<IFrequencyBehavior>())
+                FrequencyPreparer.Prepare(_simulations, simulation, Parameters);
+            if (eb.Tracks<INoiseBehavior>())
+                NoisePreparer.Prepare(_simulations, simulation, Parameters);
+            if (eb.Tracks<ITimeBehavior>())
+                TimePreparer.Prepare(_simulations, simulation, Parameters);
+
+            // Create the behaviors in our subcircuit
+            for (var i = 0; i < Entities.Length; i++)
+            {
                 var ec = new SubcircuitEntityCollection(simulation, Entities[i], entities);
                 _simulations[i].Run(ec);
             }
+
+            var context = new SubcircuitBindingContext(simulation, _nodes, behaviors, _simulations);
+
+            // Create the subcircuit behaviors
+            if (eb.Tracks<ITemperatureBehavior>())
+                behaviors.Add(new TemperatureBehavior(Name, context));
+            if (eb.Tracks<IBiasingBehavior>())
+                behaviors.Add(new BiasingBehavior(Name, context));
+            if (eb.Tracks<IFrequencyBehavior>())
+                behaviors.Add(new FrequencyBehavior(Name, context));
+            if (eb.Tracks<INoiseBehavior>())
+                behaviors.Add(new NoiseBehavior(Name, context));
+            if (eb.Tracks<ITimeBehavior>())
+                behaviors.Add(new TimeBehavior(Name, context));
+            if (eb.Tracks<IAcceptBehavior>())
+                behaviors.Add(new AcceptBehavior(Name, context));
         }
     }
 }

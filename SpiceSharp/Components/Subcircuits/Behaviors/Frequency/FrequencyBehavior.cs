@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
@@ -16,6 +14,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     {
         private FrequencyParameters _fp;
         private ISubcircuitComplexSimulationState[] _states;
+        private BehaviorList<IFrequencyUpdateBehavior>[] _updates;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -49,6 +48,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 foreach (var state in _states)
                     state.ShareVariables(common);
             }
+
+            // Get the updates
+            _updates = new BehaviorList<IFrequencyUpdateBehavior>[Simulations.Length];
+            for (var i = 0; i < Simulations.Length; i++)
+                _updates[i] = Simulations[i].EntityBehaviors.GetBehaviorList<IFrequencyUpdateBehavior>();
         }
 
         /// <summary>
@@ -94,7 +98,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
             else
             {
-                // Use single thread
+                // Use single task
                 foreach (var bs in Behaviors)
                 {
                     foreach (var behavior in bs)
@@ -148,7 +152,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
             else
             {
-                // Use single thread
+                // Use single task
                 foreach (var bs in Behaviors)
                 {
                     foreach (var behavior in bs)
@@ -166,6 +170,34 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             {
                 foreach (var state in _states)
                     state.Update();
+            }
+
+            if (_fp != null && _fp.ParallelUpdate && _updates.Length > 1)
+            {
+                // Execute multiple tasks
+                var tasks = new Task[_updates.Length];
+                for (var t = 0; t < tasks.Length; t++)
+                {
+                    var task = t;
+                    tasks[t] = Task.Run(() =>
+                    {
+                        foreach (var bs in _updates)
+                        {
+                            foreach (var behavior in bs)
+                                behavior.Update();
+                        }
+                    });
+                }
+                Task.WaitAll(tasks);
+            }
+            else
+            {
+                // Use single task
+                foreach (var bs in _updates)
+                {
+                    foreach (var behavior in bs)
+                        behavior.Update();
+                }
             }
         }
     }
