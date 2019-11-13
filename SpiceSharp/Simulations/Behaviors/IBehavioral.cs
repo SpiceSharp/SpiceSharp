@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Behaviors;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Specifies that the class uses behaviors of a certain type.

@@ -77,11 +77,12 @@ namespace SpiceSharp.Components
         protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
             var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
-            if (simulation is IBehavioral<IFrequencyBehavior>)
+            var eb = simulation.EntityBehaviors;
+            if (eb.Tracks<IFrequencyBehavior>())
                 behaviors.Add(new FrequencyBehavior(Name, context));
-            if (simulation is IBehavioral<ITimeBehavior>)
+            if (eb.Tracks<ITimeBehavior>())
                 behaviors.Add(new TransientBehavior(Name, context));
-            if (simulation is IBehavioral<ITemperatureBehavior> && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
+            if (eb.Tracks<ITemperatureBehavior>() && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
                 behaviors.Add(new TemperatureBehavior(Name, context));
         }
     }

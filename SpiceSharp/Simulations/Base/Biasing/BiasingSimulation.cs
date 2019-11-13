@@ -6,16 +6,14 @@ using SpiceSharp.Entities;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// The base simulation.
+    /// A class that can bias components.
     /// </summary>
-    /// <remarks>
-    /// Pretty much all simulations start out with calculating the operating point of the circuit. So a <see cref="BiasingState" /> is always part of the simulation.
-    /// </remarks>
     /// <seealso cref="Simulation" />
+    /// <seealso cref="IBehavioral{T}" />
     public abstract partial class BiasingSimulation : Simulation,
         IBehavioral<IBiasingBehavior>, IBehavioral<IBiasingUpdateBehavior>,
-        IBehavioral<ITemperatureBehavior>, IBehavioral<IInitialConditionBehavior>
-    {        
+        IBehavioral<ITemperatureBehavior>
+    {
         /// <summary>
         /// Gets the variable that causes issues.
         /// </summary>
@@ -70,7 +68,6 @@ namespace SpiceSharp.Simulations
         private BehaviorList<IBiasingBehavior> _loadBehaviors;
         private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
         private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
-        private BehaviorList<IInitialConditionBehavior> _initialConditionBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
@@ -149,7 +146,6 @@ namespace SpiceSharp.Simulations
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _updateBehaviors = EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
-            _initialConditionBehaviors = EntityBehaviors.GetBehaviorList<IInitialConditionBehavior>();
             _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
             BiasingState.Setup(this);
 
@@ -217,7 +213,6 @@ namespace SpiceSharp.Simulations
 
             // Remove behavior and configuration references
             _loadBehaviors = null;
-            _initialConditionBehaviors = null;
             _temperatureBehaviors = null;
         }
 

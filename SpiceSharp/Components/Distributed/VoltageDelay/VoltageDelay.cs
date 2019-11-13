@@ -54,13 +54,14 @@ namespace SpiceSharp.Components
         protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
             var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model);
-            if (simulation is IBehavioral<ITimeBehavior>)
+            var eb = simulation.EntityBehaviors;
+            if (eb.Tracks<ITimeBehavior>())
                 behaviors.Add(new TransientBehavior(Name, context));
-            if (simulation is IBehavioral<IFrequencyBehavior>)
+            if (eb.Tracks<IFrequencyBehavior>())
                 behaviors.Add(new FrequencyBehavior(Name, context));
-            if (simulation is IBehavioral<IBiasingBehavior> && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
+            if (eb.Tracks<IBiasingBehavior>() && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
                 behaviors.Add(new BiasingBehavior(Name, context));
-            if (simulation is IBehavioral<IAcceptBehavior>)
+            if (eb.Tracks<IAcceptBehavior>())
                 behaviors.Add(new AcceptBehavior(Name, context));
         }
     }

@@ -67,6 +67,16 @@ namespace SpiceSharp.Components
         /// <param name="behaviors">A container where all behaviors are to be stored.</param>
         protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
+            if (Entities == null || Entities.Length == 0)
+                return;
+
+            _simulations = new SubcircuitSimulation[Entities.Length];
+            for (var i = 0; i < Entities.Length; i++)
+            {
+                _simulations[i] = new SubcircuitSimulation(Name, simulation);
+                var ec = new SubcircuitEntityCollection(simulation, Entities[i], entities);
+                _simulations[i].Run(ec);
+            }
         }
     }
 }

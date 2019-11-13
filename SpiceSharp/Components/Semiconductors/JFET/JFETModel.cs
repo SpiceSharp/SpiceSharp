@@ -31,7 +31,7 @@ namespace SpiceSharp.Components
         protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
             var context = new ModelBindingContext(simulation, behaviors);
-            if (simulation is IBehavioral<ITemperatureBehavior>)
+            if (simulation.EntityBehaviors.Tracks<ITemperatureBehavior>())
                 behaviors.Add(new ModelTemperatureBehavior(Name, context));
         }
     }

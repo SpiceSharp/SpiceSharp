@@ -132,6 +132,17 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
+        /// </summary>
+        /// <param name="source">The collection to serve as a template.</param>
+        public BehaviorContainerCollection(BehaviorContainerCollection source)
+        {
+            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(source._entityBehaviors.Comparer);
+            foreach (var type in _behaviorLists.Keys)
+                _behaviorLists.Add(type, new List<IBehavior>());
+        }
+
+        /// <summary>
         /// Adds the entity behaviors.
         /// </summary>
         /// <param name="id">The identifier.</param>
@@ -237,6 +248,16 @@ namespace SpiceSharp.Behaviors
                 Lock.ExitReadLock();
             }
         }
+
+        /// <summary>
+        /// Checks if the collection tracks an <see cref="IBehavior"/>.
+        /// </summary>
+        /// <typeparam name="B">The behavior.</typeparam>
+        /// <returns>\
+        /// <c>true</c> if the collection tracks the behavior type; otherwise <c>false</c>.
+        /// </returns>
+        public bool Tracks<B>() where B : IBehavior
+            => _behaviorLists.ContainsKey(typeof(B));
 
         /// <summary>
         /// Clears all behaviors in the pool.

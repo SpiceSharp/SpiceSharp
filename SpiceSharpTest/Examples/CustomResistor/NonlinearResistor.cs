@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
         {
             var context = new ComponentBindingContext(simulation, behaviors, ApplyConnections(simulation.Variables), Model);
-            if (simulation is IBehavioral<IBiasingBehavior>)
+            if (simulation.EntityBehaviors.Tracks<IBiasingBehavior>())
                 behaviors.Add(new BiasingBehavior(Name, context));
         }
     }
