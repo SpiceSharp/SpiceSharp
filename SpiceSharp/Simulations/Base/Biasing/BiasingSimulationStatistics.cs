@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="BiasingSimulationStatistics" />.
     /// </summary>
-    public class BiasingSimulationStatistics : Statistics
+    public class BiasingSimulationStatistics : IStatistics
     {
         /// <summary>
         /// Gets the total number of iterations.
@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Reset simulation statistics.
         /// </summary>
-        public override void Reset()
+        public void Reset()
         {
             Iterations = 0;
             SolveTime.Reset();

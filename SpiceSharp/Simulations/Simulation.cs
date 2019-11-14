@@ -8,7 +8,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation : IEventfulSimulation
+    public abstract class Simulation : IEventfulSimulation,
+        IKeepsStatistics<SimulationStatistics>
     {
         /// <summary>
         /// Gets the current status of the <see cref="ISimulation" />.
@@ -25,14 +26,6 @@ namespace SpiceSharp.Simulations
         /// The configuration.
         /// </value>
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
-
-        /// <summary>
-        /// Gets a set of <see cref="Statistics" /> instances tracked by the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The statistics.
-        /// </value>
-        public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
 
         /// <summary>
         /// Gets the variables.
@@ -92,7 +85,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// A reference to the regular simulation statistics (cached)
         /// </summary>
-        protected SimulationStatistics SimulationStatistics { get; } = new SimulationStatistics();
+        public SimulationStatistics Statistics { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
@@ -101,9 +94,7 @@ namespace SpiceSharp.Simulations
         protected Simulation(string name)
         {
             Name = name;
-
-            // Add our own statistics
-            Statistics.Add(SimulationStatistics);
+            Statistics = new SimulationStatistics();
         }
 
         /// <summary>
@@ -116,10 +107,10 @@ namespace SpiceSharp.Simulations
             
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
-            SimulationStatistics.SetupTime.Start();
+            Statistics.SetupTime.Start();
             Status = SimulationStatus.Setup;
             Setup(entities);
-            SimulationStatistics.SetupTime.Stop();
+            Statistics.SetupTime.Stop();
             OnAfterSetup(EventArgs.Empty);
 
             // Check that at least something is simulated
@@ -136,9 +127,9 @@ namespace SpiceSharp.Simulations
                 OnBeforeExecute(beforeArgs);
 
                 // Execute simulation
-                SimulationStatistics.ExecutionTime.Start();
+                Statistics.ExecutionTime.Start();
                 Execute();
-                SimulationStatistics.ExecutionTime.Stop();
+                Statistics.ExecutionTime.Stop();
 
                 // Reset
                 afterArgs.Repeat = false;
@@ -151,10 +142,10 @@ namespace SpiceSharp.Simulations
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
-            SimulationStatistics.UnsetupTime.Start();
+            Statistics.UnsetupTime.Start();
             Status = SimulationStatus.Unsetup;
             Unsetup();
-            SimulationStatistics.UnsetupTime.Stop();
+            Statistics.UnsetupTime.Stop();
             OnAfterUnsetup(EventArgs.Empty);
 
             Status = SimulationStatus.None;
@@ -209,10 +200,10 @@ namespace SpiceSharp.Simulations
             EntityBehaviors = new BehaviorContainerCollection(entities.Comparer, this);
 
             // Create the behaviors
-            SimulationStatistics.BehaviorCreationTime.Start();
+            Statistics.BehaviorCreationTime.Start();
             foreach (var entity in entities)
                 entity.CreateBehaviors(this, entities);
-            SimulationStatistics.BehaviorCreationTime.Stop();
+            Statistics.BehaviorCreationTime.Stop();
         }
 
         #region Methods for raising events

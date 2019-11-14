@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export the input-referred noise density.
     /// </summary>
-    /// <seealso cref="Export{T}" />
+    /// <seealso cref="Export{S, T}" />
     public class InputNoiseDensityExport : Export<Noise, double>
     {
         /// <summary>
@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         /// Initializes the export.
         /// </summary>
         /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             var state = ((IStateful<INoiseSimulationState>)Simulation).State;

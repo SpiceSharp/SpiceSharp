@@ -11,7 +11,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class FrequencySimulation : BiasingSimulation,
         IBehavioral<IFrequencyBehavior>, IBehavioral<IFrequencyUpdateBehavior>,
-        IStateful<IComplexSimulationState>
+        IStateful<IComplexSimulationState>,
+        IKeepsStatistics<ComplexSimulationStatistics>
     {
         /// <summary>
         /// Private variables
@@ -22,9 +23,12 @@ namespace SpiceSharp.Simulations
         private bool _shouldReorderAc;
 
         /// <summary>
-        /// Gets the (cached) simulation statistics.
+        /// Gets the statistics.
         /// </summary>
-        protected ComplexSimulationStatistics FrequencySimulationStatistics { get; }
+        /// <value>
+        /// The statistics.
+        /// </value>
+        public new ComplexSimulationStatistics Statistics { get; }
 
         /// <summary>
         /// Occurs before loading the matrix and right-hand side vector.
@@ -73,8 +77,7 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new FrequencyConfiguration());
-            FrequencySimulationStatistics = new ComplexSimulationStatistics();
-            Statistics.Add(FrequencySimulationStatistics);
+            Statistics = new ComplexSimulationStatistics();
             ComplexState = new ComplexSimulationState();
         }
 
@@ -87,8 +90,7 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
-            FrequencySimulationStatistics = new ComplexSimulationStatistics();
-            Statistics.Add(FrequencySimulationStatistics);
+            Statistics = new ComplexSimulationStatistics();
             ComplexState = new ComplexSimulationState();
         }
 
@@ -190,16 +192,16 @@ namespace SpiceSharp.Simulations
 
             if (_shouldReorderAc)
             {
-                FrequencySimulationStatistics.ComplexReorderTime.Start();
+                Statistics.ComplexReorderTime.Start();
                 solver.OrderAndFactor();
-                FrequencySimulationStatistics.ComplexReorderTime.Stop();
+                Statistics.ComplexReorderTime.Stop();
                 _shouldReorderAc = false;
             }
             else
             {
-                FrequencySimulationStatistics.ComplexDecompositionTime.Start();
+                Statistics.ComplexDecompositionTime.Start();
                 var factored = solver.Factor();
-                FrequencySimulationStatistics.ComplexDecompositionTime.Stop();
+                Statistics.ComplexDecompositionTime.Stop();
 
                 if (!factored)
                 {
@@ -209,9 +211,9 @@ namespace SpiceSharp.Simulations
             }
 
             // Solve
-            FrequencySimulationStatistics.ComplexSolveTime.Start();
+            Statistics.ComplexSolveTime.Start();
             solver.Solve(cstate.Solution);
-            FrequencySimulationStatistics.ComplexSolveTime.Stop();
+            Statistics.ComplexSolveTime.Stop();
 
             // Update with the found solution
             foreach (var behavior in _frequencyUpdateBehaviors)
@@ -219,7 +221,7 @@ namespace SpiceSharp.Simulations
 
             // Reset values
             cstate.Solution[0] = 0.0;
-            FrequencySimulationStatistics.ComplexPoints++;
+            Statistics.ComplexPoints++;
         }
 
         /// <summary>
@@ -252,10 +254,10 @@ namespace SpiceSharp.Simulations
         protected void FrequencyLoad()
         {
             OnBeforeFrequencyLoad(_loadStateEventArgs);
-            FrequencySimulationStatistics.ComplexLoadTime.Start();
+            Statistics.ComplexLoadTime.Start();
             ComplexState.Solver.Reset();
             LoadFrequencyBehaviors();
-            FrequencySimulationStatistics.ComplexLoadTime.Reset();
+            Statistics.ComplexLoadTime.Reset();
             OnAfterFrequencyLoad(_loadStateEventArgs);
         }
 

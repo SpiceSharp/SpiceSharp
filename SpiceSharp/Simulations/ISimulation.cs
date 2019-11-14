@@ -10,6 +10,14 @@ namespace SpiceSharp.Simulations
     public interface ISimulation
     {
         /// <summary>
+        /// Gets the name of the <see cref="ISimulation"/>.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        string Name { get; }
+
+        /// <summary>
         /// Gets the current status of the <see cref="ISimulation"/>.
         /// </summary>
         /// <value>
@@ -26,28 +34,12 @@ namespace SpiceSharp.Simulations
         ParameterSetDictionary Configurations { get; }
 
         /// <summary>
-        /// Gets a set of <see cref="Simulations.Statistics"/> instances tracked by the <see cref="ISimulation"/>.
-        /// </summary>
-        /// <value>
-        /// The statistics.
-        /// </value>
-        TypeDictionary<Statistics> Statistics { get; }
-
-        /// <summary>
         /// Gets the variables.
         /// </summary>
         /// <value>
         /// The variables.
         /// </value>
         IVariableSet Variables { get; }
-
-        /// <summary>
-        /// Gets the name of the <see cref="ISimulation"/>.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        string Name { get; }
 
         /// <summary>
         /// Gets the entity behaviors.

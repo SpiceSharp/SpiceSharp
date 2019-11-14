@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export real currents.
     /// </summary>
-    /// <seealso cref="Export{T}" />
+    /// <seealso cref="Export{S, T}" />
     public class RealCurrentExport : Export<BiasingSimulation, double>
     {
         /// <summary>

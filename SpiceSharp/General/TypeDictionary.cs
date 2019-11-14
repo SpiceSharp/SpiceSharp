@@ -165,6 +165,7 @@ namespace SpiceSharp
         {
             Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
             Dictionary = new Dictionary<Type, T>();
+            StoreHierarchy = false;
         }
 
         /// <summary>

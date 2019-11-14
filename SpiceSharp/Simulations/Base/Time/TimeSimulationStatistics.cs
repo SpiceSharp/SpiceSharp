@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="TimeSimulationStatistics" />.
     /// </summary>
-    public class TimeSimulationStatistics : Statistics
+    public class TimeSimulationStatistics : IStatistics
     {
         /// <summary>
         /// Gets the number of time points calculated.
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Reset the statistics.
         /// </summary>
-        public override void Reset()
+        public void Reset()
         {
             TimePoints = 0;
             TransientIterations = 0;

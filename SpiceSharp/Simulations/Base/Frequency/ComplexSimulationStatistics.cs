@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="FrequencySimulation"/>.
     /// </summary>
-    public class ComplexSimulationStatistics : Statistics
+    public class ComplexSimulationStatistics : IStatistics
     {
         /// <summary>
         /// Gets or sets the number of frequency points calculated.
@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Reset the statistics.
         /// </summary>
-        public override void Reset()
+        public void Reset()
         {
             ComplexPoints = 0;
             ComplexTime.Reset();

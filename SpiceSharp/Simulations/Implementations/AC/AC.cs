@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
             Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
-            FrequencySimulationStatistics.ComplexTime.Start();
+            Statistics.ComplexTime.Start();
             try
             {
                 InitializeAcParameters();
@@ -81,11 +81,11 @@ namespace SpiceSharp.Simulations
                     OnExport(exportargs);
                 }
 
-                FrequencySimulationStatistics.ComplexTime.Stop();
+                Statistics.ComplexTime.Stop();
             }
             catch (Exception)
             {
-                FrequencySimulationStatistics.ComplexTime.Stop();
+                Statistics.ComplexTime.Stop();
                 throw;
             }
         }

@@ -49,9 +49,10 @@ namespace SpiceSharp.Simulations
             var timeConfig = Configurations.GetValue<TimeConfiguration>().ThrowIfNull("time configuration");
 
             // Start our statistics
-            TimeSimulationStatistics.TransientTime.Start();
-            var startIters = BaseSimulationStatistics.Iterations;
-            var startselapsed = BaseSimulationStatistics.SolveTime.Elapsed;
+            Statistics.TransientTime.Start();
+            var stats = ((IKeepsStatistics<BiasingSimulationStatistics>)this).Statistics;
+            var startIters = stats.Iterations;
+            var startselapsed = stats.SolveTime.Elapsed;
 
             try
             {
@@ -69,9 +70,9 @@ namespace SpiceSharp.Simulations
                     if (TimeState.Method.Time >= timeConfig.FinalTime)
                     {
                         // Keep our statistics
-                        TimeSimulationStatistics.TransientTime.Stop();
-                        TimeSimulationStatistics.TransientIterations += BaseSimulationStatistics.Iterations - startIters;
-                        TimeSimulationStatistics.TransientSolveTime += BaseSimulationStatistics.SolveTime.Elapsed - startselapsed;
+                        Statistics.TransientTime.Stop();
+                        Statistics.TransientIterations += stats.Iterations - startIters;
+                        Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
                         return;
@@ -88,20 +89,20 @@ namespace SpiceSharp.Simulations
 
                         // Try to solve the new point
                         var converged = TimeIterate(timeConfig.TranMaxIterations);
-                        TimeSimulationStatistics.TimePoints++;
+                        Statistics.TimePoints++;
 
                         // Did we fail to converge to a solution?
                         if (!converged)
                         {
                             TimeState.Method.NonConvergence(this, out newDelta);
-                            TimeSimulationStatistics.Rejected++;
+                            Statistics.Rejected++;
                         }
                         else
                         {
                             // If our integration method approves of our solution, continue to the next timepoint
                             if (TimeState.Method.Evaluate(this, out newDelta))
                                 break;
-                            TimeSimulationStatistics.Rejected++;
+                            Statistics.Rejected++;
                         }
                     }
                 }
@@ -109,9 +110,9 @@ namespace SpiceSharp.Simulations
             catch (CircuitException ex)
             {
                 // Keep our statistics
-                TimeSimulationStatistics.TransientTime.Stop();
-                TimeSimulationStatistics.TransientIterations += BaseSimulationStatistics.Iterations - startIters;
-                TimeSimulationStatistics.TransientSolveTime += BaseSimulationStatistics.SolveTime.Elapsed - startselapsed;
+                Statistics.TransientTime.Stop();
+                Statistics.TransientIterations += stats.Iterations - startIters;
+                Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
             }
         }

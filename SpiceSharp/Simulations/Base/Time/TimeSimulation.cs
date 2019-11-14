@@ -10,7 +10,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class TimeSimulation : BiasingSimulation,
         IBehavioral<ITimeBehavior>, IBehavioral<IAcceptBehavior>,
-        IStateful<ITimeSimulationState>
+        IStateful<ITimeSimulationState>,
+        IKeepsStatistics<TimeSimulationStatistics>
     {
         /// <summary>
         /// Time-domain behaviors.
@@ -21,9 +22,12 @@ namespace SpiceSharp.Simulations
         private bool _shouldReorder = true, _useIc;
 
         /// <summary>
-        /// Time simulation statistics.
+        /// Gets the statistics.
         /// </summary>
-        protected TimeSimulationStatistics TimeSimulationStatistics { get; }
+        /// <value>
+        /// The statistics.
+        /// </value>
+        public new TimeSimulationStatistics Statistics { get; }
 
         /// <summary>
         /// Gets the state of the time.
@@ -48,8 +52,7 @@ namespace SpiceSharp.Simulations
         protected TimeSimulation(string name) : base(name)
         {
             Configurations.Add(new TimeConfiguration());
-            TimeSimulationStatistics = new TimeSimulationStatistics();
-            Statistics.Add(TimeSimulationStatistics);
+            Statistics = new TimeSimulationStatistics();
         }
 
         /// <summary>
@@ -62,8 +65,7 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final));
-            TimeSimulationStatistics = new TimeSimulationStatistics();
-            Statistics.Add(TimeSimulationStatistics);
+            Statistics = new TimeSimulationStatistics();
             TimeState = new TimeSimulationState();
         }
 
@@ -78,8 +80,7 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Configurations.Add(new TimeConfiguration(step, final, maxStep));
-            TimeSimulationStatistics = new TimeSimulationStatistics();
-            Statistics.Add(TimeSimulationStatistics);
+            Statistics = new TimeSimulationStatistics();
             TimeState = new TimeSimulationState();
         }
 
@@ -136,7 +137,7 @@ namespace SpiceSharp.Simulations
             BiasingState.UseIc = _useIc;
             BiasingState.UseDc = true;
             Op(DcMaxIterations);
-            TimeSimulationStatistics.TimePoints++;
+            Statistics.TimePoints++;
 
             // Stop calculating the operating point
             BiasingState.UseIc = false;
@@ -207,29 +208,28 @@ namespace SpiceSharp.Simulations
                 catch (CircuitException)
                 {
                     iterno++;
-                    BaseSimulationStatistics.Iterations = iterno;
+                    base.Statistics.Iterations = iterno;
                     throw;
                 }
 
                 // Preordering is already done in the operating point calculation
-
                 if (state.Init == InitializationModes.Junction || initTransient)
                     _shouldReorder = true;
 
                 // Reorder
                 if (_shouldReorder)
                 {
-                    BaseSimulationStatistics.ReorderTime.Start();
+                    base.Statistics.ReorderTime.Start();
                     solver.OrderAndFactor();
-                    BaseSimulationStatistics.ReorderTime.Stop();
+                    base.Statistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }
                 else
                 {
                     // Decompose
-                    BaseSimulationStatistics.DecompositionTime.Start();
+                    base.Statistics.DecompositionTime.Start();
                     var success = solver.Factor();
-                    BaseSimulationStatistics.DecompositionTime.Stop();
+                    base.Statistics.DecompositionTime.Stop();
 
                     if (!success)
                     {
@@ -242,9 +242,9 @@ namespace SpiceSharp.Simulations
                 state.StoreSolution();
 
                 // Solve the equation
-                BaseSimulationStatistics.SolveTime.Start();
+                base.Statistics.SolveTime.Start();
                 solver.Solve(state.Solution);
-                BaseSimulationStatistics.SolveTime.Stop();
+                base.Statistics.SolveTime.Stop();
 
                 // Reset ground nodes
                 state.Solution[0] = 0.0;
@@ -253,7 +253,7 @@ namespace SpiceSharp.Simulations
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
                 {
-                    BaseSimulationStatistics.Iterations += iterno;
+                    base.Statistics.Iterations += iterno;
                     return false;
                 }
 
@@ -276,7 +276,7 @@ namespace SpiceSharp.Simulations
                         case InitializationModes.Float:
                             if (state.IsConvergent)
                             {
-                                BaseSimulationStatistics.Iterations += iterno;
+                                base.Statistics.Iterations += iterno;
                                 return true;
                             }
 
@@ -297,7 +297,7 @@ namespace SpiceSharp.Simulations
                             break;
 
                         default:
-                            BaseSimulationStatistics.Iterations += iterno;
+                            base.Statistics.Iterations += iterno;
                             throw new CircuitException("Could not find flag");
                     }
                 }
@@ -348,7 +348,7 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in _acceptBehaviors)
                 behavior.Accept();
             TimeState.Method.Accept(this);
-            TimeSimulationStatistics.Accepted++;
+            Statistics.Accepted++;
         }
 
         /// <summary>

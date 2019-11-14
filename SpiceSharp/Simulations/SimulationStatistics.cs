@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="Simulation" />.
     /// </summary>
-    public class SimulationStatistics : Statistics
+    public class SimulationStatistics : IStatistics
     {
         /// <summary>
         /// Gets the time spent during setup.
@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Clear all statistics
         /// </summary>
-        public override void Reset()
+        public void Reset()
         {
             SetupTime.Reset();
             ExecutionTime.Reset();
