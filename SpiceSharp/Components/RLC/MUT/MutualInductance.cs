@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Components.MutualInductanceBehaviors;

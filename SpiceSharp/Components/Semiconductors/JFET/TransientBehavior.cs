@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;

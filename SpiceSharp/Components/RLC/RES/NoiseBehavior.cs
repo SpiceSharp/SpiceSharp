@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.NoiseSources;
 
 namespace SpiceSharp.Components.ResistorBehaviors

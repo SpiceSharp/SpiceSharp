@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     public class BehaviorContainerCollection
     {
-        private readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         /// <summary>
         /// Behaviors indexed by the entity that created them.
@@ -31,7 +31,7 @@ namespace SpiceSharp.Behaviors
         {
             get
             {
-                Lock.EnterReadLock();
+                _lock.EnterReadLock();
                 try
                 {
                     var count = 0;
@@ -41,7 +41,7 @@ namespace SpiceSharp.Behaviors
                 }
                 finally
                 {
-                    Lock.ExitReadLock();
+                    _lock.ExitReadLock();
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace SpiceSharp.Behaviors
         {
             get
             {
-                Lock.EnterReadLock();
+                _lock.EnterReadLock();
                 try
                 {
                     foreach (var key in _entityBehaviors.Keys)
@@ -69,7 +69,7 @@ namespace SpiceSharp.Behaviors
                 }
                 finally
                 {
-                    Lock.ExitReadLock();
+                    _lock.ExitReadLock();
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace SpiceSharp.Behaviors
         {
             get
             {
-                Lock.EnterReadLock();
+                _lock.EnterReadLock();
                 try
                 {
                     if (_entityBehaviors.TryGetValue(name, out var result))
@@ -100,7 +100,7 @@ namespace SpiceSharp.Behaviors
                 }
                 finally
                 {
-                    Lock.ExitReadLock();
+                    _lock.ExitReadLock();
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace SpiceSharp.Behaviors
         {
             id.ThrowIfNull(nameof(id));
             behaviors.ThrowIfNull(nameof(behaviors));
-            Lock.EnterReadLock();
+            _lock.EnterReadLock();
             try
             {
                 // First see if we already have a behavior
@@ -161,10 +161,10 @@ namespace SpiceSharp.Behaviors
             }
             finally
             {
-                Lock.ExitReadLock();
+                _lock.ExitReadLock();
             }
 
-            Lock.EnterWriteLock();
+            _lock.EnterWriteLock();
             try
             {
                 _entityBehaviors.Add(id, behaviors);
@@ -176,7 +176,7 @@ namespace SpiceSharp.Behaviors
             }
             finally
             {
-                Lock.ExitWriteLock();
+                _lock.ExitWriteLock();
             }
         }
 
@@ -197,7 +197,7 @@ namespace SpiceSharp.Behaviors
         /// </returns>
         public virtual BehaviorList<T> GetBehaviorList<T>() where T : IBehavior
         {
-            Lock.EnterReadLock();
+            _lock.EnterReadLock();
             try
             {
                 if (_behaviorLists.TryGetValue(typeof(T), out var list))
@@ -206,7 +206,7 @@ namespace SpiceSharp.Behaviors
             }
             finally
             {
-                Lock.ExitReadLock();
+                _lock.ExitReadLock();
             }
         }
 
@@ -218,14 +218,14 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public virtual bool TryGetBehaviors(string name, out IBehaviorContainer ebd)
         {
-            Lock.EnterReadLock();
+            _lock.EnterReadLock();
             try
             {
                 return _entityBehaviors.TryGetValue(name, out ebd);
             }
             finally
             {
-                Lock.ExitReadLock();
+                _lock.ExitReadLock();
             }
         }
 
@@ -238,14 +238,14 @@ namespace SpiceSharp.Behaviors
         /// </returns>
         public virtual bool ContainsKey(string name)
         {
-            Lock.EnterReadLock();
+            _lock.EnterReadLock();
             try
             {
                 return _entityBehaviors.ContainsKey(name);
             }
             finally
             {
-                Lock.ExitReadLock();
+                _lock.ExitReadLock();
             }
         }
 
@@ -264,7 +264,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         public virtual void Clear()
         {
-            Lock.EnterWriteLock();
+            _lock.EnterWriteLock();
             try
             {
                 _behaviorLists.Clear();
@@ -272,7 +272,7 @@ namespace SpiceSharp.Behaviors
             }
             finally
             {
-                Lock.ExitWriteLock();
+                _lock.ExitWriteLock();
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Entities;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Template for a behavior.

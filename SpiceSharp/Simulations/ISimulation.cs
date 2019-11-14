@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
-using System;
 
 namespace SpiceSharp.Simulations
 {

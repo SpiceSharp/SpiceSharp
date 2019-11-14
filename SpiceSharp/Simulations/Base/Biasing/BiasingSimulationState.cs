@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Algebra;
-using System;
 
 namespace SpiceSharp.Simulations
 {

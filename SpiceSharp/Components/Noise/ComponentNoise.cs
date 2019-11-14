@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 

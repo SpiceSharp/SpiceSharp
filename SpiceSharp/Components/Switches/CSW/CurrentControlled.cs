@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors

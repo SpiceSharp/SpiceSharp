@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Entities;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;

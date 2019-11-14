@@ -1,7 +1,5 @@
-﻿using SpiceSharp.Entities;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using System;
 using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.ResistorBehaviors
