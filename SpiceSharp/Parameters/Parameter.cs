@@ -20,13 +20,10 @@ namespace SpiceSharp
         public virtual void CopyFrom(Parameter<T> source)
         {
             source.ThrowIfNull(nameof(source));
-
             if (source.GetType() == GetType())
                 Reflection.CopyPropertiesAndFields(source, this);
-            else if (source is Parameter<T> p)
-                Value = p.Value;
             else
-                throw new CircuitException("Cannot copy: source is not a Parameter");
+                Value = source.Value;
         }
 
         /// <summary>

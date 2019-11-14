@@ -10,12 +10,12 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// The row index.
         /// </summary>
-        public int Row;
+        public readonly int Row;
 
         /// <summary>
         /// The column index.
         /// </summary>
-        public int Column;
+        public readonly int Column;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MatrixLocation"/> struct.

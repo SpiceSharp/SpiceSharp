@@ -88,30 +88,14 @@ namespace SpiceSharp.Simulations
             public ISparseSolver<double> Solver { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
-            /// </summary>
-            public BiasingSimulationState()
-            {
-                Solver = LUHelper.CreateSparseRealSolver();
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
+            /// Initializes a new instance of the <see cref="BiasingSimulationState" /> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            public BiasingSimulationState(ISparseSolver<double> solver)
+            /// <param name="map">The map.</param>
+            public BiasingSimulationState(ISparseSolver<double> solver, IVariableMap map)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
-            }
-
-            /// <summary>
-            /// Initializes the specified simulation.
-            /// </summary>
-            /// <param name="simulation">The simulation.</param>
-            public void Initialize(ISimulation simulation)
-            {
-                simulation.ThrowIfNull(nameof(simulation));
-                Map = new VariableMap(simulation.Variables.Ground);
+                Map = map.ThrowIfNull(nameof(map));
             }
 
             /// <summary>
@@ -132,17 +116,6 @@ namespace SpiceSharp.Simulations
                 UseDc = true;
                 UseIc = false;
                 IsConvergent = true;
-            }
-
-            /// <summary>
-            /// Unsetup the state.
-            /// </summary>
-            public void Unsetup()
-            {
-                Solution = null;
-                OldSolution = null;
-                Solver.Clear();
-                Map = null;
             }
 
             /// <summary>

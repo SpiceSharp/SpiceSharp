@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
@@ -87,5 +88,24 @@ namespace SpiceSharp.Simulations
         /// Gets the nodesets.
         /// </summary>
         public Dictionary<string, double> Nodesets { get; } = new Dictionary<string, double>();
+
+        /// <summary>
+        /// Gets or sets the solver used to solve equations. If <c>null</c>, a default solver will be used.
+        /// </summary>
+        /// <value>
+        /// The solver.
+        /// </value>
+        [ParameterName("biasing.solver"), ParameterInfo("The solver used to solve equations.")]
+        public ISparseSolver<double> Solver { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mapper used to map <see cref="Variable"/> to equation indices. If <c>null</c>,
+        /// a default mapper will be used.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        [ParameterName("biasing.map"), ParameterInfo("The mapper used to map variables to node indices.")]
+        public IVariableMap Map { get; set; }
     }
 }

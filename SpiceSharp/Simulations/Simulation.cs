@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
-        public BehaviorContainerCollection EntityBehaviors { get; protected set; }
+        public BehaviorContainerCollection EntityBehaviors { get; private set; }
 
         /// <summary>
         /// A reference to the regular simulation statistics (cached)
@@ -166,6 +166,7 @@ namespace SpiceSharp.Simulations
                 Variables = cconfig.Variables ?? new VariableSet();
             else
                 Variables = new VariableSet();
+            Variables.Clear();
 
             // Create all entity behaviors
             CreateBehaviors(entities);
@@ -176,13 +177,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected virtual void Unsetup()
         {
-            // Clear all parameters
-            EntityBehaviors.Clear();
-            EntityBehaviors = null;
-
-            // Clear all nodes
-            Variables.Clear();
-            Variables = null;
         }
 
         /// <summary>
@@ -207,43 +201,43 @@ namespace SpiceSharp.Simulations
 
         #region Methods for raising events
         /// <summary>
-        /// Raises the <see cref="E:ExportSimulationData" /> event.
+        /// Raises the <see cref="ExportSimulationData" /> event.
         /// </summary>
         /// <param name="args">The <see cref="ExportDataEventArgs"/> instance containing the event data.</param>
         protected virtual void OnExport(ExportDataEventArgs args) => ExportSimulationData?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeSetup" /> event.
+        /// Raises the <see cref="BeforeSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeExecute" /> event.
+        /// Raises the <see cref="BeforeExecute" /> event.
         /// </summary>
         /// <param name="args">The <see cref="BeforeExecuteEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeExecute(BeforeExecuteEventArgs args) => BeforeExecute?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterSetup" /> event.
+        /// Raises the <see cref="AfterSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterSetup" /> event.
+        /// Raises the <see cref="AfterSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterExecute(AfterExecuteEventArgs args) => AfterExecute?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeUnsetup" /> event.
+        /// Raises the <see cref="BeforeUnsetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeUnsetup(EventArgs args) => BeforeUnsetup?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterUnsetup" /> event.
+        /// Raises the <see cref="AfterUnsetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);

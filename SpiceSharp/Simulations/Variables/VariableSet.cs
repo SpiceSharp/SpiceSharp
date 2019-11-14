@@ -77,17 +77,8 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="VariableSet"/> class.
         /// </summary>
         public VariableSet()
+            : this(EqualityComparer<string>.Default)
         {
-            // Setup the ground node
-            Ground = new Variable("0", 0);
-            Map = new Dictionary<string, Variable>
-            {
-                {Ground.Name, Ground}, 
-                {"GND", Ground}
-            };
-
-            // Unlock
-            _locked = false;
         }
 
         /// <summary>

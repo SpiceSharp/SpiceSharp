@@ -1,4 +1,8 @@
-﻿namespace SpiceSharp.Simulations
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
+using System.Numerics;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A configuration for a <see cref="FrequencySimulation" />.
@@ -25,6 +29,25 @@
         /// Gets or sets the frequency sweep.
         /// </summary>
         public Sweep<double> FrequencySweep { get; set; }
+
+        /// <summary>
+        /// Gets or sets the solver used to solve equations. If <c>null</c>, a default solver will be used.
+        /// </summary>
+        /// <value>
+        /// The solver.
+        /// </value>
+        [ParameterName("complex.solver"), ParameterInfo("The solver used to solve equations.")]
+        public ISparseSolver<Complex> Solver { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mapper used to map <see cref="Variable"/> to equation indices. If <c>null</c>,
+        /// a default mapper will be used.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        [ParameterName("complex.map"), ParameterInfo("The mapper used to map variables to node indices.")]
+        public IVariableMap Map { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.

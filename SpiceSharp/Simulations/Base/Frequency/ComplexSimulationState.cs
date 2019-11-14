@@ -40,33 +40,17 @@ namespace SpiceSharp.Simulations
             /// <value>
             /// The map.
             /// </value>
-            public IVariableMap Map { get; private set; }
+            public IVariableMap Map { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
-            /// </summary>
-            public ComplexSimulationState()
-            {
-                Solver = LUHelper.CreateSparseComplexSolver();
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
+            /// Initializes a new instance of the <see cref="ComplexSimulationState" /> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            public ComplexSimulationState(ISparseSolver<Complex> solver)
+            /// <param name="map">The map.</param>
+            public ComplexSimulationState(ISparseSolver<Complex> solver, IVariableMap map)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
-            }
-
-            /// <summary>
-            /// Initializes the specified simulation.
-            /// </summary>
-            /// <param name="simulation">The simulation.</param>
-            public void Initialize(ISimulation simulation)
-            {
-                simulation.ThrowIfNull(nameof(simulation));
-                Map = new VariableMap(simulation.Variables.Ground);
+                Map = map.ThrowIfNull(nameof(map));
             }
 
             /// <summary>
@@ -76,16 +60,6 @@ namespace SpiceSharp.Simulations
             public void Setup(ISimulation simulation)
             {
                 Solution = new DenseVector<Complex>(Solver.Size);
-            }
-
-            /// <summary>
-            /// Unsetup the state.
-            /// </summary>
-            public void Unsetup()
-            {
-                Solution = null;
-                Solver.Clear();
-                Map = null;
             }
         }
     }

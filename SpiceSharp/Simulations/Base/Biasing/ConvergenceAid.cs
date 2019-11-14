@@ -136,17 +136,5 @@ namespace SpiceSharp.Simulations
                     Rhs.Value = Value;
             }
         }
-
-        /// <summary>
-        /// Destroys the convergence aid.
-        /// </summary>
-        public virtual void Unsetup()
-        {
-            // Clear all variables
-            Variables = null;
-            Solver = null;
-            Diagonal = null;
-            Rhs = null;
-        }
     }
 }

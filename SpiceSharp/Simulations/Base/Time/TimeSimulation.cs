@@ -160,8 +160,6 @@ namespace SpiceSharp.Simulations
 
             // Destroy the initial conditions
             AfterLoad -= LoadInitialConditions;
-            foreach (var ic in _initialConditions)
-                ic.Unsetup();
             _initialConditions.Clear();
 
             base.Unsetup();

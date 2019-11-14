@@ -80,7 +80,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected BiasingSimulationState BiasingState { get; }
+        protected BiasingSimulationState BiasingState { get; private set; }
         
         /// <summary>
         /// Gets the maximum number of allowed iterations for DC analysis.
@@ -122,7 +122,6 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new BiasingConfiguration());
             Statistics = new BiasingSimulationStatistics();
-            BiasingState = new BiasingSimulationState();
         }
 
         /// <summary>
@@ -140,19 +139,10 @@ namespace SpiceSharp.Simulations
             circuit.ThrowIfNull(nameof(circuit));
 
             // Get behaviors and configuration data
-            var config = Configurations.GetValue<BiasingConfiguration>().ThrowIfNull("base configuration");
+            var config = Configurations.GetValue<BiasingConfiguration>();
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
-
-            // Create the state for this simulation
-            ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
-            BiasingState.Gmin = config.Gmin;
-            _isPreordered = false;
-            _shouldReorder = true;
-            /* var strategy = _state.Solver.Strategy;
-            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
 
             // Setup the rest of the circuit.
             base.Setup(circuit);
@@ -175,7 +165,20 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)
         {
-            BiasingState.Initialize(this);
+            var config = Configurations.GetValue<BiasingConfiguration>();
+
+            // Create the state for this simulation
+            ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
+            BiasingState = new BiasingSimulationState(
+                config.Solver ?? Algebra.LUHelper.CreateSparseRealSolver(),
+                config.Map ?? new VariableMap(Variables.Ground));
+            BiasingState.Gmin = config.Gmin;
+            _isPreordered = false;
+            _shouldReorder = true;
+            /* var strategy = _state.Solver.Strategy;
+            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
+
             base.CreateBehaviors(entities);
         }
 
@@ -218,12 +221,8 @@ namespace SpiceSharp.Simulations
 
             // Remove nodeset
             AfterLoad -= LoadNodeSets;
-            foreach (var aid in _nodesets)
-                aid.Unsetup();
             _nodesets.Clear();
 
-            // Clear the state
-            BiasingState.Unsetup();
             _realStateLoadArgs = null;
 
             // Remove behavior and configuration references

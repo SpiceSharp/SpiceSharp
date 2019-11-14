@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The complex simulation state.
         /// </value>
-        protected ComplexSimulationState ComplexState { get; }
+        protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
         /// Gets the frequency sweep.
@@ -78,7 +78,6 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new FrequencyConfiguration());
             Statistics = new ComplexSimulationStatistics();
-            ComplexState = new ComplexSimulationState();
         }
 
         /// <summary>
@@ -91,7 +90,6 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
             Statistics = new ComplexSimulationStatistics();
-            ComplexState = new ComplexSimulationState();
         }
 
         /// <summary>
@@ -111,13 +109,6 @@ namespace SpiceSharp.Simulations
             // Get behaviors, configurations and states
             var config = Configurations.GetValue<FrequencyConfiguration>();
             FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
-
-            ModifiedNodalAnalysisHelper<Complex>.Magnitude = ComplexMagnitude;
-
-            // Create the state for complex numbers
-            /* var strategy = ComplexState.Solver.Strategy;
-            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
             
             // Setup the rest of the behaviors
             base.Setup(entities);
@@ -143,7 +134,17 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)
         {
-            ComplexState.Initialize(this);
+            var config = Configurations.GetValue<FrequencyConfiguration>();
+
+            ModifiedNodalAnalysisHelper<Complex>.Magnitude = ComplexMagnitude;
+            ComplexState = new ComplexSimulationState(
+                config.Solver ?? Algebra.LUHelper.CreateSparseComplexSolver(),
+                config.Map ?? new VariableMap(Variables.Ground)
+                );
+            /* var strategy = ComplexState.Solver.Strategy;
+            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
+            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
+
             base.CreateBehaviors(entities);
         }
 
@@ -166,9 +167,6 @@ namespace SpiceSharp.Simulations
             // Remove references
             _frequencyBehaviors = null;
             _frequencyUpdateBehaviors = null;
-
-            // Remove the state
-            ComplexState.Unsetup();
 
             // Configuration
             FrequencySweep = null;
