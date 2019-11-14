@@ -110,8 +110,6 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new BiasingConfiguration());
             BaseSimulationStatistics = new BiasingSimulationStatistics();
             Statistics.Add(BaseSimulationStatistics);
-
-            // Create our states
             BiasingState = new BiasingSimulationState();
             States.Add<IBiasingSimulationState>(BiasingState);
         }

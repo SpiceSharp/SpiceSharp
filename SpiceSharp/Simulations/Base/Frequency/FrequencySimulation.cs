@@ -66,11 +66,6 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new FrequencyConfiguration());
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
             Statistics.Add(FrequencySimulationStatistics);
-
-            // Add behavior types in the order they are (usually) called
-            Types.Add(typeof(IFrequencyBehavior));
-            Types.Add(typeof(IFrequencyUpdateBehavior));
-
             ComplexState = new ComplexSimulationState();
             States.Add<IComplexSimulationState>(ComplexState);
         }
@@ -86,11 +81,6 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
             Statistics.Add(FrequencySimulationStatistics);
-
-            // Add behavior types in the order they are (usually) called
-            Types.Add(typeof(IFrequencyBehavior));
-            Types.Add(typeof(IFrequencyUpdateBehavior));
-
             ComplexState = new ComplexSimulationState();
             States.Add<IComplexSimulationState>(ComplexState);
         }

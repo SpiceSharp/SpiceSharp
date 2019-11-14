@@ -103,15 +103,6 @@ namespace SpiceSharp.Simulations
         protected SimulationStatistics SimulationStatistics { get; } = new SimulationStatistics();
 
         /// <summary>
-        /// Gets the behavior types in the order that they are called.
-        /// </summary>
-        /// <remarks>
-        /// The order is important for establishing dependencies. A behavior that is called first should
-        /// not depend on any other behaviors!
-        /// </remarks>
-        protected List<Type> Types { get; } = new List<Type>(6);
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>

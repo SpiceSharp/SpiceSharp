@@ -34,10 +34,6 @@ namespace SpiceSharp.Simulations
         public Noise(string name) : base(name)
         {
             Configurations.Add(new NoiseConfiguration());
-            
-            // Add behavior types in the order they are (usually) called
-            Types.Add(typeof(INoiseBehavior));
-
             NoiseState = new NoiseSimulationState();
             States.Add<INoiseSimulationState>(NoiseState);
         }
@@ -53,10 +49,6 @@ namespace SpiceSharp.Simulations
             : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, null, input));
-
-            // Add behavior types in the order they are (usually) called
-            Types.Add(typeof(INoiseBehavior));
-
             NoiseState = new NoiseSimulationState();
             States.Add<INoiseSimulationState>(NoiseState);
         }
@@ -73,10 +65,6 @@ namespace SpiceSharp.Simulations
             : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, reference, input));
-
-            // Add behavior types in the order they are (usually) called
-            Types.Add(typeof(INoiseBehavior));
-
             NoiseState = new NoiseSimulationState();
             States.Add<INoiseSimulationState>(NoiseState);
         }

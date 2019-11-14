@@ -42,13 +42,6 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new TimeConfiguration());
             TimeSimulationStatistics = new TimeSimulationStatistics();
             Statistics.Add(TimeSimulationStatistics);
-
-            // Add the behavior in the order they are (usually) called
-            Types.AddRange(new []
-            {
-                typeof(ITimeBehavior),
-                typeof(IAcceptBehavior)
-            });
         }
 
         /// <summary>
@@ -63,13 +56,6 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new TimeConfiguration(step, final));
             TimeSimulationStatistics = new TimeSimulationStatistics();
             Statistics.Add(TimeSimulationStatistics);
-
-            // Add the behavior in the order they are (usually) called
-            Types.AddRange(new []
-            {
-                typeof(ITimeBehavior),
-                typeof(IAcceptBehavior)
-            });
 
             TimeState = new TimeSimulationState();
             States.Add<ITimeSimulationState>(TimeState);
@@ -88,14 +74,6 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new TimeConfiguration(step, final, maxStep));
             TimeSimulationStatistics = new TimeSimulationStatistics();
             Statistics.Add(TimeSimulationStatistics);
-
-            // Add the behavior in the order they are (usually) called
-            Types.AddRange(new []
-            {
-                typeof(ITimeBehavior),
-                typeof(IAcceptBehavior)
-            });
-
             TimeState = new TimeSimulationState();
             States.Add<ITimeSimulationState>(TimeState);
         }
