@@ -12,7 +12,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IBehavioral{T}" />
     public abstract partial class BiasingSimulation : Simulation,
         IBehavioral<IBiasingBehavior>, IBehavioral<IBiasingUpdateBehavior>,
-        IBehavioral<ITemperatureBehavior>
+        IBehavioral<ITemperatureBehavior>,
+        IStateful<IBiasingSimulationState>
     {
         /// <summary>
         /// Gets the variable that causes issues.
@@ -101,6 +102,14 @@ namespace SpiceSharp.Simulations
         protected BiasingSimulationStatistics BaseSimulationStatistics { get; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        public IBiasingSimulationState State => BiasingState;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
@@ -111,8 +120,13 @@ namespace SpiceSharp.Simulations
             BaseSimulationStatistics = new BiasingSimulationStatistics();
             Statistics.Add(BaseSimulationStatistics);
             BiasingState = new BiasingSimulationState();
-            States.Add<IBiasingSimulationState>(BiasingState);
         }
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        public void GetState(out IBiasingSimulationState state) => state = BiasingState;
 
         /// <summary>
         /// Set up the simulation.
@@ -133,7 +147,7 @@ namespace SpiceSharp.Simulations
             BiasingState.Gmin = config.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
-            /* var strategy = BiasingState.Solver.Strategy;
+            /* var strategy = _state.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
             strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
 

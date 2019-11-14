@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             _collectorNode = ComplexState.Map[context.Nodes[0]];
             _baseNode = ComplexState.Map[context.Nodes[1]];
             _emitterNode = ComplexState.Map[context.Nodes[2]];

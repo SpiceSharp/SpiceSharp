@@ -18,8 +18,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
             foreach (var sim in simulations)
             {
-                var state = parent.States.GetValue<ITimeSimulationState>();
-                sim.States.Add(state);
+                if (sim.Top is IStateful<ITimeSimulationState> t)
+                    sim.States.Add(t.State);
             }
         }
     }

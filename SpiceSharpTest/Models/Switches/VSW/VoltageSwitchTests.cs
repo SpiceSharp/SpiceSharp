@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Models
 
             // Create the simulation, exports and references
             var dc = new DC("DC", "V1", -3, 3, 10e-3);
-            Export<double>[] exports = { new RealVoltageExport(dc, "out") };
+            IExport<double>[] exports = { new RealVoltageExport(dc, "out") };
             double[][] references =
             {
                 new[]
@@ -214,8 +214,8 @@ namespace SpiceSharpTest.Models
                 );
 
             // Build simulation, exports and references
-            var transient = new Transient("Tran 1", 0.1e-3, 3e-3);
-            Export<double>[] exports = { new GenericExport<double>(transient, () => transient.States.GetValue<ITimeSimulationState>().Method.Time),  new RealVoltageExport(transient, "OUT") };
+            var tran = new Transient("Tran 1", 0.1e-3, 3e-3);
+            IExport<double>[] exports = { new GenericExport<double>(tran, () => tran.State.Method.Time),  new RealVoltageExport(tran, "OUT") };
             double[][] references =
             {
                 new[]
@@ -273,7 +273,7 @@ namespace SpiceSharpTest.Models
                     3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00
                 }
             };
-            AnalyzeTransient(transient, ckt, exports, references);
+            AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }
 

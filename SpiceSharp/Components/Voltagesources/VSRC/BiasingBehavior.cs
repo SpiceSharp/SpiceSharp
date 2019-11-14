@@ -88,8 +88,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             }
 
             // Connections
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            context.States.TryGetValue(out _timeState);
+            BiasingState = context.GetState<IBiasingSimulationState>();
+            context.TryGetState(out _timeState);
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);

@@ -28,7 +28,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
 
             // Create exports
-            var exports = new Export<double>[1];
+            var exports = new IExport<double>[1];
             exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
@@ -61,7 +61,7 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
             tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
-            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
             // Run
@@ -105,7 +105,7 @@ namespace SpiceSharpTest.Models
                     ((IBiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
-            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
             // Run
@@ -152,7 +152,7 @@ namespace SpiceSharpTest.Models
                     ((IBiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
-            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
             // Run
@@ -184,7 +184,7 @@ namespace SpiceSharpTest.Models
             var config = tran.Configurations.GetValue<TimeConfiguration>();
             config.Method = new Gear();
             config.InitialConditions["OUT"] = 0.0;
-            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
             // Run
@@ -211,7 +211,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 1.0e6, 10));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
+            IExport<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
 
             // Create references
             Func<double, Complex>[] references = { f => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };

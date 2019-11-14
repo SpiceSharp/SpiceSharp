@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             context.Nodes.ThrowIfNot("nodes", 2);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             var load = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();

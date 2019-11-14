@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             _posNode = ComplexState.Map[context.Nodes[0]];
             _negNode = ComplexState.Map[context.Nodes[1]];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, null, new[] { _posNode, _negNode });

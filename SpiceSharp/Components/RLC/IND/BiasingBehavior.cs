@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             context.Nodes.ThrowIfNot("nodes", 2);
 
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);

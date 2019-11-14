@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             context.Nodes.ThrowIfNot("nodes", 3);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-            context.States.TryGetValue(out _timeState);
+            context.TryGetState(out _timeState);
             _drainNode = BiasingState.Map[context.Nodes[0]];
             _gateNode = BiasingState.Map[context.Nodes[1]];
             _sourceNode = BiasingState.Map[context.Nodes[2]];

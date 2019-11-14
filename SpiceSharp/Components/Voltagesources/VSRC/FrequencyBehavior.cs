@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Connections
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             _posNode = ComplexState.Map[context.Nodes[0]];
             _negNode = ComplexState.Map[context.Nodes[1]];
             _brNode = ComplexState.Map[Branch];

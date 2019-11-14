@@ -106,7 +106,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
                 Method = new CurrentControlled(ctx);
             else
                 Method = new VoltageControlled(context);
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();

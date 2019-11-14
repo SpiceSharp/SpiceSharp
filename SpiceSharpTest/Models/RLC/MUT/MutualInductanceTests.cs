@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Models
             tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["1"] = 0;
 
             // Create exports
-            var exports = new Export<double>[1];
+            var exports = new IExport<double>[1];
             exports[0] = new RealVoltageExport(tran, "OUT");
 
             // Create references
@@ -85,7 +85,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(1, 1e8, 10));
 
             // Create exports
-            var exports = new Export<Complex>[1];
+            var exports = new IExport<Complex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references

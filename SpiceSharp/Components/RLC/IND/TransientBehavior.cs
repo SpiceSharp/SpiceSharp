@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 new MatrixLocation(_branchEq, _branchEq)
             }, new[] { _branchEq });
 
-            var method = context.States.GetValue<ITimeSimulationState>().Method;
+            var method = context.GetState<ITimeSimulationState>().Method;
             _flux = method.CreateDerivative();
         }
 

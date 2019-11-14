@@ -68,8 +68,8 @@ namespace SpiceSharp.Components
         public void Bind(ComponentBindingContext context, params Variable[] nodes)
         {
             context.ThrowIfNull(nameof(context));
-            _cstate = context.States.GetValue<IComplexSimulationState>();
-            _nstate = context.States.GetValue<INoiseSimulationState>();
+            _cstate = context.GetState<IComplexSimulationState>();
+            _nstate = context.GetState<INoiseSimulationState>();
             
             foreach (var generator in Generators)
                 generator.Bind(context, nodes);

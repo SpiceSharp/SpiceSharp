@@ -26,7 +26,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
 
             // Create exports
-            var exports = new Export<double>[1];
+            var exports = new IExport<double>[1];
             exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
@@ -56,7 +56,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
 
             // Create exports
-            var exports = new Export<Complex>[1];
+            var exports = new IExport<Complex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
@@ -95,7 +95,7 @@ namespace SpiceSharpTest.Models
             tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
 
             // Create exports
-            var exports = new Export<double>[1];
+            var exports = new IExport<double>[1];
             exports[0] = new RealPropertyExport(tran, "C1", "v");
 
             // Create reference function

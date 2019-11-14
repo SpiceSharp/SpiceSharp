@@ -10,7 +10,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class FrequencySimulation : BiasingSimulation,
-        IBehavioral<IFrequencyBehavior>, IBehavioral<IFrequencyUpdateBehavior>
+        IBehavioral<IFrequencyBehavior>, IBehavioral<IFrequencyUpdateBehavior>,
+        IStateful<IComplexSimulationState>
     {
         /// <summary>
         /// Private variables
@@ -57,6 +58,14 @@ namespace SpiceSharp.Simulations
         protected Sweep<double> FrequencySweep { get; private set; }
 
         /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        public new IComplexSimulationState State => ComplexState;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
@@ -67,7 +76,6 @@ namespace SpiceSharp.Simulations
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
             Statistics.Add(FrequencySimulationStatistics);
             ComplexState = new ComplexSimulationState();
-            States.Add<IComplexSimulationState>(ComplexState);
         }
 
         /// <summary>
@@ -82,8 +90,13 @@ namespace SpiceSharp.Simulations
             FrequencySimulationStatistics = new ComplexSimulationStatistics();
             Statistics.Add(FrequencySimulationStatistics);
             ComplexState = new ComplexSimulationState();
-            States.Add<IComplexSimulationState>(ComplexState);
         }
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        public void GetState(out IComplexSimulationState state) => state = ComplexState;
 
         /// <summary>
         /// Set up the simulation.
@@ -226,6 +239,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
+            // Support legacy models
             BiasingState.UseDc = false;
             Load();
             foreach (var behavior in _frequencyBehaviors)

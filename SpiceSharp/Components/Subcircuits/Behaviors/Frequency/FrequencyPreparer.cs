@@ -16,25 +16,33 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="parameters">The parameters.</param>
         public static void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
-            var state = parent.States.GetValue<IComplexSimulationState>();
             if (parameters.TryGetValue<FrequencyParameters>(out var fp) &&
                 (fp.ParallelLoad || fp.ParallelSolve) && simulations.Length > 1)
             {
                 if (fp.ParallelSolve)
                 {
                     foreach (var sim in simulations)
-                        sim.States.Add<IComplexSimulationState>(new SolveComplexState(state));
+                    {
+                        if (sim.Top is IStateful<IComplexSimulationState> t)
+                            sim.States.Add<IComplexSimulationState>(new SolveComplexState(t.State));
+                    }
                 }
                 else
                 {
                     foreach (var sim in simulations)
-                        sim.States.Add<IComplexSimulationState>(new LoadComplexState(state));
+                    {
+                        if (sim.Top is IStateful<IComplexSimulationState> t)
+                            sim.States.Add<IComplexSimulationState>(new LoadComplexState(t.State));
+                    }
                 }
             }
             else
             {
                 foreach (var sim in simulations)
-                    sim.States.Add(state);
+                {
+                    if (sim.Top is IStateful<IComplexSimulationState> t)
+                        sim.States.Add(t.State);
+                }
             }
         }
     }

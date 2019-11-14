@@ -5,8 +5,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export real properties.
     /// </summary>
-    /// <seealso cref="Export{T}" />
-    public class RealPropertyExport : Export<double>
+    /// <seealso cref="Export{S, T}" />
+    public class RealPropertyExport : Export<Simulation, double>
     {
         /// <summary>
         /// Gets the identifier of the entity.

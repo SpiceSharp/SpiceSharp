@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, MutualInductanceBindingContext context) : base(name, context) 
         {
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             var bias = context.Inductor1Behaviors.GetValue<BiasingBehavior>();
             _br1 = ComplexState.Map[bias.Branch];
             bias = context.Inductor2Behaviors.GetValue<BiasingBehavior>();

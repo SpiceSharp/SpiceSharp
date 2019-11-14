@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Models
             });
 
             // Create exports
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
                 new RealPropertyExport(dc, "V1", "i"),
                 new RealPropertyExport(dc, "V2", "i"),
@@ -312,7 +312,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 10e9, 10));
 
             // Create exports
-            var exports = new Export<Complex>[]
+            var exports = new IExport<Complex>[]
             {
                 new ComplexPropertyExport(ac, "V1", "i"),
                 new ComplexPropertyExport(ac, "V2", "i"),
@@ -468,9 +468,9 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-6, 10e-6);
 
             // Build the exports
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.States.GetValue<ITimeSimulationState>().Method.Time),
+                new GenericExport<double>(tran, () => tran.State.Method.Time),
                 new RealPropertyExport(tran, "V1", "i"),
                 new RealPropertyExport(tran, "V2", "i")
             };

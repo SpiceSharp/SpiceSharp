@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Entities
 {
     /// <summary>
-    /// Context for binding an <see cref="IBehavior"/> to an <see cref="SpiceSharp.Simulations.ISimulation"/>.
+    /// Context for binding an <see cref="IBehavior"/> to an <see cref="ISimulation"/>.
     /// </summary>
     public class BindingContext
     {
@@ -41,20 +41,43 @@ namespace SpiceSharp.Entities
         public virtual IVariableSet Variables => Simulation.Variables;
 
         /// <summary>
-        /// Gets the simulation states.
-        /// </summary>
-        /// <value>
-        /// The states.
-        /// </value>
-        public virtual TypeDictionary<ISimulationState> States => Simulation.States;
-
-        /// <summary>
         /// Gets the simulation configurations.
         /// </summary>
         /// <value>
         /// The configurations.
         /// </value>
         public virtual ParameterSetDictionary Configurations => Simulation.Configurations;
+
+        /// <summary>
+        /// Gets a simulation state.
+        /// </summary>
+        /// <typeparam name="S">The type of simulation state.</typeparam>
+        /// <returns>The simulation state.</returns>
+        public S GetState<S>() where S : ISimulationState
+        {
+            if (Simulation is IStateful<S> sim)
+                return sim.State;
+            throw new CircuitException("The simulation does not use a state of type {0}".FormatString(typeof(S)));
+        }
+
+        /// <summary>
+        /// Tries to get a simulation state.
+        /// </summary>
+        /// <typeparam name="S">The type of simulation state.</typeparam>
+        /// <param name="state">The simulation state.</param>
+        /// <returns>
+        /// <c>true</c> if the state was found; otherwise <c>false</c>.
+        /// </returns>
+        public bool TryGetState<S>(out S state) where S : ISimulationState
+        {
+            if (Simulation is IStateful<S> sim)
+            {
+                state = sim.State;
+                return true;
+            }
+            state = default;
+            return false;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BindingContext"/> class.

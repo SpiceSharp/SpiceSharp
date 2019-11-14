@@ -16,7 +16,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="parameters">The parameters.</param>
         public static void Prepare(SubcircuitSimulation[] simulations, ISimulation parent, ParameterSetDictionary parameters)
         {
-            var state = parent.States.GetValue<IBiasingSimulationState>();
             if (parameters.TryGetValue<BiasingParameters>(out var bp) &&
                 (bp.ParallelLoad || bp.ParallelSolve) &&
                 simulations.Length > 1)
@@ -24,18 +23,27 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 if (bp.ParallelSolve)
                 {
                     foreach (var sim in simulations)
-                        sim.States.Add<IBiasingSimulationState>(new SolveBiasingState(state, bp));
+                    {
+                        if (sim.Top is IStateful<IBiasingSimulationState> t)
+                            sim.States.Add<IBiasingSimulationState>(new SolveBiasingState(t.State, bp));
+                    }
                 }
                 else
                 {
                     foreach (var sim in simulations)
-                        sim.States.Add<IBiasingSimulationState>(new LoadBiasingState(state));
+                    {
+                        if (sim.Top is IStateful<IBiasingSimulationState> t)
+                        sim.States.Add<IBiasingSimulationState>(new LoadBiasingState(t.State));
+                    }
                 }
             }
             else
             {
                 foreach (var sim in simulations)
-                    sim.States.Add(state);
+                {
+                    if (sim.Top is IStateful<IBiasingSimulationState> t)
+                        sim.States.Add(t.State);
+                }
             }
         }
     }

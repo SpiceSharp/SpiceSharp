@@ -22,8 +22,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation.States.TryGetValue<ITimeSimulationState>(out var state))
-                    return state.Method.Time;
+                if (_simulation is IStateful<ITimeSimulationState> sim)
+                    return sim.State.Method.Time;
                 return double.NaN;
             }
         }
@@ -35,8 +35,9 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation.States.TryGetValue<IComplexSimulationState>(out var state))
+                if (_simulation is IStateful<IComplexSimulationState> sim)
                 {
+                    var state = sim.State;
                     if (!state.Laplace.Real.Equals(0.0))
                         return double.NaN;
                     return state.Laplace.Imaginary / 2.0 / Math.PI;
@@ -52,8 +53,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation.States.TryGetValue<IComplexSimulationState>(out var state))
-                    return state.Laplace;
+                if (_simulation is IStateful<IComplexSimulationState> sim)
+                    return sim.State.Laplace;
                 return double.NaN;
             }
         }
@@ -100,9 +101,10 @@ namespace SpiceSharp.Simulations
         public double GetVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
-
-            if (_simulation.States.TryGetValue<IBiasingSimulationState>(out var state))
+            if (_simulation is IStateful<IBiasingSimulationState> sim)
             {
+                var state = sim.State;
+
                 // Get the voltage of the positive node
                 var node = _simulation.Variables[positive];
                 var index = state.Map[node];
@@ -143,8 +145,10 @@ namespace SpiceSharp.Simulations
         public Complex GetComplexVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
-            if (_simulation.States.TryGetValue<IComplexSimulationState>(out var state))
+            if (_simulation is IStateful<IComplexSimulationState> sim)
             {
+                var state = sim.State;
+
                 // Get the voltage of the positive node
                 var node = _simulation.Variables[positive];
                 var index = state.Map[node];

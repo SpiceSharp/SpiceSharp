@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation : ISimulation
+    public abstract class Simulation : IEventfulSimulation
     {
         /// <summary>
         /// Gets the current status of the <see cref="ISimulation" />.
@@ -25,14 +25,6 @@ namespace SpiceSharp.Simulations
         /// The configuration.
         /// </value>
         public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
-
-        /// <summary>
-        /// Gets a set of <see cref="ISimulationState" /> instances used by the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The states.
-        /// </value>
-        public TypeDictionary<ISimulationState> States { get; } = new TypeDictionary<ISimulationState>();
 
         /// <summary>
         /// Gets a set of <see cref="Statistics" /> instances tracked by the <see cref="ISimulation" />.

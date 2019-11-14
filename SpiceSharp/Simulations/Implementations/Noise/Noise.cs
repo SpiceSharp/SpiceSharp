@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="FrequencySimulation" />
     public partial class Noise : FrequencySimulation,
-        IBehavioral<INoiseBehavior>
+        IBehavioral<INoiseBehavior>, IStateful<INoiseSimulationState>
     {
         /// <summary>
         /// Gets the currently active noise configuration.
@@ -21,6 +21,14 @@ namespace SpiceSharp.Simulations
         /// Gets the noise simulation state.
         /// </summary>
         protected NoiseSimulationState NoiseState { get; }
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        public new INoiseSimulationState State => NoiseState;
 
         /// <summary>
         /// Noise behaviors
@@ -35,7 +43,6 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new NoiseConfiguration());
             NoiseState = new NoiseSimulationState();
-            States.Add<INoiseSimulationState>(NoiseState);
         }
 
         /// <summary>
@@ -50,7 +57,6 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new NoiseConfiguration(output, null, input));
             NoiseState = new NoiseSimulationState();
-            States.Add<INoiseSimulationState>(NoiseState);
         }
 
         /// <summary>
@@ -66,8 +72,13 @@ namespace SpiceSharp.Simulations
         {
             Configurations.Add(new NoiseConfiguration(output, reference, input));
             NoiseState = new NoiseSimulationState();
-            States.Add<INoiseSimulationState>(NoiseState);
         }
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        public void GetState(out INoiseSimulationState state) => state = NoiseState;
 
         /// <summary>
         /// Set up the simulation.

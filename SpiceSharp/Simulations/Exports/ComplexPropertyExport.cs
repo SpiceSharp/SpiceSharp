@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export complex property values.
     /// </summary>
-    /// <seealso cref="Export{T}" />
-    public class ComplexPropertyExport : Export<Complex>
+    /// <seealso cref="Export{S, T}" />
+    public class ComplexPropertyExport : Export<Simulation, Complex>
     {
         /// <summary>
         /// Gets the identifier of the entity.

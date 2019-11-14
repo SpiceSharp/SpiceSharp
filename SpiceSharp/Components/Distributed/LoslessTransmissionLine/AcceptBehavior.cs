@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
             _tran = context.Behaviors.GetValue<TransientBehavior>();
-            _method = context.States.GetValue<ITimeSimulationState>().Method;
+            _method = context.GetState<ITimeSimulationState>().Method;
         }
 
         /// <summary>

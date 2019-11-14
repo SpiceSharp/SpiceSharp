@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="context">The context.</param>
         public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            var method = context.States.GetValue<ITimeSimulationState>().Method;
+            var method = context.GetState<ITimeSimulationState>().Method;
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
 

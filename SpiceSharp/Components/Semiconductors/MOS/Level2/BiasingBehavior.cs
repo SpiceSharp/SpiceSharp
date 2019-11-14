@@ -154,7 +154,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             context.Nodes.ThrowIfNot("nodes", 4);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-            context.States.TryGetValue(out _timeState);
+            context.TryGetState(out _timeState);
             SaturationVoltageDs = 0;
             Von = 0;
             Mode = 1;

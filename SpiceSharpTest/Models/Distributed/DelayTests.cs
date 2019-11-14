@@ -21,9 +21,9 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation
             var tran = new Transient("tran", 1e-7, 10e-5);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.States.GetValue<ITimeSimulationState>().Method.Time), 
+                new GenericExport<double>(tran, () => tran.State.Method.Time), 
                 new RealVoltageExport(tran, "in"),
                 new RealVoltageExport(tran, "out"), 
             };
@@ -113,9 +113,9 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation
             var tran = new Transient("tran", 1e-7, 10e-5);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.States.GetValue<ITimeSimulationState>().Method.Time), 
+                new GenericExport<double>(tran, () => tran.State.Method.Time), 
                 new RealVoltageExport(tran, "in"),
                 new RealVoltageExport(tran, "out"), 
             };
@@ -219,13 +219,13 @@ namespace SpiceSharpTest.Models
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(1e-3, 1e5, 5));
-            var exports = new Export<Complex>[]
+            var exports = new IExport<Complex>[]
             {
                 new ComplexVoltageExport(ac, "out")
             };
             var references = new Func<double, Complex>[]
             {
-                frequency => Complex.Exp(-ac.States.GetValue<IComplexSimulationState>().Laplace * delay)
+                frequency => Complex.Exp(-ac.State.Laplace * delay)
             };
 
             // Analyze the AC behavior

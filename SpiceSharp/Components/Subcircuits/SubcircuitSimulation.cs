@@ -10,6 +10,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class SubcircuitSimulation : LocalSimulation
     {
         /// <summary>
+        /// Gets the top simulation.
+        /// </summary>
+        /// <value>
+        /// The top simulation.
+        /// </value>
+        public ISimulation Top { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitSimulation"/> class.
         /// </summary>
         /// <param name="name">The identifier of the subcircuit simulation.</param>
@@ -21,6 +29,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             Variables = new SubcircuitVariableSet(name, parent.Variables);
             EntityBehaviors = new LocalBehaviorContainerCollection(parent.EntityBehaviors, parent);
             States = new TypeDictionary<ISimulationState>();
+
+            // We want to find the top-level subcircuit simulation to check for states and behaviors
+            Top = (parent as SubcircuitSimulation)?.Top ?? parent;
         }
     }
 }

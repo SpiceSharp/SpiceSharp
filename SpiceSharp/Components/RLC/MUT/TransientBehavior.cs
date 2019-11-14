@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="context"></param>
         public TransientBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
         {
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
             Load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
             _br1 = BiasingState.Map[Load1.Branch];
             Load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TransientBehavior>();

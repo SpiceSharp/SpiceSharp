@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            var state = context.States.GetValue<IComplexSimulationState>();
+            var state = context.GetState<IComplexSimulationState>();
             _posNode = state.Map[context.Nodes[0]];
             _negNode = state.Map[context.Nodes[1]];
             ComplexElements = new ElementSet<Complex>(state.Solver, new[] {

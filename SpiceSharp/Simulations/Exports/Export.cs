@@ -5,8 +5,9 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for exporting data for a simulation.
     /// </summary>
+    /// <typeparam name="S">The simulation for which the export works.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract class Export<T>
+    public abstract class Export<S, T> : IExport<T> where S : IEventfulSimulation
     {
         /// <summary>
         /// Returns true if the exporter is currently valid.
@@ -29,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the simulation from which the data needs to be extracted.
         /// </summary>
-        public Simulation Simulation
+        public S Simulation
         {
             get => _simulation; 
             set
@@ -40,8 +41,6 @@ namespace SpiceSharp.Simulations
                     _simulation.BeforeUnsetup -= Initialize;
                     Extractor = null;
                 }
-                if (value != null && !IsValidSimulation(value))
-                    throw new ArgumentException("Invalid simulation");
                 _simulation = value;
                 if (_simulation != null)
                 {
@@ -50,14 +49,7 @@ namespace SpiceSharp.Simulations
                 }
             }
         }
-        private Simulation _simulation;
-
-        /// <summary>
-        /// Checks whether or not the simulation is a valid one
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected virtual bool IsValidSimulation(ISimulation simulation) => true;
+        private S _simulation;
 
         /// <summary>
         /// Gets the current value from the simulation.
@@ -82,10 +74,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Export{T}"/> class.
+        /// Initializes a new instance of the <see cref="Export{S, T}"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        protected Export(Simulation simulation)
+        protected Export(S simulation)
         {
             Simulation = simulation;
         }
@@ -95,7 +87,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public virtual void Destroy()
         {
-            Simulation = null;
+            Simulation = default;
         }
 
         /// <summary>
@@ -103,7 +95,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void LazyLoad()
         {
-            if (_simulation == null)
+            if (_simulation == default)
                 return;
 
             // If we're already too far, emulate a call from the simulation

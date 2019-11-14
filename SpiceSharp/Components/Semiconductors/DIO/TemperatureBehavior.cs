@@ -93,7 +93,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>

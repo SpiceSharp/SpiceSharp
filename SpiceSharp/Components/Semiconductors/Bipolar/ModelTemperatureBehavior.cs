@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>

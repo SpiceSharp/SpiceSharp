@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
 
             // Connections
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>

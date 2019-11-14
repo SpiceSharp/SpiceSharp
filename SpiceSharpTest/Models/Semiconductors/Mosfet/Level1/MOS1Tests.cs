@@ -47,7 +47,7 @@ namespace SpiceSharpTest.Models
             });
 
             // Create exports
-            Export<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
+            IExport<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
 
             // Create references
             var references = new double[1][];
@@ -193,7 +193,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref =
@@ -248,7 +248,7 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Export<double>[] exports = { new RealVoltageExport(tran, "out") };
+            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
 
             // Create references
             var references = new double[1][];
@@ -307,7 +307,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var noise = new Noise("noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
-            Export<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+            IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             var references = new double[2][];
             references[0] = new[]
             {
@@ -420,7 +420,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                var v = op.States.GetValue<IBiasingSimulationState>().Solution;
+                var v = op.State.Solution;
             };
 
             // Disable source stepping and see if it converges

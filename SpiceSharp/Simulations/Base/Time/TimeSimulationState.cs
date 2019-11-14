@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
             /// Set up the simulation state for the simulation.
             /// </summary>
             /// <param name="simulation">The simulation.</param>
-            public void Setup(ISimulation simulation)
+            public void Setup(TimeSimulation simulation)
             {
                 Method.Setup(simulation);
             }

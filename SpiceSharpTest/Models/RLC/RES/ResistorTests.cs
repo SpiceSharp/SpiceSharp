@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var op = new OP("op");
-            var exports = new Export<double>[1];
+            var exports = new IExport<double>[1];
             exports[0] = new RealCurrentExport(op, "V1");
             double[] references = { -0.01 };
 
@@ -59,7 +59,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var ac = new AC("ac", new LinearSweep(1.0, 10001, 10));
-            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i_c") };
+            IExport<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i_c") };
             Func<double, Complex>[] references = { f => 1e-3 };
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
@@ -95,7 +95,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var op = new OP("op");
-            Export<double>[] exports = { new RealPropertyExport(op, "R2", "v") };
+            IExport<double>[] exports = { new RealPropertyExport(op, "R2", "v") };
             double[] references = { 100.0 * 1.0 / (3.0 + 1.0) };
 
             // Run
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var op = new OP("op");
-            Export<double>[] exports = { new RealPropertyExport(op, "R1", "i"), new RealPropertyExport(op, "R2", "i") };
+            IExport<double>[] exports = { new RealPropertyExport(op, "R1", "i"), new RealPropertyExport(op, "R2", "i") };
             double[] references = { dc / r1, dc / r2 };
 
             // Run
@@ -153,7 +153,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation exports and references
             var op = new OP("op");
-            Export<double>[] exports =
+            IExport<double>[] exports =
             {
                 new RealPropertyExport(op, "R1", "resistance"),
                 new RealPropertyExport(op, "V1", "dc"),

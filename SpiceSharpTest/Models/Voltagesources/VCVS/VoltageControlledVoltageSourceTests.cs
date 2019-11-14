@@ -23,7 +23,7 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var dc = new DC("DC", "V1", -10, 10, 1e-3);
-            Export<double>[] exports = { new RealVoltageExport(dc, "out") };
+            IExport<double>[] exports = { new RealVoltageExport(dc, "out") };
             Func<double, double>[] references = { sweep => gain * sweep };
             AnalyzeDC(dc, ckt, exports, references);
             DestroyExports(exports);
@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1.0, 10e3, 4));
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
             Func<double, Complex>[] references = { sweep => gain * magnitude };
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);

@@ -97,7 +97,7 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 10.0);
-            Export<double> export = null;
+            IExport<double> export = null;
             tran.ExportSimulationData += (sender, args) =>
             {
                 // If the time > 5.0 then start exporting our stuff
@@ -141,7 +141,7 @@ namespace SpiceSharpTest.Simulations
 
             // Build the simulation
             var tran = new Transient("tran", 1e-6, 10e-6);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
                 new RealVoltageExport(tran, "in"),
                 new RealVoltageExport(tran, "out")

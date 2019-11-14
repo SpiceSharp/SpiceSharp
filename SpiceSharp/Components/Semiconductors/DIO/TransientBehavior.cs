@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _negNode = BiasingState.Map[context.Nodes[1]];
             _posPrimeNode = BiasingState.Map[PosPrime];
 
-            var method = context.States.GetValue<ITimeSimulationState>().Method;
+            var method = context.GetState<ITimeSimulationState>().Method;
             _capCharge = method.CreateDerivative();
         }
 

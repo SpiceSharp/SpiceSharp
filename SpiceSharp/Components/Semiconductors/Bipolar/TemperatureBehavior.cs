@@ -117,7 +117,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>

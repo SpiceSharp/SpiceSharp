@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation, exports and references
             var op = new OP("OP");
-            Export<double>[] exports = { new RealVoltageExport(op, $"{voltages.Length}") };
+            IExport<double>[] exports = { new RealVoltageExport(op, $"{voltages.Length}") };
             double[] references = { sum };
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);

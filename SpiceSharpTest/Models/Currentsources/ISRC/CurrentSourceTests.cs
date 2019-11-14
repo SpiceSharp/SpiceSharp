@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var op = new OP("op");
-            var exports = new Export<double>[2];
+            var exports = new IExport<double>[2];
             exports[0] = new RealPropertyExport(op, "I1", "v");
             exports[1] = new RealPropertyExport(op, "R1", "i");
             double[] references =
@@ -86,7 +86,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
 
             // Create exports
-            var exports = new List<Export<double>>();
+            var exports = new List<IExport<double>>();
             for (var i = 1; i <= resistorCount; i++)
                 exports.Add(new RealPropertyExport(op, $"R{i}", "i"));
             exports.Add(new RealPropertyExport(op, "I1", "v"));

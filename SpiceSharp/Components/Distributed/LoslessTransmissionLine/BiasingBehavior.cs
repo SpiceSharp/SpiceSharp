@@ -77,7 +77,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
 
             // Connect
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
 
             _pos1 = BiasingState.Map[context.Nodes[0]];
             _neg1 = BiasingState.Map[context.Nodes[1]];

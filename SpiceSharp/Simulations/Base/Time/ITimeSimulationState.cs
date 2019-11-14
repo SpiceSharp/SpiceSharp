@@ -5,7 +5,6 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Simulation state for a <see cref="TimeSimulation"/>.
     /// </summary>
-    /// <seealso cref="ISimulationState" />
     public interface ITimeSimulationState : ISimulationState
     {
         /// <summary>

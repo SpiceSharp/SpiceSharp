@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 new MatrixLocation(_negNode, _negNode)
             }, new[] { _posNode, _negNode });
 
-            var method = context.States.GetValue<ITimeSimulationState>().Method;
+            var method = context.GetState<ITimeSimulationState>().Method;
             QCap = method.CreateDerivative();
         }
 

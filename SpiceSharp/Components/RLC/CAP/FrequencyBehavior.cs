@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             context.Nodes.ThrowIfNot("nodes", 2);
 
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             _posNode = ComplexState.Map[context.Nodes[0]];
             _negNode = ComplexState.Map[context.Nodes[1]];
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,

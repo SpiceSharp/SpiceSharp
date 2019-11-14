@@ -89,9 +89,9 @@ namespace SpiceSharp.Components.NoiseSources
         {
             context.ThrowIfNull(nameof(context));
             nodes.ThrowIfNull(nameof(nodes));
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
-            NoiseState = context.States.GetValue<INoiseSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
+            NoiseState = context.GetState<INoiseSimulationState>();
 
             // Get the nodes
             var mapped = new int[_pins.Length];

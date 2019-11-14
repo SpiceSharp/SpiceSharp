@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public FrequencyBehavior(string name, ComponentBindingContext context)
             : base(name, context)
         {
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             _pos1 = ComplexState.Map[context.Nodes[0]];
             _neg1 = ComplexState.Map[context.Nodes[1]];
             _pos2 = ComplexState.Map[context.Nodes[2]];

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
-using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
 {
@@ -10,7 +9,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class TimeSimulation : BiasingSimulation,
-        IBehavioral<ITimeBehavior>, IBehavioral<IAcceptBehavior>
+        IBehavioral<ITimeBehavior>, IBehavioral<IAcceptBehavior>,
+        IStateful<ITimeSimulationState>
     {
         /// <summary>
         /// Time-domain behaviors.
@@ -32,6 +32,14 @@ namespace SpiceSharp.Simulations
         /// The state of the time.
         /// </value>
         protected TimeSimulationState TimeState { get; }
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        public new ITimeSimulationState State => TimeState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
@@ -56,9 +64,7 @@ namespace SpiceSharp.Simulations
             Configurations.Add(new TimeConfiguration(step, final));
             TimeSimulationStatistics = new TimeSimulationStatistics();
             Statistics.Add(TimeSimulationStatistics);
-
             TimeState = new TimeSimulationState();
-            States.Add<ITimeSimulationState>(TimeState);
         }
 
         /// <summary>
@@ -75,8 +81,13 @@ namespace SpiceSharp.Simulations
             TimeSimulationStatistics = new TimeSimulationStatistics();
             Statistics.Add(TimeSimulationStatistics);
             TimeState = new TimeSimulationState();
-            States.Add<ITimeSimulationState>(TimeState);
         }
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        public void GetState(out ITimeSimulationState state) => state = TimeState;
 
         /// <summary>
         /// Set up the simulation.

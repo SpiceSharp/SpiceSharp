@@ -160,7 +160,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
-            context.States.TryGetValue(out _timeState);
+            context.TryGetState(out _timeState);
             _collectorNode = BiasingState.Map[context.Nodes[0]];
             _baseNode = BiasingState.Map[context.Nodes[1]];
             _emitterNode = BiasingState.Map[context.Nodes[2]];

@@ -96,10 +96,11 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        public virtual void Setup(ISimulation simulation)
+        public virtual void Setup(IStateful<IBiasingSimulationState> simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            BiasingState = simulation.States.GetValue<IBiasingSimulationState>();
+            simulation.GetState(out var state);
+            BiasingState = state;
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
                 new DenseVector<double>(BiasingState.Solver.Size), 
                 StateManager.Build()));
@@ -168,7 +169,6 @@ namespace SpiceSharp.IntegrationMethods
             for (var i = 1; i < IntegrationStates.Length; i++)
             {
                 IntegrationStates[i].Delta = IntegrationStates[0].Delta;
-                // IntegrationStates[0].Solution.CopyTo(IntegrationStates[i].Solution);
                 IntegrationStates[0].State.CopyTo(IntegrationStates[i].State);
             }
         }

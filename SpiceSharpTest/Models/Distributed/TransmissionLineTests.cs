@@ -24,9 +24,9 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation
             var tran = new Transient("tran", 1e-6, 20e-6);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.States.GetValue<ITimeSimulationState>().Method.Time),
+                new GenericExport<double>(tran, () => tran.State.Method.Time),
                 new RealVoltageExport(tran, "a"),
                 new RealVoltageExport(tran, "b")
             };
@@ -320,7 +320,7 @@ namespace SpiceSharpTest.Models
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(0.1, 1e8, 5));
-            var exports = new Export<Complex>[]
+            var exports = new IExport<Complex>[]
             {
                 new ComplexVoltageExport(ac, "a"),
                 new ComplexVoltageExport(ac, "b"), 
@@ -331,13 +331,13 @@ namespace SpiceSharpTest.Models
             {
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.States.GetValue<IComplexSimulationState>().Laplace * delay);
+                    var k = Complex.Exp(-ac.State.Laplace * delay);
                     k = (k * k - 1) / (k * k + 1);
                     return (k - rlnorm) / ((1 + rlnorm * rsnorm) * k - rsnorm - rlnorm);
                 },
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.States.GetValue<IComplexSimulationState>().Laplace * delay);
+                    var k = Complex.Exp(-ac.State.Laplace * delay);
                     return -2 * rlnorm * k / (k * k + 1) /
                            ((1 + rlnorm * rsnorm) * (k * k - 1) / (k * k + 1) - rsnorm - rlnorm);
                 }

@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="context"></param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             _drainNode = ComplexState.Map[context.Nodes[0]];
             _gateNode = ComplexState.Map[context.Nodes[1]];
             _sourceNode = ComplexState.Map[context.Nodes[2]];

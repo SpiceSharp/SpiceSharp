@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
         }
         
         /// <summary>

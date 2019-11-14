@@ -54,19 +54,6 @@ namespace SpiceSharp.Entities.Local
         private ParameterSetDictionary _configurations = null;
 
         /// <summary>
-        /// Gets a set of <see cref="ISimulationState" /> instances used by the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The states.
-        /// </value>
-        public TypeDictionary<ISimulationState> States
-        {
-            get => _states ?? Parent.States;
-            protected set => _states = value;
-        }
-        private TypeDictionary<ISimulationState> _states = null;
-
-        /// <summary>
         /// Gets a set of <see cref="SpiceSharp.Simulations.Statistics" /> instances tracked by the <see cref="ISimulation" />.
         /// </summary>
         /// <value>

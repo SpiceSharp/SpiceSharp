@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export complex currents.
     /// </summary>
-    /// <seealso cref="Export{T}" />
-    public class ComplexCurrentExport : Export<Complex>
+    /// <seealso cref="Export{S, T}" />
+    public class ComplexCurrentExport : Export<FrequencySimulation, Complex>
     {
         /// <summary>
         /// Gets the identifier of the voltage source.
@@ -18,13 +18,6 @@ namespace SpiceSharp.Simulations
         /// Gets the index in the of the current variable.
         /// </summary>
         public int Index { get; private set; }
-
-        /// <summary>
-        /// Check if the simulation is a frequency simulation
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override bool IsValidSimulation(ISimulation simulation) => simulation is FrequencySimulation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
@@ -45,10 +38,8 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            // Create our extractor!
-            var simulation = (Simulation)sender;
-            var state = simulation.States.GetValue<IComplexSimulationState>();
-            if (simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
+            var state = ((IStateful<IComplexSimulationState>)Simulation).State;
+            if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))
                 {

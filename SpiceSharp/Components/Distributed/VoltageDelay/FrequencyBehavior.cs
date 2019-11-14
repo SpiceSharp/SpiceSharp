@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             _contPosNode = BiasingState.Map[context.Nodes[2]];
             _contNegNode = BiasingState.Map[context.Nodes[3]];
             _branchEq = BiasingState.Map[Branch];
-            ComplexState = context.States.GetValue<IComplexSimulationState>();
+            ComplexState = context.GetState<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),

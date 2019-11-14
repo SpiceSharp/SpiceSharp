@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             context.ThrowIfNull(nameof(context));
             ModelParameters = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
         }
         
         /// <summary>

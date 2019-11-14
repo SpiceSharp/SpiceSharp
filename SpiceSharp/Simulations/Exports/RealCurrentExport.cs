@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// This class can export real currents.
     /// </summary>
     /// <seealso cref="Export{T}" />
-    public class RealCurrentExport : Export<double>
+    public class RealCurrentExport : Export<BiasingSimulation, double>
     {
         /// <summary>
         /// Gets the identifier of the voltage source.
@@ -17,13 +17,6 @@ namespace SpiceSharp.Simulations
         /// Gets the index of the variable in the solver.
         /// </summary>
         public int Index { get; private set; }
-
-        /// <summary>
-        /// Check if the simulation is a base simulation.
-        /// </summary>
-        /// <param name="simulation"></param>
-        /// <returns></returns>
-        protected override bool IsValidSimulation(ISimulation simulation) => simulation is BiasingSimulation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
@@ -44,9 +37,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            // Create our extractor!
-            var simulation = (Simulation)sender;
-            var state = simulation.States.GetValue<IBiasingSimulationState>();
+            var state = ((IStateful<IBiasingSimulationState>)Simulation).State;
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.BiasingBehavior), out var behavior))

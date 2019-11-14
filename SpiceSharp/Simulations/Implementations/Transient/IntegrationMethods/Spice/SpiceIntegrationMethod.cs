@@ -96,7 +96,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Setup(ISimulation simulation)
+        public override void Setup(IStateful<IBiasingSimulationState> simulation)
         {
             base.Setup(simulation);
 

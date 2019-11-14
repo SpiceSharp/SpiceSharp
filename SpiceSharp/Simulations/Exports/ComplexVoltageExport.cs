@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export complex voltages.
     /// </summary>
-    /// <seealso cref="Export{T}" />
-    public class ComplexVoltageExport : Export<Complex>
+    /// <seealso cref="Export{S, T}" />
+    public class ComplexVoltageExport : Export<FrequencySimulation, Complex>
     {
         /// <summary>
         /// Gets the identifier of the positive node.
@@ -54,13 +54,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Check if the simulation is a <see cref="FrequencySimulation" />.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override bool IsValidSimulation(ISimulation simulation) => simulation is FrequencySimulation;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
@@ -96,9 +89,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            // Create our extractor!
-            var simulation = (Simulation)sender;
-            var state = simulation.States.GetValue<IComplexSimulationState>();
+            var state = ((IStateful<IComplexSimulationState>)Simulation).State;
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 PosIndex = state.Map[posNode];

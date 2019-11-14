@@ -92,7 +92,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeOp(OP sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double> references)
+        protected void AnalyzeOp(OP sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double> references)
         {
             if (exports == null)
                 throw new ArgumentNullException(nameof(exports));
@@ -123,7 +123,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             if (exports == null)
                 throw new ArgumentNullException(nameof(exports));
@@ -169,7 +169,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
+        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references)
         {
             sim.ExportSimulationData += (sender, data) =>
             {
@@ -207,7 +207,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             var index = 0;
             sim.ExportSimulationData += (sender, data) =>
@@ -246,7 +246,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Complex[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<Complex>> exports, IEnumerable<Complex[]> references)
         {
             var index = 0;
             sim.ExportSimulationData += (sender, data) =>
@@ -290,7 +290,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Func<double, Complex>> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<Complex>> exports, IEnumerable<Func<double, Complex>> references)
         {
             sim.ExportSimulationData += (sender, data) =>
             {
@@ -331,7 +331,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             var index = 0;
             sim.ExportSimulationData += (sender, data) =>
@@ -369,7 +369,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references)
         {
             sim.ExportSimulationData += (sender, data) =>
             {
@@ -405,7 +405,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             var index = 0;
             sim.ExportSimulationData += (sender, data) =>
@@ -447,7 +447,7 @@ namespace SpiceSharpTest.Models
         /// <param name="sim">The simulation.</param>
         /// <param name="ckt">The circuit.</param>
         /// <param name="exports">The exports.</param>
-        protected void WriteExportsToConsole(Simulation sim, Circuit ckt, IEnumerable<Export<double>> exports)
+        protected void WriteExportsToConsole(Simulation sim, Circuit ckt, IEnumerable<IExport<double>> exports)
         {
             var arr = exports.ToArray();
             var output = new List<string>[arr.Length];
@@ -471,7 +471,7 @@ namespace SpiceSharpTest.Models
         /// </summary>
         /// <typeparam name="T">The base type.</typeparam>
         /// <param name="exports">The exports.</param>
-        protected void DestroyExports<T>(IEnumerable<Export<T>> exports)
+        protected void DestroyExports<T>(IEnumerable<IExport<T>> exports)
         {
             foreach (var export in exports)
                 export.Destroy();
@@ -484,8 +484,8 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">The circuit.</param>
         protected void DumpTransientState(Transient tran, Circuit ckt)
         {
-            var state = tran.States.GetValue<ITimeSimulationState>();
-            var rstate = tran.States.GetValue<IBiasingSimulationState>();
+            var state = tran.State;
+            tran.GetState(out IBiasingSimulationState rstate);
 
             Console.WriteLine("----------- Dumping transient information -------------");
             Console.WriteLine($"Base time: {state.Method.BaseTime}");
@@ -495,7 +495,7 @@ namespace SpiceSharpTest.Models
                 Console.Write("{0}{1}", i > 0 ? ", " : "", state.Method.GetTimestep(i));
             Console.WriteLine();
             Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
-            Console.WriteLine("Problem variable value: {0}", tran.States.GetValue<IBiasingSimulationState>().Solution[rstate.Map[tran.ProblemVariable]]);
+            Console.WriteLine("Problem variable value: {0}", rstate.Solution[rstate.Map[tran.ProblemVariable]]);
             Console.WriteLine();
 
             // Dump the circuit contents
@@ -517,7 +517,7 @@ namespace SpiceSharpTest.Models
             Console.WriteLine("- Solutions");
             Dictionary<int, string> variables = new Dictionary<int, string>();
             foreach (var variable in rstate.Map)
-                variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.UnknownType}): {tran.States.GetValue<IBiasingSimulationState>().Solution[variable.Value]}");
+                variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.UnknownType}): {rstate.Solution[variable.Value]}");
             for (var i = 0; i <= state.Method.MaxOrder; i++)
             {
                 var oldsolution = state.Method.GetSolution(i);

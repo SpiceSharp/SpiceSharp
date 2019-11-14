@@ -123,9 +123,9 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Create exports
-            Export<double> inputExport = new RealVoltageExport(dc, "in");
-            Export<double> outputExport = new RealVoltageExport(dc, "out");
-            Export<double> currentExport = new RealPropertyExport(dc, "V1", "i");
+            var inputExport = new RealVoltageExport(dc, "in");
+            var outputExport = new RealVoltageExport(dc, "out");
+            var currentExport = new RealPropertyExport(dc, "V1", "i");
 
             // Catch exported data
             dc.ExportSimulationData += (sender, args) =>

@@ -73,13 +73,9 @@ namespace SpiceSharp.Simulations
         public virtual void Initialize(BiasingSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-
-            // Get the state
-            var state = simulation.States.GetValue<IBiasingSimulationState>();
+            var state = ((IStateful<IBiasingSimulationState>)simulation).State;
             Variables = state.Map;
-
-            // Get the real solver
-            Solver = simulation.States.GetValue<IBiasingSimulationState>().Solver;
+            Solver = state.Solver;
 
             // Get the node
             if (!simulation.Variables.TryGetNode(Name, out var node) || !Variables.Contains(node))

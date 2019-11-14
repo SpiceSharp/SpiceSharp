@@ -67,12 +67,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             context.ThrowIfNull(nameof(context));
             context.Nodes.ThrowIfNot("nodes", 2);
 
-            BiasingState = context.States.GetValue<IBiasingSimulationState>();
+            BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
-            context.States.TryGetValue(out _timeState);
+            context.TryGetState(out _timeState);
             BaseParameters.Waveform?.Bind(context);
 
             // Give some warnings if no value is given
