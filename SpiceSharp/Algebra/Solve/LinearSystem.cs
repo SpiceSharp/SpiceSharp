@@ -145,6 +145,17 @@ namespace SpiceSharp.Algebra
         public virtual void ResetVector() => Vector.Reset();
 
         /// <summary>
+        /// Clears the system of any elements. The size of the system becomes 0.
+        /// </summary>
+        public virtual void Clear()
+        {
+            Matrix.Clear();
+            Vector.Clear();
+            Row.Clear();
+            Column.Clear();
+        }
+
+        /// <summary>
         /// Maps an external row/column tuple to an internal one.
         /// </summary>
         /// <param name="indices">The external row/column indices.</param>

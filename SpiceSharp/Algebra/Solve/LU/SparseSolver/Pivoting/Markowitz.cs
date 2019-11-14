@@ -119,6 +119,17 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
+        /// Clears the pivot strategy.
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            _markowitzRow = null;
+            _markowitzColumn = null;
+            _markowitzProduct = null;
+        }
+
+        /// <summary>
         /// Count the Markowitz numbers.
         /// </summary>
         /// <param name="matrix">The matrix.</param>

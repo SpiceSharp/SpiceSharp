@@ -92,6 +92,11 @@ namespace SpiceSharp.Algebra
         /// <param name="indices">The external row/column indices.</param>
         /// <returns>The internal row/column indices.</returns>
         MatrixLocation ExternalToInternal(MatrixLocation indices);
+
+        /// <summary>
+        /// Clears the solver of any elements. The size of the solver becomes 0.
+        /// </summary>
+        void Clear();
     }
 
     /// <summary>

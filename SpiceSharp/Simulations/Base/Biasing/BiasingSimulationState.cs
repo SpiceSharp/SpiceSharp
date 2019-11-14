@@ -132,6 +132,7 @@ namespace SpiceSharp.Simulations
                 Init = InitializationModes.None;
                 UseDc = true;
                 UseIc = false;
+                IsConvergent = true;
             }
 
             /// <summary>
@@ -141,6 +142,8 @@ namespace SpiceSharp.Simulations
             {
                 Solution = null;
                 OldSolution = null;
+                Solver.Clear();
+                Map = null;
             }
 
             /// <summary>

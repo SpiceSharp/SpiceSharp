@@ -11,6 +11,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Constants
         /// </summary>
         private const float ExpansionFactor = 1.5f;
+        private const int InitialSize = 4;
 
         /// <summary>
         /// Private variable
@@ -44,7 +45,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes a new instance of the <see cref="Translation"/> class.
         /// </summary>
         public Translation()
-            : this(4)
+            : this(InitialSize)
         {
         }
 
@@ -167,6 +168,22 @@ namespace SpiceSharp.Algebra.Solve
                 _intToExt[i] = i;
             }
             Length = newLength;
+        }
+
+        /// <summary>
+        /// Clears all translations.
+        /// </summary>
+        public void Clear()
+        {
+            var size = InitialSize;
+            _extToInt = new int[size + 1];
+            _intToExt = new int[size + 1];
+            for (var i = 1; i <= size; i++)
+            {
+                _extToInt[i] = i;
+                _intToExt[i] = i;
+            }
+            _allocated = size;
         }
     }
 }

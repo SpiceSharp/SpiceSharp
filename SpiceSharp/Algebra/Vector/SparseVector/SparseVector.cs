@@ -402,7 +402,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Resets all elements in the vector.
+        /// Resets all elements in the vector to their default value.
         /// </summary>
         public void Reset()
         {
@@ -421,17 +421,10 @@ namespace SpiceSharp.Algebra
         public void Clear()
         {
             _trashCan.Value = default;
-            var elt = _firstInVector;
-            while (elt != null)
-            {
-                elt.PreviousInVector = null;
-                elt = elt.NextInVector;
-                if (elt != null)
-                    elt.PreviousInVector.NextInVector = null;
-            }
             _firstInVector = null;
             _lastInVector = null;
             ElementCount = 1;
+            Length = 0;
         }
 
         /// <summary>

@@ -106,6 +106,21 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Destroys the integration method.
+        /// </summary>
+        public virtual void Unsetup()
+        {
+            StateManager.Unsetup();
+            IntegrationStates.Clear((IntegrationState)null);
+
+            // Clear variables
+            Order = 0;
+            Slope = 0.0;
+            BaseTime = 0.0;
+            Time = 0.0;
+        }
+
+        /// <summary>
         /// Creates a state that keeps a history of values.
         /// </summary>
         /// <returns>
@@ -252,23 +267,6 @@ namespace SpiceSharp.IntegrationMethods
 
             // Update the new timestep
             IntegrationStates[0].Delta = args.Delta;
-        }
-
-        /// <summary>
-        /// Destroys the integration method.
-        /// </summary>
-        public virtual void Unsetup()
-        {
-            StateManager.Unsetup();
-
-            // Clear the timesteps and solutions
-            IntegrationStates.Clear((IntegrationState)null);
-
-            // Clear variables
-            Order = 0;
-            Slope = 0.0;
-            BaseTime = 0.0;
-            Time = 0.0;
         }
 
         /// <summary>

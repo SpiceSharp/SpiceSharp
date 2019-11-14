@@ -85,5 +85,13 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <returns>The chosen pivot.</returns>
         public abstract ISparseMatrixElement<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep);
+
+        /// <summary>
+        /// Clears the pivot strategy.
+        /// </summary>
+        public virtual void Clear()
+        {
+            SearchLimit = 0;
+        }
     }
 }

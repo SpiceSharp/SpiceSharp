@@ -330,5 +330,38 @@ namespace SpiceSharpTest.Simulations
 
             sim2.Run(ckt);
         }
+
+        [Test]
+        public void When_MultipleTransient_Expect_Reference()
+        {
+            /*
+             * We test if the simulation can run twice on different circuits with
+             * different number of equations.
+             */
+            var cktA = new Circuit(
+                new CurrentSource("I1", "0", "in", new Pulse(0, 1e-3, 0, 1e-15, 1, 10, 20)),
+                new Resistor("R1", "in", "0", 1e9),
+                new Capacitor("C1", "in", "0", 1e-6));
+            var cktB = new Circuit(
+                new CurrentSource("I1", "0", "in", new Pulse(0, 1e-3, 0, 1e-15, 1, 10, 20)),
+                new VoltageSource("V1", "in", "out", 0.0),
+                new Resistor("R1", "in", "0", 1e9),
+                new Capacitor("C1", "out", "0", 1e-6),
+                new Capacitor("C2", "out", "0", 1e-6));
+
+            var tran = new Transient("tran", 1e-9, 1e-6);
+            bool a = true;
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                if (a)
+                    Assert.AreEqual(args.Time * 1e-3 / 1e-6, args.GetVoltage("in"), 1e-12);
+                else
+                    Assert.AreEqual(args.Time * 1e-3 / 2e-6, args.GetVoltage("in"), 1e-12);
+            };
+            a = false; // Doing second circuit
+            tran.Run(cktB);
+            a = true; // Doing first circuit
+            tran.Run(cktA);
+        }
     }
 }

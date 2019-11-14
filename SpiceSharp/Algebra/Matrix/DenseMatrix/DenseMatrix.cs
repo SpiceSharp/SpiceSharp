@@ -228,7 +228,7 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Resets all elements in the matrix.
+        /// Resets all elements in the matrix to their default value.
         /// </summary>
         public void Reset()
         {

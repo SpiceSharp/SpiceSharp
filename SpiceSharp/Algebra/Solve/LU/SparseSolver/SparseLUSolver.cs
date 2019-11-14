@@ -74,8 +74,10 @@ namespace SpiceSharp.Algebra
         protected SparseLUSolver(M matrix, V vector, SparsePivotStrategy<T> strategy)
             : base(matrix, vector)
         {
+            IsFactored = false;
             NeedsReordering = true;
             Strategy = strategy.ThrowIfNull(nameof(strategy));
+            Fillins = 0;
         }
 
         /// <summary>
@@ -340,6 +342,19 @@ namespace SpiceSharp.Algebra
         {
             base.ResetMatrix();
             IsFactored = false;
+        }
+
+        /// <summary>
+        /// Clears the system of any elements. The size of the system becomes 0.
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            IsFactored = false;
+            NeedsReordering = true;
+            Fillins = 0;
+            _order = 0;
+            Strategy.Clear();
         }
     }
 }

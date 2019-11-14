@@ -97,5 +97,37 @@ namespace SpiceSharpTest.Simulations
             dc.Run(ckt);
             dc.Run(ckt);
         }
+
+        [Test]
+        public void When_MultipleDC_Expect_Reference()
+        {
+            /*
+             * We test if the simulation can run twice on different circuits with
+             * different number of equations.
+             */
+            var cktA = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new Resistor("R1", "in", "out", 1e3),
+                new Resistor("R2", "out", "0", 1e3));
+            var cktB = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new Resistor("R1", "in", "out", 1e3),
+                new Resistor("R2", "out", "int", 1e3),
+                new Resistor("R3", "int", "0", 1e3));
+
+            var dc = new DC("dc", "V1", -2, 2, 0.1);
+            bool a = true;
+            dc.ExportSimulationData += (sender, args) =>
+            {
+                if (a)
+                    Assert.AreEqual(args.GetVoltage("in") * 0.5, args.GetVoltage("out"), 1e-12);
+                else
+                    Assert.AreEqual(args.GetVoltage("in") * 2.0 / 3.0, args.GetVoltage("out"), 1e-12);
+            };
+            a = false; // Doing second circuit
+            dc.Run(cktB);
+            a = true; // Doing first circuit
+            dc.Run(cktA);
+        }
     }
 }

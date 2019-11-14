@@ -33,7 +33,7 @@ namespace SpiceSharp.Algebra
         void CopyTo(IVector<T> target);
 
         /// <summary>
-        /// Resets all elements in the vector.
+        /// Resets all elements in the vector to their default value.
         /// </summary>
         void Reset();
 

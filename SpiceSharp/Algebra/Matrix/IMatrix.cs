@@ -28,7 +28,7 @@ namespace SpiceSharp.Algebra
         T this[int row, int column] { get; set; }
 
         /// <summary>
-        /// Resets all elements in the matrix.
+        /// Resets all elements in the matrix to their default value.
         /// </summary>
         void Reset();
 

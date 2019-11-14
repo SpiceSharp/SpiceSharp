@@ -231,5 +231,17 @@ namespace SpiceSharp.Algebra
             base.ResetMatrix();
             IsFactored = false;
         }
+
+        /// <summary>
+        /// Clears the system of any elements. The size of the system becomes 0.
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            IsFactored = false;
+            NeedsReordering = true;
+            _order = 0;
+            Strategy.Clear();
+        }
     }
 }

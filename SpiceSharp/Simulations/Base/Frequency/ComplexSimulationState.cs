@@ -84,11 +84,8 @@ namespace SpiceSharp.Simulations
             public void Unsetup()
             {
                 Solution = null;
-                Map.Clear();
+                Solver.Clear();
                 Map = null;
-
-                // TODO: Clear all for the matrix
-                Solver.Reset();
             }
         }
     }

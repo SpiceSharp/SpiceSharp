@@ -137,14 +137,6 @@ namespace SpiceSharp.Algebra
             /// </summary>
             public void Clear()
             {
-                var elt = FirstInRow;
-                while (elt != null)
-                {
-                    elt.Left = null;
-                    elt = elt.Right;
-                    if (elt != null)
-                        elt.Left.Right = null;
-                }
                 FirstInRow = null;
                 LastInRow = null;
             }

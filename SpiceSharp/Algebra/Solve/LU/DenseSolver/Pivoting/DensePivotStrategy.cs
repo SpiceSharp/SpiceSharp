@@ -78,5 +78,13 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row of the found pivot.</param>
         /// <param name="column">The column of the found pivot.</param>
         public abstract bool FindPivot(IMatrix<T> matrix, int eliminationStep, out int row, out int column);
+
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
+        public virtual void Clear()
+        {
+            SearchLimit = 0;
+        }
     }
 }
