@@ -50,7 +50,7 @@ namespace SpiceSharp.Simulations
 
             // Start our statistics
             Statistics.TransientTime.Start();
-            var stats = ((IKeepsStatistics<BiasingSimulationStatistics>)this).Statistics;
+            var stats = ((BiasingSimulation)this).Statistics;
             var startIters = stats.Iterations;
             var startselapsed = stats.SolveTime.Elapsed;
 

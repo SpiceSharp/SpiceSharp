@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="FrequencySimulation"/>.
     /// </summary>
-    public class ComplexSimulationStatistics : IStatistics
+    public class ComplexSimulationStatistics
     {
         /// <summary>
         /// Gets or sets the number of frequency points calculated.

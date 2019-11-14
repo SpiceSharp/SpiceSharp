@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="TimeSimulationStatistics" />.
     /// </summary>
-    public class TimeSimulationStatistics : IStatistics
+    public class TimeSimulationStatistics
     {
         /// <summary>
         /// Gets the number of time points calculated.

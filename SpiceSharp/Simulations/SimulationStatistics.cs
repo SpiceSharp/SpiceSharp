@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="Simulation" />.
     /// </summary>
-    public class SimulationStatistics : IStatistics
+    public class SimulationStatistics
     {
         /// <summary>
         /// Gets the time spent during setup.

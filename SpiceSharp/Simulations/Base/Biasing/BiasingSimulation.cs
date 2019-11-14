@@ -13,8 +13,7 @@ namespace SpiceSharp.Simulations
     public abstract partial class BiasingSimulation : Simulation,
         IBehavioral<IBiasingBehavior>, IBehavioral<IBiasingUpdateBehavior>,
         IBehavioral<ITemperatureBehavior>,
-        IStateful<IBiasingSimulationState>,
-        IKeepsStatistics<BiasingSimulationStatistics>
+        IStateful<IBiasingSimulationState>
     {
         /// <summary>
         /// Gets the variable that causes issues.

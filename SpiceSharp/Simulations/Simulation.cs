@@ -7,8 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation : IEventfulSimulation,
-        IKeepsStatistics<SimulationStatistics>
+    public abstract class Simulation : IEventfulSimulation
     {
         /// <summary>
         /// Gets the current status of the <see cref="ISimulation" />.
@@ -82,8 +81,11 @@ namespace SpiceSharp.Simulations
         public BehaviorContainerCollection EntityBehaviors { get; private set; }
 
         /// <summary>
-        /// A reference to the regular simulation statistics (cached)
+        /// Gets the statistics.
         /// </summary>
+        /// <value>
+        /// The statistics.
+        /// </value>
         public SimulationStatistics Statistics { get; }
 
         /// <summary>

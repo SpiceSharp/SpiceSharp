@@ -10,8 +10,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class TimeSimulation : BiasingSimulation,
         IBehavioral<ITimeBehavior>, IBehavioral<IAcceptBehavior>,
-        IStateful<ITimeSimulationState>,
-        IKeepsStatistics<TimeSimulationStatistics>
+        IStateful<ITimeSimulationState>
     {
         /// <summary>
         /// Time-domain behaviors.

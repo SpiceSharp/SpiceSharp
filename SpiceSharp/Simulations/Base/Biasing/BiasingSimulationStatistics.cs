@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Statistics for a <see cref="BiasingSimulationStatistics" />.
     /// </summary>
-    public class BiasingSimulationStatistics : IStatistics
+    public class BiasingSimulationStatistics
     {
         /// <summary>
         /// Gets the total number of iterations.
