@@ -262,7 +262,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <returns>
         /// A deep clone of the parameter set.
         /// </returns>
-        public override ParameterSet Clone()
+        public override IParameterSet Clone()
         {
             // We have a properties that are only privately settable, so we need to update them manually when cloning.
             var result = (ModelBaseParameters) base.Clone();

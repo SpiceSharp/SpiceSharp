@@ -6,7 +6,7 @@ namespace SpiceSharp
     /// A template for parameters of a specific type.
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
-    public abstract class Parameter<T> : ICloneable, ICloneable<Parameter<T>>
+    public abstract class Parameter<T> : ICloneable
     {
         /// <summary>
         /// Gets or sets the value of the parameter.

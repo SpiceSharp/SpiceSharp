@@ -35,7 +35,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public ICollection<Type> Keys
+        public IEnumerable<Type> Keys
         {
             get
             {
@@ -54,7 +54,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets an <see cref="ICollection{T}" /> containing the values in the <see cref="TypeDictionary{T}" />.
         /// </summary>
-        public ICollection<T> Values
+        public IEnumerable<T> Values
         {
             get
             {

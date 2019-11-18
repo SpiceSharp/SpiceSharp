@@ -28,6 +28,22 @@ namespace SpiceSharp
         T this[Type key] { get; }
 
         /// <summary>
+        /// Gets the keys.
+        /// </summary>
+        /// <value>
+        /// The keys.
+        /// </value>
+        IEnumerable<Type> Keys { get; }
+
+        /// <summary>
+        /// Gets the values.
+        /// </summary>
+        /// <value>
+        /// The values.
+        /// </value>
+        IEnumerable<T> Values { get; }
+
+        /// <summary>
         /// Adds the specified value to the dictionary.
         /// </summary>
         /// <param name="value">The value.</param>

@@ -4,13 +4,13 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp
 {
     /// <summary>
-    /// A class that describes a set of parameters.
+    /// Base class for a set of parameters.
     /// </summary>
     /// <remarks>
     /// This class allows accessing parameters by their metadata. Metadata is specified by using 
     /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
     /// </remarks>
-    public abstract class ParameterSet : ICloneable, ICloneable<ParameterSet>
+    public abstract class ParameterSet : IParameterSet
     {
         /// <summary>
         /// Method for calculating the default values of derived parameters.
@@ -29,9 +29,9 @@ namespace SpiceSharp
         /// <returns>
         /// A clone of the parameter set.
         /// </returns>
-        public virtual ParameterSet Clone()
+        public virtual IParameterSet Clone()
         {
-            var clone = (ParameterSet) Activator.CreateInstance(GetType());
+            var clone = (IParameterSet) Activator.CreateInstance(GetType());
             clone.CopyFrom(this);
             return clone;
         }
@@ -48,7 +48,7 @@ namespace SpiceSharp
         /// Copy properties and fields from another parameter set.
         /// </summary>
         /// <param name="source">The source parameter set.</param>
-        public virtual void CopyFrom(ParameterSet source)
+        public virtual void CopyFrom(IParameterSet source)
         {
             Reflection.CopyPropertiesAndFields(source, this);
         }
@@ -57,6 +57,6 @@ namespace SpiceSharp
         /// Copy parameters from another object.
         /// </summary>
         /// <param name="source">The source object.</param>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((ParameterSet)source);
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((IParameterSet)source);
     }
 }

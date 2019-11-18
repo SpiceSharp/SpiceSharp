@@ -5,8 +5,9 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A container for behaviors
     /// </summary>
-    /// <seealso cref="SpiceSharp.IParameterSet{T}" />
-    public interface IBehaviorContainer : ITypeDictionary<IBehavior>, IParameterSet<IBehaviorContainer>
+    /// <seealso cref="ITypeDictionary{T}" />
+    /// <seealso cref="INamedParameterCollection" />
+    public interface IBehaviorContainer : ITypeDictionary<IBehavior>, INamedParameterCollection
     {
         /// <summary>
         /// Gets the name.
@@ -17,11 +18,11 @@ namespace SpiceSharp.Simulations
         string Name { get; }
 
         /// <summary>
-        /// Gets the parameters used by the behaviors.
+        /// Gets the parameters.
         /// </summary>
         /// <value>
         /// The parameters.
         /// </value>
-        ParameterSetDictionary Parameters { get; }
+        IParameterSetDictionary Parameters { get; }
     }
 }

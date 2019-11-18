@@ -145,8 +145,16 @@ namespace SpiceSharp
         /// <param name="source">The source.</param>
         /// <param name="value">The value.</param>
         /// <returns>The original object, can be used to chain.</returns>
-        public static T SetParameter<T, P>(this T source, P value)
+        public static T SetParameter<T, P>(this T source, P value) where T : INamedParameters
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TrySetParameter(value))
+                        return source;
+                }
+            }
             var desc = GetPrincipalMember(source.GetType());
             if (desc == null || !desc.TrySet(source, value))
                 throw new CircuitException("Could not find a principal parameter for {0}".FormatString(source));
@@ -162,8 +170,16 @@ namespace SpiceSharp
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <returns>The original object, can be used to chain.</returns>
-        public static T SetParameter<T, P>(this T source, string name, P value)
+        public static T SetParameter<T, P>(this T source, string name, P value) where T : INamedParameters
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TrySetParameter(name, value))
+                        return source;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !desc.TrySet(source, value))
                 throw new CircuitException("Could not find a parameter '{0}' for {1}".FormatString(name, source));
@@ -177,8 +193,16 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter method.</param>
         /// <returns>The original object, can be used to chain.</returns>
-        public static T Call<T>(this T source, string name)
+        public static T Call<T>(this T source, string name) where T : INamedParameters
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TryCall(name))
+                        return source;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length > 0)
                 throw new CircuitException("Cannot call method '{0}' on {1}".FormatString(name, source));
@@ -192,8 +216,16 @@ namespace SpiceSharp
         /// <typeparam name="P">The parameter type.</typeparam>
         /// <param name="source">The source object.</param>
         /// <returns>The value of the parameter.</returns>
-        public static P GetParameter<P>(this object source)
+        public static P GetParameter<P>(this INamedParameters source)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TryGetParameter(out P pv))
+                        return pv;
+                }
+            }
             var desc = GetPrincipalMember(source.GetType());
             if (desc != null && desc.TryGet(source, out P value))
                 return value;
@@ -207,8 +239,16 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>The value of the parameter.</returns>
-        public static P GetParameter<P>(this object source, string name)
+        public static P GetParameter<P>(this INamedParameters source, string name)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TryGetParameter(name, out P pv))
+                        return pv;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             if (desc != null && desc.TryGet(source, out P value))
                 return value;
@@ -224,8 +264,16 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public static bool TrySetParameter<P>(this object source, P value)
+        public static bool TrySetParameter<P>(this INamedParameters source, P value)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TrySetParameter(value))
+                        return true;
+                }
+            }
             var desc = GetPrincipalMember(source.GetType());
             return desc != null && desc.TrySet(source, value);
         }
@@ -238,8 +286,16 @@ namespace SpiceSharp
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TrySetParameter<P>(this object source, string name, P value)
+        public static bool TrySetParameter<P>(this INamedParameters source, string name, P value)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TrySetParameter(name, value))
+                        return true;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             return desc != null && desc.TrySet(source, value);
         }
@@ -252,8 +308,16 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
-        public static bool TryCall(this object source, string name)
+        public static bool TryCall(this INamedParameters source, string name)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TryCall(name))
+                        return true;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length != 0)
                 return false;
@@ -270,8 +334,16 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the parameter is returned; otherwise <c>false</c>.
         /// </returns>
-        public static bool TryGetParameter<P>(this object source, out P value)
+        public static bool TryGetParameter<P>(this INamedParameters source, out P value)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TryGetParameter(out value))
+                        return true;
+                }
+            }
             var desc = GetPrincipalMember(source.GetType());
             if (desc != null && desc.TryGet<P>(source, out value))
                 return true;
@@ -289,8 +361,16 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the parameter is returned; otherwise <c>false</c>.
         /// </returns>
-        public static bool TryGetParameter<P>(this object source, string name, out P value)
+        public static bool TryGetParameter<P>(this INamedParameters source, string name, out P value)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    if (ps.TryGetParameter(name, out value))
+                        return true;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             if (desc == null)
             {
@@ -308,8 +388,17 @@ namespace SpiceSharp
         /// <returns>
         /// The function that can return the value of the principal parameter.
         /// </returns>
-        public static Func<P> CreateGetter<P>(this object source)
+        public static Func<P> CreateGetter<P>(this INamedParameters source)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    var result = ps.CreateGetter<P>();
+                    if (result != null)
+                        return result;
+                }
+            }
             var desc = GetPrincipalMember(source.GetType());
             return desc?.CreateGetter<P>(source);
         }
@@ -323,8 +412,17 @@ namespace SpiceSharp
         /// <returns>
         /// The function that can return the value of the parameter.
         /// </returns>
-        public static Func<P> CreateGetter<P>(this object source, string name)
+        public static Func<P> CreateGetter<P>(this INamedParameters source, string name)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    var result = ps.CreateGetter<P>(name);
+                    if (result != null)
+                        return result;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             return desc?.CreateGetter<P>(source);
         }
@@ -337,8 +435,17 @@ namespace SpiceSharp
         /// <returns>
         /// The action that can set the value of the principal parameter.
         /// </returns>
-        public static Action<P> CreateSetter<P>(this object source)
+        public static Action<P> CreateSetter<P>(this INamedParameters source)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    var result = ps.CreateSetter<P>();
+                    if (result != null)
+                        return result;
+                }
+            }
             var desc = GetPrincipalMember(source.GetType());
             return desc?.CreateSetter<P>(source);
         }
@@ -352,8 +459,17 @@ namespace SpiceSharp
         /// <returns>
         /// The action that cna set the value of the parameter.
         /// </returns>
-        public static Action<P> CreateSetter<P>(this object source, string name)
+        public static Action<P> CreateSetter<P>(this INamedParameters source, string name)
         {
+            if (source is INamedParameterCollection ipc)
+            {
+                foreach (var ps in ipc.NamedParameters)
+                {
+                    var result = ps.CreateSetter<P>(name);
+                    if (result != null)
+                        return result;
+                }
+            }
             var desc = GetMember(source.GetType(), name);
             return desc?.CreateSetter<P>(source);
         }

@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// Template for a waveform that can change value over time.
     /// </summary>
-    public abstract class Waveform : ICloneable, ICloneable<Waveform>
+    public abstract class Waveform : ICloneable, INamedParameters
     {
         /// <summary>
         /// Gets the current waveform value at the last probed timepoint.

@@ -3,7 +3,7 @@
     /// <summary>
     /// Contract for a behavior.
     /// </summary>
-    public interface IBehavior
+    public interface IBehavior : INamedParameters
     {
         /// <summary>
         /// Gets the name of the behavior.
