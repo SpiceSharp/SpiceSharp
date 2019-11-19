@@ -12,13 +12,13 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Small-signal magnitude.
         /// </summary>
-        [ParameterName("acmag"), ParameterInfo("A.C. magnitude value")]
+        [ParameterName("acmag"), ParameterInfo("AC magnitude value")]
         public GivenParameter<double> AcMagnitude { get; } = new GivenParameter<double>();
 
         /// <summary>
         /// Small-signal phase.
         /// </summary>
-        [ParameterName("acphase"), ParameterInfo("A.C. phase value")]
+        [ParameterName("acphase"), ParameterInfo("AC phase value")]
         public GivenParameter<double> AcPhase { get; } = new GivenParameter<double>();
 
         /// <summary>

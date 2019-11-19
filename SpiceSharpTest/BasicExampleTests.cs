@@ -274,5 +274,49 @@ namespace SpiceSharpTest
             op.Run(ckt);
             // </example_Stochastic>
         }
+
+        [Test]
+        public void When_Documentation_Expect_NoException()
+        {
+            // <example_EntityDocumentation>
+            var entity = new ResistorModel("RM1");
+            foreach (var parameter in Documentation.Parameters(entity))
+            {
+                Console.Write(string.Join(", ", parameter.Names));
+                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType})");
+            }
+            // </example_EntityDocumentation>
+
+            Console.WriteLine();
+
+            // <example_SimulationDocumentation>
+            var simulation = new Transient("tran");
+            foreach (var parameter in Documentation.Parameters(simulation))
+            {
+                Console.Write(string.Join(", ", parameter.Names));
+                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType})");
+            }
+            // </example_SimulationDocumentation>
+
+            Console.WriteLine();
+
+            // <example_BehaviorDocumentation>
+            var op = new OP("op");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Resistor("R1", "in", "0", 1e3));
+            op.AfterSetup += (sender, args) =>
+            {
+                // Behaviors are created when executing a simulation,
+                // so we need to register for the event to have access to them.
+                foreach (var parameter in Documentation.Parameters(op.EntityBehaviors["V1"]))
+                {
+                    Console.Write(string.Join(", ", parameter.Names));
+                    Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType})");
+                }
+            };
+            op.Run(ckt);
+            // </example_BehaviorDocumentation>
+        }
     }
 }

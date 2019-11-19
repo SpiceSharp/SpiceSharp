@@ -36,12 +36,50 @@ namespace SpiceSharp.General
         public string[] Names { get; }
 
         /// <summary>
+        /// Gets the description of the parameter.
+        /// </summary>
+        /// <value>
+        /// The description of the parameter.
+        /// </value>
+        public string Description
+        {
+            get
+            {
+                // Try to find a parameter info attribute
+                var attr = Member.GetCustomAttribute<ParameterInfoAttribute>();
+                return attr?.Description ?? "";
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this member is interesting.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is interesting; otherwise, <c>false</c>.
+        /// </value>
+        public bool Interesting
+        {
+            get
+            {
+                var attr = Member.GetCustomAttribute<ParameterInfoAttribute>();
+                return attr?.Interesting ?? false;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this instance is principal.
         /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is principal; otherwise, <c>false</c>.
         /// </value>
-        public bool IsPrincipal { get; }
+        public bool IsPrincipal 
+        {
+            get
+            {
+                var attr = Member.GetCustomAttribute<ParameterInfoAttribute>();
+                return attr?.Interesting ?? false;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberDescription"/> class.
@@ -55,9 +93,6 @@ namespace SpiceSharp.General
             Names = member
                 .GetCustomAttributes(typeof(ParameterNameAttribute))
                 .Select(attr => ((ParameterNameAttribute)attr).Name).ToArray();
-
-            // Check if the member is a principal parameter
-            IsPrincipal = member.GetCustomAttribute<ParameterInfoAttribute>()?.IsPrincipal ?? false;
 
             // Cache the return type
             switch (member)
