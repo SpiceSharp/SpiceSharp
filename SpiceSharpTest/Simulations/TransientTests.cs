@@ -118,8 +118,8 @@ namespace SpiceSharpTest.Simulations
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-6, 1e-6, 1e-5, 2e-5)),
                 new NonlinearResistor("NLR1", "in", "out")
-                    .SetParameter("a", 100.0)
-                    .SetParameter("b", 0.7),
+                    .Set("a", 100.0)
+                    .Set("b", 0.7),
                 new Capacitor("C1", "out", "0", 1.0e-9)
                 );
 
@@ -165,17 +165,17 @@ namespace SpiceSharpTest.Simulations
         {
             // First create the models
             var diodeModelA = new DiodeModel("DA")
-                .SetParameter("n", 0.1e-3);
+                .Set("n", 0.1e-3);
             var diodeModelB = new DiodeModel("DB")
-                .SetParameter("is", 100e-14);
+                .Set("is", 100e-14);
             var bjtModelQp1 = new BipolarJunctionTransistorModel("QP1")
-                .SetParameter("pnp", true)
-                .SetParameter("is", 16e-15)
-                .SetParameter("bf", 1700.0);
+                .Set("pnp", true)
+                .Set("is", 16e-15)
+                .Set("bf", 1700.0);
             var bjtModelQp2 = new BipolarJunctionTransistorModel("QP2")
-                .SetParameter("pnp", true)
-                .SetParameter("is", 16e-15)
-                .SetParameter("bf", 1610.5);
+                .Set("pnp", true)
+                .Set("is", 16e-15)
+                .Set("bf", 1610.5);
 
             var ckt = new Circuit(
                 new NodeMapper(new[]

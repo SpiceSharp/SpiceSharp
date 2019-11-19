@@ -5,7 +5,7 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.
     /// </summary>
-    public interface IEntity : ICloneable, INamedParameterCollection
+    public interface IEntity : ICloneable, IParameterized<IEntity>
     {
         /// <summary>
         /// Gets the name of the entity.
@@ -14,14 +14,6 @@ namespace SpiceSharp.Entities
         /// The name.
         /// </value>
         string Name { get; }
-
-        /// <summary>
-        /// Gets the parameters.
-        /// </summary>
-        /// <value>
-        /// The parameters.
-        /// </value>
-        IParameterSetDictionary Parameters { get; }
 
         /// <summary>
         /// Creates the behaviors for the specified simulation and registers them with the simulation.

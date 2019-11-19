@@ -129,7 +129,7 @@ namespace SpiceSharp.Components
         /// Copy from another component.
         /// </summary>
         /// <param name="source">The source component.</param>
-        public override void CopyFrom(IEntity source)
+        protected override void CopyFrom(ICloneable source)
         {
             base.CopyFrom(source);
             var c = (Component)source;

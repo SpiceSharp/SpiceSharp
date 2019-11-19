@@ -5,7 +5,10 @@
     /// </summary>
     /// <seealso cref="ICloneable" />
     /// <seealso cref="ITypeDictionary{T}" />
-    public interface IParameterSetDictionary : ICloneable, ITypeDictionary<IParameterSet>, INamedParameterCollection
+    public interface IParameterSetDictionary : 
+        ITypeDictionary<IParameterSet>,
+        IChainableImportParameterSet<IParameterSetDictionary>,
+        IParameterSet
     {
     }
 }

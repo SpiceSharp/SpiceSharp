@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -8,21 +7,8 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Base class for any circuit object that can take part in simulations.
     /// </summary>
-    public abstract class Entity : IEntity
+    public abstract class Entity : Parameterized<IEntity>, IEntity
     {
-        /// <summary>
-        /// Gets a collection of parameters.
-        /// </summary>
-        public IParameterSetDictionary Parameters { get; }
-
-        /// <summary>
-        /// Gets the parameters in the collection.
-        /// </summary>
-        /// <value>
-        /// The parameters in the collection.
-        /// </value>
-        IEnumerable<INamedParameters> INamedParameterCollection.NamedParameters => Parameters.Values;
-
         /// <summary>
         /// Gets or sets a value indicating whether the parameters should reference that of the entity.
         /// If the parameters are not referenced, then the parameters are cloned instead.
@@ -42,9 +28,9 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         protected Entity(string name)
+            : base(new ParameterSetDictionary())
         {
             Name = name;
-            Parameters = new ParameterSetDictionary();
         }
 
         /// <summary>
@@ -53,9 +39,9 @@ namespace SpiceSharp.Entities
         /// <param name="name">The name.</param>
         /// <param name="parameters">The parameters.</param>
         protected Entity(string name, ParameterSetDictionary parameters)
+            : base(parameters)
         {
             Name = name;
-            Parameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
         /// <summary>
@@ -124,7 +110,7 @@ namespace SpiceSharp.Entities
         /// Clones the entity
         /// </summary>
         /// <returns></returns>
-        public virtual IEntity Clone()
+        protected override ICloneable Clone()
         {
             var clone = (IEntity) Activator.CreateInstance(GetType(), Name);
             clone.CopyFrom(this);
@@ -132,24 +118,41 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Clones this object.
-        /// </summary>
-        ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
         /// Copy properties from another entity.
         /// </summary>
         /// <param name="source">The source entity.</param>
-        public virtual void CopyFrom(IEntity source)
+        protected override void CopyFrom(ICloneable source)
         {
             source.ThrowIfNull(nameof(source));
             Reflection.CopyPropertiesAndFields(source, this);
         }
 
         /// <summary>
-        /// Copy properties from another object.
+        /// Call a parameter method with the specified name.
         /// </summary>
-        /// <param name="source">The source object.</param>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((IEntity)source);
+        /// <param name="name">The name of the method.</param>
+        /// <returns>
+        /// The current instance for chaining.
+        /// </returns>
+        public override IEntity Set(string name)
+        {
+            Parameters.Set(name);
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the value of the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// The current instance for chaining.
+        /// </returns>
+        public override IEntity Set<P>(string name, P value)
+        {
+            Parameters.Set(name, value);
+            return this;
+        }
     }
 }

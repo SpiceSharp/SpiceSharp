@@ -193,21 +193,24 @@ namespace SpiceSharpTest.Parameters
         }
 
         [Test]
-        public void When_GetParameter_Expect_Parameter()
+        public void When_Get_Expect_Parameter()
         {
             var p = new ParameterExample();
-            var param = p.GetParameter<Parameter<double>>("parameter1");
+            var param = p.Get<Parameter<double>>("parameter1");
             Assert.AreEqual(p.Parameter1, param);
         }
 
+        /*
         [Test]
         public void When_PrincipalParameter_Expect_DirectAccess()
         {
             var p = new ParameterExample();
-            var param = p.GetParameter<Parameter<double>>();
+            var param = p.Get<Parameter<double>>();
             Assert.AreEqual(param, p.PrincipalTest);
         }
+        */
 
+        /*
         [Test]
         public void When_PrincipalSetter_Expect_DirectAccess()
         {
@@ -218,5 +221,6 @@ namespace SpiceSharpTest.Parameters
             setter(10.0);
             Assert.AreEqual(10.0, p.PrincipalTest.Value, 1e-12);
         }
+        */
     }
 }

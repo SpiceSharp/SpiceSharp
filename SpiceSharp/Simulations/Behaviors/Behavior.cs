@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using System;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Template for a behavior.
@@ -24,5 +26,39 @@
         {
             Name = name;
         }
+
+        /// <summary>
+        /// Gets the value of the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// The value.
+        /// </returns>
+        public P Get<P>(string name)
+            => Reflection.Get<P>(this, name);
+
+        /// <summary>
+        /// Tries to get the value of the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
+        /// </returns>
+        public bool TryGet<P>(string name, out P value)
+            => Reflection.TryGet(this, name, out value);
+
+        /// <summary>
+        /// Creates a getter for a parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// A getter if the parameter exists; otherwise <c>null</c>.
+        /// </returns>
+        public Func<P> CreateGetter<P>(string name)
+            => Reflection.CreateGetter<P>(this, name);
     }
 }

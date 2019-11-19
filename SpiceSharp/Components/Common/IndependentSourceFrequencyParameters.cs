@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         /// A deep clone of the parameter set.
         /// </returns>
-        public override IParameterSet Clone()
+        protected override ICloneable Clone()
         {
             var result = (IndependentSourceFrequencyParameters) base.Clone();
             result.Phasor = Phasor;
@@ -85,7 +85,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// Copy parameters.
         /// </summary>
         /// <param name="source">The source object.</param>
-        public override void CopyFrom(IParameterSet source)
+        protected override void CopyFrom(ICloneable source)
         {
             base.CopyFrom(source);
             Phasor = ((IndependentSourceFrequencyParameters)source).Phasor;

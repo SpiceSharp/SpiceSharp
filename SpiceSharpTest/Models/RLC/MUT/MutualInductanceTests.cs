@@ -28,7 +28,7 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1)
-                    .SetParameter("ic", 0.0),
+                    .Set("ic", 0.0),
                 new Inductor("L2", "OUT", "0", l2),
                 new Resistor("R2", "OUT", "0", r2),
                 new MutualInductance("M1", "L1", "L2", k)
@@ -73,7 +73,7 @@ namespace SpiceSharpTest.Models
             var k = 0.693;
             var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
                 new Inductor("L2", "OUT", "0", l2),

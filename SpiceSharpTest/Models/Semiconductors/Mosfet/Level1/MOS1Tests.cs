@@ -180,7 +180,7 @@ namespace SpiceSharpTest.Models
             // Build circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "g", 10.0e3),
@@ -294,14 +294,14 @@ namespace SpiceSharpTest.Models
             // Create circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
                 CreateMOS1("M1", "out", "g", "0", "0", "MM")
-                    .SetParameter("w", 100e-6)
-                    .SetParameter("l", 100e-6),
+                    .Set("w", 100e-6)
+                    .Set("l", 100e-6),
                 CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
 
@@ -394,9 +394,9 @@ namespace SpiceSharpTest.Models
         public void When_MOS1PMOSDifferentialPair_Expect_Reference()
         {
             var model = new Mosfet1Model("Model")
-                .SetParameter("pmos", true)
-                .SetParameter("vto", -0.7)
-                .SetParameter("kp", 12.57e-4);
+                .Set("pmos", true)
+                .Set("vto", -0.7)
+                .Set("kp", 12.57e-4);
 
             var ckt = new Circuit(
                 new NodeMapper("VDD", "B12", "B13", "CTRL", "B14", "TH"),

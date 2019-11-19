@@ -14,14 +14,6 @@ namespace SpiceSharp.General
         private HashSet<MemberDescription> _values;
 
         /// <summary>
-        /// Gets the principal parameter.
-        /// </summary>
-        /// <value>
-        /// The principal parameter.
-        /// </value>
-        public MemberDescription Principal { get; }
-
-        /// <summary>
         /// Enumerate all members in the map.
         /// </summary>
         /// <value>
@@ -72,8 +64,6 @@ namespace SpiceSharp.General
                         }
                     }
                 }
-                if (desc.IsPrincipal)
-                    Principal = desc;
             }
         }
 

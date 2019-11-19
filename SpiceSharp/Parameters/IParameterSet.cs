@@ -1,10 +1,12 @@
 ﻿namespace SpiceSharp
 {
     /// <summary>
-    /// Interface describing a set of parameters.
+    /// Interface for a set of named parameters that can be read or written.
     /// </summary>
+    /// <seealso cref="IImportParameterSet" />
+    /// <seealso cref="IExportParameterSet" />
     /// <seealso cref="ICloneable" />
-    public interface IParameterSet : ICloneable, INamedParameters
+    public interface IParameterSet : IImportParameterSet, IExportParameterSet, ICloneable
     {
         /// <summary>
         /// Method for calculating the default values of derived parameters.

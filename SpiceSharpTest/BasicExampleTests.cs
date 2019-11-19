@@ -24,11 +24,11 @@ namespace SpiceSharpTest
             // </example_structure_resistor>
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
-            ckt["R1"].SetParameter("resistance", 2.0e3);
-            ckt["R1"].Parameters.SetParameter("resistance", 2.0e3);
+            ckt["R1"].Set("resistance", 2.0e3);
+            ckt["R1"].Parameters.Set("resistance", 2.0e3);
 
             // The resistance is a principal parameter, so we don't even need to specify "resistance"
-            ckt["R1"].Parameters.SetParameter(2.0e3);
+            // ckt["R1"].Parameters.Set(2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -70,16 +70,16 @@ namespace SpiceSharpTest
             // </example_parameters_mos1_createsetter>
             // <example_parameters_mos1_getparameter>
             // Get the parameter that describes the oxide thickness of the mosfet1 model
-            var toxParameter = parameters.GetParameter<double>("tox");
+            var toxParameter = parameters.Get<double>("tox");
             // </example_parameters_mos1_getparameter>
             // <example_parameters_mos1_setparameter>
             // Flag the model as a PMOS type
-            parameters.SetParameter("pmos", true);
+            parameters.Set("pmos", true);
             // </example_parameters_mos1_setparameter>
             // <example_parameters_res_setparameter>
             // Set the resistance of the resistor
             var res = new Resistor("R1");
-            res.Parameters.SetParameter(2.0e3); // 2kOhm
+            // res.Parameters.Set(2.0e3); // 2kOhm
             // </example_parameters_res_setparameter>
         }
 
@@ -146,7 +146,7 @@ namespace SpiceSharpTest
             var nmos = new Mosfet1("M1") {Model = "example"};
             nmos.Connect("d", "g", "0", "0");
             var nmosmodel = new Mosfet1Model("example");
-            nmosmodel.SetParameter("kp", 150.0e-3);
+            nmosmodel.Set("kp", 150.0e-3);
 
             // Build the circuit
             var ckt = new Circuit(
@@ -184,7 +184,7 @@ namespace SpiceSharpTest
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new Resistor("R1", "in", "out", 10.0e3),
                 new Capacitor("C1", "out", "0", 1e-6)
                 );
@@ -253,7 +253,7 @@ namespace SpiceSharpTest
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation) sender;
-                sim.EntityBehaviors["R1"].SetParameter("resistance", value);
+                sim.EntityBehaviors["R1"].Parameters.Set("resistance", value);
             };
             op.AfterExecute += (sender, args) =>
             {

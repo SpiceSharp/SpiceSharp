@@ -72,7 +72,7 @@ namespace SpiceSharpTest.Models
                 CreateDiode("D1", "0", "OUT", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 1.0)
-                    .SetParameter("acmag", 1.0)
+                    .Set("acmag", 1.0)
                 );
 
             // Create simulation
@@ -136,7 +136,7 @@ namespace SpiceSharpTest.Models
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new Resistor("R1", "in", "out", 10e3),
                 CreateDiode("D1", "out", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-14 Af=0.9")

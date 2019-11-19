@@ -209,11 +209,11 @@ namespace SpiceSharpTest.Models
             var p = s.Parameters.GetValue<SpiceSharp.Components.SwitchBehaviors.BaseParameters>();
 
             // Check on
-            s.Parameters.Call("on");
+            s.Parameters.Set("on");
             Assert.AreEqual(true, p.ZeroState);
 
             // Check off
-            s.Parameters.Call("off");
+            s.Parameters.Set("off");
             Assert.AreEqual(false, p.ZeroState);
         }
     }

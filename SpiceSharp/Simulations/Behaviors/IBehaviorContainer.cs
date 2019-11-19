@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// A container for behaviors
     /// </summary>
     /// <seealso cref="ITypeDictionary{T}" />
-    /// <seealso cref="INamedParameterCollection" />
-    public interface IBehaviorContainer : ITypeDictionary<IBehavior>, INamedParameterCollection
+    public interface IBehaviorContainer : 
+        ITypeDictionary<IBehavior>, IExportParameterSet
     {
         /// <summary>
         /// Gets the name.

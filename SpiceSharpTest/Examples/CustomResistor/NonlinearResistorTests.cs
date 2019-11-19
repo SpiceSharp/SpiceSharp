@@ -16,8 +16,8 @@ namespace SpiceSharpTest.Examples
             var ckt = new Circuit(
                 new VoltageSource("V1", "out", "0", 0.0),
                 new NonlinearResistor("RNL1", "out", "0")
-                    .SetParameter("a", 2.0e3)
-                    .SetParameter("b", 0.5)
+                    .Set("a", 2.0e3)
+                    .Set("b", 0.5)
             );
 
             // Setup the simulation and export our current

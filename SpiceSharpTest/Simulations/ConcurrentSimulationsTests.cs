@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Simulations
                     if (args.Name.Equals("R2"))
                     {
                         args.Result = dc.EntityBehaviors["R2"]
-                            .GetParameter<Parameter<double>>("resistance");
+                            .Get<Parameter<double>>("resistance");
                         args.TemperatureNeeded = true;
                     }
                 };

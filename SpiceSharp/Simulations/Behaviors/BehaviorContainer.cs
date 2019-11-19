@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Simulations;
-using System.Collections.Generic;
+﻿using System;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{Behavior}" />
-    public class BehaviorContainer : TypeDictionary<IBehavior>, IBehaviorContainer, INamedParameterCollection
+    public class BehaviorContainer : TypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
         /// Gets the source identifier.
@@ -21,23 +21,6 @@ namespace SpiceSharp.Behaviors
         /// The parameters.
         /// </value>
         public IParameterSetDictionary Parameters { get; }
-
-        /// <summary>
-        /// Gets the parameters in the collection.
-        /// </summary>
-        /// <value>
-        /// The parameters in the collection.
-        /// </value>
-        IEnumerable<INamedParameters> INamedParameterCollection.NamedParameters
-        {
-            get
-            {
-                foreach (var behavior in Values)
-                    yield return behavior;
-                foreach (var ps in Parameters.Values)
-                    yield return ps;
-            }
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
@@ -60,6 +43,62 @@ namespace SpiceSharp.Behaviors
         {
             Name = source.ThrowIfNull(nameof(source));
             Parameters = parameters.ThrowIfNull(nameof(parameters));
+        }
+
+        /// <summary>
+        /// Gets the value of the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// The value.
+        /// </returns>
+        public P Get<P>(string name)
+        {
+            foreach (var behavior in Dictionary.Values)
+            {
+                if (behavior.TryGet(name, out P value))
+                    return value;
+            }
+            return Parameters.Get<P>(name);
+        }
+
+        /// <summary>
+        /// Tries to get the value of the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
+        /// </returns>
+        public bool TryGet<P>(string name, out P value)
+        {
+            foreach (var behavior in Dictionary.Values)
+            {
+                if (behavior.TryGet(name, out value))
+                    return true;
+            }
+            return Parameters.TryGet(name, out value);
+        }
+
+        /// <summary>
+        /// Creates a getter for a parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <returns>
+        /// A getter if the parameter exists; otherwise <c>null</c>.
+        /// </returns>
+        public Func<P> CreateGetter<P>(string name)
+        {
+            foreach (var behavior in Dictionary.Values)
+            {
+                var result = behavior.CreateGetter<P>(name);
+                if (result != null)
+                    return result;
+            }
+            return Parameters.CreateGetter<P>(name);
         }
     }
 }

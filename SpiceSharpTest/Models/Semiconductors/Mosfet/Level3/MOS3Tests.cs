@@ -41,8 +41,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "0", "g", 0),
                 new VoltageSource("V2", "0", "d", 0),
                 CreateMOS3("M1", "d", "g", "0", "0", "DMOS")
-                    .SetParameter("w", 1e-6)
-                    .SetParameter("l", 1e-6),
+                    .Set("w", 1e-6)
+                    .Set("l", 1e-6),
                 CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
             );
 
@@ -90,13 +90,13 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("Vsupply", "vdd", "0", 1.8),
                 new VoltageSource("Vin", "in", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new Resistor("R1", "out", "0", 100e3),
                 new Resistor("R2", "g", "out", 10e3),
                 new Capacitor("C1", "in", "g", 1e-6),
                 CreateMOS3("M1", "out", "g", "vdd", "vdd", "DMOS")
-                    .SetParameter("w", 1e-6)
-                    .SetParameter("l", 1e-6),
+                    .Set("w", 1e-6)
+                    .Set("l", 1e-6),
                 CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
 
@@ -152,8 +152,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("Vsupply", "vdd", "0", 1.8),
                 new Resistor("R1", "out", "0", 100e3),
                 CreateMOS3("M1", "out", "in", "vdd", "vdd", "DMOS")
-                    .SetParameter("w", 1e-6)
-                    .SetParameter("l", 1e-6),
+                    .Set("w", 1e-6)
+                    .Set("l", 1e-6),
                 CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
 
@@ -237,14 +237,14 @@ namespace SpiceSharpTest.Models
             // Create circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0)
-                    .SetParameter("acmag", 1.0),
+                    .Set("acmag", 1.0),
                 new VoltageSource("Vsupply", "vdd", "0", 1.8),
                 new Resistor("R1", "out", "0", 100e3),
                 new Resistor("R2", "g", "out", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
                 CreateMOS3("M1", "out", "g", "vdd", "vdd", "DMOS")
-                    .SetParameter("w", 1e-6)
-                    .SetParameter("l", 1e-6),
+                    .Set("w", 1e-6)
+                    .Set("l", 1e-6),
                 CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5 KF=1e-24")
                 );
 

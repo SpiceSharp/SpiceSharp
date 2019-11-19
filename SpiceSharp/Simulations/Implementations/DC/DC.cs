@@ -126,7 +126,7 @@ namespace SpiceSharp.Simulations
                     var eb = EntityBehaviors[sweep.Parameter];
 
                     // Check for a parameter called "dc" that we will sweep
-                    if (eb.TryGetParameter("dc", out Parameter<double> dc))
+                    if (eb.TryGet("dc", out Parameter<double> dc))
                         swept[i] = dc;
                     else
                         throw new CircuitException("Invalid sweep object");

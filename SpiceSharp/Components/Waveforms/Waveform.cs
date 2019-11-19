@@ -1,12 +1,11 @@
 ﻿using SpiceSharp.Entities;
-using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// Template for a waveform that can change value over time.
     /// </summary>
-    public abstract class Waveform : ICloneable, INamedParameters
+    public abstract class Waveform : ParameterSet
     {
         /// <summary>
         /// Gets the current waveform value at the last probed timepoint.
@@ -28,39 +27,5 @@ namespace SpiceSharp.Components
         /// Accepts the current timepoint.
         /// </summary>
         public abstract void Accept();
-
-        /// <summary>
-        /// Clones the waveform.
-        /// </summary>
-        /// <returns>
-        /// The cloned waveform.
-        /// </returns>
-        public virtual Waveform Clone()
-        {
-            var destinationObject = (Waveform)Activator.CreateInstance(this.GetType());
-            Reflection.CopyPropertiesAndFields(this, destinationObject);
-            return destinationObject;
-        }
-
-        /// <summary>
-        /// Clones the object.
-        /// </summary>
-        /// <returns></returns>
-        ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
-        /// Copies the contents of another waveform to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        public virtual void CopyFrom(Waveform source)
-        {
-            Reflection.CopyPropertiesAndFields(source, this);
-        }
-
-        /// <summary>
-        /// Copy the contents of another object to this one.
-        /// </summary>
-        /// <param name="source">The source object.</param>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom((Waveform)source);
     }
 }
