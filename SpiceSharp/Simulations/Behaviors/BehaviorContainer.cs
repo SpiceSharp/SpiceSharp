@@ -30,7 +30,7 @@ namespace SpiceSharp.Behaviors
             : base(true)
         {
             Name = source.ThrowIfNull(nameof(source));
-            Parameters = new ParameterSetDictionary();
+            Parameters = new ParameterSetDictionary(true);
         }
 
         /// <summary>

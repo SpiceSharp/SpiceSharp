@@ -237,11 +237,10 @@ namespace SpiceSharp
             }
             else
             {
-                var key = typeof(V);
                 Lock.EnterWriteLock();
                 try
                 {
-                    Dictionary.Add(key, value);
+                    Dictionary.Add(value.GetType(), value);
                 }
                 finally
                 {

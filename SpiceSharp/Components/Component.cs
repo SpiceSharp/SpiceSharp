@@ -61,18 +61,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Creates behaviors for the specified simulation that describe this <see cref="Entity" />.
-        /// </summary>
-        /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
-        public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
-        {
-            if (Model != null)
-                entities[Model].CreateBehaviors(simulation, entities);
-            base.CreateBehaviors(simulation, entities);
-        }
-
-        /// <summary>
         /// Gets the node index of a pin.
         /// </summary>
         /// <param name="index">The pin index.</param>

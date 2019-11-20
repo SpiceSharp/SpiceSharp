@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Entities
 {
@@ -16,11 +17,11 @@ namespace SpiceSharp.Entities
         string Name { get; }
 
         /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
+        /// Creates the behaviors and stores them in the specified container.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="entities">The collection of entities that is being simulated.</param>
+        /// <param name="behaviors">An <see cref="IBehaviorContainer"/> where the behaviors can be stored.</param>
         /// <returns>A dictionary of behaviors that can be used by the simulation.</returns>
-        void CreateBehaviors(ISimulation simulation, IEntityCollection entities);
+        void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors);
     }
 }

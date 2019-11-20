@@ -9,6 +9,11 @@ namespace SpiceSharp.Behaviors
     public interface IBehaviorContainerCollection
     {
         /// <summary>
+        /// Occurs when a behavior has not been found.
+        /// </summary>
+        event EventHandler<BehaviorsNotFoundEventArgs> BehaviorsNotFound;
+
+        /// <summary>
         /// Gets the number of behavior containers in the collection.
         /// </summary>
         /// <value>
@@ -53,9 +58,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Adds the <see cref="IBehaviorContainer"/> with the specified identifier.
         /// </summary>
-        /// <param name="name">The identifier.</param>
         /// <param name="container">The behavior container.</param>
-        void Add(string name, IBehaviorContainer container);
+        void Add(IBehaviorContainer container);
 
         /// <summary>
         /// Gets a list of behaviors of a specific behavior type.

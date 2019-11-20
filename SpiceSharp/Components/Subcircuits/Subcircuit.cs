@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The entities.
         /// </value>
-        public ISubcircuitEntityCollection Entities { get; }
+        public ISubcircuitDefinition Entities { get; }
 
         /// <summary>
         /// Gets the number of nodes.
@@ -43,35 +43,24 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="entities">The entities in the subcircuit.</param>
-        public Subcircuit(string name, ISubcircuitEntityCollection entities)
+        public Subcircuit(string name, ISubcircuitDefinition entities)
             : base(name)
         {
             Entities = entities;
         }
 
         /// <summary>
-        /// Creates behaviors for the specified simulation that describe this <see cref="Entity" />.
+        /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
-        public override void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
+        public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
         {
-            if (Model != null)
-                entities[Model].CreateBehaviors(simulation, entities);
-            base.CreateBehaviors(simulation, entities);
-        }
+            base.CreateBehaviors(simulation, behaviors);
 
-        /// <summary>
-        /// Create one or more behaviors for the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
-        /// <param name="entities">The other entities.</param>
-        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
-        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, IBehaviorContainer behaviors)
-        {
             if (Entities == null)
                 return;
-            Entities.CreateBehaviors(simulation, entities, behaviors, _connections);
+            Entities.CreateBehaviors(simulation, behaviors, _connections);
         }
 
         /// <summary>

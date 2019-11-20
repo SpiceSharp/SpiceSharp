@@ -25,6 +25,11 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<Type, List<IBehavior>> _behaviorLists = new Dictionary<Type, List<IBehavior>>();
 
         /// <summary>
+        /// Occurs when a behavior has not been found.
+        /// </summary>
+        public event EventHandler<BehaviorsNotFoundEventArgs> BehaviorsNotFound;
+
+        /// <summary>
         /// Gets the number of entities in the collection.
         /// </summary>
         /// <value>
@@ -69,16 +74,23 @@ namespace SpiceSharp.Behaviors
         {
             get
             {
-                _lock.EnterReadLock();
+                _lock.EnterUpgradeableReadLock();
                 try
                 {
                     if (_entityBehaviors.TryGetValue(name, out var result))
                         return result;
-                    return null;
+                    var args = new BehaviorsNotFoundEventArgs(name);
+                    OnBehaviorsNotFound(args);
+                    if (args.Behaviors != null)
+                    {
+                        Add(args.Behaviors);
+                        return args.Behaviors;
+                    }
+                    throw new CircuitException("Cannot find behaviors for '{0}'".FormatString(name));
                 }
                 finally
                 {
-                    _lock.ExitReadLock();
+                    _lock.ExitUpgradeableReadLock();
                 }
             }
         }
@@ -123,19 +135,17 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Adds the entity behaviors.
         /// </summary>
-        /// <param name="id">The identifier.</param>
         /// <param name="behaviors">The behaviors.</param>
         /// <exception cref="CircuitException">There are already behaviors for '{0}'".FormatString(id)</exception>
-        public void Add(string id, IBehaviorContainer behaviors)
+        public void Add(IBehaviorContainer behaviors)
         {
-            id.ThrowIfNull(nameof(id));
             behaviors.ThrowIfNull(nameof(behaviors));
             _lock.EnterReadLock();
             try
             {
                 // First see if we already have a behavior
-                if (_entityBehaviors.ContainsKey(id))
-                    throw new CircuitException("There are already behaviors for '{0}'".FormatString(id));
+                if (_entityBehaviors.ContainsKey(behaviors.Name))
+                    throw new CircuitException("There are already behaviors for '{0}'".FormatString(behaviors.Name));
             }
             finally
             {
@@ -145,7 +155,7 @@ namespace SpiceSharp.Behaviors
             _lock.EnterWriteLock();
             try
             {
-                _entityBehaviors.Add(id, behaviors);
+                _entityBehaviors.Add(behaviors.Name, behaviors);
                 foreach (var type in _behaviorLists.Keys)
                 {
                     if (behaviors.TryGetValue(type, out IBehavior behavior))
@@ -253,5 +263,11 @@ namespace SpiceSharp.Behaviors
                 _lock.ExitWriteLock();
             }
         }
+
+        /// <summary>
+        /// Raises the <see cref="BehaviorsNotFound" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="BehaviorsNotFoundEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnBehaviorsNotFound(BehaviorsNotFoundEventArgs args) => BehaviorsNotFound?.Invoke(this, args);
     }
 }

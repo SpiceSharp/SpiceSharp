@@ -13,20 +13,12 @@ namespace SpiceSharp.Components
     public class ComponentBindingContext : BindingContext
     {
         /// <summary>
-        /// Gets the model.
-        /// </summary>
-        /// <value>
-        /// The model.
-        /// </value>
-        protected string Model { get; }
-
-        /// <summary>
         /// Gets the model behaviors.
         /// </summary>
         /// <value>
         /// The model behaviors.
         /// </value>
-        public IBehaviorContainer ModelBehaviors => Model != null ? Simulation.EntityBehaviors[Model] : null;
+        public IBehaviorContainer ModelBehaviors { get; }
 
         /// <summary>
         /// Gets the nodes that the component is connected to.
@@ -47,7 +39,8 @@ namespace SpiceSharp.Components
             : base(simulation, behaviors)
         {
             Nodes = nodes.ThrowIfNull(nameof(nodes)).ToArray();
-            Model = model;
+            if (model != null)
+                ModelBehaviors = simulation.EntityBehaviors[model];
         }
     }
 }

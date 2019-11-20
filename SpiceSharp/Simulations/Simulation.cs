@@ -194,11 +194,32 @@ namespace SpiceSharp.Simulations
         {
             EntityBehaviors = new BehaviorContainerCollection(entities.Comparer, this);
 
+            // Automatically create the behaviors of entities that need priority
+            void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
+            {
+                if (entities.TryGetEntity(args.Name, out var entity))
+                {
+                    var behaviors = new BehaviorContainer(entity.Name);
+                    entity.CreateBehaviors(this, behaviors);
+                    args.Behaviors = behaviors;
+                }
+            }
+            EntityBehaviors.BehaviorsNotFound += BehaviorsNotFound;
+
             // Create the behaviors
             Statistics.BehaviorCreationTime.Start();
             foreach (var entity in entities)
-                entity.CreateBehaviors(this, entities);
+            {
+                if (!EntityBehaviors.Contains(entity.Name))
+                {
+                    var behaviors = new BehaviorContainer(entity.Name);
+                    entity.CreateBehaviors(this, behaviors);
+                    EntityBehaviors.Add(behaviors);
+                }
+            }
             Statistics.BehaviorCreationTime.Stop();
+
+            EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
         }
 
         #region Methods for raising events

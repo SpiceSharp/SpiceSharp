@@ -45,58 +45,31 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
+        /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
-        public virtual void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
+        public virtual void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            entities.ThrowIfNull(nameof(entities));
+            behaviors.ThrowIfNull(nameof(behaviors));
 
-            // Skip creating behaviors if the entity is already defined in the pool
-            var pool = simulation.EntityBehaviors;
-            if (pool.Contains(Name))
-                return;
-
-            // Create our entity behavior container
-            var eb = CreateBehaviorContainer(simulation, entities);
-            if (eb != null && eb.Parameters.Count > 0 || eb.Count > 0)
-                simulation.EntityBehaviors.Add(Name, eb);
-        }
-
-        /// <summary>
-        /// Creates the <see cref="BehaviorContainer"/> containing the behaviors.
-        /// </summary>
-        /// <param name="simulation">The simulation that requests the behaviors.</param>
-        /// <param name="entities">The other entities.</param>
-        /// <returns>
-        /// A container with behaviors for the simulation.
-        /// </returns>
-        protected virtual IBehaviorContainer CreateBehaviorContainer(ISimulation simulation, IEntityCollection entities)
-        {
-            IBehaviorContainer behaviors = null;
             if (Parameters.Count > 0)
             {
-                behaviors = new BehaviorContainer(Name, (IParameterSetDictionary)(LinkParameters ? Parameters : Parameters.Clone()));
-                foreach (var p in behaviors.Parameters.Values)
-                    p.CalculateDefaults();
+                foreach (var ps in Parameters.Values)
+                {
+                    // TODO: This shouldn't be necessary. The unique values should be returned
+                    if (!behaviors.Parameters.ContainsKey(ps.GetType()))
+                    {
+                        if (LinkParameters)
+                            behaviors.Parameters.Add(ps);
+                        else
+                            behaviors.Parameters.Add((IParameterSet)ps.Clone());
+                    }
+                }
+                behaviors.Parameters.CalculateDefaults();
             }
-
-            // Create behaviors
-            if (behaviors == null)
-                behaviors = new BehaviorContainer(Name);
-            CreateBehaviors(simulation, entities, behaviors);
-            return behaviors;
         }
-
-        /// <summary>
-        /// Create one or more behaviors for the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
-        /// <param name="entities">The other entities.</param>
-        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
-        protected abstract void CreateBehaviors(ISimulation simulation, IEntityCollection entities, IBehaviorContainer behaviors);
 
         /// <summary>
         /// Clones the entity

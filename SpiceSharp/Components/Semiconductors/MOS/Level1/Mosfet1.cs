@@ -45,13 +45,14 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Create one or more behaviors for the simulation.
+        /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
-        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
-        /// <param name="entities">The other entities.</param>
-        /// <param name="behaviors">A container where all behaviors are to be stored.</param>
-        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, IBehaviorContainer behaviors)
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
+        public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
         {
+            base.CreateBehaviors(simulation, behaviors);
+
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
             var eb = simulation.EntityBehaviors;
             if (eb.Tracks<INoiseBehavior>())
