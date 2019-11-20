@@ -121,7 +121,7 @@ namespace SpiceSharp.Simulations
                 else
                 {
                     // Get entity parameters
-                    if (!EntityBehaviors.ContainsKey(sweep.Parameter))
+                    if (!EntityBehaviors.Contains(sweep.Parameter))
                         throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
                     var eb = EntityBehaviors[sweep.Parameter];
 

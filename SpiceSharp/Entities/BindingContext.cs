@@ -30,7 +30,7 @@ namespace SpiceSharp.Entities
         /// <value>
         /// The behaviors.
         /// </value>
-        public virtual BehaviorContainer Behaviors { get; }
+        public virtual IBehaviorContainer Behaviors { get; }
 
         /// <summary>
         /// Gets the simulation variables.
@@ -84,7 +84,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="behaviors">The entity behaviors.</param>
-        public BindingContext(ISimulation simulation, BehaviorContainer behaviors)
+        public BindingContext(ISimulation simulation, IBehaviorContainer behaviors)
         {
             Simulation = simulation.ThrowIfNull(nameof(simulation));
             Behaviors = behaviors.ThrowIfNull(nameof(behaviors));

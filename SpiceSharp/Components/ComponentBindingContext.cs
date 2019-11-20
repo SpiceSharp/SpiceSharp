@@ -1,11 +1,13 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Context for binding an <see cref="IBehavior"/> created by a <see cref="Component"/> to an <see cref="ISimulation"/>.
+    /// Context for binding an <see cref="IBehavior"/> created by an <see cref="IComponent"/> to an <see cref="ISimulation"/>.
     /// </summary>
     /// <seealso cref="BindingContext" />
     public class ComponentBindingContext : BindingContext
@@ -41,10 +43,10 @@ namespace SpiceSharp.Components
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="nodes">The nodes that the component is connected to.</param>
         /// <param name="model">The model.</param>
-        public ComponentBindingContext(ISimulation simulation, BehaviorContainer behaviors, Variable[] nodes, string model)
+        public ComponentBindingContext(ISimulation simulation, IBehaviorContainer behaviors, IEnumerable<Variable> nodes, string model)
             : base(simulation, behaviors)
         {
-            Nodes = nodes.ThrowIfNull(nameof(nodes));
+            Nodes = nodes.ThrowIfNull(nameof(nodes)).ToArray();
             Model = model;
         }
     }

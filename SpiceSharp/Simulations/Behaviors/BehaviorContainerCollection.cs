@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.
     /// </summary>
-    public class BehaviorContainerCollection
+    public class BehaviorContainerCollection : IBehaviorContainerCollection
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
@@ -25,39 +25,17 @@ namespace SpiceSharp.Behaviors
         private readonly Dictionary<Type, List<IBehavior>> _behaviorLists = new Dictionary<Type, List<IBehavior>>();
 
         /// <summary>
-        /// Gets the number of behaviors in the collection.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                _lock.EnterReadLock();
-                try
-                {
-                    var count = 0;
-                    foreach (var pair in _behaviorLists)
-                        count += pair.Value.Count;
-                    return count;
-                }
-                finally
-                {
-                    _lock.ExitReadLock();
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets the number of entities in the collection.
         /// </summary>
         /// <value>
         /// The entity count.
         /// </value>
-        public int EntityCount => _entityBehaviors.Count;
+        public int Count => _entityBehaviors.Count;
 
         /// <summary>
         /// Enumerates all names in the pool.
         /// </summary>
-        public IEnumerable<string> Names
+        public IEnumerable<string> Keys
         {
             get
             {
@@ -80,7 +58,7 @@ namespace SpiceSharp.Behaviors
         /// <value>
         /// The types.
         /// </value>
-        public IEnumerable<Type> Types => _behaviorLists.Keys;
+        public IEnumerable<Type> BehaviorTypes => _behaviorLists.Keys;
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
@@ -236,7 +214,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if behaviors exist; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool ContainsKey(string name)
+        public virtual bool Contains(string name)
         {
             _lock.EnterReadLock();
             try

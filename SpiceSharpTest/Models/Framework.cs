@@ -43,7 +43,7 @@ namespace SpiceSharpTest.Models
             {
                 _nodes.AddRange(nodes);
             }
-            protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+            protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, IBehaviorContainer behaviors)
             {
                 var context = new ModelBindingContext(simulation, behaviors);
                 behaviors.Add(new Mapper(_nodes, context));
@@ -507,7 +507,7 @@ namespace SpiceSharpTest.Models
                 {
                     for (var i = 0; i < c.PinCount; i++)
                         Console.Write($"{c.GetNode(i)} ");
-                    Console.Write($"({string.Join(", ", c.GetNodes(tran.Variables))})");
+                    Console.Write($"({string.Join(", ", c.MapNodes(tran.Variables))})");
                 }
                 Console.WriteLine();
             }

@@ -20,7 +20,7 @@ namespace SpiceSharp
         /// </summary>
         private class VoltageDriver
         {
-            public Component Source;
+            public IComponent Source;
             public Variable Node1;
             public Variable Node2;
         }
@@ -89,11 +89,11 @@ namespace SpiceSharp
         private void CheckEntity(IEntity c)
         {
             // Circuit components
-            if (c is Component icc)
+            if (c is IComponent icc)
             {
                 var i = 0;
                 var nodes = new Variable[icc.PinCount];
-                foreach (var node in icc.GetNodes(_nodes))
+                foreach (var node in icc.MapNodes(_nodes))
                 {
                     // Group indices
                     nodes[i++] = node;
@@ -144,12 +144,12 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if all component pins are short-circuited; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsShortCircuited(Component component)
+        private bool IsShortCircuited(IComponent component)
         {
             // Check for ground node and for short-circuited components
             Variable n = null;
             var isShortcircuit = false;
-            foreach (var node in component.GetNodes(_nodes))
+            foreach (var node in component.MapNodes(_nodes))
             {
                 // Check for a connection to ground
                 if (node == _nodes.Ground)
@@ -178,7 +178,7 @@ namespace SpiceSharp
         /// <returns>
         /// The component that closes the loop.
         /// </returns>
-        private Component FindVoltageDriveLoop()
+        private IComponent FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
             var index = 1;

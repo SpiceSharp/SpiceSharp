@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="eb">The eb.</param>
         /// <param name="inductor1">The name of the primary inductor.</param>
         /// <param name="inductor2">The name of the secondary inductor.</param>
-        public MutualInductanceBindingContext(ISimulation simulation, BehaviorContainer eb, string inductor1, string inductor2)
+        public MutualInductanceBindingContext(ISimulation simulation, IBehaviorContainer eb, string inductor1, string inductor2)
             : base(simulation, eb)
         {
             InductorName1 = inductor1.ThrowIfNull(nameof(inductor1));

@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a pool of all entity behaviors active in the simulation.
         /// </summary>
-        public BehaviorContainerCollection EntityBehaviors { get; private set; }
+        public IBehaviorContainerCollection EntityBehaviors { get; private set; }
 
         /// <summary>
         /// Gets the statistics.

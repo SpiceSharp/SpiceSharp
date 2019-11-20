@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SpiceSharp.General;
 using System.Reflection;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Attributes;
 using System.Linq;

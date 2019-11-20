@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="behaviors">The entity behaviors.</param>
-        public ModelBindingContext(ISimulation simulation, BehaviorContainer behaviors) : base(simulation, behaviors)
+        public ModelBindingContext(ISimulation simulation, IBehaviorContainer behaviors) : base(simulation, behaviors)
         {
         }
     }

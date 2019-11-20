@@ -38,7 +38,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="parameters">The parameters.</param>
-        protected Entity(string name, ParameterSetDictionary parameters)
+        protected Entity(string name, IParameterSetDictionary parameters)
             : base(parameters)
         {
             Name = name;
@@ -47,14 +47,6 @@ namespace SpiceSharp.Entities
         /// <summary>
         /// Creates behaviors for the specified simulation that describe this <see cref="Entity"/>.
         /// </summary>
-        /// <remarks>
-        /// The order typically indicates hierarchy. The entity will create the behaviors in reverse order, allowing
-        /// the most specific child class to be used that is necessary. For example, the <see cref="OP"/> simulation needs
-        /// <see cref="ITemperatureBehavior"/> and an <see cref="IBiasingBehavior"/>. The entity will first look for behaviors
-        /// of type <see cref="IBiasingBehavior"/>, and then for the behaviors of type <see cref="ITemperatureBehavior"/>. However,
-        /// if the behavior that was created for <see cref="IBiasingBehavior"/> also implements <see cref="ITemperatureBehavior"/>,
-        /// then then entity will not create a new instance of the behavior.
-        /// </remarks>
         /// <param name="simulation">The simulation requesting the behaviors.</param>
         /// <param name="entities">The entities being processed, used by the entity to find linked entities.</param>
         public virtual void CreateBehaviors(ISimulation simulation, IEntityCollection entities)
@@ -64,7 +56,7 @@ namespace SpiceSharp.Entities
 
             // Skip creating behaviors if the entity is already defined in the pool
             var pool = simulation.EntityBehaviors;
-            if (pool.ContainsKey(Name))
+            if (pool.Contains(Name))
                 return;
 
             // Create our entity behavior container
@@ -81,9 +73,9 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// A container with behaviors for the simulation.
         /// </returns>
-        protected virtual BehaviorContainer CreateBehaviorContainer(ISimulation simulation, IEntityCollection entities)
+        protected virtual IBehaviorContainer CreateBehaviorContainer(ISimulation simulation, IEntityCollection entities)
         {
-            BehaviorContainer behaviors = null;
+            IBehaviorContainer behaviors = null;
             if (Parameters.Count > 0)
             {
                 behaviors = new BehaviorContainer(Name, (IParameterSetDictionary)(LinkParameters ? Parameters : Parameters.Clone()));
@@ -104,7 +96,7 @@ namespace SpiceSharp.Entities
         /// <param name="simulation">The simulation for which behaviors need to be created.</param>
         /// <param name="entities">The other entities.</param>
         /// <param name="behaviors">A container where all behaviors are to be stored.</param>
-        protected abstract void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors);
+        protected abstract void CreateBehaviors(ISimulation simulation, IEntityCollection entities, IBehaviorContainer behaviors);
 
         /// <summary>
         /// Clones the entity

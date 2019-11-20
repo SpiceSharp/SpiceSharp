@@ -73,7 +73,7 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation for which behaviors need to be created.</param>
         /// <param name="entities">The other entities.</param>
         /// <param name="behaviors">A container where all behaviors are to be stored.</param>
-        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, BehaviorContainer behaviors)
+        protected override void CreateBehaviors(ISimulation simulation, IEntityCollection entities, IBehaviorContainer behaviors)
         {
             var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
             var eb = simulation.EntityBehaviors;

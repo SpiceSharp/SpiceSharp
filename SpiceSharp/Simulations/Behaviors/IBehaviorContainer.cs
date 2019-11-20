@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Simulations
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// A container for behaviors
