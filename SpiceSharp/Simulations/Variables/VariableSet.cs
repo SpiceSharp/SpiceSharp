@@ -128,18 +128,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Make an alias for a variable identifier.
+        /// Make an alias for a variable.
         /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <param name="alias">The alias for the identifier.</param>
         /// <remarks>
         /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
         /// point to the ground node.
         /// </remarks>
-        /// <param name="original">The original identifier.</param>
-        /// <param name="alias">The alias for the identifier.</param>
-        public void AliasNode(string original, string alias)
+        public void AliasNode(Variable variable, string alias)
         {
-            var originalNode = Map[original];
-            Map.Add(alias, originalNode);
+            Map.Add(alias, variable);
         }
 
         /// <summary>

@@ -55,9 +55,10 @@ namespace SpiceSharp.Entities
         /// <returns>The simulation state.</returns>
         public S GetState<S>() where S : ISimulationState
         {
-            if (Simulation is IStateful<S> sim)
-                return sim.State;
-            throw new CircuitException("The simulation does not use a state of type {0}".FormatString(typeof(S)));
+            var state = Simulation.GetState<S>();
+            if (state == null)
+                throw new CircuitException("The simulation does not use a state of type '{0}'".FormatString(typeof(S)));
+            return state;
         }
 
         /// <summary>
@@ -70,13 +71,8 @@ namespace SpiceSharp.Entities
         /// </returns>
         public bool TryGetState<S>(out S state) where S : ISimulationState
         {
-            if (Simulation is IStateful<S> sim)
-            {
-                state = sim.State;
-                return true;
-            }
-            state = default;
-            return false;
+            state = Simulation.GetState<S>();
+            return state != null;
         }
 
         /// <summary>

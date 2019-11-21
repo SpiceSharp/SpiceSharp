@@ -64,6 +64,15 @@ namespace SpiceSharp.Components
             // So we'll make a subcircuit simulation matching the parent simulation.
             string name = behaviors.Name;
             var simulation = new SubcircuitSimulation(name, parentSimulation);
+
+            // We can now alias the inside- and outside nodes
+            for (var i = 0; i < nodes.Length; i++)
+            {
+                var node = parentSimulation.Variables.MapNode(nodes[i], VariableType.Voltage);
+                simulation.Variables.AliasNode(node, _pins[i]);
+            }
+
+            // Creat the behaviors for the subcircuit
             simulation.Run(Entities);
 
             // Create the behaviors necessary for the subcircuit

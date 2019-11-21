@@ -59,18 +59,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         }
 
         /// <summary>
-        /// Make an alias for a variable identifier.
+        /// Make an alias for a variable.
         /// </summary>
-        /// <param name="original">The original identifier.</param>
+        /// <param name="variable">The variable.</param>
         /// <param name="alias">The alias for the identifier.</param>
         /// <remarks>
         /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
         /// point to the ground node.
         /// </remarks>
-        public void AliasNode(string original, string alias)
-        {
-            _parent.AliasNode(_name.Combine(original), _name.Combine(alias));
-        }
+        public void AliasNode(Variable variable, string alias)
+            => _parent.AliasNode(variable, _name.Combine(alias));
 
         /// <summary>
         /// Clears the set from any variables.

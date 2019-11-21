@@ -82,15 +82,15 @@ namespace SpiceSharp.Simulations
         bool Contains(string id);
 
         /// <summary>
-        /// Make an alias for a variable identifier.
+        /// Make an alias for a variable.
         /// </summary>
         /// <remarks>
         /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
         /// point to the ground node.
         /// </remarks>
-        /// <param name="original">The original identifier.</param>
+        /// <param name="variable">The variable.</param>
         /// <param name="alias">The alias for the identifier.</param>
-        void AliasNode(string original, string alias);
+        void AliasNode(Variable variable, string alias);
 
         /// <summary>
         /// Tries to get a variable.
