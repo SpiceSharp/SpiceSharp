@@ -124,12 +124,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <param name="state">The state.</param>
-        public void GetState(out IBiasingSimulationState state) => state = BiasingState;
-
-        /// <summary>
         /// Set up the simulation.
         /// </summary>
         /// <param name="circuit">The circuit that will be used.</param>

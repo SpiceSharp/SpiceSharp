@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 
@@ -16,6 +18,46 @@ namespace SpiceSharp.Simulations
         /// The status.
         /// </value>
         public SimulationStatus Status { get; private set; }
+
+        /// <summary>
+        /// Gets all the state types that are used by the class.
+        /// </summary>
+        /// <value>
+        /// The states.
+        /// </value>
+        public virtual IEnumerable<Type> States
+        {
+            get
+            {
+                var ifs = GetType().GetTypeInfo().GetInterfaces();
+                foreach (var i in ifs)
+                {
+                    var info = i.GetTypeInfo();
+                    if (info.IsGenericType && info.GetGenericTypeDefinition() == typeof(IStateful<>))
+                        yield return info.GetGenericArguments()[0];
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all behavior types that are used by the class.
+        /// </summary>
+        /// <value>
+        /// The behaviors.
+        /// </value>
+        public virtual IEnumerable<Type> Behaviors
+        {
+            get
+            {
+                var ifs = GetType().GetTypeInfo().GetInterfaces();
+                foreach (var i in ifs)
+                {
+                    var info = i.GetTypeInfo();
+                    if (info.IsGenericType && info.GetGenericTypeDefinition() == typeof(IBehavioral<>))
+                        yield return info.GetGenericArguments()[0];
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a set of configurations for the <see cref="ISimulation" />.
@@ -221,6 +263,34 @@ namespace SpiceSharp.Simulations
             Statistics.BehaviorCreationTime.Stop();
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
+        }
+
+        /// <summary>
+        /// Checks if the class uses the specified behaviors.
+        /// </summary>
+        /// <typeparam name="B">The behavior type.</typeparam>
+        /// <returns>
+        /// <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
+        /// </returns>
+        public virtual bool UsesBehaviors<B>() where B : IBehavior
+        {
+            if (this is IBehavioral<B>)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the state of the specified type.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        /// The type.
+        /// </returns>
+        public virtual S GetState<S>() where S : ISimulationState
+        {
+            if (this is IStateful<S> stateful)
+                return stateful.State;
+            return default;
         }
 
         #region Methods for raising events

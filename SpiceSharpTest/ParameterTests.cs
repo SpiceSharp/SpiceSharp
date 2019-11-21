@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Attributes;
-using SpiceSharp.General;
 
 namespace SpiceSharpTest.Parameters
 {

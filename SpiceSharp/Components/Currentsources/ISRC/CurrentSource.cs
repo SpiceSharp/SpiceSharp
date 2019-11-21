@@ -70,11 +70,11 @@ namespace SpiceSharp.Components
 
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), null);
             var eb = simulation.EntityBehaviors;
-            if (eb.Tracks<IAcceptBehavior>())
+            if (simulation.UsesBehaviors<IAcceptBehavior>())
                 behaviors.Add(new AcceptBehavior(Name, context));
-            if (eb.Tracks<IFrequencyBehavior>())
+            if (simulation.UsesBehaviors<IFrequencyBehavior>())
                 behaviors.Add(new FrequencyBehavior(Name, context));
-            if (eb.Tracks<IBiasingBehavior>() && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
+            if (simulation.UsesBehaviors<IBiasingBehavior>() && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
                 behaviors.Add(new BiasingBehavior(Name, context));
         }
     }

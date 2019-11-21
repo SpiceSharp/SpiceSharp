@@ -58,11 +58,11 @@ namespace SpiceSharp.Components
 
             var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
             var eb = simulation.EntityBehaviors;
-            if (eb.Tracks<IFrequencyBehavior>())
+            if (simulation.UsesBehaviors<IFrequencyBehavior>())
                 behaviors.Add(new FrequencyBehavior(Name, context));
-            if (eb.Tracks<ITimeBehavior>())
+            if (simulation.UsesBehaviors<ITimeBehavior>())
                 behaviors.Add(new TransientBehavior(Name, context));
-            if (eb.Tracks<ITemperatureBehavior>() && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
+            if (simulation.UsesBehaviors<ITemperatureBehavior>() && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
                 behaviors.Add(new TemperatureBehavior(Name, context));
         }
     }

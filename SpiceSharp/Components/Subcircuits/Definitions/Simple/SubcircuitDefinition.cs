@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SubcircuitBehaviors;
+using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
@@ -53,7 +53,6 @@ namespace SpiceSharp.Components
         /// <param name="parentSimulation">The parent simulation.</param>
         /// <param name="behaviors">The <see cref="IBehaviorContainer" /> used for this subcircuit.</param>
         /// <param name="nodes">The nodes on the outside of the subcircuit.</param>
-        /// <exception cref="CircuitException">Node mismatch: subcircuit requires {0} nodes, but {1} given".FormatString(_pins.Length, nodes?.Length ?? 0)</exception>
         public virtual void CreateBehaviors(ISimulation parentSimulation, IBehaviorContainer behaviors, string[] nodes)
         {
             if (Entities == null || Entities.Count == 0)
@@ -63,6 +62,28 @@ namespace SpiceSharp.Components
 
             // We need to create behaviors for all subcircuit entities
             // So we'll make a subcircuit simulation matching the parent simulation.
+            string name = behaviors.Name;
+            var simulation = new SubcircuitSimulation(name, parentSimulation);
+            simulation.Run(Entities);
+
+            // Create the behaviors necessary for the subcircuit
+            if (simulation.UsesBehaviors<ITemperatureBehavior>())
+                behaviors.Add(new TemperatureBehavior(name, simulation));
+            if (simulation.UsesBehaviors<IBiasingUpdateBehavior>())
+                behaviors.Add(new BiasingUpdateBehavior(name, simulation));
+            if (simulation.UsesBehaviors<IBiasingBehavior>())
+                behaviors.Add(new BiasingBehavior(name, simulation));
+            if (simulation.UsesBehaviors<ITimeBehavior>())
+                behaviors.Add(new TimeBehavior(name, simulation));
+            if (simulation.UsesBehaviors<IAcceptBehavior>())
+                behaviors.Add(new AcceptBehavior(name, simulation));
+            if (simulation.UsesBehaviors<IFrequencyUpdateBehavior>())
+                behaviors.Add(new FrequencyUpdateBehavior(name, simulation));
+            if (simulation.UsesBehaviors<IFrequencyBehavior>())
+                behaviors.Add(new FrequencyBehavior(name, simulation));
+            if (simulation.UsesBehaviors<INoiseBehavior>())
+                behaviors.Add(new NoiseBehavior(name, simulation));
+
         }
     }
 }

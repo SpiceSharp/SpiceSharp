@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            Simulation.GetState(out IComplexSimulationState state);
+            var state = Simulation.GetState<IComplexSimulationState>();
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 PosIndex = state.Map[posNode];

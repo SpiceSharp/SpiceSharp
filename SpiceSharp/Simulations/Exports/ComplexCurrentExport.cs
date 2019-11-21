@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            Simulation.GetState(out IComplexSimulationState state);
+            var state = Simulation.GetState<IComplexSimulationState>();
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
                 if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))

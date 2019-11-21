@@ -1,51 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors
+namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
 {
     /// <summary>
     /// A template for a subcircuit simulation.
     /// </summary>
     /// <seealso cref="ISimulation" />
-    public abstract class SubcircuitSimulation : IEventfulSimulation
+    public class SubcircuitSimulation : ISimulation
     {
-        /// <summary>
-        /// Occurs when simulation data can be exported.
-        /// </summary>
-        public event EventHandler<ExportDataEventArgs> ExportSimulationData;
-
-        /// <summary>
-        /// Occurs before the simulation is set up.
-        /// </summary>
-        public event EventHandler<EventArgs> BeforeSetup;
-
-        /// <summary>
-        /// Occurs after the simulation is set up.
-        /// </summary>
-        public event EventHandler<EventArgs> AfterSetup;
-
-        /// <summary>
-        /// Occurs before the simulation starts its execution.
-        /// </summary>
-        public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
-
-        /// <summary>
-        /// Occurs after the simulation has executed.
-        /// </summary>
-        public event EventHandler<AfterExecuteEventArgs> AfterExecute;
-
-        /// <summary>
-        /// Occurs before the simulation is destroyed.
-        /// </summary>
-        public event EventHandler<EventArgs> BeforeUnsetup;
-
-        /// <summary>
-        /// Occurs after the simulation is destroyed.
-        /// </summary>
-        public event EventHandler<EventArgs> AfterUnsetup;
-
         /// <summary>
         /// Gets the parent simulation.
         /// </summary>
@@ -53,6 +19,22 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// The parent.
         /// </value>
         protected ISimulation Parent { get; }
+
+        /// <summary>
+        /// Gets all the states that the class uses.
+        /// </summary>
+        /// <value>
+        /// The states.
+        /// </value>
+        public IEnumerable<Type> States => Parent.States;
+
+        /// <summary>
+        /// Gets all behavior types that are used by the class.
+        /// </summary>
+        /// <value>
+        /// The behaviors.
+        /// </value>
+        public IEnumerable<Type> Behaviors => Parent.Behaviors;
 
         /// <summary>
         /// Gets the name of the <see cref="ISimulation" />.
@@ -84,7 +66,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The variables.
         /// </value>
-        public IVariableSet Variables => Parent.Variables;
+        public IVariableSet Variables { get; }
 
         /// <summary>
         /// Gets the entity behaviors.
@@ -97,9 +79,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitSimulation"/> class.
         /// </summary>
-        public SubcircuitSimulation(ISimulation parent)
+        public SubcircuitSimulation(string name, ISimulation parent)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
+            Variables = new SubcircuitVariableSet(name, parent.Variables);
         }
 
         /// <summary>
@@ -108,7 +91,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="entities">The entities.</param>
         public void Run(IEntityCollection entities)
         {
-            EntityBehaviors = new BehaviorContainerCollection(Parent.EntityBehaviors);
+            EntityBehaviors = new BehaviorContainerCollection(Parent.EntityBehaviors.Comparer, Parent);
 
             void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
             {
@@ -139,5 +122,23 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
         }
+
+        /// <summary>
+        /// Gets the state of the specified type.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        /// The type, or <c>null</c> if the state isn't used.
+        /// </returns>
+        public S GetState<S>() where S : ISimulationState => Parent.GetState<S>();
+
+        /// <summary>
+        /// Checks if the class uses the specified behaviors.
+        /// </summary>
+        /// <typeparam name="B">The behavior type.</typeparam>
+        /// <returns>
+        ///   <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
+        /// </returns>
+        public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
     }
 }

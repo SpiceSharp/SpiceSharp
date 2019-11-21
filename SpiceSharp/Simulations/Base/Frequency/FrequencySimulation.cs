@@ -92,12 +92,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <param name="state">The state.</param>
-        public void GetState(out IComplexSimulationState state) => state = ComplexState;
-
-        /// <summary>
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The circuit that will be used.</param>

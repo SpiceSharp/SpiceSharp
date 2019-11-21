@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.NonlinearResistorBehaviors;
 using SpiceSharp.Simulations;
 
@@ -36,7 +35,7 @@ namespace SpiceSharp.Components
             base.CreateBehaviors(simulation, behaviors);
 
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
-            if (simulation.EntityBehaviors.Tracks<IBiasingBehavior>())
+            if (simulation.UsesBehaviors<IBiasingBehavior>())
                 behaviors.Add(new BiasingBehavior(Name, context));
         }
     }

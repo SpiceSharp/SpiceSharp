@@ -484,8 +484,8 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">The circuit.</param>
         protected void DumpTransientState(Transient tran, Circuit ckt)
         {
-            var state = tran.State;
-            tran.GetState(out IBiasingSimulationState rstate);
+            var state = tran.GetState<ITimeSimulationState>();
+            var rstate = tran.GetState<IBiasingSimulationState>();
 
             Console.WriteLine("----------- Dumping transient information -------------");
             Console.WriteLine($"Base time: {state.Method.BaseTime}");

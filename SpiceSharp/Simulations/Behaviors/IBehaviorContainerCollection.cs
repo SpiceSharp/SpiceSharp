@@ -90,15 +90,6 @@ namespace SpiceSharp.Behaviors
         bool Contains(string name);
 
         /// <summary>
-        /// Checks if the collection tracks a behavior type.
-        /// </summary>
-        /// <typeparam name="B">The <see cref="IBehavior"/> type.</typeparam>
-        /// <returns>
-        /// <c>true</c> if the type is tracked by the collection; otherwise <c>false</c>.
-        /// </returns>
-        bool Tracks<B>() where B : IBehavior;
-
-        /// <summary>
         /// Clears all containers in the collection.
         /// </summary>
         void Clear();

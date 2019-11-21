@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Interface that describes a simulation.
     /// </summary>
-    public interface ISimulation
+    public interface ISimulation : IStateful, IBehavioral
     {
         /// <summary>
         /// Gets the name of the <see cref="ISimulation"/>.

@@ -109,23 +109,7 @@ namespace SpiceSharp.Behaviors
         public BehaviorContainerCollection(IEqualityComparer<string> comparer, ISimulation simulation)
         {
             _entityBehaviors = new Dictionary<string, IBehaviorContainer>(comparer);
-            var ifs = simulation.GetType().GetTypeInfo().GetInterfaces();
-            foreach (var type in ifs)
-            {
-                var info = type.GetTypeInfo();
-                if (info.IsGenericType && (info.GetGenericTypeDefinition() == typeof(IBehavioral<>)))
-                    _behaviorLists.Add(info.GetGenericArguments()[0], new List<IBehavior>());
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
-        /// </summary>
-        /// <param name="source">The collection to serve as a template.</param>
-        public BehaviorContainerCollection(IBehaviorContainerCollection source)
-        {
-            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(source.Comparer);
-            foreach (var type in _behaviorLists.Keys)
+            foreach (var type in simulation.Behaviors)
                 _behaviorLists.Add(type, new List<IBehavior>());
         }
 
@@ -233,16 +217,6 @@ namespace SpiceSharp.Behaviors
                 _lock.ExitReadLock();
             }
         }
-
-        /// <summary>
-        /// Checks if the collection tracks an <see cref="IBehavior"/>.
-        /// </summary>
-        /// <typeparam name="B">The behavior.</typeparam>
-        /// <returns>\
-        /// <c>true</c> if the collection tracks the behavior type; otherwise <c>false</c>.
-        /// </returns>
-        public bool Tracks<B>() where B : IBehavior
-            => _behaviorLists.ContainsKey(typeof(B));
 
         /// <summary>
         /// Clears all behaviors in the pool.

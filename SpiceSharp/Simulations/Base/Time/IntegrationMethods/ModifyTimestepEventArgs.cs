@@ -11,7 +11,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the time simulation.
         /// </summary>
-        public TimeSimulation Simulation { get; }
+        public ITimeSimulation Simulation { get; }
 
         /// <summary>
         /// Gets or sets the timestep to be probed.
@@ -37,7 +37,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="delta">The timestep.</param>
-        public ModifyTimestepEventArgs(TimeSimulation simulation, double delta)
+        public ModifyTimestepEventArgs(ITimeSimulation simulation, double delta)
         {
             Simulation = simulation.ThrowIfNull(nameof(simulation));
             _delta = delta;

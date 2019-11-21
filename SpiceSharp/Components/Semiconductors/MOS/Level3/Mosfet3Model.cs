@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.MosfetBehaviors.Level3;
 using SpiceSharp.Simulations;
 
@@ -41,7 +40,7 @@ namespace SpiceSharp.Components
             base.CreateBehaviors(simulation, behaviors);
 
             var context = new ModelBindingContext(simulation, behaviors);
-            if (simulation.EntityBehaviors.Tracks<ITemperatureBehavior>())
+            if (simulation.UsesBehaviors<ITemperatureBehavior>())
                 behaviors.Add(new ModelTemperatureBehavior(Name, context));
         }
     }
