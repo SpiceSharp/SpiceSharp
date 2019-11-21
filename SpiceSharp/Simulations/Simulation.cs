@@ -201,6 +201,7 @@ namespace SpiceSharp.Simulations
                 {
                     var behaviors = new BehaviorContainer(entity.Name);
                     entity.CreateBehaviors(this, behaviors);
+                    EntityBehaviors.Add(behaviors);
                     args.Behaviors = behaviors;
                 }
             }

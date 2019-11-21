@@ -96,7 +96,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Setup(IStateful<IBiasingSimulationState> simulation)
+        public override void Setup(ITimeSimulation simulation)
         {
             base.Setup(simulation);
 
@@ -132,7 +132,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes the integration method.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Initialize(TimeSimulation simulation)
+        public override void Initialize(ITimeSimulation simulation)
         {
             base.Initialize(simulation);
 
@@ -148,7 +148,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Accepts the last evaluated time point.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Accept(TimeSimulation simulation)
+        public override void Accept(ITimeSimulation simulation)
         {
             // Clear breakpoints
             while (Time > Breakpoints.First)
@@ -163,7 +163,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>
         /// <param name="delta">The initial probing timestep.</param>
-        public override void Continue(TimeSimulation simulation, ref double delta)
+        public override void Continue(ITimeSimulation simulation, ref double delta)
         {
             // Modify the timestep
             delta = Math.Min(delta, MaxStep);
@@ -200,7 +200,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="delta">The timestep to be probed.</param>
-        public override void Probe(TimeSimulation simulation, double delta)
+        public override void Probe(ITimeSimulation simulation, double delta)
         {
             base.Probe(simulation, delta);
 
@@ -216,7 +216,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="newDelta">The next timestep to be probed.</param>
-        public override void NonConvergence(TimeSimulation simulation, out double newDelta)
+        public override void NonConvergence(ITimeSimulation simulation, out double newDelta)
         {
             base.NonConvergence(simulation, out newDelta);
 
@@ -242,7 +242,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         /// <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Evaluate(TimeSimulation simulation, out double newDelta)
+        public override bool Evaluate(ITimeSimulation simulation, out double newDelta)
         {
             // Spice 3f5 ignores the first timestep
             if (BaseTime.Equals(0.0))
@@ -320,7 +320,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Predicts a solution
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        protected abstract void Predict(TimeSimulation simulation);
+        protected abstract void Predict(ITimeSimulation simulation);
 
         /// <summary>
         /// Produces a derivative.

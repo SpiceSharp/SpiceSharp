@@ -3,7 +3,7 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Simulation state for a <see cref="BiasingSimulation"/>.
+    /// Simulation state for a <see cref="IBiasingSimulation"/>.
     /// </summary>
     /// <seealso cref="ISimulationState" />
     public interface  IBiasingSimulationState : ISolverSimulationState<double>

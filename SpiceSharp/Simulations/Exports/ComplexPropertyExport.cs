@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// This class can export complex property values.
     /// </summary>
     /// <seealso cref="Export{S, T}" />
-    public class ComplexPropertyExport : Export<Simulation, Complex>
+    public class ComplexPropertyExport : Export<IEventfulSimulation, Complex>
     {
         /// <summary>
         /// Gets the identifier of the entity.
@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="entityName">The identifier of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
-        public ComplexPropertyExport(Simulation simulation, string entityName, string propertyName)
+        public ComplexPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
             EntityName = entityName.ThrowIfNull(nameof(entityName));

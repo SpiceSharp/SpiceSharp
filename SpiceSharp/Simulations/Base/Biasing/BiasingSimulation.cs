@@ -9,11 +9,11 @@ namespace SpiceSharp.Simulations
     /// A class that can bias components.
     /// </summary>
     /// <seealso cref="Simulation" />
+    /// <seealso cref="IBiasingSimulation"/>
     /// <seealso cref="IBehavioral{T}" />
     public abstract partial class BiasingSimulation : Simulation,
-        IBehavioral<IBiasingBehavior>, IBehavioral<IBiasingUpdateBehavior>,
-        IBehavioral<ITemperatureBehavior>,
-        IStateful<IBiasingSimulationState>
+        IBiasingSimulation,
+        IBehavioral<IBiasingUpdateBehavior>
     {
         /// <summary>
         /// Gets the variable that causes issues.

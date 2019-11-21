@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="FrequencySimulation" />
     public partial class Noise : FrequencySimulation,
-        IBehavioral<INoiseBehavior>, IStateful<INoiseSimulationState>
+        INoiseSimulation
     {
         /// <summary>
         /// Gets the currently active noise configuration.

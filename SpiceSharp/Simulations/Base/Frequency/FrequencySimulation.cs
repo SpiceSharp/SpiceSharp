@@ -10,8 +10,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class FrequencySimulation : BiasingSimulation,
-        IBehavioral<IFrequencyBehavior>, IBehavioral<IFrequencyUpdateBehavior>,
-        IStateful<IComplexSimulationState>
+        IFrequencySimulation,
+        IBehavioral<IFrequencyUpdateBehavior>
     {
         /// <summary>
         /// Private variables

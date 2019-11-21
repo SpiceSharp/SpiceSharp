@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// This class can export real properties.
     /// </summary>
     /// <seealso cref="Export{S, T}" />
-    public class RealPropertyExport : Export<Simulation, double>
+    public class RealPropertyExport : Export<IEventfulSimulation, double>
     {
         /// <summary>
         /// Gets the identifier of the entity.
@@ -24,7 +24,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="entityName">The identifier of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
-        public RealPropertyExport(Simulation simulation, string entityName, string propertyName)
+        public RealPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
             EntityName = entityName.ThrowIfNull(nameof(entityName));

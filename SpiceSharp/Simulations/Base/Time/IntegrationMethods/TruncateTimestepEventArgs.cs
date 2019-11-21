@@ -12,7 +12,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the time-based simulation.
         /// </summary>
-        public TimeSimulation Simulation { get; }
+        public ITimeSimulation Simulation { get; }
 
         /// <summary>
         /// Gets or sets the timestep to be probed.
@@ -40,7 +40,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes a new instance of the <see cref="TruncateTimestepEventArgs"/> class.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public TruncateTimestepEventArgs(TimeSimulation simulation)
+        public TruncateTimestepEventArgs(ITimeSimulation simulation)
             : this(simulation, double.PositiveInfinity)
         {
         }
@@ -50,7 +50,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="delta">The maximum timestep.</param>
-        public TruncateTimestepEventArgs(TimeSimulation simulation, double delta)
+        public TruncateTimestepEventArgs(ITimeSimulation simulation, double delta)
         {
             Simulation = simulation.ThrowIfNull(nameof(simulation));
             _delta = delta;

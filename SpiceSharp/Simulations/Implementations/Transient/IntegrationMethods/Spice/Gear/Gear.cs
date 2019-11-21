@@ -41,7 +41,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes the integration method.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Initialize(TimeSimulation simulation)
+        public override void Initialize(ITimeSimulation simulation)
         {
             base.Initialize(simulation);
 
@@ -72,7 +72,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Predicts a solution
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        protected override void Predict(TimeSimulation simulation)
+        protected override void Predict(ITimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -91,7 +91,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Truncates the timestep using nodes.
         /// </summary>
         /// <param name="sender">The sender (integration method).</param>
-        /// <param name="args">The <see cref="SpiceSharp.IntegrationMethods.TruncateEvaluateEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">The <see cref="TruncateEvaluateEventArgs" /> instance containing the event data.</param>
         protected override void TruncateNodes(object sender, TruncateEvaluateEventArgs args)
         {
             args.ThrowIfNull(nameof(args));
@@ -193,7 +193,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Produces a derivative.
         /// </summary>
         /// <returns>
-        /// A <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> that can be used with this integration method.
+        /// A <see cref="StateDerivative" /> that can be used with this integration method.
         /// </returns>
         protected override StateDerivative ProduceDerivative() => new GearStateDerivative(this);
     }

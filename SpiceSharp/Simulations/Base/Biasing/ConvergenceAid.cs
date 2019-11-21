@@ -70,10 +70,10 @@ namespace SpiceSharp.Simulations
         /// Sets up the convergence aid for a specific simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        public virtual void Initialize(BiasingSimulation simulation)
+        public virtual void Initialize(IBiasingSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            var state = ((IStateful<IBiasingSimulationState>)simulation).State;
+            var state = simulation.State;
             Variables = state.Map;
             Solver = state.Solver;
 

@@ -96,10 +96,10 @@ namespace SpiceSharp.IntegrationMethods
         /// Sets up for the specified simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        public virtual void Setup(IStateful<IBiasingSimulationState> simulation)
+        public virtual void Setup(ITimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            simulation.GetState(out var state);
+            simulation.GetState(out IBiasingSimulationState state);
             BiasingState = state;
             IntegrationStates.Clear(i => new IntegrationState(1.0, 
                 new DenseVector<double>(BiasingState.Solver.Size), 
@@ -156,7 +156,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes the integration method.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public virtual void Initialize(TimeSimulation simulation)
+        public virtual void Initialize(ITimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -178,7 +178,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="delta">The timestep to be probed.</param>
-        public virtual void Probe(TimeSimulation simulation, double delta)
+        public virtual void Probe(ITimeSimulation simulation, double delta)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -196,7 +196,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="newDelta">The next timestep to be probed.</param>
-        public virtual void NonConvergence(TimeSimulation simulation, out double newDelta)
+        public virtual void NonConvergence(ITimeSimulation simulation, out double newDelta)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -220,7 +220,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         ///   <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool Evaluate(TimeSimulation simulation, out double newDelta)
+        public virtual bool Evaluate(ITimeSimulation simulation, out double newDelta)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -241,7 +241,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Accepts the last evaluated time point.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public virtual void Accept(TimeSimulation simulation)
+        public virtual void Accept(ITimeSimulation simulation)
         {
             // Store the current solution
             BiasingState.Solution.CopyTo(IntegrationStates[0].Solution);
@@ -253,7 +253,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>
         /// <param name="delta">The initial probing timestep.</param>
-        public virtual void Continue(TimeSimulation simulation, ref double delta)
+        public virtual void Continue(ITimeSimulation simulation, ref double delta)
         {
             simulation.ThrowIfNull(nameof(simulation));
 
@@ -307,31 +307,31 @@ namespace SpiceSharp.IntegrationMethods
         #endif
 
         /// <summary>
-        /// Raises the <see cref="E:TruncateNonConvergence" /> event.
+        /// Raises the <see cref="TruncateNonConvergence" /> event.
         /// </summary>
         /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected void OnTruncateNonConvergence(TruncateEvaluateEventArgs args) =>
             TruncateNonConvergence?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:TruncateEvaluate" /> event.
+        /// Raises the <see cref="TruncateEvaluate" /> event.
         /// </summary>
         /// <param name="args">The <see cref="TruncateEvaluateEventArgs"/> instance containing the event data.</param>
         protected void OnTruncateEvaluate(TruncateEvaluateEventArgs args) => TruncateEvaluate?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AcceptSolution" /> event.
+        /// Raises the <see cref="AcceptSolution" /> event.
         /// </summary>
         protected void OnAcceptSolution(EventArgs args) => AcceptSolution?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:TruncateProbe" /> event.
+        /// Raises the <see cref="TruncateProbe" /> event.
         /// </summary>
         /// <param name="args">The <see cref="TruncateTimestepEventArgs"/> instance containing the event data.</param>
         protected virtual void OnTruncateProbe(TruncateTimestepEventArgs args) => TruncateProbe?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:Continue" /> event.
+        /// Raises the <see cref="Continue" /> event.
         /// </summary>
         /// <param name="args">The <see cref="ModifyTimestepEventArgs"/> instance containing the event data.</param>
         protected virtual void OnContinue(ModifyTimestepEventArgs args) => ContinueTimestep?.Invoke(this, args);

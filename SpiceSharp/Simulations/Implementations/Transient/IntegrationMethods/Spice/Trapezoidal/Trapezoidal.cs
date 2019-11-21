@@ -31,7 +31,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes the integration method.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Initialize(TimeSimulation simulation)
+        public override void Initialize(ITimeSimulation simulation)
         {
             base.Initialize(simulation);
 
@@ -56,7 +56,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Predicts a solution
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        protected override void Predict(TimeSimulation simulation)
+        protected override void Predict(ITimeSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
 

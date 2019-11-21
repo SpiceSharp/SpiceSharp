@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// This class can export complex voltages.
     /// </summary>
     /// <seealso cref="Export{S, T}" />
-    public class ComplexVoltageExport : Export<FrequencySimulation, Complex>
+    public class ComplexVoltageExport : Export<IFrequencySimulation, Complex>
     {
         /// <summary>
         /// Gets the identifier of the positive node.
@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
-        public ComplexVoltageExport(FrequencySimulation simulation, string posNode)
+        public ComplexVoltageExport(IFrequencySimulation simulation, string posNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
-        public ComplexVoltageExport(FrequencySimulation simulation, string posNode, string negNode)
+        public ComplexVoltageExport(IFrequencySimulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            var state = ((IStateful<IComplexSimulationState>)Simulation).State;
+            Simulation.GetState(out IComplexSimulationState state);
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 PosIndex = state.Map[posNode];

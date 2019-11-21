@@ -82,10 +82,7 @@ namespace SpiceSharp.Behaviors
                     var args = new BehaviorsNotFoundEventArgs(name);
                     OnBehaviorsNotFound(args);
                     if (args.Behaviors != null)
-                    {
-                        Add(args.Behaviors);
                         return args.Behaviors;
-                    }
                     throw new CircuitException("Cannot find behaviors for '{0}'".FormatString(name));
                 }
                 finally
@@ -125,9 +122,9 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="source">The collection to serve as a template.</param>
-        public BehaviorContainerCollection(BehaviorContainerCollection source)
+        public BehaviorContainerCollection(IBehaviorContainerCollection source)
         {
-            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(source._entityBehaviors.Comparer);
+            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(source.Comparer);
             foreach (var type in _behaviorLists.Keys)
                 _behaviorLists.Add(type, new List<IBehavior>());
         }

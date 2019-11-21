@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
@@ -55,10 +56,13 @@ namespace SpiceSharp.Components
         /// <exception cref="CircuitException">Node mismatch: subcircuit requires {0} nodes, but {1} given".FormatString(_pins.Length, nodes?.Length ?? 0)</exception>
         public virtual void CreateBehaviors(ISimulation parentSimulation, IBehaviorContainer behaviors, string[] nodes)
         {
+            if (Entities == null || Entities.Count == 0)
+                return;
             if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
                 throw new CircuitException("Node mismatch: subcircuit requires {0} nodes, but {1} given".FormatString(_pins.Length, nodes?.Length ?? 0));
 
-            // We need to create behaviors for all subcircuit entities, but we don't want to expose them to the parent simulation
+            // We need to create behaviors for all subcircuit entities
+            // So we'll make a subcircuit simulation matching the parent simulation.
         }
     }
 }

@@ -42,7 +42,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="maxOrder">The maximum integration order.</param>
-        public TruncateEvaluateEventArgs(TimeSimulation simulation, int maxOrder)
+        public TruncateEvaluateEventArgs(ITimeSimulation simulation, int maxOrder)
             : this(simulation, maxOrder, double.PositiveInfinity)
         {
         }
@@ -53,7 +53,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="maxOrder">The maximum integration order.</param>
         /// <param name="delta">The initial timestep.</param>
-        public TruncateEvaluateEventArgs(TimeSimulation simulation, int maxOrder, double delta)
+        public TruncateEvaluateEventArgs(ITimeSimulation simulation, int maxOrder, double delta)
             : base(simulation, delta)
         {
             MaxOrder = maxOrder;

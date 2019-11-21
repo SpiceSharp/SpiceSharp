@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// This class can export real voltages.
     /// </summary>
     /// <seealso cref="Export{S, T}" />
-    public class RealVoltageExport : Export<BiasingSimulation, double>
+    public class RealVoltageExport : Export<IBiasingSimulation, double>
     {
         /// <summary>
         /// Gets the identifier of the positive node.
@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The node identifier.</param>
-        public RealVoltageExport(BiasingSimulation simulation, string posNode)
+        public RealVoltageExport(IBiasingSimulation simulation, string posNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNode">The positive node identifier.</param>
         /// <param name="negNode">The negative node identifier.</param>
-        public RealVoltageExport(BiasingSimulation simulation, string posNode, string negNode)
+        public RealVoltageExport(IBiasingSimulation simulation, string posNode, string negNode)
             : base(simulation)
         {
             PosNode = posNode.ThrowIfNull(nameof(posNode));
@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            var state = ((IStateful<IBiasingSimulationState>)Simulation).State;
+            var state = Simulation.State;
             if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
             {
                 PosIndex = state.Map[posNode];

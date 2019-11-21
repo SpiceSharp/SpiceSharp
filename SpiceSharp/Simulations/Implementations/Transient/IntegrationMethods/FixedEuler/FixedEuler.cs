@@ -7,7 +7,7 @@ namespace SpiceSharp.IntegrationMethods
     /// fastest way, but also the least accurate. Any changes to the timestep are
     /// ignored.
     /// </summary>
-    /// <seealso cref="SpiceSharp.IntegrationMethods.IntegrationMethod" />
+    /// <seealso cref="IntegrationMethod" />
     public partial class FixedEuler : IntegrationMethod
     {
         private double _fixedStep;
@@ -24,7 +24,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes the integration method.
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
-        public override void Initialize(TimeSimulation simulation)
+        public override void Initialize(ITimeSimulation simulation)
         {
             base.Initialize(simulation);
             if (simulation.Configurations.TryGetValue(out TimeConfiguration config))
@@ -36,7 +36,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation.</param>
         /// <param name="delta">The timestep to be probed.</param>
-        public override void Probe(TimeSimulation simulation, double delta)
+        public override void Probe(ITimeSimulation simulation, double delta)
         {
             base.Probe(simulation, delta);
             Slope = 1.0 / _fixedStep;
@@ -47,7 +47,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="simulation">The time-based simulation</param>
         /// <param name="delta">The initial probing timestep.</param>
-        public override void Continue(TimeSimulation simulation, ref double delta)
+        public override void Continue(ITimeSimulation simulation, ref double delta)
         {
             base.Continue(simulation, ref delta);
             delta = _fixedStep;
@@ -61,7 +61,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>
         /// <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Evaluate(TimeSimulation simulation, out double newDelta)
+        public override bool Evaluate(ITimeSimulation simulation, out double newDelta)
         {
             base.Evaluate(simulation, out _);
             newDelta = _fixedStep;
