@@ -49,6 +49,15 @@ namespace SpiceSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
         /// </summary>
+        public ParameterSetDictionary()
+        {
+            _dictionary = new TypeDictionary<IParameterSet>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
+        /// </summary>
+        /// <param name="parameters">The type dictionary for the parameters.</param>
         public ParameterSetDictionary(ITypeDictionary<IParameterSet> parameters)
         {
             _dictionary = parameters.ThrowIfNull(nameof(parameters));

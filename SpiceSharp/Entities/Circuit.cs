@@ -29,6 +29,14 @@ namespace SpiceSharp
         /// </summary>
         public bool IsReadOnly => _entities.IsReadOnly;
 
+        /// <summary>
+        /// Gets the <see cref="IEntity"/> with the specified name.
+        /// </summary>
+        /// <value>
+        /// The <see cref="IEntity"/>.
+        /// </value>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public IEntity this[string name] => _entities[name];
 
         /// <summary>

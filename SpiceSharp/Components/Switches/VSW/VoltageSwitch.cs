@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.SwitchBehaviors;
 using SpiceSharp.Simulations;
 
@@ -37,8 +36,9 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg) 
-            : this(name)
+            : base(name, VoltageSwitchPinCount)
         {
+            Parameters.Add(new BaseParameters());
             Connect(pos, neg, controlPos, controlNeg);
         }
 
@@ -46,19 +46,19 @@ namespace SpiceSharp.Components
         /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
-        public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
+        public override void CreateBehaviors(ISimulation simulation)
         {
-            base.CreateBehaviors(simulation, behaviors);
-
+            var behaviors = new BehaviorContainer(Name,
+                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
+            behaviors.Parameters.CalculateDefaults();
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
-            var eb = simulation.EntityBehaviors;
             if (simulation.UsesBehaviors<IAcceptBehavior>())
                 behaviors.Add(new AcceptBehavior(Name, context));
             if (simulation.UsesBehaviors<IFrequencyBehavior>())
                 behaviors.Add(new FrequencyBehavior(Name, context));
             if (simulation.UsesBehaviors<IBiasingBehavior>() && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
                 behaviors.Add(new BiasingBehavior(Name, context));
+            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

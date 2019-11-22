@@ -17,10 +17,10 @@ namespace SpiceSharp
         private readonly HashSet<T> _values;
 
         /// <summary>
-        /// Gets the <see cref="T"/> with the specified key.
+        /// Gets the value of the specified type.
         /// </summary>
         /// <value>
-        /// The <see cref="T"/>.
+        /// The value.
         /// </value>
         /// <param name="key">The key.</param>
         /// <returns></returns>
@@ -67,15 +67,15 @@ namespace SpiceSharp
         public void Add<V>(V value) where V : T
         {
             var ctype = value.GetType();
-            _dictionary.Add(ctype, value);
+            bool overwrite = _dictionary.ContainsKey(ctype);
+            _dictionary[ctype] = value;
 
             // Track inheritance
-            // TODO: review this part
             while (ctype != null && ctype != typeof(object))
             {
                 var info = ctype.GetTypeInfo();
                 ctype = info.BaseType;
-                if (_dictionary.ContainsKey(ctype))
+                if (!overwrite && _dictionary.ContainsKey(ctype))
                     break; // Don't overwrite previously added
                 _dictionary.Add(ctype, value);
             }
@@ -84,8 +84,6 @@ namespace SpiceSharp
             var ifs = value.GetType().GetTypeInfo().GetInterfaces();
             foreach (var type in ifs)
                 _dictionary[type] = value;
-            _values.Add(value);
-
             _values.Add(value);
         }
 

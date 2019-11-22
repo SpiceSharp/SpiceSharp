@@ -241,11 +241,9 @@ namespace SpiceSharp.Simulations
             {
                 if (entities.TryGetEntity(args.Name, out var entity))
                 {
-                    var behaviors = new BehaviorContainer(entity.Name,
-                        new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()));
-                    entity.CreateBehaviors(this, behaviors);
-                    EntityBehaviors.Add(behaviors);
-                    args.Behaviors = behaviors;
+                    entity.CreateBehaviors(this);
+                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var container))
+                        args.Behaviors = container;
                 }
             }
             EntityBehaviors.BehaviorsNotFound += BehaviorsNotFound;
@@ -255,12 +253,7 @@ namespace SpiceSharp.Simulations
             foreach (var entity in entities)
             {
                 if (!EntityBehaviors.Contains(entity.Name))
-                {
-                    var behaviors = new BehaviorContainer(entity.Name,
-                        new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()));
-                    entity.CreateBehaviors(this, behaviors);
-                    EntityBehaviors.Add(behaviors);
-                }
+                    entity.CreateBehaviors(this);
             }
             Statistics.BehaviorCreationTime.Stop();
 

@@ -28,7 +28,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         protected Entity(string name)
-            : base(new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
+            : base(new ParameterSetDictionary())
         {
             Name = name;
         }
@@ -48,36 +48,17 @@ namespace SpiceSharp.Entities
         /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
-        public virtual void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
-        {
-            simulation.ThrowIfNull(nameof(simulation));
-            behaviors.ThrowIfNull(nameof(behaviors));
-
-            if (Parameters.Count > 0)
-            {
-                foreach (var ps in Parameters.Values)
-                {
-                    // TODO: This shouldn't be necessary. The unique values should be returned
-                    if (!behaviors.Parameters.ContainsKey(ps.GetType()))
-                    {
-                        if (LinkParameters)
-                            behaviors.Parameters.Add(ps);
-                        else
-                            behaviors.Parameters.Add((IParameterSet)ps.Clone());
-                    }
-                }
-                behaviors.Parameters.CalculateDefaults();
-            }
-        }
+        public abstract void CreateBehaviors(ISimulation simulation);
 
         /// <summary>
-        /// Clones the entity
+        /// Clones the instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The cloned instance.
+        /// </returns>
         protected override ICloneable Clone()
         {
-            var clone = (IEntity)Activator.CreateInstance(GetType(), Name, Parameters.Clone());
+            var clone = (IEntity)Activator.CreateInstance(GetType(), Name);
             Reflection.CopyPropertiesAndFields(this, clone);
             return clone;
         }

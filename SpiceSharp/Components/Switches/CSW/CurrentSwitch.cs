@@ -29,7 +29,8 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(string name) : base(name, CurrentSwitchPinCount)
+        public CurrentSwitch(string name) 
+            : base(name, CurrentSwitchPinCount)
         {
             Parameters.Add(new BaseParameters());
         }
@@ -53,19 +54,19 @@ namespace SpiceSharp.Components
         /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
-        public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
+        public override void CreateBehaviors(ISimulation simulation)
         {
-            base.CreateBehaviors(simulation, behaviors);
-
+            var behaviors = new BehaviorContainer(Name,
+                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
+            behaviors.Parameters.CalculateDefaults();
             var context = new ControlledBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model, ControllingName);
-            var eb = simulation.EntityBehaviors;
             if (simulation.UsesBehaviors<IAcceptBehavior>())
                 behaviors.Add(new AcceptBehavior(Name, context));
             if (simulation.UsesBehaviors<IFrequencyBehavior>())
                 behaviors.Add(new FrequencyBehavior(Name, context));
             if (simulation.UsesBehaviors<IBiasingBehavior>() && !behaviors.ContainsKey(typeof(IBiasingBehavior)))
                 behaviors.Add(new BiasingBehavior(Name, context));
+            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

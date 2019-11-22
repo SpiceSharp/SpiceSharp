@@ -38,7 +38,18 @@ namespace SpiceSharp.Components
         protected Component(string name, int nodeCount)
             : base(name)
         {
-            // Initialize
+            _connections = nodeCount > 0 ? new string[nodeCount] : null;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Component"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="nodeCount">The node count.</param>
+        /// <param name="parameters">The parameters.</param>
+        protected Component(string name, int nodeCount, IParameterSetDictionary parameters)
+            : base(name, parameters)
+        {
             _connections = nodeCount > 0 ? new string[nodeCount] : null;
         }
 
@@ -87,6 +98,21 @@ namespace SpiceSharp.Components
                 var node = variables.MapNode(c, VariableType.Voltage);
                 yield return node;
             }
+        }
+
+        /// <summary>
+        /// Clones the instance.
+        /// </summary>
+        /// <returns>
+        /// The cloned instance.
+        /// </returns>
+        protected override ICloneable Clone()
+        {
+            var clone = (Component)base.Clone();
+            for (var i = 0; i < _connections.Length; i++)
+                clone._connections[i] = _connections[i];
+            return clone;
+
         }
 
         /// <summary>

@@ -43,10 +43,12 @@ namespace SpiceSharpTest.Models
             {
                 _nodes.AddRange(nodes);
             }
-            public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
+            public override void CreateBehaviors(ISimulation simulation)
             {
+                var behaviors = new BehaviorContainer(Name, new ParameterSetDictionary());
                 var context = new ModelBindingContext(simulation, behaviors);
                 behaviors.Add(new Mapper(_nodes, context));
+                simulation.EntityBehaviors.Add(behaviors);
             }
         }
 

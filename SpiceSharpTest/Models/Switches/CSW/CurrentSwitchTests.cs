@@ -202,7 +202,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_VSWBooleanParameter_Expect_DirectAccess()
+        public void When_CSWBooleanParameter_Expect_DirectAccess()
         {
             // Create voltage source
             var s = new CurrentSwitch("SW 1");

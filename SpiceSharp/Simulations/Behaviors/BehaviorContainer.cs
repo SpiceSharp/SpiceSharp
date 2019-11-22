@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{Behavior}" />
-    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer
+    public class BehaviorContainer : InheritedTypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
         /// Gets the source identifier.

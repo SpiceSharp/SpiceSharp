@@ -53,12 +53,14 @@ namespace SpiceSharp.Components
         /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="behaviors">An <see cref="IBehaviorContainer" /> where the behaviors can be stored.</param>
-        public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
+        public override void CreateBehaviors(ISimulation simulation)
         {
-            base.CreateBehaviors(simulation, behaviors);
+            var behaviors = new BehaviorContainer(Name,
+                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
+            behaviors.Parameters.CalculateDefaults();
             var definition = Parameters.GetValue<ISubcircuitDefinition>();
             definition.CreateBehaviors(simulation, behaviors, _connections);
+            simulation.EntityBehaviors.Add(behaviors);
         }
 
         /// <summary>

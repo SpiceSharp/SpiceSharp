@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the model</param>
         public VoltageSwitchModel(string name)
-            : base(name)
+            : base(name, new ParameterSetDictionary(new InheritedTypeDictionary<IParameterSet>()))
         {
             Parameters.Add<ModelBaseParameters>(new VoltageModelParameters());
         }
