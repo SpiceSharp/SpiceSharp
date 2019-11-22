@@ -28,7 +28,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         protected Entity(string name)
-            : base(new ParameterSetDictionary())
+            : base(new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
         {
             Name = name;
         }
@@ -77,8 +77,8 @@ namespace SpiceSharp.Entities
         /// <returns></returns>
         protected override ICloneable Clone()
         {
-            var clone = (IEntity) Activator.CreateInstance(GetType(), Name);
-            clone.CopyFrom(this);
+            var clone = (IEntity)Activator.CreateInstance(GetType(), Name, Parameters.Clone());
+            Reflection.CopyPropertiesAndFields(this, clone);
             return clone;
         }
 

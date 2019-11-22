@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -6,22 +8,50 @@ namespace SpiceSharp
     /// A dictionary of <see cref="ParameterSet" />. Only one instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{P}" />
-    public class ParameterSetDictionary : TypeDictionary<IParameterSet>, IParameterSetDictionary
+    public class ParameterSetDictionary : IParameterSetDictionary
     {
+        private readonly ITypeDictionary<IParameterSet> _dictionary;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
+        /// Gets the count.
         /// </summary>
-        public ParameterSetDictionary()
-        {
-        }
+        /// <value>
+        /// The count.
+        /// </value>
+        public int Count => _dictionary.Count;
+
+        /// <summary>
+        /// Gets the keys.
+        /// </summary>
+        /// <value>
+        /// The keys.
+        /// </value>
+        public IEnumerable<Type> Keys => _dictionary.Keys;
+
+        /// <summary>
+        /// Gets the values.
+        /// </summary>
+        /// <value>
+        /// The values.
+        /// </value>
+        public IEnumerable<IParameterSet> Values => _dictionary.Values;
+
+        /// <summary>
+        /// Gets the <see cref="IParameterSet"/> with the specified key.
+        /// </summary>
+        /// <value>
+        /// The <see cref="IParameterSet"/>.
+        /// </value>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        public IParameterSet this[Type key] => _dictionary[key];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterSetDictionary"/> class.
         /// </summary>
-        /// <param name="hierarchy">if set to <c>true</c>, the dictionary can be searched by parent classes and interfaces.</param>
-        public ParameterSetDictionary(bool hierarchy)
-            : base(hierarchy)
+        public ParameterSetDictionary(ITypeDictionary<IParameterSet> parameters)
         {
+            _dictionary = parameters.ThrowIfNull(nameof(parameters));
         }
 
         /// <summary>
@@ -30,9 +60,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public virtual IParameterSetDictionary Clone()
         {
-            var clone = (ParameterSetDictionary)Activator.CreateInstance(GetType(), StoreHierarchy);
-            foreach (var p in Dictionary)
-                clone.Dictionary.Add(p.Key, (IParameterSet)p.Value.Clone());
+            var clone = (ParameterSetDictionary)Activator.CreateInstance(GetType(), _dictionary.Clone());
             return clone;
         }
 
@@ -72,7 +100,7 @@ namespace SpiceSharp
         /// <returns>The current instance for chaining.</returns>
         public IParameterSetDictionary Set(string name)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TrySet(name))
                     return this;
@@ -89,7 +117,7 @@ namespace SpiceSharp
         /// <returns>The current instance for chaining.</returns>
         public IParameterSetDictionary Set<P>(string name, P value)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TrySet(name, value))
                     return this;
@@ -105,7 +133,7 @@ namespace SpiceSharp
         /// </remarks>
         public void CalculateDefaults()
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
                 ps.CalculateDefaults();
         }
 
@@ -115,7 +143,7 @@ namespace SpiceSharp
         /// <param name="name">The name of the method.</param>
         void IImportParameterSet.Set(string name)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TrySet(name))
                     return;
@@ -132,7 +160,7 @@ namespace SpiceSharp
         /// </returns>
         public bool TrySet(string name)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TrySet(name))
                     return true;
@@ -148,7 +176,7 @@ namespace SpiceSharp
         /// <param name="value">The value.</param>
         void IImportParameterSet.Set<P>(string name, P value)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TrySet(name, value))
                     return;
@@ -167,7 +195,7 @@ namespace SpiceSharp
         /// </returns>
         public bool TrySet<P>(string name, P value)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TrySet(name, value))
                     return true;
@@ -183,7 +211,7 @@ namespace SpiceSharp
         /// <returns>The value.</returns>
         public P Get<P>(string name)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TryGet(name, out P result))
                     return result;
@@ -202,7 +230,7 @@ namespace SpiceSharp
         /// </returns>
         public bool TryGet<P>(string name, out P value)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 if (ps.TryGet(name, out value))
                     return true;
@@ -221,7 +249,7 @@ namespace SpiceSharp
         /// </returns>
         public Func<P> CreateGetter<P>(string name)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 var result = ps.CreateGetter<P>(name);
                 if (result != null)
@@ -240,7 +268,7 @@ namespace SpiceSharp
         /// </returns>
         public Action<P> CreateSetter<P>(string name)
         {
-            foreach (var ps in Dictionary.Values)
+            foreach (var ps in _dictionary.Values)
             {
                 var result = ps.CreateSetter<P>(name);
                 if (result != null)
@@ -248,5 +276,79 @@ namespace SpiceSharp
             }
             return null;
         }
+
+        /// <summary>
+        /// Adds the specified value.
+        /// </summary>
+        /// <typeparam name="V"></typeparam>
+        /// <param name="value">The value.</param>
+        public void Add<V>(V value) where V : IParameterSet
+            => _dictionary.Add(value);
+
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
+        public void Clear()
+            => _dictionary.Clear();
+
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <returns></returns>
+        public TResult GetValue<TResult>() where TResult : IParameterSet
+            => _dictionary.GetValue<TResult>();
+
+        /// <summary>
+        /// Tries the get value.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public bool TryGetValue<TResult>(out TResult value) where TResult : IParameterSet
+            => _dictionary.TryGetValue(out value);
+
+        /// <summary>
+        /// Tries the get value.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public bool TryGetValue(Type key, out IParameterSet value)
+            => _dictionary.TryGetValue(key, out value);
+
+        /// <summary>
+        /// Determines whether the specified key contains key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified key contains key; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ContainsKey(Type key)
+            => _dictionary.ContainsKey(key);
+
+        /// <summary>
+        /// Determines whether the specified value contains value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified value contains value; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ContainsValue(IParameterSet value)
+            => _dictionary.ContainsValue(value);
+
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<KeyValuePair<Type, IParameterSet>> GetEnumerator()
+            => _dictionary.GetEnumerator();
+
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
+            => ((IEnumerable)_dictionary).GetEnumerator();
     }
 }

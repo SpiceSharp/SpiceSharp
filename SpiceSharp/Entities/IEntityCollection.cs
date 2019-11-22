@@ -4,11 +4,12 @@ using System.Collections.Generic;
 namespace SpiceSharp.Entities
 {
     /// <summary>
-    /// Template for a collection of <see cref="Entity"/>.
+    /// Template for a collection of <see cref="Entity" />.
     /// </summary>
-    /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
-    /// <seealso cref="System.Collections.Generic.ICollection{T}" />
-    public interface IEntityCollection : IEnumerable<IEntity>, ICollection<IEntity>
+    /// <seealso cref="ICloneable" />
+    /// <seealso cref="IEnumerable{T}" />
+    /// <seealso cref="ICollection{T}" />
+    public interface IEntityCollection : IEnumerable<IEntity>, ICollection<IEntity>, ICloneable
     {
         /// <summary>
         /// Gets the <see cref="Entity"/> with the specified name.
@@ -27,6 +28,12 @@ namespace SpiceSharp.Entities
         /// The comparer.
         /// </value>
         IEqualityComparer<string> Comparer { get; }
+
+        /// <summary>
+        /// Adds the specified entities to the collection.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        void Add(params IEntity[] entities);
 
         /// <summary>
         /// Removes the <see cref="Entity"/> with specified name.
@@ -55,10 +62,10 @@ namespace SpiceSharp.Entities
         bool TryGetEntity(string name, out IEntity entity);
 
         /// <summary>
-        /// Enumerates each <see cref="Entity"/> of the specified type.
+        /// Gets all entities that are of a specified type.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        IEnumerable<IEntity> ByType(Type type);
+        /// <typeparam name="E">The type of entity.</typeparam>
+        /// <returns>The entities.</returns>
+        IEnumerable<E> ByType<E>() where E : IEntity;
     }
 }

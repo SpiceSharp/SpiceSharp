@@ -7,7 +7,7 @@ namespace SpiceSharp
     /// A dictionary that can store objects, and indexes them by their type.
     /// </summary>
     /// <typeparam name="T">The common base type of all objects.</typeparam>
-    public interface ITypeDictionary<T> : IEnumerable<KeyValuePair<Type, T>>
+    public interface ITypeDictionary<T> : IEnumerable<KeyValuePair<Type, T>>, ICloneable
     {
         /// <summary>
         /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}"/>.
@@ -24,7 +24,7 @@ namespace SpiceSharp
         /// The key type.
         /// </value>
         /// <param name="key">The key.</param>
-        /// <returns></returns>
+        /// <returns>The value.</returns>
         T this[Type key] { get; }
 
         /// <summary>
@@ -46,6 +46,7 @@ namespace SpiceSharp
         /// <summary>
         /// Adds the specified value to the dictionary.
         /// </summary>
+        /// <typeparam name="V">The value type.</typeparam>
         /// <param name="value">The value.</param>
         void Add<V>(V value) where V : T;
 
@@ -85,5 +86,14 @@ namespace SpiceSharp
         ///   <c>true</c> if the specified key contains key; otherwise, <c>false</c>.
         /// </returns>
         bool ContainsKey(Type key);
+
+        /// <summary>
+        /// Determines whether the dictionary contains the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsValue(T value);
     }
 }

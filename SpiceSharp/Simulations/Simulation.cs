@@ -65,7 +65,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The configuration.
         /// </value>
-        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
+        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary(new TypeDictionary<IParameterSet>());
 
         /// <summary>
         /// Gets the variables.
@@ -241,7 +241,8 @@ namespace SpiceSharp.Simulations
             {
                 if (entities.TryGetEntity(args.Name, out var entity))
                 {
-                    var behaviors = new BehaviorContainer(entity.Name);
+                    var behaviors = new BehaviorContainer(entity.Name,
+                        new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()));
                     entity.CreateBehaviors(this, behaviors);
                     EntityBehaviors.Add(behaviors);
                     args.Behaviors = behaviors;
@@ -255,7 +256,8 @@ namespace SpiceSharp.Simulations
             {
                 if (!EntityBehaviors.Contains(entity.Name))
                 {
-                    var behaviors = new BehaviorContainer(entity.Name);
+                    var behaviors = new BehaviorContainer(entity.Name,
+                        new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()));
                     entity.CreateBehaviors(this, behaviors);
                     EntityBehaviors.Add(behaviors);
                 }

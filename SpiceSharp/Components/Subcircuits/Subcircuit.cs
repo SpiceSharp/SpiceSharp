@@ -23,20 +23,20 @@ namespace SpiceSharp.Components
         public string Model { get; set; }
 
         /// <summary>
-        /// Gets the entities.
-        /// </summary>
-        /// <value>
-        /// The entities.
-        /// </value>
-        public ISubcircuitDefinition Entities { get; }
-
-        /// <summary>
         /// Gets the number of nodes.
         /// </summary>
         /// <value>
         /// The number of nodes.
         /// </value>
-        public int PinCount => Entities?.PinCount ?? 0;
+        public int PinCount
+        {
+            get
+            {
+                if (Parameters.TryGetValue<ISubcircuitDefinition>(out var result))
+                    return result.PinCount;
+                return 0;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subcircuit"/> class.
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
         public Subcircuit(string name, ISubcircuitDefinition entities)
             : base(name)
         {
-            Entities = entities;
+            Parameters.Add(entities);
         }
 
         /// <summary>
@@ -57,10 +57,8 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation, IBehaviorContainer behaviors)
         {
             base.CreateBehaviors(simulation, behaviors);
-
-            if (Entities == null)
-                return;
-            Entities.CreateBehaviors(simulation, behaviors, _connections);
+            var definition = Parameters.GetValue<ISubcircuitDefinition>();
+            definition.CreateBehaviors(simulation, behaviors, _connections);
         }
 
         /// <summary>

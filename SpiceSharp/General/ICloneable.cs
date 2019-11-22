@@ -10,10 +10,10 @@
     public interface ICloneable
     {
         /// <summary>
-        /// Clones the parameter.
+        /// Clones the instance.
         /// </summary>
         /// <returns>
-        /// The cloned parameter.
+        /// The cloned instance.
         /// </returns>
         ICloneable Clone();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -7,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
     /// <seealso cref="TypeDictionary{Behavior}" />
-    public class BehaviorContainer : TypeDictionary<IBehavior>, IBehaviorContainer
+    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
         /// Gets the source identifier.
@@ -26,20 +25,9 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
         /// <param name="source">The entity identifier that will provide the behaviors.</param>
-        public BehaviorContainer(string source)
-            : base(true)
-        {
-            Name = source.ThrowIfNull(nameof(source));
-            Parameters = new ParameterSetDictionary(true);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
-        /// </summary>
-        /// <param name="source">The source.</param>
         /// <param name="parameters">The parameters.</param>
         public BehaviorContainer(string source, IParameterSetDictionary parameters)
-            : base(true)
+            : base()
         {
             Name = source.ThrowIfNull(nameof(source));
             Parameters = parameters.ThrowIfNull(nameof(parameters));
@@ -55,7 +43,7 @@ namespace SpiceSharp.Behaviors
         /// </returns>
         public P Get<P>(string name)
         {
-            foreach (var behavior in Dictionary.Values)
+            foreach (var behavior in Values)
             {
                 if (behavior.TryGet(name, out P value))
                     return value;
@@ -74,7 +62,7 @@ namespace SpiceSharp.Behaviors
         /// </returns>
         public bool TryGet<P>(string name, out P value)
         {
-            foreach (var behavior in Dictionary.Values)
+            foreach (var behavior in Values)
             {
                 if (behavior.TryGet(name, out value))
                     return true;
@@ -92,7 +80,7 @@ namespace SpiceSharp.Behaviors
         /// </returns>
         public Func<P> CreateGetter<P>(string name)
         {
-            foreach (var behavior in Dictionary.Values)
+            foreach (var behavior in Values)
             {
                 var result = behavior.CreateGetter<P>(name);
                 if (result != null)

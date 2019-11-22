@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SpiceSharp
 {
     /// <summary>
-    /// An implementation of the <see cref="ITypeDictionary{T}"/> interface.
-    /// This implementation supports multithreaded access.
+    /// An implementation of the <see cref="ITypeDictionary{T}"/> interface that
+    /// also allows retrieving information using interface types.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="ITypeDictionary{T}" />
-    public class TypeDictionary<T> : ITypeDictionary<T>
+    public class InterfaceTypeDictionary<T> : ITypeDictionary<T>
     {
-        /// <summary>
-        /// Gets the dictionary to look up using types.
-        /// </summary>
         private readonly Dictionary<Type, T> _dictionary;
+        private readonly HashSet<T> _values;
 
         /// <summary>
         /// Gets the keys.
@@ -31,29 +30,33 @@ namespace SpiceSharp
         /// <value>
         /// The values.
         /// </value>
-        public IEnumerable<T> Values => _dictionary.Values;
+        public IEnumerable<T> Values => _values;
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}" />.
+        /// Gets the number of elements contained in the <see cref="T:SpiceSharp.ITypeDictionary`1" />.
         /// </summary>
         /// <value>
         /// The count.
         /// </value>
-        public int Count => _dictionary.Count;
+        public int Count => _values.Count;
 
         /// <summary>
-        /// Gets or sets the value with the specified key.
+        /// Gets the value with the specified type.
         /// </summary>
-        /// <param name="key">The type.</param>
-        /// <returns>The object of the specified type.</returns>
-        public T this[Type key] => _dictionary[key];
+        /// <value>
+        /// The associated value.
+        /// </value>
+        /// <param name="type">The type.</param>
+        /// <returns>The associated value.</returns>
+        public T this[Type type] => _dictionary[type];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
+        /// Initializes a new instance of the <see cref="InterfaceTypeDictionary{T}"/> class.
         /// </summary>
-        public TypeDictionary()
+        public InterfaceTypeDictionary()
         {
             _dictionary = new Dictionary<Type, T>();
+            _values = new HashSet<T>();
         }
 
         /// <summary>
@@ -63,9 +66,16 @@ namespace SpiceSharp
         /// <param name="value">The value.</param>
         public void Add<V>(V value) where V : T
         {
+            // Add a regular one
             _dictionary.Add(value.GetType(), value);
             if (!_dictionary.ContainsKey(typeof(V)))
-                _dictionary[typeof(V)] = value;
+                _dictionary.Add(typeof(V), value);
+
+            // Make references for the interfaces as well
+            var ifs = value.GetType().GetTypeInfo().GetInterfaces();
+            foreach (var type in ifs)
+                _dictionary[type] = value;
+            _values.Add(value);
         }
 
         /// <summary>
@@ -96,6 +106,14 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Tries to get a value from the dictionary.
+        /// </summary>
+        /// <param name="key">The key type.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public bool TryGetValue(Type key, out T value) => _dictionary.TryGetValue(key, out value);
+
+        /// <summary>
         /// Determines whether the dictionary contains a value of the specified type.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -111,28 +129,16 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsValue(T value) => _dictionary.ContainsValue(value);
+        public bool ContainsValue(T value) => _values.Contains(value);
 
         /// <summary>
-        /// Gets the value associated with the specified key.
+        /// Clears all items in the dictionary.
         /// </summary>
-        /// <param name="key">The key whose value to get.</param>
-        /// <param name="value">When this method returns, the value associated with the specified key,
-        /// if the key is found; otherwise, the default value for the type of the
-        /// <paramref name="value" /> parameter. This parameter is passed uninitialized.</param>
-        /// <returns>
-        ///   <c>true</c> if the object that implements <see cref="TypeDictionary{T}" /> contains an element with the specified key; otherwise, <c>false</c>.
-        /// </returns>
-        public bool TryGetValue(Type key, out T value)
+        public void Clear()
         {
-            key.ThrowIfNull(nameof(key));
-            return _dictionary.TryGetValue(key, out value);
+            _dictionary.Clear();
+            _values.Clear();
         }
-
-        /// <summary>
-        /// Removes all items from the <see cref="TypeDictionary{T}"/>.
-        /// </summary>
-        public void Clear() => _dictionary.Clear();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -156,29 +162,16 @@ namespace SpiceSharp
         /// <returns>
         /// The cloned instance.
         /// </returns>
-        ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
-
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
-        protected virtual ICloneable Clone()
+        ICloneable ICloneable.Clone()
         {
-            var clone = new TypeDictionary<T>();
+            var clone = new InterfaceTypeDictionary<T>();
             foreach (var pair in _dictionary)
             {
+                var value = pair.Value;
                 if (pair.Value is ICloneable cloneable)
-                    clone._dictionary.Add(pair.Key, (T)cloneable.Clone());
-                else
-                    clone._dictionary.Add(pair.Key, pair.Value);
+                    value = (T)cloneable.Clone();
+                clone._dictionary.Add(pair.Key, value);
+                clone._values.Add(value);
             }
             return clone;
         }
@@ -187,12 +180,14 @@ namespace SpiceSharp
         /// Copies the contents of one interface to this one.
         /// </summary>
         /// <param name="source">The source parameter.</param>
-        protected virtual void CopyFrom(ICloneable source)
+        void ICloneable.CopyFrom(ICloneable source)
         {
             _dictionary.Clear();
+            _values.Clear();
             foreach (var pair in _dictionary)
             {
                 _dictionary.Add(pair.Key, pair.Value);
+                _values.Add(pair.Value);
             }
         }
     }

@@ -2,6 +2,7 @@
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -9,7 +10,7 @@ namespace SpiceSharp.Components
     /// A standard implementation of a <see cref="ISubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="ISubcircuitDefinition" />
-    public class SubcircuitDefinition : ISubcircuitDefinition
+    public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition
     {
         private string[] _pins;
 
@@ -92,7 +93,35 @@ namespace SpiceSharp.Components
                 behaviors.Add(new FrequencyBehavior(name, simulation));
             if (simulation.UsesBehaviors<INoiseBehavior>())
                 behaviors.Add(new NoiseBehavior(name, simulation));
+        }
 
+        /// <summary>
+        /// Creates a clone of the parameter set.
+        /// </summary>
+        /// <returns>
+        /// A clone of the parameter set.
+        /// </returns>
+        protected override ICloneable Clone()
+        {
+            var clone = new SubcircuitDefinition((IEntityCollection)Entities.Clone(), _pins);
+            return clone;
+        }
+
+        /// <summary>
+        /// Copy properties and fields from another parameter set.
+        /// </summary>
+        /// <param name="source">The source parameter set.</param>
+        protected override void CopyFrom(ICloneable source)
+        {
+            base.CopyFrom(source);
+            var sd = (SubcircuitDefinition)source;
+            _pins = new string[sd._pins.Length];
+            for (var i = 0; i < _pins.Length; i++)
+                _pins[i] = sd._pins[i];
+
+            Entities.Clear();
+            foreach (var entity in sd.Entities)
+                Entities.Add(entity);
         }
     }
 }

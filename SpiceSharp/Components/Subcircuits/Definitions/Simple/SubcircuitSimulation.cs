@@ -97,7 +97,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             {
                 if (entities.TryGetEntity(args.Name, out var entity))
                 {
-                    var behaviors = new BehaviorContainer(entity.Name);
+                    var behaviors = new BehaviorContainer(entity.Name,
+                        new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()));
                     entity.CreateBehaviors(this, behaviors);
                     EntityBehaviors.Add(behaviors);
                     args.Behaviors = behaviors;
@@ -114,7 +115,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             {
                 if (!EntityBehaviors.Contains(entity.Name))
                 {
-                    var behaviors = new BehaviorContainer(entity.Name);
+                    var behaviors = new BehaviorContainer(entity.Name,
+                        new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()));
                     entity.CreateBehaviors(this, behaviors);
                     EntityBehaviors.Add(behaviors);
                 }

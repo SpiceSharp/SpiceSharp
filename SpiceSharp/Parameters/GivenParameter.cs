@@ -51,10 +51,10 @@
         }
 
         /// <summary>
-        /// Clones the parameter.
+        /// Clones the instance.
         /// </summary>
         /// <returns>
-        /// The cloned parameter.
+        /// The cloned instance.
         /// </returns>
         public override Parameter<T> Clone()
         {

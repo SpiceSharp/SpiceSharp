@@ -37,10 +37,10 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Clones the parameter.
+        /// Clones the instance.
         /// </summary>
         /// <returns>
-        /// The cloned parameter.
+        /// The cloned instance.
         /// </returns>
         ICloneable ICloneable.Clone() => Clone();
 
