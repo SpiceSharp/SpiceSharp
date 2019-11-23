@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.MutualInductanceBehaviors;
 using SpiceSharp.Simulations;
 

@@ -2,7 +2,6 @@
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
-using System;
 
 namespace SpiceSharp.Components
 {

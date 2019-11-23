@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Components.MosfetBehaviors.Level1;
 using SpiceSharp.Simulations;
 

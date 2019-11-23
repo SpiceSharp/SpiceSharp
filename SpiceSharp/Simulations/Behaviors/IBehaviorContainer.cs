@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors
@@ -34,6 +33,6 @@ namespace SpiceSharp.Behaviors
         /// <param name="simulation">The simulation.</param>
         /// <param name="factory">The factory.</param>
         /// <returns>The container itself for chaining calls.</returns>
-        IBehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory);
+        IBehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory) where B : IBehavior;
     }
 }

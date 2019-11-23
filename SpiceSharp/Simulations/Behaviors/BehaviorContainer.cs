@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Simulations;
 using System;
-using System.Reflection;
 
 namespace SpiceSharp.Behaviors
 {
@@ -98,7 +97,7 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="B">The behavior (interface) type to be registering for.</typeparam>
         /// <param name="simulation">The simulation.</param>
         /// <param name="factory">The factory.</param>
-        public BehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory) where B : IBehavior
+        public IBehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory) where B : IBehavior
         {
             if (!simulation.UsesBehaviors<B>())
                 return this;
