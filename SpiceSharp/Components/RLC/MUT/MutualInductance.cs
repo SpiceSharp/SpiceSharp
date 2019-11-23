@@ -57,12 +57,10 @@ namespace SpiceSharp.Components
                 LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
             behaviors.Parameters.CalculateDefaults();
             var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
-            if (simulation.UsesBehaviors<IFrequencyBehavior>())
-                behaviors.Add(new FrequencyBehavior(Name, context));
-            if (simulation.UsesBehaviors<ITimeBehavior>())
-                behaviors.Add(new TransientBehavior(Name, context));
-            if (simulation.UsesBehaviors<ITemperatureBehavior>() && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
-                behaviors.Add(new TemperatureBehavior(Name, context));
+            behaviors
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new TransientBehavior(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

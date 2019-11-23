@@ -77,22 +77,15 @@ namespace SpiceSharp.Components
             simulation.Run(Entities);
 
             // Create the behaviors necessary for the subcircuit
-            if (simulation.UsesBehaviors<ITemperatureBehavior>())
-                behaviors.Add(new TemperatureBehavior(name, simulation));
-            if (simulation.UsesBehaviors<IBiasingUpdateBehavior>())
-                behaviors.Add(new BiasingUpdateBehavior(name, simulation));
-            if (simulation.UsesBehaviors<IBiasingBehavior>())
-                behaviors.Add(new BiasingBehavior(name, simulation));
-            if (simulation.UsesBehaviors<ITimeBehavior>())
-                behaviors.Add(new TimeBehavior(name, simulation));
-            if (simulation.UsesBehaviors<IAcceptBehavior>())
-                behaviors.Add(new AcceptBehavior(name, simulation));
-            if (simulation.UsesBehaviors<IFrequencyUpdateBehavior>())
-                behaviors.Add(new FrequencyUpdateBehavior(name, simulation));
-            if (simulation.UsesBehaviors<IFrequencyBehavior>())
-                behaviors.Add(new FrequencyBehavior(name, simulation));
-            if (simulation.UsesBehaviors<INoiseBehavior>())
-                behaviors.Add(new NoiseBehavior(name, simulation));
+            behaviors
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(name, simulation))
+                .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdateBehavior(name, simulation))
+                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new BiasingBehavior(name, simulation))
+                .AddIfNo<ITimeBehavior>(parentSimulation, () => new TimeBehavior(name, simulation))
+                .AddIfNo<IAcceptBehavior>(parentSimulation, () => new AcceptBehavior(name, simulation))
+                .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
+                .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
+                .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
         }
 
         /// <summary>

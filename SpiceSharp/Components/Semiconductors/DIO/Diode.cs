@@ -51,19 +51,12 @@ namespace SpiceSharp.Components
                 LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
             behaviors.Parameters.CalculateDefaults();
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
-            if (simulation.UsesBehaviors<INoiseBehavior>())
-                behaviors.Add(new NoiseBehavior(Name, context));
-            else if (simulation.UsesBehaviors<IFrequencyBehavior>())
-                behaviors.Add(new FrequencyBehavior(Name, context));
-            if (simulation.UsesBehaviors<ITimeBehavior>())
-                behaviors.Add(new TransientBehavior(Name, context));
-            if (simulation.UsesBehaviors<IBiasingBehavior>())
-            {
-                if (!behaviors.ContainsKey(typeof(IBiasingBehavior)))
-                    behaviors.Add(new BiasingBehavior(Name, context));
-            }
-            else if (simulation.UsesBehaviors<ITemperatureBehavior>() && !behaviors.ContainsKey(typeof(ITemperatureBehavior)))
-                behaviors.Add(new TemperatureBehavior(Name, context));
+            behaviors
+                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new TransientBehavior(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

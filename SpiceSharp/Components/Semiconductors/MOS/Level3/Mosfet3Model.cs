@@ -40,8 +40,7 @@ namespace SpiceSharp.Components
                 LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
             behaviors.Parameters.CalculateDefaults();
             var context = new ModelBindingContext(simulation, behaviors);
-            if (simulation.UsesBehaviors<ITemperatureBehavior>())
-                behaviors.Add(new ModelTemperatureBehavior(Name, context));
+            behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

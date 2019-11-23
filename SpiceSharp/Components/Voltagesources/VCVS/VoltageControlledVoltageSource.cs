@@ -54,10 +54,9 @@ namespace SpiceSharp.Components
                 LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
             behaviors.Parameters.CalculateDefaults();
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
-            if (simulation.UsesBehaviors<IFrequencyBehavior>())
-                behaviors.Add(new FrequencyBehavior(Name, context));
-            else if (simulation.UsesBehaviors<IBiasingBehavior>())
-                behaviors.Add(new BiasingBehavior(Name, context));
+            behaviors
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }
