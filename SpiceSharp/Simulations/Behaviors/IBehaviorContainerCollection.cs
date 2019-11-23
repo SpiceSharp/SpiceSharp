@@ -30,14 +30,6 @@ namespace SpiceSharp.Behaviors
         IEnumerable<string> Keys { get; }
 
         /// <summary>
-        /// Gets the tracked behavior types.
-        /// </summary>
-        /// <value>
-        /// An <see cref="IEnumerable{T}"/> object that contains each <see cref="IBehavior"/> type tracked by the collection.
-        /// </value>
-        IEnumerable<Type> BehaviorTypes { get; }
-
-        /// <summary>
         /// Gets the comparer used to identify elements.
         /// </summary>
         /// <value>

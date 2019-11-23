@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace SpiceSharp
 {
@@ -15,6 +14,7 @@ namespace SpiceSharp
     {
         private readonly Dictionary<Type, T> _dictionary;
         private readonly HashSet<T> _values;
+        private readonly HashSet<Type> _ambiguousTypes;
 
         /// <summary>
         /// Gets the value of the specified type.
@@ -57,33 +57,67 @@ namespace SpiceSharp
         {
             _dictionary = new Dictionary<Type, T>();
             _values = new HashSet<T>();
+            _ambiguousTypes = new HashSet<Type>();
+            _ambiguousTypes.Add(typeof(object));
         }
 
         /// <summary>
         /// Adds the specified value to the dictionary.
         /// </summary>
+        /// <remarks>
+        /// If two types share a common base class, then the common base classes become impossible
+        /// to be used as a reference due to ambiguity.
+        /// </remarks>
         /// <typeparam name="V">The value type.</typeparam>
         /// <param name="value">The value.</param>
         public void Add<V>(V value) where V : T
         {
             var ctype = value.GetType();
-            bool overwrite = _dictionary.ContainsKey(ctype);
-            _dictionary[ctype] = value;
+            _dictionary.Add(ctype, value);
+            _values.Add(value);
+            _ambiguousTypes.Remove(ctype); // We have a direct reference now
 
             // Track inheritance
-            while (ctype != null && ctype != typeof(object))
+            ctype = ctype.GetTypeInfo().BaseType;
+            while (!_ambiguousTypes.Contains(ctype))
             {
-                var info = ctype.GetTypeInfo();
-                ctype = info.BaseType;
-                if (!overwrite && _dictionary.ContainsKey(ctype))
-                    break; // Don't overwrite previously added
-                _dictionary.Add(ctype, value);
+                // Do we already have an entry for the base type?
+                if (_dictionary.ContainsKey(ctype))
+                {
+                    // There is already an entry for the base class:
+                    // - Any abstract classes down the line will become unavailable due to ambiguity
+                    // - Any classes that do not directly reference themselves become unavailable due to ambiguity
+                    while (!_ambiguousTypes.Contains(ctype))
+                    {
+                        var info = ctype.GetTypeInfo();
+                        if (info.IsAbstract)
+                            _ambiguousTypes.Add(ctype);
+                        else if (info.IsClass && _dictionary.TryGetValue(ctype, out var result) && result.GetType() != ctype)
+                            _ambiguousTypes.Add(ctype);
+                        ctype = ctype.GetTypeInfo().BaseType;
+                    }
+                    break;
+                }
+                else
+                    _dictionary.Add(ctype, value);
+                ctype = ctype.GetTypeInfo().BaseType;
             }
 
             // Make references for the interfaces as well
             var ifs = value.GetType().GetTypeInfo().GetInterfaces();
             foreach (var type in ifs)
-                _dictionary[type] = value;
+            {
+                if (_ambiguousTypes.Contains(type))
+                    continue;
+                if (_dictionary.ContainsKey(type))
+                {
+                    // The interface can't resolve to a single item anymore
+                    _dictionary.Remove(type);
+                    _ambiguousTypes.Add(type);
+                }
+                else
+                    _dictionary.Add(type, value);
+            }
             _values.Add(value);
         }
 
@@ -113,6 +147,8 @@ namespace SpiceSharp
                 clone._dictionary.Add(pair.Key, value);
                 clone._values.Add(value);
             }
+            foreach (var type in _ambiguousTypes)
+                clone._ambiguousTypes.Add(type);
             return clone;
         }
 
@@ -165,7 +201,13 @@ namespace SpiceSharp
         /// The result.
         /// </returns>
         public TResult GetValue<TResult>() where TResult : T
-            => (TResult)_dictionary[typeof(TResult)];
+        {
+            if (_dictionary.TryGetValue(typeof(TResult), out var result))
+                return (TResult)result;
+            if (_ambiguousTypes.Contains(typeof(TResult)))
+                throw new CircuitException("Ambiguity detected for type '{0}'".FormatString(typeof(TResult).FullName));
+            throw new CircuitException("No value for '{0}'".FormatString(typeof(TResult).FullName));
+        }
 
         /// <summary>
         /// Tries to get a strongly typed value from the dictionary.
@@ -180,6 +222,8 @@ namespace SpiceSharp
                 value = (TResult)result;
                 return true;
             }
+            if (_ambiguousTypes.Contains(typeof(TResult)))
+                throw new CircuitException("Ambiguity detected for type '{0}'".FormatString(typeof(TResult).FullName));
             value = default;
             return false;
         }
@@ -191,7 +235,15 @@ namespace SpiceSharp
         /// <param name="value">The value.</param>
         /// <returns></returns>
         public bool TryGetValue(Type key, out T value)
-            => _dictionary.TryGetValue(key, out value);
+        {
+            key.ThrowIfNull(nameof(key));
+            if (_dictionary.TryGetValue(key, out value))
+                return true;
+            if (_ambiguousTypes.Contains(key))
+                throw new CircuitException("Ambiguity detected for type '{0}'".FormatString(key.FullName));
+            value = default;
+            return false;
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.

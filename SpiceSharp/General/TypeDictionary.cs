@@ -195,5 +195,15 @@ namespace SpiceSharp
                 _dictionary.Add(pair.Key, pair.Value);
             }
         }
+
+        /// <summary>
+        /// Removes the value of the specified type from the dictionary.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>
+        /// <c>true</c> if the value has been removed succesfully; otherwise <c>false</c>.
+        /// </returns>
+        public bool Remove(Type key)
+            => _dictionary.Remove(key);
     }
 }

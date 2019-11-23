@@ -1,11 +1,14 @@
-﻿using System;
+﻿using SpiceSharp.Simulations;
+using System;
+using System.Reflection;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
-    /// <seealso cref="TypeDictionary{Behavior}" />
+    /// <seealso cref="IBehaviorContainer" />
+    /// <seealso cref="InheritedTypeDictionary{Behavior}" />
     public class BehaviorContainer : InheritedTypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
@@ -87,6 +90,21 @@ namespace SpiceSharp.Behaviors
                     return result;
             }
             return Parameters.CreateGetter<P>(name);
+        }
+
+        /// <summary>
+        /// Adds a behavior to the container only if the behavior type doesn't exist yet.
+        /// </summary>
+        /// <typeparam name="B">The behavior (interface) type to be registering for.</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="factory">The factory.</param>
+        public BehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory) where B : IBehavior
+        {
+            if (!simulation.UsesBehaviors<B>())
+                return this;
+            if (!ContainsKey(typeof(B)))
+                Add(factory());
+            return this;
         }
     }
 }

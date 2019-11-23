@@ -12,17 +12,13 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     public class BehaviorContainerCollection : IBehaviorContainerCollection
     {
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         /// <summary>
         /// Behaviors indexed by the entity that created them.
         /// </summary>
-        private readonly Dictionary<string, IBehaviorContainer> _entityBehaviors;
-
-        /// <summary>
-        /// Lists of behaviors indexed by type of behavior.
-        /// </summary>
-        private readonly Dictionary<Type, List<IBehavior>> _behaviorLists = new Dictionary<Type, List<IBehavior>>();
+        private readonly Dictionary<string, IBehaviorContainer> _dictionary;
+        private readonly List<IBehaviorContainer> _values;
 
         /// <summary>
         /// Occurs when a behavior has not been found.
@@ -35,7 +31,7 @@ namespace SpiceSharp.Behaviors
         /// <value>
         /// The entity count.
         /// </value>
-        public int Count => _entityBehaviors.Count;
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// Enumerates all names in the pool.
@@ -47,7 +43,7 @@ namespace SpiceSharp.Behaviors
                 _lock.EnterReadLock();
                 try
                 {
-                    foreach (var key in _entityBehaviors.Keys)
+                    foreach (var key in _dictionary.Keys)
                         yield return key;
                 }
                 finally
@@ -56,14 +52,6 @@ namespace SpiceSharp.Behaviors
                 }
             }
         }
-
-        /// <summary>
-        /// Gets the types.
-        /// </summary>
-        /// <value>
-        /// The types.
-        /// </value>
-        public IEnumerable<Type> BehaviorTypes => _behaviorLists.Keys;
 
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
@@ -77,7 +65,7 @@ namespace SpiceSharp.Behaviors
                 _lock.EnterUpgradeableReadLock();
                 try
                 {
-                    if (_entityBehaviors.TryGetValue(name, out var result))
+                    if (_dictionary.TryGetValue(name, out var result))
                         return result;
                     var args = new BehaviorsNotFoundEventArgs(name);
                     OnBehaviorsNotFound(args);
@@ -93,11 +81,18 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
+        /// Gets the entity identifier comparer.
+        /// </summary>
+        /// <value>
+        /// The comparer.
+        /// </value>
+        public IEqualityComparer<string> Comparer => _dictionary.Comparer;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainerCollection" /> class.
         /// </summary>
-        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
-        public BehaviorContainerCollection(ISimulation simulation)
-            : this(EqualityComparer<string>.Default, simulation)
+        public BehaviorContainerCollection()
+            : this(EqualityComparer<string>.Default)
         {
         }
 
@@ -105,12 +100,10 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BehaviorContainerCollection"/> class.
         /// </summary>
         /// <param name="comparer">The comparer for behaviors.</param>
-        /// <param name="simulation">The simulation for which behaviors need to be created.</param>
-        public BehaviorContainerCollection(IEqualityComparer<string> comparer, ISimulation simulation)
+        public BehaviorContainerCollection(IEqualityComparer<string> comparer)
         {
-            _entityBehaviors = new Dictionary<string, IBehaviorContainer>(comparer);
-            foreach (var type in simulation.Behaviors)
-                _behaviorLists.Add(type, new List<IBehavior>());
+            _dictionary = new Dictionary<string, IBehaviorContainer>(comparer);
+            _values = new List<IBehaviorContainer>();
         }
 
         /// <summary>
@@ -121,41 +114,27 @@ namespace SpiceSharp.Behaviors
         public void Add(IBehaviorContainer behaviors)
         {
             behaviors.ThrowIfNull(nameof(behaviors));
-            _lock.EnterReadLock();
+            _lock.EnterUpgradeableReadLock();
             try
             {
-                // First see if we already have a behavior
-                if (_entityBehaviors.ContainsKey(behaviors.Name))
+                if (_dictionary.ContainsKey(behaviors.Name))
                     throw new CircuitException("There are already behaviors for '{0}'".FormatString(behaviors.Name));
-            }
-            finally
-            {
-                _lock.ExitReadLock();
-            }
-
-            _lock.EnterWriteLock();
-            try
-            {
-                _entityBehaviors.Add(behaviors.Name, behaviors);
-                foreach (var type in _behaviorLists.Keys)
+                _lock.EnterWriteLock();
+                try
                 {
-                    if (behaviors.TryGetValue(type, out IBehavior behavior))
-                        _behaviorLists[type].Add(behavior);
+                    _dictionary.Add(behaviors.Name, behaviors);
+                    _values.Add(behaviors);
+                }
+                finally
+                {
+                    _lock.ExitWriteLock();
                 }
             }
             finally
             {
-                _lock.ExitWriteLock();
+                _lock.ExitUpgradeableReadLock();
             }
         }
-
-        /// <summary>
-        /// Gets the entity identifier comparer.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
-        public IEqualityComparer<string> Comparer => _entityBehaviors.Comparer;
 
         /// <summary>
         /// Gets a list of behaviors of a specific type.
@@ -169,9 +148,13 @@ namespace SpiceSharp.Behaviors
             _lock.EnterReadLock();
             try
             {
-                if (_behaviorLists.TryGetValue(typeof(T), out var list))
-                    return new BehaviorList<T>(list.Cast<T>());
-                return new BehaviorList<T>(new T[0]);
+                var list = new List<T>(_values.Count);
+                foreach (var elt in _values)
+                {
+                    if (elt.TryGetValue(out T value))
+                        list.Add(value);
+                }
+                return new BehaviorList<T>(list.ToArray());
             }
             finally
             {
@@ -190,7 +173,7 @@ namespace SpiceSharp.Behaviors
             _lock.EnterReadLock();
             try
             {
-                return _entityBehaviors.TryGetValue(name, out ebd);
+                return _dictionary.TryGetValue(name, out ebd);
             }
             finally
             {
@@ -210,7 +193,7 @@ namespace SpiceSharp.Behaviors
             _lock.EnterReadLock();
             try
             {
-                return _entityBehaviors.ContainsKey(name);
+                return _dictionary.ContainsKey(name);
             }
             finally
             {
@@ -226,8 +209,8 @@ namespace SpiceSharp.Behaviors
             _lock.EnterWriteLock();
             try
             {
-                _behaviorLists.Clear();
-                _entityBehaviors.Clear();
+                _dictionary.Clear();
+                _values.Clear();
             }
             finally
             {

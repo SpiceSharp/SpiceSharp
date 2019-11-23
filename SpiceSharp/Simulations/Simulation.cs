@@ -234,7 +234,7 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected virtual void CreateBehaviors(IEntityCollection entities)
         {
-            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer, this);
+            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer);
 
             // Automatically create the behaviors of entities that need priority
             void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)

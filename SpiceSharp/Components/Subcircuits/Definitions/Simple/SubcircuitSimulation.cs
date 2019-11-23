@@ -91,7 +91,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="entities">The entities.</param>
         public void Run(IEntityCollection entities)
         {
-            EntityBehaviors = new BehaviorContainerCollection(Parent.EntityBehaviors.Comparer, Parent);
+            EntityBehaviors = new BehaviorContainerCollection(Parent.EntityBehaviors.Comparer);
 
             void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
             {
