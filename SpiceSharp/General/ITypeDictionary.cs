@@ -67,7 +67,9 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///   <c>true</c> if the specified key contains
+        /// </returns>
         bool TryGetValue<TResult>(out TResult value) where TResult : T;
 
         /// <summary>
@@ -75,15 +77,17 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="key">The key type.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///   <c>true</c> if the value was resolved; otherwise <c>false</c>.
+        /// </returns>
         bool TryGetValue(Type key, out T value);
 
         /// <summary>
-        /// Determines whether the dictionary contains a value of the specified type.
+        /// Determines whether the dictionary contains one or more values of the specified type.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>
-        ///   <c>true</c> if the specified key contains key; otherwise, <c>false</c>.
+        ///   <c>true</c> if the dictionary contains one ore more values of the specified type; otherwise, <c>false</c>.
         /// </returns>
         bool ContainsKey(Type key);
 

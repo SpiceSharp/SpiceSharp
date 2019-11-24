@@ -2,6 +2,8 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -28,6 +30,17 @@ namespace SpiceSharpTest.Models
             double[] references = { sum };
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_VoltageSourceSmallSignal_Expect_Reference()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).Set("acmag", 1.0));
+            var ac = new AC("ac", new DecadeSweep(1.0, 100, 5));
+            var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "in") };
+            var references = new Func<double, Complex>[] { f => new Complex(1.0, 0.0) };
+            AnalyzeAC(ac, ckt, exports, references);
         }
     }
 }

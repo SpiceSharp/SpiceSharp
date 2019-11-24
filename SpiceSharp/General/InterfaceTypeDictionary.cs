@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SpiceSharp
+namespace SpiceSharp.General
 {
     /// <summary>
     /// An implementation of the <see cref="ITypeDictionary{T}"/> interface that
@@ -14,7 +14,7 @@ namespace SpiceSharp
     public class InterfaceTypeDictionary<T> : ITypeDictionary<T>
     {
         private readonly Dictionary<Type, T> _dictionary;
-        private readonly HashSet<T> _values;
+        private readonly Dictionary<Type, InheritanceNode<T>> _interfaces;
 
         /// <summary>
         /// Gets the keys.
@@ -22,7 +22,7 @@ namespace SpiceSharp
         /// <value>
         /// The keys.
         /// </value>
-        public IEnumerable<Type> Keys => _dictionary.Keys;
+        public IEnumerable<Type> Keys => _interfaces.Keys;
 
         /// <summary>
         /// Gets the values.
@@ -30,15 +30,15 @@ namespace SpiceSharp
         /// <value>
         /// The values.
         /// </value>
-        public IEnumerable<T> Values => _values;
+        public IEnumerable<T> Values => _dictionary.Values;
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="T:SpiceSharp.ITypeDictionary`1" />.
+        /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}" />.
         /// </summary>
         /// <value>
         /// The count.
         /// </value>
-        public int Count => _values.Count;
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// Gets the value with the specified type.
@@ -48,7 +48,15 @@ namespace SpiceSharp
         /// </value>
         /// <param name="type">The type.</param>
         /// <returns>The associated value.</returns>
-        public T this[Type type] => _dictionary[type];
+        public T this[Type type]
+        {
+            get
+            {
+                if (_interfaces.TryGetValue(type, out var result))
+                    return result.Value;
+                return _dictionary[type];
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InterfaceTypeDictionary{T}"/> class.
@@ -56,7 +64,7 @@ namespace SpiceSharp
         public InterfaceTypeDictionary()
         {
             _dictionary = new Dictionary<Type, T>();
-            _values = new HashSet<T>();
+            _interfaces = new Dictionary<Type, InheritanceNode<T>>();
         }
 
         /// <summary>
@@ -66,16 +74,22 @@ namespace SpiceSharp
         /// <param name="value">The value.</param>
         public void Add<V>(V value) where V : T
         {
-            // Add a regular one
+            // Add a regular class entry
             _dictionary.Add(value.GetType(), value);
-            if (!_dictionary.ContainsKey(typeof(V)))
-                _dictionary.Add(typeof(V), value);
 
             // Make references for the interfaces as well
             var ifs = value.GetType().GetTypeInfo().GetInterfaces();
             foreach (var type in ifs)
-                _dictionary[type] = value;
-            _values.Add(value);
+            {
+                if (_interfaces.TryGetValue(type, out var existing))
+                {
+                    while (existing.NextSibling != null)
+                        existing = existing.NextSibling;
+                    existing.NextSibling = new InheritanceNode<T>(value, false);
+                }
+                else
+                    _interfaces.Add(type, new InheritanceNode<T>(value, false));
+            }
         }
 
         /// <summary>
@@ -86,7 +100,15 @@ namespace SpiceSharp
         /// The result.
         /// </returns>
         public TResult GetValue<TResult>() where TResult : T
-            => (TResult)_dictionary[typeof(TResult)];
+        {
+            if (_interfaces.TryGetValue(typeof(TResult), out var result))
+            {
+                if (result.NextSibling != null)
+                    throw new AmbiguousTypeException(typeof(TResult));
+                return (TResult)result.Value;
+            }
+            return (TResult)_dictionary[typeof(TResult)];
+        }
 
         /// <summary>
         /// Tries to get a strongly typed value from the dictionary.
@@ -96,9 +118,16 @@ namespace SpiceSharp
         /// <returns></returns>
         public bool TryGetValue<TResult>(out TResult value) where TResult : T
         {
-            if (_dictionary.TryGetValue(typeof(TResult), out var result))
+            if (_interfaces.TryGetValue(typeof(TResult), out var result))
             {
-                value = (TResult)result;
+                if (result.NextSibling != null)
+                    throw new AmbiguousTypeException(typeof(TResult));
+                value = (TResult)result.Value;
+                return true;
+            }
+            if (_dictionary.TryGetValue(typeof(TResult), out var direct))
+            {
+                value = (TResult)direct;
                 return true;
             }
             value = default;
@@ -111,7 +140,23 @@ namespace SpiceSharp
         /// <param name="key">The key type.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public bool TryGetValue(Type key, out T value) => _dictionary.TryGetValue(key, out value);
+        public bool TryGetValue(Type key, out T value)
+        {
+            if (_interfaces.TryGetValue(key, out var result))
+            {
+                if (result.NextSibling != null)
+                    throw new AmbiguousTypeException(key);
+                value = result.Value;
+                return true;
+            }
+            if (_dictionary.TryGetValue(key, out var direct))
+            {
+                value = direct;
+                return true;
+            }
+            value = default;
+            return false;
+        }
 
         /// <summary>
         /// Determines whether the dictionary contains a value of the specified type.
@@ -120,7 +165,7 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the specified key contains key; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key);
+        public bool ContainsKey(Type key) => _interfaces.ContainsKey(key) || _dictionary.ContainsKey(key);
 
         /// <summary>
         /// Determines whether the dictionary contains the specified value.
@@ -129,15 +174,15 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsValue(T value) => _values.Contains(value);
+        public bool ContainsValue(T value) => _dictionary.TryGetValue(value.GetType(), out var result) && result.Equals(value);
 
         /// <summary>
         /// Clears all items in the dictionary.
         /// </summary>
         public void Clear()
         {
+            _interfaces.Clear();
             _dictionary.Clear();
-            _values.Clear();
         }
 
         /// <summary>
@@ -146,7 +191,13 @@ namespace SpiceSharp
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator() => _dictionary.GetEnumerator();
+        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator()
+        {
+            foreach (var pair in _interfaces)
+                yield return new KeyValuePair<Type, T>(pair.Key, pair.Value.Value);
+            foreach (var pair in _dictionary)
+                yield return new KeyValuePair<Type, T>(pair.Key, pair.Value);
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
@@ -154,7 +205,7 @@ namespace SpiceSharp
         /// <returns>
         /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => _dictionary.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Clones the instance.
@@ -165,13 +216,16 @@ namespace SpiceSharp
         ICloneable ICloneable.Clone()
         {
             var clone = new InterfaceTypeDictionary<T>();
-            foreach (var pair in _dictionary)
+            foreach (var pair in _interfaces)
             {
-                var value = pair.Value;
-                if (pair.Value is ICloneable cloneable)
-                    value = (T)cloneable.Clone();
-                clone._dictionary.Add(pair.Key, value);
-                clone._values.Add(value);
+                var cloneValue = pair.Value.Clone();
+                clone._interfaces.Add(pair.Key, cloneValue);
+                var elt = cloneValue;
+                foreach (var v in cloneValue.Values)
+                {
+                    if (!clone._dictionary.ContainsKey(v.GetType()))
+                        clone._dictionary.Add(v.GetType(), v);
+                }
             }
             return clone;
         }
@@ -183,11 +237,18 @@ namespace SpiceSharp
         void ICloneable.CopyFrom(ICloneable source)
         {
             _dictionary.Clear();
-            _values.Clear();
-            foreach (var pair in _dictionary)
+            var src = (InterfaceTypeDictionary<T>)source;
+            foreach (var pair in src._interfaces)
             {
-                _dictionary.Add(pair.Key, pair.Value);
-                _values.Add(pair.Value);
+                var srcNode = pair.Value;
+                var newNode = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
+                _interfaces.Add(pair.Key, newNode);
+                while (srcNode.NextSibling != null)
+                {
+                    srcNode = srcNode.NextSibling;
+                    newNode.NextSibling = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
+                    newNode = newNode.NextSibling;
+                }
             }
         }
     }

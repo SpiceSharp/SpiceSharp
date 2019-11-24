@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SpiceSharp
+namespace SpiceSharp.General
 {
     /// <summary>
     /// An <see cref="ITypeDictionary{T}"/> that tracks inheritance and interfaces.
@@ -12,9 +12,8 @@ namespace SpiceSharp
     /// <seealso cref="ITypeDictionary{T}" />
     public class InheritedTypeDictionary<T> : ITypeDictionary<T>
     {
-        private readonly Dictionary<Type, T> _dictionary;
+        private readonly Dictionary<Type, InheritanceNode<T>> _dictionary;
         private readonly HashSet<T> _values;
-        private readonly HashSet<Type> _ambiguousTypes;
 
         /// <summary>
         /// Gets the value of the specified type.
@@ -24,7 +23,16 @@ namespace SpiceSharp
         /// </value>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public T this[Type key] => _dictionary[key];
+        public T this[Type key]
+        {
+            get
+            {
+                var result = _dictionary[key];
+                if (result.NextSibling != null)
+                    throw new AmbiguousTypeException(key);
+                return result.Value;
+            }
+        }
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}" />.
@@ -55,10 +63,8 @@ namespace SpiceSharp
         /// </summary>
         public InheritedTypeDictionary()
         {
-            _dictionary = new Dictionary<Type, T>();
+            _dictionary = new Dictionary<Type, InheritanceNode<T>>();
             _values = new HashSet<T>();
-            _ambiguousTypes = new HashSet<Type>();
-            _ambiguousTypes.Add(typeof(object));
         }
 
         /// <summary>
@@ -73,33 +79,34 @@ namespace SpiceSharp
         public void Add<V>(V value) where V : T
         {
             var ctype = value.GetType();
-            _dictionary.Add(ctype, value);
-            _values.Add(value);
-            _ambiguousTypes.Remove(ctype); // We have a direct reference now
+            var node = new InheritanceNode<T>(value, true);
 
-            // Track inheritance
-            ctype = ctype.GetTypeInfo().BaseType;
-            while (!_ambiguousTypes.Contains(ctype))
+            // We should always be able to access the type by itself, so remove any ambiguous elements if necessary
+            if (_dictionary.TryGetValue(ctype, out var existing))
             {
-                // Do we already have an entry for the base type?
-                if (_dictionary.ContainsKey(ctype))
+                if (existing.IsDirect)
+                    throw new CircuitException("A value of type '{0}' already exists".FormatString(ctype.FullName));
+                node.NextSibling = existing;
+                _dictionary[ctype] = node;
+            }
+            else
+                _dictionary.Add(ctype, node);
+            _values.Add(node.Value);
+
+            // Track the inheritance tree
+            ctype = ctype.GetTypeInfo().BaseType;
+            while (ctype != null && ctype != typeof(object) && ctype != typeof(T))
+            {
+                if (_dictionary.TryGetValue(ctype, out existing))
                 {
-                    // There is already an entry for the base class:
-                    // - Any abstract classes down the line will become unavailable due to ambiguity
-                    // - Any classes that do not directly reference themselves become unavailable due to ambiguity
-                    while (!_ambiguousTypes.Contains(ctype))
-                    {
-                        var info = ctype.GetTypeInfo();
-                        if (info.IsAbstract)
-                            _ambiguousTypes.Add(ctype);
-                        else if (info.IsClass && _dictionary.TryGetValue(ctype, out var result) && result.GetType() != ctype)
-                            _ambiguousTypes.Add(ctype);
-                        ctype = ctype.GetTypeInfo().BaseType;
-                    }
-                    break;
+                    // There is already a node that is associated to this type, let's add it as a sibling
+                    var elt = existing;
+                    while (elt.NextSibling != null)
+                        elt = elt.NextSibling;
+                    elt.NextSibling = new InheritanceNode<T>(value, false);
                 }
                 else
-                    _dictionary.Add(ctype, value);
+                    _dictionary.Add(ctype, new InheritanceNode<T>(value, false));
                 ctype = ctype.GetTypeInfo().BaseType;
             }
 
@@ -107,18 +114,77 @@ namespace SpiceSharp
             var ifs = value.GetType().GetTypeInfo().GetInterfaces();
             foreach (var type in ifs)
             {
-                if (_ambiguousTypes.Contains(type))
-                    continue;
-                if (_dictionary.ContainsKey(type))
+                if (_dictionary.TryGetValue(type, out existing))
                 {
-                    // The interface can't resolve to a single item anymore
-                    _dictionary.Remove(type);
-                    _ambiguousTypes.Add(type);
+                    // There is already a node that is associated to this interface, let's add it as a sibling
+                    var elt = existing;
+                    while (elt.NextSibling != null)
+                        elt = elt.NextSibling;
+                    elt.NextSibling = new InheritanceNode<T>(value, false);
                 }
                 else
-                    _dictionary.Add(type, value);
+                    _dictionary.Add(type, new InheritanceNode<T>(value, false));
             }
             _values.Add(value);
+        }
+
+        /// <summary>
+        /// Removes the specified value from the dictionary.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
+        /// </returns>
+        public bool Remove(T value)
+        {
+            if (!_values.Contains(value))
+                return false;
+            var ctype = value.GetType();
+            RemoveValueFromList(value, ctype);
+            _values.Remove(value);
+
+            // Track the inheritance tree
+            ctype = ctype.GetTypeInfo().BaseType;
+            while (ctype != null && ctype != typeof(object) && ctype != typeof(T))
+            {
+                RemoveValueFromList(value, ctype);
+                ctype = ctype.GetTypeInfo().BaseType;
+            }
+
+            // Make references for the interfaces as well
+            var ifs = value.GetType().GetTypeInfo().GetInterfaces();
+            foreach (var type in ifs)
+                RemoveValueFromList(value, type);
+            _values.Add(value);
+            return true;
+        }
+
+        /// <summary>
+        /// Removes the value from the list.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="key">The key.</param>
+        private void RemoveValueFromList(T value, Type key)
+        {
+            var first = _dictionary[key];
+            if (first.Value.Equals(value))
+            {
+                if (first.NextSibling != null)
+                    _dictionary[key] = first.NextSibling;
+                else
+                    _dictionary.Remove(key);
+            }
+            else
+            {
+                var lastElt = first;
+                var elt = first.NextSibling;
+                while (!elt.Value.Equals(value))
+                {
+                    lastElt = elt;
+                    elt = elt.NextSibling;
+                }
+                lastElt.NextSibling = elt.NextSibling;
+            }
         }
 
         /// <summary>
@@ -141,14 +207,15 @@ namespace SpiceSharp
             var clone = new InheritedTypeDictionary<T>();
             foreach (var pair in _dictionary)
             {
-                var value = pair.Value;
-                if (pair.Value is ICloneable cloneable)
-                    value = (T)cloneable.Clone();
-                clone._dictionary.Add(pair.Key, value);
-                clone._values.Add(value);
+                var cloneValue = pair.Value.Clone();
+                clone._dictionary.Add(pair.Key, cloneValue);
+                var elt = cloneValue;
+                while (elt != null)
+                {
+                    clone._values.Add(elt.Value);
+                    elt = elt.NextSibling;
+                }
             }
-            foreach (var type in _ambiguousTypes)
-                clone._ambiguousTypes.Add(type);
             return clone;
         }
 
@@ -178,11 +245,21 @@ namespace SpiceSharp
         {
             _dictionary.Clear();
             _values.Clear();
-            foreach (var pair in _dictionary)
+            var src = (InheritedTypeDictionary<T>)source;
+            foreach (var pair in src._dictionary)
             {
-                _dictionary.Add(pair.Key, pair.Value);
-                _values.Add(pair.Value);
+                var srcNode = pair.Value;
+                var newNode = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
+                _dictionary.Add(pair.Key, newNode);
+                while (srcNode.NextSibling != null)
+                {
+                    srcNode = srcNode.NextSibling;
+                    newNode.NextSibling = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
+                    newNode = newNode.NextSibling;
+                }
             }
+            foreach (var value in src._values)
+                _values.Add(value);
         }
 
         /// <summary>
@@ -191,7 +268,11 @@ namespace SpiceSharp
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator() => _dictionary.GetEnumerator();
+        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator()
+        {
+            foreach (var elt in _dictionary)
+                yield return new KeyValuePair<Type, T>(elt.Key, elt.Value.Value);
+        }
 
         /// <summary>
         /// Gets the strongly typed value from the dictionary.
@@ -203,9 +284,11 @@ namespace SpiceSharp
         public TResult GetValue<TResult>() where TResult : T
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
-                return (TResult)result;
-            if (_ambiguousTypes.Contains(typeof(TResult)))
-                throw new CircuitException("Ambiguity detected for type '{0}'".FormatString(typeof(TResult).FullName));
+            {
+                if (result.NextSibling != null && !result.IsDirect)
+                    throw new AmbiguousTypeException(typeof(TResult));
+                return (TResult)result.Value;
+            }
             throw new CircuitException("No value for '{0}'".FormatString(typeof(TResult).FullName));
         }
 
@@ -219,11 +302,11 @@ namespace SpiceSharp
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
             {
-                value = (TResult)result;
+                if (result.NextSibling != null && !result.IsDirect)
+                    throw new AmbiguousTypeException(typeof(TResult));
+                value = (TResult)result.Value;
                 return true;
             }
-            if (_ambiguousTypes.Contains(typeof(TResult)))
-                throw new CircuitException("Ambiguity detected for type '{0}'".FormatString(typeof(TResult).FullName));
             value = default;
             return false;
         }
@@ -233,14 +316,19 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="key">The key type.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> if the value was resolved; otherwise <c>false</c>.
+        /// </returns>
         public bool TryGetValue(Type key, out T value)
         {
             key.ThrowIfNull(nameof(key));
-            if (_dictionary.TryGetValue(key, out value))
+            if (_dictionary.TryGetValue(key, out var result))
+            {
+                if (result.NextSibling != null && !result.IsDirect)
+                    throw new AmbiguousTypeException(key);
+                value = result.Value;
                 return true;
-            if (_ambiguousTypes.Contains(key))
-                throw new CircuitException("Ambiguity detected for type '{0}'".FormatString(key.FullName));
+            }
             value = default;
             return false;
         }
@@ -251,7 +339,6 @@ namespace SpiceSharp
         /// <returns>
         /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-            => ((IEnumerable)_dictionary).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
