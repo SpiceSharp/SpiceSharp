@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
     /// <summary>
     /// General behavior for a <see cref="VoltageControlledVoltageSource"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior
     {
         /// <summary>
         /// Gets the base parameters.

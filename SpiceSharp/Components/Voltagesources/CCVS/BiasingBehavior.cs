@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     /// <summary>
     /// General behavior for <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior
     {
         /// <summary>
         /// Gets the base parameters.
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <value>
         /// The branch.
         /// </value>
-        protected Variable Branch { get; private set; }
+        public Variable Branch { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
 
-            var behavior = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior>();
             ControlBranch = behavior.Branch;
             _cbrNode = BiasingState.Map[ControlBranch];
             

@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
-            var load = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            var load = context.ControlBehaviors.GetValue<IBranchedBehavior>();
             ControlBranch = load.Branch;
             _brNode = BiasingState.Map[ControlBranch];
             Elements = new ElementSet<double>(BiasingState.Solver,

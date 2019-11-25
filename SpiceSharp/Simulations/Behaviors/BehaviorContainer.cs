@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     /// <seealso cref="IBehaviorContainer" />
     /// <seealso cref="InheritedTypeDictionary{Behavior}" />
-    public class BehaviorContainer : InheritedTypeDictionary<IBehavior>, IBehaviorContainer
+    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
         /// Gets the source identifier.

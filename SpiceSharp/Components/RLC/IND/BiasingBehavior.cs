@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="Inductor"/>
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IBranchedBehavior
     {
         /// <summary>
         /// Gets the branch equation index.
