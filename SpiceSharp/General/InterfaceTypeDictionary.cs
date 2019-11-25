@@ -14,7 +14,7 @@ namespace SpiceSharp.General
     public class InterfaceTypeDictionary<T> : ITypeDictionary<T>
     {
         private readonly Dictionary<Type, T> _dictionary;
-        private readonly Dictionary<Type, InheritanceNode<T>> _interfaces;
+        private readonly Dictionary<Type, TypeValues<T>> _interfaces;
 
         /// <summary>
         /// Gets the keys.
@@ -64,7 +64,7 @@ namespace SpiceSharp.General
         public InterfaceTypeDictionary()
         {
             _dictionary = new Dictionary<Type, T>();
-            _interfaces = new Dictionary<Type, InheritanceNode<T>>();
+            _interfaces = new Dictionary<Type, TypeValues<T>>();
         }
 
         /// <summary>
@@ -75,21 +75,39 @@ namespace SpiceSharp.General
         public void Add<V>(V value) where V : T
         {
             // Add a regular class entry
+            var ctype = value.GetType();
             _dictionary.Add(value.GetType(), value);
 
             // Make references for the interfaces as well
-            var ifs = value.GetType().GetTypeInfo().GetInterfaces();
-            foreach (var type in ifs)
+            foreach (var type in InterfaceCache.Get(ctype))
             {
-                if (_interfaces.TryGetValue(type, out var existing))
+                if (!_interfaces.TryGetValue(type, out var values))
                 {
-                    while (existing.NextSibling != null)
-                        existing = existing.NextSibling;
-                    existing.NextSibling = new InheritanceNode<T>(value, false);
+                    values = new TypeValues<T>();
+                    _interfaces.Add(type, values);
                 }
-                else
-                    _interfaces.Add(type, new InheritanceNode<T>(value, false));
+                values.Add(value);
             }
+        }
+
+        /// <summary>
+        /// Removes the specified value from the dictionary.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
+        /// </returns>
+        public bool Remove(T value)
+        {
+            var ctype = value.GetType();
+            if (ContainsValue(value))
+            {
+                _dictionary.Remove(ctype);
+                foreach (var type in InterfaceCache.Get(ctype))
+                    _interfaces[type].Remove(value);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -103,7 +121,7 @@ namespace SpiceSharp.General
         {
             if (_interfaces.TryGetValue(typeof(TResult), out var result))
             {
-                if (result.NextSibling != null)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
@@ -120,7 +138,7 @@ namespace SpiceSharp.General
         {
             if (_interfaces.TryGetValue(typeof(TResult), out var result))
             {
-                if (result.NextSibling != null)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(typeof(TResult));
                 value = (TResult)result.Value;
                 return true;
@@ -144,7 +162,7 @@ namespace SpiceSharp.General
         {
             if (_interfaces.TryGetValue(key, out var result))
             {
-                if (result.NextSibling != null)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(key);
                 value = result.Value;
                 return true;
@@ -215,17 +233,13 @@ namespace SpiceSharp.General
         /// </returns>
         ICloneable ICloneable.Clone()
         {
-            var clone = new InterfaceTypeDictionary<T>();
-            foreach (var pair in _interfaces)
+            var clone = new InheritedTypeDictionary<T>();
+            foreach (var v in Values)
             {
-                var cloneValue = pair.Value.Clone();
-                clone._interfaces.Add(pair.Key, cloneValue);
-                var elt = cloneValue;
-                foreach (var v in cloneValue.Values)
-                {
-                    if (!clone._dictionary.ContainsKey(v.GetType()))
-                        clone._dictionary.Add(v.GetType(), v);
-                }
+                var cloneValue = v;
+                if (v is ICloneable cloneable)
+                    cloneValue = (T)cloneable.Clone();
+                clone.Add(cloneValue);
             }
             return clone;
         }
@@ -237,19 +251,10 @@ namespace SpiceSharp.General
         void ICloneable.CopyFrom(ICloneable source)
         {
             _dictionary.Clear();
+            _interfaces.Clear();
             var src = (InterfaceTypeDictionary<T>)source;
-            foreach (var pair in src._interfaces)
-            {
-                var srcNode = pair.Value;
-                var newNode = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
-                _interfaces.Add(pair.Key, newNode);
-                while (srcNode.NextSibling != null)
-                {
-                    srcNode = srcNode.NextSibling;
-                    newNode.NextSibling = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
-                    newNode = newNode.NextSibling;
-                }
-            }
+            foreach (var value in src.Values)
+                Add(value);
         }
     }
 }

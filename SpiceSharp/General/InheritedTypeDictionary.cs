@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SpiceSharp.General
@@ -12,7 +13,7 @@ namespace SpiceSharp.General
     /// <seealso cref="ITypeDictionary{T}" />
     public class InheritedTypeDictionary<T> : ITypeDictionary<T>
     {
-        private readonly Dictionary<Type, InheritanceNode<T>> _dictionary;
+        private readonly Dictionary<Type, TypeValues<T>> _dictionary;
         private readonly HashSet<T> _values;
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace SpiceSharp.General
             get
             {
                 var result = _dictionary[key];
-                if (result.NextSibling != null)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(key);
                 return result.Value;
             }
@@ -63,7 +64,7 @@ namespace SpiceSharp.General
         /// </summary>
         public InheritedTypeDictionary()
         {
-            _dictionary = new Dictionary<Type, InheritanceNode<T>>();
+            _dictionary = new Dictionary<Type, TypeValues<T>>();
             _values = new HashSet<T>();
         }
 
@@ -79,53 +80,30 @@ namespace SpiceSharp.General
         public void Add<V>(V value) where V : T
         {
             var ctype = value.GetType();
-            var node = new InheritanceNode<T>(value, true);
 
             // We should always be able to access the type by itself, so remove any ambiguous elements if necessary
-            if (_dictionary.TryGetValue(ctype, out var existing))
+            if (_dictionary.TryGetValue(ctype, out var values))
             {
-                if (existing.IsDirect)
+                if (values.IsDirect)
                     throw new CircuitException("A value of type '{0}' already exists".FormatString(ctype.FullName));
-                node.NextSibling = existing;
-                _dictionary[ctype] = node;
             }
             else
-                _dictionary.Add(ctype, node);
-            _values.Add(node.Value);
-
-            // Track the inheritance tree
-            ctype = ctype.GetTypeInfo().BaseType;
-            while (ctype != null && ctype != typeof(object) && ctype != typeof(T))
             {
-                if (_dictionary.TryGetValue(ctype, out existing))
-                {
-                    // There is already a node that is associated to this type, let's add it as a sibling
-                    var elt = existing;
-                    while (elt.NextSibling != null)
-                        elt = elt.NextSibling;
-                    elt.NextSibling = new InheritanceNode<T>(value, false);
-                }
-                else
-                    _dictionary.Add(ctype, new InheritanceNode<T>(value, false));
-                ctype = ctype.GetTypeInfo().BaseType;
+                values = new TypeValues<T>();
+                _dictionary.Add(ctype, values);
             }
-
-            // Make references for the interfaces as well
-            var ifs = value.GetType().GetTypeInfo().GetInterfaces();
-            foreach (var type in ifs)
-            {
-                if (_dictionary.TryGetValue(type, out existing))
-                {
-                    // There is already a node that is associated to this interface, let's add it as a sibling
-                    var elt = existing;
-                    while (elt.NextSibling != null)
-                        elt = elt.NextSibling;
-                    elt.NextSibling = new InheritanceNode<T>(value, false);
-                }
-                else
-                    _dictionary.Add(type, new InheritanceNode<T>(value, false));
-            }
+            values.Add(value, true);
             _values.Add(value);
+
+            foreach (var type in InheritanceCache.Get(ctype).Union(InterfaceCache.Get(ctype)))
+            {
+                if (!_dictionary.TryGetValue(type, out values))
+                {
+                    values = new TypeValues<T>();
+                    _dictionary.Add(type, values);
+                }
+                values.Add(value);
+            }
         }
 
         /// <summary>
@@ -140,51 +118,11 @@ namespace SpiceSharp.General
             if (!_values.Contains(value))
                 return false;
             var ctype = value.GetType();
-            RemoveValueFromList(value, ctype);
+            _dictionary[ctype].Remove(value);
             _values.Remove(value);
-
-            // Track the inheritance tree
-            ctype = ctype.GetTypeInfo().BaseType;
-            while (ctype != null && ctype != typeof(object) && ctype != typeof(T))
-            {
-                RemoveValueFromList(value, ctype);
-                ctype = ctype.GetTypeInfo().BaseType;
-            }
-
-            // Make references for the interfaces as well
-            var ifs = value.GetType().GetTypeInfo().GetInterfaces();
-            foreach (var type in ifs)
-                RemoveValueFromList(value, type);
-            _values.Add(value);
+            foreach (var type in InheritanceCache.Get(ctype).Union(InterfaceCache.Get(ctype)))
+                _dictionary[type].Remove(value);
             return true;
-        }
-
-        /// <summary>
-        /// Removes the value from the list.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="key">The key.</param>
-        private void RemoveValueFromList(T value, Type key)
-        {
-            var first = _dictionary[key];
-            if (first.Value.Equals(value))
-            {
-                if (first.NextSibling != null)
-                    _dictionary[key] = first.NextSibling;
-                else
-                    _dictionary.Remove(key);
-            }
-            else
-            {
-                var lastElt = first;
-                var elt = first.NextSibling;
-                while (!elt.Value.Equals(value))
-                {
-                    lastElt = elt;
-                    elt = elt.NextSibling;
-                }
-                lastElt.NextSibling = elt.NextSibling;
-            }
         }
 
         /// <summary>
@@ -205,16 +143,12 @@ namespace SpiceSharp.General
         ICloneable ICloneable.Clone()
         {
             var clone = new InheritedTypeDictionary<T>();
-            foreach (var pair in _dictionary)
+            foreach (var v in Values)
             {
-                var cloneValue = pair.Value.Clone();
-                clone._dictionary.Add(pair.Key, cloneValue);
-                var elt = cloneValue;
-                while (elt != null)
-                {
-                    clone._values.Add(elt.Value);
-                    elt = elt.NextSibling;
-                }
+                var cloneValue = v;
+                if (v is ICloneable cloneable)
+                    cloneValue = (T)cloneable.Clone();
+                clone.Add(cloneValue);
             }
             return clone;
         }
@@ -246,20 +180,8 @@ namespace SpiceSharp.General
             _dictionary.Clear();
             _values.Clear();
             var src = (InheritedTypeDictionary<T>)source;
-            foreach (var pair in src._dictionary)
-            {
-                var srcNode = pair.Value;
-                var newNode = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
-                _dictionary.Add(pair.Key, newNode);
-                while (srcNode.NextSibling != null)
-                {
-                    srcNode = srcNode.NextSibling;
-                    newNode.NextSibling = new InheritanceNode<T>(srcNode.Value, srcNode.IsDirect);
-                    newNode = newNode.NextSibling;
-                }
-            }
-            foreach (var value in src._values)
-                _values.Add(value);
+            foreach (var value in src.Values)
+                Add(value);
         }
 
         /// <summary>
@@ -285,7 +207,7 @@ namespace SpiceSharp.General
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
             {
-                if (result.NextSibling != null && !result.IsDirect)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
@@ -302,7 +224,7 @@ namespace SpiceSharp.General
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
             {
-                if (result.NextSibling != null && !result.IsDirect)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(typeof(TResult));
                 value = (TResult)result.Value;
                 return true;
@@ -324,7 +246,7 @@ namespace SpiceSharp.General
             key.ThrowIfNull(nameof(key));
             if (_dictionary.TryGetValue(key, out var result))
             {
-                if (result.NextSibling != null && !result.IsDirect)
+                if (result.IsAmbiguous)
                     throw new AmbiguousTypeException(key);
                 value = result.Value;
                 return true;
