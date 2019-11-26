@@ -11,12 +11,18 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the inductance of the inductor.
         /// </summary>
+        /// <value>
+        /// The inductance.
+        /// </value>
         [ParameterName("l"), ParameterName("inductance"), ParameterInfo("The inductance")]
         public double Inductance { get; private set; }
 
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
+        /// <value>
+        /// The base parameters.
+        /// </value>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>

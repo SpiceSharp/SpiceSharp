@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using IInductanceBehavior = SpiceSharp.Components.InductorBehaviors.IInductanceBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -21,12 +22,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Gets the temperature behavior of inductor 1.
         /// </summary>
-        protected InductorBehaviors.TemperatureBehavior TemperatureBehavior1 { get; private set; }
+        protected IInductanceBehavior InductanceBehavior1 { get; private set; }
 
         /// <summary>
         /// Gets the temperature behavior of inductor 2.
         /// </summary>
-        protected InductorBehaviors.TemperatureBehavior TemperatureBehavior2 { get; private set; }
+        protected IInductanceBehavior InductanceBehavior2 { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -38,8 +39,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             context.ThrowIfNull(nameof(context));
 
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            TemperatureBehavior1 = (InductorBehaviors.TemperatureBehavior)context.Inductor1Behaviors.GetValue<ITemperatureBehavior>();
-            TemperatureBehavior2 = (InductorBehaviors.TemperatureBehavior)context.Inductor2Behaviors.GetValue<ITemperatureBehavior>();
+            InductanceBehavior1 = context.Inductor1Behaviors.GetValue<IInductanceBehavior>();
+            InductanceBehavior2 = context.Inductor2Behaviors.GetValue<IInductanceBehavior>();
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void ITemperatureBehavior.Temperature()
         {
             // Calculate coupling factor
-            Factor = BaseParameters.Coupling * Math.Sqrt(TemperatureBehavior1.Inductance * TemperatureBehavior2.Inductance);
+            Factor = BaseParameters.Coupling * Math.Sqrt(InductanceBehavior1.Inductance * InductanceBehavior2.Inductance);
         }
     }
 }
