@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -37,6 +38,36 @@ namespace SpiceSharpTest.Algebra
             Assert.AreEqual(solution[2], 2.0, 1e-12);
             Assert.AreEqual(solution[3], 5.0 / 4.0, 1e-12);
             Assert.AreEqual(solution[4], 1.0, 1e-12);
+        }
+
+        [Test]
+        public void When_GearExample_Expect_Reference()
+        {
+            var solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
+                new DenseMatrix<double>(),
+                new DenseVector<double>());
+            for (var i = 1; i <= 4; i++)
+                solver[1, i] = 1;
+            for (var i = 2; i <= 4; i++)
+                solver[i, 2] = 1;
+            solver[2, 3] = 1.5;
+            solver[3, 3] = 2.25;
+            solver[4, 3] = 3.375;
+            solver[2, 4] = 1.75;
+            solver[3, 4] = 3.0625;
+            solver[4, 4] = 5.359375;
+            solver[2] = -25000000;
+
+            solver.Factor();
+            var sol = new DenseVector<double>(4);
+            solver.Solve(sol);
+            var reference = new double[] { 5.595238095238093e+07, -1.749999999999999e+08, 2.333333333333332e+08, -1.142857142857142e+08 };
+
+            for (var i = 0; i < sol.Length; i++)
+            {
+                var tol = Math.Max(Math.Abs(sol[i + 1]), Math.Abs(reference[i])) * 1e-12;
+                Assert.AreEqual(reference[i], sol[i + 1], tol);
+            }
         }
     }
 }

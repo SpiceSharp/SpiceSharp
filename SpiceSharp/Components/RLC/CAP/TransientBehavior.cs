@@ -81,8 +81,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             // Calculate the state for DC
             var sol = BiasingState.Solution;
-            if (BaseParameters.InitialCondition.Given)
-                QCap.Current = BaseParameters.InitialCondition;
+            if (BiasingState.UseIc)
+                QCap.Current = Capacitance * BaseParameters.InitialCondition;
             else
                 QCap.Current = Capacitance * (sol[_posNode] - sol[_negNode]);
         }

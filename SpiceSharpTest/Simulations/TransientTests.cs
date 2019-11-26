@@ -12,7 +12,7 @@ namespace SpiceSharpTest.Simulations
     public class TransientTests : Framework
     {
         [Test]
-        public void When_RCFilterConstantTransient_Expect_Reference()
+        public void When_RCFilterConstantTransientTrapezoidal_Expect_Reference()
         {
             // Create the circuit
             var ckt = new Circuit(
@@ -23,11 +23,9 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.Configurations.GetValue<TimeConfiguration>().InitTime = 0.0;
-            tran.Configurations.GetValue<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-9);
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-12);
             };
             tran.Run(ckt);
 
@@ -53,9 +51,11 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            // TODO: review this test
-            // tran.Configurations.Get<TimeConfiguration>().Method = new Gear();
-            tran.ExportSimulationData += (sender, args) => { Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12); };
+            tran.Configurations.GetValue<TimeConfiguration>().Method = new Gear();
+            tran.ExportSimulationData += (sender, args) => 
+            {
+                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-10); 
+            };
             tran.Run(ckt);
 
             // Let's run the simulation twice to check if it is consistent
@@ -67,6 +67,27 @@ namespace SpiceSharpTest.Simulations
             {
                 throw new Exception(@"Cannot run transient analysis twice");
             }
+        }
+
+        [Test]
+        public void When_ChangeIntegrationMethod_Expect_Reference()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10.0),
+                new Resistor("R1", "in", "out", 10),
+                new Capacitor("C1", "out", "0", 20));
+
+            // Create the transient analysis
+            var tran = new Transient("tran 1", 1.0, 10.0);
+            tran.Configurations.GetValue<TimeConfiguration>().Method = new Gear();
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-10);
+            };
+            tran.Run(ckt);
+            tran.Configurations.GetValue<TimeConfiguration>().Method = new Trapezoidal();
+            tran.Run(ckt);
         }
 
         [Test]

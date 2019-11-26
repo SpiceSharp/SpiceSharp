@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Inductor"/>.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior, IInductanceBehavior
     {
         /// <summary>
         /// Gets the inductance of the inductor.

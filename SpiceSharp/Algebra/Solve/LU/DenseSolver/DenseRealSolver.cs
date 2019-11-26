@@ -64,7 +64,7 @@ namespace SpiceSharp.Algebra
             {
                 _intermediate[i] = Vector[i];
                 for (var j = 1; j < i; j++)
-                    _intermediate[i] -= Matrix[i, j] * Vector[j];
+                    _intermediate[i] -= Matrix[i, j] * _intermediate[j];
             }
 
             // Backward substitution

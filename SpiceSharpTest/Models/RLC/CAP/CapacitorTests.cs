@@ -13,7 +13,7 @@ namespace SpiceSharpTest.Models
     public class CapacitorTests : Framework
     {
         [Test]
-        public void When_Capacitor_LowpassRCOperatingPoint_Expect_Reference()
+        public void When_LowpassRCOperatingPoint_Expect_Reference()
         {
             /*
              * Lowpass RC circuit
@@ -40,7 +40,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Capacitor_LowpassRCTransient_Expect_Reference()
+        public void When_LowpassRCTransientTrapezoidal_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -70,7 +70,38 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_CapacitorIsTemperatureInvariant_Expect_Reference()
+        public void When_LowpassRCTransientGear_Expect_Reference()
+        {
+            /*
+             * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
+             * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
+             */
+            double dcVoltage = 10;
+            var resistorResistance = 10e3; // 10000;
+            var capacitance = 1e-6; // 0.000001;
+            var tau = resistorResistance * capacitance;
+
+            // Build circuit
+            var ckt = new Circuit(
+                new Capacitor("C1", "OUT", "0", capacitance),
+                new Resistor("R1", "IN", "OUT", resistorResistance),
+                new VoltageSource("V1", "IN", "0", dcVoltage)
+            );
+
+            // Create simulation, exports and references
+            var tran = new Transient("tran", 1e-8, 10e-6);
+            var config = tran.Configurations.GetValue<TimeConfiguration>();
+            config.Method = new Gear();
+            config.InitialConditions["OUT"] = 0.0;
+            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+
+            // Run
+            AnalyzeTransient(tran, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_IsTemperatureInvariant_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -114,7 +145,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_CapacitorIsTemperatureDependent_Expect_Reference()
+        public void When_IsTemperatureDependent_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -161,38 +192,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Capacitor_LowpassRCTransientGear_Expect_Reference()
-        {
-            /*
-             * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
-             * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
-             */
-            double dcVoltage = 10;
-            var resistorResistance = 10e3; // 10000;
-            var capacitance = 1e-6; // 0.000001;
-            var tau = resistorResistance * capacitance;
-
-            // Build circuit
-            var ckt = new Circuit(
-                new Capacitor("C1", "OUT", "0", capacitance),
-                new Resistor("R1", "IN", "OUT", resistorResistance),
-                new VoltageSource("V1", "IN", "0", dcVoltage)
-            );
-
-            // Create simulation, exports and references
-            var tran = new Transient("tran", 1e-8, 10e-6);
-            var config = tran.Configurations.GetValue<TimeConfiguration>();
-            config.Method = new Gear();
-            config.InitialConditions["OUT"] = 0.0;
-            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
-            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
-
-            // Run
-            AnalyzeTransient(tran, ckt, exports, references);
-        }
-
-        [Test]
-        public void When_Capacitor_LowpassRCSmallSignal_Expect_Reference()
+        public void When_LowpassRCSmallSignal_Expect_Reference()
         {
             /*
              * Lowpass RC filter in the frequency domain should have a single pole at s=-2pi*R*C

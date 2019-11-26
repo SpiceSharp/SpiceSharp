@@ -29,7 +29,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initializes a new instance of the <see cref="Gear"/> class.
         /// </summary>
         public Gear()
-            : base(6)
+            : base(2)
         {
             Solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
                 new DenseMatrix<double>(7),
