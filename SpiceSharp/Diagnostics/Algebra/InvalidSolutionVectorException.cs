@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Algebra
+﻿using System;
+
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Exception thrown when the solution vector is not suitable for storing the solution of the solver equations.

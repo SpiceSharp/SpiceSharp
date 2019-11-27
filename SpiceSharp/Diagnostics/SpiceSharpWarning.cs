@@ -5,7 +5,7 @@ namespace SpiceSharp
     /// <summary>
     /// A static class that tracks warnings.
     /// </summary>
-    public static class CircuitWarning
+    public static class SpiceSharpWarning
     {
         /// <summary>
         /// Occurs when a warning was generated.

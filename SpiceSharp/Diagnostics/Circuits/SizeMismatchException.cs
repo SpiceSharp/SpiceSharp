@@ -3,8 +3,8 @@
     /// <summary>
     /// Exception thrown when two objects do not have the same size.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class SizeMismatchException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class SizeMismatchException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SizeMismatchException"/> class.

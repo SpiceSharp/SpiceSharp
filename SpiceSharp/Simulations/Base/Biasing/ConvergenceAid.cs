@@ -80,7 +80,7 @@ namespace SpiceSharp.Simulations
             // Get the node
             if (!simulation.Variables.TryGetNode(Name, out var node) || !Variables.Contains(node))
             {
-                CircuitWarning.Warning(this, "Could not set convergence aid: variable {0} not found.".FormatString(Name));
+                SpiceSharpWarning.Warning(this, "Could not set convergence aid: variable {0} not found.".FormatString(Name));
                 Index = 0;
                 Diagonal = null;
                 Rhs = null;

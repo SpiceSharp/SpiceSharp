@@ -68,7 +68,7 @@ namespace SpiceSharp.Behaviors
                     OnBehaviorsNotFound(args);
                     if (args.Behaviors != null)
                         return args.Behaviors;
-                    throw new CircuitException("Cannot find behaviors for '{0}'".FormatString(name));
+                    throw new SpiceSharpException("Cannot find behaviors for '{0}'".FormatString(name));
                 }
                 finally
                 {
@@ -107,7 +107,7 @@ namespace SpiceSharp.Behaviors
         /// Adds the entity behaviors.
         /// </summary>
         /// <param name="behaviors">The behaviors.</param>
-        /// <exception cref="CircuitException">There are already behaviors for '{0}'".FormatString(id)</exception>
+        /// <exception cref="SpiceSharpException">There are already behaviors for '{0}'".FormatString(id)</exception>
         public void Add(IBehaviorContainer behaviors)
         {
             behaviors.ThrowIfNull(nameof(behaviors));
@@ -115,7 +115,7 @@ namespace SpiceSharp.Behaviors
             try
             {
                 if (_dictionary.ContainsKey(behaviors.Name))
-                    throw new CircuitException("There are already behaviors for '{0}'".FormatString(behaviors.Name));
+                    throw new SpiceSharpException("There are already behaviors for '{0}'".FormatString(behaviors.Name));
                 _lock.EnterWriteLock();
                 try
                 {

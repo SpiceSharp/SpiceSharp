@@ -75,21 +75,21 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (_mbp.GradingCoefficient > 0.9)
             {
                 _mbp.GradingCoefficient.RawValue = 0.9;
-                CircuitWarning.Warning(this, "{0}: grading coefficient too large, limited to 0.9".FormatString(Name));
+                SpiceSharpWarning.Warning(this, "{0}: grading coefficient too large, limited to 0.9".FormatString(Name));
             }
 
             // limit activation energy to min of 0.1
             if (_mbp.ActivationEnergy < 0.1)
             {
                 _mbp.ActivationEnergy.RawValue = 0.1;
-                CircuitWarning.Warning(this, "{0}: activation energy too small, limited to 0.1".FormatString(Name));
+                SpiceSharpWarning.Warning(this, "{0}: activation energy too small, limited to 0.1".FormatString(Name));
             }
 
             // limit depletion cap coeff to max of .95
             if (_mbp.DepletionCapCoefficient > 0.95)
             {
                 _mbp.DepletionCapCoefficient.RawValue = 0.95;
-                CircuitWarning.Warning(this, "{0}: coefficient Fc too large, limited to 0.95".FormatString(Name));
+                SpiceSharpWarning.Warning(this, "{0}: coefficient Fc too large, limited to 0.95".FormatString(Name));
             }
 
             if (_mbp.Resistance > 0)

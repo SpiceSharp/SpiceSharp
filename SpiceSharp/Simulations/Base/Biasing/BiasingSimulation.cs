@@ -262,7 +262,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Failed
-            throw new CircuitException("Could not determine operating point");
+            throw new SpiceSharpException("Could not determine operating point");
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace SpiceSharp.Simulations
             var state = BiasingState;
 
             // We will shunt all PN-junctions with a conductance (should be implemented by the components)
-            CircuitWarning.Warning(this, Properties.Resources.StartGminStepping);
+            SpiceSharpWarning.Warning(this, Properties.Resources.StartGminStepping);
 
             // We could've ended up with some crazy value, so let's reset it
             for (var i = 0; i <= BiasingState.Solution.Length; i++)
@@ -297,7 +297,7 @@ namespace SpiceSharp.Simulations
                 if (!Iterate(maxIterations))
                 {
                     state.Gmin = original;
-                    CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
+                    SpiceSharpWarning.Warning(this, Properties.Resources.GminSteppingFailed);
                     break;
                 }
 
@@ -322,7 +322,7 @@ namespace SpiceSharp.Simulations
             var state = BiasingState;
 
             // We will add a DC path to ground to all nodes to aid convergence
-            CircuitWarning.Warning(this, Properties.Resources.StartDiagonalGminStepping);
+            SpiceSharpWarning.Warning(this, Properties.Resources.StartDiagonalGminStepping);
 
             // We'll hack into the loading algorithm to apply our diagonal contributions
             _diagonalGmin = state.Gmin;
@@ -348,7 +348,7 @@ namespace SpiceSharp.Simulations
                 if (!Iterate(maxIterations))
                 {
                     _diagonalGmin = 0.0;
-                    CircuitWarning.Warning(this, Properties.Resources.GminSteppingFailed);
+                    SpiceSharpWarning.Warning(this, Properties.Resources.GminSteppingFailed);
                     break;
                 }
                 _diagonalGmin /= 10.0;
@@ -372,7 +372,7 @@ namespace SpiceSharp.Simulations
             var state = BiasingState;
 
             // We will slowly ramp up voltages starting at 0 to make sure it converges
-            CircuitWarning.Warning(this, Properties.Resources.StartSourceStepping);
+            SpiceSharpWarning.Warning(this, Properties.Resources.StartSourceStepping);
 
             // We could've ended up with some crazy value, so let's reset it
             for (var i = 0; i <= BiasingState.Solution.Length; i++)
@@ -387,7 +387,7 @@ namespace SpiceSharp.Simulations
                 if (!Iterate(maxIterations))
                 {
                     state.SourceFactor = 1.0;
-                    CircuitWarning.Warning(this, Properties.Resources.SourceSteppingFailed);
+                    SpiceSharpWarning.Warning(this, Properties.Resources.SourceSteppingFailed);
                     success = false;
                     break;
                 }
@@ -432,7 +432,7 @@ namespace SpiceSharp.Simulations
                     Load();
                     iterno++;
                 }
-                catch (CircuitException)
+                catch (SpiceSharpException)
                 {
                     iterno++;
                     Statistics.Iterations = iterno;
@@ -532,7 +532,7 @@ namespace SpiceSharp.Simulations
 
                     default:
                         Statistics.Iterations += iterno;
-                        throw new CircuitException("Could not find flag");
+                        throw new SpiceSharpException("Could not find flag");
                 }
             }
         }
@@ -600,7 +600,7 @@ namespace SpiceSharp.Simulations
                 var o = rstate.OldSolution[v.Value];
 
                 if (double.IsNaN(n))
-                    throw new CircuitException("Non-convergence, node {0} is not a number.".FormatString(node));
+                    throw new SpiceSharpException("Non-convergence, node {0} is not a number.".FormatString(node));
 
                 if (node.UnknownType == VariableType.Voltage)
                 {

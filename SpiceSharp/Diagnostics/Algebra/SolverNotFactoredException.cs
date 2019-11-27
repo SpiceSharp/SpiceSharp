@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Algebra
+﻿using System;
+
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Exception thrown when a solver has not been factored yet.

@@ -77,12 +77,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 // No DC value: either have a transient value or none
                 if (BaseParameters.Waveform != null)
                 {
-                    CircuitWarning.Warning(this, "{0}: No DC value, transient time 0 value used".FormatString(Name));
+                    SpiceSharpWarning.Warning(this, "{0}: No DC value, transient time 0 value used".FormatString(Name));
                     BaseParameters.DcValue.RawValue = BaseParameters.Waveform.Value;
                 }
                 else
                 {
-                    CircuitWarning.Warning(this, "{0}: No value, DC 0 assumed".FormatString(Name));
+                    SpiceSharpWarning.Warning(this, "{0}: No value, DC 0 assumed".FormatString(Name));
                 }
             }
 

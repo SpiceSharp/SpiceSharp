@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra
     /// Sparse matrix exception
     /// </summary>
     /// <seealso cref="Exception" />
-    public class AlgebraException : Exception
+    public class AlgebraException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AlgebraException"/> class.

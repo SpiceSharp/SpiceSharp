@@ -196,7 +196,7 @@ namespace SpiceSharp.Simulations
                     Load();
                     iterno++;
                 }
-                catch (CircuitException)
+                catch (SpiceSharpException)
                 {
                     iterno++;
                     base.Statistics.Iterations = iterno;
@@ -289,7 +289,7 @@ namespace SpiceSharp.Simulations
 
                         default:
                             base.Statistics.Iterations += iterno;
-                            throw new CircuitException("Could not find flag");
+                            throw new SpiceSharpException("Could not find flag");
                     }
                 }
             }

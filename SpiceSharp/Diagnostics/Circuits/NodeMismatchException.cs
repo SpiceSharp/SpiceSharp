@@ -3,8 +3,8 @@
     /// <summary>
     /// Exception thrown when nodes aren't matched.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class NodeMismatchException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class NodeMismatchException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeMismatchException"/> class.

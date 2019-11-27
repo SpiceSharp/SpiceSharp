@@ -5,7 +5,7 @@ namespace SpiceSharp
     /// <summary>
     /// Exception for identifying a bad parameter.
     /// </summary>
-    public class BadParameterException : CircuitException
+    public class BadParameterException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BadParameterException"/> class.

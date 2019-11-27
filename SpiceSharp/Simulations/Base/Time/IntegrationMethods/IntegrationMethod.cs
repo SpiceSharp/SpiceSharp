@@ -85,7 +85,7 @@ namespace SpiceSharp.IntegrationMethods
         protected IntegrationMethod(int maxOrder)
         {
             if (maxOrder < 1)
-                throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
+                throw new SpiceSharpException("Invalid order {0}".FormatString(maxOrder));
             MaxOrder = maxOrder;
 
             // Allocate history of timesteps and solutions

@@ -6,24 +6,24 @@ namespace SpiceSharp
     /// An exception for circuit-related issues.
     /// </summary>
     /// <seealso cref="Exception" />
-    public class CircuitException : Exception
+    public class SpiceSharpException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CircuitException"/> class.
+        /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
         /// </summary>
-        public CircuitException() { }
+        public SpiceSharpException() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CircuitException"/> class.
+        /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public CircuitException(string message) : base(message) { }
+        public SpiceSharpException(string message) : base(message) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CircuitException"/> class.
+        /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public CircuitException(string message, Exception innerException) : base(message, innerException) { }
+        public SpiceSharpException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

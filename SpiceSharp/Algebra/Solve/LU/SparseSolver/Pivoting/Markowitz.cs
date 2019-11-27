@@ -443,7 +443,7 @@ namespace SpiceSharp.Algebra.Solve
                     e = e.Left;
                 }
                 if (_markowitzRow[i] != count && _markowitzRow[i] != count + 1)
-                    throw new CircuitException("Invalid row count");
+                    throw new SpiceSharpException("Invalid row count");
 
                 // Count the elements in the column
                 count = -1;
@@ -454,16 +454,16 @@ namespace SpiceSharp.Algebra.Solve
                     e = e.Above;
                 }
                 if (_markowitzColumn[i] != count)
-                    throw new CircuitException("Invalid column count");
+                    throw new SpiceSharpException("Invalid column count");
 
                 if (_markowitzProduct[i] != Math.Min(_markowitzRow[i] * _markowitzColumn[i], MaxMarkowitzCount))
-                    throw new CircuitException("Invalid product");
+                    throw new SpiceSharpException("Invalid product");
                 if (_markowitzProduct[i] == 0)
                     singletons++;
             }
 
             if (singletons != Singletons)
-                throw new CircuitException("Invalid singleton count");
+                throw new SpiceSharpException("Invalid singleton count");
         }
         #endif
     }

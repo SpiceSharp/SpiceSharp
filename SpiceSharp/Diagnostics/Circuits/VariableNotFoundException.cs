@@ -3,8 +3,8 @@
     /// <summary>
     /// Exception thrown when a variable cannot be found.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class VariableNotFoundException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class VariableNotFoundException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableNotFoundException"/> class.

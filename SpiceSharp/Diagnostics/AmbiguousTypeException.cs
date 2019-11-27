@@ -5,8 +5,8 @@ namespace SpiceSharp.General
     /// <summary>
     /// Exception for ambiguous types.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class AmbiguousTypeException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class AmbiguousTypeException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.

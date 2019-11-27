@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the limit
             if (Math.Sign(step) * (stop - start) <= 0)
-                throw new CircuitException("Invalid sweep: {0} to {1} cannot be reached in steps of {2}".FormatString(start, stop, step));
+                throw new SpiceSharpException("Invalid sweep: {0} to {1} cannot be reached in steps of {2}".FormatString(start, stop, step));
             Limit = (int)Math.Floor((stop - start) / step + 0.25);
 
             // Calculate the final value

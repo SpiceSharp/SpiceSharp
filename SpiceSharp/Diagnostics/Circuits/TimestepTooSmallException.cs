@@ -3,8 +3,8 @@
     /// <summary>
     /// Exception thrown when the timestep is too small.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class TimestepTooSmallException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class TimestepTooSmallException : SpiceSharpException
     {
         /// <summary>
         /// Gets the timestep that was too small.

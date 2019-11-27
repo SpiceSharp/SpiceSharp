@@ -62,7 +62,7 @@ namespace SpiceSharp
         public static T ThrowIfNotBound<T>(this T source, Behaviors.Behavior behavior) where T : class
         {
             if (source == null)
-                throw new UnboundException(behavior.Name);
+                throw new InstanceNotBoundException(behavior.Name);
             return source;
         }
 

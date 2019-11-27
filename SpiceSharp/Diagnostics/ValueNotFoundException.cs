@@ -5,8 +5,8 @@ namespace SpiceSharp
     /// <summary>
     /// Exception thrown when a value type could not be found.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class ValueNotFoundException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class ValueNotFoundException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueNotFoundException"/> class.

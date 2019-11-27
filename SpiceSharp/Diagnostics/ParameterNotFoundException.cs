@@ -3,8 +3,8 @@
     /// <summary>
     /// The exception that is thrown when a parameter has not been found.
     /// </summary>
-    /// <seealso cref="CircuitException" />
-    public class ParameterNotFoundException : CircuitException
+    /// <seealso cref="SpiceSharpException" />
+    public class ParameterNotFoundException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterNotFoundException"/> class.

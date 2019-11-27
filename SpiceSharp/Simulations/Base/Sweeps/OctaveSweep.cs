@@ -44,7 +44,7 @@ namespace SpiceSharp.Simulations
         public OctaveSweep(double initial, double final, int steps)
         {
             if (final * initial <= 0)
-                throw new CircuitException("Invalid decade sweep from {0} to {1}".FormatString(initial, final));
+                throw new SpiceSharpException("Invalid decade sweep from {0} to {1}".FormatString(initial, final));
 
             Initial = initial;
             Final = final;

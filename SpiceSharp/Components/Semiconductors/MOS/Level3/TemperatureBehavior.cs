@@ -197,7 +197,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 SourceConductance = 0;
 
             if (BaseParameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
-                CircuitWarning.Warning(this, "{0}: effective channel length less than zero".FormatString(Name));
+                SpiceSharpWarning.Warning(this, "{0}: effective channel length less than zero".FormatString(Name));
             var ratio4 = ratio * Math.Sqrt(ratio);
             TempTransconductance = ModelParameters.Transconductance / ratio4;
             TempSurfaceMobility = ModelParameters.SurfaceMobility / ratio4;
