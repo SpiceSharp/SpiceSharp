@@ -50,14 +50,13 @@ namespace SpiceSharp.Algebra
         public void Solve(IVector<double> solution, int steps)
         {
             solution.ThrowIfNull(nameof(solution));
-            if (steps > Size || steps > solution.Length)
-                throw new AlgebraException("Cannot solve for more than {0} elements".FormatString(Math.Max(Size, solution.Length)));
             if (!IsFactored)
-                throw new AlgebraException("Solver is not yet factored");
+                throw new SolverNotFactoredException();
             if (solution.Length != Size)
-                throw new AlgebraException("Solution vector and solver order does not match");
+                throw new InvalidSolutionVectorException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
+            steps = Math.Max(steps, Size);
 
             // Forward substitution
             for (var i = 1; i <= steps; i++)
@@ -94,14 +93,13 @@ namespace SpiceSharp.Algebra
         public void SolveTransposed(IVector<double> solution, int steps)
         {
             solution.ThrowIfNull(nameof(solution));
-            if (steps > Size || steps > solution.Length)
-                throw new AlgebraException("Cannot solve for more than {0} elements".FormatString(Math.Max(Size, solution.Length)));
             if (!IsFactored)
-                throw new AlgebraException("Solver is not yet factored");
+                throw new SolverNotFactoredException();
             if (solution.Length != Size)
-                throw new AlgebraException("Solution vector and solver order does not match");
+                throw new InvalidSolutionVectorException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
+            steps = Math.Max(steps, Size);
 
             // Scramble
             for (var i = 1; i <= steps; i++)

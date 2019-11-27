@@ -85,7 +85,7 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         public virtual void CopyFrom(IParameterSetDictionary source)
         {
-            var d = source as ParameterSetDictionary ?? throw new CircuitException("Cannot copy, type mismatch");
+            var d = source as ParameterSetDictionary ?? throw new TypeMismatchException(GetType(), source?.GetType());
             foreach (var ps in d.Values)
             {
                 // If the parameter set doesn't exist, then we will simply clone it, else copy them

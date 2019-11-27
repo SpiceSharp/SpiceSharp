@@ -74,7 +74,7 @@ namespace SpiceSharp.Algebra
         public SparseVector(int length)
         {
             if (length < 0)
-                throw new AlgebraException("Invalid length");
+                throw new ArgumentOutOfRangeException(nameof(length));
             Length = length;
             _trashCan = new Element(0);
             ElementCount = 1;
@@ -124,7 +124,7 @@ namespace SpiceSharp.Algebra
         public Element<T> GetElement(int index)
         {
             if (index < 0)
-                throw new ArgumentException("Invalid index {0}".FormatString(index));
+                throw new ArgumentOutOfRangeException(nameof(index));
             if (index == 0)
                 return _trashCan;
 
@@ -173,7 +173,7 @@ namespace SpiceSharp.Algebra
         public Element<T> FindElement(int index)
         {
             if (index < 0)
-                throw new ArgumentException("Invalid index {0}".FormatString(index));
+                throw new ArgumentOutOfRangeException(nameof(index));
             if (index > Length)
                 return null;
             if (index == 0)
@@ -232,7 +232,7 @@ namespace SpiceSharp.Algebra
         {
             target.ThrowIfNull(nameof(target));
             if (target.Length != Length)
-                throw new ArgumentException("Vector lengths do not match");
+                throw new SizeMismatchException(nameof(target));
             for (var i = 1; i <= Length; i++)
                 target[i] = GetVectorValue(i);
         }
@@ -244,8 +244,10 @@ namespace SpiceSharp.Algebra
         /// <param name="index2">The index of the second element.</param>
         public void SwapElements(int index1, int index2)
         {
-            if (index1 < 0 || index2 < 0)
-                throw new AlgebraException("Invalid indices {0} and {1}".FormatString(index1, index2));
+            if (index1 < 0)
+                throw new ArgumentOutOfRangeException(nameof(index1));
+            if (index2 < 0)
+                throw new ArgumentOutOfRangeException(nameof(index2));
             if (index1 == index2)
                 return;
             if (index2 < index1)

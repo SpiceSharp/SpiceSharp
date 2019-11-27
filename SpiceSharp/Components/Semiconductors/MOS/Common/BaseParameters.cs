@@ -115,7 +115,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
                 case 1: InitialVoltageDs.Value = value[0];
                     break;
                 default:
-                    throw new CircuitException("Bad parameter");
+                    throw new BadParameterException(nameof(value));
             }
         }
     }

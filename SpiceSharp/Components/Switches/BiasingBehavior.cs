@@ -98,8 +98,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
-            if (context.Nodes.Length < 2)
-                throw new CircuitException("Invalid number of nodes");
 
             if (context is ControlledBindingContext ctx)
                 Method = new CurrentControlled(ctx);

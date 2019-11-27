@@ -91,7 +91,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 default:
-                    throw new CircuitException("Invalid order");
+                    throw new ArgumentOutOfRangeException(nameof(Order));
             }
         }
 
@@ -107,7 +107,6 @@ namespace SpiceSharp.IntegrationMethods
             // Get the state
             double tol, diff, tmp;
             var timetemp = double.PositiveInfinity;
-            var nodes = args.Simulation.Variables;
             int index;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...
@@ -156,7 +155,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 default:
-                    throw new CircuitException("Invalid order");
+                    throw new ArgumentOutOfRangeException(nameof(Order));
             }
 
             // Get the minimum timestep
@@ -184,7 +183,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 default:
-                    throw new CircuitException("Invalid order {0}".FormatString(Order));
+                    throw new ArgumentOutOfRangeException(nameof(Order));
             }
 
             // Store the derivative w.r.t. the current timestep

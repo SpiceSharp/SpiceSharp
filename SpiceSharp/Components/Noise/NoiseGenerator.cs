@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.NoiseSources
             for (var i = 0; i < _pins.Length; i++)
             {
                 if (_pins[i] >= nodes.Length)
-                    throw new CircuitException("Not enough pins to find node {0}".FormatString(_pins[i]));
+                    throw new SizeMismatchException(nameof(nodes));
                 mapped[i] = ComplexState.Map[nodes[_pins[i]]];
             }
             Nodes = new NodeCollection(mapped);

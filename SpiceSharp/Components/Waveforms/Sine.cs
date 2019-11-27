@@ -162,7 +162,7 @@ namespace SpiceSharp.Components
 
             // Some checks
             if (_freq < 0)
-                throw new CircuitException("Invalid frequency {0}".FormatString(Frequency.Value));
+                throw new BadParameterException(nameof(Frequency), Frequency, "Invalid frequency.");
         }
 
         /// <summary>

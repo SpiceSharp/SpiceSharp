@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                     InitialVoltageBe.Value = value[0];
                     break;
                 default:
-                    throw new CircuitException("Bad parameter");
+                    throw new BadParameterException(nameof(value));
             }
         }
     }

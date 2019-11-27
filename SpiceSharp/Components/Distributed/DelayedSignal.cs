@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Components.Distributed
 {
@@ -52,7 +53,7 @@ namespace SpiceSharp.Components.Distributed
             Size = size;
             Values = new double[size];
             if (delay <= 0)
-                throw new CircuitException("Invalid delay {0}.".FormatString(delay));
+                throw new BadParameterException(nameof(delay), delay, "Non-causal delay detected. Delay should be greater than 0.");
 
             // Setup our linked list
             _reference = _oldest = _probed = new Node(size)
@@ -75,8 +76,7 @@ namespace SpiceSharp.Components.Distributed
 
             // Check that the time is increasing
             if (_probed.Older != null && _probed.Older.Time > time)
-                throw new CircuitException(
-                    "Delayed signal time is not increasing, {0} goes to {1}.".FormatString(_probed.Older.Time, time));
+                throw new CircuitException("Delayed signal time is not increasing, {0} goes to {1}.".FormatString(_probed.Older.Time, time));
 
             // Move the reference to the closest delayed timepoint
             MoveReferenceCloseTo(refTime);
@@ -135,7 +135,7 @@ namespace SpiceSharp.Components.Distributed
         {
             // Copy the values
             if (values.Length != Size)
-                throw new CircuitException("Delayed signal received {0} values, {1} expected.".FormatString(values.Length, Size));
+                throw new SizeMismatchException(nameof(values));
             for (var i = 0; i < Size; i++)
                 _probed.Values[i] = values[i];
         }

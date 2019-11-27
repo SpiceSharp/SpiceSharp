@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components
@@ -86,7 +87,7 @@ namespace SpiceSharp.Components
         public string GetNode(int index)
         {
             if (index < 0 || index >= _connections.Length)
-                throw new CircuitException("Invalid node {0}".FormatString(index));
+                throw new ArgumentOutOfRangeException(nameof(index));
             return _connections[index];
         }
 

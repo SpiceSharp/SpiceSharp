@@ -23,7 +23,7 @@ namespace SpiceSharp.Algebra.Solve
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
-                throw new ArgumentException("Invalid elimination step");
+                throw new ArgumentOutOfRangeException(nameof(eliminationStep));
             var limit = markowitz.SearchLimit;
 
             // No singletons left, so don't bother

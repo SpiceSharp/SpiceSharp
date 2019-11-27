@@ -30,11 +30,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void CalculateDefaults()
         {
             if (Delay < 0.0)
-                throw new CircuitException("Non-causal delay {0:e3} detected. Delays should be larger than 0.".FormatString(Delay));
+                throw new BadParameterException(nameof(Delay), Delay, "Non-causal delay {0:e3} detected. Delay should be larger than 0.");
             if (RelativeTolerance <= 0.0)
-                throw new CircuitException("Relative tolerance {0:e3} should be larger than 0.".FormatString(RelativeTolerance));
+                throw new BadParameterException(nameof(RelativeTolerance), RelativeTolerance, "Relative tolerance should be larger than 0.");
             if (AbsoluteTolerance <= 0.0)
-                throw new CircuitException("Absolute tolerance {0:e3} should be larger than 0.".FormatString(AbsoluteTolerance));
+                throw new BadParameterException(nameof(AbsoluteTolerance), AbsoluteTolerance, "Absolute tolerance should be larger than 0.");
         }
     }
 }

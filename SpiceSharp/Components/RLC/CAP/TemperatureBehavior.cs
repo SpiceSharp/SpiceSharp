@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (!BaseParameters.Capacitance.Given)
             {
                 if (ModelParameters == null)
-                    throw new CircuitException("No model specified");
+                    throw new ModelNotFoundException(Name);
 
                 var width = BaseParameters.Width.Given
                     ? BaseParameters.Width.Value

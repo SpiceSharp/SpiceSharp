@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     else
                     {
                         ModelParameters.SubstrateDoping.RawValue = 0;
-                        throw new CircuitException("{0}: Nsub < Ni".FormatString(Name));
+                        throw new BadParameterException("Nsub", "Nsub < Ni");
                     }
                 }
             }

@@ -80,7 +80,7 @@ namespace SpiceSharp.Components
         public void Evaluate()
         {
             if (_nstate == null || _cstate == null)
-                throw new CircuitException("Component noise is not bound");
+                throw new UnboundException();
 
             // Calculate the output noise density
             Noise = 0.0;

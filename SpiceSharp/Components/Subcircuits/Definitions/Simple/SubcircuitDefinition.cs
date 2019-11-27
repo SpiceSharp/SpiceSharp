@@ -58,7 +58,7 @@ namespace SpiceSharp.Components
             if (Entities == null || Entities.Count == 0)
                 return;
             if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
-                throw new CircuitException("Node mismatch: subcircuit requires {0} nodes, but {1} given".FormatString(_pins.Length, nodes?.Length ?? 0));
+                throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
 
             // We need to create behaviors for all subcircuit entities
             // So we'll make a subcircuit simulation matching the parent simulation.

@@ -85,7 +85,7 @@ namespace SpiceSharp.General
             if (_dictionary.TryGetValue(ctype, out var values))
             {
                 if (values.IsDirect)
-                    throw new CircuitException("A value of type '{0}' already exists".FormatString(ctype.FullName));
+                    throw new ArgumentException("A value of type '{0}' already exists.".FormatString(ctype.FullName));
             }
             else
             {
@@ -211,7 +211,7 @@ namespace SpiceSharp.General
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
-            throw new CircuitException("No value for '{0}'".FormatString(typeof(TResult).FullName));
+            throw new ValueNotFoundException(typeof(TResult));
         }
 
         /// <summary>

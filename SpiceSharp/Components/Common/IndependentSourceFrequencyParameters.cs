@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.CommonBehaviors
                     AcMagnitude.Value = 0.0;
                     break;
                 default:
-                    throw new BadParameterException("ac");
+                    throw new BadParameterException(nameof(ac));
             }
         }
 

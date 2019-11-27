@@ -117,7 +117,7 @@ namespace SpiceSharp
         {
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !desc.TrySet(source, value))
-                throw new CircuitException("Could not find a parameter '{0}' for {1}".FormatString(name, source));
+                throw new ParameterNotFoundException(name, source);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace SpiceSharp
         {
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length > 0)
-                throw new CircuitException("Cannot call method '{0}' on {1}".FormatString(name, source));
+                throw new ParameterNotFoundException(name, source);
             mi.Invoke(source, null);
         }
 

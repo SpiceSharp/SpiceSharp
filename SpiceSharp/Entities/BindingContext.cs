@@ -57,7 +57,7 @@ namespace SpiceSharp.Entities
         {
             var state = Simulation.GetState<S>();
             if (state == null)
-                throw new CircuitException("The simulation does not use a state of type '{0}'".FormatString(typeof(S)));
+                throw new StateNotDefinedException(typeof(S));
             return state;
         }
 

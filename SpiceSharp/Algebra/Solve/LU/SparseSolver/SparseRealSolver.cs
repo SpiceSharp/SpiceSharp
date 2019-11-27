@@ -47,7 +47,7 @@ namespace SpiceSharp.Algebra
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
-                throw new AlgebraException("Solver is not yet factored");
+                throw new SolverNotFactoredException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
 
@@ -113,7 +113,7 @@ namespace SpiceSharp.Algebra
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
-                throw new AlgebraException("Solver is not yet factored");
+                throw new SolverNotFactoredException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
 

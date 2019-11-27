@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.Waveforms
             for (var i = 1; i < _pwlPoints; i++)
             {
                 if (Times[i-1] >= Times[i])
-                    throw new ArgumentException("PWL - times array should contain monotonously increasing time points");
+                    throw new ArgumentException("Time values should contain monotonously increasing values.");
             }
         }
 

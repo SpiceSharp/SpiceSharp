@@ -59,10 +59,10 @@ namespace SpiceSharp
         /// <param name="source">The object.</param>
         /// <param name="behavior">The behavior that is supposed to be bound.</param>
         /// <returns></returns>
-        public static T ThrowIfNotBound<T>(this T source, SpiceSharp.Behaviors.Behavior behavior) where T : class
+        public static T ThrowIfNotBound<T>(this T source, Behaviors.Behavior behavior) where T : class
         {
             if (source == null)
-                throw new CircuitException("Behavior '{0}' is not bound to any simulation".FormatString(behavior.Name));
+                throw new UnboundException(behavior.Name);
             return source;
         }
 

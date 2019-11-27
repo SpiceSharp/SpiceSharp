@@ -18,15 +18,15 @@ namespace SpiceSharpTest.Waveforms
             var context = new BindingContext(op, new BehaviorContainer("eb", new ParameterSetDictionary(new TypeDictionary<IParameterSet>())));
 
             // Negative rise time
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Bind(context));
+            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Bind(context));
             // Negative fall time
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Bind(context));
+            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Bind(context));
             // Negative pulse width
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Bind(context));
+            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Bind(context));
             // Negative period
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Bind(context));
+            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Bind(context));
             // Sum of times is higher than a period
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Bind(context));
+            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Bind(context));
         }
 
         [Test]

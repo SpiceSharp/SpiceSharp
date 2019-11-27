@@ -13,12 +13,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the integration coefficients.
         /// </summary>
-        protected DenseVector<double> Coefficients { get; } = new DenseVector<double>(7);
+        protected DenseVector<double> Coefficients { get; }
 
         /// <summary>
         /// Gets the prediction coefficients.
         /// </summary>
-        protected DenseVector<double> PredictionCoefficients { get; } = new DenseVector<double>(7);
+        protected DenseVector<double> PredictionCoefficients { get; }
 
         /// <summary>
         /// Matrix used to solve the integration coefficients.
@@ -32,9 +32,11 @@ namespace SpiceSharp.IntegrationMethods
             : base(2)
         {
             Solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
-                new DenseMatrix<double>(7),
-                new DenseVector<double>(7)
+                new DenseMatrix<double>(MaxOrder + 1),
+                new DenseVector<double>(MaxOrder + 1)
                 );
+            Coefficients = new DenseVector<double>(MaxOrder + 1);
+            PredictionCoefficients = new DenseVector<double>(MaxOrder + 1);
         }
 
         /// <summary>
@@ -98,7 +100,6 @@ namespace SpiceSharp.IntegrationMethods
 
             // Get the state
             var timetmp = double.PositiveInfinity;
-            var nodes = args.Simulation.Variables;
 
             var delsum = 0.0;
             for (var i = 0; i <= Order; i++)

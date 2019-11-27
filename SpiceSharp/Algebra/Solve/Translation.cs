@@ -112,7 +112,7 @@ namespace SpiceSharp.Algebra.Solve
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length)
-                throw new ArgumentException("Length of inputs does not match");
+                throw new SizeMismatchException(nameof(source), nameof(target));
 
             // Expand translation vectors if necessary
             if (_allocated < source.Length || _allocated < target.Length)
@@ -133,7 +133,7 @@ namespace SpiceSharp.Algebra.Solve
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length + 1)
-                throw new ArgumentException("Length of inputs does not match");
+                throw new SizeMismatchException(nameof(source), nameof(target));
 
             // Expand translation vectors if necessary
             if (_allocated < source.Length || _allocated < target.Length)

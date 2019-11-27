@@ -26,11 +26,6 @@ namespace SpiceSharp.Simulations
         protected Dictionary<string, Variable> Map { get; }
 
         /// <summary>
-        /// Is the variable set locked?
-        /// </summary>
-        private bool _locked;
-
-        /// <summary>
         /// Event that is called when a variable is added to the set.
         /// </summary>
         public event EventHandler<VariableEventArgs> VariableAdded;
@@ -69,7 +64,7 @@ namespace SpiceSharp.Simulations
             {
                 if (Map.TryGetValue(id, out var node))
                     return node;
-                throw new CircuitException("Node '{0}' does not exist".FormatString(id));
+                throw new VariableNotFoundException(id);
             }
         }
 
@@ -94,9 +89,6 @@ namespace SpiceSharp.Simulations
                 {Ground.Name, Ground}, 
                 {"GND", Ground}
             };
-
-            // Unlock
-            _locked = false;
         }
 
         /// <summary>
@@ -110,8 +102,7 @@ namespace SpiceSharp.Simulations
         /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
         public Variable MapNode(string id, VariableType type)
         {
-            if (_locked)
-                throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
+            id.ThrowIfNull(nameof(id));
 
             // Check the node
             if (Map.ContainsKey(id))
@@ -138,6 +129,10 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         public void AliasNode(Variable variable, string alias)
         {
+            variable.ThrowIfNull(nameof(variable));
+            alias.ThrowIfNull(nameof(alias));
+            if (!Map.ContainsValue(variable))
+                throw new VariableNotFoundException(nameof(variable));
             Map.Add(alias, variable);
         }
 
@@ -152,8 +147,7 @@ namespace SpiceSharp.Simulations
         /// <returns>A new variable.</returns>
         public Variable Create(string id, VariableType type)
         {
-            if (_locked)
-                throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
+            id.ThrowIfNull(nameof(id));
 
             // Create the node
             var node = new Variable(id, type);
@@ -205,16 +199,8 @@ namespace SpiceSharp.Simulations
             id.ThrowIfNull(nameof(id));
             if (Map.TryGetValue(id, out var result))
                 return result;
-            throw new CircuitException("Could not find node {0}".FormatString(id));
+            throw new VariableNotFoundException(nameof(id));
         }
-
-        /// <summary>
-        /// Avoids any further additions of variables.
-        /// </summary>
-        /// <remarks>
-        /// It is not possible to dynamically add and remove nodes while performing some operations (like most simulations).
-        /// </remarks>
-        public void Lock() => _locked = true;
 
         /// <summary>
         /// Clear all variables.
@@ -227,9 +213,6 @@ namespace SpiceSharp.Simulations
             Map.Clear();
             Map.Add(Ground.Name, Ground);
             Map.Add("GND", Ground);
-
-            // Unlock
-            _locked = false;
         }
 
         /// <summary>

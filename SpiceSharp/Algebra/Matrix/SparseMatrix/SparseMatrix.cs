@@ -168,8 +168,10 @@ namespace SpiceSharp.Algebra
         /// <returns>The matrix element at the specified row and column.</returns>
         public Element<T> GetElement(int row, int column)
         {
-            if (row < 0 || column < 0)
-                throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
+            if (row < 0)
+                throw new ArgumentOutOfRangeException(nameof(row));
+            if (column < 0)
+                throw new ArgumentOutOfRangeException(nameof(column));
             if (row == 0 || column == 0)
                 return _trashCan;
 
@@ -228,8 +230,10 @@ namespace SpiceSharp.Algebra
         /// <returns>The element at the specified row and column, or null if it doesn't exist.</returns>
         public Element<T> FindElement(int row, int column)
         {
-            if (row < 0 || column < 0)
-                throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
+            if (row < 0)
+                throw new ArgumentOutOfRangeException(nameof(row));
+            if (column < 0)
+                throw new ArgumentOutOfRangeException(nameof(column));
             if (row > Size || column > Size)
                 return null;
             if (row == 0 || column == 0)

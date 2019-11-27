@@ -142,15 +142,15 @@ namespace SpiceSharp.Components
 
             // Some checks
             if (_tr < 0.0)
-                throw new CircuitException("Invalid rise time {0}".FormatString(_tr));
+                throw new BadParameterException(nameof(RiseTime), RiseTime, "Invalid rise time.");
             if (_tf < 0.0)
-                throw new CircuitException("Invalid fall time {0}".FormatString(_tf));
+                throw new BadParameterException(nameof(FallTime), FallTime, "Invalid fall time");
             if (_pw < 0.0)
-                throw new CircuitException("Invalid pulse width {0}".FormatString(_pw));
+                throw new BadParameterException(nameof(PulseWidth), PulseWidth, "Invalid pulse width");
             if (_per < 0.0)
-                throw new CircuitException("Invalid period {0}".FormatString(_per));
+                throw new BadParameterException(nameof(Period), Period, "Invalid period");
             if (_per < _tr + _pw + _tf)
-                throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(_per));
+                throw new BadParameterException(nameof(Period), Period, "Invalid pulse specification: Period is too small");
 
             // Initialize the value
             At(0.0);

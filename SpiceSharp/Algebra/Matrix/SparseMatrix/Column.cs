@@ -152,7 +152,7 @@ namespace SpiceSharp.Algebra
             public void Swap(Element first, Element second, int rowFirst, int rowSecond)
             {
                 if (first == null && second == null)
-                    throw new ArgumentException("Both matrix elements cannot be null");
+                    throw new ArgumentNullException(nameof(first) + ", " + nameof(second));
 
                 if (first == null)
                 {

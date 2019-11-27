@@ -100,7 +100,7 @@ namespace SpiceSharp.IntegrationMethods
                         break;
 
                     default:
-                        throw new CircuitException("Invalid order");
+                        throw new ArgumentOutOfRangeException(nameof(Order));
                 }
             }
 

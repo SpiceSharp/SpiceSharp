@@ -177,7 +177,7 @@ namespace SpiceSharp.Algebra
                         if (!Elimination(step, size))
                         {
                             IsFactored = false;
-                            throw new AlgebraException("Elimination failed on accepted pivot");
+                            throw new EliminationFailedException();
                         }
                     }
                     else

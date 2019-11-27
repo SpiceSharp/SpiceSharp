@@ -66,7 +66,7 @@ namespace SpiceSharp.Algebra
         public DenseVector(int length)
         {
             if (length < 0 && length > int.MaxValue - 1)
-                throw new ArgumentException("Invalid length {0}".FormatString(length));
+                throw new ArgumentOutOfRangeException(nameof(length));
             Length = length;
             _values = new T[length + 1];
         }
@@ -150,7 +150,7 @@ namespace SpiceSharp.Algebra
         {
             target.ThrowIfNull(nameof(target));
             if (target.Length != Length)
-                throw new ArgumentException("Vector lengths do not match");
+                throw new SizeMismatchException(nameof(target));
             for (var i = 1; i <= Length; i++)
                 target[i] = this[i];
         }

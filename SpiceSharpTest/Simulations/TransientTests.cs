@@ -54,7 +54,7 @@ namespace SpiceSharpTest.Simulations
             tran.Configurations.GetValue<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) => 
             {
-                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-10); 
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10); 
             };
             tran.Run(ckt);
 

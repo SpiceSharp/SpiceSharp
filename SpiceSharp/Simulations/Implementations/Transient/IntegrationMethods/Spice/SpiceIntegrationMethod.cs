@@ -229,7 +229,7 @@ namespace SpiceSharp.IntegrationMethods
             {
                 // If we already tried
                 if (_oldDelta <= MinStep)
-                    throw new CircuitException("Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime));
+                    throw new TimestepTooSmallException(newDelta, BaseTime);
                 newDelta = MinStep;
             }
         }
@@ -265,7 +265,7 @@ namespace SpiceSharp.IntegrationMethods
             {
                 // If we already tried
                 if (_oldDelta <= MinStep)
-                    throw new CircuitException("Timestep {0:e} is too small at time {1:e}".FormatString(newDelta, BaseTime));
+                    throw new TimestepTooSmallException(newDelta, BaseTime);
                 newDelta = MinStep;
             }
 
