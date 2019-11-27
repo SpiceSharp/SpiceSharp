@@ -202,7 +202,7 @@ namespace SpiceSharpTest.Models
             var capacitance = 1e-6;
             var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0)
-                    .Set("acmag", 1.0),
+                    .SetParameter("acmag", 1.0),
                 new Resistor("R1", "IN", "OUT", resistance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );

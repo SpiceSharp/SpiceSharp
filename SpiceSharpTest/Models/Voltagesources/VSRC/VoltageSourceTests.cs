@@ -36,7 +36,7 @@ namespace SpiceSharpTest.Models
         public void When_VoltageSourceSmallSignal_Expect_Reference()
         {
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0).Set("acmag", 1.0));
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0));
             var ac = new AC("ac", new DecadeSweep(1.0, 100, 5));
             var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "in") };
             var references = new Func<double, Complex>[] { f => new Complex(1.0, 0.0) };

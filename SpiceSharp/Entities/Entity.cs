@@ -79,9 +79,9 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public override IEntity Set(string name)
+        public override IEntity SetParameter(string name)
         {
-            Parameters.Set(name);
+            Parameters.SetParameter(name);
             return this;
         }
 
@@ -94,9 +94,9 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public override IEntity Set<P>(string name, P value)
+        public override IEntity SetParameter<P>(string name, P value)
         {
-            Parameters.Set(name, value);
+            Parameters.SetParameter(name, value);
             return this;
         }
     }

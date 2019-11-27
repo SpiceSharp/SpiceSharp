@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     /// <seealso cref="ITypeDictionary{T}" />
     public interface IBehaviorContainer : 
-        ITypeDictionary<IBehavior>, IExportParameterSet
+        ITypeDictionary<IBehavior>, IExportPropertySet
     {
         /// <summary>
         /// Gets the name.

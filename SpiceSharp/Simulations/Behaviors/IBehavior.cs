@@ -3,7 +3,7 @@
     /// <summary>
     /// Contract for a behavior.
     /// </summary>
-    public interface IBehavior : IExportParameterSet
+    public interface IBehavior : IExportPropertySet
     {
         /// <summary>
         /// Gets the name of the behavior.

@@ -44,14 +44,14 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The value.
         /// </returns>
-        public P Get<P>(string name)
+        public P GetProperty<P>(string name)
         {
             foreach (var behavior in Values)
             {
-                if (behavior.TryGet(name, out P value))
+                if (behavior.TryGetProperty(name, out P value))
                     return value;
             }
-            return Parameters.Get<P>(name);
+            return Parameters.GetProperty<P>(name);
         }
 
         /// <summary>
@@ -63,14 +63,14 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGet<P>(string name, out P value)
+        public bool TryGetProperty<P>(string name, out P value)
         {
             foreach (var behavior in Values)
             {
-                if (behavior.TryGet(name, out value))
+                if (behavior.TryGetProperty(name, out value))
                     return true;
             }
-            return Parameters.TryGet(name, out value);
+            return Parameters.TryGetProperty(name, out value);
         }
 
         /// <summary>
@@ -81,15 +81,15 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Func<P> CreateGetter<P>(string name)
+        public Func<P> CreatePropertyGetter<P>(string name)
         {
             foreach (var behavior in Values)
             {
-                var result = behavior.CreateGetter<P>(name);
+                var result = behavior.CreatePropertyGetter<P>(name);
                 if (result != null)
                     return result;
             }
-            return Parameters.CreateGetter<P>(name);
+            return Parameters.CreatePropertyGetter<P>(name);
         }
 
         /// <summary>

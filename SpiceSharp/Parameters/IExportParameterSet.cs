@@ -3,12 +3,12 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// A parameter set that supports exporting or getting parameters.
+    /// A set of properties that support exporting or getting their values.
     /// </summary>
     /// <remarks>
-    /// Parameters can be named using the <see cref="Attributes.ParameterNameAttribute" />.
+    /// Properties can be named using the <see cref="Attributes.ParameterNameAttribute" />.
     /// </remarks>
-    public interface IExportParameterSet
+    public interface IExportPropertySet
     {
         /// <summary>
         /// Gets the value of the parameter with the specified name.
@@ -16,7 +16,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name.</param>
         /// <returns>The value.</returns>
-        P Get<P>(string name);
+        P GetProperty<P>(string name);
 
         /// <summary>
         /// Tries to get the value of the parameter with the specified name.
@@ -27,7 +27,7 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        bool TryGet<P>(string name, out P value);
+        bool TryGetProperty<P>(string name, out P value);
 
         /// <summary>
         /// Creates a getter for a parameter with the specified name.
@@ -37,6 +37,6 @@ namespace SpiceSharp
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        Func<P> CreateGetter<P>(string name);
+        Func<P> CreatePropertyGetter<P>(string name);
     }
 }

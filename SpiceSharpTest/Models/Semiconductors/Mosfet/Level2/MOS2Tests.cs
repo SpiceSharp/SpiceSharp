@@ -40,8 +40,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", 0.0),
                 new VoltageSource("V2", "out", "0", 0.0),
                 CreateMOS2("M1", "out", "in", "0", "0", "NFET")
-                    .Set("l", 6e-6)
-                    .Set("w", 1e-6),
+                    .SetParameter("l", 6e-6)
+                    .SetParameter("w", 1e-6),
                 CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
             );
 
@@ -111,14 +111,14 @@ namespace SpiceSharpTest.Models
             // Create circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .Set("acmag", 1.0),
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("C1", "in", "g", 1e-6),
                 CreateMOS2("M1", "out", "g", "0", "0", "NFET")
-                    .Set("l", 6e-6)
-                    .Set("w", 1e-6),
+                    .SetParameter("l", 6e-6)
+                    .SetParameter("w", 1e-6),
                 CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
 
@@ -178,8 +178,8 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("Vsupply", "vdd", "0", 3.3),
                 new Resistor("R1", "out", "vdd", 100e3),
                 CreateMOS2("M1", "out", "in", "0", "0", "NFET")
-                    .Set("w", 1e-6)
-                    .Set("l", 6e-6),
+                    .SetParameter("w", 1e-6)
+                    .SetParameter("l", 6e-6),
                 CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
 
@@ -275,14 +275,14 @@ namespace SpiceSharpTest.Models
             // Create circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .Set("acmag", 1.0),
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("C1", "in", "g", 1e-6),
                 CreateMOS2("M1", "out", "g", "0", "0", "NFET")
-                    .Set("l", 6e-6)
-                    .Set("w", 1e-6),
+                    .SetParameter("l", 6e-6)
+                    .SetParameter("w", 1e-6),
                 CreateMOS2Model("NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9 KF = 0.5e-25")
                 );
 

@@ -83,7 +83,7 @@ namespace SpiceSharpTest.Models
                 var value = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
 
                 // Set the entity parameter
-                entity.Set(name, value);
+                entity.SetParameter(name, value);
             }
         }
 

@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="name">The name of the method.</param>
         /// <returns>The current instance for chaining.</returns>
-        new T Set(string name);
+        new T SetParameter(string name);
 
         /// <summary>
         /// Sets the value of the parameter with the specified name.
@@ -21,6 +21,6 @@
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <returns>The current instance for chaining.</returns>
-        new T Set<P>(string name, P value);
+        new T SetParameter<P>(string name, P value);
     }
 }

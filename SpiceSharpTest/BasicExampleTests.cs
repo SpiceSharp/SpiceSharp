@@ -22,13 +22,11 @@ namespace SpiceSharpTest
             var resParameters = ckt["R1"].Parameters;
             resParameters.GetValue<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
             // </example_structure_resistor>
+
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
-            ckt["R1"].Set("resistance", 2.0e3);
-            ckt["R1"].Parameters.Set("resistance", 2.0e3);
-
-            // The resistance is a principal parameter, so we don't even need to specify "resistance"
-            // ckt["R1"].Parameters.Set(2.0e3);
+            ckt["R1"].SetParameter("resistance", 2.0e3);
+            ckt["R1"].Parameters.SetParameter("resistance", 2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -43,6 +41,7 @@ namespace SpiceSharpTest
             var dcConfig = dc.Configurations.GetValue<DCConfiguration>();
             dcConfig.Sweeps.Add(new SweepConfiguration("V1", 0.0, 3.3, 0.1));
             // </example_structure_dc>
+
             // <example_structure_dc_2>
             var baseConfig = dc.Configurations.GetValue<BiasingConfiguration>();
             baseConfig.RelativeTolerance = 1e-4;
@@ -60,27 +59,25 @@ namespace SpiceSharpTest
 
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model
-            var tnomGetter = parameters.CreateGetter<double>("tnom");
+            var tnomGetter = parameters.CreatePropertyGetter<double>("tnom");
             double temperature = tnomGetter(); // In degrees Celsius
             // </example_parameters_mos1_creategetter>
+
             // <example_parameters_mos1_createsetter>
             // Create a setter for the gate-drain overlap capacitance of the mosfet1 model
-            var cgdoSetter = parameters.CreateSetter<double>("cgdo");
+            var cgdoSetter = parameters.CreateParameterSetter<double>("cgdo");
             cgdoSetter(1e-15); // 1pF
             // </example_parameters_mos1_createsetter>
+
             // <example_parameters_mos1_getparameter>
             // Get the parameter that describes the oxide thickness of the mosfet1 model
-            var toxParameter = parameters.Get<double>("tox");
+            var toxParameter = parameters.GetProperty<double>("tox");
             // </example_parameters_mos1_getparameter>
+
             // <example_parameters_mos1_setparameter>
             // Flag the model as a PMOS type
-            parameters.Set("pmos", true);
+            parameters.SetParameter("pmos", true);
             // </example_parameters_mos1_setparameter>
-            // <example_parameters_res_setparameter>
-            // Set the resistance of the resistor
-            var res = new Resistor("R1");
-            // res.Parameters.Set(2.0e3); // 2kOhm
-            // </example_parameters_res_setparameter>
         }
 
         [Test]
@@ -146,7 +143,7 @@ namespace SpiceSharpTest
             var nmos = new Mosfet1("M1") {Model = "example"};
             nmos.Connect("d", "g", "0", "0");
             var nmosmodel = new Mosfet1Model("example");
-            nmosmodel.Set("kp", 150.0e-3);
+            nmosmodel.SetParameter("kp", 150.0e-3);
 
             // Build the circuit
             var ckt = new Circuit(
@@ -184,7 +181,7 @@ namespace SpiceSharpTest
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .Set("acmag", 1.0),
+                    .SetParameter("acmag", 1.0),
                 new Resistor("R1", "in", "out", 10.0e3),
                 new Capacitor("C1", "out", "0", 1e-6)
                 );
@@ -253,7 +250,7 @@ namespace SpiceSharpTest
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation) sender;
-                sim.EntityBehaviors["R1"].Parameters.Set("resistance", value);
+                sim.EntityBehaviors["R1"].Parameters.SetParameter("resistance", value);
             };
             op.AfterExecute += (sender, args) =>
             {

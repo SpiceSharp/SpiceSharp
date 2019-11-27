@@ -67,7 +67,7 @@ namespace SpiceSharp
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public ParameterSet Set(string name)
+        public ParameterSet SetParameter(string name)
         {
             Reflection.Set(this, name);
             return this;
@@ -82,7 +82,7 @@ namespace SpiceSharp
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public ParameterSet Set<P>(string name, P value)
+        public ParameterSet SetParameter<P>(string name, P value)
         {
             Reflection.Set(this, name, value);
             return this;
@@ -92,7 +92,7 @@ namespace SpiceSharp
         /// Call a parameter method with the specified name.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        void IImportParameterSet.Set(string name) => Set(name);
+        void IImportParameterSet.SetParameter(string name) => SetParameter(name);
 
         /// <summary>
         /// Tries calling a parameter method with the specified name.
@@ -101,7 +101,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySet(string name)
+        public bool TrySetParameter(string name)
             => Reflection.TrySet(this, name);
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        void IImportParameterSet.Set<P>(string name, P value) => Set(name, value);
+        void IImportParameterSet.SetParameter<P>(string name, P value) => SetParameter(name, value);
 
         /// <summary>
         /// Tries to set the value of the parameter with the specified name.
@@ -121,7 +121,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySet<P>(string name, P value)
+        public bool TrySetParameter<P>(string name, P value)
             => Reflection.TrySet(this, name, value);
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace SpiceSharp
         /// <returns>
         /// The value.
         /// </returns>
-        public P Get<P>(string name)
+        public P GetProperty<P>(string name)
             => Reflection.Get<P>(this, name);
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGet<P>(string name, out P value)
+        public bool TryGetProperty<P>(string name, out P value)
             => Reflection.TryGet(this, name, out value);
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace SpiceSharp
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Func<P> CreateGetter<P>(string name)
+        public Func<P> CreatePropertyGetter<P>(string name)
             => Reflection.CreateGetter<P>(this, name);
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace SpiceSharp
         /// <returns>
         /// A setter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Action<P> CreateSetter<P>(string name)
+        public Action<P> CreateParameterSetter<P>(string name)
             => Reflection.CreateSetter<P>(this, name);
     }
 }

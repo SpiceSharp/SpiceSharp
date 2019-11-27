@@ -14,7 +14,7 @@ namespace SpiceSharp
         /// Call a parameter method with the specified name.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        void Set(string name);
+        void SetParameter(string name);
 
         /// <summary>
         /// Tries calling a parameter method with the specified name.
@@ -23,7 +23,7 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
-        bool TrySet(string name);
+        bool TrySetParameter(string name);
 
         /// <summary>
         /// Sets the value of the parameter with the specified name.
@@ -31,7 +31,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        void Set<P>(string name, P value);
+        void SetParameter<P>(string name, P value);
 
         /// <summary>
         /// Tries to set the value of the parameter with the specified name.
@@ -42,7 +42,7 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
-        bool TrySet<P>(string name, P value);
+        bool TrySetParameter<P>(string name, P value);
 
         /// <summary>
         /// Creates a setter for a parameter with the specified name.
@@ -52,6 +52,6 @@ namespace SpiceSharp
         /// <returns>
         /// A setter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        Action<P> CreateSetter<P>(string name);
+        Action<P> CreateParameterSetter<P>(string name);
     }
 }

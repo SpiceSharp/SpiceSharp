@@ -55,7 +55,7 @@ namespace SpiceSharpTest.Models
              * 1) a current through resistor is 0.01 A (Ohms law)
              */
             var ckt = CreateResistorDcCircuit(10, 1000);
-            ckt["V1"].Set("acmag", 1.0);
+            ckt["V1"].SetParameter("acmag", 1.0);
 
             // Create simulation, exports and references
             var ac = new AC("ac", new LinearSweep(1.0, 10001, 10));

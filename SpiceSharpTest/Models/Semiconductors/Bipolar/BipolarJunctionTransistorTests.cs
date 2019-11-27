@@ -78,7 +78,7 @@ namespace SpiceSharpTest.Models
             // Build circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
-                    .Set("acmag", 1.0),
+                    .SetParameter("acmag", 1.0),
                 new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 1.0e3),
                 new Resistor("R2", "out", "b", 10.0e3),

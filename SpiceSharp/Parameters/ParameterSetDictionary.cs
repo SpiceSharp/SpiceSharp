@@ -107,11 +107,11 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">The name of the method.</param>
         /// <returns>The current instance for chaining.</returns>
-        public IParameterSetDictionary Set(string name)
+        public IParameterSetDictionary SetParameter(string name)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TrySet(name))
+                if (ps.TrySetParameter(name))
                     return this;
             }
             throw new ParameterNotFoundException(name, this);
@@ -124,11 +124,11 @@ namespace SpiceSharp
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <returns>The current instance for chaining.</returns>
-        public IParameterSetDictionary Set<P>(string name, P value)
+        public IParameterSetDictionary SetParameter<P>(string name, P value)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TrySet(name, value))
+                if (ps.TrySetParameter(name, value))
                     return this;
             }
             throw new ParameterNotFoundException(name, this);
@@ -150,11 +150,11 @@ namespace SpiceSharp
         /// Call a parameter method with the specified name.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        void IImportParameterSet.Set(string name)
+        void IImportParameterSet.SetParameter(string name)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TrySet(name))
+                if (ps.TrySetParameter(name))
                     return;
             }
             throw new ParameterNotFoundException(name, this);
@@ -167,11 +167,11 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySet(string name)
+        public bool TrySetParameter(string name)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TrySet(name))
+                if (ps.TrySetParameter(name))
                     return true;
             }
             return false;
@@ -183,11 +183,11 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        void IImportParameterSet.Set<P>(string name, P value)
+        void IImportParameterSet.SetParameter<P>(string name, P value)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TrySet(name, value))
+                if (ps.TrySetParameter(name, value))
                     return;
             }
             throw new ParameterNotFoundException(name, this);
@@ -202,11 +202,11 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySet<P>(string name, P value)
+        public bool TrySetParameter<P>(string name, P value)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TrySet(name, value))
+                if (ps.TrySetParameter(name, value))
                     return true;
             }
             return false;
@@ -218,11 +218,11 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name.</param>
         /// <returns>The value.</returns>
-        public P Get<P>(string name)
+        public P GetProperty<P>(string name)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TryGet(name, out P result))
+                if (ps.TryGetProperty(name, out P result))
                     return result;
             }
             throw new ParameterNotFoundException(name, this);
@@ -237,11 +237,11 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGet<P>(string name, out P value)
+        public bool TryGetProperty<P>(string name, out P value)
         {
             foreach (var ps in _dictionary.Values)
             {
-                if (ps.TryGet(name, out value))
+                if (ps.TryGetProperty(name, out value))
                     return true;
             }
             value = default;
@@ -256,11 +256,11 @@ namespace SpiceSharp
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Func<P> CreateGetter<P>(string name)
+        public Func<P> CreatePropertyGetter<P>(string name)
         {
             foreach (var ps in _dictionary.Values)
             {
-                var result = ps.CreateGetter<P>(name);
+                var result = ps.CreatePropertyGetter<P>(name);
                 if (result != null)
                     return result;
             }
@@ -275,11 +275,11 @@ namespace SpiceSharp
         /// <returns>
         /// A setter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Action<P> CreateSetter<P>(string name)
+        public Action<P> CreateParameterSetter<P>(string name)
         {
             foreach (var ps in _dictionary.Values)
             {
-                var result = ps.CreateSetter<P>(name);
+                var result = ps.CreateParameterSetter<P>(name);
                 if (result != null)
                     return result;
             }

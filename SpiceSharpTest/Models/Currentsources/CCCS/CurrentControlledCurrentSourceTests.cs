@@ -43,7 +43,7 @@ namespace SpiceSharpTest.Models
             // Build the circuit
             var ckt = new Circuit(
                 new CurrentSource("I1", "0", "in", 0.0)
-                    .Set("acmag", magnitude),
+                    .SetParameter("acmag", magnitude),
                 new VoltageSource("V1", "in", "0", 0.0),
                 new CurrentControlledCurrentSource("F1", "0", "out", "V1", gain),
                 new Resistor("R1", "out", "0", resistance)

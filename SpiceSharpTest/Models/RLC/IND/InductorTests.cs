@@ -48,7 +48,7 @@ namespace SpiceSharpTest.Models
             var inductance = 1e-3;
             var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0)
-                    .Set("acmag", 1.0),
+                    .SetParameter("acmag", 1.0),
                 new Inductor("L1", "IN", "OUT", inductance),
                 new Resistor("R1", "OUT", "0", resistance));
 
@@ -79,7 +79,7 @@ namespace SpiceSharpTest.Models
             var initialCurrent = 1e-3;
             var ckt = new Circuit(
                 new Inductor("L1", "OUT", "0", inductance)
-                    .Set("ic", initialCurrent),
+                    .SetParameter("ic", initialCurrent),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
 

@@ -40,7 +40,7 @@ namespace SpiceSharp
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public abstract T Set(string name);
+        public abstract T SetParameter(string name);
 
         /// <summary>
         /// Sets the value of the parameter with the specified name.
@@ -51,13 +51,13 @@ namespace SpiceSharp
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public abstract T Set<P>(string name, P value);
+        public abstract T SetParameter<P>(string name, P value);
 
         /// <summary>
         /// Call a parameter method with the specified name.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        void IImportParameterSet.Set(string name) => Parameters.Set(name);
+        void IImportParameterSet.SetParameter(string name) => Parameters.SetParameter(name);
 
         /// <summary>
         /// Tries calling a parameter method with the specified name.
@@ -66,7 +66,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySet(string name) => Parameters.TrySet(name);
+        public bool TrySetParameter(string name) => Parameters.TrySetParameter(name);
 
         /// <summary>
         /// Sets the value of the parameter with the specified name.
@@ -74,7 +74,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        void IImportParameterSet.Set<P>(string name, P value) => Parameters.Set(name, value);
+        void IImportParameterSet.SetParameter<P>(string name, P value) => Parameters.SetParameter(name, value);
 
         /// <summary>
         /// Tries to set the value of the parameter with the specified name.
@@ -85,7 +85,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
-        public bool TrySet<P>(string name, P value) => Parameters.TrySet(name, value);
+        public bool TrySetParameter<P>(string name, P value) => Parameters.TrySetParameter(name, value);
 
         /// <summary>
         /// Gets the value of the parameter with the specified name.
@@ -95,7 +95,7 @@ namespace SpiceSharp
         /// <returns>
         /// The value.
         /// </returns>
-        public P Get<P>(string name) => Parameters.Get<P>(name);
+        public P GetProperty<P>(string name) => Parameters.GetProperty<P>(name);
 
         /// <summary>
         /// Tries to get the value of the parameter with the specified name.
@@ -106,7 +106,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGet<P>(string name, out P value) => Parameters.TryGet(name, out value);
+        public bool TryGetProperty<P>(string name, out P value) => Parameters.TryGetProperty(name, out value);
 
         /// <summary>
         /// Creates a getter for a parameter with the specified name.
@@ -116,7 +116,7 @@ namespace SpiceSharp
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Func<P> CreateGetter<P>(string name) => Parameters.CreateGetter<P>(name);
+        public Func<P> CreatePropertyGetter<P>(string name) => Parameters.CreatePropertyGetter<P>(name);
 
         /// <summary>
         /// Creates a setter for a parameter with the specified name.
@@ -126,7 +126,7 @@ namespace SpiceSharp
         /// <returns>
         /// A setter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Action<P> CreateSetter<P>(string name) => Parameters.CreateSetter<P>(name);
+        public Action<P> CreateParameterSetter<P>(string name) => Parameters.CreateParameterSetter<P>(name);
 
         /// <summary>
         /// Clones the entity
