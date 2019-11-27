@@ -46,8 +46,8 @@ namespace SpiceSharp.Algebra
         /// Solves the system of equations with a matrix that was factored for a number of steps.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="steps">The steps.</param>
-        public void Solve(IVector<double> solution, int steps)
+        /// <param name="size">The size of the submatrix to be solved.</param>
+        public void Solve(IVector<double> solution, int size)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
@@ -56,10 +56,11 @@ namespace SpiceSharp.Algebra
                 throw new InvalidSolutionVectorException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
-            steps = Math.Max(steps, Size);
+            size = Math.Min(size, Size);
+            var order = Math.Min(size, Order);
 
             // Forward substitution
-            for (var i = 1; i <= steps; i++)
+            for (var i = 1; i <= order; i++)
             {
                 _intermediate[i] = Vector[i];
                 for (var j = 1; j < i; j++)
@@ -67,10 +68,9 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            _intermediate[steps] *= Matrix[steps, steps];
-            for (var i = steps - 1; i >= 1; i--)
+            for (var i = order; i >= 1; i--)
             {
-                for (var j = i + 1; j <= steps; j++)
+                for (var j = i + 1; j <= size; j++)
                     _intermediate[i] -= Matrix[i, j] * _intermediate[j];
                 _intermediate[i] *= Matrix[i, i];
             }
