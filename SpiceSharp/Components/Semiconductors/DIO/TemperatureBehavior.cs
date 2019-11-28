@@ -147,7 +147,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (cbv < TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt)
                 {
                     cbv = TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt;
-                    SpiceSharpWarning.Warning(this, "{0}: breakdown current increased to {1:g} to resolve incompatability with specified saturation current".FormatString(Name, cbv));
+                    SpiceSharpWarning.Warning(this, 
+                        Properties.Resources.Diodes_BreakdownCurrentIncreased.FormatString(Name, cbv));
                     xbv = ModelParameters.BreakdownVoltage;
                 }
                 else
@@ -163,7 +164,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                             break;
                     }
                     if (iter >= 25)
-                        SpiceSharpWarning.Warning(this, "{0}: unable to match forward and reverse diode regions: bv = {1:g}, ibv = {2:g}".FormatString(Name, xbv, xcbv));
+                        SpiceSharpWarning.Warning(this, 
+                            Properties.Resources.Diodes_ImpossibleFwdRevMatch.FormatString(Name, xbv, xcbv));
                 }
                 TempBreakdownVoltage = xbv;
             }

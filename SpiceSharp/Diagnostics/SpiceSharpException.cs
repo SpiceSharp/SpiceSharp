@@ -3,7 +3,7 @@
 namespace SpiceSharp
 {
     /// <summary>
-    /// An exception for circuit-related issues.
+    /// An exception for SpiceSharp-related issues.
     /// </summary>
     /// <seealso cref="Exception" />
     public class SpiceSharpException : Exception

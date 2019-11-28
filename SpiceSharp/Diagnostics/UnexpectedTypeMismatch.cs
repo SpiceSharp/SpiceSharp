@@ -14,7 +14,7 @@ namespace SpiceSharp
         /// <param name="expected">The expected type.</param>
         /// <param name="actual">The actual type.</param>
         public UnexpectedTypeMismatch(Type expected, Type actual)
-            : base("Type mismatch: '{0}' expected, but got '{1}'".FormatString(expected?.FullName, actual?.FullName))
+            : base(Properties.Resources.UnexpectedType.FormatString(expected?.FullName, actual?.FullName))
         {
         }
     }

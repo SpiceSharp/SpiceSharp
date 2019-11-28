@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SpiceSharp
+﻿namespace SpiceSharp
 {
     /// <summary>
     /// Exception thrown when the model of a component could not be found.
@@ -13,7 +11,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="componentName">Name of the entity.</param>
         public ModelNotFoundException(string componentName)
-            : base("No model found for component '{1}'.".FormatString(componentName))
+            : base(Properties.Resources.ModelNotFound.FormatString(componentName))
         {
         }
     }

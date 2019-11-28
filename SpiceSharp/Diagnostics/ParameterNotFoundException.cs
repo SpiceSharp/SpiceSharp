@@ -12,7 +12,7 @@
         /// <param name="name">The name.</param>
         /// <param name="source">The source.</param>
         public ParameterNotFoundException(string name, object source)
-            : base("Could not find a parameter '{0}' for {0}".FormatString(name, source))
+            : base(Properties.Resources.ParameterNotFound.FormatString(name, source))
         {
         }
     }

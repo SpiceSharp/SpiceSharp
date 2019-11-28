@@ -13,7 +13,7 @@ namespace SpiceSharp.General
         /// </summary>
         /// <param name="type">The type.</param>
         public AmbiguousTypeException(Type type)
-            : base("Ambiguous type reference for '{0}'".FormatString(type.FullName))
+            : base(Properties.Resources.AmbiguousType.FormatString(type.FullName))
         {
         }
     }

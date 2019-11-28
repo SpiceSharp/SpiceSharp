@@ -13,7 +13,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="type">The type.</param>
         public ValueNotFoundException(Type type)
-            : base("A value of type '{0}' could not be found.".FormatString(type.FullName))
+            : base(Properties.Resources.ValueNotFound.FormatString(type.FullName))
         {
         }
     }

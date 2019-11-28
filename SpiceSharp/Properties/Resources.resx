@@ -117,19 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AmbiguousType" xml:space="preserve">
+    <value>An ambiguous type reference for type '{0}' has been encountered.</value>
+  </data>
+  <data name="BadParameter1" xml:space="preserve">
+    <value>Invalid parameter value for '{0}'.</value>
+  </data>
+  <data name="BadParameterReason" xml:space="preserve">
+    <value>Invalid parameter value '{0}': {1}</value>
+  </data>
+  <data name="BadParameterValue" xml:space="preserve">
+    <value>Invalid parameter value for '{0}' ({1}).</value>
+  </data>
+  <data name="BadParameterValueReason" xml:space="preserve">
+    <value>Invalid parameter value '{0}' ({1}): {2}</value>
+  </data>
+  <data name="ConvergenceAidVariableNotFound" xml:space="preserve">
+    <value>Could not set convergence aid: variable '{0}' could not be found.</value>
+  </data>
+  <data name="Diodes.ActivationEnergyTooSmall" xml:space="preserve">
+    <value>{0}: activation energy too small, limited to {1:g}.</value>
+  </data>
+  <data name="Diodes.BreakdownCurrentIncreased" xml:space="preserve">
+    <value>{0}: breakdown current increased to {1:g5} to resolve incompatibility with specified saturation current.</value>
+  </data>
+  <data name="Diodes.DepletionCapCoefficientTooLarge" xml:space="preserve">
+    <value>{0}: depletion capacitance coefficient too large, limited to {1}.</value>
+  </data>
+  <data name="Diodes.GradingCoefficientTooLarge" xml:space="preserve">
+    <value>{0}: grading coefficient too large, limited to {1:g}.</value>
+  </data>
+  <data name="Diodes.ImpossibleFwdRevMatch" xml:space="preserve">
+    <value>{0}: unable to match forward and reverse diode region. Bv = {1:g}, ibv = {2:g}.</value>
+  </data>
+  <data name="EliminationFailed" xml:space="preserve">
+    <value>Elimination failed.</value>
+  </data>
   <data name="GminSteppingFailed" xml:space="preserve">
-    <value>Gmin step failed</value>
+    <value>Gmin step failed.</value>
+  </data>
+  <data name="IndependentSources.NoDc" xml:space="preserve">
+    <value>{0} has no DC value, 0 assumed.</value>
+  </data>
+  <data name="IndependentSources.NoDcUseWaveform" xml:space="preserve">
+    <value>{0} has no DC value, waveform value at time 0 used.</value>
+  </data>
+  <data name="InstanceNotBound" xml:space="preserve">
+    <value>The instance has not been bound to any simulation.</value>
+  </data>
+  <data name="InstanceNotBoundNamed" xml:space="preserve">
+    <value>{0} has not been bound to any simulation.</value>
+  </data>
+  <data name="JFETs.DepletionCapCoefficientTooLarge" xml:space="preserve">
+    <value>{0}: depletion capacitance coefficient too large, limited to {1:g}.</value>
+  </data>
+  <data name="ModelNotFound" xml:space="preserve">
+    <value>No model found for component '{0}'.</value>
+  </data>
+  <data name="Mosfets.EffectiveChannelTooSmall" xml:space="preserve">
+    <value>{0}: effective channel length less than zero.</value>
+  </data>
+  <data name="NodeMismatch" xml:space="preserve">
+    <value>Node mismatch: {0} nodes expected, but {1} were given.</value>
+  </data>
+  <data name="ParameterNotFound" xml:space="preserve">
+    <value>Could not find parameter '{0}' for {1}.</value>
+  </data>
+  <data name="Resistors.ZeroResistance" xml:space="preserve">
+    <value>{0}: resistance is 0, set to 1000.</value>
+  </data>
+  <data name="SingularMatrix" xml:space="preserve">
+    <value>Singular matrix encountered.</value>
+  </data>
+  <data name="SingularMatrixIndexed" xml:space="preserve">
+    <value>Singular matrix encountered at elimination step {0}.</value>
+  </data>
+  <data name="SizeMismatch1" xml:space="preserve">
+    <value>Size mismatch of {0} and {1}.</value>
+  </data>
+  <data name="SizeMismatch2" xml:space="preserve">
+    <value>Size mismatch of {0}: expected {1}.</value>
+  </data>
+  <data name="SolverNotFactored" xml:space="preserve">
+    <value>The solver has not been factored yet.</value>
   </data>
   <data name="SourceSteppingFailed" xml:space="preserve">
-    <value>Source stepping failed</value>
+    <value>Source stepping failed.</value>
   </data>
   <data name="StartDiagonalGminStepping" xml:space="preserve">
-    <value>Starting diagonal Gmin stepping</value>
+    <value>Starting diagonal Gmin stepping.</value>
   </data>
   <data name="StartGminStepping" xml:space="preserve">
-    <value>Starting Gmin stepping</value>
+    <value>Starting Gmin stepping.</value>
   </data>
   <data name="StartSourceStepping" xml:space="preserve">
-    <value>Starting source stepping</value>
+    <value>Starting source stepping.</value>
+  </data>
+  <data name="StateNotDefined" xml:space="preserve">
+    <value>A simulation state of type {0} was not defined.</value>
+  </data>
+  <data name="TimestepTooSmall" xml:space="preserve">
+    <value>The timestep {0:e5}s is too small at t = {1:e5}s.</value>
+  </data>
+  <data name="UnexpectedType" xml:space="preserve">
+    <value>"Unexpected type encountered: expected {0}, but got {1}.</value>
+  </data>
+  <data name="ValueNotFound" xml:space="preserve">
+    <value>Could not find a value of type {0}.</value>
+  </data>
+  <data name="VariableNotFound" xml:space="preserve">
+    <value>A variable by the name of '{0}' could not be found.</value>
   </data>
 </root>

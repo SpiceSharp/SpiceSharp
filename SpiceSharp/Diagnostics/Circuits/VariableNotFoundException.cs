@@ -11,7 +11,7 @@
         /// </summary>
         /// <param name="name">The name.</param>
         public VariableNotFoundException(string name)
-            : base("A variable by the name '{0}' could not be found.".FormatString(name))
+            : base(Properties.Resources.VariableNotFound.FormatString(name))
         {
         }
     }

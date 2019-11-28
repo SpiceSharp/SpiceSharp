@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
                         resistance = ModelParameters.SheetResistance * (BaseParameters.Length - ModelParameters.Narrow) / (BaseParameters.Width - ModelParameters.Narrow);
                     else
                     {
-                        SpiceSharpWarning.Warning(this, "{0}: resistance=0, set to 1000".FormatString(Name));
+                        SpiceSharpWarning.Warning(this, Properties.Resources.Resistors_ZeroResistance.FormatString(Name));
                         resistance = 1000;
                     }
                 }

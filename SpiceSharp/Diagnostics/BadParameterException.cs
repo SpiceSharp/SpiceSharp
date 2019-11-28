@@ -17,7 +17,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="parameterName">Name of the parameter.</param>
         public BadParameterException(string parameterName)
-            : base("Invalid parameter value for '{0}'".FormatString(parameterName))
+            : base(Properties.Resources.BadParameter1.FormatString(parameterName))
         {
         }
 
@@ -27,7 +27,7 @@ namespace SpiceSharp
         /// <param name="parameterName">Name of the parameter.</param>
         /// <param name="reason">The reason.</param>
         public BadParameterException(string parameterName, string reason)
-            : base("Invalid parameter value for '{0}': {1}".FormatString(parameterName, reason))
+            : base(Properties.Resources.BadParameterValue.FormatString(parameterName, reason))
         {
         }
 
@@ -38,7 +38,7 @@ namespace SpiceSharp
         /// <param name="value">The value.</param>
         /// <param name="reason">The reason.</param>
         public BadParameterException(string parameterName, object value, string reason)
-            : base("Invalid parameter value for '{0}' ({1}): {2}".FormatString(parameterName, value, reason))
+            : base(Properties.Resources.BadParameterValueReason.FormatString(parameterName, value, reason))
         {
         }
 
@@ -48,7 +48,7 @@ namespace SpiceSharp
         /// <param name="parameterName">Name of the parameter.</param>
         /// <param name="innerException">The inner exception.</param>
         public BadParameterException(string parameterName, Exception innerException)
-            : base("Invalid parameter value for '{0}'".FormatString(parameterName), innerException)
+            : base(Properties.Resources.BadParameterReason.FormatString(parameterName, innerException.Message), innerException)
         {
         }
     }

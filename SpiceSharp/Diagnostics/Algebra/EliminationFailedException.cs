@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SpiceSharp.Algebra
+﻿namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Exception thrown when elimination has failed.
@@ -12,7 +10,7 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="EliminationFailedException"/> class.
         /// </summary>
         public EliminationFailedException()
-            : base("Elimination failed")
+            : base(Properties.Resources.EliminationFailed)
         {
         }
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SpiceSharp
+﻿namespace SpiceSharp
 {
     /// <summary>
     /// Exception thrown when an instance is not bound to any simulation.
@@ -12,7 +10,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="InstanceNotBoundException"/> class.
         /// </summary>
         public InstanceNotBoundException()
-            : base("Instance is not bound to any simulation")
+            : base(Properties.Resources.InstanceNotBound)
         {
         }
 
@@ -21,7 +19,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="parameterName">Name of the parameter.</param>
         public InstanceNotBoundException(string parameterName)
-            : base("{0} is not bound to any simulation".FormatString(parameterName))
+            : base(Properties.Resources.InstanceNotBoundNamed.FormatString(parameterName))
         {
         }
     }

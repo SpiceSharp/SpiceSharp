@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             if (_mbp.DepletionCapCoefficient > 0.95)
             {
                 SpiceSharpWarning.Warning(this,
-                    "{0}: Depletion capacitance coefficient too large, limited to 0.95".FormatString(Name));
+                    Properties.Resources.JFETs_DepletionCapCoefficientTooLarge.FormatString(Name, _mbp.DepletionCapCoefficient.Value));
                 _mbp.DepletionCapCoefficient.Value = .95;
             }
 
