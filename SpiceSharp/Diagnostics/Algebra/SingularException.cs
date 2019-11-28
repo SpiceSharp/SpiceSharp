@@ -15,7 +15,7 @@
         /// Initializes a new instance of the <see cref="SingularException"/> class.
         /// </summary>
         public SingularException()
-            : base(Properties.Resources.SingularMatrix)
+            : base(Properties.Resources.Algebra_SingularMatrix)
         {
         }
 
@@ -24,7 +24,7 @@
         /// </summary>
         /// <param name="index">The index where the exception occurred.</param>
         public SingularException(int index)
-            : base(Properties.Resources.SingularMatrixIndexed.FormatString(index))
+            : base(Properties.Resources.Algebra_SingularMatrixIndexed.FormatString(index))
         {
             Index = index;
         }

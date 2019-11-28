@@ -27,7 +27,7 @@ namespace SpiceSharp.IntegrationMethods
                 if (value > 0.0)
                     _delta = value;
                 else
-                    throw new ArgumentException("Cannot set the a timestep to 0 or negative values");
+                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimestepInvalid);
             }
         }
         private double _delta;

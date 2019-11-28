@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="context">The context.</param>
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            context.Nodes.ThrowIfNot("nodes", 2);
+            context.Nodes.CheckNodes(2);
 
             BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];

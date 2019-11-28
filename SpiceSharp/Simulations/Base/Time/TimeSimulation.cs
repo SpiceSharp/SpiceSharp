@@ -289,7 +289,7 @@ namespace SpiceSharp.Simulations
 
                         default:
                             base.Statistics.Iterations += iterno;
-                            throw new SpiceSharpException("Could not find flag");
+                            throw new SpiceSharpException(Properties.Resources.Simulations_InvalidInitializationMode);
                     }
                 }
             }

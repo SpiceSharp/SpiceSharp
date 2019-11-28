@@ -63,7 +63,8 @@ namespace SpiceSharp.Components
         /// </returns>
         public IComponent Connect(params string[] nodes)
         {
-            nodes.ThrowIfNot(nameof(nodes), _connections.Length);
+            if (nodes == null || nodes.Length != _connections.Length)
+                throw new NodeMismatchException(Name, _connections.Length, nodes?.Length ?? 0);
             for (var i = 0; i < nodes.Length; i++)
             {
                 nodes[i].ThrowIfNull("node{0}".FormatString(i + 1));

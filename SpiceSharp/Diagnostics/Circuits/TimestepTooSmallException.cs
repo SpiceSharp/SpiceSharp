@@ -28,7 +28,7 @@
         /// <param name="timestep">The timestep.</param>
         /// <param name="time">The time point.</param>
         public TimestepTooSmallException(double timestep, double time)
-            : base(Properties.Resources.TimestepTooSmall.FormatString(timestep, time))
+            : base(Properties.Resources.Simulations_Time_TimestepTooSmall.FormatString(timestep, time))
         {
             Timestep = timestep;
             Time = time;

@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
-            context.Nodes.ThrowIfNot("nodes", 2);
+            context.Nodes.CheckNodes(2);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
             BaseParameters.Waveform?.Bind(context);

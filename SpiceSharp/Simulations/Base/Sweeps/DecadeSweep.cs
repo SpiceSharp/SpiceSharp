@@ -43,8 +43,10 @@ namespace SpiceSharp.Simulations
         /// <param name="steps">The number of steps per decade.</param>
         public DecadeSweep(double initial, double final, int steps)
         {
-            if (final * initial <= 0)
-                throw new SpiceSharpException("Invalid decade sweep from {0} to {1}".FormatString(initial, final));
+            if (initial <= 0)
+                throw new SpiceSharpException(Properties.Resources.Simulations_Frequency_InitialFrequencyTooSmall);
+            if (final <= 0)
+                throw new SpiceSharpException(Properties.Resources.Simulations_Frequency_FinalFrequencyTooSmall);
 
             Initial = initial;
             Final = final;

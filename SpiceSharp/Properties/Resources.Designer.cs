@@ -62,6 +62,42 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Elimination failed..
+        /// </summary>
+        internal static string Algebra_EliminationFailed {
+            get {
+                return ResourceManager.GetString("Algebra.EliminationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Singular matrix encountered..
+        /// </summary>
+        internal static string Algebra_SingularMatrix {
+            get {
+                return ResourceManager.GetString("Algebra.SingularMatrix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Singular matrix encountered at elimination step {0}..
+        /// </summary>
+        internal static string Algebra_SingularMatrixIndexed {
+            get {
+                return ResourceManager.GetString("Algebra.SingularMatrixIndexed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The solver has not been factored yet..
+        /// </summary>
+        internal static string Algebra_SolverNotFactored {
+            get {
+                return ResourceManager.GetString("Algebra.SolverNotFactored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An ambiguous type reference for type &apos;{0}&apos; has been encountered..
         /// </summary>
         internal static string AmbiguousType {
@@ -73,9 +109,9 @@ namespace SpiceSharp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Invalid parameter value for &apos;{0}&apos;..
         /// </summary>
-        internal static string BadParameter1 {
+        internal static string BadParameterNamed {
             get {
-                return ResourceManager.GetString("BadParameter1", resourceCulture);
+                return ResourceManager.GetString("BadParameterNamed", resourceCulture);
             }
         }
         
@@ -107,11 +143,101 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are already behaviors for &apos;{0}&apos;..
+        /// </summary>
+        internal static string Behaviors_BehaviorsAlreadyExist {
+            get {
+                return ResourceManager.GetString("Behaviors.BehaviorsAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find behaviors for &apos;{0}&apos;..
+        /// </summary>
+        internal static string Behaviors_NoBehaviorFor {
+            get {
+                return ResourceManager.GetString("Behaviors.NoBehaviorFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: depletion capacitance coefficient too large, limited to {1:g}..
+        /// </summary>
+        internal static string BJTs_DepletionCapCoefficientTooLarge {
+            get {
+                return ResourceManager.GetString("BJTs.DepletionCapCoefficientTooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No model found for component &apos;{0}&apos;..
+        /// </summary>
+        internal static string Components_ModelNotFound {
+            get {
+                return ResourceManager.GetString("Components.ModelNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Node mismatch: {0} nodes expected, but {1} were given..
+        /// </summary>
+        internal static string Components_NodeMismatch {
+            get {
+                return ResourceManager.GetString("Components.NodeMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Node mismatch for &apos;{0}&apos;: {1} nodes expected, but {1} were given..
+        /// </summary>
+        internal static string Components_NodeMismatchNamed {
+            get {
+                return ResourceManager.GetString("Components.NodeMismatchNamed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not set convergence aid: variable &apos;{0}&apos; could not be found..
         /// </summary>
         internal static string ConvergenceAidVariableNotFound {
             get {
                 return ResourceManager.GetString("ConvergenceAidVariableNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The absolute tolerance should be greater than 0..
+        /// </summary>
+        internal static string Delays_AbsoluteToleranceTooSmall {
+            get {
+                return ResourceManager.GetString("Delays.AbsoluteToleranceTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-causal delay detected. Delays should be greater than 0..
+        /// </summary>
+        internal static string Delays_NonCausalDelay {
+            get {
+                return ResourceManager.GetString("Delays.NonCausalDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time points are not monotonically increasing. Time goes from {0:e3} to {1:e3}..
+        /// </summary>
+        internal static string Delays_NonIncreasingTime {
+            get {
+                return ResourceManager.GetString("Delays.NonIncreasingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The relative tolerance should be greater than 0..
+        /// </summary>
+        internal static string Delays_RelativeToleranceTooSmall {
+            get {
+                return ResourceManager.GetString("Delays.RelativeToleranceTooSmall", resourceCulture);
             }
         }
         
@@ -161,24 +287,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Elimination failed..
-        /// </summary>
-        internal static string EliminationFailed {
-            get {
-                return ResourceManager.GetString("EliminationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gmin step failed..
-        /// </summary>
-        internal static string GminSteppingFailed {
-            get {
-                return ResourceManager.GetString("GminSteppingFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} has no DC value, 0 assumed..
         /// </summary>
         internal static string IndependentSources_NoDc {
@@ -224,15 +332,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No model found for component &apos;{0}&apos;..
-        /// </summary>
-        internal static string ModelNotFound {
-            get {
-                return ResourceManager.GetString("ModelNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}: effective channel length less than zero..
         /// </summary>
         internal static string Mosfets_EffectiveChannelTooSmall {
@@ -242,11 +341,29 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node mismatch: {0} nodes expected, but {1} were given..
+        ///   Looks up a localized string similar to Nsub &lt; Ni..
         /// </summary>
-        internal static string NodeMismatch {
+        internal static string Mosfets_NsubTooSmall {
             get {
-                return ResourceManager.GetString("NodeMismatch", resourceCulture);
+                return ResourceManager.GetString("Mosfets.NsubTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The oxide thickness is invalid..
+        /// </summary>
+        internal static string Mosfets_OxideThicknessTooSmall {
+            get {
+                return ResourceManager.GetString("Mosfets.OxideThicknessTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No enough elements..
+        /// </summary>
+        internal static string NotEnoughElements {
+            get {
+                return ResourceManager.GetString("NotEnoughElements", resourceCulture);
             }
         }
         
@@ -269,20 +386,191 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singular matrix encountered..
+        ///   Looks up a localized string similar to Gmin step failed..
         /// </summary>
-        internal static string SingularMatrix {
+        internal static string Simulation_Biasing_GminSteppingFailed {
             get {
-                return ResourceManager.GetString("SingularMatrix", resourceCulture);
+                return ResourceManager.GetString("Simulation.Biasing.GminSteppingFailed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singular matrix encountered at elimination step {0}..
+        ///   Looks up a localized string similar to The solution of variable &apos;{0}&apos; is not a number for the current iteration..
         /// </summary>
-        internal static string SingularMatrixIndexed {
+        internal static string Simulation_VariableNotANumber {
             get {
-                return ResourceManager.GetString("SingularMatrixIndexed", resourceCulture);
+                return ResourceManager.GetString("Simulation.VariableNotANumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not determine the operating point..
+        /// </summary>
+        internal static string Simulations_Biasing_NoOp {
+            get {
+                return ResourceManager.GetString("Simulations.Biasing.NoOp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source stepping failed..
+        /// </summary>
+        internal static string Simulations_Biasing_SourceSteppingFailed {
+            get {
+                return ResourceManager.GetString("Simulations.Biasing.SourceSteppingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting diagonal Gmin stepping..
+        /// </summary>
+        internal static string Simulations_Biasing_StartDiagonalGminStepping {
+            get {
+                return ResourceManager.GetString("Simulations.Biasing.StartDiagonalGminStepping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting Gmin stepping..
+        /// </summary>
+        internal static string Simulations_Biasing_StartGminStepping {
+            get {
+                return ResourceManager.GetString("Simulations.Biasing.StartGminStepping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting source stepping..
+        /// </summary>
+        internal static string Simulations_Biasing_StartSourceStepping {
+            get {
+                return ResourceManager.GetString("Simulations.Biasing.StartSourceStepping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find DC parameter entity &apos;{0}&apos;..
+        /// </summary>
+        internal static string Simulations_DC_InvalidEntity {
+            get {
+                return ResourceManager.GetString("Simulations.DC.InvalidEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sweep values cannot be used to reach the stop value..
+        /// </summary>
+        internal static string Simulations_DC_InvalidSweep {
+            get {
+                return ResourceManager.GetString("Simulations.DC.InvalidSweep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find a sweeping parameter &apos;{0}&apos;..
+        /// </summary>
+        internal static string Simulations_DC_NoSource {
+            get {
+                return ResourceManager.GetString("Simulations.DC.NoSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The final frequency needs to be greater than 0..
+        /// </summary>
+        internal static string Simulations_Frequency_FinalFrequencyTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.FinalFrequencyTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The initial frequency needs to be greater than 0..
+        /// </summary>
+        internal static string Simulations_Frequency_InitialFrequencyTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.InitialFrequencyTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid number of points..
+        /// </summary>
+        internal static string Simulations_Frequency_InvalidCount {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.InvalidCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid initialization mode..
+        /// </summary>
+        internal static string Simulations_InvalidInitializationMode {
+            get {
+                return ResourceManager.GetString("Simulations.InvalidInitializationMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: there are no entities..
+        /// </summary>
+        internal static string Simulations_NoEntities {
+            get {
+                return ResourceManager.GetString("Simulations.NoEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: there are no unknown variables to solve..
+        /// </summary>
+        internal static string Simulations_NoVariables {
+            get {
+                return ResourceManager.GetString("Simulations.NoVariables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A simulation state of type {0} was not defined..
+        /// </summary>
+        internal static string Simulations_StateNotDefined {
+            get {
+                return ResourceManager.GetString("Simulations.StateNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The integration order is too small..
+        /// </summary>
+        internal static string Simulations_Time_OrderTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Time.OrderTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: transient simulation was terminated..
+        /// </summary>
+        internal static string Simulations_Time_Terminated {
+            get {
+                return ResourceManager.GetString("Simulations.Time.Terminated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The timestep is invalid..
+        /// </summary>
+        internal static string Simulations_Time_TimestepInvalid {
+            get {
+                return ResourceManager.GetString("Simulations.Time.TimestepInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The timestep {0:e5}s is too small at t={1:e5}s..
+        /// </summary>
+        internal static string Simulations_Time_TimestepTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Time.TimestepTooSmall", resourceCulture);
             }
         }
         
@@ -305,65 +593,20 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The solver has not been factored yet..
+        ///   Looks up a localized string similar to Invalid characteristic impedance..
         /// </summary>
-        internal static string SolverNotFactored {
+        internal static string TransmissionLines_ImpedanceTooSmall {
             get {
-                return ResourceManager.GetString("SolverNotFactored", resourceCulture);
+                return ResourceManager.GetString("TransmissionLines.ImpedanceTooSmall", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source stepping failed..
+        ///   Looks up a localized string similar to A value of type {0} already exists..
         /// </summary>
-        internal static string SourceSteppingFailed {
+        internal static string TypeAlreadyExists {
             get {
-                return ResourceManager.GetString("SourceSteppingFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starting diagonal Gmin stepping..
-        /// </summary>
-        internal static string StartDiagonalGminStepping {
-            get {
-                return ResourceManager.GetString("StartDiagonalGminStepping", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starting Gmin stepping..
-        /// </summary>
-        internal static string StartGminStepping {
-            get {
-                return ResourceManager.GetString("StartGminStepping", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starting source stepping..
-        /// </summary>
-        internal static string StartSourceStepping {
-            get {
-                return ResourceManager.GetString("StartSourceStepping", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A simulation state of type {0} was not defined..
-        /// </summary>
-        internal static string StateNotDefined {
-            get {
-                return ResourceManager.GetString("StateNotDefined", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The timestep {0:e5}s is too small at t = {1:e5}s..
-        /// </summary>
-        internal static string TimestepTooSmall {
-            get {
-                return ResourceManager.GetString("TimestepTooSmall", resourceCulture);
+                return ResourceManager.GetString("TypeAlreadyExists", resourceCulture);
             }
         }
         
@@ -373,6 +616,51 @@ namespace SpiceSharp.Properties {
         internal static string UnexpectedType {
             get {
                 return ResourceManager.GetString("UnexpectedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Floating node detected: {0}..
+        /// </summary>
+        internal static string Validation_FloatingNodeFound {
+            get {
+                return ResourceManager.GetString("Validation.FloatingNodeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no ground node in the circuit..
+        /// </summary>
+        internal static string Validation_NoGround {
+            get {
+                return ResourceManager.GetString("Validation.NoGround", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no independent source driving the circuit..
+        /// </summary>
+        internal static string Validation_NoIndependentSource {
+            get {
+                return ResourceManager.GetString("Validation.NoIndependentSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: all pins are short-circuited..
+        /// </summary>
+        internal static string Validation_ShortCircuitComponent {
+            get {
+                return ResourceManager.GetString("Validation.ShortCircuitComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The source {0} closes a loop of voltage sources..
+        /// </summary>
+        internal static string Validation_VoltageLoopFound {
+            get {
+                return ResourceManager.GetString("Validation.VoltageLoopFound", resourceCulture);
             }
         }
         
@@ -391,6 +679,69 @@ namespace SpiceSharp.Properties {
         internal static string VariableNotFound {
             get {
                 return ResourceManager.GetString("VariableNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fall time should be greater or equal than 0..
+        /// </summary>
+        internal static string Waveforms_Pulse_FallTimeTooSmall {
+            get {
+                return ResourceManager.GetString("Waveforms.Pulse.FallTimeTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period should be greater than 0..
+        /// </summary>
+        internal static string Waveforms_Pulse_PeriodTooSmall {
+            get {
+                return ResourceManager.GetString("Waveforms.Pulse.PeriodTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pulse width should be greater or equal than 0..
+        /// </summary>
+        internal static string Waveforms_Pulse_PulseWidthTooSmall {
+            get {
+                return ResourceManager.GetString("Waveforms.Pulse.PulseWidthTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rise time should be greater or equal than 0..
+        /// </summary>
+        internal static string Waveforms_Pulse_RiseTimeTooSmall {
+            get {
+                return ResourceManager.GetString("Waveforms.Pulse.RiseTimeTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No points are specified..
+        /// </summary>
+        internal static string Waveforms_Pwl_Empty {
+            get {
+                return ResourceManager.GetString("Waveforms.Pwl.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The time values are not monotonically increasing..
+        /// </summary>
+        internal static string Waveforms_Pwl_NoIncreasingTimeValues {
+            get {
+                return ResourceManager.GetString("Waveforms.Pwl.NoIncreasingTimeValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The frequency should be greater or equal than 0..
+        /// </summary>
+        internal static string Waveforms_Sine_FrequencyTooSmall {
+            get {
+                return ResourceManager.GetString("Waveforms.Sine.FrequencyTooSmall", resourceCulture);
             }
         }
     }

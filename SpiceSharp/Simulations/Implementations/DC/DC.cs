@@ -122,14 +122,14 @@ namespace SpiceSharp.Simulations
                 {
                     // Get entity parameters
                     if (!EntityBehaviors.Contains(sweep.Parameter))
-                        throw new SpiceSharpException("Could not find source {0}".FormatString(sweep.Parameter));
+                        throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSource.FormatString(sweep.Parameter));
                     var eb = EntityBehaviors[sweep.Parameter];
 
                     // Check for a parameter called "dc" that we will sweep
                     if (eb.TryGetProperty("dc", out Parameter<double> dc))
                         swept[i] = dc;
                     else
-                        throw new SpiceSharpException("Invalid sweep object");
+                        throw new SpiceSharpException(Properties.Resources.Simulations_DC_InvalidEntity.FormatString(eb.Name));
                 }
 
                 original[i] = (Parameter<double>) swept[i].Clone();

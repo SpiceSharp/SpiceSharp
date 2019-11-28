@@ -232,7 +232,7 @@ namespace SpiceSharp.Algebra
         {
             target.ThrowIfNull(nameof(target));
             if (target.Length != Length)
-                throw new SizeMismatchException(nameof(target));
+                throw new SizeMismatchException(nameof(target), Length);
             for (var i = 1; i <= Length; i++)
                 target[i] = GetVectorValue(i);
         }

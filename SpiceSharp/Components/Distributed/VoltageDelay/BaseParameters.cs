@@ -30,11 +30,14 @@ namespace SpiceSharp.Components.DelayBehaviors
         public override void CalculateDefaults()
         {
             if (Delay < 0.0)
-                throw new BadParameterException(nameof(Delay), Delay, "Non-causal delay {0:e3} detected. Delay should be larger than 0.");
+                throw new BadParameterException(nameof(Delay), Delay, 
+                    Properties.Resources.Delays_NonCausalDelay);
             if (RelativeTolerance <= 0.0)
-                throw new BadParameterException(nameof(RelativeTolerance), RelativeTolerance, "Relative tolerance should be larger than 0.");
+                throw new BadParameterException(nameof(RelativeTolerance), RelativeTolerance,
+                    Properties.Resources.Delays_RelativeToleranceTooSmall);
             if (AbsoluteTolerance <= 0.0)
-                throw new BadParameterException(nameof(AbsoluteTolerance), AbsoluteTolerance, "Absolute tolerance should be larger than 0.");
+                throw new BadParameterException(nameof(AbsoluteTolerance), AbsoluteTolerance,
+                    Properties.Resources.Delays_AbsoluteToleranceTooSmall);
         }
     }
 }

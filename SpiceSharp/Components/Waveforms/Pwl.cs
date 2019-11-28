@@ -32,34 +32,31 @@ namespace SpiceSharp.Components.Waveforms
         private long _currentLineIndex;
         private readonly long _pwlPoints;
         private ITimeSimulationState _state;
+        private double[] _times;
+        private double[] _values;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Pwl"/> class.
         /// </summary>
-        /// <param name="times">Array of times.</param>
-        /// <param name="voltages">Array of voltages.</param>
-        public Pwl(double[] times, double[] voltages)
+        /// <param name="times">Enumeration of time points.</param>
+        /// <param name="values">Enumeration of values.</param>
+        public Pwl(double[] times, double[] values)
         {
-            Times = times.ThrowIfEmpty(nameof(times));
-            Voltages = voltages.ThrowIfNot(nameof(voltages), times.Length);
+            // TODO: Don't use the array reference (may be changed from the outside)
+            _times = times.ThrowIfNull(nameof(times));
+            _values = values.ThrowIfNull(nameof(values));
+            if (_times.Length == 0)
+                throw new ArgumentException(Properties.Resources.Waveforms_Pwl_Empty);
+            if (_values.Length != _times.Length)
+                throw new SizeMismatchException(nameof(values), _times.Length);
 
-            _pwlPoints = Times.Length;
+            _pwlPoints = _times.Length;
             for (var i = 1; i < _pwlPoints; i++)
             {
-                if (Times[i-1] >= Times[i])
-                    throw new ArgumentException("Time values should contain monotonously increasing values.");
+                if (_times[i-1] >= _times[i])
+                    throw new ArgumentException(Properties.Resources.Waveforms_Pwl_NoIncreasingTimeValues);
             }
         }
-
-        /// <summary>
-        /// Array of times.
-        /// </summary>
-        public double[] Times { get; }
-
-        /// <summary>
-        /// Array of voltages.
-        /// </summary>
-        public double[] Voltages { get; }
 
         /// <summary>
         /// Accepts the current timepoint.
@@ -76,7 +73,7 @@ namespace SpiceSharp.Components.Waveforms
 
                 if (!_breakPointAdded && _currentLineIndex < _pwlPoints)
                 {
-                    double breakPointTime = Times[_currentLineIndex];
+                    double breakPointTime = _times[_currentLineIndex];
                     if (breakPointTime >= 0.0)
                     {
                         breaks.SetBreakpoint(breakPointTime);
@@ -128,21 +125,21 @@ namespace SpiceSharp.Components.Waveforms
         {
             while (_currentLineIndex < _pwlPoints)
             {
-                if (Times[_currentLineIndex] >= time)
+                if (_times[_currentLineIndex] >= time)
                 {
                     long prevLineIndex = _currentLineIndex - 1;
                     if (prevLineIndex >= 0)
                     {
                         if (_lineDefinition == null)
                         {
-                            _lineDefinition = CreateLineParameters(Times[prevLineIndex], Times[_currentLineIndex], Voltages[prevLineIndex], Voltages[_currentLineIndex]);
+                            _lineDefinition = CreateLineParameters(_times[prevLineIndex], _times[_currentLineIndex], _values[prevLineIndex], _values[_currentLineIndex]);
                             _breakPointAdded = false;
                         }
                         return (_lineDefinition.A * time) + _lineDefinition.B;
                     }
                     else
                     {
-                        return Voltages[0];
+                        return _values[0];
                     }
                 }
 
@@ -151,7 +148,7 @@ namespace SpiceSharp.Components.Waveforms
                 _currentLineIndex++;
             }
 
-            return Voltages[_pwlPoints - 1];
+            return _values[_pwlPoints - 1];
         }
 
         /// <summary>

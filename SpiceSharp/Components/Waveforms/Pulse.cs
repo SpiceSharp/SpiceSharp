@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class implements a pulse waveform.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.Waveform" />
+    /// <seealso cref="Waveform" />
     public class Pulse : Waveform
     {
         /// <summary>
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components
         [ParameterName("pulse"), ParameterInfo("A vector of all pulse waveform parameters")]
         public void SetPulse(double[] parameters)
         {
-            parameters.ThrowIfEmpty(nameof(parameters));
+            parameters.ThrowIfNull(nameof(parameters));
             switch (parameters.Length)
             {
                 case 7:
@@ -142,15 +142,17 @@ namespace SpiceSharp.Components
 
             // Some checks
             if (_tr < 0.0)
-                throw new BadParameterException(nameof(RiseTime), RiseTime, "Invalid rise time.");
+                throw new BadParameterException(nameof(RiseTime), RiseTime, 
+                    Properties.Resources.Waveforms_Pulse_RiseTimeTooSmall);
             if (_tf < 0.0)
-                throw new BadParameterException(nameof(FallTime), FallTime, "Invalid fall time");
+                throw new BadParameterException(nameof(FallTime), FallTime, 
+                    Properties.Resources.Waveforms_Pulse_FallTimeTooSmall);
             if (_pw < 0.0)
-                throw new BadParameterException(nameof(PulseWidth), PulseWidth, "Invalid pulse width");
-            if (_per < 0.0)
-                throw new BadParameterException(nameof(Period), Period, "Invalid period");
+                throw new BadParameterException(nameof(PulseWidth), PulseWidth, 
+                    Properties.Resources.Waveforms_Pulse_PulseWidthTooSmall);
             if (_per < _tr + _pw + _tf)
-                throw new BadParameterException(nameof(Period), Period, "Invalid pulse specification: Period is too small");
+                throw new BadParameterException(nameof(Period), Period, 
+                    Properties.Resources.Waveforms_Pulse_PeriodTooSmall);
 
             // Initialize the value
             At(0.0);

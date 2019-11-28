@@ -252,7 +252,7 @@ namespace SpiceSharp.Entities
             if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex));
             if (array.Length < arrayIndex + Count)
-                throw new ArgumentException("Not enough elements in the array");
+                throw new ArgumentException(Properties.Resources.NotEnoughElements);
             foreach (var item in _entities.Values)
                 array[arrayIndex++] = item;
         }

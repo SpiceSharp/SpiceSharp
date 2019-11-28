@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Algebra.EliminationFailed" xml:space="preserve">
+    <value>Elimination failed.</value>
+  </data>
+  <data name="Algebra.SingularMatrix" xml:space="preserve">
+    <value>Singular matrix encountered.</value>
+  </data>
+  <data name="Algebra.SingularMatrixIndexed" xml:space="preserve">
+    <value>Singular matrix encountered at elimination step {0}.</value>
+  </data>
+  <data name="Algebra.SolverNotFactored" xml:space="preserve">
+    <value>The solver has not been factored yet.</value>
+  </data>
   <data name="AmbiguousType" xml:space="preserve">
     <value>An ambiguous type reference for type '{0}' has been encountered.</value>
   </data>
-  <data name="BadParameter1" xml:space="preserve">
+  <data name="BadParameterNamed" xml:space="preserve">
     <value>Invalid parameter value for '{0}'.</value>
   </data>
   <data name="BadParameterReason" xml:space="preserve">
@@ -132,8 +144,38 @@
   <data name="BadParameterValueReason" xml:space="preserve">
     <value>Invalid parameter value '{0}' ({1}): {2}</value>
   </data>
+  <data name="Behaviors.BehaviorsAlreadyExist" xml:space="preserve">
+    <value>There are already behaviors for '{0}'.</value>
+  </data>
+  <data name="Behaviors.NoBehaviorFor" xml:space="preserve">
+    <value>Could not find behaviors for '{0}'.</value>
+  </data>
+  <data name="BJTs.DepletionCapCoefficientTooLarge" xml:space="preserve">
+    <value>{0}: depletion capacitance coefficient too large, limited to {1:g}.</value>
+  </data>
+  <data name="Components.ModelNotFound" xml:space="preserve">
+    <value>No model found for component '{0}'.</value>
+  </data>
+  <data name="Components.NodeMismatch" xml:space="preserve">
+    <value>Node mismatch: {0} nodes expected, but {1} were given.</value>
+  </data>
+  <data name="Components.NodeMismatchNamed" xml:space="preserve">
+    <value>Node mismatch for '{0}': {1} nodes expected, but {1} were given.</value>
+  </data>
   <data name="ConvergenceAidVariableNotFound" xml:space="preserve">
     <value>Could not set convergence aid: variable '{0}' could not be found.</value>
+  </data>
+  <data name="Delays.AbsoluteToleranceTooSmall" xml:space="preserve">
+    <value>The absolute tolerance should be greater than 0.</value>
+  </data>
+  <data name="Delays.NonCausalDelay" xml:space="preserve">
+    <value>Non-causal delay detected. Delays should be greater than 0.</value>
+  </data>
+  <data name="Delays.NonIncreasingTime" xml:space="preserve">
+    <value>Time points are not monotonically increasing. Time goes from {0:e3} to {1:e3}.</value>
+  </data>
+  <data name="Delays.RelativeToleranceTooSmall" xml:space="preserve">
+    <value>The relative tolerance should be greater than 0.</value>
   </data>
   <data name="Diodes.ActivationEnergyTooSmall" xml:space="preserve">
     <value>{0}: activation energy too small, limited to {1:g}.</value>
@@ -150,12 +192,6 @@
   <data name="Diodes.ImpossibleFwdRevMatch" xml:space="preserve">
     <value>{0}: unable to match forward and reverse diode region. Bv = {1:g}, ibv = {2:g}.</value>
   </data>
-  <data name="EliminationFailed" xml:space="preserve">
-    <value>Elimination failed.</value>
-  </data>
-  <data name="GminSteppingFailed" xml:space="preserve">
-    <value>Gmin step failed.</value>
-  </data>
   <data name="IndependentSources.NoDc" xml:space="preserve">
     <value>{0} has no DC value, 0 assumed.</value>
   </data>
@@ -171,14 +207,17 @@
   <data name="JFETs.DepletionCapCoefficientTooLarge" xml:space="preserve">
     <value>{0}: depletion capacitance coefficient too large, limited to {1:g}.</value>
   </data>
-  <data name="ModelNotFound" xml:space="preserve">
-    <value>No model found for component '{0}'.</value>
-  </data>
   <data name="Mosfets.EffectiveChannelTooSmall" xml:space="preserve">
     <value>{0}: effective channel length less than zero.</value>
   </data>
-  <data name="NodeMismatch" xml:space="preserve">
-    <value>Node mismatch: {0} nodes expected, but {1} were given.</value>
+  <data name="Mosfets.NsubTooSmall" xml:space="preserve">
+    <value>Nsub &lt; Ni.</value>
+  </data>
+  <data name="Mosfets.OxideThicknessTooSmall" xml:space="preserve">
+    <value>The oxide thickness is invalid.</value>
+  </data>
+  <data name="NotEnoughElements" xml:space="preserve">
+    <value>No enough elements.</value>
   </data>
   <data name="ParameterNotFound" xml:space="preserve">
     <value>Could not find parameter '{0}' for {1}.</value>
@@ -186,11 +225,68 @@
   <data name="Resistors.ZeroResistance" xml:space="preserve">
     <value>{0}: resistance is 0, set to 1000.</value>
   </data>
-  <data name="SingularMatrix" xml:space="preserve">
-    <value>Singular matrix encountered.</value>
+  <data name="Simulation.Biasing.GminSteppingFailed" xml:space="preserve">
+    <value>Gmin step failed.</value>
   </data>
-  <data name="SingularMatrixIndexed" xml:space="preserve">
-    <value>Singular matrix encountered at elimination step {0}.</value>
+  <data name="Simulation.VariableNotANumber" xml:space="preserve">
+    <value>The solution of variable '{0}' is not a number for the current iteration.</value>
+  </data>
+  <data name="Simulations.Biasing.NoOp" xml:space="preserve">
+    <value>Could not determine the operating point.</value>
+  </data>
+  <data name="Simulations.Biasing.SourceSteppingFailed" xml:space="preserve">
+    <value>Source stepping failed.</value>
+  </data>
+  <data name="Simulations.Biasing.StartDiagonalGminStepping" xml:space="preserve">
+    <value>Starting diagonal Gmin stepping.</value>
+  </data>
+  <data name="Simulations.Biasing.StartGminStepping" xml:space="preserve">
+    <value>Starting Gmin stepping.</value>
+  </data>
+  <data name="Simulations.Biasing.StartSourceStepping" xml:space="preserve">
+    <value>Starting source stepping.</value>
+  </data>
+  <data name="Simulations.DC.InvalidEntity" xml:space="preserve">
+    <value>Cannot find DC parameter entity '{0}'.</value>
+  </data>
+  <data name="Simulations.DC.InvalidSweep" xml:space="preserve">
+    <value>The sweep values cannot be used to reach the stop value.</value>
+  </data>
+  <data name="Simulations.DC.NoSource" xml:space="preserve">
+    <value>Could not find a sweeping parameter '{0}'.</value>
+  </data>
+  <data name="Simulations.Frequency.FinalFrequencyTooSmall" xml:space="preserve">
+    <value>The final frequency needs to be greater than 0.</value>
+  </data>
+  <data name="Simulations.Frequency.InitialFrequencyTooSmall" xml:space="preserve">
+    <value>The initial frequency needs to be greater than 0.</value>
+  </data>
+  <data name="Simulations.Frequency.InvalidCount" xml:space="preserve">
+    <value>Invalid number of points.</value>
+  </data>
+  <data name="Simulations.InvalidInitializationMode" xml:space="preserve">
+    <value>Invalid initialization mode.</value>
+  </data>
+  <data name="Simulations.NoEntities" xml:space="preserve">
+    <value>{0}: there are no entities.</value>
+  </data>
+  <data name="Simulations.NoVariables" xml:space="preserve">
+    <value>{0}: there are no unknown variables to solve.</value>
+  </data>
+  <data name="Simulations.StateNotDefined" xml:space="preserve">
+    <value>A simulation state of type {0} was not defined.</value>
+  </data>
+  <data name="Simulations.Time.OrderTooSmall" xml:space="preserve">
+    <value>The integration order is too small.</value>
+  </data>
+  <data name="Simulations.Time.Terminated" xml:space="preserve">
+    <value>{0}: transient simulation was terminated.</value>
+  </data>
+  <data name="Simulations.Time.TimestepInvalid" xml:space="preserve">
+    <value>The timestep is invalid.</value>
+  </data>
+  <data name="Simulations.Time.TimestepTooSmall" xml:space="preserve">
+    <value>The timestep {0:e5}s is too small at t={1:e5}s.</value>
   </data>
   <data name="SizeMismatch1" xml:space="preserve">
     <value>Size mismatch of {0} and {1}.</value>
@@ -198,34 +294,55 @@
   <data name="SizeMismatch2" xml:space="preserve">
     <value>Size mismatch of {0}: expected {1}.</value>
   </data>
-  <data name="SolverNotFactored" xml:space="preserve">
-    <value>The solver has not been factored yet.</value>
+  <data name="TransmissionLines.ImpedanceTooSmall" xml:space="preserve">
+    <value>Invalid characteristic impedance.</value>
   </data>
-  <data name="SourceSteppingFailed" xml:space="preserve">
-    <value>Source stepping failed.</value>
-  </data>
-  <data name="StartDiagonalGminStepping" xml:space="preserve">
-    <value>Starting diagonal Gmin stepping.</value>
-  </data>
-  <data name="StartGminStepping" xml:space="preserve">
-    <value>Starting Gmin stepping.</value>
-  </data>
-  <data name="StartSourceStepping" xml:space="preserve">
-    <value>Starting source stepping.</value>
-  </data>
-  <data name="StateNotDefined" xml:space="preserve">
-    <value>A simulation state of type {0} was not defined.</value>
-  </data>
-  <data name="TimestepTooSmall" xml:space="preserve">
-    <value>The timestep {0:e5}s is too small at t = {1:e5}s.</value>
+  <data name="TypeAlreadyExists" xml:space="preserve">
+    <value>A value of type {0} already exists.</value>
   </data>
   <data name="UnexpectedType" xml:space="preserve">
     <value>"Unexpected type encountered: expected {0}, but got {1}.</value>
+  </data>
+  <data name="Validation.FloatingNodeFound" xml:space="preserve">
+    <value>Floating node detected: {0}.</value>
+  </data>
+  <data name="Validation.NoGround" xml:space="preserve">
+    <value>There is no ground node in the circuit.</value>
+  </data>
+  <data name="Validation.NoIndependentSource" xml:space="preserve">
+    <value>There is no independent source driving the circuit.</value>
+  </data>
+  <data name="Validation.ShortCircuitComponent" xml:space="preserve">
+    <value>{0}: all pins are short-circuited.</value>
+  </data>
+  <data name="Validation.VoltageLoopFound" xml:space="preserve">
+    <value>The source {0} closes a loop of voltage sources.</value>
   </data>
   <data name="ValueNotFound" xml:space="preserve">
     <value>Could not find a value of type {0}.</value>
   </data>
   <data name="VariableNotFound" xml:space="preserve">
     <value>A variable by the name of '{0}' could not be found.</value>
+  </data>
+  <data name="Waveforms.Pulse.FallTimeTooSmall" xml:space="preserve">
+    <value>Fall time should be greater or equal than 0.</value>
+  </data>
+  <data name="Waveforms.Pulse.PeriodTooSmall" xml:space="preserve">
+    <value>The period should be greater than 0.</value>
+  </data>
+  <data name="Waveforms.Pulse.PulseWidthTooSmall" xml:space="preserve">
+    <value>Pulse width should be greater or equal than 0.</value>
+  </data>
+  <data name="Waveforms.Pulse.RiseTimeTooSmall" xml:space="preserve">
+    <value>Rise time should be greater or equal than 0.</value>
+  </data>
+  <data name="Waveforms.Pwl.Empty" xml:space="preserve">
+    <value>No points are specified.</value>
+  </data>
+  <data name="Waveforms.Pwl.NoIncreasingTimeValues" xml:space="preserve">
+    <value>The time values are not monotonically increasing.</value>
+  </data>
+  <data name="Waveforms.Sine.FrequencyTooSmall" xml:space="preserve">
+    <value>The frequency should be greater or equal than 0.</value>
   </data>
 </root>

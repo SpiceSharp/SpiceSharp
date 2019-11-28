@@ -58,15 +58,19 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                 Delay.RawValue = NormalizedLength.Value / Frequency.Value;
 
             if (Delay < 0.0)
-                throw new BadParameterException(nameof(Delay), Delay, "Non-causal delay detected. Delays should be larger than 0.");
+                throw new BadParameterException(nameof(Delay), Delay, 
+                    Properties.Resources.Delays_NonCausalDelay);
             if (RelativeTolerance <= 0.0)
-                throw new BadParameterException(nameof(RelativeTolerance), RelativeTolerance, "Relative tolerance should be larger than 0.");
+                throw new BadParameterException(nameof(RelativeTolerance), RelativeTolerance, 
+                    Properties.Resources.Delays_RelativeToleranceTooSmall);
             if (AbsoluteTolerance <= 0.0)
-                throw new BadParameterException(nameof(AbsoluteTolerance), AbsoluteTolerance, "Absolute tolerance should be larger than 0.");
+                throw new BadParameterException(nameof(AbsoluteTolerance), AbsoluteTolerance, 
+                    Properties.Resources.Delays_AbsoluteToleranceTooSmall);
 
             // Calculate the admittance for saving a division operation
             if (Impedance <= 0.0)
-                throw new BadParameterException(nameof(Impedance), Impedance, "Invalid characteristic impedance of {0:e3}. Should be larger than 0.".FormatString(Impedance));
+                throw new BadParameterException(nameof(Impedance), Impedance,
+                    Properties.Resources.TransmissionLines_ImpedanceTooSmall);
             Admittance = 1.0 / Impedance;
         }
     }

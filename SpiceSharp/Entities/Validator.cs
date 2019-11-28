@@ -57,16 +57,16 @@ namespace SpiceSharp
 
             // Check if a voltage source is available
             if (!_hasSource)
-                throw new SpiceSharpException("No independent source found");
+                throw new SpiceSharpException(Properties.Resources.Validation_NoIndependentSource);
 
             // Check if a circuit has ground
             if (!_hasGround)
-                throw new SpiceSharpException("No ground found");
+                throw new SpiceSharpException(Properties.Resources.Validation_NoGround);
 
             // Check if a voltage driver is closing a loop
             var icc = FindVoltageDriveLoop();
             if (icc != null)
-                throw new SpiceSharpException("{0} closes a loop of voltage sources".FormatString(icc.Name));
+                throw new SpiceSharpException(Properties.Resources.Validation_VoltageLoopFound.FormatString(icc.Name));
 
             // Check for floating nodes
             var unconnected = FindFloatingNodes();
@@ -78,7 +78,7 @@ namespace SpiceSharp
                     if (unconnected.Contains(n))
                         un.Add(n.Name);
                 }
-                throw new SpiceSharpException("{0}: Floating nodes found".FormatString(string.Join(",", un)));
+                throw new SpiceSharpException(Properties.Resources.Validation_FloatingNodeFound.FormatString(string.Join(",", un)));
             }
         }
 
@@ -102,7 +102,7 @@ namespace SpiceSharp
                 }
 
                 if (IsShortCircuited(icc))
-                    throw new SpiceSharpException("{0}: All pins are short-circuited".FormatString(icc.Name));
+                    throw new SpiceSharpException(Properties.Resources.Validation_ShortCircuitComponent.FormatString(icc.Name));
                 
                 // Use attributes for checking properties
                 var attributes = c.GetType().GetTypeInfo().GetCustomAttributes(false);

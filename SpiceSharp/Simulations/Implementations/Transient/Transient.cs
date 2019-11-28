@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientTime.Stop();
                 Statistics.TransientIterations += stats.Iterations - startIters;
                 Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
-                throw new SpiceSharpException("{0}: transient terminated".FormatString(Name), ex);
+                throw new SpiceSharpException(Properties.Resources.Simulations_Time_Terminated.FormatString(Name), ex);
             }
         }
     }

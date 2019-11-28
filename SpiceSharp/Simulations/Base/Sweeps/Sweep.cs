@@ -53,8 +53,9 @@ namespace SpiceSharp.Simulations
         /// <param name="count">The number of points.</param>
         protected Sweep(T initial, T final, int count)
         {
+            // TODO: redesign sweeps!
             if (count < 0)
-                throw new ArgumentException("Invalid count");
+                throw new ArgumentException(Properties.Resources.Simulations_Frequency_InvalidCount);
 
             Initial = initial;
             Final = final;

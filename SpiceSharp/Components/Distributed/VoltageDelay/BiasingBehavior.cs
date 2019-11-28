@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             : base(name)
         {
             context.ThrowIfNull(nameof(context));
-            context.Nodes.ThrowIfNot("nodes", 4);
+            context.Nodes.CheckNodes(4);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();

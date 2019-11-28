@@ -17,7 +17,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="parameterName">Name of the parameter.</param>
         public BadParameterException(string parameterName)
-            : base(Properties.Resources.BadParameter1.FormatString(parameterName))
+            : base(Properties.Resources.BadParameterNamed.FormatString(parameterName))
         {
         }
 

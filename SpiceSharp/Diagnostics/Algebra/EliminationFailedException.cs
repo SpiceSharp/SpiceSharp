@@ -10,7 +10,7 @@
         /// Initializes a new instance of the <see cref="EliminationFailedException"/> class.
         /// </summary>
         public EliminationFailedException()
-            : base(Properties.Resources.EliminationFailed)
+            : base(Properties.Resources.Algebra_EliminationFailed)
         {
         }
     }

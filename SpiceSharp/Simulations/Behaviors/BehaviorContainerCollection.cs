@@ -68,7 +68,7 @@ namespace SpiceSharp.Behaviors
                     OnBehaviorsNotFound(args);
                     if (args.Behaviors != null)
                         return args.Behaviors;
-                    throw new SpiceSharpException("Cannot find behaviors for '{0}'".FormatString(name));
+                    throw new SpiceSharpException(Properties.Resources.Behaviors_NoBehaviorFor.FormatString(name));
                 }
                 finally
                 {
@@ -115,7 +115,7 @@ namespace SpiceSharp.Behaviors
             try
             {
                 if (_dictionary.ContainsKey(behaviors.Name))
-                    throw new SpiceSharpException("There are already behaviors for '{0}'".FormatString(behaviors.Name));
+                    throw new SpiceSharpException(Properties.Resources.Behaviors_BehaviorsAlreadyExist.FormatString(behaviors.Name));
                 _lock.EnterWriteLock();
                 try
                 {

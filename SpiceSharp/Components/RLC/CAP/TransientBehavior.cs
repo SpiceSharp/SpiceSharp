@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="context">The context.</param>
         public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            context.Nodes.ThrowIfNot("nodes", 2);
+            context.Nodes.CheckNodes(2);
 
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];

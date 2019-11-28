@@ -153,7 +153,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="context">The context.</param>
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            context.Nodes.ThrowIfNot("nodes", 4);
+            context.Nodes.CheckNodes(4);
 
             // Get configurations
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();

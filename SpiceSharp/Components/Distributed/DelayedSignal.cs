@@ -53,7 +53,8 @@ namespace SpiceSharp.Components.Distributed
             Size = size;
             Values = new double[size];
             if (delay <= 0)
-                throw new BadParameterException(nameof(delay), delay, "Non-causal delay detected. Delay should be greater than 0.");
+                throw new BadParameterException(nameof(delay), delay, 
+                    Properties.Resources.Delays_NonCausalDelay);
 
             // Setup our linked list
             _reference = _oldest = _probed = new Node(size)
@@ -76,7 +77,8 @@ namespace SpiceSharp.Components.Distributed
 
             // Check that the time is increasing
             if (_probed.Older != null && _probed.Older.Time > time)
-                throw new SpiceSharpException("Delayed signal time is not increasing, {0} goes to {1}.".FormatString(_probed.Older.Time, time));
+                throw new SpiceSharpException(
+                    Properties.Resources.Delays_NonIncreasingTime.FormatString(_probed.Older.Time, time));
 
             // Move the reference to the closest delayed timepoint
             MoveReferenceCloseTo(refTime);
@@ -135,7 +137,7 @@ namespace SpiceSharp.Components.Distributed
         {
             // Copy the values
             if (values.Length != Size)
-                throw new SizeMismatchException(nameof(values));
+                throw new SizeMismatchException(nameof(values), Size);
             for (var i = 0; i < Size; i++)
                 _probed.Values[i] = values[i];
         }

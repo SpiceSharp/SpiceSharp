@@ -11,7 +11,7 @@
         /// </summary>
         /// <param name="componentName">Name of the entity.</param>
         public ModelNotFoundException(string componentName)
-            : base(Properties.Resources.ModelNotFound.FormatString(componentName))
+            : base(Properties.Resources.Components_ModelNotFound.FormatString(componentName))
         {
         }
     }

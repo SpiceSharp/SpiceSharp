@@ -31,7 +31,7 @@ namespace SpiceSharp.IntegrationMethods
                         _delta = value;
                 }
                 else
-                    throw new ArgumentException("Cannot set the the timestep to a non-positive values");
+                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimestepInvalid);
             }
         }
         private double _delta;

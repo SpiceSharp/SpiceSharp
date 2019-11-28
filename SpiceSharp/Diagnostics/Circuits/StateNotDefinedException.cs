@@ -12,7 +12,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="StateNotDefinedException"/> class.
         /// </summary>
         public StateNotDefinedException(Type type)
-            : base(Properties.Resources.StateNotDefined.FormatString(type.FullName))
+            : base(Properties.Resources.Simulations_StateNotDefined.FormatString(type.FullName))
         {
         }
     }

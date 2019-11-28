@@ -144,7 +144,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <param name="context"></param>
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            context.Nodes.ThrowIfNot("nodes", 4);
+            context.Nodes.CheckNodes(4);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
             context.TryGetState(out _timeState);

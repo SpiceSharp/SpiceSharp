@@ -24,7 +24,8 @@
         /// <param name="coefficients">Values</param>
         public override void SetCoefficients(params double[] coefficients)
         {
-            coefficients.ThrowIfNot(nameof(coefficients), 1);
+            if (coefficients == null || coefficients.Length != 1)
+                throw new BadParameterException(nameof(coefficients));
             Gain = coefficients[0];
         }
 

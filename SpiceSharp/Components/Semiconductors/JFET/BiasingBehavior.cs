@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="context">The context.</param>
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            context.Nodes.ThrowIfNot("nodes", 3);
+            context.Nodes.CheckNodes(3);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
             context.TryGetState(out _timeState);

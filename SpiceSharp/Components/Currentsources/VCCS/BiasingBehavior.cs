@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
-            context.Nodes.ThrowIfNot("nodes", 4);
+            context.Nodes.CheckNodes(4);
 
             BiasingState = context.GetState<IBiasingSimulationState>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();

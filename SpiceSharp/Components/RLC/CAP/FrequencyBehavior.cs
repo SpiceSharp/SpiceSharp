@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            context.Nodes.ThrowIfNot("nodes", 2);
+            context.Nodes.CheckNodes(2);
 
             ComplexState = context.GetState<IComplexSimulationState>();
             _posNode = ComplexState.Map[context.Nodes[0]];

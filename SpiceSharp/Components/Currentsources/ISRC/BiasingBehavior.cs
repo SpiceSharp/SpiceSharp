@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
-            context.Nodes.ThrowIfNot("nodes", 2);
+            context.Nodes.CheckNodes(2);
 
             BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];

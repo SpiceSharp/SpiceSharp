@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
+using System;
 using System.Collections;
 using System.Globalization;
 
@@ -67,36 +70,18 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Throws an exception if a collection is null or empty.
+        /// Checks the number of specified nodes.
         /// </summary>
-        /// <typeparam name="T">The collection type.</typeparam>
-        /// <param name="source">The object.</param>
-        /// <param name="name">The parameter name.</param>
-        /// <returns>The original collection.</returns>
-        public static T ThrowIfEmpty<T>(this T source, string name) where T : ICollection
+        /// <param name="nodes">The nodes.</param>
+        /// <param name="count">The number of expected nodes.</param>
+        public static void CheckNodes(this Variable[] nodes, int count)
         {
-            if (source == null)
-                throw new ArgumentNullException(name);
-            if (source.Count == 0)
-                throw new ArgumentException("{0} contains no elements".FormatString(name));
-            return source;
-        }
-
-        /// <summary>
-        /// Throws an exception if a collection is null or does not contain a fixed amount of elements.
-        /// </summary>
-        /// <typeparam name="T">The collection type.</typeparam>
-        /// <param name="source">The object.</param>
-        /// <param name="name">The parameter name.</param>
-        /// <param name="size">The original collection.</param>
-        /// <returns></returns>
-        public static T ThrowIfNot<T>(this T source, string name, int size) where T : ICollection
-        {
-            if (source == null)
-                throw new ArgumentNullException(name);
-            if (source.Count != size)
-                throw new ArgumentException("{0} does not have {1} elements".FormatString(name, size));
-            return source;
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (nodes.Length != count)
+                throw new NodeMismatchException(count, nodes.Length);
+            foreach (var node in nodes)
+                node.ThrowIfNull(nameof(node));
         }
     }
 }

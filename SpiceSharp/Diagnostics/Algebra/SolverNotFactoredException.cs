@@ -10,7 +10,7 @@
         /// Initializes a new instance of the <see cref="SolverNotFactoredException"/> class.
         /// </summary>
         public SolverNotFactoredException()
-            : base(Properties.Resources.SolverNotFactored)
+            : base(Properties.Resources.Algebra_SolverNotFactored)
         {
         }
     }

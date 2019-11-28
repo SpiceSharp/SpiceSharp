@@ -358,7 +358,7 @@ namespace SpiceSharp
             source.ThrowIfNull(nameof(source));
             destination.ThrowIfNull(nameof(destination));
             if (source.GetType() != destination.GetType())
-                throw new ArgumentException(@"Source and target are not of the same type.");
+                throw new UnexpectedTypeMismatch(destination.GetType(), source.GetType());
 
             var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)

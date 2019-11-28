@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <param name="context">The context.</param>
         public VoltageControlled(ComponentBindingContext context)
         {
-            context.Nodes.ThrowIfNot("nodes", 4);
+            context.Nodes.CheckNodes(4);
             var state = context.GetState<IBiasingSimulationState>();
             ContPosNode = state.Map[context.Nodes[2]];
             ContNegNode = state.Map[context.Nodes[3]];

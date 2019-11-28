@@ -85,7 +85,7 @@ namespace SpiceSharp.General
             if (_dictionary.TryGetValue(ctype, out var values))
             {
                 if (values.IsDirect)
-                    throw new ArgumentException("A value of type '{0}' already exists.".FormatString(ctype.FullName));
+                    throw new ArgumentException(Properties.Resources.TypeAlreadyExists.FormatString(ctype.FullName));
             }
             else
             {

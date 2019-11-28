@@ -54,8 +54,7 @@ namespace SpiceSharp.Components
         [ParameterName("sine"), ParameterInfo("A vector of all sine waveform parameters")]
         public void SetSine(double[] parameters)
         {
-            parameters.ThrowIfEmpty(nameof(parameters));
-
+            parameters.ThrowIfNull(nameof(parameters));
             switch (parameters.Length)
             {
                 case 6:
@@ -162,7 +161,8 @@ namespace SpiceSharp.Components
 
             // Some checks
             if (_freq < 0)
-                throw new BadParameterException(nameof(Frequency), Frequency, "Invalid frequency.");
+                throw new BadParameterException(nameof(Frequency), Frequency, 
+                    Properties.Resources.Waveforms_Sine_FrequencyTooSmall);
         }
 
         /// <summary>

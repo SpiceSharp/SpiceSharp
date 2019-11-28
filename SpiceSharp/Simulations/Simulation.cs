@@ -158,7 +158,7 @@ namespace SpiceSharp.Simulations
 
             // Check that at least something is simulated
             if (Variables.Count < 1)
-                throw new SpiceSharpException("{0}: No circuit nodes for simulation".FormatString(Name));
+                throw new SpiceSharpException(Properties.Resources.Simulations_NoVariables.FormatString(Name));
 
             // Execute the simulation
             Status = SimulationStatus.Running;
@@ -203,7 +203,7 @@ namespace SpiceSharp.Simulations
             // Validate the entities
             entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
-                throw new SpiceSharpException("{0}: No circuit objects for simulation".FormatString(Name));
+                throw new SpiceSharpException(Properties.Resources.Simulations_NoEntities.FormatString(Name));
 
             // Create the set of variables
             if (Configurations.TryGetValue(out CollectionConfiguration cconfig))

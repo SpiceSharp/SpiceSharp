@@ -96,8 +96,9 @@ namespace SpiceSharp.Components.NoiseSources
             var mapped = new int[_pins.Length];
             for (var i = 0; i < _pins.Length; i++)
             {
+                // TODO: Exception doesn't look right...
                 if (_pins[i] >= nodes.Length)
-                    throw new SizeMismatchException(nameof(nodes));
+                    throw new SizeMismatchException(nameof(nodes), nodes.Length);
                 mapped[i] = ComplexState.Map[nodes[_pins[i]]];
             }
             Nodes = new NodeCollection(mapped);

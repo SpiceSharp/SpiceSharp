@@ -185,7 +185,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 if (_mbp.DepletionCapCoefficient > 0.9999)
                 {
                     _mbp.DepletionCapCoefficient.RawValue = 0.9999;
-                    throw new BadParameterException("fc", _mbp.DepletionCapCoefficient, "Parameter fc limited to 0.9999.");
+                    SpiceSharpWarning.Warning(this,
+                        Properties.Resources.BJTs_DepletionCapCoefficientTooLarge.FormatString(Name, _mbp.DepletionCapCoefficient.Value));
                 }
             }
             else

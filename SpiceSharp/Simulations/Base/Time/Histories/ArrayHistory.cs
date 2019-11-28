@@ -31,7 +31,7 @@ namespace SpiceSharp.IntegrationMethods
             get
             {
                 if (index < 0 || index >= Length)
-                    throw new ArgumentException("Invalid index {0}".FormatString(index));
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 return _history[index];
             }
         }

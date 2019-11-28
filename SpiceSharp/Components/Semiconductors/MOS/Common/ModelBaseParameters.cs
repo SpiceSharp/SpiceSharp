@@ -246,7 +246,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         public override void CalculateDefaults()
         {
             if (OxideThickness.Given && OxideThickness <= 0.0)
-                throw new BadParameterException(nameof(OxideThickness), OxideThickness, "Invalid oxide thickness.");
+                throw new BadParameterException(nameof(OxideThickness), OxideThickness, 
+                    Properties.Resources.Mosfets_OxideThicknessTooSmall);
 
             // Calculate the oxide capacitance
             OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
