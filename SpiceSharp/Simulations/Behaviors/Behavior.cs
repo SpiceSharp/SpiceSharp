@@ -35,7 +35,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The value.
         /// </returns>
-        public P GetProperty<P>(string name)
+        public virtual P GetProperty<P>(string name)
             => Reflection.Get<P>(this, name);
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetProperty<P>(string name, out P value)
+        public virtual bool TryGetProperty<P>(string name, out P value)
             => Reflection.TryGet(this, name, out value);
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public Func<P> CreatePropertyGetter<P>(string name)
+        public virtual Func<P> CreatePropertyGetter<P>(string name)
             => Reflection.CreateGetter<P>(this, name);
     }
 }

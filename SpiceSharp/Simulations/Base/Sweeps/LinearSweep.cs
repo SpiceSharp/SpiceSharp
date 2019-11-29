@@ -18,17 +18,7 @@ namespace SpiceSharp.Simulations
         /// The initial frequency value.
         /// </value>
         [ParameterName("start"), ParameterName("initial"), ParameterInfo("The initial frequency of the sweep.")]
-        public double Initial
-        {
-            get => _initial;
-            set
-            {
-                if (value < 0)
-                    throw new BadParameterException(nameof(Initial), value, Properties.Resources.Simulations_Frequency_InitialFrequencyTooSmall2);
-                _initial = value;
-            }
-        }
-        private double _initial;
+        public double Initial { get; set; }
 
         /// <summary>
         /// The final frequency of the sweep.
@@ -37,17 +27,7 @@ namespace SpiceSharp.Simulations
         /// The final frequency value.
         /// </value>
         [ParameterName("stop"), ParameterName("final"), ParameterInfo("The final frequency of the sweep.")]
-        public double Final
-        {
-            get => _final;
-            set
-            {
-                if (value < 0)
-                    throw new BadParameterException(nameof(Final), value, Properties.Resources.Simulations_Frequency_FinalFrequencyTooSmall2);
-                _final = value;
-            }
-        }
-        private double _final;
+        public double Final { get; set; }
 
         /// <summary>
         /// Gets or sets the number of points.
@@ -61,7 +41,7 @@ namespace SpiceSharp.Simulations
             set
             {
                 if (value < 1)
-                    throw new BadParameterException(nameof(Points), value, Properties.Resources.Simulations_Frequency_PointsTooSmall);
+                    throw new BadParameterException(nameof(Points), value, Properties.Resources.Sweeps_PointsTooSmall);
                 _points = value;
             }
         }
@@ -91,8 +71,11 @@ namespace SpiceSharp.Simulations
             Initial = initial;
 
             // Calculate the number of points to be used
-            Points = (int)(Math.Floor((final - Initial) / delta));
-            Final = Initial + Points * delta;
+            var pts = (int)Math.Floor((final - Initial) / delta);
+            if (Points < 0)
+                throw new BadParameterException(nameof(delta), delta, Properties.Resources.Sweeps_CannotReachFinalPoint);
+            Final = Initial + pts * delta;
+            Points = pts + 1;
         }
 
         /// <summary>
@@ -103,6 +86,11 @@ namespace SpiceSharp.Simulations
         /// </returns>
         public IEnumerator<double> GetEnumerator()
         {
+            if (Points == 1)
+            {
+                yield return Initial;
+                yield break;
+            }
             for (var i = 0; i < Points; i++)
             {
                 var f = (double)i / (Points - 1);

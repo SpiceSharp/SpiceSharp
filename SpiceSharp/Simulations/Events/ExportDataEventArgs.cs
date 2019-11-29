@@ -60,19 +60,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the current sweep value if the simulation is a <see cref="DC" /> analysis.
-        /// </summary>
-        public double SweepValue
-        {
-            get
-            {
-                if (_simulation is DC dc && dc.Sweeps.Count > 0)
-                    return dc.Sweeps.Top.CurrentValue;
-                return double.NaN;
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ExportDataEventArgs"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
@@ -165,6 +152,16 @@ namespace SpiceSharp.Simulations
                 return voltage;
             }
             return double.NaN;
+        }
+
+        /// <summary>
+        /// Gets the current sweep value if the simulation is a <see cref="DC" /> analysis.
+        /// </summary>
+        public double[] GetSweepValues()
+        {
+            if (_simulation is DC dc)
+                return dc.GetSweepValues();
+            return null;
         }
     }
 }

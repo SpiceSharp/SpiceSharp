@@ -18,17 +18,7 @@ namespace SpiceSharp.Simulations
         /// The initial frequency value.
         /// </value>
         [ParameterName("start"), ParameterName("initial"), ParameterInfo("The initial frequency of the sweep.")]
-        public double Initial
-        {
-            get => _initial;
-            set
-            {
-                if (value <= 0)
-                    throw new BadParameterException(nameof(Initial), value, Properties.Resources.Simulations_Frequency_InitialFrequencyTooSmall);
-                _initial = value;
-            }
-        }
-        private double _initial;
+        public double Initial { get; set; }
 
         /// <summary>
         /// The final frequency of the sweep.
@@ -37,17 +27,7 @@ namespace SpiceSharp.Simulations
         /// The final frequency value.
         /// </value>
         [ParameterName("stop"), ParameterName("final"), ParameterInfo("The final frequency of the sweep.")]
-        public double Final
-        {
-            get => _final;
-            set
-            {
-                if (value <= 0)
-                    throw new BadParameterException(nameof(Final), value, Properties.Resources.Simulations_Frequency_FinalFrequencyTooSmall);
-                _final = value;
-            }
-        }
-        private double _final;
+        public double Final { get; set; }
 
         /// <summary>
         /// Gets or sets the points per decade.
@@ -61,7 +41,7 @@ namespace SpiceSharp.Simulations
             set
             {
                 if (value <= 0)
-                    throw new BadParameterException(nameof(PointsPerDecade), value, Properties.Resources.Simulations_Frequency_PointsPerDecadeTooSmall);
+                    throw new BadParameterException(nameof(PointsPerDecade), value, Properties.Resources.Sweeps_PointsTooSmall);
                 _ppd = value;
             }
         }
@@ -88,15 +68,34 @@ namespace SpiceSharp.Simulations
         /// </returns>
         public IEnumerator<double> GetEnumerator()
         {
-            if (Final < Initial)
-                throw new BadParameterException(nameof(Final), Final, Properties.Resources.Simulations_Frequency_FinalFrequencySmallerThanInitial);
+            if (Final.Equals(Initial))
+            {
+                yield return Initial;
+                yield break;
+            }
+
             var delta = Math.Exp(Math.Log(10.0) / _ppd);
             double current = Initial;
             double stop = Final * Math.Sqrt(delta);
-            while (current <= stop)
+            if (Final < Initial)
             {
-                yield return current;
-                current *= delta;
+                if (Initial > 0)
+                    throw new BadParameterException(nameof(Final), Final, Properties.Resources.Sweeps_CannotReachFinalPoint);
+                while (current <= stop)
+                {
+                    yield return current;
+                    current *= delta;
+                }
+            }
+            else
+            {
+                if (Initial < 0)
+                    throw new BadParameterException(nameof(Final), Final, Properties.Resources.Sweeps_CannotReachFinalPoint);
+                while (current >= stop)
+                {
+                    yield return current;
+                    current *= delta;
+                }
             }
         }
 

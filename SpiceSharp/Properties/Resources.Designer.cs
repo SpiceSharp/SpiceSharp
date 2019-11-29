@@ -449,6 +449,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find the source &apos;{0}&apos;..
+        /// </summary>
+        internal static string Simulations_DC_CannotFindSource {
+            get {
+                return ResourceManager.GetString("Simulations.DC.CannotFindSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find DC parameter entity &apos;{0}&apos;..
         /// </summary>
         internal static string Simulations_DC_InvalidEntity {
@@ -476,65 +485,11 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The final frequency is at a lower frequency than the initial frequency..
+        ///   Looks up a localized string similar to The sweep &apos;{0}&apos; does not contain any points to simulate..
         /// </summary>
-        internal static string Simulations_Frequency_FinalFrequencySmallerThanInitial {
+        internal static string Simulations_DC_NoSweepPoints {
             get {
-                return ResourceManager.GetString("Simulations.Frequency.FinalFrequencySmallerThanInitial", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The final frequency needs to be greater than 0..
-        /// </summary>
-        internal static string Simulations_Frequency_FinalFrequencyTooSmall {
-            get {
-                return ResourceManager.GetString("Simulations.Frequency.FinalFrequencyTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The final frequency should be greater than or equal to 0..
-        /// </summary>
-        internal static string Simulations_Frequency_FinalFrequencyTooSmall2 {
-            get {
-                return ResourceManager.GetString("Simulations.Frequency.FinalFrequencyTooSmall2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The initial frequency needs to be greater than 0..
-        /// </summary>
-        internal static string Simulations_Frequency_InitialFrequencyTooSmall {
-            get {
-                return ResourceManager.GetString("Simulations.Frequency.InitialFrequencyTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The initial frequency should be greater than or equal to 0..
-        /// </summary>
-        internal static string Simulations_Frequency_InitialFrequencyTooSmall2 {
-            get {
-                return ResourceManager.GetString("Simulations.Frequency.InitialFrequencyTooSmall2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The number of points per decade should be greater than 0..
-        /// </summary>
-        internal static string Simulations_Frequency_PointsPerDecadeTooSmall {
-            get {
-                return ResourceManager.GetString("Simulations.Frequency.PointsPerDecadeTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The number of points should be greater than 1..
-        /// </summary>
-        internal static string Simulations_Frequency_PointsTooSmall {
-            get {
-                return ResourceManager.GetString("Simulations.Frequency.PointsTooSmall", resourceCulture);
+                return ResourceManager.GetString("Simulations.DC.NoSweepPoints", resourceCulture);
             }
         }
         
@@ -625,6 +580,24 @@ namespace SpiceSharp.Properties {
         internal static string SizeMismatch2 {
             get {
                 return ResourceManager.GetString("SizeMismatch2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot reach the final sweep point..
+        /// </summary>
+        internal static string Sweeps_CannotReachFinalPoint {
+            get {
+                return ResourceManager.GetString("Sweeps.CannotReachFinalPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of points should be greater than 0..
+        /// </summary>
+        internal static string Sweeps_PointsTooSmall {
+            get {
+                return ResourceManager.GetString("Sweeps.PointsTooSmall", resourceCulture);
             }
         }
         

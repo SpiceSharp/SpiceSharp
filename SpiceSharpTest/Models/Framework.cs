@@ -150,10 +150,12 @@ namespace SpiceSharpTest.Models
                         }
                         catch (Exception ex)
                         {
-                            var sweeps = new string[sim.Sweeps.Count];
-                            for (var k = 0; k < sim.Sweeps.Count; k++)
-                                sweeps[k] += $"{sim.Sweeps[k].Parameter}={sim.Sweeps[k].CurrentValue}";
-                            var msg = ex.Message + " at " + string.Join(" ", sweeps);
+                            var sweeps = sim.Configurations.GetValue<DCConfiguration>().Sweeps;
+                            var values = sim.GetSweepValues();
+                            string msg = ex.Message + " at ";
+                            var index = 0;
+                            foreach (var sweep in sweeps)
+                                msg += "{0}={1}".FormatString(sweep.Name, values[index++]) + ", ";
                             throw new Exception(msg, ex);
                         }
                     }
@@ -181,7 +183,7 @@ namespace SpiceSharpTest.Models
                     while (exportIt.MoveNext() && referencesIt.MoveNext())
                     {
                         var actual = exportIt.Current?.Value ?? throw new ArgumentNullException();
-                        var expected = referencesIt.Current?.Invoke(sim.Sweeps[0].CurrentValue) ?? throw new ArgumentNullException();
+                        var expected = referencesIt.Current?.Invoke(sim.GetSweepValues()[0]) ?? throw new ArgumentNullException();
                         var tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
                         try
@@ -190,10 +192,12 @@ namespace SpiceSharpTest.Models
                         }
                         catch (Exception ex)
                         {
-                            var sweeps = new string[sim.Sweeps.Count];
-                            for (var k = 0; k < sim.Sweeps.Count; k++)
-                                sweeps[k] += $"{sim.Sweeps[k].Parameter}={sim.Sweeps[k].CurrentValue}";
-                            var msg = ex.Message + " at " + string.Join(" ", sweeps);
+                            var sweeps = sim.Configurations.GetValue<DCConfiguration>().Sweeps;
+                            var values = sim.GetSweepValues();
+                            string msg = ex.Message + " at ";
+                            var index = 0;
+                            foreach (var sweep in sweeps)
+                                msg += "{0}={1}".FormatString(sweep.Name, values[index++]) + ", ";
                             throw new Exception(msg, ex);
                         }
                     }

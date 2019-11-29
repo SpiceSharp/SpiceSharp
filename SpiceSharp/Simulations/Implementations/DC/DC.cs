@@ -1,29 +1,25 @@
 ﻿using SpiceSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class that implements a DC sweep analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BiasingSimulation" />
+    /// <seealso cref="BiasingSimulation" />
     public class DC : BiasingSimulation
     {
-        /// <summary>
-        /// Gets the currently active sweeps.
-        /// </summary>
-        public NestedSweeps Sweeps { get; protected set; }
-
         /// <summary>
         /// Occurs when iterating to a solution has failed.
         /// </summary>
         public event EventHandler<EventArgs> IterationFailed;
 
         /// <summary>
-        /// Occurs when a parameter for sweeping is searched.
+        /// The enumerators
         /// </summary>
-        public event EventHandler<DCParameterSearchEventArgs> OnParameterSearch;
+        private IEnumerator<double>[] _enumerators;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
@@ -45,8 +41,7 @@ namespace SpiceSharp.Simulations
         public DC(string name, string source, double start, double stop, double step) : base(name)
         {
             var config = new DCConfiguration();
-            var s = new SweepConfiguration(source, start, stop, step);
-            config.Sweeps.Add(s);
+            config.Sweeps.Add(new SourceSweep(source, new LinearSweep(start, stop, step)));
             Configurations.Add(config);
         }
 
@@ -55,7 +50,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
-        public DC(string name, IEnumerable<SweepConfiguration> sweeps) : base(name)
+        public DC(string name, IEnumerable<ISweep> sweeps) : base(name)
         {
             sweeps.ThrowIfNull(nameof(sweeps));
 
@@ -63,19 +58,6 @@ namespace SpiceSharp.Simulations
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);
             Configurations.Add(dcconfig);
-        }
-
-        /// <summary>
-        /// Set up the simulation.
-        /// </summary>
-        /// <param name="entities">The circuit that will be used.</param>
-        protected override void Setup(IEntityCollection entities)
-        {
-            // Get sweeps
-            var config = Configurations.GetValue<DCConfiguration>();
-            Sweeps = new NestedSweeps(config.Sweeps);
-
-            base.Setup(entities);
         }
 
         /// <summary>
@@ -95,61 +77,27 @@ namespace SpiceSharp.Simulations
             BiasingState.UseDc = true;
 
             // Initialize
-            Sweeps = new NestedSweeps(dcconfig.Sweeps);
-            var swept = new Parameter<double>[Sweeps.Count];
-            var original = new Parameter<double>[Sweeps.Count];
-            var levelNeedsTemperature = -1;
-
-            // Initialize first time
-            for (var i = 0; i < dcconfig.Sweeps.Count; i++)
+            var sweeps = dcconfig.Sweeps.ToArray();
+            _enumerators = new IEnumerator<double>[dcconfig.Sweeps.Count];
+            for (var i = 0; i < sweeps.Length; i++)
             {
-                // Get the component to be swept
-                var sweep = Sweeps[i];
-
-                // Try finding the parameter to sweep
-                var args = new DCParameterSearchEventArgs(sweep.Parameter, i);
-                OnParameterSearch?.Invoke(this, args);
-
-                if (args.Result != null)
-                {
-                    swept[i] = args.Result;
-
-                    // Keep track of the highest level that needs to recalculate temperature
-                    if (args.TemperatureNeeded)
-                        levelNeedsTemperature = Math.Max(levelNeedsTemperature, i);
-                }
-                else
-                {
-                    // Get entity parameters
-                    if (!EntityBehaviors.Contains(sweep.Parameter))
-                        throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSource.FormatString(sweep.Parameter));
-                    var eb = EntityBehaviors[sweep.Parameter];
-
-                    // Check for a parameter called "dc" that we will sweep
-                    if (eb.TryGetProperty("dc", out Parameter<double> dc))
-                        swept[i] = dc;
-                    else
-                        throw new SpiceSharpException(Properties.Resources.Simulations_DC_InvalidEntity.FormatString(eb.Name));
-                }
-
-                original[i] = (Parameter<double>) swept[i].Clone();
-                swept[i].Value = sweep.Initial;
+                sweeps[i].CalculateDefaults();
+                _enumerators[i] = sweeps[i].CreatePoints(this);
+                if (!_enumerators[i].MoveNext())
+                    throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[i].Name));
             }
 
-            // Execute temperature behaviors if necessary the first time
-            if (levelNeedsTemperature >= 0)
-                Temperature();
-
             // Execute the sweeps
-            var level = Sweeps.Count - 1;
+            var level = sweeps.Length - 1;
             while (level >= 0)
             {
-                // Fill the values with start values
-                while (level < Sweeps.Count - 1)
+                // Fill the values up again by resetting
+                while (level < sweeps.Length - 1)
                 {
                     level++;
-                    Sweeps[level].Reset();
-                    swept[level].Value = Sweeps[level].CurrentValue;
+                    _enumerators[level] = sweeps[level].CreatePoints(this);
+                    if (!_enumerators[level].MoveNext())
+                        throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[level].Name));
                     BiasingState.Init = InitializationModes.Junction;
                 }
 
@@ -164,24 +112,11 @@ namespace SpiceSharp.Simulations
                 OnExport(exportargs);
 
                 // Remove all values that are greater or equal to the maximum value
-                while (level >= 0 && Sweeps[level].CurrentStep >= Sweeps[level].Limit)
+                while (level >= 0 && !_enumerators[level].MoveNext())
                     level--;
-
-                // Go to the next step for the top level
-                if (level >= 0)
-                {
-                    Sweeps[level].Increment();
-                    swept[level].Value = Sweeps[level].CurrentValue;
-
-                    // If temperature behavior is needed for this level or higher, run behaviors
-                    if (levelNeedsTemperature >= level)
-                        Temperature();
-                }
+                if (level == 0)
+                    break;
             }
-
-            // Restore all the parameters of the swept components
-            for (var i = 0; i < Sweeps.Count; i++)
-                swept[i].CopyFrom(original[i]);
         }
 
         /// <summary>
@@ -189,12 +124,22 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Unsetup()
         {
-            // Clear sweeps
-            Sweeps?.Clear();
-            Sweeps = null;
-
             // Clear configuration
             base.Unsetup();
+        }
+
+        /// <summary>
+        /// Gets the sweep values.
+        /// </summary>
+        /// <returns>The sweep values.</returns>
+        public double[] GetSweepValues()
+        {
+            if (_enumerators == null)
+                return null;
+            var result = new double[_enumerators.Length];
+            for (var i = 0; i < _enumerators.Length; i++)
+                result[i] = _enumerators[i].Current;
+            return result;
         }
     }
 }

@@ -48,8 +48,8 @@ namespace SpiceSharpTest.Models
 
             // Create simulation
             var dc = new DC("dc", new[] {
-                new SweepConfiguration("V2", 0, 1.8, 0.3),
-                new SweepConfiguration("V1", 0, 1.8, 0.3)
+                new SourceSweep("V2", new LinearSweep(0, 1.8, 0.3)),
+                new SourceSweep("V1", new LinearSweep(0, 1.8, 0.3))
             });
 
             // Create exports

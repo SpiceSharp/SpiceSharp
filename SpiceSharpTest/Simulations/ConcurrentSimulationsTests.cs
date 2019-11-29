@@ -5,6 +5,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -31,21 +32,15 @@ namespace SpiceSharpTest.Simulations
                 var dc = new DC("DC " + i);
                 dc.Configurations.Add(cconfig);
                 var config = dc.Configurations.GetValue<DCConfiguration>();
-                config.Sweeps.Add(new SweepConfiguration("R2", 0.0, 1e4, 1e3)); // Sweep R2 from 0 to 10k per 1k
-                config.Sweeps.Add(new SweepConfiguration("V1", 1, 5, 0.1)); // Sweep V1 from 1V to 5V per 100mV
-                dc.OnParameterSearch += (sender, args) =>
+                config.Sweeps.Add(new ParameterSweep("R2", "resistance", new LinearSweep(0.0, 1e4, 1e3), container =>
                 {
-                    if (args.Name.Equals("R2"))
-                    {
-                        args.Result = dc.EntityBehaviors["R2"]
-                            .GetProperty<Parameter<double>>("resistance");
-                        args.TemperatureNeeded = true;
-                    }
-                };
+                    container.GetValue<ITemperatureBehavior>().Temperature();
+                })); // Sweep R2 from 0 to 10k per 1k
+                config.Sweeps.Add(new SourceSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
                 dc.ExportSimulationData += (sender, args) =>
                 {
-                    var resistance = dc.Sweeps[0].CurrentValue;
-                    var voltage = dc.Sweeps[1].CurrentValue;
+                    var resistance = dc.GetSweepValues()[0];
+                    var voltage = dc.GetSweepValues()[1];
                     var expected = voltage * resistance / (resistance + 1.0e4);
                     Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
                 };
