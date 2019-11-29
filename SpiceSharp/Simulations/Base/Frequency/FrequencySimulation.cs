@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
@@ -56,9 +57,19 @@ namespace SpiceSharp.Simulations
         protected ComplexSimulationState ComplexState { get; private set; }
 
         /// <summary>
-        /// Gets the frequency sweep.
+        /// Gets the frequency points.
         /// </summary>
-        protected Sweep<double> FrequencySweep { get; private set; }
+        /// <value>
+        /// The frequency points.
+        /// </value>
+        protected IEnumerable<double> Frequencies
+        {
+            get
+            {
+                var config = Configurations.GetValue<FrequencyConfiguration>();
+                return config.Frequencies;
+            }
+        }
 
         /// <summary>
         /// Gets the state.
@@ -84,7 +95,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        protected FrequencySimulation(string name, Sweep<double> frequencySweep) 
+        protected FrequencySimulation(string name, IEnumerable<double> frequencySweep) 
             : base(name)
         {
             Configurations.Add(new FrequencyConfiguration(frequencySweep));
@@ -99,10 +110,6 @@ namespace SpiceSharp.Simulations
         {
             entities.ThrowIfNull(nameof(entities));
 
-            // Get behaviors, configurations and states
-            var config = Configurations.GetValue<FrequencyConfiguration>();
-            FrequencySweep = config.FrequencySweep.ThrowIfNull("frequency sweep");
-            
             // Setup the rest of the behaviors
             base.Setup(entities);
 
@@ -160,9 +167,6 @@ namespace SpiceSharp.Simulations
             // Remove references
             _frequencyBehaviors = null;
             _frequencyUpdateBehaviors = null;
-
-            // Configuration
-            FrequencySweep = null;
 
             base.Unsetup();
         }

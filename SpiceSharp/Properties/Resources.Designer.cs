@@ -476,11 +476,29 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The final frequency is at a lower frequency than the initial frequency..
+        /// </summary>
+        internal static string Simulations_Frequency_FinalFrequencySmallerThanInitial {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.FinalFrequencySmallerThanInitial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The final frequency needs to be greater than 0..
         /// </summary>
         internal static string Simulations_Frequency_FinalFrequencyTooSmall {
             get {
                 return ResourceManager.GetString("Simulations.Frequency.FinalFrequencyTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The final frequency should be greater than or equal to 0..
+        /// </summary>
+        internal static string Simulations_Frequency_FinalFrequencyTooSmall2 {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.FinalFrequencyTooSmall2", resourceCulture);
             }
         }
         
@@ -494,11 +512,29 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid number of points..
+        ///   Looks up a localized string similar to The initial frequency should be greater than or equal to 0..
         /// </summary>
-        internal static string Simulations_Frequency_InvalidCount {
+        internal static string Simulations_Frequency_InitialFrequencyTooSmall2 {
             get {
-                return ResourceManager.GetString("Simulations.Frequency.InvalidCount", resourceCulture);
+                return ResourceManager.GetString("Simulations.Frequency.InitialFrequencyTooSmall2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of points per decade should be greater than 0..
+        /// </summary>
+        internal static string Simulations_Frequency_PointsPerDecadeTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.PointsPerDecadeTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of points should be greater than 1..
+        /// </summary>
+        internal static string Simulations_Frequency_PointsTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Frequency.PointsTooSmall", resourceCulture);
             }
         }
         
@@ -737,7 +773,7 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The frequency should be greater or equal than 0..
+        ///   Looks up a localized string similar to The frequency should be greater than or equal to 0..
         /// </summary>
         internal static string Waveforms_Sine_FrequencyTooSmall {
             get {

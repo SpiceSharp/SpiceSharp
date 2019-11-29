@@ -255,14 +255,26 @@
   <data name="Simulations.DC.NoSource" xml:space="preserve">
     <value>Could not find a sweeping parameter '{0}'.</value>
   </data>
+  <data name="Simulations.Frequency.FinalFrequencySmallerThanInitial" xml:space="preserve">
+    <value>The final frequency is at a lower frequency than the initial frequency.</value>
+  </data>
   <data name="Simulations.Frequency.FinalFrequencyTooSmall" xml:space="preserve">
     <value>The final frequency needs to be greater than 0.</value>
+  </data>
+  <data name="Simulations.Frequency.FinalFrequencyTooSmall2" xml:space="preserve">
+    <value>The final frequency should be greater than or equal to 0.</value>
   </data>
   <data name="Simulations.Frequency.InitialFrequencyTooSmall" xml:space="preserve">
     <value>The initial frequency needs to be greater than 0.</value>
   </data>
-  <data name="Simulations.Frequency.InvalidCount" xml:space="preserve">
-    <value>Invalid number of points.</value>
+  <data name="Simulations.Frequency.InitialFrequencyTooSmall2" xml:space="preserve">
+    <value>The initial frequency should be greater than or equal to 0.</value>
+  </data>
+  <data name="Simulations.Frequency.PointsPerDecadeTooSmall" xml:space="preserve">
+    <value>The number of points per decade should be greater than 0.</value>
+  </data>
+  <data name="Simulations.Frequency.PointsTooSmall" xml:space="preserve">
+    <value>The number of points should be greater than 1.</value>
   </data>
   <data name="Simulations.InvalidInitializationMode" xml:space="preserve">
     <value>Invalid initialization mode.</value>
@@ -343,6 +355,6 @@
     <value>The time values are not monotonically increasing.</value>
   </data>
   <data name="Waveforms.Sine.FrequencyTooSmall" xml:space="preserve">
-    <value>The frequency should be greater or equal than 0.</value>
+    <value>The frequency should be greater than or equal to 0.</value>
   </data>
 </root>

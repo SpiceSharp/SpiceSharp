@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Entities;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -7,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Class that implements a frequency-domain analysis (AC analysis).
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.FrequencySimulation" />
+    /// <seealso cref="FrequencySimulation" />
     public class AC : FrequencySimulation
     {
         private bool _keepOpInfo;
@@ -25,7 +26,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The identifier of the simulation.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public AC(string name, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public AC(string name, IEnumerable<double> frequencySweep) : base(name, frequencySweep)
         {
         }
 
@@ -69,7 +70,7 @@ namespace SpiceSharp.Simulations
                     OnExport(exportargs);
 
                 // Sweep the frequency
-                foreach (var freq in FrequencySweep.Points)
+                foreach (var freq in Frequencies)
                 {
                     // Calculate the current frequency
                     cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -7,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A configuration for a <see cref="FrequencySimulation" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public class FrequencyConfiguration : ParameterSet
     {
         /// <summary>
@@ -28,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the frequency sweep.
         /// </summary>
-        public Sweep<double> FrequencySweep { get; set; }
+        public IEnumerable<double> Frequencies { get; set; }
 
         /// <summary>
         /// Gets or sets the solver used to solve equations. If <c>null</c>, a default solver will be used.
@@ -55,16 +56,16 @@ namespace SpiceSharp.Simulations
         public FrequencyConfiguration()
         {
             // Default frequency-sweep
-            FrequencySweep = new DecadeSweep(1, 100, 10);
+            Frequencies = new DecadeSweep(1, 100, 10);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.
         /// </summary>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public FrequencyConfiguration(Sweep<double> frequencySweep)
+        public FrequencyConfiguration(IEnumerable<double> frequencySweep)
         {
-            FrequencySweep = frequencySweep;
+            Frequencies = frequencySweep;
         }
     }
 }

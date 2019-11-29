@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
@@ -52,7 +53,7 @@ namespace SpiceSharp.Simulations
         /// <param name="output">The output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(string name, string output, string input, Sweep<double> frequencySweep) 
+        public Noise(string name, string output, string input, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, null, input));
@@ -67,7 +68,7 @@ namespace SpiceSharp.Simulations
         /// <param name="reference">The reference output node identifier.</param>
         /// <param name="input">The input source identifier.</param>
         /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(string name, string output, string reference, string input, Sweep<double> frequencySweep) 
+        public Noise(string name, string output, string reference, string input, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
             Configurations.Add(new NoiseConfiguration(output, reference, input));
@@ -123,7 +124,10 @@ namespace SpiceSharp.Simulations
             var negOutNode = noiseconfig.OutputRef != null ? state.Map[Variables[noiseconfig.OutputRef]] : 0;
 
             // Initialize
-            nstate.Reset(FrequencySweep.Initial);
+            var freq = Frequencies.GetEnumerator();
+            if (!freq.MoveNext())
+                return;
+            nstate.Reset(freq.Current);
             cstate.Laplace = 0;
             state.UseIc = false;
             state.UseDc = true;
@@ -133,10 +137,10 @@ namespace SpiceSharp.Simulations
             InitializeAcParameters();
 
             // Loop through noise figures
-            foreach (var freq in FrequencySweep.Points)
+            do
             {
-                nstate.Frequency = freq;
-                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                nstate.Frequency = freq.Current;
+                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq.Current);
                 AcIterate();
 
                 var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
@@ -154,6 +158,7 @@ namespace SpiceSharp.Simulations
                 // Export the data
                 OnExport(exportargs);
             }
+            while (freq.MoveNext());
         }
 
         /// <summary>
