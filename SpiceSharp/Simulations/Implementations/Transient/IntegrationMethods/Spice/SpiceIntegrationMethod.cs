@@ -266,7 +266,10 @@ namespace SpiceSharp.IntegrationMethods
                 // If we already tried
                 if (_oldDelta <= MinStep)
                     throw new TimestepTooSmallException(newDelta, BaseTime);
+
+                // Try once more, but with the minimum timestep and a cut order
                 newDelta = MinStep;
+                Order = 1;
             }
 
             return result;
