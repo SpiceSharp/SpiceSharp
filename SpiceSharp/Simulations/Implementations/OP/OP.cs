@@ -9,7 +9,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OP"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         public OP(string name) : base(name)
         {
         }

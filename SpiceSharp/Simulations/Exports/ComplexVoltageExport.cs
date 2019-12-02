@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
     public class ComplexVoltageExport : Export<IFrequencySimulation, Complex>
     {
         /// <summary>
-        /// Gets the identifier of the positive node.
+        /// Gets the name of the positive node.
         /// </summary>
         public string PosNode { get; }
 
@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         public int PosIndex { get; private set; }
 
         /// <summary>
-        /// Gets the identifier of the negative node.
+        /// Gets the name of the negative node.
         /// </summary>
         public string NegNode { get; }
 
@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="posNode">The node identifier.</param>
+        /// <param name="posNode">The node name.</param>
         public ComplexVoltageExport(IFrequencySimulation simulation, string posNode)
             : base(simulation)
         {
@@ -71,8 +71,8 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="posNode">The positive node identifier.</param>
-        /// <param name="negNode">The negative node identifier.</param>
+        /// <param name="posNode">The positive node name.</param>
+        /// <param name="negNode">The negative node name.</param>
         public ComplexVoltageExport(IFrequencySimulation simulation, string posNode, string negNode)
             : base(simulation)
         {

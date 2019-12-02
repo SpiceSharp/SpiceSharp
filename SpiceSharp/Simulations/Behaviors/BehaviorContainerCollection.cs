@@ -53,8 +53,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Gets the associated <see cref="Behavior"/> of an entity.
         /// </summary>
-        /// <param name="name">The entity identifier.</param>
-        /// <returns>The behavior associated to the specified entity identifier.</returns>
+        /// <param name="name">The entity name.</param>
+        /// <returns>The behavior associated to the specified entity name.</returns>
         public virtual IBehaviorContainer this[string name]
         {
             get
@@ -78,7 +78,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets the entity identifier comparer.
+        /// Gets the entity name comparer.
         /// </summary>
         /// <value>
         /// The comparer.
@@ -160,9 +160,9 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Tries to the get the entity behaviors by a specified identifier.
+        /// Tries to the get the entity behaviors by a specified name.
         /// </summary>
-        /// <param name="name">The identifier.</param>
+        /// <param name="name">The name.</param>
         /// <param name="ebd">The dictionary of entity behaviors.</param>
         /// <returns></returns>
         public virtual bool TryGetBehaviors(string name, out IBehaviorContainer ebd)
@@ -179,9 +179,9 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Checks if behaviors exist for a specified entity identifier.
+        /// Checks if behaviors exist for a specified entity name.
         /// </summary>
-        /// <param name="name">The entity identifier.</param>
+        /// <param name="name">The entity name.</param>
         /// <returns>
         ///   <c>true</c> if behaviors exist; otherwise, <c>false</c>.
         /// </returns>

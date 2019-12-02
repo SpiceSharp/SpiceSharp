@@ -62,7 +62,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.
         /// </summary>
-        /// <param name="frequencySweep">The frequency sweep.</param>
+        /// <param name="frequencySweep">The frequency points.</param>
         public FrequencyConfiguration(IEnumerable<double> frequencySweep)
         {
             Frequencies = frequencySweep;

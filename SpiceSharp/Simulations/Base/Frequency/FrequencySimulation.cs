@@ -82,7 +82,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         protected FrequencySimulation(string name) 
             : base(name)
         {
@@ -93,8 +93,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="frequencySweep">The frequency sweep.</param>
+        /// <param name="name">The name of the simulation.</param>
+        /// <param name="frequencySweep">The frequency points.</param>
         protected FrequencySimulation(string name, IEnumerable<double> frequencySweep) 
             : base(name)
         {

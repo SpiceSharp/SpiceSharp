@@ -143,7 +143,7 @@ namespace SpiceSharpTest.Models
             );
 
             // Create the noise, exports and reference values
-            var noise = new Noise("Noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
+            var noise = new Noise("Noise", "out", new DecadeSweep(10, 10e9, 10));
             IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {
@@ -254,7 +254,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "in", "out", 10e3), model,
                 new Diode("D1", "out", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
-            var noise = new Noise("noise", "out", "V1", new DecadeSweep(0.1, 1e6, 5));
+            var noise = new Noise("noise", "out", new DecadeSweep(0.1, 1e6, 5));
             var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);

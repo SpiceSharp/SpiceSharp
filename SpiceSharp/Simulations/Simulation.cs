@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
         #endregion
 
         /// <summary>
-        /// Gets the identifier of the simulation.
+        /// Gets the name of the simulation.
         /// </summary>
         public string Name { get; }
 
@@ -133,7 +133,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         protected Simulation(string name)
         {
             Name = name;

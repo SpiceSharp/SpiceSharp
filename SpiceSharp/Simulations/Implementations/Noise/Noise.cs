@@ -39,7 +39,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         public Noise(string name) : base(name)
         {
             Configurations.Add(new NoiseConfiguration());
@@ -49,29 +49,27 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="output">The output node identifier.</param>
-        /// <param name="input">The input source identifier.</param>
-        /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(string name, string output, string input, IEnumerable<double> frequencySweep) 
+        /// <param name="name">The name of the simulation.</param>
+        /// <param name="output">The output node name.</param>
+        /// <param name="frequencySweep">The frequency points.</param>
+        public Noise(string name, string output, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
-            Configurations.Add(new NoiseConfiguration(output, null, input));
+            Configurations.Add(new NoiseConfiguration(output, null));
             NoiseState = new NoiseSimulationState();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="output">The output node identifier.</param>
-        /// <param name="reference">The reference output node identifier.</param>
-        /// <param name="input">The input source identifier.</param>
-        /// <param name="frequencySweep">The frequency sweep.</param>
-        public Noise(string name, string output, string reference, string input, IEnumerable<double> frequencySweep) 
+        /// <param name="name">The name of the simulation.</param>
+        /// <param name="output">The output node name.</param>
+        /// <param name="reference">The reference output node name.</param>
+        /// <param name="frequencySweep">The frequency points.</param>
+        public Noise(string name, string output, string reference, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
-            Configurations.Add(new NoiseConfiguration(output, reference, input));
+            Configurations.Add(new NoiseConfiguration(output, reference));
             NoiseState = new NoiseSimulationState();
         }
 

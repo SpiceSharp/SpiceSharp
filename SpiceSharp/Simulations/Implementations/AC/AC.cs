@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         public AC(string name) : base(name)
         {
         }
@@ -24,8 +24,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="frequencySweep">The frequency sweep.</param>
+        /// <param name="name">The name of the simulation.</param>
+        /// <param name="frequencySweep">The frequency points.</param>
         public AC(string name, IEnumerable<double> frequencySweep) : base(name, frequencySweep)
         {
         }

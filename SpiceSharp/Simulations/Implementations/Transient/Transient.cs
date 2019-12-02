@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         public Transient(string name) : base(name)
         {
         }
@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         public Transient(string name, double step, double final) 
@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         /// <param name="maxStep">The maximum step.</param>

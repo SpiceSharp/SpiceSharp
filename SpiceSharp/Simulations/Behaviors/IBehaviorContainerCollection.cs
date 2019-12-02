@@ -22,10 +22,10 @@ namespace SpiceSharp.Behaviors
         int Count { get; }
 
         /// <summary>
-        /// Gets the behavior container identifiers.
+        /// Gets the behavior container names.
         /// </summary>
         /// <value>
-        /// An <see cref="IEnumerable{T}"/> object that contains the identifier of each <see cref="BehaviorContainer"/>.
+        /// An <see cref="IEnumerable{T}"/> object that contains the name of each <see cref="BehaviorContainer"/>.
         /// </value>
         IEnumerable<string> Keys { get; }
 
@@ -44,11 +44,11 @@ namespace SpiceSharp.Behaviors
         /// The <see cref="IBehaviorContainer"/>.
         /// </value>
         /// <param name="name">The name.</param>
-        /// <returns>The container associated to the specified identifier.</returns>
+        /// <returns>The container associated to the specified name.</returns>
         IBehaviorContainer this[string name] { get; }
 
         /// <summary>
-        /// Adds the <see cref="IBehaviorContainer"/> with the specified identifier.
+        /// Adds the <see cref="IBehaviorContainer"/> with the specified name.
         /// </summary>
         /// <param name="container">The behavior container.</param>
         void Add(IBehaviorContainer container);

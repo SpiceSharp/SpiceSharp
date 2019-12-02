@@ -21,7 +21,7 @@ namespace SpiceSharp.Entities
         IEntity this[string name] { get; }
 
         /// <summary>
-        /// Gets the comparer used to compare <see cref="Entity"/> identifiers.
+        /// Gets the comparer used to compare <see cref="Entity"/> names.
         /// </summary>
         /// <value>
         /// The comparer.

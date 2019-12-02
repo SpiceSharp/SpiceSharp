@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior" /> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
+        /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context)
             : base(name, context)

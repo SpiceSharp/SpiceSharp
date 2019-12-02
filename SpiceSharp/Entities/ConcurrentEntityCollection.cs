@@ -51,7 +51,7 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Gets the comparer for entity identifiers.
+        /// Gets the comparer for entity names.
         /// </summary>
         public IEqualityComparer<string> Comparer => _entities.Comparer;
 

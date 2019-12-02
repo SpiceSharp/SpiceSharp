@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
 {
     /// <summary>
-    /// A variable set that will automatically make variables local by prefixing the identifiers.
+    /// A variable set that will automatically make variables local by prefixing the names.
     /// </summary>
     /// <seealso cref="IVariableSet" />
     public class SubcircuitVariableSet : IVariableSet
@@ -14,12 +14,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         private IVariableSet _parent;
 
         /// <summary>
-        /// Gets the <see cref="Variable"/> with the specified identifier.
+        /// Gets the <see cref="Variable"/> with the specified name.
         /// </summary>
         /// <value>
         /// The <see cref="Variable"/>.
         /// </value>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns></returns>
         public Variable this[string id] => _parent[_name.Combine(id)];
 
@@ -62,9 +62,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// Make an alias for a variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
-        /// <param name="alias">The alias for the identifier.</param>
+        /// <param name="alias">The alias for the name.</param>
         /// <remarks>
-        /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
+        /// This basically gives two names to the same variable. This can be used for example to make multiple names
         /// point to the ground node.
         /// </remarks>
         public void AliasNode(Variable variable, string alias)
@@ -78,16 +78,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// Determines whether this instance contains the object.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
         public bool Contains(string id) => _parent.Contains(_name.Combine(id));
 
         /// <summary>
-        /// Determines whether the set contains a mapped variable by a specified identifier.
+        /// Determines whether the set contains a mapped variable by a specified name.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
@@ -96,7 +96,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// Creates a new variable.
         /// </summary>
-        /// <param name="id">The identifier of the new variable.</param>
+        /// <param name="id">The name of the new variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>
         /// A new variable.
@@ -115,12 +115,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         public IEnumerator<Variable> GetEnumerator() => _parent.GetEnumerator();
 
         /// <summary>
-        /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
+        /// This method maps a variable in the circuit. If a variable with the same name already exists, then that variable is returned.
         /// </summary>
-        /// <param name="id">The identifier of the variable.</param>
+        /// <param name="id">The name of the variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>
-        /// A new variable with the specified identifier and type, or a previously mapped variable if it already existed.
+        /// A new variable with the specified name and type, or a previously mapped variable if it already existed.
         /// </returns>
         /// <remarks>
         /// If the variable already exists, the variable type is ignored.
@@ -135,7 +135,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// Tries to get a variable.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <param name="node">The found variable.</param>
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.

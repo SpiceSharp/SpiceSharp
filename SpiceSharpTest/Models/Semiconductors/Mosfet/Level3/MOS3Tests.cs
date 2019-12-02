@@ -249,7 +249,7 @@ namespace SpiceSharpTest.Models
                 );
 
             // Make simulation, exports and references
-            var noise = new Noise("Noise", "out", "V1", new DecadeSweep(10.0, 10.0e9, 10));
+            var noise = new Noise("Noise", "out", new DecadeSweep(10.0, 10.0e9, 10));
             IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {

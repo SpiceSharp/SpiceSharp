@@ -33,7 +33,7 @@ namespace SpiceSharp.Entities
         public IEntity this[string name] => _entities[name];
 
         /// <summary>
-        /// Gets the comparer used to compare <see cref="Entity" /> identifiers.
+        /// Gets the comparer used to compare <see cref="Entity" /> names.
         /// </summary>
         /// <value>
         /// The comparer.

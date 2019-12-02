@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     public class Variable
     {
         /// <summary>
-        /// Gets the identifier of the variable.
+        /// Gets the name of the variable.
         /// </summary>
         public string Name { get; }
 
@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Variable"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the variable.</param>
+        /// <param name="name">The name of the variable.</param>
         public Variable(string name)
         {
             Name = name;
@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Variable"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the variable.</param>
+        /// <param name="name">The name of the variable.</param>
         /// <param name="type">The type of variable.</param>
         public Variable(string name, VariableType type)
         {

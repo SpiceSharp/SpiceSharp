@@ -8,22 +8,16 @@ namespace SpiceSharp.Simulations
     public class NoiseConfiguration : ParameterSet
     {
         /// <summary>
-        /// Gets or sets the noise output node identifier.
+        /// Gets or sets the noise output node name.
         /// </summary>
         [ParameterName("output"), ParameterInfo("Noise output summation node")]
         public string Output { get; set; }
 
         /// <summary>
-        /// Gets or sets the noise output reference node identifier.
+        /// Gets or sets the noise output reference node name.
         /// </summary>
         [ParameterName("outputref"), ParameterInfo("Noise output reference node")]
         public string OutputRef { get; set; }
-
-        /// <summary>
-        /// Gets or sets the identifier of the AC source used as input reference.
-        /// </summary>
-        [ParameterName("input"), ParameterInfo("Name of the AC source used as input reference")]
-        public string Input { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseConfiguration"/> class.
@@ -35,14 +29,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseConfiguration"/> class.
         /// </summary>
-        /// <param name="output">The output node identifier.</param>
-        /// <param name="reference">The reference node identifier.</param>
-        /// <param name="input">The input source identifier.</param>
-        public NoiseConfiguration(string output, string reference, string input)
+        /// <param name="output">The output node name.</param>
+        /// <param name="reference">The reference node name.</param>
+        public NoiseConfiguration(string output, string reference)
         {
             Output = output;
             OutputRef = reference;
-            Input = input;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         public DC(string name) : base(name)
         {
             Configurations.Add(new DCConfiguration());
@@ -33,8 +33,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="source">The source identifier.</param>
+        /// <param name="name">The name of the simulation.</param>
+        /// <param name="source">The source name.</param>
         /// <param name="start">The starting value.</param>
         /// <param name="stop">The stop value.</param>
         /// <param name="step">The step value.</param>
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
         public DC(string name, IEnumerable<ISweep> sweeps) : base(name)
         {

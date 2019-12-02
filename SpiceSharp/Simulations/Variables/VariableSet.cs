@@ -51,12 +51,12 @@ namespace SpiceSharp.Simulations
         public IEnumerable<string> Keys => Map.Keys;
 
         /// <summary>
-        /// Gets the <see cref="Variable"/> with the specified identifier.
+        /// Gets the <see cref="Variable"/> with the specified name.
         /// </summary>
         /// <value>
         /// The <see cref="Variable"/>.
         /// </value>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns></returns>
         public Variable this[string id]
         {
@@ -92,14 +92,14 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// This method maps a variable in the circuit. If a variable with the same identifier already exists, then that variable is returned.
+        /// This method maps a variable in the circuit. If a variable with the same name already exists, then that variable is returned.
         /// </summary>
         /// <remarks>
         /// If the variable already exists, the variable type is ignored.
         /// </remarks>
-        /// <param name="id">The identifier of the variable.</param>
+        /// <param name="id">The name of the variable.</param>
         /// <param name="type">The type of the variable.</param>
-        /// <returns>A new variable with the specified identifier and type, or a previously mapped variable if it already existed.</returns>
+        /// <returns>A new variable with the specified name and type, or a previously mapped variable if it already existed.</returns>
         public Variable MapNode(string id, VariableType type)
         {
             id.ThrowIfNull(nameof(id));
@@ -122,9 +122,9 @@ namespace SpiceSharp.Simulations
         /// Make an alias for a variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
-        /// <param name="alias">The alias for the identifier.</param>
+        /// <param name="alias">The alias for the name.</param>
         /// <remarks>
-        /// This basically gives two names to the same variable. This can be used for example to make multiple identifiers
+        /// This basically gives two names to the same variable. This can be used for example to make multiple names
         /// point to the ground node.
         /// </remarks>
         public void AliasNode(Variable variable, string alias)
@@ -142,7 +142,7 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.
         /// </remarks>
-        /// <param name="id">The identifier of the new variable.</param>
+        /// <param name="id">The name of the new variable.</param>
         /// <param name="type">The type of the variable.</param>
         /// <returns>A new variable.</returns>
         public Variable Create(string id, VariableType type)
@@ -160,18 +160,18 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Determines whether the set contains a mapped variable by a specified identifier.
+        /// Determines whether the set contains a mapped variable by a specified name.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns>
         ///   <c>true</c> if the specified set contains the variable; otherwise, <c>false</c>.
         /// </returns>
         public bool ContainsNode(string id) => Map.ContainsKey(id);
 
         /// <summary>
-        /// Determines whether the set contains any variable by a specified identifier.
+        /// Determines whether the set contains any variable by a specified name.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
@@ -180,7 +180,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Tries to get a variable.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <param name="node">The found variable.</param>
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
@@ -190,9 +190,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets a mapped variable. If the node voltage does not exist, an exception will be thrown.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The name.</param>
         /// <returns>
-        /// The node with the specified identifier.
+        /// The node with the specified name.
         /// </returns>
         public Variable GetNode(string id)
         {

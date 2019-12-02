@@ -214,7 +214,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("Rs", "in", "out", 10e3));
             ParallelSeries(cktReference, name => new Resistor(name, "", "", 1e3), "out", "0", 3, 2);
 
-            var noise = new Noise("op", "out", "V1", new LinearSweep(0, 10, 2));
+            var noise = new Noise("op", "out", new LinearSweep(0, 10, 2));
             var exports = new IExport<double>[] { new OutputNoiseDensityExport(noise), new InputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);

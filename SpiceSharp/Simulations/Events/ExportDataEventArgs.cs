@@ -71,7 +71,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the voltage at a specified node.
         /// </summary>
-        /// <param name="node">The node identifier.</param>
+        /// <param name="node">The node name.</param>
         /// <returns>The extracted voltage.</returns>
         /// <remarks>
         /// For better performance, consider using <see cref="RealVoltageExport" />.
@@ -82,8 +82,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the differential voltage between two specified nodes.
         /// </summary>
-        /// <param name="positive">The identifier of the node at the positive probe.</param>
-        /// <param name="negative">The identifier of the node at the negative probe.</param>
+        /// <param name="positive">The name of the node at the positive probe.</param>
+        /// <param name="negative">The name of the node at the negative probe.</param>
         /// <returns>The extracted voltage.</returns>
         public double GetVoltage(string positive, string negative)
         {
@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the complex voltage at a specific node.
         /// </summary>
-        /// <param name="node">The node identifier.</param>
+        /// <param name="node">The node name.</param>
         /// <returns>The extracted voltage.</returns>
         /// <remarks>
         /// For better performance, consider using <see cref="ComplexVoltageExport"/>
@@ -124,8 +124,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the differential complex voltage between two specified nodes.
         /// </summary>
-        /// <param name="positive">The identifier of the node at the positive probe.</param>
-        /// <param name="negative">The identifier of the node at the negative probe.</param>
+        /// <param name="positive">The name of the node at the positive probe.</param>
+        /// <param name="negative">The name of the node at the negative probe.</param>
         /// <returns>
         /// The extracted voltage.
         /// </returns>

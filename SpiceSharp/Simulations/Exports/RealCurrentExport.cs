@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
     public class RealCurrentExport : Export<IBiasingSimulation, double>
     {
         /// <summary>
-        /// Gets the identifier of the voltage source.
+        /// Gets the name of the voltage source.
         /// </summary>
         public string Source { get; }
 
@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="source">The source identifier.</param>
+        /// <param name="source">The source name.</param>
         public RealCurrentExport(IBiasingSimulation simulation, string source)
             : base(simulation)
         {

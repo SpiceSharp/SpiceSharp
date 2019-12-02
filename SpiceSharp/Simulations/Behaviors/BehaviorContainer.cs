@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
     public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer
     {
         /// <summary>
-        /// Gets the source identifier.
+        /// Gets the source name.
         /// </summary>
         public string Name { get; }
 
@@ -27,7 +27,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
-        /// <param name="source">The entity identifier that will provide the behaviors.</param>
+        /// <param name="source">The entity name that will provide the behaviors.</param>
         /// <param name="parameters">The parameters.</param>
         public BehaviorContainer(string source, IParameterSetDictionary parameters)
             : base()

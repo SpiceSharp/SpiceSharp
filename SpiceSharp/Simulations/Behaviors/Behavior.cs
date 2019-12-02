@@ -8,19 +8,19 @@ namespace SpiceSharp.Behaviors
     public abstract class Behavior : IBehavior
     {
         /// <summary>
-        /// Gets the identifier of the behavior.
+        /// Gets the name of the behavior.
         /// </summary>
         /// <remarks>
-        /// This should be the same identifier as the entity that created it.
+        /// This should be the same name as the entity that created it.
         /// </remarks>
         public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Behavior"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the behavior.</param>
+        /// <param name="name">The name of the behavior.</param>
         /// <remarks>
-        /// The identifier of the behavior should be the same as that of the entity creating it.
+        /// The name of the behavior should be the same as that of the entity creating it.
         /// </remarks>
         protected Behavior(string name)
         {
