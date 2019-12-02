@@ -47,4 +47,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Diagnostics\Validation\" />
+  </ItemGroup>
+
 </Project>
