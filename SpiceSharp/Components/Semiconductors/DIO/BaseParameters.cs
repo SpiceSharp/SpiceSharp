@@ -39,5 +39,23 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the temperature parameter in degrees Kelvin.
         /// </summary>
         public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+
+        /// <summary>
+        /// Gets or sets the parallel multiplier.
+        /// </summary>
+        /// <value>
+        /// The parallel multiplier.
+        /// </value>
+        [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        public double ParallelMultiplier { get; set; } = 1.0;
+
+        /// <summary>
+        /// Gets or sets the series multiplier.
+        /// </summary>
+        /// <value>
+        /// The series multiplier.
+        /// </value>
+        [ParameterName("n"), ParameterInfo("Series multiplier")]
+        public double SeriesMultiplier { get; set; } = 1.0;
     }
 }

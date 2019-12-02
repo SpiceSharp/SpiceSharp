@@ -11,16 +11,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
     {
         /// <summary>
-        /// Gets the capacitance charge.
-        /// </summary>
-        [ParameterName("charge"), ParameterInfo("Diode capacitor charge")]
-        public sealed override double CapCharge
-        {
-            get => _capCharge.Current;
-            protected set => _capCharge.Current = value;
-        }
-
-        /// <summary>
         /// Gets the capacitor current.
         /// </summary>
         [ParameterName("capcur"), ParameterInfo("Diode capacitor current")]
@@ -51,8 +41,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            double vd = BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode];
+            double vd = (BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
             CalculateCapacitance(vd);
+            _capCharge.Current = LocalCapCharge;
         }
 
         /// <summary>
@@ -62,17 +53,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             // Calculate the capacitance
             var state = BiasingState;
-            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var n = BaseParameters.SeriesMultiplier;
+            double vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / n;
             CalculateCapacitance(vd);
 
             // Integrate
+            _capCharge.Current = LocalCapCharge;
             _capCharge.Integrate();
-            var geq = _capCharge.Jacobian(Capacitance);
+            var geq = _capCharge.Jacobian(LocalCapacitance);
             var ceq = _capCharge.RhsCurrent(geq, vd);
 
             // Store the current
-            Current += _capCharge.Derivative;
+            LocalCurrent += _capCharge.Derivative;
 
+            var m = BaseParameters.ParallelMultiplier;
+            geq *= m / n;
+            ceq *= m;
             Elements.Add(
                 // Y-matrix
                 0, geq, geq, -geq, -geq, 0, 0,

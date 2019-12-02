@@ -11,7 +11,7 @@ namespace SpiceSharpTest.Models
     public class InductorTests : Framework
     {
         [Test]
-        public void When_Inductor_LowpassRLOperatingPoint_Expect_Reference()
+        public void When_LowpassRLOperatingPoint_Expect_Reference()
         {
             /*
              * Lowpass RL circuit
@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Inductor_LowpassRLSmallSignal_Expect_Reference()
+        public void When_LowpassRLSmallSignal_Expect_Reference()
         {
             /*
              * Lowpass RL filter in the frequency domain should have a single pole at s=-2pi*R/L
@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_Inductor_LCTankTransient_Expect_Reference()
+        public void When_LCTankTransient_Expect_Reference()
         {
             /*
              * Test for LC tank circuit, an inductor parallel with a capacitor will resonate at a frequency of 1/(2*pi*sqrt(LC))
@@ -107,5 +107,32 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        /*
+         * Parallel inductors cause a singular exception, because they are short-circuited at DC. If multiple
+         * short-circuit components are in parallel, the simulator can't find the current through each of the
+         * inductors, and this shows as a singular matrix.
+        [Test]
+        public void When_InductorMultiplierSmallSignal_Expect_Reference()
+        {
+            // Create circuit
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
+                new Resistor("R1", "out", "0", 1e3));
+            ParallelSeries(cktReference, name => new Inductor(name, "", "", 1e-6), "in", "out", 2, 1);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
+                new Inductor("L1", "in", "out", 1e-6).SetParameter("m", 2.0).SetParameter("n", 1.0),
+                new Resistor("R1", "out", "0", 1e3));
+
+            // Create simulation
+            var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
+            var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "out") };
+
+            // Run test
+            Compare(ac, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+        */
     }
 }

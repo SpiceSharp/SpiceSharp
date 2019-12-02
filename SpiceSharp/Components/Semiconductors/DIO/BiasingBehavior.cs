@@ -29,25 +29,40 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
-        public double Voltage { get; private set; }
+        public double Voltage => LocalVoltage * BaseParameters.SeriesMultiplier;
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
-        public double Current { get; protected set; }
+        public double Current => LocalCurrent * BaseParameters.ParallelMultiplier;
 
         /// <summary>
         /// Gets the small-signal conductance.
         /// </summary>
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
-        public double Conductance { get; protected set; }
+        public double Conductance => LocalConductance * BaseParameters.ParallelMultiplier;
 
         /// <summary>
         /// Gets the power dissipated.
         /// </summary>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
-        public double GetPower() => Current * Voltage;
+        public double Power => Current * Voltage;
+
+        /// <summary>
+        /// The voltage across a single diode (not including parallel or series multipliers).
+        /// </summary>
+        protected double LocalVoltage;
+
+        /// <summary>
+        /// The current through a single diode (not including parallel or series multipliers).
+        /// </summary>
+        protected double LocalCurrent;
+
+        /// <summary>
+        /// The conductance through a single diode (not including paralle or series multipliers).
+        /// </summary>
+        protected double LocalConductance;
 
         private int _posNode, _negNode, _posPrimeNode;
 
@@ -88,7 +103,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = BiasingState;
             double cd, gd;
 
-            // Get the current voltages
+            // Get the current voltage across (one diode).
             Initialize(out double vd, out bool check);
 
             /* 
@@ -129,11 +144,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Store for next time
-            Voltage = vd;
-            Current = cd;
-            Conductance = gd;
+            LocalVoltage = vd;
+            LocalCurrent = cd;
+            LocalConductance = gd;
+
+            var m = BaseParameters.ParallelMultiplier;
+            var n = BaseParameters.SeriesMultiplier;
 
             var cdeq = cd - gd * vd;
+            gd *= m / n;
+            gspr *= m / n;
+            cdeq *= m;
             Elements.Add(
                 // Y-matrix
                 gspr, gd, gd + gspr, -gd, -gd, -gspr, -gspr,
@@ -158,19 +179,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
             else
             {
-                // Get voltage over the diode (without series resistance)
-                vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+                // Get voltage over the diodes (without series resistance).
+                vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
 
-                // limit new junction voltage
+                // Limit new junction voltage.
                 if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
                 {
                     var vdtemp = -(vd + TempBreakdownVoltage);
-                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(Voltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(LocalVoltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);
                     vd = -(vdtemp + TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.LimitJunction(vd, Voltage, Vte, TempVCritical, ref check);
+                    vd = Semiconductor.LimitJunction(vd, LocalVoltage, Vte, TempVCritical, ref check);
                 }
             }
         }
@@ -182,11 +203,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         bool IBiasingBehavior.IsConvergent()
         {
             var state = BiasingState;
-            var vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
+            var vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
 
-            var delvd = vd - Voltage;
-            var cdhat = Current + Conductance * delvd;
-            var cd = Current;
+            var delvd = vd - LocalVoltage;
+            var cdhat = LocalCurrent + LocalConductance * delvd;
+            var cd = LocalCurrent;
 
             // check convergence
             var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + BaseConfiguration.AbsoluteTolerance;

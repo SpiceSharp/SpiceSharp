@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            Inductance = BaseParameters.Inductance / BaseParameters.ParallelMultiplier;
+            Inductance = BaseParameters.Inductance * BaseParameters.SeriesMultiplier / BaseParameters.ParallelMultiplier;
         }
     }
 }

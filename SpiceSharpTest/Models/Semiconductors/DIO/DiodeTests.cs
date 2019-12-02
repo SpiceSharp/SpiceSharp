@@ -203,5 +203,94 @@ namespace SpiceSharpTest.Models
             AnalyzeNoise(noise, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_DiodeMultipliersDc_Expect_Reference()
+        {
+            var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0), model);
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "0", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0), model,
+                new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            var dc = new DC("dc", "V1", -1, 1, 0.1);
+            var exports = new IExport<double>[] { new RealCurrentExport(dc, "V1") };
+
+            Compare(dc, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_DiodeMultipliersSmallSignal_Expect_Reference()
+        {
+            var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0), model);
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "0", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0), model,
+                new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 5));
+            var exports = new IExport<Complex>[] { new ComplexCurrentExport(ac, "V1") };
+
+            Compare(ac, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_DiodeMultipliersNoise_Expect_Reference()
+        {
+            var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=5680 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-10 Af=0.9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 3).SetParameter("acmag", 1.0),
+                new Resistor("R1", "in", "out", 10e3),
+                model);
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "out", "0", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 3).SetParameter("acmag", 1.0),
+                new Resistor("R1", "in", "out", 10e3), model,
+                new Diode("D1", "out", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            var noise = new Noise("noise", "out", "V1", new DecadeSweep(0.1, 1e6, 5));
+            var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+
+            Compare(noise, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_DiodeMultipliersTransient_Expect_Reference()
+        {
+            /*
+             * Pulsed voltage source towards a resistive voltage divider between 0V and 5V
+             * Output voltage is expected to behavior like the reference
+             */
+            // Build circuit
+            var model = CreateDiodeModel("1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "out", "0", 10.0e3),
+                model
+            );
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "out", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "out", "0", 10.0e3),
+                model,
+                new Diode("D1", "in", "out", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            // Create simulation
+            var tran = new Transient("tran", 1e-9, 10e-6);
+            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
+            Compare(tran, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
     }
 }

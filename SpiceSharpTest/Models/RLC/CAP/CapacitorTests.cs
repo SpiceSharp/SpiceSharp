@@ -220,5 +220,54 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_MultiplierTransient_Expect_Reference()
+        {
+            // Build circuit
+            var ckt_actual = new Circuit(
+                new Capacitor("C1", "out", "0", 1e-6).SetParameter("m", 3.0),
+                new Resistor("R1", "in", "out", 1e3),
+                new VoltageSource("V1", "in", "0", 1.0)
+                );
+            var ckt_reference = new Circuit(
+                new Resistor("R1", "in", "out", 1e3),
+                new VoltageSource("V1", "in", "0", 1.0)
+                );
+            ParallelSeries(ckt_reference, name => new Capacitor(name, "", "", 1e-6), "in", "0", 3, 1);
+
+            // Create simulation, exports and references
+            var tran = new Transient("tran", 1e-8, 10e-6);
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
+            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
+
+            // Run 
+            Compare(tran, ckt_reference, ckt_actual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_MultiplierSmallSignal_Expect_Reference()
+        {
+            // Build circuit
+            var ckt_actual = new Circuit(
+                new Capacitor("C1", "out", "0", 1e-6).SetParameter("m", 3.0),
+                new Resistor("R1", "in", "out", 1e3),
+                new VoltageSource("V1", "in", "0", 1.0)
+                );
+            var ckt_reference = new Circuit(
+                new Resistor("R1", "in", "out", 1e3),
+                new VoltageSource("V1", "in", "0", 1.0)
+                );
+            ParallelSeries(ckt_reference, name => new Capacitor(name, "", "", 1e-6), "in", "0", 3, 1);
+
+            // Create simulation, exports and references
+            var ac = new AC("ac", new DecadeSweep(1, 1e6, 3));
+            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+
+            // Run 
+            Compare(ac, ckt_reference, ckt_actual, exports);
+            DestroyExports(exports);
+        }
     }
 }

@@ -164,5 +164,61 @@ namespace SpiceSharpTest.Models
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_ResistorMultiplierOp_Expect_Reference()
+        {
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 4.0),
+                new Resistor("R1", "in", "0", 1e3).SetParameter("m", 3.0).SetParameter("n", 2.0)
+                );
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 4.0));
+            ParallelSeries(cktReference, name => new Resistor(name, "", "", 1e3), "in", "0", 3, 2);
+
+            var op = new OP("op");
+            var exports = new IExport<double>[] { new RealCurrentExport(op, "V1") };
+
+            Compare(op, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ResistorMultiplierSmallSignal_Expect_Reference()
+        {
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 4.0),
+                new Resistor("R1", "in", "0", 1e3).SetParameter("m", 3.0).SetParameter("n", 2.0)
+                );
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 4.0));
+            ParallelSeries(cktReference, name => new Resistor(name, "", "", 1e3), "in", "0", 3, 2);
+
+            var ac = new AC("op", new LinearSweep(0, 10, 2));
+            var exports = new IExport<Complex>[] { new ComplexCurrentExport(ac, "V1") };
+
+            Compare(ac, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ResistorMultiplierNoise_Expect_Reference()
+        {
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 4.0),
+                new Resistor("Rs", "in", "out", 10e3),
+                new Resistor("R1", "out", "0", 1e3).SetParameter("m", 3.0).SetParameter("n", 2.0)
+                );
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 4.0),
+                new Resistor("Rs", "in", "out", 10e3));
+            ParallelSeries(cktReference, name => new Resistor(name, "", "", 1e3), "out", "0", 3, 2);
+
+            var noise = new Noise("op", "out", "V1", new LinearSweep(0, 10, 2));
+            var exports = new IExport<double>[] { new OutputNoiseDensityExport(noise), new InputNoiseDensityExport(noise) };
+
+            Compare(noise, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
     }
 }

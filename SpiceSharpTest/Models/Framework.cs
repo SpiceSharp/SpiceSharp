@@ -63,6 +63,16 @@ namespace SpiceSharpTest.Models
         public double RelTol = 1e-3;
 
         /// <summary>
+        /// Absolute tolerance used for comparing circuits
+        /// </summary>
+        public double CompareAbsTol = 1e-12;
+
+        /// <summary>
+        /// Relative tolerance used for comparing circuits
+        /// </summary>
+        public double CompareRelTol = 1e-6;
+
+        /// <summary>
         /// Apply a parameter definition to an entity
         /// Parameters are a series of assignments [name]=[value] delimited by spaces.
         /// </summary>
@@ -85,6 +95,109 @@ namespace SpiceSharpTest.Models
                 // Set the entity parameter
                 entity.SetParameter(name, value);
             }
+        }
+
+        /// <summary>
+        /// Creates a subcircuit definition with a component in parallel and series.
+        /// </summary>
+        public static void ParallelSeries(IEntityCollection ckt, Func<string, IComponent> factory, string ca, string cb, int m, int n)
+        {
+            for (var j = 0; j < m; j++)
+            {
+                for (var i = 0; i < n; i++)
+                {
+                    var clone = factory("entity" + j.ToString() + "_" + i.ToString());
+                    string a, b;
+                    if (i == 0)
+                        a = ca;
+                    else
+                        a = "n" + j.ToString() + "_" + (i - 1).ToString();
+                    if (i == n - 1)
+                        b = cb;
+                    else
+                        b = "n" + j.ToString() + "_" + i.ToString();
+                    clone.Connect(a, b);
+                    ckt.Add(clone);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compares the two circuits for the specified simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="cktReference">The reference circuit.</param>
+        /// <param name="cktActual">The actual circuit.</param>
+        /// <param name="exports">The exports to be compared.</param>
+        public void Compare(IEventfulSimulation simulation, IEntityCollection cktReference, IEntityCollection cktActual, IExport<double>[] exports)
+        {
+            var results = new List<double>();
+            void StoreResults(object sender, ExportDataEventArgs args)
+            {
+                foreach (var export in exports)
+                    results.Add(export.Value);
+            }
+            var index = 0;
+            void CompareResults(object sender, ExportDataEventArgs args)
+            {
+                foreach (var export in exports)
+                {
+                    var expected = results[index++];
+                    var actual = export.Value;
+                    var tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * CompareRelTol + CompareAbsTol;
+                    Assert.AreEqual(expected, actual, tol);
+                }
+            }
+
+            // Store results
+            simulation.ExportSimulationData += StoreResults;
+            simulation.Run(cktReference);
+            simulation.ExportSimulationData -= StoreResults;
+
+            // Compare to second circuit
+            simulation.ExportSimulationData += CompareResults;
+            simulation.Run(cktActual);
+            simulation.ExportSimulationData -= CompareResults;
+        }
+
+        /// <summary>
+        /// Compares the two circuits for the specified simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="cktReference">The reference circuit.</param>
+        /// <param name="cktActual">The actual circuit.</param>
+        /// <param name="exports">The exports to be compared.</param>
+        public void Compare(IEventfulSimulation simulation, IEntityCollection cktReference, IEntityCollection cktActual, IExport<Complex>[] exports)
+        {
+            var results = new List<Complex>();
+            void StoreResults(object sender, ExportDataEventArgs args)
+            {
+                foreach (var export in exports)
+                    results.Add(export.Value);
+            }
+            var index = 0;
+            void CompareResults(object sender, ExportDataEventArgs args)
+            {
+                foreach (var export in exports)
+                {
+                    var expected = results[index++];
+                    var actual = export.Value;
+                    var tol = Math.Max(Math.Abs(expected.Real), Math.Abs(actual.Real)) * CompareRelTol + CompareAbsTol;
+                    Assert.AreEqual(expected.Real, actual.Real, tol);
+                    tol = Math.Max(Math.Abs(expected.Imaginary), Math.Abs(actual.Imaginary)) * CompareRelTol + CompareAbsTol;
+                    Assert.AreEqual(expected.Imaginary, actual.Imaginary, tol);
+                }
+            }
+
+            // Store results
+            simulation.ExportSimulationData += StoreResults;
+            simulation.Run(cktReference);
+            simulation.ExportSimulationData -= StoreResults;
+
+            // Compare to second circuit
+            simulation.ExportSimulationData += CompareResults;
+            simulation.Run(cktActual);
+            simulation.ExportSimulationData -= CompareResults;
         }
 
         /// <summary>

@@ -81,7 +81,7 @@ namespace SpiceSharp.Simulations
             {
                 if (Initial > 0)
                     throw new BadParameterException(nameof(Final), Final, Properties.Resources.Sweeps_CannotReachFinalPoint);
-                while (current <= stop)
+                while (current >= stop)
                 {
                     yield return current;
                     current *= delta;
@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
             {
                 if (Initial < 0)
                     throw new BadParameterException(nameof(Final), Final, Properties.Resources.Sweeps_CannotReachFinalPoint);
-                while (current >= stop)
+                while (current <= stop)
                 {
                     yield return current;
                     current *= delta;

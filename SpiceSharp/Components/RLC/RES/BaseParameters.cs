@@ -47,6 +47,15 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double ParallelMultiplier { get; set; } = 1.0;
 
         /// <summary>
+        /// Gets or sets the series multiplier.
+        /// </summary>
+        /// <value>
+        /// The series multiplier.
+        /// </value>
+        [ParameterName("n"), ParameterInfo("Series multiplier")]
+        public double SeriesMultiplier { get; set; } = 1.0;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
         public BaseParameters()

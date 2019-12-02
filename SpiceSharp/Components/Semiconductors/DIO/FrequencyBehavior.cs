@@ -18,12 +18,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// The complex matrix elements.
         /// </value>
         protected ElementSet<Complex> ComplexElements { get; private set; }
-        
+
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posPrimeNode] - ComplexState.Solution[_negNode];
+        public Complex GetComplexVoltage()
+        {
+            ComplexState.ThrowIfNotBound(this);
+            return (ComplexState.Solution[_posPrimeNode] - ComplexState.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
+        }
 
         /// <summary>
         /// Gets the current.
@@ -32,9 +36,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public Complex GetComplexCurrent()
         {
             ComplexState.ThrowIfNotBound(this);
-            var geq = Capacitance * ComplexState.Laplace + Conductance;
-            var voltage = ComplexState.Solution[_posPrimeNode] - ComplexState.Solution[_negNode];
-            return voltage * geq;
+            var geq = LocalCapacitance * ComplexState.Laplace + LocalConductance;
+            return GetComplexVoltage() * geq * BaseParameters.ParallelMultiplier;
         }
 
         /// <summary>
@@ -42,13 +45,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         [ParameterName("p_c"), ParameterName("pd_c"), ParameterInfo("Power")]
         public Complex GetComplexPower()
-        {
-            ComplexState.ThrowIfNotBound(this);
-            var geq = Capacitance * ComplexState.Laplace + Conductance;
-            var current = (ComplexState.Solution[_posPrimeNode] - ComplexState.Solution[_negNode]) * geq;
-            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
-            return voltage * -Complex.Conjugate(current);
-        }
+            => GetComplexVoltage() * Complex.Conjugate(GetComplexCurrent());
 
         /// <summary>
         /// Gets the complex simulation state.
@@ -86,7 +83,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void IFrequencyBehavior.InitializeParameters()
         {
-            CalculateCapacitance(Voltage);
+            CalculateCapacitance(LocalVoltage);
         }
 
         /// <summary>
@@ -97,10 +94,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = ComplexState;
 
             var gspr = ModelTemperature.Conductance * BaseParameters.Area;
-            var geq = Conductance;
-            var xceq = Capacitance * state.Laplace.Imaginary;
+            var geq = LocalConductance;
+            var xceq = LocalCapacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix
+            var m = BaseParameters.ParallelMultiplier;
+            var n = BaseParameters.SeriesMultiplier;
+            geq *= m / n;
+            gspr *= m / n;
+            xceq *= m / n;
             ComplexElements.Add(
                 gspr, new Complex(geq, xceq), new Complex(geq + gspr, xceq),
                 -gspr, -new Complex(geq, xceq), -gspr, -new Complex(geq, xceq));

@@ -93,7 +93,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
             if (resistance < MinimumResistance)
                 resistance = MinimumResistance;
 
-            Conductance = BaseParameters.ParallelMultiplier / (resistance * factor);
+            // Calculate the final conductance
+            Conductance = BaseParameters.ParallelMultiplier / BaseParameters.SeriesMultiplier / (resistance * factor);
         }
     }
 }

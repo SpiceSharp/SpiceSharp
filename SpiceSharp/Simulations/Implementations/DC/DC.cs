@@ -114,7 +114,7 @@ namespace SpiceSharp.Simulations
                 // Remove all values that are greater or equal to the maximum value
                 while (level >= 0 && !_enumerators[level].MoveNext())
                     level--;
-                if (level == 0)
+                if (level < 0)
                     break;
             }
         }
