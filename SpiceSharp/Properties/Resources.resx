@@ -309,14 +309,23 @@
   <data name="Validation.FloatingNodeFound" xml:space="preserve">
     <value>Floating node detected: {0}.</value>
   </data>
+  <data name="Validation.NoFixedVoltageNodes" xml:space="preserve">
+    <value>Not enough nodes have been specified.</value>
+  </data>
   <data name="Validation.NoGround" xml:space="preserve">
     <value>There is no ground node in the circuit.</value>
   </data>
   <data name="Validation.NoIndependentSource" xml:space="preserve">
     <value>There is no independent source driving the circuit.</value>
   </data>
+  <data name="Validation.NoVariableSet" xml:space="preserve">
+    <value>No variables set has been specified for validation.</value>
+  </data>
   <data name="Validation.ShortCircuitComponent" xml:space="preserve">
     <value>{0}: all pins are short-circuited.</value>
+  </data>
+  <data name="Validation.ShortCircuitFixedVoltage" xml:space="preserve">
+    <value>A fixed voltage was applied to a short-circuit by '{0}'.</value>
   </data>
   <data name="Validation.VoltageLoopFound" xml:space="preserve">
     <value>The source {0} closes a loop of voltage sources.</value>

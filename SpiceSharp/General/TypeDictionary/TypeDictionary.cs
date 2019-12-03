@@ -79,11 +79,27 @@ namespace SpiceSharp
             => (TResult)_dictionary[typeof(TResult)];
 
         /// <summary>
+        /// Gets all strongly typed values from the dictionary.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <returns>
+        /// The results.
+        /// </returns>
+        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
+        {
+            if (_dictionary.TryGetValue(typeof(TResult), out var result))
+                yield return (TResult)result;
+            yield break;
+        }
+
+        /// <summary>
         /// Tries to get a strongly typed value from the dictionary.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> if the specified key contains the type; otherwise <c>false</c>.
+        /// </returns>
         public bool TryGetValue<TResult>(out TResult value) where TResult : T
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))

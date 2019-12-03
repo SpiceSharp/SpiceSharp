@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using SpiceSharp.Entities;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp
 {
@@ -80,16 +81,6 @@ namespace SpiceSharp
                 return;
             foreach (var entity in entities)
                 Add(entity);
-        }
-
-        /// <summary>
-        /// Validates the circuit. Checks for voltage loops, floating nodes, etc.
-        /// </summary>
-        /// <seealso cref="Validator"/>
-        public void Validate()
-        {
-            var validator = new Validator();
-            validator.Validate(this);
         }
 
         /// <summary>
@@ -216,6 +207,39 @@ namespace SpiceSharp
         {
             var src = (Circuit)source;
             _entities.CopyFrom(src._entities);
+        }
+
+        /// <summary>
+        /// Validates the circuit using the rules created by the rule factory.
+        /// </summary>
+        /// <param name="ruleFactory">The rule factory.</param>
+        public void Validate(IRuleFactory ruleFactory)
+        {
+            var container = ruleFactory.ThrowIfNull(nameof(ruleFactory)).CreateRuleContainer();
+            container.Validate(Validators);
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public void Validate() => Validate(RuleFactory.Default);
+
+        /// <summary>
+        /// Gets the validators.
+        /// </summary>
+        /// <value>
+        /// The validators.
+        /// </value>
+        protected IEnumerable<IValidator> Validators
+        {
+            get
+            {
+                foreach (var entity in _entities)
+                {
+                    if (entity is IValidator validator)
+                        yield return validator;
+                }
+            }
         }
     }
 }

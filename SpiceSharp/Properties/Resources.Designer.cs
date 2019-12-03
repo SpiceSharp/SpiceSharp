@@ -638,6 +638,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not enough nodes have been specified..
+        /// </summary>
+        internal static string Validation_NoFixedVoltageNodes {
+            get {
+                return ResourceManager.GetString("Validation.NoFixedVoltageNodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no ground node in the circuit..
         /// </summary>
         internal static string Validation_NoGround {
@@ -656,11 +665,29 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No variables set has been specified for validation..
+        /// </summary>
+        internal static string Validation_NoVariableSet {
+            get {
+                return ResourceManager.GetString("Validation.NoVariableSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: all pins are short-circuited..
         /// </summary>
         internal static string Validation_ShortCircuitComponent {
             get {
                 return ResourceManager.GetString("Validation.ShortCircuitComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A fixed voltage was applied to a short-circuit by &apos;{0}&apos;..
+        /// </summary>
+        internal static string Validation_ShortCircuitFixedVoltage {
+            get {
+                return ResourceManager.GetString("Validation.ShortCircuitFixedVoltage", resourceCulture);
             }
         }
         

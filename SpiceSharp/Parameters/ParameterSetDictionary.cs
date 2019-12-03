@@ -309,6 +309,14 @@ namespace SpiceSharp
             => _dictionary.GetValue<TResult>();
 
         /// <summary>
+        /// Gets all values.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <returns></returns>
+        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : IParameterSet
+            => _dictionary.GetAllValues<TResult>();
+
+        /// <summary>
         /// Tries the get value.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

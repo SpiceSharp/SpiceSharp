@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SpiceSharp.General
@@ -126,6 +127,20 @@ namespace SpiceSharp.General
                 return (TResult)result.Value;
             }
             return (TResult)_dictionary[typeof(TResult)];
+        }
+
+        /// <summary>
+        /// Gets all strongly typed values from the dictionary.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <returns>
+        /// The results.
+        /// </returns>
+        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
+        {
+            if (_interfaces.TryGetValue(typeof(TResult), out var result))
+                return result.Values.Cast<TResult>();
+            return Enumerable.Empty<TResult>();
         }
 
         /// <summary>

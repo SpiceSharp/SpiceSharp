@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.General;
 
 namespace SpiceSharp
 {
@@ -60,7 +61,15 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <returns>The result.</returns>
+        /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
         TResult GetValue<TResult>() where TResult : T;
+
+        /// <summary>
+        /// Gets all strongly typed values from the dictionary.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <returns>The results.</returns>
+        IEnumerable<TResult> GetAllValues<TResult>() where TResult : T;
 
         /// <summary>
         /// Tries to get a strongly typed value from the dictionary.
@@ -68,8 +77,9 @@ namespace SpiceSharp
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if the specified key contains
+        ///   <c>true</c> if the specified key contains the type; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
         bool TryGetValue<TResult>(out TResult value) where TResult : T;
 
         /// <summary>
@@ -80,6 +90,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the value was resolved; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
         bool TryGetValue(Type key, out T value);
 
         /// <summary>

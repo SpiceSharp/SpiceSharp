@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Validation;
+using SpiceSharp.Validation.Rules;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharpTest.Circuits
 {
@@ -12,7 +15,7 @@ namespace SpiceSharpTest.Circuits
         {
             // Verifies that CircuitException is thrown during Check when circuit has a ground node called "GND"
             var ckt = CreateCircuit("gnd");
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
 
         [Test]
@@ -53,7 +56,7 @@ namespace SpiceSharpTest.Circuits
                 new VoltageSource("V2", "B", "A", 1.0),
                 new VoltageSource("V3", "B", "A", 1.0)
                 );
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
 
         [Test]
@@ -71,7 +74,7 @@ namespace SpiceSharpTest.Circuits
                 new VoltageSource("V9", "H", "I", 1.0),
                 new VoltageSource("V10", "I", "0", 1.0)
                 );
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
 
         [Test]
@@ -82,7 +85,7 @@ namespace SpiceSharpTest.Circuits
                 new Capacitor("C1", "in", "out", 1e-12),
                 new Capacitor("C2", "out", "gnd", 1e-12)
                 );
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
 
         [Test]
@@ -93,7 +96,7 @@ namespace SpiceSharpTest.Circuits
                 new VoltageControlledVoltageSource("E1", "out", "gnd", "in", "gnd", 2.0),
                 new VoltageControlledVoltageSource("E2", "out2", "gnd", "out", "gnd", 1.0)
                 );
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
 
         [Test]
@@ -104,7 +107,7 @@ namespace SpiceSharpTest.Circuits
                 new VoltageSource("V1", "in", "0", 0),
                 new CurrentControlledCurrentSource("F1", "out", "0", "V1", 12.0)
             );
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
 
         [Test]
@@ -113,7 +116,7 @@ namespace SpiceSharpTest.Circuits
             var ckt = new Circuit(
                 new CurrentSource("I1", "in", "0", 1.0),
                 new CurrentSource("I2", "0", "in", 2.0));
-            Assert.Throws<SpiceSharpException>(() => ckt.Validate());
+            Assert.Throws<ValidationException>(() => ckt.Validate());
         }
     }
 }

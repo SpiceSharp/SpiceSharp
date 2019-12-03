@@ -215,6 +215,20 @@ namespace SpiceSharp.General
         }
 
         /// <summary>
+        /// Gets all strongly typed values from the dictionary.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <returns>
+        /// The results.
+        /// </returns>
+        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
+        {
+            if (_dictionary.TryGetValue(typeof(TResult), out var result))
+                return result.Values.Cast<TResult>();
+            return Enumerable.Empty<TResult>();
+        }
+
+        /// <summary>
         /// Tries to get a strongly typed value from the dictionary.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

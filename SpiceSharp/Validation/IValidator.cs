@@ -3,11 +3,12 @@
     /// <summary>
     /// An interface that describes a class that can be validated.
     /// </summary>
-    public interface IValidationEntity
+    public interface IValidator
     {
         /// <summary>
         /// Validates this instance.
         /// </summary>
-        void Validate(IValidationContainer container);
+        /// <param name="container">The container with all the rules that should be validated.</param>
+        void Validate(IRuleContainer container);
     }
 }
