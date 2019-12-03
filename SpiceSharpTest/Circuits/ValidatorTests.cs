@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Validation;
 using SpiceSharp.Validation.Rules;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharpTest.Circuits
 {
@@ -13,15 +13,17 @@ namespace SpiceSharpTest.Circuits
         [Test]
         public void When_GroundNameInvalid_Expect_Exception()
         {
-            // Verifies that CircuitException is thrown during Check when circuit has a ground node called "GND"
+            // Check for a circuit that does not have a ground reference
             var ckt = CreateCircuit("gnd");
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            var rules = new RuleFactory(() => new HasGroundRule());
+            rules.Configuration.Add(new VariableParameters());
+            Assert.Throws<NoGroundException>(() => ckt.Validate(rules));
         }
 
         [Test]
         public void When_GroundNameValid_Expect_NoException()
         {
-            // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "gnd"
+            // Check for a circuit that does have a ground reference
             var ckt = CreateCircuit("GND");
             ckt.Validate();
         }
@@ -29,7 +31,7 @@ namespace SpiceSharpTest.Circuits
         [Test]
         public void When_GroundNameZero_Expect_NoException()
         {
-            // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "0"
+            // Check for a circuit that does have a ground reference
             var ckt = CreateCircuit("0");
             ckt.Validate();
         }
@@ -51,17 +53,19 @@ namespace SpiceSharpTest.Circuits
         [Test]
         public void When_VoltageLoop_Expect_CircuitException()
         {
+            // Check for a voltage loop
             var ckt = new Circuit(
                 new VoltageSource("V1", "A", "0", 1.0),
                 new VoltageSource("V2", "B", "A", 1.0),
                 new VoltageSource("V3", "B", "A", 1.0)
                 );
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
 
         [Test]
         public void When_VoltageLoop2_Expect_CircuitException()
         {
+            // Check for a voltage loop
             var ckt = new Circuit(
                 new VoltageSource("V1", "A", "0", 1.0),
                 new VoltageSource("V2", "A", "B", 1.0),
@@ -74,49 +78,51 @@ namespace SpiceSharpTest.Circuits
                 new VoltageSource("V9", "H", "I", 1.0),
                 new VoltageSource("V10", "I", "0", 1.0)
                 );
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
 
         [Test]
-        public void When_FloatingNode_Expect_CircuitException()
+        public void When_FloatingNodeCapacitors_Expect_CircuitException()
         {
+            // Check for a floating node made by capacitors.
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "gnd", 1.0),
                 new Capacitor("C1", "in", "out", 1e-12),
                 new Capacitor("C2", "out", "gnd", 1e-12)
                 );
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
 
         [Test]
-        public void When_FloatingNode2_Expect_CircuitException()
+        public void When_FloatingNodeVoltageControlledVoltageSource_Expect_CircuitException()
         {
+            // Check for a floating node made by a voltage-controlled voltage source
             var ckt = new Circuit(
                 new VoltageSource("V1", "input", "gnd", 1.0),
                 new VoltageControlledVoltageSource("E1", "out", "gnd", "in", "gnd", 2.0),
                 new VoltageControlledVoltageSource("E2", "out2", "gnd", "out", "gnd", 1.0)
                 );
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
 
         [Test]
-        public void When_CCCSFloatingNodeValidator_Expect_CircuitException()
+        public void When_FloatingNodeCurrentControlledVoltageSource_Expect_CircuitException()
         {
             var ckt = new Circuit(
                 new CurrentSource("I1", "0", "in", 0),
                 new VoltageSource("V1", "in", "0", 0),
                 new CurrentControlledCurrentSource("F1", "out", "0", "V1", 12.0)
             );
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
 
         [Test]
-        public void When_CurrentSourceSeriesValidator_Expect_CircuitException()
+        public void When_FloatingNodeCurrentSource_Expect_CircuitException()
         {
             var ckt = new Circuit(
                 new CurrentSource("I1", "in", "0", 1.0),
                 new CurrentSource("I2", "0", "in", 2.0));
-            Assert.Throws<ValidationException>(() => ckt.Validate());
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
     }
 }

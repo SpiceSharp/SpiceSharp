@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ namespace SpiceSharp.Validation.Rules
         /// </summary>
         /// <param name="component">The component that applies a fixed voltage.</param>
         /// <param name="nodes">The nodes over which a fixed voltage is applied.</param>
-        /// <exception cref="ValidationException">If a voltage loop has been detected.</exception>
+        /// <exception cref="VoltageLoopException">If a voltage loop has been detected.</exception>
         public void ApplyFixedVoltage(IComponent component, params string[] nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
@@ -78,23 +79,23 @@ namespace SpiceSharp.Validation.Rules
                         var args = new RuleViolationEventArgs();
                         Violated?.Invoke(this, args);
                         if (!args.Ignore)
-                            throw new ValidationException(Properties.Resources.Validation_ShortCircuitFixedVoltage.FormatString(component.Name));
-                    }
-
-                    // Closes a voltage loop (both variable are already part of a fixed-relation graph group
-                    if (fixedGroupi == fixedGroupj)
-                    {
-                        Fixed = fixedGroupi;
-                        ClosesLoop = component;
-                        var args = new RuleViolationEventArgs();
-                        Violated?.Invoke(this, args);
-                        if (!args.Ignore)
-                            throw new ValidationException(Properties.Resources.Validation_VoltageLoopFound.FormatString(component.Name));
+                            throw new VoltageLoopException(component);
                     }
 
                     // These two have already fixed connections to other nodes
                     if (hasni && hasnj)
                     {
+                        // Closes a voltage loop (both variable are already part of a fixed-relation graph group
+                        if (fixedGroupi == fixedGroupj)
+                        {
+                            Fixed = fixedGroupi;
+                            ClosesLoop = component;
+                            var args = new RuleViolationEventArgs();
+                            Violated?.Invoke(this, args);
+                            if (!args.Ignore)
+                                throw new VoltageLoopException(component);
+                        }
+
                         // Merge the two groups
                         foreach (var v in fixedGroupj)
                             _fixedGroups[v] = fixedGroupj;

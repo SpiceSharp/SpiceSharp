@@ -153,7 +153,7 @@ namespace SpiceSharp.Components
                     if (attribute.Pin1 >= 0 && attribute.Pin2 >= 0)
                         rule.AddConductivePath(this, GetNode(attribute.Pin1), GetNode(attribute.Pin2));
                     else
-                        rule.NoConductivePath(this);
+                        rule.AddConductivePath(this);
                 }
                 if (doAll)
                 {

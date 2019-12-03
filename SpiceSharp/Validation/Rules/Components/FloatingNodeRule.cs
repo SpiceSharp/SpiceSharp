@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Validation.Rules
@@ -44,13 +45,16 @@ namespace SpiceSharp.Validation.Rules
         }
 
         /// <summary>
-        /// Applies a conductive path between nodes.
+        /// Applies a conductive path between nodes of a component. If no nodes are specified,
+        /// then none of the component pins create a conductive path to another node.
         /// </summary>
         /// <param name="component">The component that applies the conductive paths.</param>
         /// <param name="nodes">The nodes that are connected together via a conductive path.</param>
         public void AddConductivePath(IComponent component, params string[] nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
+
+            // There are some pins conducting to other pins
             for (var i = 0; i < nodes.Length; i++)
             {
                 nodes[i].ThrowIfNull(nameof(nodes));
@@ -91,7 +95,7 @@ namespace SpiceSharp.Validation.Rules
                 }
             }
 
-            // We also need to check for other nodes that the component might have
+            // Make sure that the pins that don't conduct are also taken into account
             for (var i = 0; i < component.PinCount; i++)
             {
                 var node = _variables.MapNode(component.GetNode(i), VariableType.Voltage);
@@ -106,19 +110,13 @@ namespace SpiceSharp.Validation.Rules
         /// <param name="component">The component.</param>
         public void NoConductivePath(IComponent component)
         {
-            // We also need to check for other nodes that the component might have
-            for (var i = 0; i < component.PinCount; i++)
-            {
-                var node = _variables.MapNode(component.GetNode(i), VariableType.Voltage);
-                if (!_groups.ContainsKey(node))
-                    _groups.Add(node, new HashSet<Variable> { node });
-            }
+
         }
 
         /// <summary>
         /// Finish the check by validating the results.
         /// </summary>
-        /// <exception cref="ValidationException">Thrown when an unhandled floating node has been found.</exception>
+        /// <exception cref="FloatingNodeException">Thrown when an unhandled floating node has been found.</exception>
         public void Validate()
         {
             foreach (var pair in _groups)
@@ -131,7 +129,7 @@ namespace SpiceSharp.Validation.Rules
                 var args = new RuleViolationEventArgs();
                 Violated?.Invoke(this, args);
                 if (!args.Ignore)
-                    throw new ValidationException(Properties.Resources.Validation_FloatingNodeFound.FormatString(pair.Key.Name));
+                    throw new FloatingNodeException(pair.Key);
             }
         }
     }

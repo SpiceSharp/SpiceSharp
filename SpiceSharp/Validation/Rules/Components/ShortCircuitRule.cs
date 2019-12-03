@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 
@@ -41,7 +42,7 @@ namespace SpiceSharp.Validation.Rules
         /// Checks the specified component.
         /// </summary>
         /// <param name="component">The component.</param>
-        /// <exception cref="ValidationException">Thrown when all pins of the component have been shorted.</exception>
+        /// <exception cref="ShortCircuitComponentException">Thrown when all pins of the component have been shorted.</exception>
         public void Check(IComponent component)
         {
             component.ThrowIfNull(nameof(component));
@@ -58,7 +59,7 @@ namespace SpiceSharp.Validation.Rules
             var args = new RuleViolationEventArgs();
             Violated?.Invoke(this, args);
             if (args.Ignore)
-                throw new ValidationException(Properties.Resources.Validation_ShortCircuitComponent);
+                throw new ShortCircuitComponentException(component);
         }
 
         /// <summary>

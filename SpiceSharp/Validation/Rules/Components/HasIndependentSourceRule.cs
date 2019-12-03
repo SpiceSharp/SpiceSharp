@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharp.Validation.Rules
 {
@@ -39,7 +40,7 @@ namespace SpiceSharp.Validation.Rules
         /// <summary>
         /// Finish the check by validating the results.
         /// </summary>
-        /// <exception cref="ValidationException">Thrown if no independent source has been found.</exception>
+        /// <exception cref="NoIndependentSourceException">Thrown if no independent source has been found.</exception>
         public void Validate()
         {
             if (_hasSource)
@@ -48,7 +49,7 @@ namespace SpiceSharp.Validation.Rules
             var args = new RuleViolationEventArgs();
             Violated?.Invoke(this, args);
             if (!args.Ignore)
-                throw new ValidationException(Properties.Resources.Validation_NoIndependentSource);
+                throw new NoIndependentSourceException();
         }
     }
 }

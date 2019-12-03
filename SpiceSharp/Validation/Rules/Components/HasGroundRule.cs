@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 
@@ -52,15 +53,15 @@ namespace SpiceSharp.Validation.Rules
         /// <summary>
         /// Finish the check by validating the results.
         /// </summary>
-        /// <exception cref="ValidationException">Thrown when no ground node has been found.</exception>
+        /// <exception cref="NoGroundException">Thrown when no ground node has been found.</exception>
         public void Validate()
         {
             if (_hasGround)
                 return;
             var args = new RuleViolationEventArgs();
             Violated?.Invoke(this, args);
-            if (args.Ignore)
-                throw new ValidationException(Properties.Resources.Validation_NoGround);
+            if (!args.Ignore)
+                throw new NoGroundException();
         }
     }
 }
