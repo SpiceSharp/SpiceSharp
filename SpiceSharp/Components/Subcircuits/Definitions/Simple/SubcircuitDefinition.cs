@@ -2,6 +2,8 @@
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components
 {
@@ -114,6 +116,41 @@ namespace SpiceSharp.Components
             Entities.Clear();
             foreach (var entity in sd.Entities)
                 Entities.Add(entity);
+        }
+
+        /// <summary>
+        /// Validates the circuit using the rules created by the rule factory.
+        /// </summary>
+        /// <param name="ruleFactory">The rule factory.</param>
+        public void Validate(IRuleFactory ruleFactory)
+        {
+            var container = ruleFactory.ThrowIfNull(nameof(ruleFactory)).CreateRuleContainer();
+            container.Validate(Validators);
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        public void Validate() => Validate(RuleFactory.Default);
+
+        /// <summary>
+        /// Gets the validators.
+        /// </summary>
+        /// <value>
+        /// The validators.
+        /// </value>
+        protected IEnumerable<IValidator> Validators
+        {
+            get
+            {
+                if (Entities == null)
+                    yield break;
+                foreach (var entity in Entities)
+                {
+                    if (entity is IValidator validator)
+                        yield return validator;
+                }
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +13,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity, IComponent
+    public class Subcircuit : Entity, IComponent, IValidator
     {
         private string[] _connections;
 
@@ -119,6 +121,28 @@ namespace SpiceSharp.Components
             _connections = new string[_connections.Length];
             for (var i = 0; i < _connections.Length; i++)
                 _connections[i] = s._connections[i];
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        /// <param name="container">The container with all the rules that should be validated.</param>
+        public void Validate(IRuleContainer container)
+        {
+            // TODO: We only need to validate the subcircuit definition once, and then
+            // we should extract properties from those rules if necessary.
+            // Not all rules are valid for a subcircuit though:
+            // - A ground connection isn't necessary.
+            // - An independent source isn't necessary.
+            // - Conductive paths need to be searched for.
+            // - Fixed voltage drops need to be accounted for.
+            ISubcircuitDefinitionValidator validator;
+            if (Parameters.TryGetValue(out validator))
+            {
+                validator.Validate();
+
+                // Do other logic
+            }
         }
     }
 }
