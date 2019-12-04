@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -95,7 +96,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void LazyLoad()
         {
-            if (_simulation == default)
+            if (EqualityComparer<S>.Default.Equals(_simulation, default))
                 return;
 
             // If we're already too far, emulate a call from the simulation

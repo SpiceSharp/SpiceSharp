@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SpiceSharp.Components;
+using System;
 
 namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// Indicates that two nodes are driven by a voltage source. This attribute can
-    /// be applied to a <see cref="Components.IComponent" /> to check for voltage loops.
+    /// be applied to a <see cref="Component" /> to check for voltage loops.
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]

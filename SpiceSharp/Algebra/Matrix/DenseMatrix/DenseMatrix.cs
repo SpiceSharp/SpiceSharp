@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -118,7 +119,7 @@ namespace SpiceSharp.Algebra
                 _trashCan = value;
             else
             {
-                if (value != default && (row > Size || column > Size))
+                if (!EqualityComparer<T>.Default.Equals(value, default) && (row > Size || column > Size))
                     Expand(Math.Max(row, column));
                 row--;
                 column--;
