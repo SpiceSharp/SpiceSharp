@@ -8,7 +8,7 @@ using SpiceSharp.Validation.Rules;
 namespace SpiceSharpTest.Circuits
 {
     [TestFixture]
-    public class ValidatorTests
+    public class ValidationTests
     {
         [Test]
         public void When_GroundNameInvalid_Expect_Exception()
@@ -48,6 +48,13 @@ namespace SpiceSharpTest.Circuits
                 new VoltageSource("V1", "IN", groundNodeName, 1.0),
                 new Resistor("R1", "IN", groundNodeName, 1.0e3));
             return ckt;
+        }
+
+        [Test]
+        public void When_NoIndependentSource_Expect_NoIndependentSourceException()
+        {
+            var ckt = new Circuit(new Resistor("R1", "in", "0", 1e3));
+            Assert.Throws<NoIndependentSourceException>(() => ckt.Validate());
         }
 
         [Test]

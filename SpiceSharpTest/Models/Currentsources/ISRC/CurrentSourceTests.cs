@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -22,7 +23,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_CurrentSource_ResistorOperatingPoint_Expect_Reference()
+        public void When_ResistorOP_Expect_Reference()
         {
             /*
              * A circuit contains a current source 10A and resistor 1000 Ohms
@@ -71,7 +72,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_CurrentSource_ResistorsInSeriesOperatingPoint_Expect_Reference()
+        public void When_SeriesResistorOP_Expect_Reference()
         {
             /*
              * A circuit contains a current source 100A and 500 resistor 1000 Ohms
@@ -103,7 +104,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_CurrentSourceResistorTransient_Expect_NoException()
+        public void When_ResistorTransient_Expect_NoException()
         {
             // Found by Marcin Golebiowski
             var ckt = new Circuit(
@@ -116,7 +117,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_CurrentSourceCloned_Expect_Reference()
+        public void When_Cloned_Expect_Reference()
         {
             // Let's check cloning of entities here.
             var isrc = (CurrentSource) new CurrentSource("I1", "A", "B", 1.0)
@@ -138,6 +139,20 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual(1.0, waveform.PulsedValue.Value, 1e-12);
             Assert.AreEqual(2.0, isrc.GetProperty<Waveform>("waveform").GetProperty<double>("v2"));
             Assert.AreEqual(1e-5, waveform.GetProperty<double>("per"), 1e-12);
+        }
+
+        [Test]
+        public void When_OpenLoopValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(new CurrentSource("I1", "in", "0", 1.0));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(new CurrentSource("I1", "0", "0", 1.0));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

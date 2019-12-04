@@ -10,9 +10,9 @@ namespace SpiceSharp.Validation.Rules
     /// An <see cref="IRule"/> that checks for a short-circuited <see cref="IComponent"/>.
     /// </summary>
     /// <seealso cref="IRule" />
-    public class ShortCircuitRule : IRule
+    public class ShortCircuitRule : IComponentValidationRule
     {
-        private IVariableSet _variables;
+        private VariableParameters _vp;
 
         /// <summary>
         /// Occurs when the rule has been violated.
@@ -34,31 +34,39 @@ namespace SpiceSharp.Validation.Rules
         public void Setup(IParameterSetDictionary parameters)
         {
             Problem = null;
-            var config = parameters.GetValue<VariableParameters>();
-            _variables = config.Variables ?? throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            _vp = parameters.GetValue<VariableParameters>();
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
         }
 
         /// <summary>
-        /// Checks the specified component.
+        /// Checks the specified component against the rule.
         /// </summary>
         /// <param name="component">The component.</param>
+        /// <exception cref="ValidationException">Thrown when no variable set is specified.</exception>
         /// <exception cref="ShortCircuitComponentException">Thrown when all pins of the component have been shorted.</exception>
         public void Check(IComponent component)
         {
             component.ThrowIfNull(nameof(component));
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
             if (component.PinCount <= 1)
                 return;
-            var reference = component.GetNode(0);
+
+            var reference = variables.MapNode(component.GetNode(0), VariableType.Voltage);
             for (var i = 1; i < component.PinCount; i++)
             {
-                if (!_variables.Comparer.Equals(reference, component.GetNode(i)))
+                var other = variables.MapNode(component.GetNode(i), VariableType.Voltage);
+                if (!reference.Equals(other))
                     return;
             }
 
+            // All the nodes are the same, so the rule is violated.
             Problem = component;
             var args = new RuleViolationEventArgs();
             Violated?.Invoke(this, args);
-            if (args.Ignore)
+            if (!args.Ignore)
                 throw new ShortCircuitComponentException(component);
         }
 

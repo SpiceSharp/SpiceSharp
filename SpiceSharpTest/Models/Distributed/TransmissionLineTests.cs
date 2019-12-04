@@ -3,6 +3,7 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -11,7 +12,7 @@ namespace SpiceSharpTest.Models
     public class TransmissionLineTests : Framework
     {
         [Test]
-        public void When_LosslessTransmissionLineTransient_Expect_Reference()
+        public void When_TerminatedTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -304,7 +305,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_LosslessTransmissionLineFrequency_Expect_Reference()
+        public void When_TerminatedFrequency_Expect_Reference()
         {
             // Parameters
             double rsource = 100.0, rload = 25.0;
@@ -346,6 +347,42 @@ namespace SpiceSharpTest.Models
             // Analyze
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_UnterminatedValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new LosslessTransmissionLine("T1", "in", "0", "out", "ref"));
+            ckt.Validate();
+        }
+
+        [Test]
+        public void When_FloatingValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new CurrentSource("I1", "in", "0", 0),
+                new LosslessTransmissionLine("T1", "in", "0", "out", "ref"));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new LosslessTransmissionLine("T1", "0", "0", "0", "0"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_LoopValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new LosslessTransmissionLine("T1", "in", "0", "out", "out"));
+            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
     }
 }

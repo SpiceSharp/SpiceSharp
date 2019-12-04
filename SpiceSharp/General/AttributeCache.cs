@@ -31,6 +31,7 @@ namespace SpiceSharp.General
                     try
                     {
                         value = type.GetTypeInfo().GetCustomAttributes().ToArray();
+                        _attributes.Add(type, value);
                     }
                     finally
                     {

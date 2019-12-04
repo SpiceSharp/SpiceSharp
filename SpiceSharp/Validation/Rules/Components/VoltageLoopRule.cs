@@ -13,7 +13,7 @@ namespace SpiceSharp.Validation.Rules
     /// <seealso cref="IFixedVoltageRule" />
     public class VoltageLoopRule : IFixedVoltageRule
     {
-        private IVariableSet _variables;
+        private VariableParameters _vp;
         private Dictionary<Variable, HashSet<Variable>> _fixedGroups = new Dictionary<Variable, HashSet<Variable>>();
 
         /// <summary>
@@ -43,12 +43,14 @@ namespace SpiceSharp.Validation.Rules
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
         public void Setup(IParameterSetDictionary parameters)
         {
-            var config = parameters.GetValue<VariableParameters>();
-            _variables = config.Variables ?? throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            _vp = parameters.GetValue<VariableParameters>();
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
 
             // Reset the graph
             _fixedGroups.Clear();
-            _fixedGroups.Add(_variables.Ground, new HashSet<Variable> { _variables.Ground });
+            _fixedGroups.Add(variables.Ground, new HashSet<Variable> { variables.Ground });
         }
 
         /// <summary>
@@ -60,15 +62,19 @@ namespace SpiceSharp.Validation.Rules
         public void ApplyFixedVoltage(IComponent component, params string[] nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
             if (nodes.Length <= 1)
                 throw new ValidationException(Properties.Resources.Validation_NoFixedVoltageNodes);
+
             for (var i = 0; i < nodes.Length; i++)
             {
-                var ni = _variables.MapNode(nodes[i], VariableType.Voltage);
+                var ni = variables.MapNode(nodes[i], VariableType.Voltage);
                 var hasni = _fixedGroups.TryGetValue(ni, out var fixedGroupi);
                 for (var j = i + 1; j < nodes.Length; j++)
                 {
-                    var nj = _variables.MapNode(nodes[j], VariableType.Voltage);
+                    var nj = variables.MapNode(nodes[j], VariableType.Voltage);
                     var hasnj = _fixedGroups.TryGetValue(nj, out var fixedGroupj);
 
                     // Short-circuit and fixed voltage violation

@@ -13,7 +13,7 @@ namespace SpiceSharp.Validation.Rules
     /// <seealso cref="IComponentValidationRule" />
     public class FloatingNodeRule : IConductivePathRule
     {
-        private IVariableSet _variables;
+        private VariableParameters _vp;
         private Dictionary<Variable, HashSet<Variable>> _groups = new Dictionary<Variable, HashSet<Variable>>();
 
         /// <summary>
@@ -36,12 +36,14 @@ namespace SpiceSharp.Validation.Rules
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
         public void Setup(IParameterSetDictionary parameters)
         {
-            var config = parameters.GetValue<VariableParameters>();
-            _variables = config.Variables ?? throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            _vp = parameters.GetValue<VariableParameters>();
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
 
             // Reset the node conductive groups
             _groups.Clear();
-            _groups.Add(_variables.Ground, new HashSet<Variable> { _variables.Ground });
+            _groups.Add(variables.Ground, new HashSet<Variable> { variables.Ground });
         }
 
         /// <summary>
@@ -53,17 +55,20 @@ namespace SpiceSharp.Validation.Rules
         public void AddConductivePath(IComponent component, params string[] nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
 
             // There are some pins conducting to other pins
             for (var i = 0; i < nodes.Length; i++)
             {
                 nodes[i].ThrowIfNull(nameof(nodes));
-                var ni = _variables.MapNode(nodes[i], VariableType.Voltage);
+                var ni = variables.MapNode(nodes[i], VariableType.Voltage);
                 var hasni = _groups.TryGetValue(ni, out var groupni);
                 for (var j = i + 1; j < nodes.Length; j++)
                 {
                     nodes[j].ThrowIfNull(nameof(nodes));
-                    var nj = _variables.MapNode(nodes[j], VariableType.Voltage);
+                    var nj = variables.MapNode(nodes[j], VariableType.Voltage);
 
                     // Don't have to add here
                     if (ni == nj)
@@ -98,19 +103,10 @@ namespace SpiceSharp.Validation.Rules
             // Make sure that the pins that don't conduct are also taken into account
             for (var i = 0; i < component.PinCount; i++)
             {
-                var node = _variables.MapNode(component.GetNode(i), VariableType.Voltage);
+                var node = variables.MapNode(component.GetNode(i), VariableType.Voltage);
                 if (!_groups.ContainsKey(node))
                     _groups.Add(node, new HashSet<Variable> { node });
             }
-        }
-
-        /// <summary>
-        /// Specifies a component that does not have a conductive path between any nodes.
-        /// </summary>
-        /// <param name="component">The component.</param>
-        public void NoConductivePath(IComponent component)
-        {
-
         }
 
         /// <summary>
@@ -119,10 +115,14 @@ namespace SpiceSharp.Validation.Rules
         /// <exception cref="FloatingNodeException">Thrown when an unhandled floating node has been found.</exception>
         public void Validate()
         {
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
+
             foreach (var pair in _groups)
             {
                 // Is this node connected indirectly to ground?
-                if (pair.Value.Contains(_variables.Ground))
+                if (pair.Value.Contains(variables.Ground))
                     continue;
 
                 FloatingNode = pair.Key;

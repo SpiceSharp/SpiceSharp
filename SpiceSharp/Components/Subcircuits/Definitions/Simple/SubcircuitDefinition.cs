@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using SpiceSharp.Validation.Rules;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components
@@ -11,7 +13,7 @@ namespace SpiceSharp.Components
     /// A standard implementation of a <see cref="ISubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="ISubcircuitDefinition" />
-    public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition
+    public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition, ISubcircuitValidator
     {
         private string[] _pins;
 
@@ -119,19 +121,31 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Validates the circuit using the rules created by the rule factory.
+        /// Validates the subcircuit definition.
         /// </summary>
-        /// <param name="ruleFactory">The rule factory.</param>
-        public void Validate(IRuleFactory ruleFactory)
+        /// <param name="subckt">The subcircuit entity that needs to validated.</param>
+        /// <param name="nodes">The nodes that the subcircuit definition is connected to.</param>
+        /// <param name="container">The rule container.</param>
+        public void Validate(Subcircuit subckt, string[] nodes, IRuleContainer container)
         {
-            var container = ruleFactory.ThrowIfNull(nameof(ruleFactory)).CreateRuleContainer();
-            container.Validate(Validators);
+            if (Entities == null || Entities.Count == 0)
+                return;
+            if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
+                throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
+
+            // Change the variable set to work with subcircuits
+            var vconfig = container.Configuration.GetValue<VariableParameters>();
+            var original = vconfig.Variables;
+            vconfig.Variables = new SubcircuitVariableSet(subckt.Name, original);
+
+            // Run the rules on the entities using these variables
+            foreach (var validator in Validators)
+                validator.Validate(container);
+
+            // Restore the original variables
+            vconfig.Variables = original;
         }
 
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public void Validate() => Validate(RuleFactory.Default);
 
         /// <summary>
         /// Gets the validators.

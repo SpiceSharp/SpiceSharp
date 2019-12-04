@@ -129,20 +129,9 @@ namespace SpiceSharp.Components
         /// <param name="container">The container with all the rules that should be validated.</param>
         public void Validate(IRuleContainer container)
         {
-            // TODO: We only need to validate the subcircuit definition once, and then
-            // we should extract properties from those rules if necessary.
-            // Not all rules are valid for a subcircuit though:
-            // - A ground connection isn't necessary.
-            // - An independent source isn't necessary.
-            // - Conductive paths need to be searched for.
-            // - Fixed voltage drops need to be accounted for.
-            ISubcircuitDefinitionValidator validator;
-            if (Parameters.TryGetValue(out validator))
-            {
-                validator.Validate();
-
-                // Do other logic
-            }
+            // Validate the subcircuit definition if possible
+            if (Parameters.TryGetValue<ISubcircuitValidator>(out var result))
+                result.Validate(this, _connections, container);
         }
     }
 }

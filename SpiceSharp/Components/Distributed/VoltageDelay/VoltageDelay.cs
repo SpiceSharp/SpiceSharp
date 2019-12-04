@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A component that will drive an output to a delayed input voltage.
     /// </summary>
     /// <seealso cref="Component" />
-    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), VoltageDriver(0, 1)]
+    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected(0, 1), VoltageDriver(0, 1)]
     public class VoltageDelay : Component
     {
         /// <summary>

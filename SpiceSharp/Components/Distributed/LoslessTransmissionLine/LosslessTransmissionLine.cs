@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A lossless transmission line
     /// </summary>
     /// <seealso cref="Component" />
-    [Pin(0, "Pos1"), Pin(1, "Neg1"), Pin(2, "Pos2"), Pin(3, "Neg2"), Connected(0, 1), Connected(2, 3)]
+    [Pin(0, "Pos1"), Pin(1, "Neg1"), Pin(2, "Pos2"), Pin(3, "Neg2"), Connected(0, 2), Connected(1, 3), VoltageDriver(0, 2), VoltageDriver(1, 3)]
     public class LosslessTransmissionLine : Component
     {
         /// <summary>

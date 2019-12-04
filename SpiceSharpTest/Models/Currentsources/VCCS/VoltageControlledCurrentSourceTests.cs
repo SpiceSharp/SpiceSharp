@@ -3,6 +3,7 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -69,6 +70,25 @@ namespace SpiceSharpTest.Models
             op.ExportSimulationData += (sender, args) => Assert.AreEqual(300.0, current.Value, 1e-12);
             op.Run(ckt);
             current.Destroy();
+        }
+
+        [Test]
+        public void When_FloatingOutputValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageControlledCurrentSource("G1", "out", "0", "in", "0", 12.0));
+
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "0", "in", 0),
+                new VoltageControlledCurrentSource("F1", "in", "in", "in", "in", 2.0));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

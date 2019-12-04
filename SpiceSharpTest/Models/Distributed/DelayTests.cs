@@ -3,6 +3,7 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -11,7 +12,7 @@ namespace SpiceSharpTest.Models
     public class DelayTests : Framework
     {
         [Test]
-        public void When_DelayTransient_Expect_Reference()
+        public void When_SimplePulsedTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -87,7 +88,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DelayTransient02_Expect_NoException()
+        public void When_SimpleSineTransient_Expect_NoException()
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "1", "0", new Sine(0, 5, 50, 0, 0, 90)),
@@ -101,7 +102,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DelayTransientBreakpoints_Expect_Reference()
+        public void When_BreakpointsTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -207,7 +208,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DelayFrequency_Expect_Reference()
+        public void When_SimpleSmallSignal_Expect_Reference()
         {
             var delay = 1e-6;
 
@@ -231,6 +232,33 @@ namespace SpiceSharpTest.Models
             // Analyze the AC behavior
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new VoltageDelay("VD1", "in", "in", "in", "in", 1e-6));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_FloatingValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new VoltageDelay("VD1", "out", "0", "in2", "0", 1e-6));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_VoltageLoopValidation_Expect_VoltageLoopException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new VoltageDelay("VD1", "in", "0", "in2", "0", 1e-6));
+            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
     }
 }

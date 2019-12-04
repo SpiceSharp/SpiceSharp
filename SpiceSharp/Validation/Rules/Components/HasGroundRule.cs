@@ -12,7 +12,7 @@ namespace SpiceSharp.Validation.Rules
     /// <seealso cref="IRule" />
     public class HasGroundRule : IComponentValidationRule
     {
-        private IVariableSet _variables;
+        private VariableParameters _vp;
         private bool _hasGround = false;
 
         /// <summary>
@@ -26,8 +26,9 @@ namespace SpiceSharp.Validation.Rules
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
         public void Setup(IParameterSetDictionary parameters)
         {
-            var config = parameters.GetValue<VariableParameters>();
-            _variables = config.Variables ?? throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            _vp = parameters.GetValue<VariableParameters>();
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
             _hasGround = false;
         }
 
@@ -38,11 +39,14 @@ namespace SpiceSharp.Validation.Rules
         public void Check(IComponent component)
         {
             component.ThrowIfNull(nameof(component));
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
             if (_hasGround)
                 return;
             for (var i = 0; i < component.PinCount; i++)
             {
-                if (_variables.TryGetNode(component.GetNode(i), out var result) && result == _variables.Ground)
+                if (variables.TryGetNode(component.GetNode(i), out var result) && result.Equals(variables.Ground))
                 {
                     _hasGround = true;
                     return;

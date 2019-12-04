@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
         public VariableSet(IEqualityComparer<string> comparer)
         {
             // Setup the ground node
-            Ground = new Variable("0", 0);
+            Ground = new Variable("0", VariableType.Voltage);
             Map = new Dictionary<string, Variable>(comparer)
             {
                 {Ground.Name, Ground}, 
