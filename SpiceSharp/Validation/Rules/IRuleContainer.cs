@@ -14,11 +14,5 @@ namespace SpiceSharp.Validation
         /// The configuration.
         /// </value>
         IParameterSetDictionary Configuration { get; }
-
-        /// <summary>
-        /// Validates the specified validators.
-        /// </summary>
-        /// <param name="validators">The validators.</param>
-        void Validate(IEnumerable<IValidator> validators);
     }
 }

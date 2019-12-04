@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
@@ -11,7 +12,7 @@ namespace SpiceSharpTest.Models
     public class VoltageSourceTests : Framework
     {
         [Test]
-        public void When_VoltageSourceSeries_Expect_Reference()
+        public void When_SimpleSeriesOP_Expect_Reference()
         {
             double[] voltages = { 1.0, 1.5, 2.8, 3.9, 0.5, -0.1, -0.5 };
 
@@ -33,7 +34,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_VoltageSourceSmallSignal_Expect_Reference()
+        public void When_SimpleSmallSignal_Expect_Reference()
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0));
@@ -41,6 +42,23 @@ namespace SpiceSharpTest.Models
             var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "in") };
             var references = new Func<double, Complex>[] { f => new Complex(1.0, 0.0) };
             AnalyzeAC(ac, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "0", "0", 1));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_VoltageLoopValidation_Expect_VoltageLoopException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "in", "0", 0));
+            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
     }
 }

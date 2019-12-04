@@ -28,6 +28,22 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Mosfet1"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="d">The drain node.</param>
+        /// <param name="g">The gate node.</param>
+        /// <param name="s">The source node.</param>
+        /// <param name="b">The bulk node.</param>
+        /// <param name="model">The mosfet model.</param>
+        public Mosfet2(string name, string d, string g, string s, string b, string model)
+            : this(name)
+        {
+            Connect(d, g, s, b);
+            Model = model;
+        }
+
+        /// <summary>
         /// Creates the behaviors for the specified simulation and registers them with the simulation.
         /// </summary>
         /// <param name="simulation">The simulation.</param>

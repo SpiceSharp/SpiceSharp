@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.General;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
@@ -46,10 +47,12 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="entities">The entities in the subcircuit.</param>
-        public Subcircuit(string name, ISubcircuitDefinition entities)
-            : base(name)
+        /// <param name="nodes">The nodes that the subcircuit is connected to.</param>
+        public Subcircuit(string name, ISubcircuitDefinition entities, params string[] nodes)
+            : base(name, new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
         {
             Parameters.Add(entities);
+            Connect(nodes);
         }
 
         /// <summary>
@@ -129,6 +132,14 @@ namespace SpiceSharp.Components
         /// <param name="container">The container with all the rules that should be validated.</param>
         public void Validate(IRuleContainer container)
         {
+            // Also allow checks on the subcircuit
+            foreach (var rule in container.GetAllValues<IComponentValidationRule>())
+                rule.Check(this);
+
+            // We don't know about conductive paths (this should be taken care of by the subcircuit definition)
+            foreach (var rule in container.GetAllValues<IConductivePathRule>())
+                rule.AddConductivePath(this);
+
             // Validate the subcircuit definition if possible
             if (Parameters.TryGetValue<ISubcircuitValidator>(out var result))
                 result.Validate(this, _connections, container);

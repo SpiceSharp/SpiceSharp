@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -24,7 +25,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1DC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * Mosfet biased by voltage sources
@@ -171,7 +172,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * Simple common source amplifier
@@ -233,7 +234,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1SwitchTransient_Expect_Spice3f5Reference()
+        public void When_SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -289,7 +290,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -368,7 +369,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1OPExample_Expect_Convergence()
+        public void When_OPExample_Expect_Convergence()
         {
             // Found by Marcin Golebiowski
             var ckt = new Circuit(
@@ -391,7 +392,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1PMOSDifferentialPair_Expect_Reference()
+        public void When_PMOSDifferentialPair_Expect_Reference()
         {
             var model = new Mosfet1Model("Model")
                 .SetParameter("pmos", true)
@@ -428,6 +429,24 @@ namespace SpiceSharpTest.Models
             // config.SourceSteps = 0;
 
             op.Run(ckt);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Mosfet1("M1", "in", "in", "in", "in", "nomod"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_FloatingGateValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Mosfet1("M1", "in", "gate", "0", "0", "nomod"));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
     }
 }

@@ -138,6 +138,13 @@ namespace SpiceSharp.Components
             var original = vconfig.Variables;
             vconfig.Variables = new SubcircuitVariableSet(subckt.Name, original);
 
+            // We can now alias the inside- and outside nodes
+            for (var i = 0; i < nodes.Length; i++)
+            {
+                var node = original.MapNode(nodes[i], VariableType.Voltage);
+                vconfig.Variables.AliasNode(node, _pins[i]);
+            }
+
             // Run the rules on the entities using these variables
             foreach (var validator in Validators)
                 validator.Validate(container);

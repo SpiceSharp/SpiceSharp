@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -27,7 +28,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeDC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * DC voltage shunted by a diode
@@ -60,7 +61,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeSmallSignal_Expect_Spice3f5Reference()
+        public void When_SimpleSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * DC voltage source shunted by a diode
@@ -96,7 +97,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeRectifier_Expect_Spice3f5Reference()
+        public void When_RectifierTransient_Expect_Spice3f5Reference()
         {
             /*
              * Pulsed voltage source towards a resistive voltage divider between 0V and 5V
@@ -131,7 +132,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeNoise_Expect_Spice3f5Reference()
+        public void When_SimpleNoise_Expect_Spice3f5Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -205,7 +206,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeMultipliersDc_Expect_Reference()
+        public void When_MultipliersDC_Expect_Reference()
         {
             var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9");
             var cktReference = new Circuit(
@@ -223,7 +224,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeMultipliersSmallSignal_Expect_Reference()
+        public void When_MultipliersSmallSignal_Expect_Reference()
         {
             var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9");
             var cktReference = new Circuit(
@@ -241,7 +242,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeMultipliersNoise_Expect_Reference()
+        public void When_MultipliersNoise_Expect_Reference()
         {
             var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=5680 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-10 Af=0.9");
             var cktReference = new Circuit(
@@ -262,7 +263,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeMultipliersTransient_Expect_Reference()
+        public void When_MultipliersTransient_Expect_Reference()
         {
             /*
              * Pulsed voltage source towards a resistive voltage divider between 0V and 5V
@@ -291,6 +292,15 @@ namespace SpiceSharpTest.Models
             IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
             Compare(tran, cktReference, cktActual, exports);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Diode("D1", "in", "in", "nomod"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

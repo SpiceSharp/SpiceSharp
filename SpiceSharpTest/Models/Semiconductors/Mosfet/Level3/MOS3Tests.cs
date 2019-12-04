@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -30,7 +31,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS3DC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * MOS3 driven by voltage sources
@@ -80,7 +81,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS3CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * Common-source amplifier biased as a diode-connected transistor
@@ -144,7 +145,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS3SwitchTransient_Expect_Spice3f5Reference()
+        public void When_SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -232,7 +233,7 @@ namespace SpiceSharpTest.Models
         }
         
         [Test]
-        public void When_MOS3CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -308,6 +309,24 @@ namespace SpiceSharpTest.Models
             };
             AnalyzeNoise(noise, ckt, exports, references);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Mosfet2("M1", "in", "in", "in", "in", "nomod"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_FloatingGateValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Mosfet2("M1", "in", "gate", "0", "0", "nomod"));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
     }
 }

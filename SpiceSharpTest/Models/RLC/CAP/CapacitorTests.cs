@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Components.CapacitorBehaviors;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
@@ -13,7 +14,7 @@ namespace SpiceSharpTest.Models
     public class CapacitorTests : Framework
     {
         [Test]
-        public void When_LowpassRCOperatingPoint_Expect_Reference()
+        public void When_LowpassRCOP_Expect_Reference()
         {
             /*
              * Lowpass RC circuit
@@ -222,7 +223,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MultiplierTransient_Expect_Reference()
+        public void When_MultipliersTransient_Expect_Reference()
         {
             // Build circuit
             var ckt_actual = new Circuit(
@@ -247,7 +248,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MultiplierSmallSignal_Expect_Reference()
+        public void When_MultipliersSmallSignal_Expect_Reference()
         {
             // Build circuit
             var ckt_actual = new Circuit(
@@ -268,6 +269,24 @@ namespace SpiceSharpTest.Models
             // Run 
             Compare(ac, ckt_reference, ckt_actual, exports);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_DecoupledNodeValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new Capacitor("C1", "in", "out", 1e-6));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new Capacitor("C1", "in", "in", 1e-5));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

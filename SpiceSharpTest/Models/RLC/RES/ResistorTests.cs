@@ -4,6 +4,7 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -26,7 +27,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorOperatingPoint_Expect_Reference()
+        public void When_SimpleOP_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 10V and resistor 1000 Ohms
@@ -47,7 +48,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorDividerSmallSignal_Expect_Reference()
+        public void When_DividerSmallSignal_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 10V and resistor 1000 Ohms
@@ -83,7 +84,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorDividerOperatingPoint_Expect_Reference()
+        public void When_DividerOP_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 100V and two resistors in series (1 and 3 Ohms). 
@@ -121,7 +122,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorParallelOperatingPoint_Expect_Reference()
+        public void When_ParallelCircuitOP_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 100V and two resistors in parallel (1 and 2 Ohms). 
@@ -144,7 +145,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorParameterAsked_Expect_Reference()
+        public void When_ParameterAsked_Expect_Reference()
         {
             var ckt = new Circuit(
                 new Resistor("R1", "out", "0", 1.0e3),
@@ -166,7 +167,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorMultiplierOp_Expect_Reference()
+        public void When_MultipliersOp_Expect_Reference()
         {
             var cktActual = new Circuit(
                 new VoltageSource("V1", "in", "0", 4.0),
@@ -184,7 +185,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorMultiplierSmallSignal_Expect_Reference()
+        public void When_MultipliersSmallSignal_Expect_Reference()
         {
             var cktActual = new Circuit(
                 new VoltageSource("V1", "in", "0", 4.0),
@@ -202,7 +203,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_ResistorMultiplierNoise_Expect_Reference()
+        public void When_MultipliersNoise_Expect_Reference()
         {
             var cktActual = new Circuit(
                 new VoltageSource("V1", "in", "0", 4.0),
@@ -219,6 +220,15 @@ namespace SpiceSharpTest.Models
 
             Compare(noise, cktReference, cktActual, exports);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new Resistor("R1", "in", "in", 1e3));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

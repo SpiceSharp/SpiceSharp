@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -27,7 +28,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_JFETDC_Expect_Reference()
+        public void When_SimpleDC_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -297,7 +298,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_JFETSmallSignal_Expect_Reference()
+        public void When_SimpleSmallSignal_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -454,7 +455,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_JFETTransient_Expect_Reference()
+        public void When_SimpleTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -633,6 +634,15 @@ namespace SpiceSharpTest.Models
             // Analyze
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new JFET("J1", "in", "in", "in", "nomod"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

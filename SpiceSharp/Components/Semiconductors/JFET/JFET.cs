@@ -15,16 +15,32 @@ namespace SpiceSharp.Components
         /// <summary>
         /// The number of pins on a JFET.
         /// </summary>
-        public const int JFETPincount = 3;
+        public const int JFETPinCount = 3;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JFET"/> class.
         /// </summary>
         /// <param name="name">The string of the entity.</param>
         public JFET(string name)
-            : base(name, JFETPincount)
+            : base(name, JFETPinCount)
         {
             Parameters.Add(new BaseParameters());
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JFET"/> class.
+        /// </summary>
+        /// <param name="name">The name of the component.</param>
+        /// <param name="drain">The drain node.</param>
+        /// <param name="gate">The gate node.</param>
+        /// <param name="source">The source node.</param>
+        /// <param name="model">The model name.</param>
+        public JFET(string name, string drain, string gate, string source, string model)
+            : base(name, JFETPinCount)
+        {
+            Parameters.Add(new BaseParameters());
+            Model = model;
+            Connect(drain, gate, source);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -26,7 +27,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTDC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * BJT connect to only voltage sources
@@ -73,7 +74,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTSmallSignal_Expect_Spice3f5Reference()
+        public void When_CommonEmitterSmallSignal_Expect_Spice3f5Reference()
         {
             // Build circuit
             var ckt = new Circuit(
@@ -118,7 +119,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTTransient_Expect_Spice3f5Reference()
+        public void When_CommonEmitterTransient_Expect_Spice3f5Reference()
         {
             /*
              * Transient analysis of a BJT common emitter amplifier
@@ -229,7 +230,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTCircuit_Expect_NoException()
+        public void When_CommonEmitter2OPSmallSignal_Expect_NoException()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -249,6 +250,15 @@ namespace SpiceSharpTest.Models
 
             op.Run(ckt);
             ac.Run(ckt);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new BipolarJunctionTransistor("Q1", "in", "in", "in", "in", "nomod"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
 
         /*

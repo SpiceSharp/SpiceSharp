@@ -15,7 +15,7 @@ namespace SpiceSharpTest.Circuits
         {
             // Check for a circuit that does not have a ground reference
             var ckt = CreateCircuit("gnd");
-            var rules = new RuleFactory(() => new HasGroundRule());
+            var rules = new RuleContainer(new HasGroundRule());
             rules.Configuration.Add(new VariableParameters());
             Assert.Throws<NoGroundException>(() => ckt.Validate(rules));
         }

@@ -212,17 +212,21 @@ namespace SpiceSharp
         /// <summary>
         /// Validates the circuit using the rules created by the rule factory.
         /// </summary>
-        /// <param name="ruleFactory">The rule factory.</param>
-        public void Validate(IRuleFactory ruleFactory)
+        /// <param name="container">The rule container.</param>
+        public void Validate(IRuleContainer container)
         {
-            var container = ruleFactory.ThrowIfNull(nameof(ruleFactory)).CreateRuleContainer();
-            container.Validate(Validators);
+            foreach (var rule in container.Values)
+                rule.Setup(container.Configuration);
+            foreach (var v in Validators)
+                v.Validate(container);
+            foreach (var rule in container.Values)
+                rule.Validate();
         }
 
         /// <summary>
         /// Validates this instance.
         /// </summary>
-        public void Validate() => Validate(RuleFactory.Default);
+        public void Validate() => Validate(RuleContainer.Default);
 
         /// <summary>
         /// Gets the validators.
