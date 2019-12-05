@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public CurrentControlled(ControlledBindingContext context)
         {
             var state = context.GetState<IBiasingSimulationState>();
-            var behavior = context.ControlBehaviors.GetValue<VoltageSourceBehaviors.BiasingBehavior>();
+            var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior>();
             _brNode = state.Map[behavior.Branch];
         }
 

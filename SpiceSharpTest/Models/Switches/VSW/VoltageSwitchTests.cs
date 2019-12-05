@@ -1,7 +1,10 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -23,7 +26,7 @@ namespace SpiceSharpTest.Models
 
 
         [Test]
-        public void When_VSWSwitchDC_Expect_Spice3f5Reference()
+        public void When_SimpleSwitchDC_Expect_Spice3f5Reference()
         {
             // NOTE: The hysteresis is chosen such that it does not switch on the same point as a sweep. If that happens, then the smallest
             // numerical error can lead to a big output change, causing a mismatch between the reference.
@@ -202,7 +205,25 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_VSWSwitchTransient_Expect_Spice3f5Reference()
+        public void When_SimpleSwitchSmallSignal_Expect_Reference()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", -1),
+                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch"),
+                new VoltageSource("Vdd", "vdd", "0", 5).SetParameter("acmag", 1.0),
+                new Resistor("R1", "out", "vdd", 1e3),
+                CreateVoltageSwitchModel("myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001")
+                );
+
+            var ac = new AC("ac", new DecadeSweep(1, 1e6, 2));
+            var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "out") };
+            var reference = new Func<double, Complex>[] { f => 0.5 };
+            AnalyzeAC(ac, ckt, exports, reference);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_SimpleSwitchTransient_Expect_Spice3f5Reference()
         {
             // Build the switch
             var ckt = new Circuit(
@@ -278,7 +299,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_VSWBooleanParameter_Expect_DirectAccess()
+        public void When_BooleanParameter_Expect_DirectAccess()
         {
             // Create voltage source
             var s = new VoltageSwitch("SW 1");
@@ -291,6 +312,33 @@ namespace SpiceSharpTest.Models
             // Check off
             s.Parameters.SetParameter("off");
             Assert.AreEqual(false, p.ZeroState);
+        }
+
+        [Test]
+        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new VoltageSwitch("S1", "in", "in", "in", "in"));
+            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_FloatingInputValidation_Expect_FloatingNodeException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new VoltageSwitch("S1", "out", "0", "in2", "0"));
+            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
+        }
+
+        [Test]
+        public void When_ConnectedOutputValidation_Expect_NoException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1),
+                new VoltageSwitch("S1", "out", "in", "in", "0"));
+            ckt.Validate();
         }
     }
 }
