@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
     /// A standard implementation of a <see cref="ISubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="ISubcircuitDefinition" />
-    public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition, ISubcircuitValidator
+    public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition, ISubcircuitRuleSubject
     {
         private string[] _pins;
 
@@ -126,7 +126,7 @@ namespace SpiceSharp.Components
         /// <param name="subckt">The subcircuit entity that needs to validated.</param>
         /// <param name="nodes">The nodes that the subcircuit definition is connected to.</param>
         /// <param name="container">The rule container.</param>
-        public void Validate(Subcircuit subckt, string[] nodes, IRuleContainer container)
+        public void ApplyTo(Subcircuit subckt, string[] nodes, IRuleContainer container)
         {
             if (Entities == null || Entities.Count == 0)
                 return;
@@ -146,8 +146,8 @@ namespace SpiceSharp.Components
             }
 
             // Run the rules on the entities using these variables
-            foreach (var validator in Validators)
-                validator.Validate(container);
+            foreach (var subject in Subjects)
+                subject.ApplyTo(container);
 
             // Restore the original variables
             vconfig.Variables = original;
@@ -155,12 +155,12 @@ namespace SpiceSharp.Components
 
 
         /// <summary>
-        /// Gets the validators.
+        /// Gets the subjects that can apply to rules.
         /// </summary>
         /// <value>
-        /// The validators.
+        /// The subjects.
         /// </value>
-        protected IEnumerable<IValidator> Validators
+        protected IEnumerable<IRuleSubject> Subjects
         {
             get
             {
@@ -168,8 +168,8 @@ namespace SpiceSharp.Components
                     yield break;
                 foreach (var entity in Entities)
                 {
-                    if (entity is IValidator validator)
-                        yield return validator;
+                    if (entity is IRuleSubject subject)
+                        yield return subject;
                 }
             }
         }

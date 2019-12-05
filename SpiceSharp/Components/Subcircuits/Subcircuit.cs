@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity, IComponent, IValidator
+    public class Subcircuit : Entity, IComponent, IRuleSubject
     {
         private string[] _connections;
 
@@ -130,19 +130,19 @@ namespace SpiceSharp.Components
         /// Validates this instance.
         /// </summary>
         /// <param name="container">The container with all the rules that should be validated.</param>
-        public void Validate(IRuleContainer container)
+        public void ApplyTo(IRuleContainer container)
         {
             // Also allow checks on the subcircuit
-            foreach (var rule in container.GetAllValues<IComponentValidationRule>())
-                rule.Check(this);
+            foreach (var rule in container.GetAllValues<IComponentRule>())
+                rule.ApplyComponent(this);
 
             // We don't know about conductive paths (this should be taken care of by the subcircuit definition)
             foreach (var rule in container.GetAllValues<IConductivePathRule>())
-                rule.AddConductivePath(this);
+                rule.ApplyConductivePath(this);
 
             // Validate the subcircuit definition if possible
-            if (Parameters.TryGetValue<ISubcircuitValidator>(out var result))
-                result.Validate(this, _connections, container);
+            if (Parameters.TryGetValue<ISubcircuitRuleSubject>(out var result))
+                result.ApplyTo(this, _connections, container);
         }
     }
 }

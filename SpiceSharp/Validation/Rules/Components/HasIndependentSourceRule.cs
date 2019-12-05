@@ -8,10 +8,16 @@ namespace SpiceSharp.Validation.Rules
     /// <summary>
     /// An <see cref="IRule"/> that checks for the existence of at least one independent source.
     /// </summary>
-    /// <seealso cref="IComponentValidationRule" />
-    public class HasIndependentSourceRule : IComponentValidationRule
+    /// <seealso cref="IComponentRule" />
+    public class HasIndependentSourceRule : IComponentRule
     {
-        private bool _hasSource;
+        /// <summary>
+        /// Gets a value indicating whether the rule has found an independent source.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the rule found an independent source; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasSource { get; private set; }
 
         /// <summary>
         /// Occurs when the rule has been violated.
@@ -19,22 +25,22 @@ namespace SpiceSharp.Validation.Rules
         public event EventHandler<RuleViolationEventArgs> Violated;
 
         /// <summary>
-        /// Sets up the validation rule.
+        /// Resets the rule.
         /// </summary>
         /// <param name="parameters">The configuration parameters.</param>
-        public void Setup(IParameterSetDictionary parameters)
+        public void Reset(IParameterSetDictionary parameters)
         {
-            _hasSource = false;
+            HasSource = false;
         }
 
         /// <summary>
         /// Checks the specified component against the rule.
         /// </summary>
         /// <param name="component">The component.</param>
-        public void Check(IComponent component)
+        public void ApplyComponent(IComponent component)
         {
             if (component is VoltageSource || component is CurrentSource)
-                _hasSource = true;
+                HasSource = true;
         }
 
         /// <summary>
@@ -43,7 +49,7 @@ namespace SpiceSharp.Validation.Rules
         /// <exception cref="NoIndependentSourceException">Thrown if no independent source has been found.</exception>
         public void Validate()
         {
-            if (_hasSource)
+            if (HasSource)
                 return;
 
             var args = new RuleViolationEventArgs();

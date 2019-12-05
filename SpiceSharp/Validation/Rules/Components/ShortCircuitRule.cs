@@ -10,7 +10,7 @@ namespace SpiceSharp.Validation.Rules
     /// An <see cref="IRule"/> that checks for a short-circuited <see cref="IComponent"/>.
     /// </summary>
     /// <seealso cref="IRule" />
-    public class ShortCircuitRule : IComponentValidationRule
+    public class ShortCircuitRule : IComponentRule
     {
         private VariableParameters _vp;
 
@@ -25,15 +25,16 @@ namespace SpiceSharp.Validation.Rules
         /// <value>
         /// The problems.
         /// </value>
-        public IComponent Problem { get; private set; }
+        public IComponent ShortedComponent { get; private set; }
 
         /// <summary>
-        /// Sets up the validation rule.
+        /// Resets the rule.
         /// </summary>
+        /// <param name="parameters">The configuration parameters.</param>
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
-        public void Setup(IParameterSetDictionary parameters)
+        public void Reset(IParameterSetDictionary parameters)
         {
-            Problem = null;
+            ShortedComponent = null;
             _vp = parameters.GetValue<VariableParameters>();
             if (_vp == null || _vp.Variables == null)
                 throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
@@ -45,7 +46,7 @@ namespace SpiceSharp.Validation.Rules
         /// <param name="component">The component.</param>
         /// <exception cref="ValidationException">Thrown when no variable set is specified.</exception>
         /// <exception cref="ShortCircuitComponentException">Thrown when all pins of the component have been shorted.</exception>
-        public void Check(IComponent component)
+        public void ApplyComponent(IComponent component)
         {
             component.ThrowIfNull(nameof(component));
             if (_vp == null || _vp.Variables == null)
@@ -63,7 +64,7 @@ namespace SpiceSharp.Validation.Rules
             }
 
             // All the nodes are the same, so the rule is violated.
-            Problem = component;
+            ShortedComponent = component;
             var args = new RuleViolationEventArgs();
             Violated?.Invoke(this, args);
             if (!args.Ignore)

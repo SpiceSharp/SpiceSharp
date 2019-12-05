@@ -6,12 +6,12 @@ namespace SpiceSharp.Validation
     /// An <see cref="IRule"/> that will check components.
     /// </summary>
     /// <seealso cref="IRule" />
-    public interface IComponentValidationRule : IRule
+    public interface IComponentRule : IRule
     {
         /// <summary>
         /// Checks the specified component against the rule.
         /// </summary>
         /// <param name="component">The component.</param>
-        void Check(IComponent component);
+        void ApplyComponent(IComponent component);
     }
 }

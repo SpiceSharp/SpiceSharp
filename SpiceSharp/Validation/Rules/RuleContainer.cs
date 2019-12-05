@@ -59,15 +59,29 @@ namespace SpiceSharp.Validation
         }
 
         /// <summary>
-        /// Validates the specified validators.
+        /// Sets up the rules in the container.
         /// </summary>
-        /// <param name="validators">The validators.</param>
-        public void Validate(IEnumerable<IValidator> validators)
+        public void Reset()
         {
             foreach (var rule in Values)
-                rule.Setup(Configuration);
-            foreach (var v in validators)
-                v.Validate(this);
+                rule.Reset(Configuration);
+        }
+
+        /// <summary>
+        /// Applies subjects to the rules in the container.
+        /// </summary>
+        /// <param name="subjects">The subjects.</param>
+        public void ApplySubjects(IEnumerable<IRuleSubject> subjects)
+        {
+            foreach (var subject in subjects)
+                subject.ApplyTo(this);
+        }
+
+        /// <summary>
+        /// Validates all the rules.
+        /// </summary>
+        public void Validate()
+        {
             foreach (var rule in Values)
                 rule.Validate();
         }

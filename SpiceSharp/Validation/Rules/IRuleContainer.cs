@@ -14,5 +14,21 @@ namespace SpiceSharp.Validation
         /// The configuration.
         /// </value>
         IParameterSetDictionary Configuration { get; }
+
+        /// <summary>
+        /// Resets all the rules in the container.
+        /// </summary>
+        void Reset();
+
+        /// <summary>
+        /// Applies subjects to all the rules.
+        /// </summary>
+        /// <param name="subjects">The subjects.</param>
+        void ApplySubjects(IEnumerable<IRuleSubject> subjects);
+
+        /// <summary>
+        /// Validates all rules in the container.
+        /// </summary>
+        void Validate();
     }
 }

@@ -10,7 +10,7 @@ namespace SpiceSharp.Validation.Rules
     /// <summary>
     /// An <see cref="IRule"/> for finding floating nodes.
     /// </summary>
-    /// <seealso cref="IComponentValidationRule" />
+    /// <seealso cref="IComponentRule" />
     public class FloatingNodeRule : IConductivePathRule
     {
         private VariableParameters _vp;
@@ -25,16 +25,38 @@ namespace SpiceSharp.Validation.Rules
         public Variable FloatingNode { get; private set; }
 
         /// <summary>
+        /// Determines whether a node is floating or not.
+        /// </summary>
+        /// <param name="name">The name of the node.</param>
+        /// <returns>
+        ///   <c>true</c> if the node is a floating node; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ValidationException">Thrown if no variable set was given.</exception>
+        public bool IsFloatingNode(string name)
+        {
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
+            if (!variables.TryGetNode(name, out var result))
+                return true;
+            if (!_groups.TryGetValue(result, out var group))
+                return true;
+            if (!group.Contains(variables.Ground))
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// Occurs when the rule has been violated.
         /// </summary>
         public event EventHandler<RuleViolationEventArgs> Violated;
 
         /// <summary>
-        /// Sets up the validation rule.
+        /// Resets the rule.
         /// </summary>
         /// <param name="parameters">The configuration parameters.</param>
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
-        public void Setup(IParameterSetDictionary parameters)
+        public void Reset(IParameterSetDictionary parameters)
         {
             _vp = parameters.GetValue<VariableParameters>();
             if (_vp == null || _vp.Variables == null)
@@ -52,7 +74,7 @@ namespace SpiceSharp.Validation.Rules
         /// </summary>
         /// <param name="component">The component that applies the conductive paths.</param>
         /// <param name="nodes">The nodes that are connected together via a conductive path.</param>
-        public void AddConductivePath(IComponent component, params string[] nodes)
+        public void ApplyConductivePath(IComponent component, params string[] nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
             if (_vp == null || _vp.Variables == null)

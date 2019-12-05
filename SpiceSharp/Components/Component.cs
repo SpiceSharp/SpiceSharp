@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class that represents a (Spice) component/device.
     /// </summary>
-    public abstract class Component : Entity, IComponent, IValidator
+    public abstract class Component : Entity, IComponent, IRuleSubject
     {
         /// <summary>
         /// Private variables
@@ -137,11 +137,11 @@ namespace SpiceSharp.Components
         /// Validates this instance.
         /// </summary>
         /// <param name="container">The container with all the rules that should be validated.</param>
-        public virtual void Validate(IRuleContainer container)
+        public virtual void ApplyTo(IRuleContainer container)
         {
             // Baseline check
-            foreach (var rule in container.GetAllValues<IComponentValidationRule>())
-                rule.Check(this);
+            foreach (var rule in container.GetAllValues<IComponentRule>())
+                rule.ApplyComponent(this);
 
             // Checks for conductivity
             foreach (var rule in container.GetAllValues<IConductivePathRule>())
@@ -151,16 +151,16 @@ namespace SpiceSharp.Components
                 {
                     doAll = false;
                     if (attribute.Pin1 >= 0 && attribute.Pin2 >= 0)
-                        rule.AddConductivePath(this, GetNode(attribute.Pin1), GetNode(attribute.Pin2));
+                        rule.ApplyConductivePath(this, GetNode(attribute.Pin1), GetNode(attribute.Pin2));
                     else
-                        rule.AddConductivePath(this);
+                        rule.ApplyConductivePath(this);
                 }
                 if (doAll)
                 {
                     for (var i = 0; i < PinCount; i++)
                     {
                         for (var j = i + 1; j < PinCount; j++)
-                            rule.AddConductivePath(this, GetNode(i), GetNode(j));
+                            rule.ApplyConductivePath(this, GetNode(i), GetNode(j));
                     }
                 }
             }

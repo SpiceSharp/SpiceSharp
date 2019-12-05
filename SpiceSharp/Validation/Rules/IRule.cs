@@ -13,13 +13,13 @@ namespace SpiceSharp.Validation
         event EventHandler<RuleViolationEventArgs> Violated;
 
         /// <summary>
-        /// Sets up the validation rule.
+        /// Resets the rule.
         /// </summary>
         /// <param name="parameters">The configuration parameters.</param>
-        void Setup(IParameterSetDictionary parameters);
+        void Reset(IParameterSetDictionary parameters);
 
         /// <summary>
-        /// Finish the check by validating the results.
+        /// Validate the rule and see if something went wrong.
         /// </summary>
         void Validate();
     }

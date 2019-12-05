@@ -10,10 +10,17 @@ namespace SpiceSharp.Validation.Rules
     /// An <see cref="IRule"/> that checks for the existence of a ground node of at least one component.
     /// </summary>
     /// <seealso cref="IRule" />
-    public class HasGroundRule : IComponentValidationRule
+    public class HasGroundRule : IComponentRule
     {
         private VariableParameters _vp;
-        private bool _hasGround = false;
+
+        /// <summary>
+        /// Gets a value indicating whether the rule has found a ground node.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has found a ground node; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasGround { get; private set; }
 
         /// <summary>
         /// Occurs when the rule has been violated.
@@ -21,34 +28,35 @@ namespace SpiceSharp.Validation.Rules
         public event EventHandler<RuleViolationEventArgs> Violated;
 
         /// <summary>
-        /// Sets up the validation rule.
+        /// Resets the rule.
         /// </summary>
+        /// <param name="parameters">The configuration parameters.</param>
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
-        public void Setup(IParameterSetDictionary parameters)
+        public void Reset(IParameterSetDictionary parameters)
         {
             _vp = parameters.GetValue<VariableParameters>();
             if (_vp == null || _vp.Variables == null)
                 throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
-            _hasGround = false;
+            HasGround = false;
         }
 
         /// <summary>
         /// Checks the specified component against the rule.
         /// </summary>
         /// <param name="component">The component.</param>
-        public void Check(IComponent component)
+        public void ApplyComponent(IComponent component)
         {
             component.ThrowIfNull(nameof(component));
             if (_vp == null || _vp.Variables == null)
                 throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
             var variables = _vp.Variables;
-            if (_hasGround)
+            if (HasGround)
                 return;
             for (var i = 0; i < component.PinCount; i++)
             {
                 if (variables.TryGetNode(component.GetNode(i), out var result) && result.Equals(variables.Ground))
                 {
-                    _hasGround = true;
+                    HasGround = true;
                     return;
                 }
             }
@@ -60,7 +68,7 @@ namespace SpiceSharp.Validation.Rules
         /// <exception cref="NoGroundException">Thrown when no ground node has been found.</exception>
         public void Validate()
         {
-            if (_hasGround)
+            if (HasGround)
                 return;
             var args = new RuleViolationEventArgs();
             Violated?.Invoke(this, args);

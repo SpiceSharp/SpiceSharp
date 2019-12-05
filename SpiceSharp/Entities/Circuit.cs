@@ -210,38 +210,35 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Validates the circuit using the rules created by the rule factory.
+        /// Validates the circuit for rules in a rule container.
         /// </summary>
         /// <param name="container">The rule container.</param>
         public void Validate(IRuleContainer container)
         {
-            foreach (var rule in container.Values)
-                rule.Setup(container.Configuration);
-            foreach (var v in Validators)
-                v.Validate(container);
-            foreach (var rule in container.Values)
-                rule.Validate();
+            container.Reset();
+            container.ApplySubjects(RuleSubjects);
+            container.Validate();
         }
 
         /// <summary>
-        /// Validates this instance.
+        /// Validates this circuit with the default rules.
         /// </summary>
         public void Validate() => Validate(RuleContainer.Default);
 
         /// <summary>
-        /// Gets the validators.
+        /// Gets the subjects that can apply to rules.
         /// </summary>
         /// <value>
-        /// The validators.
+        /// The subjects.
         /// </value>
-        protected IEnumerable<IValidator> Validators
+        public IEnumerable<IRuleSubject> RuleSubjects
         {
             get
             {
                 foreach (var entity in _entities)
                 {
-                    if (entity is IValidator validator)
-                        yield return validator;
+                    if (entity is IRuleSubject subject)
+                        yield return subject;
                 }
             }
         }

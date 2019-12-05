@@ -17,7 +17,7 @@ namespace SpiceSharp.Validation.Rules
         private Dictionary<Variable, HashSet<Variable>> _fixedGroups = new Dictionary<Variable, HashSet<Variable>>();
 
         /// <summary>
-        /// Gets nodes that are fixed in relationship to each other.
+        /// Gets the nodes that are fixed in relationship to each other.
         /// </summary>
         /// <value>
         /// The fixed.
@@ -38,10 +38,11 @@ namespace SpiceSharp.Validation.Rules
         public event EventHandler<RuleViolationEventArgs> Violated;
 
         /// <summary>
-        /// Sets up the validation rule.
+        /// Resets the rule.
         /// </summary>
+        /// <param name="parameters">The configuration parameters.</param>
         /// <exception cref="ValidationException">Thrown when no variable set has been specified.</exception>
-        public void Setup(IParameterSetDictionary parameters)
+        public void Reset(IParameterSetDictionary parameters)
         {
             _vp = parameters.GetValue<VariableParameters>();
             if (_vp == null || _vp.Variables == null)
@@ -51,6 +52,29 @@ namespace SpiceSharp.Validation.Rules
             // Reset the graph
             _fixedGroups.Clear();
             _fixedGroups.Add(variables.Ground, new HashSet<Variable> { variables.Ground });
+        }
+
+        /// <summary>
+        /// Checks whether or not two nodes have a fixed voltage relationship.
+        /// </summary>
+        /// <param name="node1">The first node.</param>
+        /// <param name="node2">The second node.</param>
+        /// <returns>
+        /// <c>true</c> if the nodes have a fixed voltage relationship; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ValidationException">Thrown if no variable set was specified.</exception>
+        public bool AreFixed(string node1, string node2)
+        {
+            if (_vp == null || _vp.Variables == null)
+                throw new ValidationException(Properties.Resources.Validation_NoVariableSet);
+            var variables = _vp.Variables;
+
+            if (variables.TryGetNode(node1, out var n1) && variables.TryGetNode(node2, out var n2))
+            {
+                if (_fixedGroups.TryGetValue(n1, out var group1) && _fixedGroups.TryGetValue(n2, out var group2))
+                    return group1 == group2;
+            }
+            return false;
         }
 
         /// <summary>

@@ -14,6 +14,6 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="component">The component that applies the conductive paths.</param>
         /// <param name="nodes">The nodes that are connected together via a conductive path.</param>
-        void AddConductivePath(IComponent component, params string[] nodes);
+        void ApplyConductivePath(IComponent component, params string[] nodes);
     }
 }
