@@ -99,13 +99,10 @@ namespace SpiceSharp.Simulations
             }
 
             /// <summary>
-            /// Set up the simulation state for the simulation.
+            /// Sets up the simulation state.
             /// </summary>
-            /// <param name="simulation">The simulation.</param>
-            public void Setup(ISimulation simulation)
+            public void Setup()
             {
-                simulation.ThrowIfNull(nameof(simulation));
-
                 // Initialize all matrices
                 Solution = new DenseVector<double>(Solver.Size);
                 OldSolution = new DenseVector<double>(Solver.Size);

@@ -288,6 +288,16 @@ namespace SpiceSharp.Simulations
             return default;
         }
 
+        /// <summary>
+        /// Checks if the class uses the specified state.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        ///   <c>true</c> if the class uses the state; otherwise <c>false</c>.
+        /// </returns>
+        public virtual bool UsesState<S>() where S : ISimulationState
+            => this is IStateful<S>;
+
         #region Methods for raising events
         /// <summary>
         /// Raises the <see cref="ExportSimulationData" /> event.

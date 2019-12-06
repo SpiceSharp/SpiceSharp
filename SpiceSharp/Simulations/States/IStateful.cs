@@ -16,6 +16,15 @@ namespace SpiceSharp.Simulations
         S GetState<S>() where S : ISimulationState;
 
         /// <summary>
+        /// Checks if the class uses the specified state.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        /// <c>true</c> if the class uses the state; otherwise <c>false</c>.
+        /// </returns>
+        bool UsesState<S>() where S : ISimulationState;
+
+        /// <summary>
         /// Gets all the states that the class uses.
         /// </summary>
         /// <value>

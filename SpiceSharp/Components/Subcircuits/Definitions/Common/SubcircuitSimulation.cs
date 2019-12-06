@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.General;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// A template for a subcircuit simulation.
+    /// A subcircuit simulation that captures created behaviors in a local container.
     /// </summary>
     /// <seealso cref="ISimulation" />
     public class SubcircuitSimulation : ISimulation
     {
         /// <summary>
+        /// Gets the local states.
+        /// </summary>
+        /// <value>
+        /// The local states.
+        /// </value>
+        public ITypeDictionary<ISimulationState> LocalStates { get; } = new InterfaceTypeDictionary<ISimulationState>();
+
+        /// <summary>
         /// Gets the parent simulation.
         /// </summary>
         /// <value>
-        /// The parent.
+        /// The parent simulation.
         /// </value>
         protected ISimulation Parent { get; }
 
@@ -77,8 +86,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         public IBehaviorContainerCollection EntityBehaviors { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubcircuitSimulation"/> class.
+        /// Initializes a new instance of the <see cref="SubcircuitSimulation" /> class.
         /// </summary>
+        /// <param name="name">The name of the subcircuit.</param>
+        /// <param name="parent">The parent simulation.</param>
         public SubcircuitSimulation(string name, ISimulation parent)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
@@ -125,7 +136,21 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <returns>
         /// The type, or <c>null</c> if the state isn't used.
         /// </returns>
-        public S GetState<S>() where S : ISimulationState => Parent.GetState<S>();
+        public S GetState<S>() where S : ISimulationState
+        {
+            if (LocalStates.TryGetValue(out S result))
+                return result;
+            return Parent.GetState<S>();
+        }
+
+        /// <summary>
+        /// Checks if the class uses the specified state.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        ///   <c>true</c> if the class uses the state; otherwise <c>false</c>.
+        /// </returns>
+        public bool UsesState<S>() where S : ISimulationState => Parent.UsesState<S>();
 
         /// <summary>
         /// Checks if the class uses the specified behaviors.

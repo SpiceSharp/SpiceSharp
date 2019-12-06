@@ -10,9 +10,11 @@ using System.Collections.Generic;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A standard implementation of a <see cref="ISubcircuitDefinition"/>.
+    /// A standard implementation of a <see cref="ISubcircuitDefinition" />.
     /// </summary>
+    /// <seealso cref="ParameterSet" />
     /// <seealso cref="ISubcircuitDefinition" />
+    /// <seealso cref="ISubcircuitRuleSubject" />
     public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition, ISubcircuitRuleSubject
     {
         private string[] _pins;
@@ -64,8 +66,7 @@ namespace SpiceSharp.Components
             if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
                 throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
 
-            // We need to create behaviors for all subcircuit entities
-            // So we'll make a subcircuit simulation matching the parent simulation.
+            // Keep all local behaviors in our subcircuit simulation
             string name = behaviors.Name;
             var simulation = new SubcircuitSimulation(name, parentSimulation);
 

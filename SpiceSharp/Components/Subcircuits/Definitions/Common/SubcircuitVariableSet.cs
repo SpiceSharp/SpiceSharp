@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
     /// A variable set that will automatically make variables local by prefixing the names.
