@@ -61,7 +61,7 @@ namespace SpiceSharp.Components
         /// <param name="nodes">The nodes on the outside of the subcircuit.</param>
         public virtual void CreateBehaviors(ISimulation parentSimulation, IBehaviorContainer behaviors, string[] nodes)
         {
-            if (Entities == null || Entities.Count == 0)
+            if (Entities.Count == 0)
                 return;
             if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
                 throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
