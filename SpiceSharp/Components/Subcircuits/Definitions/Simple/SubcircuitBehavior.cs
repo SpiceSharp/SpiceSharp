@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using System;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
 {
@@ -10,12 +11,20 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
     public abstract class SubcircuitBehavior<B> : Behavior where B : IBehavior
     {
         /// <summary>
+        /// Gets the simulation.
+        /// </summary>
+        /// <value>
+        /// The simulation.
+        /// </value>
+        protected SubcircuitSimulation Simulation { get; }
+
+        /// <summary>
         /// Gets the behaviors.
         /// </summary>
         /// <value>
         /// The behaviors.
         /// </value>
-        protected BehaviorList<B> Behaviors { get; }
+        protected BehaviorList<B> Behaviors { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitBehavior{B}"/> class.
@@ -24,9 +33,19 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="simulation">The simulation.</param>
         protected SubcircuitBehavior(string name, SubcircuitSimulation simulation)
             : base(name)
-
         {
-            Behaviors = simulation.EntityBehaviors.GetBehaviorList<B>();
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
+            simulation.AfterBehaviorCreation += RegisterBehaviors;
+        }
+
+        /// <summary>
+        /// Registers the behaviors.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void RegisterBehaviors(object sender, EventArgs e)
+        {
+            Behaviors = Simulation.EntityBehaviors.GetBehaviorList<B>();
         }
     }
 }

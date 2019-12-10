@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _updateBehaviors = EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
             _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
-            BiasingState.Setup(this);
+            BiasingState.Setup();
 
             // Set up nodesets
             foreach (var ns in config.Nodesets)

@@ -14,12 +14,33 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class SubcircuitSimulation : ISimulation
     {
         /// <summary>
+        /// Occurs when the behaviors have been created.
+        /// </summary>
+        public event EventHandler<EventArgs> AfterBehaviorCreation;
+
+        /// <summary>
         /// Gets the local states.
         /// </summary>
         /// <value>
         /// The local states.
         /// </value>
         public ITypeDictionary<ISimulationState> LocalStates { get; } = new InterfaceTypeDictionary<ISimulationState>();
+
+        /// <summary>
+        /// Gets the local parameters.
+        /// </summary>
+        /// <value>
+        /// The local parameters.
+        /// </value>
+        public IParameterSetDictionary LocalConfiguration { get; }
+
+        /// <summary>
+        /// Gets the variables that are shared between the subcircuit simulation and the parent simulation.
+        /// </summary>
+        /// <value>
+        /// The shared variables.
+        /// </value>
+        public IEnumerable<Variable> SharedVariables { get; }
 
         /// <summary>
         /// Gets the parent simulation.
@@ -90,10 +111,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="parent">The parent simulation.</param>
-        public SubcircuitSimulation(string name, ISimulation parent)
+        /// <param name="configuration">The configuration for the subcircuit.</param>
+        /// <param name="shared">The shared variables.</param>
+        public SubcircuitSimulation(string name, ISimulation parent, IParameterSetDictionary configuration, IEnumerable<Variable> shared)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
             Variables = new SubcircuitVariableSet(name, parent.Variables);
+            LocalConfiguration = configuration.ThrowIfNull(nameof(configuration));
+            SharedVariables = shared.ThrowIfNull(nameof(shared));
         }
 
         /// <summary>
@@ -127,6 +152,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
+
+            // Invoke the event
+            AfterBehaviorCreation?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

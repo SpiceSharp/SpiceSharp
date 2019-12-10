@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
@@ -25,6 +26,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The entities inside the subcircuit.
         /// </value>
+        [ParameterName("entities"), ParameterInfo("The entities in the subcircuit.")]
         public IEntityCollection Entities { get; }
 
         /// <summary>
@@ -33,6 +35,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The pin count.
         /// </value>
+        [ParameterName("pins"), ParameterInfo("The number of pins.")]
         public int PinCount => _pins.Length;
 
         /// <summary>
@@ -68,17 +71,14 @@ namespace SpiceSharp.Components
 
             // Keep all local behaviors in our subcircuit simulation
             string name = behaviors.Name;
-            var simulation = new SubcircuitSimulation(name, parentSimulation);
+            Variable[] sharedNodes = new Variable[_pins.Length];
+            for (var i = 0; i < sharedNodes.Length; i++)
+                sharedNodes[i] = parentSimulation.Variables.MapNode(nodes[i], VariableType.Voltage);
+            var simulation = new SubcircuitSimulation(name, parentSimulation, behaviors.Parameters, sharedNodes);
 
             // We can now alias the inside- and outside nodes
-            for (var i = 0; i < nodes.Length; i++)
-            {
-                var node = parentSimulation.Variables.MapNode(nodes[i], VariableType.Voltage);
-                simulation.Variables.AliasNode(node, _pins[i]);
-            }
-
-            // Creat the behaviors for the subcircuit
-            simulation.Run(Entities);
+            for (var i = 0; i < sharedNodes.Length; i++)
+                simulation.Variables.AliasNode(sharedNodes[i], _pins[i]);
 
             // Create the behaviors necessary for the subcircuit
             behaviors
@@ -90,6 +90,9 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
                 .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
                 .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
+
+            // Create the behaviors for the subcircuit
+            simulation.Run(Entities);
         }
 
         /// <summary>

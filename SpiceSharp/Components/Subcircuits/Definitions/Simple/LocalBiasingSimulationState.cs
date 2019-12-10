@@ -1,13 +1,13 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Local
+namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
 {
     /// <summary>
     /// A local biasing simulation state.
     /// </summary>
     /// <seealso cref="IBiasingSimulationState" />
-    public class BiasingSimulationState : IBiasingSimulationState
+    public class LocalBiasingSimulationState : IBiasingSimulationState
     {
         private IBiasingSimulationState _parent;
 
@@ -87,12 +87,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Local
         public IVariableMap Map { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
+        /// Initializes a new instance of the <see cref="LocalBiasingSimulationState"/> class.
         /// </summary>
-        /// <param name="parent">The parent.</param>
-        public BiasingSimulationState(IBiasingSimulationState parent)
+        /// <param name="parent">The parent simulation state.</param>
+        /// <param name="solver">The solver.</param>
+        /// <param name="variables">The variable map.</param>
+        public LocalBiasingSimulationState(IBiasingSimulationState parent, ISparseSolver<double> solver, IVariableMap variables)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
+            Solver = solver.ThrowIfNull(nameof(solver));
             Map = new VariableMap(parent.Map.Ground);
         }
     }
