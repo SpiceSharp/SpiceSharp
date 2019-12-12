@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSourceBehaviors;
+using SpiceSharp.General;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 
@@ -23,7 +24,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the current source</param>
         public CurrentSource(string name) 
-            : base(name, CurrentSourcePinCount)
+            : base(name, CurrentSourcePinCount, new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
         {
             Parameters.Add(new CommonBehaviors.IndependentSourceParameters());
             Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
@@ -37,10 +38,9 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
         public CurrentSource(string name, string pos, string neg, double dc)
-            : base(name, CurrentSourcePinCount)
+            : this(name)
         {
-            Parameters.Add(new CommonBehaviors.IndependentSourceParameters(dc));
-            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>().DcValue.Value = dc;
             Connect(pos, neg);
         }
 
@@ -51,11 +51,10 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The Waveform-object</param>
-        public CurrentSource(string name, string pos, string neg, Waveform waveform)
-            : base(name, CurrentSourcePinCount)
+        public CurrentSource(string name, string pos, string neg, IWaveformDescription waveform)
+            : this(name)
         {
-            Parameters.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
-            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.Add(waveform);
             Connect(pos, neg);
         }
 

@@ -5,22 +5,16 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="CurrentSource"/>
     /// </summary>
-    public class AcceptBehavior : Behavior, IAcceptBehavior
+    public class AcceptBehavior : BiasingBehavior, IAcceptBehavior
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private CommonBehaviors.IndependentSourceParameters _bp;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public AcceptBehavior(string name, ComponentBindingContext context) : base(name) 
+        public AcceptBehavior(string name, ComponentBindingContext context) 
+            : base(name, context) 
         {
-            _bp = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
-            _bp.Waveform?.Bind(context);
         }
 
         /// <summary>
@@ -28,7 +22,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Probe()
         {
-            _bp.Waveform?.Probe();
+            Waveform?.Probe();
         }
 
         /// <summary>
@@ -36,7 +30,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Accept()
         {
-            _bp.Waveform?.Accept();
+            Waveform?.Accept();
         }
     }
 }

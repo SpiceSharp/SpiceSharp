@@ -14,7 +14,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="context">The context.</param>
         public AcceptBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            BaseParameters.Waveform?.Bind(context);
         }
 
         /// <summary>
@@ -22,7 +21,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Probe()
         {
-            BaseParameters.Waveform?.Probe();
+            Waveform?.Probe();
         }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IAcceptBehavior.Accept()
         {
-            BaseParameters.Waveform?.Accept();
+            Waveform?.Accept();
         }
     }
 }

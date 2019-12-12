@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Components.Waveforms;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
 using System;
@@ -14,20 +13,20 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PwlHasEmptyArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentException>(() => new Pwl(new double[] { }, new double[] { }));
+            Assert.Throws<ArgumentException>(() => new Pwl(new double[] { }, new double[] { }).Create(null));
         }
 
         [Test]
         public void When_PwlHasNullArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentNullException>(() => new Pwl(null, new double[] { }));
-            Assert.Throws<ArgumentNullException>(() => new Pwl(new double[] { 1.0 }, null));
+            Assert.Throws<ArgumentNullException>(() => new Pwl(null, new double[] { }).Create(null));
+            Assert.Throws<ArgumentNullException>(() => new Pwl(new double[] { 1.0 }, null).Create(null));
         }
 
         [Test]
         public void When_PwlHasNonMonotonouslyIncreasingTimePointsArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentException>(() => new Pwl(new double[] { 1.0, 0.9 }, new double[] { 1.2, 1.3 }));
+            Assert.Throws<ArgumentException>(() => new Pwl(new double[] { 1.0, 0.9 }, new double[] { 1.2, 1.3 }).Create(null));
         }
 
         [Test]

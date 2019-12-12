@@ -16,6 +16,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
 
         /// <summary>
+        /// Gets the waveform.
+        /// </summary>
+        /// <value>
+        /// The waveform.
+        /// </value>
+        protected IWaveform Waveform { get; }
+
+        /// <summary>
         /// Gets the current through the source.
         /// </summary>
         /// <returns></returns>
@@ -70,16 +78,18 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             context.Nodes.CheckNodes(2);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
-            BaseParameters.Waveform?.Bind(context);
 
+            context.TryGetState(out _timeState);
+            if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
+                Waveform = wdesc.Create(_timeState);
             if (!BaseParameters.DcValue.Given)
             {
                 // No DC value: either have a transient value or none
-                if (BaseParameters.Waveform != null)
+                if (Waveform != null)
                 {
                     SpiceSharpWarning.Warning(this, 
                         Properties.Resources.IndependentSources_NoDcUseWaveform.FormatString(Name));
-                    BaseParameters.DcValue.RawValue = BaseParameters.Waveform.Value;
+                    BaseParameters.DcValue.RawValue = Waveform.Value;
                 }
                 else
                 {
@@ -114,8 +124,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             if (_timeState != null)
             {
                 // Use the waveform if possible
-                if (BaseParameters.Waveform != null)
-                    value = BaseParameters.Waveform.Value;
+                if (Waveform != null)
+                    value = Waveform.Value;
                 else
                     value = BaseParameters.DcValue * state.SourceFactor;
             }

@@ -20,6 +20,14 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
 
         /// <summary>
+        /// Gets the waveform.
+        /// </summary>
+        /// <value>
+        /// The waveform.
+        /// </value>
+        public IWaveform Waveform { get; }
+
+        /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
@@ -71,15 +79,17 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             _negNode = BiasingState.Map[context.Nodes[1]];
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
+
             context.TryGetState(out _timeState);
-            BaseParameters.Waveform?.Bind(context);
+            if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
+                Waveform = wdesc.Create(_timeState);
 
             // Give some warnings if no value is given
             if (!BaseParameters.DcValue.Given)
             {
                 // no DC value - either have a transient value or none
                 SpiceSharpWarning.Warning(this,
-                    BaseParameters.Waveform != null
+                    Waveform != null
                         ? Properties.Resources.IndependentSources_NoDcUseWaveform.FormatString(Name)
                         : Properties.Resources.IndependentSources_NoDc.FormatString(Name));
             }
@@ -98,8 +108,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             if (_timeState != null)
             {
                 // Use the waveform if possible
-                if (BaseParameters.Waveform != null)
-                    value = BaseParameters.Waveform.Value;
+                if (Waveform != null)
+                    value = Waveform.Value;
                 else
                     value = BaseParameters.DcValue * BiasingState.SourceFactor;
             }

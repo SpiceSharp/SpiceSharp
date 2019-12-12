@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
@@ -8,8 +7,8 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a sine wave.
     /// </summary>
-    /// <seealso cref="Waveform" />
-    public class Sine : Waveform
+    /// <seealso cref="IWaveformDescription" />
+    public partial class Sine : ParameterSet, IWaveformDescription
     {
         /// <summary>
         /// Gets the offset.
@@ -81,10 +80,14 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Private variables
+        /// Creates a waveform instance for the specified simulation and entity.
         /// </summary>
-        private double _vo, _va, _freq, _td, _theta, _phase;
-        private ITimeSimulationState _timeState;
+        /// <param name="state">The time simulation state.</param>
+        /// <returns>
+        /// A waveform instance.
+        /// </returns>
+        public IWaveform Create(ITimeSimulationState state)
+            => new Instance(state, Offset, Amplitude, Frequency, Delay, Theta, Phase);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sine"/> class.
@@ -140,64 +143,6 @@ namespace SpiceSharp.Components
             Offset.Value = offset;
             Amplitude.Value = amplitude;
             Frequency.Value = frequency;
-        }
-
-        /// <summary>
-        /// Sets up the waveform.
-        /// </summary>
-        public override void Bind(BindingContext context)
-        {
-            if (context.TryGetState(out _timeState))
-            {
-                // Cache parameter values
-                _vo = Offset;
-                _va = Amplitude;
-                _freq = Frequency * 2.0 * Math.PI;
-                _td = Delay;
-                _theta = Theta;
-                _phase = 2 * Math.PI * Phase / 360.0;
-            }
-            Value = _vo;
-
-            // Some checks
-            if (_freq < 0)
-                throw new BadParameterException(nameof(Frequency), Frequency, 
-                    Properties.Resources.Waveforms_Sine_FrequencyTooSmall);
-        }
-
-        /// <summary>
-        /// Probes a new timepoint.
-        /// </summary>
-        public override void Probe()
-        {
-            var time = _timeState.ThrowIfNull("time state").Method.Time;
-            time -= _td;
-
-            // Calculate sine wave result (no offset)
-            double result;
-            if (time <= 0.0)
-                result = 0.0;
-            else
-                result = _va * Math.Sin(_freq * time + _phase);
-
-            // Modify with theta
-            if (Theta.Given)
-                result *= Math.Exp(-time * _theta);
-
-            // Return result (with offset)
-            Value = _vo + result;
-        }
-
-        /// <summary>
-        /// Accepts the current timepoint.
-        /// </summary>
-        public override void Accept()
-        {
-            _timeState.ThrowIfNull("time state");
-
-            // Initialize the sinewave
-            if (_timeState.Method.Time.Equals(0.0))
-                Value = _vo;
         }
     }
 }
