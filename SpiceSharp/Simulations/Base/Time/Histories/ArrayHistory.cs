@@ -1,45 +1,32 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.IntegrationMethods
+namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// A class that implements a history with an array.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="History{T}" />
-    public class ArrayHistory<T> : History<T>
+    /// <seealso cref="IHistory{T}" />
+    public class ArrayHistory<T> : IHistory<T>
     {
         /// <summary>
         /// Gets or sets the current value.
         /// </summary>
-        public override T Current
+        public T Value
         {
             get => _history[0];
             set => _history[0] = value;
         }
 
         /// <summary>
-        /// Gets the value at the specified index.
+        /// Gets the number of points tracked by the history.
         /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The value at the specified index.
-        /// </returns>
-        public override T this[int index]
-        {
-            get
-            {
-                if (index < 0 || index >= Length)
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                return _history[index];
-            }
-        }
-
-        /// <summary>
-        /// Gets all points in the history.
-        /// </summary>
-        protected override IEnumerable<T> Points => _history;
+        /// <value>
+        /// The length.
+        /// </value>
+        public int Length => _history.Length;
 
         /// <summary>
         /// Timesteps in history
@@ -52,7 +39,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="length">The number of points to store.</param>
         public ArrayHistory(int length)
         {
-            Length = length;
             _history = new T[length];
         }
 
@@ -63,7 +49,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="defaultValue">The default value.</param>
         public ArrayHistory(int length, T defaultValue)
         {
-            Length = length;
             _history = new T[length];
             for (var i = 0; i < length; i++)
                 _history[i] = defaultValue;
@@ -77,8 +62,6 @@ namespace SpiceSharp.IntegrationMethods
         public ArrayHistory(int length, Func<int, T> generator)
         {
             generator.ThrowIfNull(nameof(generator));
-
-            Length = length;
             for (var i = 0; i < length; i++)
                 _history[i] = generator(i);
         }
@@ -86,7 +69,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Cycles through history.
         /// </summary>
-        public override void Cycle()
+        public void Accept()
         {
             var tmp = _history[Length - 1];
             for (var i = Length - 1; i > 0; i--)
@@ -95,49 +78,55 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Store a new value in the history.
+        /// Gets the previous value. An index of 0 means the current value.
         /// </summary>
-        /// <param name="newValue">The new value.</param>
-        public override void Store(T newValue)
+        /// <param name="index">The number of points to go back.</param>
+        /// <returns>
+        /// The previous value.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">index</exception>
+        public T GetPreviousValue(int index)
         {
-            // Shift the history
-            for (var i = Length - 1; i > 0; i--)
-                _history[i] = _history[i - 1];
-            _history[0] = newValue;
+            if (index < 0 || index >= Length)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return _history[index];
         }
-
+        
         /// <summary>
-        /// Expands the specified new size.
+        /// Sets all values in the history to the same value.
         /// </summary>
-        /// <param name="newSize">The new size.</param>
-        public override void Expand(int newSize)
+        /// <param name="value">The value.</param>
+        public void Set(T value)
         {
-            if (newSize < Length)
-                return;
-            Array.Resize(ref _history, newSize);
-            Length = newSize;
-        }
-
-        /// <summary>
-        /// Clear the whole history with the same value.
-        /// </summary>
-        /// <param name="value">The value to be cleared with.</param>
-        public override void Clear(T value)
-        {
-            for (var i = 0; i < Length; i++)
+            for (var i = 0; i < _history.Length; i++)
                 _history[i] = value;
         }
 
         /// <summary>
-        /// Clear the history using a function by index.
+        /// Sets all values in the history to the value returned by the specified method.
         /// </summary>
-        /// <param name="generator">The function generating the values.</param>
-        public override void Clear(Func<int, T> generator)
+        /// <param name="method">The method for creating the value. The index indicates the current point.</param>
+        public void Set(Func<int, T> method)
         {
-            generator.ThrowIfNull(nameof(generator));
-
-            for (var i = 0; i < Length; i++)
-                _history[i] = generator(i);
+            method.ThrowIfNull(nameof(method));
+            for (var i = 0; i < _history.Length; i++)
+                _history[i] = method(i);
         }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<T> GetEnumerator() => (IEnumerator<T>)_history.GetEnumerator();
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator() => _history.GetEnumerator();
     }
 }

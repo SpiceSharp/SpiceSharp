@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
@@ -18,101 +19,101 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </summary>
         public override double ChargeBs
         {
-            get => _chargeBs.Current;
-            protected set => _chargeBs.Current = value;
+            get => _chargeBs.Value;
+            protected set => _chargeBs.Value = value;
         }
-        private StateDerivative _chargeBs;
+        private IDerivative _chargeBs;
 
         /// <summary>
         /// Gets or sets the stored bulk-drain charge.
         /// </summary>
         public override double ChargeBd
         {
-            get => _chargeBd.Current;
-            protected set => _chargeBd.Current = value;
+            get => _chargeBd.Value;
+            protected set => _chargeBd.Value = value;
         }
-        private StateDerivative _chargeBd;
+        private IDerivative _chargeBd;
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-source charge storage.
         /// </summary>
         public override double CapGs
         {
-            get => _capGs.Current;
-            protected set => _capGs.Current = value;
+            get => _capGs.Value;
+            protected set => _capGs.Value = value;
         }
-        private StateHistory _capGs;
+        private StateValue<double> _capGs;
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-drain charge storage.
         /// </summary>
         public override double CapGd
         {
-            get => _capGd.Current;
-            protected set => _capGd.Current = value;
+            get => _capGd.Value;
+            protected set => _capGd.Value = value;
         }
-        private StateHistory _capGd;
+        private StateValue<double> _capGd;
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-bulk charge storage.
         /// </summary>
         public override double CapGb
         {
-            get => _capGb.Current;
-            protected set => _capGb.Current = value;
+            get => _capGb.Value;
+            protected set => _capGb.Value = value;
         }
-        private StateHistory _capGb;
+        private StateValue<double> _capGb;
 
         /// <summary>
         /// Gets the stored gate-source charge.
         /// </summary>
         [ParameterName("qgs"), ParameterName("Gate-Source charge storage")]
-        public double ChargeGs => _chargeGs.Current;
-        private StateDerivative _chargeGs;
+        public double ChargeGs => _chargeGs.Value;
+        private IDerivative _chargeGs;
 
         /// <summary>
         /// Gets the stored gate-drain charge.
         /// </summary>
         [ParameterName("qgd"), ParameterName("Gate-Drain storage")]
-        public double ChargeGd => _chargeGd.Current;
-        private StateDerivative _chargeGd;
+        public double ChargeGd => _chargeGd.Value;
+        private IDerivative _chargeGd;
 
         /// <summary>
         /// Gets the stored gate-bulk charge.
         /// </summary>
         [ParameterName("qgb"), ParameterInfo("Gate-Bulk charge")]
-        public double ChargeGb => _chargeGb.Current;
-        private StateDerivative _chargeGb;
+        public double ChargeGb => _chargeGb.Value;
+        private IDerivative _chargeGb;
 
         /// <summary>
         /// Gets the drain-source voltage.
         /// </summary>
         public override double VoltageDs
         {
-            get => _voltageDs.Current;
-            protected set => _voltageDs.Current = value;
+            get => _voltageDs.Value;
+            protected set => _voltageDs.Value = value;
         }
-        private StateHistory _voltageDs;
+        private StateValue<double> _voltageDs;
 
         /// <summary>
         /// Gets the gate-source voltage.
         /// </summary>
         public override double VoltageGs
         {
-            get => _voltageGs.Current;
-            protected set => _voltageGs.Current = value;
+            get => _voltageGs.Value;
+            protected set => _voltageGs.Value = value;
         }
-        private StateHistory _voltageGs;
+        private StateValue<double> _voltageGs;
 
         /// <summary>
         /// Gets the bulk-source voltage.
         /// </summary>
         public override double VoltageBs
         {
-            get => _voltageBs.Current;
-            protected set => _voltageBs.Current = value;
+            get => _voltageBs.Value;
+            protected set => _voltageBs.Value = value;
         }
-        private StateHistory _voltageBs;
+        private StateValue<double> _voltageBs;
 
         /// <summary>
         /// Gets the matrix elements.
@@ -152,13 +153,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 new MatrixLocation(_sourceNodePrime, _bulkNode)
             }, new[] { _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime });
 
-            var method = context.GetState<ITimeSimulationState>().Method;
-            _voltageGs = method.CreateHistory();
-            _voltageDs = method.CreateHistory();
-            _voltageBs = method.CreateHistory();
-            _capGs = method.CreateHistory();
-            _capGd = method.CreateHistory();
-            _capGb = method.CreateHistory();
+            var method = context.GetState<IIntegrationMethod>();
+            _voltageGs = new StateValue<double>(2); method.RegisterState(_voltageGs);
+            _voltageDs = new StateValue<double>(2); method.RegisterState(_voltageDs);
+            _voltageBs = new StateValue<double>(2); method.RegisterState(_voltageBs);
+            _capGs = new StateValue<double>(2); method.RegisterState(_capGs);
+            _capGd = new StateValue<double>(2); method.RegisterState(_capGd);
+            _capGb = new StateValue<double>(2); method.RegisterState(_capGb);
             _chargeGs = method.CreateDerivative();
             _chargeGd = method.CreateDerivative();
             _chargeGb = method.CreateDerivative();
@@ -171,7 +172,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="StateDerivative" /> or <see cref="StateHistory" />.
+        /// and the result is stored in each respective <see cref="IDerivative" /> or <see cref="StateValue{T}" />.
         /// </remarks>
         void ITimeBehavior.InitializeStates()
         {
@@ -196,12 +197,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var capgd = 2 * CapGd + gateDrainOverlapCap;
             var capgb = 2 * CapGb + gateBulkOverlapCap;
 
-            _chargeGs.Current = capgs * vgs;
-            _chargeGd.Current = capgd * vgd;
-            _chargeGb.Current = capgb * vgb;
-            _voltageGs.Current = vgs;
-            _voltageDs.Current = vds;
-            _voltageBs.Current = vbs;
+            _chargeGs.Value = capgs * vgs;
+            _chargeGd.Value = capgd * vgd;
+            _chargeGb.Value = capgb * vgb;
+            _voltageGs.Value = vgs;
+            _voltageDs.Value = vds;
+            _voltageBs.Value = vbs;
         }
 
         /// <summary>
@@ -218,12 +219,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var vgb = vgs - vbs;
 
             CalculateCapacitances(vgs, vds, vbs);
-            
+
             _chargeBd.Integrate();
-            var gbd = _chargeBd.Jacobian(CapBd);
+            var gbd = _chargeBd.GetContributions(CapBd).Jacobian;
             var cbd = _chargeBd.Derivative;
             _chargeBs.Integrate();
-            var gbs = _chargeBs.Jacobian(CapBs);
+            var gbs = _chargeBs.GetContributions(CapBs).Jacobian;
             var cbs = _chargeBs.Derivative;
 
             // Calculate Meyer's capacitors
@@ -233,26 +234,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * BaseParameters.Width;
             var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * EffectiveLength;
 
-            var vgs1 = _voltageGs[1];
-            var vgd1 = vgs1 - _voltageDs[1];
-            var vgb1 = vgs1 - _voltageBs[1];
-            var capgs = _capGs[0] + _capGs[1] + gateSourceOverlapCap;
-            var capgd = _capGd[0] + _capGd[1] + gateDrainOverlapCap;
-            var capgb = _capGb[0] + _capGb[1] + gateBulkOverlapCap;
+            var vgs1 = _voltageGs.GetPreviousValue(1);
+            var vgd1 = vgs1 - _voltageDs.GetPreviousValue(1);
+            var vgb1 = vgs1 - _voltageBs.GetPreviousValue(1);
+            var capgs = _capGs.GetPreviousValue(0) + _capGs.GetPreviousValue(1) + gateSourceOverlapCap;
+            var capgd = _capGd.GetPreviousValue(0) + _capGd.GetPreviousValue(1) + gateDrainOverlapCap;
+            var capgb = _capGb.GetPreviousValue(0) + _capGb.GetPreviousValue(1) + gateBulkOverlapCap;
 
-            _chargeGs.Current = (vgs - vgs1) * capgs + _chargeGs[1];
-            _chargeGd.Current = (vgd - vgd1) * capgd + _chargeGd[1];
-            _chargeGb.Current = (vgb1 - vgb1) * capgb + _chargeGb[1];
+            _chargeGs.Value = (vgs - vgs1) * capgs + _chargeGs.GetPreviousValue(1);
+            _chargeGd.Value = (vgd - vgd1) * capgd + _chargeGd.GetPreviousValue(1);
+            _chargeGb.Value = (vgb1 - vgb1) * capgb + _chargeGb.GetPreviousValue(1);
 
             _chargeGs.Integrate();
-            var gcgs = _chargeGs.Jacobian(capgs);
-            var ceqgs = _chargeGs.RhsCurrent(gcgs, vgs);
+            var info = _chargeGs.GetContributions(capgs, vgs);
+            var gcgs = info.Jacobian;
+            var ceqgs = info.Rhs;
             _chargeGd.Integrate();
-            var gcgd = _chargeGd.Jacobian(capgd);
-            var ceqgd = _chargeGd.RhsCurrent(gcgd, vgd);
+            info = _chargeGd.GetContributions(capgd, vgd);
+            var gcgd = info.Jacobian;
+            var ceqgd = info.Rhs;
             _chargeGb.Integrate();
-            var gcgb = _chargeGb.Jacobian(capgb);
-            var ceqgb = _chargeGb.RhsCurrent(gcgb, vgb);
+            info = _chargeGb.GetContributions(capgb, vgb);
+            var gcgb = info.Jacobian;
+            var ceqgb = info.Rhs;
 
             // Load current vector
             var ceqbs = ModelParameters.MosfetType * (cbs - gbs * vbs);

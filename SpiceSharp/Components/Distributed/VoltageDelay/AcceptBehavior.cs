@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
@@ -15,7 +16,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         private TransientBehavior _tran;
         private double _oldSlope;
         private bool _wasBreak;
-        private IntegrationMethod _method;
+        private IIntegrationMethod _method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
@@ -29,7 +30,7 @@ namespace SpiceSharp.Components.DelayBehaviors
 
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
             _tran = context.Behaviors.GetValue<TransientBehavior>();
-            _method = context.GetState<ITimeSimulationState>().Method;
+            _method = context.GetState<IIntegrationMethod>();
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             // Force first order interpolation if we are close to a breakpoint
             var breakpoint = _wasBreak;
-            if (_method is IBreakpoints method)
+            if (_method is IBreakpointMethod method)
                 breakpoint |= method.Break;
             _tran.Signal.Probe(_method.Time, breakpoint);
         }
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void IAcceptBehavior.Accept()
         {
-            if (_method is IBreakpoints method)
+            if (_method is IBreakpointMethod method)
             {
                 // The integration method supports breakpoints, let's see if we need to add one
                 if (_wasBreak || method.Break)

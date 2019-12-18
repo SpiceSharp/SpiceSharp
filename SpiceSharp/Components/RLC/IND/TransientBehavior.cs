@@ -29,13 +29,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// The state tracking the flux.
         /// </summary>
-        private StateDerivative _flux;
+        private IDerivative _flux;
 
         /// <summary>
         /// Gets the flux of the inductor.
         /// </summary>
         [ParameterName("flux"), ParameterInfo("The flux through the inductor.")]
-        public double Flux => _flux.Current;
+        public double Flux => _flux.Value;
 
         private int _branchEq;
 
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 new MatrixLocation(_branchEq, _branchEq)
             }, new[] { _branchEq });
 
-            var method = context.GetState<ITimeSimulationState>().Method;
+            var method = context.GetState<IIntegrationMethod>();
             _flux = method.CreateDerivative();
         }
 
@@ -62,9 +62,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             // Get the current through
             if (BaseParameters.InitialCondition.Given)
-                _flux.Current = BaseParameters.InitialCondition * Inductance;
+                _flux.Value = BaseParameters.InitialCondition * Inductance;
             else
-                _flux.Current = BiasingState.Solution[_branchEq] * Inductance;
+                _flux.Value = BiasingState.Solution[_branchEq] * Inductance;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         void ITimeBehavior.Load()
         {
             // Initialize
-            _flux.ThrowIfNotBound(this).Current = Inductance * BiasingState.Solution[_branchEq];
+            _flux.ThrowIfNotBound(this).Value = Inductance * BiasingState.Solution[_branchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
@@ -84,9 +84,10 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Finally load the Y-matrix
             _flux.Integrate();
+            var info = _flux.GetContributions(Inductance);
             TransientElements.Add(
-                -_flux.Jacobian(Inductance),
-                _flux.RhsCurrent()
+                -info.Jacobian,
+                info.Rhs
                 );
         }
     }

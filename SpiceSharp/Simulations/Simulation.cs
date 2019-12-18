@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.General;
 
 namespace SpiceSharp.Simulations
 {
@@ -65,7 +66,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The configuration.
         /// </value>
-        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary(new TypeDictionary<IParameterSet>());
+        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary(new InheritedTypeDictionary<IParameterSet>());
 
         /// <summary>
         /// Gets the variables.

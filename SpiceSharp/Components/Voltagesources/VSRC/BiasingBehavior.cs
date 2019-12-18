@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
-        private ITimeSimulationState _timeState;
+        private IIntegrationMethod _method;
         private int _posNode, _negNode, _brNode;
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
 
-            context.TryGetState(out _timeState);
+            context.TryGetState(out _method);
             if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
-                Waveform = wdesc.Create(_timeState);
+                Waveform = wdesc.Create(_method);
             if (!BaseParameters.DcValue.Given)
             {
                 // No DC value: either have a transient value or none
@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             // Connections
             BiasingState = context.GetState<IBiasingSimulationState>();
-            context.TryGetState(out _timeState);
+            context.TryGetState(out _method);
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             var state = BiasingState.ThrowIfNotBound(this);
             double value;
 
-            if (_timeState != null)
+            if (_method != null)
             {
                 // Use the waveform if possible
                 if (Waveform != null)

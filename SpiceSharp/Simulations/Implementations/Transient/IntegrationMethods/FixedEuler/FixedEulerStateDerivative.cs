@@ -5,8 +5,8 @@
         /// <summary>
         /// A state that can be derived by the integration method
         /// </summary>
-        /// <seealso cref="SpiceSharp.IntegrationMethods.StateDerivative" />
-        protected class FixedEulerStateDerivative : StateDerivative
+        /// <seealso cref="SpiceSharp.IntegrationMethods.IDerivative" />
+        protected class FixedEulerStateDerivative : IDerivative
         {
             private readonly int _index;
             private readonly FixedEuler _method;

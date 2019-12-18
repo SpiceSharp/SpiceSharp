@@ -151,7 +151,7 @@ namespace SpiceSharpTest.Models
             // Create exports
             IExport<double>[] exports =
             {
-                new GenericExport<double>(tran, () => tran.State.Method.Time), 
+                new GenericExport<double>(tran, () => tran.State.Time), 
                 new RealVoltageExport(tran, "out")
             };
 

@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 
-        private ITimeSimulationState _timeState;
+        private IIntegrationMethod _method;
         private int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             context.Nodes.CheckNodes(3);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-            context.TryGetState(out _timeState);
+            context.TryGetState(out _method);
             _drainNode = BiasingState.Map[context.Nodes[0]];
             _gateNode = BiasingState.Map[context.Nodes[1]];
             _sourceNode = BiasingState.Map[context.Nodes[2]];
@@ -322,7 +322,7 @@ namespace SpiceSharp.Components.JFETBehaviors
 
             // Initialization
             check = true;
-            if (state.Init == InitializationModes.Junction && _timeState != null && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && _method != null && state.UseDc && state.UseIc)
             {
                 var vds = ModelParameters.JFETType * BaseParameters.InitialVds;
                 vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;

@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
-        private ITimeSimulationState _timeState;
+        private IIntegrationMethod _method;
         private int _posNode, _negNode;
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
 
-            context.TryGetState(out _timeState);
+            context.TryGetState(out _method);
             if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
-                Waveform = wdesc.Create(_timeState);
+                Waveform = wdesc.Create(_method);
 
             // Give some warnings if no value is given
             if (!BaseParameters.DcValue.Given)
@@ -105,7 +105,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             double value;
 
             // Time domain analysis
-            if (_timeState != null)
+            if (_method != null)
             {
                 // Use the waveform if possible
                 if (Waveform != null)

@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 
-namespace SpiceSharp.IntegrationMethods
+namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// Represents the state of an integration method at a certain time point.
@@ -10,16 +10,25 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets or sets the timestep.
         /// </summary>
+        /// <value>
+        /// The delta.
+        /// </value>
         public double Delta { get; set; }
 
         /// <summary>
         /// Gets the associated solution with the timepoint.
         /// </summary>
+        /// <value>
+        /// The solution.
+        /// </value>
         public IVector<double> Solution { get; }
 
         /// <summary>
         /// Gets the states allocated by entities at this timepoint.
         /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
         public IVector<double> State { get; }
 
         /// <summary>
@@ -27,12 +36,12 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="delta">The timestep.</param>
         /// <param name="solution">The solution.</param>
-        /// <param name="state">The state.</param>
-        public IntegrationState(double delta, IVector<double> solution, IVector<double> state)
+        /// <param name="states">The number of states to keep for derivatives.</param>
+        public IntegrationState(double delta, IVector<double> solution, int states)
         {
             Delta = delta;
             Solution = solution.ThrowIfNull(nameof(solution));
-            State = state.ThrowIfNull(nameof(state));
+            State = new DenseVector<double>(states);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.IntegrationMethods
+namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// A collection of breakpoints used for time-domain analysis.

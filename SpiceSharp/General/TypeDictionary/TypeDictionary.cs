@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp
+namespace SpiceSharp.General
 {
     /// <summary>
     /// An implementation of the <see cref="ITypeDictionary{T}"/> interface.

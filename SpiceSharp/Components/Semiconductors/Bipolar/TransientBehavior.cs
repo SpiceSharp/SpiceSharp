@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -47,15 +48,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the excess phase base-X capacitor current.
         /// </summary>
         [ParameterName("cexbc"), ParameterInfo("Total capacitance in B-X junction")]
-        public double CurrentExBc => _biasingStateExcessPhaseCurrentBc.Current;
+        public double CurrentExBc => _biasingStateExcessPhaseCurrentBc.Value;
 
         /// <summary>
         /// Gets or sets the base-emitter charge storage.
         /// </summary>
         public sealed override double ChargeBe
         {
-            get => _biasingStateChargeBe.Current;
-            protected set => _biasingStateChargeBe.Current = value;
+            get => _biasingStateChargeBe.Value;
+            protected set => _biasingStateChargeBe.Value = value;
         }
 
         /// <summary>
@@ -63,8 +64,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public sealed override double ChargeBc
         {
-            get => _biasingStateChargeBc.Current;
-            protected set => _biasingStateChargeBc.Current = value;
+            get => _biasingStateChargeBc.Value;
+            protected set => _biasingStateChargeBc.Value = value;
         }
 
         /// <summary>
@@ -72,8 +73,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public sealed override double ChargeCs
         {
-            get => _biasingStateChargeCs.Current;
-            protected set => _biasingStateChargeCs.Current = value;
+            get => _biasingStateChargeCs.Value;
+            protected set => _biasingStateChargeCs.Value = value;
         }
 
         /// <summary>
@@ -81,16 +82,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public sealed override double ChargeBx
         {
-            get => _biasingStateChargeBx.Current;
-            protected set => _biasingStateChargeBx.Current = value;
+            get => _biasingStateChargeBx.Value;
+            protected set => _biasingStateChargeBx.Value = value;
         }
 
-        private StateDerivative _biasingStateChargeBe;
-        private StateDerivative _biasingStateChargeBc;
-        private StateDerivative _biasingStateChargeCs;
-        private StateDerivative _biasingStateChargeBx;
-        private StateHistory _biasingStateExcessPhaseCurrentBc;
-        private IntegrationMethod _method;
+        private IDerivative _biasingStateChargeBe;
+        private IDerivative _biasingStateChargeBc;
+        private IDerivative _biasingStateChargeCs;
+        private IDerivative _biasingStateChargeBx;
+        private StateValue<double> _biasingStateExcessPhaseCurrentBc;
+        private IIntegrationMethod _method;
         private int _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
@@ -122,12 +123,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 new MatrixLocation(_collectorPrimeNode, _baseNode)
             }, new[] { _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode });
 
-            _method = context.GetState<ITimeSimulationState>().Method;
+            _method = context.GetState<IIntegrationMethod>();
             _biasingStateChargeBe = _method.CreateDerivative();
             _biasingStateChargeBc = _method.CreateDerivative();
             _biasingStateChargeCs = _method.CreateDerivative();
             _biasingStateChargeBx = _method.CreateDerivative(false); // Spice 3f5 does not include this state for LTE calculations
-            _biasingStateExcessPhaseCurrentBc = _method.CreateHistory();
+            _biasingStateExcessPhaseCurrentBc = new StateValue<double>(3);
+            _method.RegisterState(_biasingStateExcessPhaseCurrentBc);
         }
 
         /// <summary>
@@ -141,7 +143,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
             var vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
-            _biasingStateExcessPhaseCurrentBc.Current = CapCurrentBe / BaseCharge;
+            _biasingStateExcessPhaseCurrentBc.Value = CapCurrentBe / BaseCharge;
         }
 
         /// <summary>
@@ -162,19 +164,20 @@ namespace SpiceSharp.Components.BipolarBehaviors
             CalculateCapacitances(vbe, vbc, vbx, vcs);
 
             _biasingStateChargeBe.Integrate();
-            var geqcb = _biasingStateChargeBe.Jacobian(Geqcb); // Multiplies geqcb with method.Slope (ag[0])
-            gpi += _biasingStateChargeBe.Jacobian(CapBe);
+            var info = _biasingStateChargeBe.GetContributions(Geqcb);
+            var geqcb = info.Jacobian; // Multiplies geqcb with method.Slope (ag[0])
+            gpi += _biasingStateChargeBe.GetContributions(CapBe).Jacobian;
             cb += _biasingStateChargeBe.Derivative;
             _biasingStateChargeBc.Integrate();
-            gmu += _biasingStateChargeBc.Jacobian(CapBc);
+            gmu += _biasingStateChargeBc.GetContributions(CapBc).Jacobian;
             cb += _biasingStateChargeBc.Derivative;
             cc -= _biasingStateChargeBc.Derivative;
 
             // Charge storage for c-s and b-x junctions
             _biasingStateChargeCs.Integrate();
-            var gccs = _biasingStateChargeCs.Jacobian(CapCs);
+            var gccs = _biasingStateChargeCs.GetContributions(CapCs).Jacobian;
             _biasingStateChargeBx.Integrate();
-            var geqbx = _biasingStateChargeBx.Jacobian(CapBx);
+            var geqbx = _biasingStateChargeBx.GetContributions(CapBx).Jacobian;
 
             // Load current excitation vector
             var ceqcs = ModelParameters.BipolarType * (_biasingStateChargeCs.Derivative - vcs * gccs);
@@ -217,7 +220,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var td = ModelTemperature.ExcessPhaseFactor;
             if (td.Equals(0))
             {
-                _biasingStateExcessPhaseCurrentBc.Current = cex;
+                _biasingStateExcessPhaseCurrentBc.Value = cex;
                 return;
             }
             
@@ -228,8 +231,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var cbe = cex;
             var gbe = gex;
 
-            var delta = _method.GetTimestep(0);
-            var prevdelta = _method.GetTimestep(1);
+            var delta = _method.GetPreviousTimestep(0);
+            var prevdelta = _method.GetPreviousTimestep(1);
             var arg1 = delta / td;
             var arg2 = 3 * arg1;
             arg1 = arg2 * arg1;
@@ -241,11 +244,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 state.States[1][State + Cexbc] = cbe / qb;
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
-            cc = (_biasingStateExcessPhaseCurrentBc[1] * (1 + delta / prevdelta + arg2) 
-                - _biasingStateExcessPhaseCurrentBc[2] * delta / prevdelta) / denom;
+
+            cc = (_biasingStateExcessPhaseCurrentBc.GetPreviousValue(1) * (1 + delta / prevdelta + arg2) 
+                - _biasingStateExcessPhaseCurrentBc.GetPreviousValue(2) * delta / prevdelta) / denom;
             cex = cbe * arg3;
             gex = gbe * arg3;
-            _biasingStateExcessPhaseCurrentBc.Current = cc + cex / BaseCharge;
+            _biasingStateExcessPhaseCurrentBc.Value = cc + cex / BaseCharge;
         }
     }
 }

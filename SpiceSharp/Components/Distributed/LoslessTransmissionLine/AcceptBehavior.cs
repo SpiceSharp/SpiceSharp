@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
@@ -17,7 +18,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         private double _oldSlope1, _oldSlope2;
         private bool _wasBreak = false;
 
-        private IntegrationMethod _method;
+        private IIntegrationMethod _method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
@@ -29,7 +30,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
             _tran = context.Behaviors.GetValue<TransientBehavior>();
-            _method = context.GetState<ITimeSimulationState>().Method;
+            _method = context.GetState<IIntegrationMethod>();
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         void IAcceptBehavior.Probe()
         {
             var breakpoint = _wasBreak;
-            if (_method is IBreakpoints method)
+            if (_method is IBreakpointMethod method)
                 breakpoint |= method.Break;
             _tran.Signals.Probe(_method.Time, breakpoint);
         }
@@ -48,7 +49,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         void IAcceptBehavior.Accept()
         {
-            if (_method is IBreakpoints method)
+            if (_method is IBreakpointMethod method)
             {
                 // The integration method supports breakpoints, let's see if we need to add one
                 if (_wasBreak || method.Break)

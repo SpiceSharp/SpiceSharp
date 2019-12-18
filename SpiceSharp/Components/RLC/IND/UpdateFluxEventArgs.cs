@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// New flux through the inductor (initially set to the original flux)
         /// </summary>
-        public StateDerivative Flux { get; }
+        public IDerivative Flux { get; }
 
         /// <summary>
         /// Gets the state currently being operated on
@@ -41,13 +41,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="current">Current</param>
         /// <param name="flux">Flux</param>
         /// <param name="state">State</param>
-        public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, IBiasingSimulationState state)
+        public UpdateFluxEventArgs(double inductance, double current, IDerivative flux, IBiasingSimulationState state)
         {
             flux.ThrowIfNull(nameof(flux));
 
             Inductance = inductance;
             Current = current;
-            OriginalFlux = flux.Current;
+            OriginalFlux = flux.Value;
             Flux = flux;
             State = state ?? throw new ArgumentNullException(nameof(state));
         }

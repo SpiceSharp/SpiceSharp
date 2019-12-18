@@ -52,13 +52,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Creates a waveform instance for the specified simulation and entity.
         /// </summary>
-        /// <param name="state">The time simulation state.</param>
+        /// <param name="method">The integration method.</param>
         /// <returns>
         /// A waveform instance.
         /// </returns>
-        public IWaveform Create(ITimeSimulationState state)
+        public IWaveform Create(IIntegrationMethod method)
         {
-            return new Instance(Times, Values, state);
+            return new Instance(Times, Values, method);
         }
     }
 }

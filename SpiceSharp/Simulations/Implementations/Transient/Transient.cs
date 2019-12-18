@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
             // First do temperature-dependent calculations and IC
             base.Execute();
             var exportargs = new ExportDataEventArgs(this);
-            var timeConfig = Configurations.GetValue<TimeConfiguration>().ThrowIfNull("time configuration");
+            var config = Configurations.GetValue<IIntegrationMethodDescription>().ThrowIfNull("time configuration");
 
             // Start our statistics
             Statistics.TransientTime.Start();
@@ -56,18 +56,18 @@ namespace SpiceSharp.Simulations
 
             try
             {
-                var newDelta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
+                var newDelta = Math.Min(config.StopTime / 50.0, config.InitialStep) / 10.0;
                 while (true)
                 {
                     // Accept the last evaluated time point
                     Accept();
 
                     // Export the current timepoint
-                    if (TimeState.Method.Time >= timeConfig.InitTime)
+                    if (Method.Time >= config.StartTime)
                         OnExport(exportargs);
 
                     // Detect the end of the simulation
-                    if (TimeState.Method.Time >= timeConfig.FinalTime)
+                    if (Method.Time >= config.StopTime)
                     {
                         // Keep our statistics
                         Statistics.TransientTime.Stop();
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
                     }
 
                     // Continue integration
-                    TimeState.Method.Continue(this, ref newDelta);
+                    Method.Prepare(ref newDelta);
 
                     // Find a valid time point
                     while (true)
@@ -88,19 +88,19 @@ namespace SpiceSharp.Simulations
                         Probe(newDelta);
 
                         // Try to solve the new point
-                        var converged = TimeIterate(timeConfig.TranMaxIterations);
+                        var converged = TimeIterate(config.TranMaxIterations);
                         Statistics.TimePoints++;
 
                         // Did we fail to converge to a solution?
                         if (!converged)
                         {
-                            TimeState.Method.NonConvergence(this, out newDelta);
+                            Method.Reject(out newDelta);
                             Statistics.Rejected++;
                         }
                         else
                         {
                             // If our integration method approves of our solution, continue to the next timepoint
-                            if (TimeState.Method.Evaluate(this, out newDelta))
+                            if (Method.Evaluate(out newDelta))
                                 break;
                             Statistics.Rejected++;
                         }

@@ -603,15 +603,15 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">The circuit.</param>
         protected void DumpTransientState(Transient tran, Circuit ckt)
         {
-            var state = tran.GetState<ITimeSimulationState>();
+            var state = tran.GetState<IIntegrationMethod>();
             var rstate = tran.GetState<IBiasingSimulationState>();
 
             Console.WriteLine("----------- Dumping transient information -------------");
-            Console.WriteLine($"Base time: {state.Method.BaseTime}");
-            Console.WriteLine($"Target time: {state.Method.Time}");
+            Console.WriteLine($"Base time: {state.BaseTime}");
+            Console.WriteLine($"Target time: {state.Time}");
             Console.Write($"Last timesteps (current first):");
-            for (var i = 0; i <= state.Method.MaxOrder; i++)
-                Console.Write("{0}{1}", i > 0 ? ", " : "", state.Method.GetTimestep(i));
+            for (var i = 0; i <= state.MaxOrder; i++)
+                Console.Write("{0}{1}", i > 0 ? ", " : "", state.GetPreviousTimestep(i));
             Console.WriteLine();
             Console.WriteLine("Problem variable: {0}", tran.ProblemVariable);
             Console.WriteLine("Problem variable value: {0}", rstate.Solution[rstate.Map[tran.ProblemVariable]]);
@@ -637,9 +637,9 @@ namespace SpiceSharpTest.Models
             Dictionary<int, string> variables = new Dictionary<int, string>();
             foreach (var variable in rstate.Map)
                 variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.UnknownType}): {rstate.Solution[variable.Value]}");
-            for (var i = 0; i <= state.Method.MaxOrder; i++)
+            for (var i = 0; i <= state.MaxOrder; i++)
             {
-                var oldsolution = state.Method.GetSolution(i);
+                var oldsolution = state.GetPreviousSolution(i);
                 for (var k = 1; k <= variables.Count; k++)
                     variables[k] += $", {oldsolution[k]}";
             }
@@ -652,16 +652,17 @@ namespace SpiceSharpTest.Models
             }
             Console.WriteLine();
 
+            /*
             // Dump the states used by the transient
             #if DEBUG
             Console.WriteLine("- States");
-            var intstate = state.Method.GetStates(0);
+            var intstate = state.GetPreviousStates(0);
             string[] output = new string[intstate.Length];
             for (var i = 0; i < intstate.Length; i++)
                 output[i] = $"{intstate[i]}";
-            for (var k = 1; k <= state.Method.MaxOrder; k++)
+            for (var k = 1; k <= state.MaxOrder; k++)
             {
-                intstate = state.Method.GetStates(k);
+                intstate = state.GetPreviousStates(k);
                 for (var i = 0; i < intstate.Length; i++)
                     output[i] += $", {intstate[i]}";
             }
@@ -669,6 +670,7 @@ namespace SpiceSharpTest.Models
                 Console.WriteLine(output[i]);
             Console.WriteLine();
             #endif
+            */
 
             Console.WriteLine("------------------------ End of information ------------------------");
         }

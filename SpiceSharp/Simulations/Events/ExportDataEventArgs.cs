@@ -22,8 +22,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is IStateful<ITimeSimulationState> sim)
-                    return sim.State.Method.Time;
+                if (_simulation is IStateful<IIntegrationMethod> sim)
+                    return sim.State.Time;
                 return double.NaN;
             }
         }

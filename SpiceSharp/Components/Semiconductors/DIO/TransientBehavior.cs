@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// The charge on the junction capacitance
         /// </summary>
-        private StateDerivative _capCharge;
+        private IDerivative _capCharge;
         private int _negNode, _posPrimeNode;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _negNode = BiasingState.Map[context.Nodes[1]];
             _posPrimeNode = BiasingState.Map[PosPrime];
 
-            var method = context.GetState<ITimeSimulationState>().Method;
+            var method = context.GetState<IIntegrationMethod>();
             _capCharge = method.CreateDerivative();
         }
 
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             double vd = (BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
             CalculateCapacitance(vd);
-            _capCharge.Current = LocalCapCharge;
+            _capCharge.Value = LocalCapCharge;
         }
 
         /// <summary>
@@ -58,10 +58,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
             CalculateCapacitance(vd);
 
             // Integrate
-            _capCharge.Current = LocalCapCharge;
+            _capCharge.Value = LocalCapCharge;
             _capCharge.Integrate();
-            var geq = _capCharge.Jacobian(LocalCapacitance);
-            var ceq = _capCharge.RhsCurrent(geq, vd);
+            var info = _capCharge.GetContributions(LocalCapacitance, vd);
+            var geq = info.Jacobian;
+            var ceq = info.Rhs;
 
             // Store the current
             LocalCurrent += _capCharge.Derivative;

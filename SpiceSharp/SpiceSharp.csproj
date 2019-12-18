@@ -33,6 +33,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Simulations\Implementations\Transient\IntegrationMethods\FixedEuler\**" />
+    <Compile Remove="Simulations\Implementations\Transient\IntegrationMethods\Spice\Gear\**" />
+    <EmbeddedResource Remove="Simulations\Implementations\Transient\IntegrationMethods\FixedEuler\**" />
+    <EmbeddedResource Remove="Simulations\Implementations\Transient\IntegrationMethods\Spice\Gear\**" />
+    <None Remove="Simulations\Implementations\Transient\IntegrationMethods\FixedEuler\**" />
+    <None Remove="Simulations\Implementations\Transient\IntegrationMethods\Spice\Gear\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

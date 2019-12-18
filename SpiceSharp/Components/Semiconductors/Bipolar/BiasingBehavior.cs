@@ -143,7 +143,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public double Dqbdve { get; protected set; }
 
-        private ITimeSimulationState _timeState;
+        private IIntegrationMethod _method;
         private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
-            context.TryGetState(out _timeState);
+            context.TryGetState(out _method);
             _collectorNode = BiasingState.Map[context.Nodes[0]];
             _baseNode = BiasingState.Map[context.Nodes[1]];
             _emitterNode = BiasingState.Map[context.Nodes[2]];
@@ -374,7 +374,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var state = BiasingState;
 
             // Initialization
-            if (state.Init == InitializationModes.Junction && (_timeState != null) && state.UseDc && state.UseIc)
+            if (state.Init == InitializationModes.Junction && (_method != null) && state.UseDc && state.UseIc)
             {
                 vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
                 var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;

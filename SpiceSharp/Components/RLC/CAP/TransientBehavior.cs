@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the state tracking the charge.
         /// </summary>
-        protected StateDerivative QCap { get; private set; }
+        protected IDerivative QCap { get; private set; }
 
         private int _posNode, _negNode;
 
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 new MatrixLocation(_negNode, _negNode)
             }, new[] { _posNode, _negNode });
 
-            var method = context.GetState<ITimeSimulationState>().Method;
+            var method = context.GetState<IIntegrationMethod>();
             QCap = method.CreateDerivative();
         }
 
@@ -82,9 +82,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             // Calculate the state for DC
             var sol = BiasingState.Solution;
             if (BiasingState.UseIc)
-                QCap.Current = Capacitance * BaseParameters.InitialCondition;
+                QCap.Value = Capacitance * BaseParameters.InitialCondition;
             else
-                QCap.Current = Capacitance * (sol[_posNode] - sol[_negNode]);
+                QCap.Value = Capacitance * (sol[_posNode] - sol[_negNode]);
         }
         
         /// <summary>
@@ -95,10 +95,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             var vcap = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
 
             // Integrate
-            QCap.Current = Capacitance * vcap;
+            QCap.Value = Capacitance * vcap;
             QCap.Integrate();
-            var geq = QCap.Jacobian(Capacitance);
-            var ceq = QCap.RhsCurrent();
+            var info = QCap.GetContributions(Capacitance);
+            var geq = info.Jacobian;
+            var ceq = info.Rhs;
 
             // Load matrix and rhs vector
             Elements.Add(geq, -geq, -geq, geq, -ceq, ceq);

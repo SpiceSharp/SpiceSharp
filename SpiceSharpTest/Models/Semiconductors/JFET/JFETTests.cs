@@ -471,7 +471,7 @@ namespace SpiceSharpTest.Models
             // Build the exports
             var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.State.Method.Time),
+                new GenericExport<double>(tran, () => tran.State.Time),
                 new RealPropertyExport(tran, "V1", "i"),
                 new RealPropertyExport(tran, "V2", "i")
             };

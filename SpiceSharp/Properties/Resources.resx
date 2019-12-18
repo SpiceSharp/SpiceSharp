@@ -261,6 +261,9 @@
   <data name="Simulations.DC.NoSweepPoints" xml:space="preserve">
     <value>The sweep '{0}' does not contain any points to simulate.</value>
   </data>
+  <data name="Simulations.History.InvalidLength" xml:space="preserve">
+    <value>Histories cannot track less than one point.</value>
+  </data>
   <data name="Simulations.InvalidInitializationMode" xml:space="preserve">
     <value>Invalid initialization mode.</value>
   </data>

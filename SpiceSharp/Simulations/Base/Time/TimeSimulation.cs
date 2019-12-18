@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
 {
@@ -34,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The state of the time.
         /// </value>
-        protected TimeSimulationState TimeState { get; }
+        protected IIntegrationMethod Method { get; private set; }
 
         /// <summary>
         /// Gets the state.
@@ -42,15 +43,16 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The state.
         /// </value>
-        public new ITimeSimulationState State => TimeState;
+        public new IIntegrationMethod State => Method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        protected TimeSimulation(string name) : base(name)
+        protected TimeSimulation(string name) 
+            : base(name)
         {
-            Configurations.Add(new TimeConfiguration());
+            Configurations.Add(new Trapezoidal());
             Statistics = new TimeSimulationStatistics();
         }
 
@@ -63,9 +65,8 @@ namespace SpiceSharp.Simulations
         protected TimeSimulation(string name, double step, double final)
             : base(name)
         {
-            Configurations.Add(new TimeConfiguration(step, final));
+            Configurations.Add(new Trapezoidal { InitialStep = step, StopTime = final });
             Statistics = new TimeSimulationStatistics();
-            TimeState = new TimeSimulationState();
         }
 
         /// <summary>
@@ -78,9 +79,8 @@ namespace SpiceSharp.Simulations
         protected TimeSimulation(string name, double step, double final, double maxStep)
             : base(name)
         {
-            Configurations.Add(new TimeConfiguration(step, final, maxStep));
+            Configurations.Add(new Trapezoidal { InitialStep = step, StopTime = final, MaxStep = maxStep });
             Statistics = new TimeSimulationStatistics();
-            TimeState = new TimeSimulationState();
         }
 
         /// <summary>
@@ -92,9 +92,9 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors and configurations
-            var config = Configurations.GetValue<TimeConfiguration>().ThrowIfNull("time configuration");
+            var config = Configurations.GetValue<IIntegrationMethodDescription>();
             _useIc = config.UseIc;
-            TimeState.Method = config.Method.ThrowIfNull("method");
+            Method = config.Create(this);
 
             // Setup
             base.Setup(entities);
@@ -103,11 +103,12 @@ namespace SpiceSharp.Simulations
             _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 
-            TimeState.Setup(this);
-
             // Set up initial conditions
             foreach (var ic in config.InitialConditions)
                 _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
+
+            // Initialize the integration method (all components have been able to allocate integration states).
+            Method.Initialize();
         }
 
         /// <summary>
@@ -148,9 +149,6 @@ namespace SpiceSharp.Simulations
             _transientBehaviors = null;
             _acceptBehaviors = null;
 
-            // Destroy the integration method
-            TimeState.Unsetup();
-
             // Destroy the initial conditions
             AfterLoad -= LoadInitialConditions;
             _initialConditions.Clear();
@@ -170,7 +168,7 @@ namespace SpiceSharp.Simulations
             var solver = BiasingState.Solver;
             // var pass = false;
             var iterno = 0;
-            var initTransient = TimeState.Method.BaseTime.Equals(0.0);
+            var initTransient = Method.BaseTime.Equals(0.0);
             var state = BiasingState;
 
             // Ignore operating condition point, just use the solution as-is
@@ -302,7 +300,7 @@ namespace SpiceSharp.Simulations
         {
             foreach (var behavior in _transientBehaviors)
                 behavior.InitializeStates();
-            TimeState.Method.Initialize(this);
+            Method.InitializeStates();
         }
 
         /// <summary>
@@ -338,7 +336,7 @@ namespace SpiceSharp.Simulations
         {
             foreach (var behavior in _acceptBehaviors)
                 behavior.Accept();
-            TimeState.Method.Accept(this);
+            Method.Accept();
             Statistics.Accepted++;
         }
 
@@ -348,7 +346,7 @@ namespace SpiceSharp.Simulations
         /// <param name="delta">The timestep.</param>
         protected void Probe(double delta)
         {
-            TimeState.Method.Probe(this, delta);
+            Method.Probe(delta);
             foreach (var behavior in _acceptBehaviors)
                 behavior.Probe();
         }

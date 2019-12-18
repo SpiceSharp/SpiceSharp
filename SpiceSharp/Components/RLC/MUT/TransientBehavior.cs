@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         private void UpdateFlux2(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
-            args.Flux.Current += Factor * state.Solution[_br1];
+            args.Flux.Value += Factor * state.Solution[_br1];
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         private void UpdateFlux1(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
-            Conductance = args.Flux.Jacobian(Factor);
-            args.Flux.Current += Factor * state.Solution[_br2];
+            Conductance = args.Flux.GetContributions(Factor).Jacobian;
+            args.Flux.Value += Factor * state.Solution[_br2];
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace SpiceSharp.Components
         protected class Instance : IWaveform
         {
             private readonly double[] _times, _values;
-            private readonly ITimeSimulationState _state;
+            private readonly IIntegrationMethod _method;
             private Line _line;
             private int _index;
 
@@ -65,12 +66,12 @@ namespace SpiceSharp.Components
             /// </summary>
             /// <param name="times">The times.</param>
             /// <param name="values">The values.</param>
-            /// <param name="state"></param>
+            /// <param name="method">The integration method.</param>
             /// <exception cref="ArgumentException">Thrown if no points are specified. </exception>
             /// <exception cref="SizeMismatchException">Thrown if the size of the time points does not match the size of the values.</exception>
-            public Instance(IEnumerable<double> times, IEnumerable<double> values, ITimeSimulationState state)
+            public Instance(IEnumerable<double> times, IEnumerable<double> values, IIntegrationMethod method)
             {
-                _state = state;
+                _method = method;
                 _times = times.ThrowIfNull(nameof(times)).ToArray();
                 _values = values.ThrowIfNull(nameof(values)).ToArray();
                 if (_times.Length == 0 || _values.Length == 0)
@@ -94,7 +95,7 @@ namespace SpiceSharp.Components
             /// </summary>
             public void Probe()
             {
-                var time = _state?.Method?.Time ?? 0.0;
+                var time = _method?.Time ?? 0.0;
 
                 // Find the line segment
                 // The line segment is likely to be very close to the current segment.
@@ -139,12 +140,12 @@ namespace SpiceSharp.Components
             /// </summary>
             public void Accept()
             {
-                if (_state.Method is IBreakpoints breakpoints)
+                if (_method is IBreakpointMethod breakpoints)
                 {
                     if (breakpoints.Break)
                     {
                         // Add the next point as a breakpoint
-                        if (_index < _times.Length && _times[_index] > _state.Method.Time)
+                        if (_index < _times.Length && _times[_index] > _method.Time)
                             breakpoints.Breakpoints.SetBreakpoint(_times[_index]);
                     }
                 }

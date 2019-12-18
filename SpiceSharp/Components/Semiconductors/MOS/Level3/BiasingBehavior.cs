@@ -134,7 +134,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </value>
         protected ElementSet<double> Elements { get; private set; }
 
-        private ITimeSimulationState _timeState;
+        private IIntegrationMethod _method;
         private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             context.Nodes.CheckNodes(4);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-            context.TryGetState(out _timeState);
+            context.TryGetState(out _method);
             SaturationVoltageDs = 0;
             Von = 0;
             Mode = 1;
@@ -322,7 +322,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var state = BiasingState;
             check = true;
 
-            if (state.Init == InitializationModes.Float || (_timeState != null && _timeState.Method.BaseTime.Equals(0.0)) ||
+            if (state.Init == InitializationModes.Float || (_method != null && _method.BaseTime.Equals(0.0)) ||
                 state.Init == InitializationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration

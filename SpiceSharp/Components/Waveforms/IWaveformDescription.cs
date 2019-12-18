@@ -16,6 +16,6 @@ namespace SpiceSharp.Components
         /// <returns>
         /// A waveform instance.
         /// </returns>
-        IWaveform Create(ITimeSimulationState state);
+        IWaveform Create(IIntegrationMethod state);
     }
 }

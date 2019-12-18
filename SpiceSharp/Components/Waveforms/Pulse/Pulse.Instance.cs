@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +22,7 @@ namespace SpiceSharp.Components
             /// Private variables
             /// </summary>
             private double _v1, _v2, _td, _tr, _tf, _pw, _per;
-            private ITimeSimulationState _timeState;
+            private IIntegrationMethod _method;
 
             /// <summary>
             /// Gets the value that is currently being probed.
@@ -34,10 +35,10 @@ namespace SpiceSharp.Components
             /// <summary>
             /// Sets up the waveform.
             /// </summary>
-            public Instance(ITimeSimulationState state,
+            public Instance(IIntegrationMethod method,
                 double v1, double v2, double td, double tr, double tf, double pw, double per)
             {
-                _timeState = state;
+                _method = method;
 
                 // Cache parameter values
                 _v1 = v1;
@@ -95,7 +96,7 @@ namespace SpiceSharp.Components
             /// </summary>
             public void Probe()
             {
-                var time = _timeState?.Method?.Time ?? 0.0;
+                var time = _method?.Time ?? 0.0;
                 At(time);
             }
 
@@ -104,14 +105,14 @@ namespace SpiceSharp.Components
             /// </summary>
             public void Accept()
             {
-                _timeState.ThrowIfNull("time state");
+                _method.ThrowIfNull("time state");
 
                 // Initialize the pulse
-                if (_timeState.Method.Time.Equals(0.0))
+                if (_method.Time.Equals(0.0))
                     Value = _v1;
 
                 // Are we at a breakpoint?
-                if (_timeState.Method is IBreakpoints method)
+                if (_method is IBreakpointMethod method)
                 {
                     var breaks = method.Breakpoints;
                     if (!method.Break)

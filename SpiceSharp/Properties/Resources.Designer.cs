@@ -494,6 +494,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Histories cannot track less than one point..
+        /// </summary>
+        internal static string Simulations_History_InvalidLength {
+            get {
+                return ResourceManager.GetString("Simulations.History.InvalidLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid initialization mode..
         /// </summary>
         internal static string Simulations_InvalidInitializationMode {

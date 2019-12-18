@@ -73,7 +73,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="track">if set to <c>false</c>, the state is considered purely informative.</param>
         /// <returns>
-        /// A <see cref="SpiceSharp.IntegrationMethods.StateDerivative" /> object that is compatible with this integration method.
+        /// A <see cref="SpiceSharp.IntegrationMethods.IDerivative" /> object that is compatible with this integration method.
         /// </returns>
         /// <remarks>
         /// Tracked derivatives are used in more advanced features implemented by the integration method.
@@ -81,7 +81,7 @@ namespace SpiceSharp.IntegrationMethods
         /// local truncation error (ie. the error made by taking discrete time steps). If you do not
         /// want the derivative to participate in these features, set <paramref name="track" /> to false.
         /// </remarks>
-        public override StateDerivative CreateDerivative(bool track)
+        public override IDerivative CreateDerivative(bool track)
         {
             return new FixedEulerStateDerivative(this);
         }
