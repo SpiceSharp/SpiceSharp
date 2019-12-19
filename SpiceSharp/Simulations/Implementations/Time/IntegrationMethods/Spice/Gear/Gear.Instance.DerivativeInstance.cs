@@ -125,6 +125,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// </returns>
                 public double Truncate()
                 {
+                    var parameters = _method.Parameters;
                     var derivativeIndex = _index + 1;
                     var current = _states.Value.State;
                     var previous = _states.GetPreviousValue(1).State;
@@ -134,9 +135,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
 
                     // Calculate the tolerance
                     var volttol =
-                        _method.AbsTol + _method.RelTol * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
+                        parameters.AbsTol + parameters.RelTol * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
                     var chargetol = Math.Max(Math.Abs(current[_index]), Math.Abs(previous[_index]));
-                    chargetol = _method.RelTol * Math.Max(chargetol, _method.ChgTol) / _states.Value.Delta;
+                    chargetol = parameters.RelTol * Math.Max(chargetol, parameters.ChgTol) / _states.Value.Delta;
                     var tol = Math.Max(volttol, chargetol);
 
                     // Now compute divided differences
@@ -183,7 +184,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                             break;
                     }
 
-                    var del = _method.TrTol * tol / Math.Max(_method.AbsTol, factor * Math.Abs(diff[0]));
+                    var del = parameters.TrTol * tol / Math.Max(parameters.AbsTol, factor * Math.Abs(diff[0]));
                     if (_method.Order == 2)
                         del = Math.Sqrt(del);
                     else if (_method.Order > 2)

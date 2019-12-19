@@ -3,9 +3,8 @@
     /// <summary>
     /// A class that implements the Gear integration method.
     /// </summary>
-    /// <seealso cref="ParameterSet" />
-    /// <seealso cref="IIntegrationMethodDescription" />
-    public partial class Gear : SpiceMethod, IIntegrationMethodDescription
+    /// <seealso cref="SpiceMethod" />
+    public partial class Gear : SpiceMethod
     {
         /// <summary>
         /// Creates an instance of the integration method for an associated <see cref="IBiasingSimulationState" />.

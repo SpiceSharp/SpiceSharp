@@ -267,6 +267,9 @@
   <data name="Simulations.InvalidInitializationMode" xml:space="preserve">
     <value>Invalid initialization mode.</value>
   </data>
+  <data name="Simulations.IterationsTooSmall" xml:space="preserve">
+    <value>The number of iterations cannot be lower than 1.</value>
+  </data>
   <data name="Simulations.NoEntities" xml:space="preserve">
     <value>{0}: there are no entities.</value>
   </data>
@@ -275,6 +278,9 @@
   </data>
   <data name="Simulations.StateNotDefined" xml:space="preserve">
     <value>A simulation state of type {0} was not defined.</value>
+  </data>
+  <data name="Simulations.Time.MaximumExpansionTooSmall" xml:space="preserve">
+    <value>The expansion factor should be greater or equal than 1.</value>
   </data>
   <data name="Simulations.Time.OrderTooSmall" xml:space="preserve">
     <value>The integration order is too small.</value>
@@ -287,6 +293,9 @@
   </data>
   <data name="Simulations.Time.TimestepTooSmall" xml:space="preserve">
     <value>The timestep {0:e5}s is too small at t={1:e5}s.</value>
+  </data>
+  <data name="Simulations.Time.TimeTooSmall" xml:space="preserve">
+    <value>A timepoint cannot be negative.</value>
   </data>
   <data name="SizeMismatch1" xml:space="preserve">
     <value>Size mismatch of {0} and {1}.</value>

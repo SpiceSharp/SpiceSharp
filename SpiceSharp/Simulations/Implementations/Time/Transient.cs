@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     /// A base class for time-domain analysis.
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
-    public abstract partial class TimeSimulation : BiasingSimulation,
+    public partial class Transient : BiasingSimulation,
         ITimeSimulation,
         IBehavioral<IAcceptBehavior>
     {
@@ -46,10 +46,10 @@ namespace SpiceSharp.Simulations
         public new IIntegrationMethod State => Method;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        protected TimeSimulation(string name) 
+        public Transient(string name) 
             : base(name)
         {
             Configurations.Add(new Trapezoidal());
@@ -57,24 +57,24 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        /// <param name="method">The integration method description.</param>
-        protected TimeSimulation(string name, IIntegrationMethodDescription method)
+        /// <param name="configuration">The time configuration.</param>
+        public Transient(string name, TimeConfiguration configuration)
             : base(name)
         {
-            Configurations.Add(method);
+            Configurations.Add(configuration);
             Statistics = new TimeSimulationStatistics();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
-        protected TimeSimulation(string name, double step, double final)
+        public Transient(string name, double step, double final)
             : base(name)
         {
             Configurations.Add(new Trapezoidal { InitialStep = step, StopTime = final });
@@ -82,13 +82,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         /// <param name="maxStep">The maximum step.</param>
-        protected TimeSimulation(string name, double step, double final, double maxStep)
+        public Transient(string name, double step, double final, double maxStep)
             : base(name)
         {
             Configurations.Add(new Trapezoidal { InitialStep = step, StopTime = final, MaxStep = maxStep });
@@ -104,7 +104,7 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors and configurations
-            var config = Configurations.GetValue<IIntegrationMethodDescription>();
+            var config = Configurations.GetValue<TimeConfiguration>();
             _useIc = config.UseIc;
             Method = config.Create(this);
 
@@ -150,6 +150,76 @@ namespace SpiceSharp.Simulations
             BiasingState.UseDc = false;
             InitializeStates();
             AfterLoad -= LoadInitialConditions;
+
+            var exportargs = new ExportDataEventArgs(this);
+            var config = Configurations.GetValue<TimeConfiguration>();
+
+            // Start our statistics
+            Statistics.TransientTime.Start();
+            var stats = ((BiasingSimulation)this).Statistics;
+            var startIters = stats.Iterations;
+            var startselapsed = stats.SolveTime.Elapsed;
+
+            try
+            {
+                while (true)
+                {
+                    // Accept the last evaluated time point
+                    Accept();
+
+                    // Export the current timepoint
+                    if (Method.Time >= config.StartTime)
+                        OnExport(exportargs);
+
+                    // Detect the end of the simulation
+                    if (Method.Time >= config.StopTime)
+                    {
+                        // Keep our statistics
+                        Statistics.TransientTime.Stop();
+                        Statistics.TransientIterations += stats.Iterations - startIters;
+                        Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
+
+                        // Finished!
+                        return;
+                    }
+
+                    // Continue integration
+                    Method.Prepare();
+
+                    // Find a valid time point
+                    while (true)
+                    {
+                        // Probe the next time point
+                        Probe();
+
+                        // Try to solve the new point
+                        var converged = TimeIterate(config.TransientMaxIterations);
+                        Statistics.TimePoints++;
+
+                        // Did we fail to converge to a solution?
+                        if (!converged)
+                        {
+                            Method.Reject();
+                            Statistics.Rejected++;
+                        }
+                        else
+                        {
+                            // If our integration method approves of our solution, continue to the next timepoint
+                            if (Method.Evaluate())
+                                break;
+                            Statistics.Rejected++;
+                        }
+                    }
+                }
+            }
+            catch (SpiceSharpException ex)
+            {
+                // Keep our statistics
+                Statistics.TransientTime.Stop();
+                Statistics.TransientIterations += stats.Iterations - startIters;
+                Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
+                throw new SpiceSharpException(Properties.Resources.Simulations_Time_Terminated.FormatString(Name), ex);
+            }
         }
 
         /// <summary>

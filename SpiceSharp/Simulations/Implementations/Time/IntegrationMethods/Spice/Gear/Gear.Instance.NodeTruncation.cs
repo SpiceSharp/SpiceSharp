@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// </returns>
                 public double Truncate()
                 {
-                    // Get the state
+                    var parameters = _method.Parameters;
                     var timetmp = double.PositiveInfinity;
                     var state = _method.Simulation.State;
                     var prediction = _method.Prediction;
@@ -45,12 +45,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     {
                         var node = v.Key;
                         var index = v.Value;
-                        var tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * _method.RelTol + _method.AbsTol;
+                        var tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * parameters.RelTol + parameters.AbsTol;
                         var diff = state.Solution[index] - prediction[index];
 
                         if (!diff.Equals(0.0))
                         {
-                            var tmp = tol * _method.TrTol * delsum / (diff * states.Value.Delta);
+                            var tmp = tol * parameters.TrTol * delsum / (diff * states.Value.Delta);
                             tmp = Math.Abs(tmp);
                             switch (_method.Order)
                             {

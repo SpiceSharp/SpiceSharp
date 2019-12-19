@@ -53,60 +53,6 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             protected List<ITruncatable> TruncatableStates { get; } = new List<ITruncatable>();
 
             /// <summary>
-            /// Private variables.
-            /// </summary>
-            private readonly double _maxStep, _minStep, _expansion, _tstart, _tstop, _step;
-            private double _saveDelta, _oldDelta;
-
-            /// <summary>
-            /// Gets the absolute tolerance.
-            /// </summary>
-            /// <value>
-            /// The absolute tolerance.
-            /// </value>
-            protected double AbsTol { get; }
-
-            /// <summary>
-            /// Gets the charge tolerance.
-            /// </summary>
-            /// <value>
-            /// The charge tolerance.
-            /// </value>
-            protected double ChgTol { get; }
-
-            /// <summary>
-            /// Gets the relative tolerance.
-            /// </summary>
-            /// <value>
-            /// The relative tolerance.
-            /// </value>
-            protected double RelTol { get; }
-
-            /// <summary>
-            /// Gets the transient tolerance factor.
-            /// </summary>
-            /// <value>
-            /// The transient tolerance factor.
-            /// </value>
-            protected double TrTol { get; }
-
-            /// <summary>
-            /// Gets the local truncation error relative tolerance.
-            /// </summary>
-            /// <value>
-            /// The relative tolerance.
-            /// </value>
-            protected double LteRelTol { get; }
-
-            /// <summary>
-            /// Gets the local truncation error absolute tolerance.
-            /// </summary>
-            /// <value>
-            /// The absolute tolerance.
-            /// </value>
-            protected double LteAbsTol { get; }
-
-            /// <summary>
             /// Gets the breakpoint system.
             /// </summary>
             public Breakpoints Breakpoints { get; } = new Breakpoints();
@@ -168,6 +114,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             protected IVector<double> Prediction { get; private set; }
 
             /// <summary>
+            /// Gets the parameters.
+            /// </summary>
+            /// <value>
+            /// The parameters.
+            /// </value>
+            protected SpiceMethod Parameters { get; }
+
+            private double _saveDelta, _oldDelta;
+
+            /// <summary>
             /// Initializes a new instance of the <see cref="SpiceInstance"/> class.
             /// </summary>
             /// <param name="parameters">The method description.</param>
@@ -175,24 +131,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <param name="maxOrder">The maximum order.</param>
             protected SpiceInstance(SpiceMethod parameters, IStateful<IBiasingSimulationState> simulation, int maxOrder)
             {
+                Parameters = parameters.ThrowIfNull(nameof(parameters));
                 Simulation = simulation.ThrowIfNull(nameof(simulation));
                 MaxOrder = maxOrder;
                 States = new NodeHistory<IntegrationState>(maxOrder + 2);
-
-                // Store the necessary parameters
-                _step = parameters.InitialStep;
-                _minStep = parameters.MinStep;
-                _maxStep = parameters.MaxStep;
-                _tstart = parameters.StartTime;
-                _tstop = parameters.StopTime;
-                _expansion = parameters.Expansion;
-                _saveDelta = double.PositiveInfinity;
-                AbsTol = parameters.AbsTol;
-                ChgTol = parameters.ChgTol;
-                RelTol = parameters.RelTol;
-                TrTol = parameters.TrTol;
-                LteRelTol = parameters.LteRelTol;
-                LteAbsTol = parameters.LteAbsTol;
             }
 
             /// <summary>
@@ -249,15 +191,15 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 // Breakpoints
                 Break = true;
                 Breakpoints.Clear();
-                Breakpoints.SetBreakpoint(_tstart);
-                Breakpoints.SetBreakpoint(_tstop);
+                Breakpoints.SetBreakpoint(Parameters.StartTime);
+                Breakpoints.SetBreakpoint(Parameters.StopTime);
 
                 // Create the prediction vector
                 Simulation.State.Solution.CopyTo(States.Value.Solution);
                 Prediction = new DenseVector<double>(Simulation.State.Solver.Size);
 
                 // Calculate an initial timestep
-                Delta = Math.Min(_tstop / 50.0, _step) / 10.0;
+                Delta = Math.Min(Parameters.StopTime / 50.0, Parameters.InitialStep) / 10.0;
             }
 
             /// <summary>
@@ -267,7 +209,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             {
                 foreach (var istate in States)
                 {
-                    istate.Delta = _maxStep;
+                    istate.Delta = Parameters.MaxStep;
                     States.Value.State.CopyTo(istate.State);
                 }
             }
@@ -277,10 +219,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// </summary>
             public virtual void Prepare()
             {
-                var delta = Math.Min(Delta, _maxStep);
+                var delta = Math.Min(Delta, Parameters.MaxStep);
 
                 // Breakpoints
-                if (Time.Equals(Breakpoints.First) || Breakpoints.First - Time <= _minStep)
+                if (Time.Equals(Breakpoints.First) || Breakpoints.First - Time <= Parameters.MinStep)
                 {
                     // Cut integration order
                     Order = 1;
@@ -294,7 +236,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                         delta /= 10.0;
 
                     // Don't go below MinStep without reason
-                    delta = Math.Max(delta, 2.0 * _minStep);
+                    delta = Math.Max(delta, 2.0 * Parameters.MinStep);
                 }
                 else if (Time + delta >= Breakpoints.First)
                 {
@@ -372,11 +314,11 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Order = 1;
 
                 // Check if we can't decrease the timestep further
-                if (Delta <= _minStep)
+                if (Delta <= Parameters.MinStep)
                 {
-                    if (_oldDelta <= _minStep)
+                    if (_oldDelta <= Parameters.MinStep)
                         throw new TimestepTooSmallException(Delta, BaseTime);
-                    Delta = _minStep;
+                    Delta = Parameters.MinStep;
                 }
             }
 
@@ -435,21 +377,21 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 }
 
                 // Limit the expansion of the timestep
-                newDelta = Math.Min(_expansion * States.Value.Delta, newDelta);
+                newDelta = Math.Min(Parameters.MaximumExpansion * States.Value.Delta, newDelta);
 
                 // Limit the maximum timestep
-                if (newDelta > _maxStep)
-                    newDelta = _maxStep;
+                if (newDelta > Parameters.MaxStep)
+                    newDelta = Parameters.MaxStep;
 
                 // Check for timesteps that are too small
-                if (newDelta <= _minStep)
+                if (newDelta <= Parameters.MinStep)
                 {
                     // We already tried?
-                    if (_oldDelta <= _minStep)
+                    if (_oldDelta <= Parameters.MinStep)
                         throw new TimestepTooSmallException(newDelta, BaseTime);
 
                     // One more time
-                    newDelta = _minStep;
+                    newDelta = Parameters.MinStep;
                     Order = 1;
                 }
 

@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <seealso cref="IIntegrationMethod" />
         protected partial class Instance : IIntegrationMethod
         {
-            private double _fixedStep;
+            private FixedEuler _parameters;
             private readonly IStateful<IBiasingSimulationState> _simulation;
             private int _stateValues = 0;
             private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(2);
@@ -65,9 +65,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <param name="simulation">The simulation.</param>
             public Instance(FixedEuler parameters, IStateful<IBiasingSimulationState> simulation)
             {
-                _fixedStep = parameters.InitialStep;
+                _parameters = parameters.ThrowIfNull(nameof(parameters));
                 _simulation = simulation.ThrowIfNull(nameof(simulation));
-                Slope = 1.0 / _fixedStep;
+                Slope = 1.0 / _parameters.Step;
                 Order = 1;
             }
 
@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <returns>
             /// The previous timestep.
             /// </returns>
-            public double GetPreviousTimestep(int index) => _fixedStep;
+            public double GetPreviousTimestep(int index) => _parameters.Step;
 
             /// <summary>
             /// Initializes the integration method using the allocated biasing state.
@@ -148,7 +148,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// </summary>
             public void Probe()
             {
-                Time = BaseTime + _fixedStep;
+                Time = BaseTime + _parameters.Step;
             }
 
             /// <summary>

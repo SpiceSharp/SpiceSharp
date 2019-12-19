@@ -512,6 +512,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The number of iterations cannot be lower than 1..
+        /// </summary>
+        internal static string Simulations_IterationsTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.IterationsTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: there are no entities..
         /// </summary>
         internal static string Simulations_NoEntities {
@@ -535,6 +544,15 @@ namespace SpiceSharp.Properties {
         internal static string Simulations_StateNotDefined {
             get {
                 return ResourceManager.GetString("Simulations.StateNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The expansion factor should be greater or equal than 1..
+        /// </summary>
+        internal static string Simulations_Time_MaximumExpansionTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Time.MaximumExpansionTooSmall", resourceCulture);
             }
         }
         
@@ -571,6 +589,15 @@ namespace SpiceSharp.Properties {
         internal static string Simulations_Time_TimestepTooSmall {
             get {
                 return ResourceManager.GetString("Simulations.Time.TimestepTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A timepoint cannot be negative..
+        /// </summary>
+        internal static string Simulations_Time_TimeTooSmall {
+            get {
+                return ResourceManager.GetString("Simulations.Time.TimeTooSmall", resourceCulture);
             }
         }
         

@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// </returns>
                 public double Truncate()
                 {
-                    // Get the state
+                    var parameters = _method.Parameters;
                     double tol, diff, tmp;
                     var timetemp = double.PositiveInfinity;
                     int index;
@@ -54,8 +54,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                                 // Avoid division by zero
                                 if (!diff.Equals(0.0))
                                 {
-                                    tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * _method.LteRelTol + _method.LteAbsTol;
-                                    tmp = _method.States.Value.Delta * Math.Sqrt(Math.Abs(2.0 * _method.TrTol * tol / diff));
+                                    tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * parameters.LteRelTol + parameters.LteAbsTol;
+                                    tmp = _method.States.Value.Delta * Math.Sqrt(Math.Abs(2.0 * parameters.TrTol * tol / diff));
                                     timetemp = Math.Min(timetemp, tmp);
                                 }
                             }
@@ -76,8 +76,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                                 // Avoid division by zero
                                 if (!deriv.Equals(0.0))
                                 {
-                                    tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * _method.LteRelTol + _method.LteAbsTol;
-                                    tmp = _method.States.Value.Delta * Math.Pow(Math.Abs(12.0 * _method.TrTol * tol / deriv), 1.0 / 3.0);
+                                    tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * parameters.LteRelTol + parameters.LteAbsTol;
+                                    tmp = _method.States.Value.Delta * Math.Pow(Math.Abs(12.0 * parameters.TrTol * tol / deriv), 1.0 / 3.0);
                                     timetemp = Math.Min(timetemp, tmp);
                                 }
                             }

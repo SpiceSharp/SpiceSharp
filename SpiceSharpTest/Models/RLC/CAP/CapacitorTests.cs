@@ -62,7 +62,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
             IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
@@ -90,7 +90,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", new Gear { InitialStep = 1e-8, StopTime = 10e-6 });
-            var config = tran.Configurations.GetValue<IIntegrationMethodDescription>();
+            var config = tran.Configurations.GetValue<TimeConfiguration>();
             config.InitialConditions["OUT"] = 0.0;
             IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
@@ -128,7 +128,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
 
             tran.BeforeTemperature += (sender, args) =>
                 {
@@ -175,7 +175,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
 
             tran.BeforeTemperature += (sender, args) =>
                 {
@@ -237,7 +237,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().InitialConditions["OUT"] = 0.0;
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["OUT"] = 0.0;
             IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
 
             // Run 
