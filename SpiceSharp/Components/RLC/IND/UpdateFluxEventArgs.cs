@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.InductorBehaviors

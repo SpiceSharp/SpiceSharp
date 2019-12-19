@@ -1,8 +1,5 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 using System;
-using System.Collections;
 using System.Globalization;
 
 namespace SpiceSharp

@@ -7,6 +7,7 @@ using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharpTest.Models
 {
@@ -70,8 +71,6 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
-        // TODO: Fix test
-        /*
         [Test]
         public void When_LowpassRCTransientGear_Expect_Reference()
         {
@@ -90,9 +89,8 @@ namespace SpiceSharpTest.Models
             );
 
             // Create simulation, exports and references
-            var tran = new Transient("tran", 1e-8, 10e-6);
+            var tran = new Transient("tran", new Gear { InitialStep = 1e-8, StopTime = 10e-6 });
             var config = tran.Configurations.GetValue<IIntegrationMethodDescription>();
-            config.Method = new Gear();
             config.InitialConditions["OUT"] = 0.0;
             IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
@@ -100,7 +98,6 @@ namespace SpiceSharpTest.Models
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
         }
-        */
 
         [Test]
         public void When_IsTemperatureInvariant_Expect_Reference()

@@ -29,6 +29,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="method">The method.</param>
+        public Transient(string name, IIntegrationMethodDescription method)
+            : base(name, method)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Transient"/> class.
+        /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>

@@ -1,7 +1,4 @@
-﻿using System;
-using SpiceSharp.Attributes;
-using SpiceSharp.Entities;
-using SpiceSharp.IntegrationMethods;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components

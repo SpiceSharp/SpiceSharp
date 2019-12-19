@@ -64,9 +64,17 @@ namespace SpiceSharp.General
         public void Add<V>(V value) where V : T
         {
             _dictionary.Add(value.GetType(), value);
-            if (!_dictionary.ContainsKey(typeof(V)))
-                _dictionary[typeof(V)] = value;
         }
+
+        /// <summary>
+        /// Removes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
+        /// </returns>
+        public bool Remove(T value)
+            => _dictionary.Remove(value.GetType());
 
         /// <summary>
         /// Gets the strongly typed value from the dictionary.

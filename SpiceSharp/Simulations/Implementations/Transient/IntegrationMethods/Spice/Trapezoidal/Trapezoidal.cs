@@ -19,12 +19,13 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public double Xmu { get; } = 0.5;
 
         /// <summary>
-        /// Creates an instance of the integration method.
+        /// Creates an instance of the integration method for an associated <see cref="IBiasingSimulationState" />.
         /// </summary>
+        /// <param name="simulation">The simulation that provides the biasing state.</param>
         /// <returns>
         /// The integration method.
         /// </returns>
-        public override IIntegrationMethod Create(IStateful<IBiasingSimulationState> state)
-            => new Instance(this, state);
+        public override IIntegrationMethod Create(IStateful<IBiasingSimulationState> simulation)
+            => new Instance(this, simulation);
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// An interface for time-dependent behaviors.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.IBehavior" />
+    /// <seealso cref="IBehavior" />
     public interface ITimeBehavior : IBehavior
     {
         /// <summary>
@@ -11,7 +13,7 @@
         /// </summary>
         /// <remarks>
         /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.IDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
+        /// and the result is stored in each respective <see cref="IDerivative" /> or <see cref="IIntegrationState" />.
         /// </remarks>
         void InitializeStates();
 

@@ -60,6 +60,18 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <param name="method">The integration method description.</param>
+        protected TimeSimulation(string name, IIntegrationMethodDescription method)
+            : base(name)
+        {
+            Configurations.Add(method);
+            Statistics = new TimeSimulationStatistics();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSimulation"/> class.
+        /// </summary>
+        /// <param name="name">The name of the simulation.</param>
         /// <param name="step">The step size.</param>
         /// <param name="final">The final time.</param>
         protected TimeSimulation(string name, double step, double final)

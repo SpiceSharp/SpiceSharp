@@ -42,10 +42,6 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Calculates the state values from the current DC solution.
         /// </summary>
-        /// <remarks>
-        /// In this method, the initial value is calculated based on the operating point solution,
-        /// and the result is stored in each respective <see cref="SpiceSharp.IntegrationMethods.IDerivative" /> or <see cref="SpiceSharp.IntegrationMethods.StateHistory" />.
-        /// </remarks>
         void ITimeBehavior.InitializeStates()
         {
             var sol = BiasingState.Solution;

@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
 using System.Numerics;
 using SpiceSharp.Algebra;

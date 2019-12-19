@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DiodeBehaviors

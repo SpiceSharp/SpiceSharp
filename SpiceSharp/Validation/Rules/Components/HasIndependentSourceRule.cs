@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharp.Validation.Rules

@@ -3,7 +3,6 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSourceBehaviors;
 using SpiceSharp.General;
 using SpiceSharp.Simulations;
-using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {

@@ -4,6 +4,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;
 
 namespace SpiceSharpTest.Simulations
@@ -40,8 +41,6 @@ namespace SpiceSharpTest.Simulations
             }
         }
 
-        // TODO: Fix test
-        /*
         [Test]
         public void When_RCFilterConstantTransientGear_Expect_Reference()
         {
@@ -52,8 +51,7 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("C1", "out", "0", 20));
 
             // Create the transient analysis
-            var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().Method = new Gear();
+            var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
             tran.ExportSimulationData += (sender, args) => 
             {
                 Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10); 
@@ -70,10 +68,7 @@ namespace SpiceSharpTest.Simulations
                 throw new Exception(@"Cannot run transient analysis twice");
             }
         }
-        */
 
-        // TODO: Fix test
-        /*
         [Test]
         public void When_ChangeIntegrationMethod_Expect_Reference()
         {
@@ -84,17 +79,16 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("C1", "out", "0", 20));
 
             // Create the transient analysis
-            var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().Method = new Gear();
+            var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
             tran.ExportSimulationData += (sender, args) =>
             {
                 Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-10);
             };
             tran.Run(ckt);
-            tran.Configurations.GetValue<IIntegrationMethodDescription>().Method = new Trapezoidal();
+            tran.Configurations.Remove(tran.Configurations.GetValue<IIntegrationMethodDescription>());
+            tran.Configurations.Add(new Trapezoidal { InitialStep = 1, StopTime = 10 });
             tran.Run(ckt);
         }
-        */
 
         [Test]
         public void When_FloatingRTransient_Expect_Reference()
@@ -138,8 +132,6 @@ namespace SpiceSharpTest.Simulations
             tran.Run(ckt);
         }
 
-        // TODO: Fix test
-        /*
         [Test]
         public void When_FixedEuler_Expect_NoException()
         {
@@ -153,11 +145,9 @@ namespace SpiceSharpTest.Simulations
                 );
 
             // Create a transient analysis using Backward Euler with fixed timesteps
-            var tran = new Transient("tran", 1e-7, 10e-5);
-            tran.Configurations.GetValue<IIntegrationMethod>().Method = new FixedEuler();
+            var tran = new Transient("tran", new FixedEuler { InitialStep = 1e-7, StopTime = 10e-5 });
             tran.Run(ckt);
         }
-        */
 
         [Test]
         public void When_FloatingCapacitor_Expect_Reference()

@@ -17,7 +17,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <summary>
                 /// Initializes a new instance of the <see cref="NodeTruncation"/> class.
                 /// </summary>
-                /// <param name="method">The method.</param>
+                /// <param name="method">The integration method.</param>
                 public NodeTruncation(Instance method)
                 {
                     _method = method.ThrowIfNull(nameof(method));

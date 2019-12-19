@@ -119,7 +119,11 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<T> GetEnumerator() => (IEnumerator<T>)_history.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (var i = 0; i < _history.Length; i++)
+                yield return _history[i];
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.

@@ -1,89 +1,168 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Attributes;
+using System.Collections.Generic;
 
-namespace SpiceSharp.IntegrationMethods
+namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// Implements backward Euler integration with a fixed timesep. This is the
     /// fastest way, but also the least accurate. Any changes to the timestep are
     /// ignored.
     /// </summary>
-    /// <seealso cref="IntegrationMethod" />
-    public partial class FixedEuler : IntegrationMethod
+    /// <seealso cref="IIntegrationMethodDescription" />
+    public partial class FixedEuler : ParameterSet, IIntegrationMethodDescription
     {
-        private double _fixedStep;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="FixedEuler"/> class.
+        /// Gets or sets the maximum timestep.
         /// </summary>
-        public FixedEuler()
-            : base(1)
+        /// <value>
+        /// The maximum timestep.
+        /// </value>
+        [ParameterName("tmax"), ParameterInfo("The maximum timestep.")]
+        public double MaxStep
         {
+            get
+            {
+                if (_maxStep <= 0.0)
+                    return (StopTime - StartTime) / 50.0;
+                return _maxStep;
+            }
+            set => _maxStep = value;
         }
+        private double _maxStep = 0.0;
 
         /// <summary>
-        /// Initializes the integration method.
+        /// Gets or sets the expansion factor for timesteps.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        public override void Initialize(ITimeSimulation simulation)
-        {
-            base.Initialize(simulation);
-            if (simulation.Configurations.TryGetValue(out TimeConfiguration config))
-                _fixedStep = config.Step;
-        }
+        /// <value>
+        /// The expansion factor.
+        /// </value>
+        [ParameterName("expansion"), ParameterInfo("The maximum expansion factor for consecutive timesteps.")]
+        public double Expansion { get; set; } = 2.0;
 
         /// <summary>
-        /// Starts probing a new timepoint.
+        /// Gets or sets the minimum timestep.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        /// <param name="delta">The timestep to be probed.</param>
-        public override void Probe(ITimeSimulation simulation, double delta)
-        {
-            base.Probe(simulation, delta);
-            Slope = 1.0 / _fixedStep;
-        }
+        /// <value>
+        /// The minimum timestep.
+        /// </value>
+        [ParameterName("tmin"), ParameterInfo("The minimum timestep.")]
+        public double MinStep => 1e-9 * MaxStep;
 
         /// <summary>
-        /// Continues the simulation.
+        /// Gets or sets the initial timestep.
         /// </summary>
-        /// <param name="simulation">The time-based simulation</param>
-        /// <param name="delta">The initial probing timestep.</param>
-        public override void Continue(ITimeSimulation simulation, ref double delta)
-        {
-            base.Continue(simulation, ref delta);
-            delta = _fixedStep;
-        }
+        /// <value>
+        /// The initial timestep.
+        /// </value>
+        [ParameterName("step"), ParameterInfo("The initial timestep.")]
+        public double InitialStep { get; set; }
 
         /// <summary>
-        /// Evaluates whether or not the current solution can be accepted.
+        /// Gets or sets the start time.
         /// </summary>
-        /// <param name="simulation">The time-based simulation.</param>
-        /// <param name="newDelta">The next requested timestep in case the solution is not accepted.</param>
+        /// <value>
+        /// The start time.
+        /// </value>
+        [ParameterName("tstart"), ParameterName("start"), ParameterInfo("The time to start exporting data.")]
+        public double StartTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stop time.
+        /// </summary>
+        /// <value>
+        /// The stop time.
+        /// </value>
+        [ParameterName("tstop"), ParameterName("stop"), ParameterInfo("The time to stop exporting data.")]
+        public double StopTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the absolute tolerance.
+        /// </summary>
+        /// <value>
+        /// The absolute tolerance.
+        /// </value>
+        [ParameterName("abstol"), ParameterInfo("The absolute tolerance.")]
+        public double AbsTol { get; set; } = 1e-12;
+
+        /// <summary>
+        /// The tolerance on charges.
+        /// </summary>
+        /// <value>
+        /// The charge tolerance.
+        /// </value>
+        [ParameterName("chgtol"), ParameterInfo("The charge tolerance.")]
+        public double ChgTol { get; set; } = 1e-14;
+
+        /// <summary>
+        /// Gets or sets the relative tolerance.
+        /// </summary>
+        /// <value>
+        /// The relative tolerance.
+        /// </value>
+        [ParameterName("reltol"), ParameterInfo("The relative tolerance.")]
+        public double RelTol { get; set; } = 1e-3;
+
+        /// <summary>
+        /// Gets or sets the transient tolerance factor.
+        /// </summary>
+        /// <value>
+        /// The transient tolerance factor.
+        /// </value>
+        [ParameterName("trtol"), ParameterInfo("The transient tolerance factor.")]
+        public double TrTol { get; set; } = 7.0;
+
+        /// <summary>
+        /// The local truncation error relative tolerance.
+        /// </summary>
+        /// <value>
+        /// The relative tolerance.
+        /// </value>
+        [ParameterName("ltereltol"), ParameterInfo("The local truncation error relative tolerance.")]
+        public double LteRelTol { get; set; } = 1e-3;
+
+        /// <summary>
+        /// The local truncation error absolute tolerance.
+        /// </summary>
+        /// <value>
+        /// The aboslute tolerance.
+        /// </value>
+        [ParameterName("lteabstol"), ParameterInfo("The local truncation error absolute tolerance.")]
+        public double LteAbsTol { get; set; } = 1e-6;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether initial conditions should be used.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initial conditions should be used; otherwise, <c>false</c>.
+        /// </value>
+        [ParameterName("useic"), ParameterInfo("Flag indicating whether initial conditions should be determined by the components.")]
+        public bool UseIc { get; set; }
+        // TODO: This shouldn't really be a part of integration methods...
+
+        /// <summary>
+        /// Gets or sets the maximum transient iterations.
+        /// </summary>
+        /// <value>
+        /// The maximum transient iterations.
+        /// </value>
+        public int TranMaxIterations { get; set; } = 10;
+
+        /// <summary>
+        /// Gets the initial conditions.
+        /// </summary>
+        /// <value>
+        /// The initial conditions.
+        /// </value>
+        public Dictionary<string, double> InitialConditions { get; } = new Dictionary<string, double>();
+
+        /// <summary>
+        /// Creates an instance of the integration method for an associated <see cref="IBiasingSimulationState" />.
+        /// </summary>
+        /// <param name="simulation">The simulation that provides the biasing state.</param>
         /// <returns>
-        /// <c>true</c> if the time point is accepted; otherwise, <c>false</c>.
+        /// The integration method.
         /// </returns>
-        public override bool Evaluate(ITimeSimulation simulation, out double newDelta)
-        {
-            base.Evaluate(simulation, out _);
-            newDelta = _fixedStep;
-            return true;
-        }
-
-        /// <summary>
-        /// Creates a state for which a derivative with respect to time can be determined.
-        /// </summary>
-        /// <param name="track">if set to <c>false</c>, the state is considered purely informative.</param>
-        /// <returns>
-        /// A <see cref="SpiceSharp.IntegrationMethods.IDerivative" /> object that is compatible with this integration method.
-        /// </returns>
-        /// <remarks>
-        /// Tracked derivatives are used in more advanced features implemented by the integration method.
-        /// For example, derived states can be used for finding a good time step by approximating the
-        /// local truncation error (ie. the error made by taking discrete time steps). If you do not
-        /// want the derivative to participate in these features, set <paramref name="track" /> to false.
-        /// </remarks>
-        public override IDerivative CreateDerivative(bool track)
-        {
-            return new FixedEulerStateDerivative(this);
-        }
+        public IIntegrationMethod Create(IStateful<IBiasingSimulationState> simulation)
+            => new Instance(this, simulation);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SpiceSharp.Attributes;
 using SpiceSharp.Entities;
 using SpiceSharp.General;

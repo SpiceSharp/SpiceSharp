@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components

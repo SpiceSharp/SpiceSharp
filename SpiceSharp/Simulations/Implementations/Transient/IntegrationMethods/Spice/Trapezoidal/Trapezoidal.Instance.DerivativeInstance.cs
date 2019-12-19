@@ -1,5 +1,4 @@
-﻿using SpiceSharp.IntegrationMethods;
-using System;
+﻿using System;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {
@@ -8,7 +7,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         protected partial class Instance
         {
             /// <summary>
-            /// Describes a state that can be derived.
+            /// An <see cref="IDerivative"/> for <see cref="Trapezoidal"/>.
             /// </summary>
             /// <seealso cref="IDerivative" />
             protected class DerivativeInstance : IDerivative, ITruncatable
@@ -77,9 +76,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 {
                     var h = _method.Slope;
                     var s = _states.Value.State;
-                    double g = h * coefficient;
                     return new JacobianInfo(
-                        g,
+                        h * coefficient,
                         s[_index + 1] - h * s[_index]);
                 }
 

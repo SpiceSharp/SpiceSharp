@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -77,9 +75,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Creates an instance of the integration method for an associated <see cref="IBiasingSimulationState"/>.
         /// </summary>
+        /// <param name="simulation">The simulation that provides the biasing state.</param>
         /// <returns>
         /// The integration method.
         /// </returns>
-        IIntegrationMethod Create(IStateful<IBiasingSimulationState> state);
+        IIntegrationMethod Create(IStateful<IBiasingSimulationState> simulation);
     }
 }

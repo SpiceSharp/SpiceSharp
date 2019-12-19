@@ -151,6 +151,8 @@ namespace SpiceSharp.Algebra
             target.ThrowIfNull(nameof(target));
             if (target.Length != Length)
                 throw new SizeMismatchException(nameof(target), Length);
+            if (target == this)
+                return;
             for (var i = 1; i <= Length; i++)
                 target[i] = this[i];
         }

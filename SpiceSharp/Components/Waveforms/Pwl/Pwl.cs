@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Attributes;
-using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components

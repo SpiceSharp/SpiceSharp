@@ -52,6 +52,15 @@ namespace SpiceSharp
         void Add<V>(V value) where V : T;
 
         /// <summary>
+        /// Removes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
+        /// </returns>
+        bool Remove(T value);
+
+        /// <summary>
         /// Clears all items in the dictionary.
         /// </summary>
         void Clear();

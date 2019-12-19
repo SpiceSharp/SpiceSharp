@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Algebra;
-using System;
+﻿using System;
 
 namespace SpiceSharp.Components.Distributed
 {

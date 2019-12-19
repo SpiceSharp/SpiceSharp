@@ -296,6 +296,16 @@ namespace SpiceSharp
             => _dictionary.Add(value);
 
         /// <summary>
+        /// Removes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
+        /// </returns>
+        public bool Remove(IParameterSet value)
+            => _dictionary.Remove(value);
+
+        /// <summary>
         /// Clears this instance.
         /// </summary>
         public void Clear()
