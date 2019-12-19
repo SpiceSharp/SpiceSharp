@@ -355,10 +355,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Probe for a new time point.
         /// </summary>
-        /// <param name="delta">The timestep.</param>
-        protected void Probe(double delta)
+        protected void Probe()
         {
-            Method.Probe(delta);
+            Method.Probe();
             foreach (var behavior in _acceptBehaviors)
                 behavior.Probe();
         }

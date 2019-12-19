@@ -94,24 +94,21 @@ namespace SpiceSharp.Simulations
         /// Prepares the integration method for calculating the next timepoint.
         /// The integration method may change the suggested timestep if needed.
         /// </summary>
-        /// <param name="delta">The initial timestep to try.</param>
-        void Prepare(ref double delta);
+        void Prepare();
 
         /// <summary>
         /// Probes a new timepoint.
         /// </summary>
-        /// <param name="delta">The timestep to probe.</param>
-        void Probe(double delta);
+        void Probe();
 
         /// <summary>
         /// Evaluates the solution at the probed timepoint. If the solution is invalid,
         /// the analysis should roll back and try a smaller timestep. 
         /// </summary>
-        /// <param name="newDelta">A new timestep suggested by the method if the probed timepoint is invalid.</param>
         /// <returns>
         /// <c>true</c> if the solution is a valid solution; otherwise, <c>false</c>.
         /// </returns>
-        bool Evaluate(out double newDelta);
+        bool Evaluate();
 
         /// <summary>
         /// Accepts the last probed timepoint.
@@ -122,7 +119,6 @@ namespace SpiceSharp.Simulations
         /// Rejects the last probed timepoint. This method can be called if no
         /// solution could be found.
         /// </summary>
-        /// <param name="newDelta">A new timestep suggested by the method.</param>
-        void Reject(out double newDelta);
+        void Reject();
     }
 }

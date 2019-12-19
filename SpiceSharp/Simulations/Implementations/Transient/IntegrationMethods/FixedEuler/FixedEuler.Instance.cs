@@ -137,19 +137,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Prepares the integration method for calculating the next timepoint.
             /// The integration method may change the suggested timestep if needed.
             /// </summary>
-            /// <param name="delta">The initial timestep to try.</param>
-            public void Prepare(ref double delta)
+            public void Prepare()
             {
                 _states.Accept();
-                delta = _fixedStep;
                 BaseTime = Time;
             }
 
             /// <summary>
             /// Probes a new timepoint.
             /// </summary>
-            /// <param name="delta">The timestep to probe.</param>
-            public void Probe(double delta)
+            public void Probe()
             {
                 Time = BaseTime + _fixedStep;
             }
@@ -158,13 +155,11 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Evaluates the solution at the probed timepoint. If the solution is invalid,
             /// the analysis should roll back and try a smaller timestep.
             /// </summary>
-            /// <param name="newDelta">A new timestep suggested by the method if the probed timepoint is invalid.</param>
             /// <returns>
             ///   <c>true</c> if the solution is a valid solution; otherwise, <c>false</c>.
             /// </returns>
-            public bool Evaluate(out double newDelta)
+            public bool Evaluate()
             {
-                newDelta = _fixedStep;
                 return true;
             }
 
@@ -181,8 +176,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Rejects the last probed timepoint. This method can be called if no
             /// solution could be found.
             /// </summary>
-            /// <param name="newDelta">A new timestep suggested by the method.</param>
-            public void Reject(out double newDelta)
+            public void Reject()
             {
                 throw new TimestepTooSmallException(0.0, BaseTime);
             }

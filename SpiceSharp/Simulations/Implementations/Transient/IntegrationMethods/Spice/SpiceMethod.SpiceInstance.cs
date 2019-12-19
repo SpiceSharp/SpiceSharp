@@ -13,6 +13,14 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         protected abstract class SpiceInstance : IBreakpointMethod
         {
             /// <summary>
+            /// Gets the timestep.
+            /// </summary>
+            /// <value>
+            /// The timestep.
+            /// </value>
+            public double Delta { get; protected set; }
+
+            /// <summary>
             /// Gets the simulation that the integration method will work with.
             /// </summary>
             /// <value>
@@ -47,7 +55,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <summary>
             /// Private variables.
             /// </summary>
-            private readonly double _maxStep, _minStep, _expansion, _tstart, _tstop;
+            private readonly double _maxStep, _minStep, _expansion, _tstart, _tstop, _step;
             private double _saveDelta, _oldDelta;
 
             /// <summary>
@@ -160,11 +168,6 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             protected IVector<double> Prediction { get; private set; }
 
             /// <summary>
-            /// Gets or sets the suggested timestep.
-            /// </summary>
-            public double TimestepSuggestion { get; protected set; }
-
-            /// <summary>
             /// Initializes a new instance of the <see cref="SpiceInstance"/> class.
             /// </summary>
             /// <param name="parameters">The method description.</param>
@@ -177,6 +180,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 States = new NodeHistory<IntegrationState>(maxOrder + 2);
 
                 // Store the necessary parameters
+                _step = parameters.InitialStep;
                 _minStep = parameters.MinStep;
                 _maxStep = parameters.MaxStep;
                 _tstart = parameters.StartTime;
@@ -251,6 +255,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 // Create the prediction vector
                 Simulation.State.Solution.CopyTo(States.Value.Solution);
                 Prediction = new DenseVector<double>(Simulation.State.Solver.Size);
+
+                // Calculate an initial timestep
+                Delta = Math.Min(_tstop / 50.0, _step) / 10.0;
             }
 
             /// <summary>
@@ -268,10 +275,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <summary>
             /// Prepares the integration method for probing new values.
             /// </summary>
-            /// <param name="delta"></param>
-            public virtual void Prepare(ref double delta)
+            public virtual void Prepare()
             {
-                delta = Math.Min(delta, _maxStep);
+                var delta = Math.Min(Delta, _maxStep);
 
                 // Breakpoints
                 if (Time.Equals(Breakpoints.First) || Breakpoints.First - Time <= _minStep)
@@ -301,16 +307,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 States.Accept();
                 BaseTime = Time;
                 States.Value.Delta = delta;
+                Delta = delta;
             }
 
             /// <summary>
             /// Probes a new timepoint.
             /// </summary>
-            /// <param name="delta">The timestep to probe in the future.</param>
-            public virtual void Probe(double delta)
+            public virtual void Probe()
             {
-                Time = BaseTime + delta;
-                States.Value.Delta = delta;
+                Time = BaseTime + Delta;
+                States.Value.Delta = Delta;
 
                 // Compute the integration coefficients
                 ComputeCoefficients();
@@ -352,9 +358,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Rejects the last probed timepoint. This method can be called if no
             /// solution could be found.
             /// </summary>
-            /// <param name="newDelta">A new timestep suggested by the method.</param>
             /// <exception cref="TimestepTooSmallException">Thrown when the timestep became too small.</exception>
-            public virtual void Reject(out double newDelta)
+            public virtual void Reject()
             {
                 // TODO: We probably don't really need to keep the old delta.
                 // Check if the last probed delta is smaller or equal to the min step.
@@ -363,15 +368,15 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 States.GetPreviousValue(1).Solution.CopyTo(Simulation.State.Solution);
 
                 // Limit the timestep and cut the order
-                newDelta = States.Value.Delta / 8.0;
+                Delta = States.Value.Delta / 8.0;
                 Order = 1;
 
                 // Check if we can't decrease the timestep further
-                if (newDelta <= _minStep)
+                if (Delta <= _minStep)
                 {
                     if (_oldDelta <= _minStep)
-                        throw new TimestepTooSmallException(newDelta, BaseTime);
-                    newDelta = _minStep;
+                        throw new TimestepTooSmallException(Delta, BaseTime);
+                    Delta = _minStep;
                 }
             }
 
@@ -379,17 +384,18 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Evaluates the solution at the probed timepoint. If the solution is invalid,
             /// the analysis should roll back and try a smaller timestep.
             /// </summary>
-            /// <param name="newDelta">A new timestep suggested by the method if the probed timepoint is invalid.</param>
             /// <returns>
             ///   <c>true</c> if the solution is a valid solution; otherwise, <c>false</c>.
             /// </returns>
             /// <exception cref="TimestepTooSmallException">Thrown when the timestep is too small.</exception>
-            public virtual bool Evaluate(out double newDelta)
+            public virtual bool Evaluate()
             {
+                double newDelta;
+
                 // Ignore checks on the first timepoint
                 if (BaseTime.Equals(0.0))
                 {
-                    newDelta = States.Value.Delta;
+                    Delta = States.Value.Delta;
                     return true;
                 }
                 else
@@ -422,7 +428,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                         }
                     }
                     else
+                    {
+                        Delta = newDelta;
                         return false;
+                    }
                 }
 
                 // Limit the expansion of the timestep
@@ -444,6 +453,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     Order = 1;
                 }
 
+                Delta = newDelta;
                 return true;
             }
         }

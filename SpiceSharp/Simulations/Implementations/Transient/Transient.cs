@@ -66,7 +66,6 @@ namespace SpiceSharp.Simulations
 
             try
             {
-                var newDelta = Math.Min(config.StopTime / 50.0, config.InitialStep) / 10.0;
                 while (true)
                 {
                     // Accept the last evaluated time point
@@ -89,13 +88,13 @@ namespace SpiceSharp.Simulations
                     }
 
                     // Continue integration
-                    Method.Prepare(ref newDelta);
+                    Method.Prepare();
 
                     // Find a valid time point
                     while (true)
                     {
                         // Probe the next time point
-                        Probe(newDelta);
+                        Probe();
 
                         // Try to solve the new point
                         var converged = TimeIterate(config.TranMaxIterations);
@@ -104,13 +103,13 @@ namespace SpiceSharp.Simulations
                         // Did we fail to converge to a solution?
                         if (!converged)
                         {
-                            Method.Reject(out newDelta);
+                            Method.Reject();
                             Statistics.Rejected++;
                         }
                         else
                         {
                             // If our integration method approves of our solution, continue to the next timepoint
-                            if (Method.Evaluate(out newDelta))
+                            if (Method.Evaluate())
                                 break;
                             Statistics.Rejected++;
                         }
