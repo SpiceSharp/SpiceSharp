@@ -69,5 +69,14 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// </value>
         [ParameterName("lteabstol"), ParameterInfo("The local truncation error absolute tolerance.")]
         public double LteAbsTol { get; set; } = 1e-6;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether node voltages should be used to truncate the timestep.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if node voltages are used; otherwise, <c>false</c>.
+        /// </value>
+        [ParameterName("truncnodes"), ParameterInfo("Flag that specifies whether or not node voltages should be used to truncate the timestep.")]
+        public bool TruncateNodes { get; set; }
     }
 }

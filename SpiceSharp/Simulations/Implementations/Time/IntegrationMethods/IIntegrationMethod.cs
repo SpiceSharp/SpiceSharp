@@ -82,17 +82,17 @@ namespace SpiceSharp.Simulations
 
         /// <summary>
         /// Initializes the integration method using the allocated biasing state.
+        /// At this point, all entities should have received the chance to allocate and register integration states.
         /// </summary>
         void Initialize();
 
         /// <summary>
-        /// Initializes the integration states.
+        /// Accepts a solution at the current timepoint.
         /// </summary>
-        void InitializeStates();
+        void Accept();
 
         /// <summary>
         /// Prepares the integration method for calculating the next timepoint.
-        /// The integration method may change the suggested timestep if needed.
         /// </summary>
         void Prepare();
 
@@ -102,22 +102,16 @@ namespace SpiceSharp.Simulations
         void Probe();
 
         /// <summary>
-        /// Evaluates the solution at the probed timepoint. If the solution is invalid,
-        /// the analysis should roll back and try a smaller timestep. 
+        /// Evaluates the current solution at the probed timepoint. If the solution is invalid,
+        /// the analysis should roll back and try again.
         /// </summary>
         /// <returns>
-        /// <c>true</c> if the solution is a valid solution; otherwise, <c>false</c>.
+        /// <c>true</c> if the current solution is a valid solution; otherwise, <c>false</c>.
         /// </returns>
         bool Evaluate();
 
         /// <summary>
-        /// Accepts the last probed timepoint.
-        /// </summary>
-        void Accept();
-
-        /// <summary>
-        /// Rejects the last probed timepoint. This method can be called if no
-        /// solution could be found.
+        /// Rejects the last probed timepoint as a valid solution. This method can be called if no solution could be found (eg. due to non-convergence).
         /// </summary>
         void Reject();
     }

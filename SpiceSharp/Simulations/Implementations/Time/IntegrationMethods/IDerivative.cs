@@ -45,11 +45,6 @@
         /// <param name="coefficient">The coefficient of the quantity that is derived.</param>
         /// <param name="currentValue">The current value of the derived state.</param>
         /// <returns>The information for filling in the Y-matrix and Rhs-vector.</returns>
-        /// <remarks>
-        /// For example, for a capacitor, I = C*dV/dt. The method would require the coefficient
-        /// to be "C", and the current value is the current voltage "V" over the capacitor.
-        /// The result is an equivalent conductance and Rhs-vector contribution.
-        /// </remarks>
         JacobianInfo GetContributions(double coefficient, double currentValue);
 
         /// <summary>
@@ -58,11 +53,6 @@
         /// </summary>
         /// <param name="coefficient">The coefficient of the quantity that is derived.</param>
         /// <returns>The information for filling in the Y-matrix and Rhs-vector</returns>
-        /// <remarks>
-        /// For example, for a capacitor, I = C*dV/dt. The method would require the coefficient
-        /// to be "C", and the current value is the current voltage "V" over the capacitor.
-        /// The result is an equivalent conductance and Rhs-vector contribution.
-        /// </remarks>
         JacobianInfo GetContributions(double coefficient);
 
         /// <summary>

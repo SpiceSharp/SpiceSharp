@@ -125,15 +125,6 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
 
             /// <summary>
-            /// Initializes the integration states.
-            /// </summary>
-            public void InitializeStates()
-            {
-                foreach (var state in _states)
-                    _states.Value.CopyTo(state);
-            }
-
-            /// <summary>
             /// Prepares the integration method for calculating the next timepoint.
             /// The integration method may change the suggested timestep if needed.
             /// </summary>
@@ -168,6 +159,11 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// </summary>
             public void Accept()
             {
+                if (BaseTime.Equals(0.0))
+                {
+                    foreach (var state in _states)
+                        _states.Value.CopyTo(state);
+                }
                 foreach (var state in _registeredStates)
                     state.Accept();
             }

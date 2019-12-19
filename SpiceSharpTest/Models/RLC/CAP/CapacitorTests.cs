@@ -5,7 +5,6 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Diagnostics.Validation;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 

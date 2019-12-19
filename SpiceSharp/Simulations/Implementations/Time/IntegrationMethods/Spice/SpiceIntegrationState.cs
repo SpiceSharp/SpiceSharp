@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
     /// <summary>
     /// Represents the state of an integration method at a certain time point.
     /// </summary>
-    public class IntegrationState
+    public class SpiceIntegrationState
     {
         /// <summary>
         /// Gets or sets the timestep.
@@ -32,12 +32,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public IVector<double> State { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IntegrationState"/> class.
+        /// Initializes a new instance of the <see cref="SpiceIntegrationState"/> class.
         /// </summary>
         /// <param name="delta">The timestep.</param>
         /// <param name="solution">The solution.</param>
         /// <param name="states">The number of states to keep for derivatives.</param>
-        public IntegrationState(double delta, IVector<double> solution, int states)
+        public SpiceIntegrationState(double delta, IVector<double> solution, int states)
         {
             Delta = delta;
             Solution = solution.ThrowIfNull(nameof(solution));

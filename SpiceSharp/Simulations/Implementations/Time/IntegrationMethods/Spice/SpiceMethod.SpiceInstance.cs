@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <value>
             /// The history of integration states.
             /// </value>
-            protected IHistory<IntegrationState> States { get; }
+            protected IHistory<SpiceIntegrationState> States { get; }
 
             /// <summary>
             /// Gets the registered states.
@@ -134,7 +134,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Parameters = parameters.ThrowIfNull(nameof(parameters));
                 Simulation = simulation.ThrowIfNull(nameof(simulation));
                 MaxOrder = maxOrder;
-                States = new NodeHistory<IntegrationState>(maxOrder + 2);
+                States = new NodeHistory<SpiceIntegrationState>(maxOrder + 2);
             }
 
             /// <summary>
@@ -179,6 +179,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
 
             /// <summary>
             /// Initializes the integration method using the allocated biasing state.
+            /// At this point, all entities should have received the chance to allocate and register integration states.
             /// </summary>
             public virtual void Initialize()
             {
@@ -203,19 +204,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
 
             /// <summary>
-            /// Initializes the integration states.
-            /// </summary>
-            public virtual void InitializeStates()
-            {
-                foreach (var istate in States)
-                {
-                    istate.Delta = Parameters.MaxStep;
-                    States.Value.State.CopyTo(istate.State);
-                }
-            }
-
-            /// <summary>
-            /// Prepares the integration method for probing new values.
+            /// Prepares the integration method for calculating the next timepoint.
             /// </summary>
             public virtual void Prepare()
             {
@@ -279,12 +268,22 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             protected abstract void Predict();
 
             /// <summary>
-            /// Accepts the last probed timepoint.
+            /// Accepts a solution at the current timepoint.
             /// </summary>
             public virtual void Accept()
             {
                 // Store the accepted solution
                 Simulation.State.Solution.CopyTo(States.Value.Solution);
+
+                // When just starting out, we want to copy all the states to the previous states.
+                if (BaseTime.Equals(0.0))
+                {
+                    foreach (var istate in States)
+                    {
+                        istate.Delta = Parameters.MaxStep;
+                        States.Value.State.CopyTo(istate.State);
+                    }
+                }
 
                 // Accept all the registered states
                 foreach (var state in RegisteredStates)
@@ -297,37 +296,29 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
 
             /// <summary>
-            /// Rejects the last probed timepoint. This method can be called if no
-            /// solution could be found.
+            /// Rejects the last probed timepoint as a valid solution. This method can be called if no solution could be found (eg. due to non-convergence).
             /// </summary>
             /// <exception cref="TimestepTooSmallException">Thrown when the timestep became too small.</exception>
             public virtual void Reject()
             {
-                // TODO: We probably don't really need to keep the old delta.
-                // Check if the last probed delta is smaller or equal to the min step.
-
                 // Start once more from the last solution
                 States.GetPreviousValue(1).Solution.CopyTo(Simulation.State.Solution);
 
-                // Limit the timestep and cut the order
-                Delta = States.Value.Delta / 8.0;
-                Order = 1;
+                // Is the previously tried timestep already at the minimum?
+                if (States.Value.Delta <= Parameters.MinStep)
+                    throw new TimestepTooSmallException(States.Value.Delta, BaseTime);
 
-                // Check if we can't decrease the timestep further
-                if (Delta <= Parameters.MinStep)
-                {
-                    if (_oldDelta <= Parameters.MinStep)
-                        throw new TimestepTooSmallException(Delta, BaseTime);
-                    Delta = Parameters.MinStep;
-                }
+                // Limit the timestep and cut the order
+                Delta = Math.Max(States.Value.Delta / 8.0, Parameters.MinStep);
+                Order = 1;
             }
 
             /// <summary>
-            /// Evaluates the solution at the probed timepoint. If the solution is invalid,
-            /// the analysis should roll back and try a smaller timestep.
+            /// Evaluates the current solution at the probed timepoint. If the solution is invalid,
+            /// the analysis should roll back and try again.
             /// </summary>
             /// <returns>
-            ///   <c>true</c> if the solution is a valid solution; otherwise, <c>false</c>.
+            ///   <c>true</c> if the current solution is a valid solution; otherwise, <c>false</c>.
             /// </returns>
             /// <exception cref="TimestepTooSmallException">Thrown when the timestep is too small.</exception>
             public virtual bool Evaluate()
@@ -383,14 +374,14 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 if (newDelta > Parameters.MaxStep)
                     newDelta = Parameters.MaxStep;
 
-                // Check for timesteps that are too small
+                // Check for timesteps that became too small
                 if (newDelta <= Parameters.MinStep)
                 {
-                    // We already tried?
-                    if (_oldDelta <= Parameters.MinStep)
+                    // Was the previously tried timestep already at the minimum?
+                    if (States.Value.Delta <= Parameters.MinStep)
                         throw new TimestepTooSmallException(newDelta, BaseTime);
 
-                    // One more time
+                    // Else let's just try one more time with the minimum timestep
                     newDelta = Parameters.MinStep;
                     Order = 1;
                 }

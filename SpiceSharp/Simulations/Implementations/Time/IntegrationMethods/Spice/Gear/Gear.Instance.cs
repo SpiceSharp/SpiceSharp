@@ -41,11 +41,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
 
             /// <summary>
             /// Initializes the integration method using the allocated biasing state.
+            /// At this point, all entities should have received the chance to allocate and register integration states.
             /// </summary>
             public override void Initialize()
             {
                 // Create all the states
-                States.Set(i => new IntegrationState(0.0,
+                States.Set(i => new SpiceIntegrationState(0.0,
                     new DenseVector<double>(Simulation.State.Solver.Size),
                     _stateValues));
 
@@ -59,7 +60,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 base.Initialize();
 
                 // Add our own truncatable states
-                // TruncatableStates.Add(new NodeTruncation(this));
+                if (Parameters.TruncateNodes)
+                    TruncatableStates.Add(new NodeTruncation(this));
             }
 
             /// <summary>

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;

@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             {
                 private readonly int _index;
                 private readonly Instance _method;
-                private readonly IHistory<IntegrationState> _states;
+                private readonly IHistory<SpiceIntegrationState> _states;
 
                 /// <summary>
                 /// Gets the current derivative.

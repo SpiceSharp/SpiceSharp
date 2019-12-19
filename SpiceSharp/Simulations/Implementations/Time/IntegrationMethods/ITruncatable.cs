@@ -9,7 +9,7 @@
         /// Truncates the current timestep.
         /// </summary>
         /// <returns>
-        /// The maximum timestep allowed by this state.
+        /// The maximum timestep allowed by this instance.
         /// </returns>
         double Truncate();
     }

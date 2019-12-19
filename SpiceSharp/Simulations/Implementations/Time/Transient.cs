@@ -382,7 +382,6 @@ namespace SpiceSharp.Simulations
         {
             foreach (var behavior in _transientBehaviors)
                 behavior.InitializeStates();
-            Method.InitializeStates();
         }
 
         /// <summary>
