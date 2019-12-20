@@ -147,7 +147,7 @@ namespace SpiceSharpTest.Algebra
             solver[3, 2] = 1;
             solver[3, 3] = 1;
 
-            solver.Order = -1;
+            solver.OrderReduction = 1;
             Assert.AreEqual(true, solver.Factor());
 
             AssertInternal(solver, 1, 1, 1);

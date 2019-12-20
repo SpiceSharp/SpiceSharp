@@ -71,6 +71,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The order reduction cannot be negative..
+        /// </summary>
+        internal static string Algebra_InvalidOrder {
+            get {
+                return ResourceManager.GetString("Algebra.InvalidOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Singular matrix encountered..
         /// </summary>
         internal static string Algebra_SingularMatrix {
@@ -616,6 +625,15 @@ namespace SpiceSharp.Properties {
         internal static string SizeMismatch2 {
             get {
                 return ResourceManager.GetString("SizeMismatch2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot compute an equivalent solution for subcircuit &apos;{0}&apos;..
+        /// </summary>
+        internal static string Subcircuits_NoEquivalent {
+            get {
+                return ResourceManager.GetString("Subcircuits.NoEquivalent", resourceCulture);
             }
         }
         

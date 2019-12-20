@@ -24,7 +24,7 @@ namespace SpiceSharp.Algebra.Solve
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
                 throw new ArgumentOutOfRangeException(nameof(eliminationStep));
-            var limit = markowitz.SearchLimit;
+            var limit = matrix.Size - markowitz.SearchReduction;
 
             // No singletons left, so don't bother
             if (markowitz.Singletons == 0)
@@ -64,11 +64,13 @@ namespace SpiceSharp.Algebra.Solve
                 {
                     // The last element in the column is the singleton element!
                     chosen = matrix.GetLastInColumn(index);
-
-                    // Check if it is a valid pivot
-                    var magnitude = markowitz.Magnitude(chosen.Value);
-                    if (magnitude > markowitz.AbsolutePivotThreshold)
-                        return chosen;
+                    if (chosen.Row <= limit && chosen.Column <= limit)
+                    {
+                        // Check if it is a valid pivot
+                        var magnitude = markowitz.Magnitude(chosen.Value);
+                        if (magnitude > markowitz.AbsolutePivotThreshold)
+                            return chosen;
+                    }
                 }
 
                 // Check if we can still use a row here
@@ -102,10 +104,13 @@ namespace SpiceSharp.Algebra.Solve
                     }
 
                     // Check if the pivot is valid
-                    var magnitude = markowitz.Magnitude(chosen.Value);
-                    if (magnitude > markowitz.AbsolutePivotThreshold &&
-                        magnitude > markowitz.RelativePivotThreshold * largest)
-                        return chosen;
+                    if (chosen.Row <= limit && chosen.Column <= limit)
+                    {
+                        var magnitude = markowitz.Magnitude(chosen.Value);
+                        if (magnitude > markowitz.AbsolutePivotThreshold &&
+                            magnitude > markowitz.RelativePivotThreshold * largest)
+                            return chosen;
+                    }
                 }
 
                 // Don't continue if no more singletons are available

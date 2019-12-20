@@ -7,8 +7,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="ITimeBehavior" />
-    public class TimeBehavior : SubcircuitBehavior<ITimeBehavior>, ITimeBehavior
+    public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
+        private BehaviorList<ITimeBehavior> _behaviors;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
@@ -17,6 +19,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         public TimeBehavior(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
+            _behaviors = Simulation.EntityBehaviors.GetBehaviorList<ITimeBehavior>();
         }
 
         /// <summary>
@@ -24,16 +27,24 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// </summary>
         public void InitializeStates()
         {
-            foreach (var behavior in Behaviors)
+            foreach (var behavior in _behaviors)
                 behavior.InitializeStates();
         }
 
         /// <summary>
-        /// Perform temperature-dependent calculations.
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        public void Load()
+        void ITimeBehavior.Load()
         {
-            foreach (var behavior in Behaviors)
+        }
+
+        /// <summary>
+        /// Loads the behaviors.
+        /// </summary>
+        protected override void LoadBehaviors()
+        {
+            base.LoadBehaviors();
+            foreach (var behavior in _behaviors)
                 behavior.Load();
         }
     }

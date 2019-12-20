@@ -34,7 +34,7 @@ namespace SpiceSharp.Algebra.Solve
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
             ISparseMatrixElement<T> largestElement = null;
             var ties = 0;
-            var limit = markowitz.SearchLimit;
+            var limit = matrix.Size - markowitz.SearchReduction;
 
             // Start search of matrix on column by column basis
             for (var i = eliminationStep; i <= limit; i++)

@@ -14,12 +14,22 @@ namespace SpiceSharp.Algebra.Solve
         public Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
-        /// Gets or sets the row/column limit for searching a pivot.
+        /// Gets or sets how many rows/columns at the end should not be considered for searching pivots.
         /// </summary>
         /// <value>
-        /// The maximum row/column to search.
+        /// The number of rows/columns to avoid.
         /// </value>
-        public int SearchLimit { get; set; }
+        public int SearchReduction 
+        { 
+            get => _search; 
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException();
+                _search = value;
+            }
+        }
+        private int _search;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SparsePivotStrategy{T}"/> class.
@@ -91,7 +101,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         public virtual void Clear()
         {
-            SearchLimit = 0;
+            SearchReduction = 0;
         }
     }
 }

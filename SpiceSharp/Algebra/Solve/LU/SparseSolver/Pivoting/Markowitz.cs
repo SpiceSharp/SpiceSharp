@@ -92,7 +92,7 @@ namespace SpiceSharp.Algebra.Solve
             // Search for the largest element below the pivot
             var element = pivot.Below;
             var largest = 0.0;
-            while (element != null && element.Row <= SearchLimit)
+            while (element != null && element.Row <= _markowitzRow.Length - 1 - SearchReduction)
             {
                 largest = Math.Max(largest, Magnitude(element.Value));
                 element = element.Below;
@@ -138,7 +138,7 @@ namespace SpiceSharp.Algebra.Solve
         private void Count(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int step)
         {
             ISparseMatrixElement<T> element;
-            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+            var limit = matrix.Size - SearchReduction;
 
             // Get the first element in the vector
             var rhsElement = rhs.GetFirstInVector();
@@ -190,7 +190,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="step">The elimination step.</param>
         private void Products(ISparseMatrix<T> matrix, int step)
         {
-            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+            var limit = matrix.Size - SearchReduction;
 
             Singletons = 0;
             for (var i = step; i <= limit; i++)
@@ -319,8 +319,7 @@ namespace SpiceSharp.Algebra.Solve
         {
             matrix.ThrowIfNull(nameof(matrix));
             pivot.ThrowIfNull(nameof(pivot));
-
-            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+            var limit = matrix.Size - SearchReduction;
 
             // If we haven't setup, just skip
             if (_markowitzProduct == null)
@@ -402,19 +401,12 @@ namespace SpiceSharp.Algebra.Solve
             matrix.ThrowIfNull(nameof(matrix));
 
             // Fix the search limit to allow our strategies to work
-            var old = SearchLimit;
-            SearchLimit = old > 0 ? old : matrix.Size + old;
-
             foreach (var strategy in Strategies)
             {
                 var chosen = strategy.FindPivot(this, matrix, eliminationStep);
                 if (chosen != null)
-                {
-                    SearchLimit = old;
                     return chosen;
-                }
             }
-            SearchLimit = old;
             return null;
         }
 
@@ -428,7 +420,7 @@ namespace SpiceSharp.Algebra.Solve
         {
             if (_markowitzProduct == null)
                 return;
-            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+            var limit = matrix.Size - SearchReduction;
 
             // Recalculate the rows and columns completely and check with the current ones
             int singletons = 0;

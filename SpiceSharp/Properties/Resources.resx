@@ -120,6 +120,9 @@
   <data name="Algebra.EliminationFailed" xml:space="preserve">
     <value>Elimination failed.</value>
   </data>
+  <data name="Algebra.InvalidOrder" xml:space="preserve">
+    <value>The order reduction cannot be negative.</value>
+  </data>
   <data name="Algebra.SingularMatrix" xml:space="preserve">
     <value>Singular matrix encountered.</value>
   </data>
@@ -302,6 +305,9 @@
   </data>
   <data name="SizeMismatch2" xml:space="preserve">
     <value>Size mismatch of {0}: expected {1}.</value>
+  </data>
+  <data name="Subcircuits.NoEquivalent" xml:space="preserve">
+    <value>Cannot compute an equivalent solution for subcircuit '{0}'.</value>
   </data>
   <data name="Sweeps.CannotReachFinalPoint" xml:space="preserve">
     <value>Cannot reach the final sweep point.</value>

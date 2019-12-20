@@ -443,7 +443,7 @@ namespace SpiceSharp.Simulations
                 if (!_isPreordered)
                 {
                     solver.Precondition((matrix, vector)
-                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Order));
+                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Size - solver.OrderReduction));
                     _isPreordered = true;
                 }
                 if (state.Init == InitializationModes.Junction)

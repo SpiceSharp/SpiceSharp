@@ -14,11 +14,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class SubcircuitSimulation : ISimulation
     {
         /// <summary>
-        /// Occurs when the behaviors have been created.
-        /// </summary>
-        public event EventHandler<EventArgs> AfterBehaviorCreation;
-
-        /// <summary>
         /// Gets the local states.
         /// </summary>
         /// <value>
@@ -152,9 +147,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
-
-            // Invoke the event
-            AfterBehaviorCreation?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -162,7 +154,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <typeparam name="S">The simulation state type.</typeparam>
         /// <returns>
-        /// The type, or <c>null</c> if the state isn't used.
+        /// The state, or <c>null</c> if the state isn't used.
         /// </returns>
         public S GetState<S>() where S : ISimulationState
         {
@@ -170,6 +162,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 return result;
             return Parent.GetState<S>();
         }
+
+        /// <summary>
+        /// Gets the state of the parent simulation.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        /// The state, or <c>null</c> if the state isn't used.
+        /// </returns>
+        public S GetParentState<S>() where S : ISimulationState
+            => Parent.GetState<S>();
 
         /// <summary>
         /// Checks if the class uses the specified state.

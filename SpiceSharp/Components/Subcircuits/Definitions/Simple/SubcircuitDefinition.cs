@@ -76,23 +76,24 @@ namespace SpiceSharp.Components
                 sharedNodes[i] = parentSimulation.Variables.MapNode(nodes[i], VariableType.Voltage);
             var simulation = new SubcircuitSimulation(name, parentSimulation, behaviors.Parameters, sharedNodes);
 
-            // We can now alias the inside- and outside nodes
+            // We can now prepare the subcircuit simulation
             for (var i = 0; i < sharedNodes.Length; i++)
                 simulation.Variables.AliasNode(sharedNodes[i], _pins[i]);
+            BiasingBehavior.Prepare(simulation);
+
+            // Create the behaviors for the subcircuit
+            simulation.Run(Entities);
 
             // Create the behaviors necessary for the subcircuit
             behaviors
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(name, simulation))
                 .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdateBehavior(name, simulation))
-                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new BiasingBehavior(name, simulation))
                 .AddIfNo<ITimeBehavior>(parentSimulation, () => new TimeBehavior(name, simulation))
+                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new BiasingBehavior(name, simulation))
                 .AddIfNo<IAcceptBehavior>(parentSimulation, () => new AcceptBehavior(name, simulation))
                 .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
                 .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
                 .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
-
-            // Create the behaviors for the subcircuit
-            simulation.Run(Entities);
         }
 
         /// <summary>

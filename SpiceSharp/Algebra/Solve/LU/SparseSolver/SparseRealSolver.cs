@@ -50,18 +50,19 @@ namespace SpiceSharp.Algebra
                 throw new SolverNotFactoredException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
+            var order = Size - OrderReduction;
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
             var index = 0;
-            while (rhsElement != null && rhsElement.Index <= Order)
+            while (rhsElement != null && rhsElement.Index <= order)
             {
                 while (index < rhsElement.Index)
                     _intermediate[index++] = 0.0;
                 _intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
-            while (index <= Order)
+            while (index <= order)
                 _intermediate[index++] = 0.0;
             while (index <= Size)
             {
@@ -70,7 +71,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Forward substitution
-            for (var i = 1; i <= Order; i++)
+            for (var i = 1; i <= order; i++)
             {
                 var temp = _intermediate[i];
                 if (!temp.Equals(0.0))
@@ -79,7 +80,7 @@ namespace SpiceSharp.Algebra
                     temp *= pivot.Value;
                     _intermediate[i] = temp;
                     var element = pivot.Below;
-                    while (element != null && element.Row <= Order)
+                    while (element != null && element.Row <= order)
                     {
                         _intermediate[element.Row] -= temp * element.Value;
                         element = element.Below;
@@ -88,7 +89,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (var i = Order; i > 0; i--)
+            for (var i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
@@ -116,12 +117,13 @@ namespace SpiceSharp.Algebra
                 throw new SolverNotFactoredException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
+            var order = Size - OrderReduction;
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
-            for (var i = 0; i <= Order; i++)
+            for (var i = 0; i <= order; i++)
                 _intermediate[i] = 0.0;
-            while (rhsElement != null && rhsElement.Index <= Order)
+            while (rhsElement != null && rhsElement.Index <= order)
             {
                 var newIndex = Column[Row.Reverse(rhsElement.Index)];
                 _intermediate[newIndex] = rhsElement.Value;
@@ -129,13 +131,13 @@ namespace SpiceSharp.Algebra
             }
 
             // Forward elimination
-            for (var i = 1; i <= Order; i++)
+            for (var i = 1; i <= order; i++)
             {
                 var temp = _intermediate[i];
                 if (!temp.Equals(0.0))
                 {
                     var element = Matrix.FindDiagonalElement(i).Right;
-                    while (element != null && element.Column <= Order)
+                    while (element != null && element.Column <= order)
                     {
                         _intermediate[element.Column] -= temp * element.Value;
                         element = element.Right;
@@ -144,12 +146,12 @@ namespace SpiceSharp.Algebra
             }
 
             // Backward substitution
-            for (var i = Order; i > 0; i--)
+            for (var i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Below;
-                while (element != null && element.Row <= Order)
+                while (element != null && element.Row <= order)
                 {
                     temp -= _intermediate[element.Row] * element.Value;
                     element = element.Below;

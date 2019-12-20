@@ -3,6 +3,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 
 namespace SpiceSharpTest.Models
@@ -56,6 +57,86 @@ namespace SpiceSharpTest.Models
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
             IEnumerable<double> references = new double[] { 1.0 };
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_LocalSolverSubcircuitOp_Expect_Reference()
+        {
+            // No internal nodes
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a", "b");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Subcircuit("X1", subckt, "in", "out"));
+            ckt["X1"].Parameters.Add(new SpiceSharp.Components.SubcircuitBehaviors.Simple.BiasingParameters() { LocalSolver = true });
+
+            var op = new OP("op");
+            IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
+            IEnumerable<double> references = new double[] { 0.5 };
+            AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_LocalSolverSubcircuitOp2_Expect_Reference()
+        {
+            // One internal node
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "c", 1e3),
+                new Resistor("R3", "b", "0", 1e3)),
+                "a", "b");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Subcircuit("X1", subckt, "in", "out"));
+            ckt["X1"].Parameters.Add(new SpiceSharp.Components.SubcircuitBehaviors.Simple.BiasingParameters() { LocalSolver = true });
+
+            var op = new OP("op");
+            IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
+            IEnumerable<double> references = new double[] { 0.5 };
+            AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_LocalSolverSubcircuitTransient_Expect_Reference()
+        {
+            // With internal states
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Capacitor("C1", "b", "0", 1e-6)),
+                "a", "b");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Subcircuit("X1", subckt, "in", "out"));
+            ckt["X1"].Parameters.Add(new SpiceSharp.Components.SubcircuitBehaviors.Simple.BiasingParameters() { LocalSolver = true });
+
+            var tran = new Transient("transient", 1e-6, 1e-3);
+            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions.Add("out", 0.0);
+            IExport<double>[] exports = new[] { new RealVoltageExport(tran, "out") };
+            IEnumerable<Func<double, double>> references = new Func<double, double>[] { t => 1.0 - Math.Exp(-t * 1e3) };
+            AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_LocalSolverSubcircuitOp3_Expect_Reference()
+        {
+            // Variable that makes an equivalent circuit impossible
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new VoltageSource("V1", "a", "0", 1.0)), "a");
+            var ckt = new Circuit(
+                new Resistor("R1", "in", "out", 1e3),
+                new Resistor("R2", "out", "0", 1e3),
+                new Subcircuit("X1", subckt, "in"));
+            ckt["X1"].Parameters.Add(new SpiceSharp.Components.SubcircuitBehaviors.Simple.BiasingParameters { LocalSolver = true });
+
+            var op = new OP("op");
+            IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
+            Assert.Throws<NoEquivalentSubcircuitException>(() => op.Run(ckt));
         }
 
         [Test]

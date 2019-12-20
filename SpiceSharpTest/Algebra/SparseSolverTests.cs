@@ -237,8 +237,8 @@ namespace SpiceSharpTest.Algebra
         public void When_PartialDecomposition_Expect_Reference()
         {
             var solver = LUHelper.CreateSparseRealSolver();
-            solver.Strategy.SearchLimit = 2; // Limit to only the 2 first elements
-            solver.Order = 2; // Only perform elimination on the first two rows
+            solver.Strategy.SearchReduction = 2; // Limit to only the 2 first elements
+            solver.OrderReduction = 2; // Only perform elimination on the first two rows
 
             solver[1, 2] = 2;
             solver[2, 1] = 1;
@@ -264,8 +264,8 @@ namespace SpiceSharpTest.Algebra
         public void When_PartialSolve_Expect_Reference()
         {
             var solver = LUHelper.CreateSparseRealSolver();
-            solver.Strategy.SearchLimit = 2; // Limit to only the 2 first elements
-            solver.Order = 2; // Only perform elimination on the first two rows
+            solver.Strategy.SearchReduction = 2; // Limit to only the 2 first elements
+            solver.OrderReduction = 2; // Only perform elimination on the first two rows
 
             solver[1, 1] = 1;
             solver[1, 3] = 2;

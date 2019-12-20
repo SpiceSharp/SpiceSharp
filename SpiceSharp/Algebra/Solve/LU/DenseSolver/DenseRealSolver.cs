@@ -57,7 +57,7 @@ namespace SpiceSharp.Algebra
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             size = Math.Min(size, Size);
-            var order = Math.Min(size, Order);
+            var order = Math.Min(size, Size - OrderReduction);
 
             // Forward substitution
             for (var i = 1; i <= order; i++)

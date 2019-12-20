@@ -10,20 +10,12 @@ namespace SpiceSharp.Algebra
     public interface ISolver<T> where T : IFormattable
     {
         /// <summary>
-        /// Gets or sets the order of the system that needs to be solved.
+        /// Gets or sets the reduction of the order of the system that needs to be solved.
         /// </summary>
-        /// <remarks>
-        /// This property can be used to limit the number of elimination steps to do
-        /// partial elimination. The pivots are also only searched within the top-left
-        /// Order x Order submatrix. However, the whole system will be solved.
-        /// Specifying a negative number of 0 makes the order relative to the size of
-        /// the system of equations. For example, -2 means that the last two equations
-        /// are expected to be linearly dependent on the first N-2 equations.
-        /// </remarks>
         /// <value>
         /// The order.
         /// </value>
-        int Order { get; set; }
+        int OrderReduction { get; set; }
 
         /// <summary>
         /// Gets the size of the matrix and right-hand side vector.

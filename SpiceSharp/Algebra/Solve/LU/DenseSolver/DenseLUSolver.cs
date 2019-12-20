@@ -18,23 +18,21 @@ namespace SpiceSharp.Algebra
         where T : IFormattable
     {
         /// <summary>
-        /// Gets or sets the order of the system that needs to be solved.
+        /// Gets or sets the reduction of the order of the system that needs to be solved.
         /// </summary>
         /// <value>
         /// The order.
         /// </value>
-        /// <remarks>
-        /// This property can be used to limit the number of elimination steps.
-        /// </remarks>
-        public int Order
+        /// <exception cref="ArgumentException">Thrown if the order reduction is negative.</exception>
+        public int OrderReduction
         {
-            get
+            get => _order;
+            set
             {
-                if (_order <= 0)
-                    return Size + _order;
-                return _order;
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Algebra_InvalidOrder);
+                _order = value;
             }
-            set => _order = value;
         }
         private int _order = 0;
 
@@ -148,7 +146,7 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public bool Factor(int size)
         {
-            int order = Math.Min(Order, size);
+            int order = Math.Min(size, Size - _order);
             for (var step = 1; step <= order; step++)
             {
                 if (!Elimination(step, size))
@@ -168,9 +166,10 @@ namespace SpiceSharp.Algebra
         {
             var size = Size;
             var step = 1;
+            var order = Size - _order;
             if (!NeedsReordering)
             {
-                for (step = 1; step <= Order; step++)
+                for (step = 1; step <= order; step++)
                 {
                     if (Strategy.IsValidPivot(Matrix, step))
                     {
@@ -197,7 +196,7 @@ namespace SpiceSharp.Algebra
             // Setup pivoting strategy
             Strategy.Setup(Matrix, Vector, step);
 
-            for (; step <= Order; step++)
+            for (; step <= order; step++)
             {
                 if (!Strategy.FindPivot(Matrix, step, out int row, out int column))
                     throw new SingularException(step);

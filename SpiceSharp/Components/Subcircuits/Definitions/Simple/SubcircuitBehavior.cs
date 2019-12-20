@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using System;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
 {
@@ -35,16 +34,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             : base(name)
         {
             Simulation = simulation.ThrowIfNull(nameof(simulation));
-            simulation.AfterBehaviorCreation += RegisterBehaviors;
-        }
-
-        /// <summary>
-        /// Registers the behaviors.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void RegisterBehaviors(object sender, EventArgs e)
-        {
             Behaviors = Simulation.EntityBehaviors.GetBehaviorList<B>();
         }
     }

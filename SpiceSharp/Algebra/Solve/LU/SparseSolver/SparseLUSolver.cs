@@ -17,23 +17,21 @@ namespace SpiceSharp.Algebra
         where T : IFormattable, IEquatable<T>
     {
         /// <summary>
-        /// Gets or sets the order of the system that needs to be solved.
+        /// Gets or sets the reduction of the order of the system that needs to be solved.
         /// </summary>
         /// <value>
         /// The order.
         /// </value>
-        /// <remarks>
-        /// This property can be used to limit the number of elimination steps.
-        /// </remarks>
-        public int Order
+        /// <exception cref="ArgumentException">Thrown if the order reduction is negative.</exception>
+        public int OrderReduction
         {
-            get
+            get => _order;
+            set
             {
-                if (_order <= 0)
-                    return Size + _order;
-                return _order;
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Algebra_InvalidOrder);
+                _order = value;
             }
-            set => _order = value;
         }
         private int _order = 0;
 
@@ -144,7 +142,8 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public bool Factor()
         {
-            for (var step = 1; step <= Order; step++)
+            var order = Size - _order;
+            for (var step = 1; step <= order; step++)
             {
                 if (!Elimination(Matrix.FindDiagonalElement(step)))
                 {
@@ -162,10 +161,11 @@ namespace SpiceSharp.Algebra
         public void OrderAndFactor()
         {
             int step = 1;
+            var order = Size - _order;
             if (!NeedsReordering)
             {
                 // Matrix has been factored before, and reordering is not required
-                for (step = 1; step <= Order; step++)
+                for (step = 1; step <= order; step++)
                 {
                     var pivot = Matrix.FindDiagonalElement(step);
                     if (Strategy.IsValidPivot(pivot))
@@ -193,7 +193,7 @@ namespace SpiceSharp.Algebra
             // Setup the pivot strategy
             Strategy.Setup(Matrix, Vector, step);
 
-            for (; step <= Order; step++)
+            for (; step <= order; step++)
             {
                 var pivot = Strategy.FindPivot(Matrix, step);
                 if (pivot == null)
@@ -353,7 +353,6 @@ namespace SpiceSharp.Algebra
             IsFactored = false;
             NeedsReordering = true;
             Fillins = 0;
-            _order = 0;
             Strategy.Clear();
         }
     }
