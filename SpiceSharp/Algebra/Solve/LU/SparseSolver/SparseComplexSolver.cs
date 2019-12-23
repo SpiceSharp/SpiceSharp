@@ -48,7 +48,7 @@ namespace SpiceSharp.Algebra
                 throw new SolverNotFactoredException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
-            var order = Size - OrderReduction;
+            var order = Size - Degeneracy;
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
@@ -110,7 +110,7 @@ namespace SpiceSharp.Algebra
                 throw new SolverNotFactoredException();
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
-            var order = Size - OrderReduction;
+            var order = Size - Degeneracy;
 
             // Scramble
             for (var i = 0; i <= Size; i++)
@@ -163,11 +163,11 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the elimination was successful; otherwise <c>false</c>.
         /// </returns>
-        protected override bool Elimination(ISparseMatrixElement<Complex> pivot)
+        protected override void Eliminate(ISparseMatrixElement<Complex> pivot)
         {
             // Test for zero pivot
             if (pivot == null || pivot.Value.Equals(0.0))
-                return false;
+                throw new ArgumentException(Properties.Resources.Algebra_InvalidPivot);
             pivot.Value = Inverse(pivot.Value);
 
             var upper = pivot.Right;
@@ -197,7 +197,6 @@ namespace SpiceSharp.Algebra
                 }
                 upper = upper.Right;
             }
-            return true;
         }
 
         /// <summary>

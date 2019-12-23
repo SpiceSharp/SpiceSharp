@@ -31,7 +31,7 @@ namespace SpiceSharpTest.Algebra
             solver[4] = 8;
 
             var solution = new DenseVector<double>(4);
-            solver.OrderAndFactor();
+            Assert.AreEqual(4, solver.OrderAndFactor());
             solver.Solve(solution);
 
             Assert.AreEqual(solution[1], -9.0 / 4.0, 1e-12);

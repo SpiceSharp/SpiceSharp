@@ -57,7 +57,7 @@ namespace SpiceSharp.Algebra
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             size = Math.Min(size, Size);
-            var order = Math.Min(size, Size - OrderReduction);
+            var order = Math.Min(size, Size - Degeneracy);
 
             // Forward substitution
             for (var i = 1; i <= order; i++)
@@ -135,11 +135,11 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the elimination was succesful; otherwise <c>false</c>.
         /// </returns>
-        protected override bool Elimination(int step, int size)
+        protected override void Eliminate(int step, int size)
         {
             var diagonal = Matrix[step, step];
             if (diagonal.Equals(0.0))
-                return false;
+                throw new ArgumentException(Properties.Resources.Algebra_InvalidPivot);
             diagonal = 1.0 / diagonal;
             Matrix[step, step] = diagonal;
 
@@ -154,7 +154,6 @@ namespace SpiceSharp.Algebra
                 for (var c = step + 1; c <= size; c++)
                     Matrix[r, c] -= lead * Matrix[step, c];
             }
-            return true;
         }
     }
 }

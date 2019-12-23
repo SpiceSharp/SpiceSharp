@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 
@@ -443,7 +444,7 @@ namespace SpiceSharp.Simulations
                 if (!_isPreordered)
                 {
                     solver.Precondition((matrix, vector)
-                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Size - solver.OrderReduction));
+                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Size - solver.Degeneracy));
                     _isPreordered = true;
                 }
                 if (state.Init == InitializationModes.Junction)
@@ -453,7 +454,8 @@ namespace SpiceSharp.Simulations
                 if (_shouldReorder)
                 {
                     Statistics.ReorderTime.Start();
-                    solver.OrderAndFactor();
+                    if (solver.OrderAndFactor() < solver.Size)
+                        throw new SingularException();
                     Statistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }

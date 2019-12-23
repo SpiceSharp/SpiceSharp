@@ -18,7 +18,7 @@ namespace SpiceSharpTest.Algebra
             var solver = ReadMtxFile(Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine("Algebra", "Matrices", "fidapm05.mtx")));
 
             // Order and factor this larger matrix
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace SpiceSharpTest.Algebra
             // Order and factor
             ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
             solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, matrix.Size));
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
 
             IVector<double> solution = new DenseVector<double>(solver.Size);
             solver.Solve(solution);
@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
         }
 
         [Test]
@@ -221,7 +221,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // Solver
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
             var solution = new DenseVector<Complex>(solver.Size);
             solver.Solve(solution);
 
@@ -238,7 +238,7 @@ namespace SpiceSharpTest.Algebra
         {
             var solver = LUHelper.CreateSparseRealSolver();
             solver.Strategy.SearchReduction = 2; // Limit to only the 2 first elements
-            solver.OrderReduction = 2; // Only perform elimination on the first two rows
+            solver.Degeneracy = 2; // Only perform elimination on the first two rows
 
             solver[1, 2] = 2;
             solver[2, 1] = 1;
@@ -248,7 +248,7 @@ namespace SpiceSharpTest.Algebra
             solver[3, 4] = 4;
             solver[4, 4] = 1;
 
-            solver.OrderAndFactor();
+            Assert.AreEqual(2, solver.OrderAndFactor());
 
             // We are testing two things here:
             // - First, the solver should not have chosen a pivot in the lower-right submatrix
@@ -265,7 +265,7 @@ namespace SpiceSharpTest.Algebra
         {
             var solver = LUHelper.CreateSparseRealSolver();
             solver.Strategy.SearchReduction = 2; // Limit to only the 2 first elements
-            solver.OrderReduction = 2; // Only perform elimination on the first two rows
+            solver.Degeneracy = 2; // Only perform elimination on the first two rows
 
             solver[1, 1] = 1;
             solver[1, 3] = 2;

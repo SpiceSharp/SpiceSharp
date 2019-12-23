@@ -15,16 +15,18 @@ namespace SpiceSharp.Algebra
     public abstract partial class DenseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISolver<T>
         where M : IPermutableMatrix<T>
         where V : IPermutableVector<T>
-        where T : IFormattable
+        where T : IFormattable, IEquatable<T>
     {
+
         /// <summary>
-        /// Gets or sets the reduction of the order of the system that needs to be solved.
+        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
+        /// expected to be linearly dependent on the others.
         /// </summary>
         /// <value>
-        /// The order.
+        /// The degeneracy.
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the order reduction is negative.</exception>
-        public int OrderReduction
+        public int Degeneracy
         {
             get => _order;
             set
@@ -53,10 +55,10 @@ namespace SpiceSharp.Algebra
         public bool IsFactored { get; protected set; }
 
         /// <summary>
-        /// Gets the strategy.
+        /// Gets the pivoting strategy.
         /// </summary>
         /// <value>
-        /// The strategy.
+        /// The pivoting strategy.
         /// </value>
         public DensePivotStrategy<T> Strategy { get; }
 
@@ -149,11 +151,10 @@ namespace SpiceSharp.Algebra
             int order = Math.Min(size, Size - _order);
             for (var step = 1; step <= order; step++)
             {
-                if (!Elimination(step, size))
-                {
-                    IsFactored = false;
+                var pivot = Matrix[step, step];
+                if (pivot.Equals(default))
                     return false;
-                }
+                Eliminate(step, size);
             }
             IsFactored = true;
             return true;
@@ -162,7 +163,7 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Order and factor the Y-matrix and Rhs-vector.
         /// </summary>
-        public void OrderAndFactor()
+        public int OrderAndFactor()
         {
             var size = Size;
             var step = 1;
@@ -172,13 +173,7 @@ namespace SpiceSharp.Algebra
                 for (step = 1; step <= order; step++)
                 {
                     if (Strategy.IsValidPivot(Matrix, step))
-                    {
-                        if (!Elimination(step, size))
-                        {
-                            IsFactored = false;
-                            throw new EliminationFailedException();
-                        }
-                    }
+                        Eliminate(step, size);
                     else
                     {
                         NeedsReordering = true;
@@ -189,7 +184,7 @@ namespace SpiceSharp.Algebra
                 if (!NeedsReordering)
                 {
                     IsFactored = true;
-                    return;
+                    return order;
                 }
             }
 
@@ -199,17 +194,14 @@ namespace SpiceSharp.Algebra
             for (; step <= order; step++)
             {
                 if (!Strategy.FindPivot(Matrix, step, out int row, out int column))
-                    throw new SingularException(step);
+                    return step - 1;
                 SwapRows(row, step);
                 SwapColumns(column, step);
-                if (!Elimination(step, size))
-                {
-                    IsFactored = false;
-                    throw new SingularException(step);
-                }
+                Eliminate(step, size);
             }
             IsFactored = true;
             NeedsReordering = false;
+            return order;
         }
 
         /// <summary>
@@ -220,7 +212,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the elimination was succesful; otherwise <c>false</c>.
         /// </returns>
-        protected abstract bool Elimination(int step, int size);
+        protected abstract void Eliminate(int step, int size);
 
         /// <summary>
         /// Resets all elements in the matrix.

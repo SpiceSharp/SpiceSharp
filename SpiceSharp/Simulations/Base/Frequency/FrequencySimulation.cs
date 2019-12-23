@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 
@@ -188,7 +189,8 @@ namespace SpiceSharp.Simulations
             if (_shouldReorderAc)
             {
                 Statistics.ComplexReorderTime.Start();
-                solver.OrderAndFactor();
+                if (solver.OrderAndFactor() < solver.Size)
+                    throw new SingularException();
                 Statistics.ComplexReorderTime.Stop();
                 _shouldReorderAc = false;
             }

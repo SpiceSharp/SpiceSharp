@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations.IntegrationMethods;
@@ -291,7 +292,8 @@ namespace SpiceSharp.Simulations
                 if (_shouldReorder)
                 {
                     base.Statistics.ReorderTime.Start();
-                    solver.OrderAndFactor();
+                    if (solver.OrderAndFactor() < solver.Size)
+                        throw new SingularException();
                     base.Statistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }

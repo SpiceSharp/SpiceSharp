@@ -10,12 +10,13 @@ namespace SpiceSharp.Algebra
     public interface ISolver<T> where T : IFormattable
     {
         /// <summary>
-        /// Gets or sets the reduction of the order of the system that needs to be solved.
+        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
+        /// expected to be linearly dependent on the others.
         /// </summary>
         /// <value>
-        /// The order.
+        /// The degeneracy.
         /// </value>
-        int OrderReduction { get; set; }
+        int Degeneracy { get; set; }
 
         /// <summary>
         /// Gets the size of the matrix and right-hand side vector.
@@ -45,16 +46,21 @@ namespace SpiceSharp.Algebra
 
         /// <summary>
         /// Factor the Y-matrix and Rhs-vector.
+        /// This method can save time when factoring similar matrices in succession.
         /// </summary>
         /// <returns>
-        /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
+        /// <c>true</c> if the factoring was successful; otherwise, <c>false</c>.
         /// </returns>
         bool Factor();
 
         /// <summary>
         /// Order and factor the Y-matrix and Rhs-vector.
+        /// This method will reorder the matrix as it sees fit.
         /// </summary>
-        void OrderAndFactor();
+        /// <returns>
+        /// The number of rows that were successfully eliminated.
+        /// </returns>
+        int OrderAndFactor();
 
         /// <summary>
         /// Clears all matrix and vector elements.

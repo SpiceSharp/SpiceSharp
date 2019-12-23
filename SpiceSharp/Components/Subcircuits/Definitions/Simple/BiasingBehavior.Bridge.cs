@@ -12,21 +12,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// </summary>
         protected struct Bridge
         {
-            /// <summary>
-            /// Gets the local.
-            /// </summary>
-            /// <value>
-            /// The local.
-            /// </value>
-            public Element<double> Local { get; }
-
-            /// <summary>
-            /// Gets the parent.
-            /// </summary>
-            /// <value>
-            /// The parent.
-            /// </value>
-            public Element<double> Parent { get; }
+            private readonly Element<double> _local, _parent;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Bridge"/> struct.
@@ -35,8 +21,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <param name="parent">The parent element.</param>
             public Bridge(Element<double> local, Element<double> parent)
             {
-                Local = local.ThrowIfNull(nameof(local));
-                Parent = parent.ThrowIfNull(nameof(parent));
+                _local = local.ThrowIfNull(nameof(local));
+                _parent = parent.ThrowIfNull(nameof(parent));
             }
 
             /// <summary>
@@ -50,9 +36,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             {
                 if (obj is Bridge bridge)
                 {
-                    if (Local != bridge.Local)
+                    if (_local != bridge._local)
                         return false;
-                    if (Parent != bridge.Parent)
+                    if (_parent != bridge._parent)
                         return false;
                     return true;
                 }
@@ -67,7 +53,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// </returns>
             public override int GetHashCode()
             {
-                return Local.GetHashCode() ^ (Parent.GetHashCode() * 13);
+                return _local.GetHashCode() ^ (_parent.GetHashCode() * 13);
             }
 
             /// <summary>
@@ -80,9 +66,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// </returns>
             public static bool operator ==(Bridge left, Bridge right)
             {
-                if (left.Local != right.Local)
+                if (left._local != right._local)
                     return false;
-                if (left.Parent != right.Parent)
+                if (left._parent != right._parent)
                     return false;
                 return true;
             }
@@ -98,6 +84,14 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             public static bool operator !=(Bridge left, Bridge right)
             {
                 return !(left == right);
+            }
+
+            /// <summary>
+            /// Applies the local elements to the parent elements.
+            /// </summary>
+            public void Apply()
+            {
+                _parent.Add(_local.Value);
             }
         }
     }

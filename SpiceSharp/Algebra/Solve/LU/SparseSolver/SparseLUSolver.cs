@@ -17,13 +17,14 @@ namespace SpiceSharp.Algebra
         where T : IFormattable, IEquatable<T>
     {
         /// <summary>
-        /// Gets or sets the reduction of the order of the system that needs to be solved.
+        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
+        /// expected to be linearly dependent on the others.
         /// </summary>
         /// <value>
-        /// The order.
+        /// The degeneracy.
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the order reduction is negative.</exception>
-        public int OrderReduction
+        public int Degeneracy
         {
             get => _order;
             set
@@ -49,18 +50,25 @@ namespace SpiceSharp.Algebra
         /// Gets or sets a flag that reordering is required.
         /// </summary>
         /// <remarks>
-        /// Can be used by the pivoting strategy to indicate that a reordering is required.
+        /// If true, the method <see cref="OrderAndFactor"/> will first try to factor a part of the matrix without
+        /// reordering. This can save some time if we don't expect significant changes by the solver.
         /// </remarks>
         public bool NeedsReordering { get; set; }
 
         /// <summary>
         /// Gets whether or not the solver is factored.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is factored; otherwise, <c>false</c>.
+        /// </value>
         public bool IsFactored { get; protected set; }
 
         /// <summary>
         /// Gets the pivoting strategy being used.
         /// </summary>
+        /// <value>
+        /// The pivoting strategy.
+        /// </value>
         public SparsePivotStrategy<T> Strategy { get; }
 
         /// <summary>
@@ -142,14 +150,16 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public bool Factor()
         {
+            IsFactored = false;
             var order = Size - _order;
             for (var step = 1; step <= order; step++)
             {
-                if (!Elimination(Matrix.FindDiagonalElement(step)))
-                {
-                    IsFactored = false;
+                var pivot = Matrix.FindDiagonalElement(step);
+
+                // We don't consult the pivoting strategy, we just need to know if we can eliminate this row
+                if (pivot == null || pivot.Value.Equals(default))
                     return false;
-                }
+                Eliminate(Matrix.FindDiagonalElement(step));
             }
             IsFactored = true;
             return true;
@@ -157,9 +167,14 @@ namespace SpiceSharp.Algebra
 
         /// <summary>
         /// Order and factor the Y-matrix and Rhs-vector.
+        /// This method will reorder the matrix as it sees fit.
         /// </summary>
-        public void OrderAndFactor()
+        /// <returns>
+        /// The number of rows that were successfully eliminated.
+        /// </returns>
+        public int OrderAndFactor()
         {
+            IsFactored = false;
             int step = 1;
             var order = Size - _order;
             if (!NeedsReordering)
@@ -169,13 +184,7 @@ namespace SpiceSharp.Algebra
                 {
                     var pivot = Matrix.FindDiagonalElement(step);
                     if (Strategy.IsValidPivot(pivot))
-                    {
-                        if (!Elimination(pivot))
-                        {
-                            IsFactored = false;
-                            throw new EliminationFailedException();
-                        }
-                    }
+                        Eliminate(pivot);
                     else
                     {
                         NeedsReordering = true;
@@ -186,7 +195,7 @@ namespace SpiceSharp.Algebra
                 if (!NeedsReordering)
                 {
                     IsFactored = true;
-                    return;
+                    return order;
                 }
             }
 
@@ -197,17 +206,14 @@ namespace SpiceSharp.Algebra
             {
                 var pivot = Strategy.FindPivot(Matrix, step);
                 if (pivot == null)
-                    throw new SingularException(step);
+                    return step - 1;
                 MovePivot(pivot, step);
-                if (!Elimination(pivot))
-                {
-                    IsFactored = false;
-                    throw new SingularException(step);
-                }
+                Eliminate(pivot);
             }
 
             IsFactored = true;
             NeedsReordering = false;
+            return order;
         }
 
         /// <summary>
@@ -217,7 +223,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the elimination was successful; otherwise <c>false</c>.
         /// </returns>
-        protected abstract bool Elimination(ISparseMatrixElement<T> pivot);
+        protected abstract void Eliminate(ISparseMatrixElement<T> pivot);
 
         /// <summary>
         /// Finds the diagonal element at the specified row/column.
@@ -284,7 +290,17 @@ namespace SpiceSharp.Algebra
         {
             row = Row[row];
             column = Column[column];
-            return Matrix.GetElement(row, column);
+            var elt = Matrix.GetElement(row, column);
+
+            // If we created a new row or column, let's move it back to still have the same equations as linearly dependent
+            if (Degeneracy > 0)
+            {
+                if (row == Size)
+                    SwapRows(Size, Size - Degeneracy);
+                if (column == Size)
+                    SwapColumns(Size, Size - Degeneracy);
+            }
+            return elt;
         }
 
         /// <summary>
@@ -300,7 +316,15 @@ namespace SpiceSharp.Algebra
             if (row < 0)
                 throw new ArgumentOutOfRangeException(nameof(row));
             row = Row[row];
-            return Vector.GetElement(row);
+            var elt = Vector.GetElement(row);
+
+            // If we created a new row, let's move it backto still have the same equations as linearly dependent
+            if (Degeneracy > 0)
+            {
+                if (row == Size)
+                    SwapRows(Size, Size - Degeneracy);
+            }
+            return elt;
         }
 
         /// <summary>

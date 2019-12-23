@@ -111,10 +111,9 @@ namespace SpiceSharp.Algebra.Solve
             if (chosen != null)
                 return chosen;
 
-            // Singular matrix
-            // If we can't find it while searching the entire matrix, then we definitely have a singular matrix...
-            if (largestElement == null || largestElement.Value.Equals(0.0))
-                throw new SingularException(eliminationStep);
+            // Else just return the largest element
+            if (largestElement != null && largestElement.Value.Equals(default))
+                return null;
             return largestElement;
         }
     }

@@ -55,9 +55,9 @@ namespace SpiceSharpTest.Algebra
             solver.GetElement(3, 4).Value = 0.0001;
             solver.GetElement(4, 4).Value = 1.0;
             solver.GetElement(5, 5).Value = 1.0;
-            
+
             // Order and factor
-            solver.OrderAndFactor();
+            Assert.AreEqual(5, solver.OrderAndFactor());
 
             // Compare
             Assert.AreEqual(solver.GetElement(1, 1).Value, 1.0e4);
@@ -89,7 +89,7 @@ namespace SpiceSharpTest.Algebra
             solver.GetElement(5, 4).Value = -1e-4;
             solver.GetElement(5, 5).Value = 1e-4;
 
-            solver.OrderAndFactor();
+            Assert.AreEqual(5, solver.OrderAndFactor());
 
             AssertInternal(solver, 1, 1, 1.0);
             AssertInternal(solver, 2, 1, 0.0);
@@ -147,7 +147,7 @@ namespace SpiceSharpTest.Algebra
             solver[3, 2] = 1;
             solver[3, 3] = 1;
 
-            solver.OrderReduction = 1;
+            solver.Degeneracy = 1;
             Assert.AreEqual(true, solver.Factor());
 
             AssertInternal(solver, 1, 1, 1);

@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Algebra.EliminationFailed" xml:space="preserve">
-    <value>Elimination failed.</value>
-  </data>
   <data name="Algebra.InvalidOrder" xml:space="preserve">
     <value>The order reduction cannot be negative.</value>
+  </data>
+  <data name="Algebra.InvalidPivot" xml:space="preserve">
+    <value>The pivot is invalid.</value>
   </data>
   <data name="Algebra.SingularMatrix" xml:space="preserve">
     <value>Singular matrix encountered.</value>

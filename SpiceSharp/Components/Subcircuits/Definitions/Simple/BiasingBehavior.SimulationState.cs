@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                         _sharedCount++;
                     }
                 });
-                solver.OrderReduction = _sharedCount;
+                solver.Degeneracy = _sharedCount;
                 solver.Strategy.SearchReduction = _sharedCount;
 
                 // Get the elements that need to be shared
@@ -225,20 +225,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                 if (_shouldPreorder)
                 {
                     Solver.Precondition((matrix, vector) =>
-                        ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, Solver.Size - Solver.OrderReduction));
+                        ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, Solver.Size - Solver.Degeneracy));
                     _shouldPreorder = false;
                 }
                 if (_shouldReorder)
                 {
-                    try
-                    {
-                        Solver.OrderAndFactor();
-                        _shouldReorder = false;
-                    }
-                    catch (SingularException)
-                    {
+                    // If the solver could not solve the whole matrix, throw an exception
+                    if (Solver.OrderAndFactor() < Solver.Size - Solver.Degeneracy)
                         throw new NoEquivalentSubcircuitException();
-                    }
+                    _shouldReorder = false;
                 }
                 else
                 {
@@ -251,8 +246,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
 
                 // Copy the necessary elements
                 foreach (var bridge in _bridges)
-                    bridge.Parent.Add(bridge.Local.Value);
-
+                    bridge.Apply();
                 _isUpdated = false;
                 return true;
             }

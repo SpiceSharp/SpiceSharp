@@ -55,7 +55,7 @@ namespace SpiceSharpTest.Algebra
             solver[5, 4] = 1;
 
             // Order and factor
-            solver.OrderAndFactor();
+            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
 
             // Compare
             Assert.AreEqual(solver[1, 1], 1.0);

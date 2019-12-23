@@ -62,20 +62,20 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Elimination failed..
-        /// </summary>
-        internal static string Algebra_EliminationFailed {
-            get {
-                return ResourceManager.GetString("Algebra.EliminationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The order reduction cannot be negative..
         /// </summary>
         internal static string Algebra_InvalidOrder {
             get {
                 return ResourceManager.GetString("Algebra.InvalidOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The pivot is invalid..
+        /// </summary>
+        internal static string Algebra_InvalidPivot {
+            get {
+                return ResourceManager.GetString("Algebra.InvalidPivot", resourceCulture);
             }
         }
         
