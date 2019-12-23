@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A configuration for a <see cref="BiasingSimulation" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public class BiasingConfiguration : ParameterSet
     {
         /// <summary>

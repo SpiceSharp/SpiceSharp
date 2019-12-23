@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The configuration.
         /// </value>
-        ParameterSetDictionary Configurations { get; }
+        IParameterSetDictionary Configurations { get; }
 
         /// <summary>
         /// Gets the variables.

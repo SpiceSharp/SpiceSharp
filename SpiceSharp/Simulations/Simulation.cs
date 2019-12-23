@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The configuration.
         /// </value>
-        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary(new InheritedTypeDictionary<IParameterSet>());
+        public IParameterSetDictionary Configurations { get; } = new ParameterSetDictionary(new InheritedTypeDictionary<IParameterSet>());
 
         /// <summary>
         /// Gets the variables.

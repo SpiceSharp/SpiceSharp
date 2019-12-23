@@ -1,0 +1,182 @@
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations;
+using System;
+using System.Collections.Generic;
+
+namespace SpiceSharp.Components.Common
+{
+    /// <summary>
+    /// A common wrapper for a simulation. It allows an extra layer of an <see cref="ISimulation"/>.
+    /// The wrapper can inject configurations, states
+    /// </summary>
+    /// <seealso cref="ISimulation" />
+    public class SimulationWrapper : ISimulation
+    {
+        /// <summary>
+        /// Gets the parent simulation.
+        /// </summary>
+        /// <value>
+        /// The parent simulation.
+        /// </value>
+        protected ISimulation Parent { get; }
+
+        /// <summary>
+        /// Gets the local states.
+        /// </summary>
+        /// <value>
+        /// The local states.
+        /// </value>
+        public ITypeDictionary<ISimulationState> LocalStates { get; }
+
+        /// <summary>
+        /// Gets all the states that the class uses.
+        /// </summary>
+        /// <value>
+        /// The states.
+        /// </value>
+        public IEnumerable<Type> States => Parent.States;
+
+        /// <summary>
+        /// Gets all behavior types that are used by the class.
+        /// </summary>
+        /// <value>
+        /// The behaviors.
+        /// </value>
+        public IEnumerable<Type> Behaviors => Parent.Behaviors;
+
+        /// <summary>
+        /// Gets the name of the <see cref="ISimulation" />.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        public string Name => Parent.Name;
+
+        /// <summary>
+        /// Gets the current status of the <see cref="ISimulation" />.
+        /// </summary>
+        /// <value>
+        /// The status.
+        /// </value>
+        public SimulationStatus Status => Parent.Status;
+
+        /// <summary>
+        /// Gets a set of configurations for the <see cref="ISimulation" />.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
+        public IParameterSetDictionary Configurations { get; }
+
+        /// <summary>
+        /// Gets the variables.
+        /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
+        public IVariableSet Variables { get; }
+
+        /// <summary>
+        /// Gets the entity behaviors.
+        /// </summary>
+        /// <value>
+        /// The entity behaviors.
+        /// </value>
+        public IBehaviorContainerCollection EntityBehaviors { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SimulationWrapper"/> class.
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <param name="configurations">The configurations.</param>
+        /// <param name="behaviors">The behaviors.</param>
+        /// <param name="states">The simulation states.</param>
+        /// <param name="variables">The variables.</param>
+        public SimulationWrapper(ISimulation parent, 
+            IParameterSetDictionary configurations,
+            IBehaviorContainerCollection behaviors,
+            ITypeDictionary<ISimulationState> states,
+            IVariableSet variables)
+        {
+            Parent = parent.ThrowIfNull(nameof(parent));
+            Configurations = configurations.ThrowIfNull(nameof(configurations));
+            EntityBehaviors = behaviors.ThrowIfNull(nameof(behaviors));
+            LocalStates = states.ThrowIfNull(nameof(states));
+            Variables = variables.ThrowIfNull(nameof(variables));
+        }
+
+        /// <summary>
+        /// Runs the <see cref="ISimulation" /> on the specified <see cref="IEntityCollection" />.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        public void Run(IEntityCollection entities)
+        {
+            void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
+            {
+                if (entities.TryGetEntity(args.Name, out var entity))
+                {
+                    entity.CreateBehaviors(this);
+                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var container))
+                        args.Behaviors = container;
+                }
+                else
+                {
+                    // Try finding it in the parent simulation
+                    args.Behaviors = Parent.EntityBehaviors[args.Name];
+                }
+            }
+            EntityBehaviors.BehaviorsNotFound += BehaviorsNotFound;
+
+            foreach (var entity in entities)
+            {
+                if (!EntityBehaviors.Contains(entity.Name))
+                    entity.CreateBehaviors(this);
+            }
+
+            EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
+        }
+
+        /// <summary>
+        /// Gets the state of the specified type.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        /// The state, or <c>null</c> if the state isn't used.
+        /// </returns>
+        public virtual S GetState<S>() where S : ISimulationState
+        {
+            if (LocalStates.TryGetValue(out S result))
+                return result;
+            return default;
+        }
+
+        /// <summary>
+        /// Gets the state of the parent simulation.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        /// The state, or <c>null</c> if the state isn't used.
+        /// </returns>
+        public S GetParentState<S>() where S : ISimulationState
+            => Parent.GetState<S>();
+
+        /// <summary>
+        /// Checks if the class uses the specified state.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <returns>
+        ///   <c>true</c> if the class uses the state; otherwise <c>false</c>.
+        /// </returns>
+        public bool UsesState<S>() where S : ISimulationState => Parent.UsesState<S>();
+
+        /// <summary>
+        /// Checks if the class uses the specified behaviors.
+        /// </summary>
+        /// <typeparam name="B">The behavior type.</typeparam>
+        /// <returns>
+        ///   <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
+        /// </returns>
+        public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
+    }
+}
