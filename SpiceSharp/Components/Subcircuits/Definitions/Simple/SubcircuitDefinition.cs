@@ -80,6 +80,7 @@ namespace SpiceSharp.Components
             for (var i = 0; i < sharedNodes.Length; i++)
                 simulation.Variables.AliasNode(sharedNodes[i], _pins[i]);
             BiasingBehavior.Prepare(simulation);
+            FrequencyBehavior.Prepare(simulation);
 
             // Create the behaviors for the subcircuit
             simulation.Run(Entities);

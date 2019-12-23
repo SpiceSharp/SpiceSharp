@@ -28,15 +28,35 @@ namespace SpiceSharp.Algebra
         /// <exception cref="ArgumentException">Thrown if the order reduction is negative.</exception>
         public int Degeneracy
         {
-            get => _order;
+            get => _degeneracy;
             set
             {
                 if (value < 0)
                     throw new ArgumentException(Properties.Resources.Algebra_InvalidOrder);
-                _order = value;
+                _degeneracy = value;
             }
         }
-        private int _order = 0;
+        private int _degeneracy = 0;
+
+        /// <summary>
+        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
+        /// the last row or column.
+        /// </summary>
+        /// <value>
+        /// The pivot search reduction.
+        /// </value>
+        /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
+        public int PivotSearchReduction
+        {
+            get => _search;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Algebra_InvalidPivotSearchReduction);
+                _search = value;
+            }
+        }
+        private int _search = 0;
 
         /// <summary>
         /// Gets or sets a value indicating whether the matrix needs to be reordered.
@@ -148,7 +168,7 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public bool Factor(int size)
         {
-            int order = Math.Min(size, Size - _order);
+            int order = Math.Min(size, Size - _degeneracy);
             for (var step = 1; step <= order; step++)
             {
                 var pivot = Matrix[step, step];
@@ -167,7 +187,8 @@ namespace SpiceSharp.Algebra
         {
             var size = Size;
             var step = 1;
-            var order = Size - _order;
+            var order = Size - Degeneracy;
+            Strategy.PivotSearchReduction = PivotSearchReduction;
             if (!NeedsReordering)
             {
                 for (step = 1; step <= order; step++)
@@ -231,7 +252,7 @@ namespace SpiceSharp.Algebra
             base.Clear();
             IsFactored = false;
             NeedsReordering = true;
-            _order = 0;
+            _degeneracy = 0;
             Strategy.Clear();
         }
     }

@@ -17,12 +17,24 @@ namespace SpiceSharp.Algebra
         protected Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
-        /// Gets or sets the row/column limit for searching a pivot.
+        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
+        /// the last row or column.
         /// </summary>
         /// <value>
-        /// The maximum row/column to search.
+        /// The pivot search reduction.
         /// </value>
-        public int SearchLimit { get; set; }
+        /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
+        public int PivotSearchReduction
+        {
+            get => _search;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Algebra_InvalidPivotSearchReduction);
+                _search = value;
+            }
+        }
+        private int _search = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DensePivotStrategy{T}"/> class.
@@ -84,7 +96,6 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public virtual void Clear()
         {
-            SearchLimit = 0;
         }
     }
 }

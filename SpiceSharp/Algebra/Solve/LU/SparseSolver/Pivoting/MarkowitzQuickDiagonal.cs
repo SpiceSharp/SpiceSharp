@@ -23,7 +23,7 @@ namespace SpiceSharp.Algebra.Solve
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
                 throw new ArgumentOutOfRangeException(nameof(eliminationStep));
-            var limit = matrix.Size - markowitz.SearchReduction;
+            var limit = matrix.Size - markowitz.PivotSearchReduction;
 
             var minMarkowitzProduct = int.MaxValue;
             ISparseMatrixElement<T> chosen = null;

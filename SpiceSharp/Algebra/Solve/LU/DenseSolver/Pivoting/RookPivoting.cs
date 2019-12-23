@@ -41,7 +41,7 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override bool FindPivot(IMatrix<T> matrix, int eliminationStep, out int row, out int column)
         {
-            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+            var limit = matrix.Size - PivotSearchReduction;
 
             // Find the largest element below and right of the pivot
             var largest = Magnitude(matrix[eliminationStep, eliminationStep]);
@@ -78,7 +78,7 @@ namespace SpiceSharp.Algebra
         /// </returns>
         public override bool IsValidPivot(IMatrix<T> matrix, int eliminationStep)
         {
-            var limit = SearchLimit > 0 ? SearchLimit : matrix.Size + SearchLimit;
+            var limit = matrix.Size - PivotSearchReduction;
 
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);

@@ -14,22 +14,24 @@ namespace SpiceSharp.Algebra.Solve
         public Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
-        /// Gets or sets how many rows/columns at the end should not be considered for searching pivots.
+        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
+        /// the last row or column.
         /// </summary>
         /// <value>
-        /// The number of rows/columns to avoid.
+        /// The pivot search reduction.
         /// </value>
-        public int SearchReduction 
-        { 
-            get => _search; 
+        /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
+        public int PivotSearchReduction
+        {
+            get => _search;
             set
             {
                 if (value < 0)
-                    throw new ArgumentException();
+                    throw new ArgumentException(Properties.Resources.Algebra_InvalidPivotSearchReduction);
                 _search = value;
             }
         }
-        private int _search;
+        private int _search = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SparsePivotStrategy{T}"/> class.
@@ -101,7 +103,6 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         public virtual void Clear()
         {
-            SearchReduction = 0;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SpiceSharp.Algebra.Solve
             ISparseMatrixElement<T> chosen = null;
             var ratioOfAccepted = 0.0;
             var ties = 0;
-            var limit = matrix.Size - markowitz.SearchReduction;
+            var limit = matrix.Size - markowitz.PivotSearchReduction;
 
             /* Used for debugging alongside Spice 3f5
             for (var index = matrix.Size + 1; index > eliminationStep; index--)

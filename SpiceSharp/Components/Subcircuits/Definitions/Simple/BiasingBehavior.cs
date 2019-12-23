@@ -29,7 +29,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                 }
             }
         }
-
         private readonly SimulationState _state;
 
         /// <summary>
@@ -41,9 +40,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             : base(name, simulation)
         {
             if (simulation.LocalStates.TryGetValue(out _state))
-            {
                 _state.Initialize(simulation.SharedVariables);
-            }
         }
 
         /// <summary>
@@ -56,6 +53,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                 _state.Update();
                 do
                 {
+                    _state.IsConvergent = true;
                     _state.Solver.Reset();
                     LoadBehaviors();
                 }

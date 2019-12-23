@@ -1,25 +1,22 @@
 ﻿using SpiceSharp.Algebra;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.SubcircuitBehaviors
 {
-    public partial class BiasingBehavior
+    public abstract partial class LocalSolverState<T>
     {
         /// <summary>
         /// A bridge between a local and parent element.
         /// </summary>
         protected struct Bridge
         {
-            private readonly Element<double> _local, _parent;
+            private readonly Element<T> _local, _parent;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Bridge"/> struct.
             /// </summary>
             /// <param name="local">The local element.</param>
             /// <param name="parent">The parent element.</param>
-            public Bridge(Element<double> local, Element<double> parent)
+            public Bridge(Element<T> local, Element<T> parent)
             {
                 _local = local.ThrowIfNull(nameof(local));
                 _parent = parent.ThrowIfNull(nameof(parent));

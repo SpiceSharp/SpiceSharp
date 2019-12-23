@@ -5,6 +5,7 @@ using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -81,6 +82,26 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
+        public void When_LocalSolverSubcircuitAc_Expect_Reference()
+        {
+            // No internal nodes
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a", "b");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
+                new Subcircuit("X1", subckt, "in", "out"));
+            ckt["X1"].Parameters.Add(new SpiceSharp.Components.SubcircuitBehaviors.Simple.FrequencyParameters() { LocalSolver = true });
+
+            var ac = new AC("ac", new DecadeSweep(1, 100, 3));
+            IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
+            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5 };
+            AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
+        [Test]
         public void When_LocalSolverSubcircuitOp2_Expect_Reference()
         {
             // One internal node
@@ -88,7 +109,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "a", "b", 1e3),
                 new Resistor("R2", "b", "c", 1e3),
                 new Resistor("R3", "b", "0", 1e3)),
-                "a", "b");
+                "a", "c");
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
                 new Subcircuit("X1", subckt, "in", "out"));
@@ -98,6 +119,27 @@ namespace SpiceSharpTest.Models
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
             IEnumerable<double> references = new double[] { 0.5 };
             AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_LocalSolverSubcircuitAC2_Expect_Reference()
+        {
+            // One internal node
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "c", 1e3),
+                new Resistor("R3", "b", "0", 1e3)),
+                "a", "c");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
+                new Subcircuit("X1", subckt, "in", "out"));
+            ckt["X1"].Parameters.Add(new SpiceSharp.Components.SubcircuitBehaviors.Simple.FrequencyParameters() { LocalSolver = true });
+
+            var ac = new AC("ac", new DecadeSweep(1, 100, 3));
+            IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
+            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5 };
+            AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }
 

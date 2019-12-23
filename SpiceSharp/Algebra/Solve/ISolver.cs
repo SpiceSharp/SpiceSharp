@@ -19,6 +19,15 @@ namespace SpiceSharp.Algebra
         int Degeneracy { get; set; }
 
         /// <summary>
+        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
+        /// the last row or column.
+        /// </summary>
+        /// <value>
+        /// The pivot search reduction.
+        /// </value>
+        int PivotSearchReduction { get; set; }
+
+        /// <summary>
         /// Gets the size of the matrix and right-hand side vector.
         /// </summary>
         /// <value>

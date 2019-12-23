@@ -80,6 +80,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The pivot search region cannot be negative..
+        /// </summary>
+        internal static string Algebra_InvalidPivotSearchReduction {
+            get {
+                return ResourceManager.GetString("Algebra.InvalidPivotSearchReduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Singular matrix encountered..
         /// </summary>
         internal static string Algebra_SingularMatrix {
