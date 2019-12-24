@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Entities;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.ParallelBehaviors;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
@@ -11,9 +13,10 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class ParallelLoader : Entity, IComponent
+    public class ParallelComponents : Entity, IComponent
     {
         private readonly IComponent[] _components;
+        private readonly IEntityCollection _collection;
 
         /// <summary>
         /// Gets or sets the model of the component.
@@ -45,17 +48,40 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelLoader"/> class.
+        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <param name="components">The components that can be executed in parallel.</param>
-        public ParallelLoader(string name, IEnumerable<IComponent> components)
+        public ParallelComponents(string name, IEnumerable<IComponent> components)
             : base(name)
         {
             PinCount = 0;
+            _collection = new EntityCollection();
             foreach (var component in components)
+            {
                 PinCount += component.PinCount;
+                _collection.Add(component);
+            }
             _components = components.ToArray();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// </summary>
+        /// <param name="name">The name of the component.</param>
+        /// <param name="components">The components that can be executed in parallel.</param>
+        public ParallelComponents(string name, params IComponent[] components)
+            : base(name)
+        {
+            PinCount = 0;
+            _collection = new EntityCollection();
+            foreach (var component in components)
+            {
+                PinCount += component.PinCount;
+                _collection.Add(component);
+            }
+            _components = (IComponent[])components.Clone();
+            
         }
 
         /// <summary>
@@ -64,6 +90,21 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
+            var parameters = LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone();
+            var container = new BehaviorContainer(Name, parameters);
+
+            // Create our parallel simulation
+            var psim = new ParallelSimulation(simulation, parameters);
+            BiasingBehavior.Prepare(psim);
+
+            // Create the behaviors
+            psim.Run(_collection);
+
+            // Create the parallel behaviors
+            container
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, psim))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, psim));
+            simulation.EntityBehaviors.Add(container);
         }
 
         /// <summary>
