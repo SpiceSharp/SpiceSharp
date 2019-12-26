@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// </summary>
     /// <seealso cref="TemperatureBehavior" />
     /// <seealso cref="ITimeBehavior" />
-    public class TransientBehavior : TemperatureBehavior, ITimeBehavior
+    public class TimeBehavior : TemperatureBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the current through the capacitor.
@@ -52,11 +52,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         private int _posNode, _negNode;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
 
@@ -85,12 +85,15 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             else
                 QCap.Value = Capacitance * (sol[_posNode] - sol[_negNode]);
         }
-        
+
         /// <summary>
-        /// Execute behavior for DC and Transient analysis
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void ITimeBehavior.Load()
+        void IBiasingBehavior.Load()
         {
+            // Don't matter for DC analysis
+            if (BiasingState.UseDc)
+                return;
             var vcap = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
 
             // Integrate

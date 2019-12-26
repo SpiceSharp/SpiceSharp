@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
             behaviors.Parameters.CalculateDefaults();
             var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
             behaviors
-                .AddIfNo<ITimeBehavior>(simulation, () => new TransientBehavior(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);

@@ -30,22 +30,5 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             foreach (var behavior in _behaviors)
                 behavior.InitializeStates();
         }
-
-        /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
-        /// </summary>
-        void ITimeBehavior.Load()
-        {
-        }
-
-        /// <summary>
-        /// Loads the behaviors.
-        /// </summary>
-        protected override void LoadBehaviors()
-        {
-            base.LoadBehaviors();
-            foreach (var behavior in _behaviors)
-                behavior.Load();
-        }
     }
 }

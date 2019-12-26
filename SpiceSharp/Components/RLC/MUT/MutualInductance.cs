@@ -58,7 +58,7 @@ namespace SpiceSharp.Components
             var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TransientBehavior(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }

@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// An interface for time-dependent behaviors.
     /// </summary>
     /// <seealso cref="IBehavior" />
-    public interface ITimeBehavior : IBehavior
+    public interface ITimeBehavior : IBiasingBehavior
     {
         /// <summary>
         /// Initialize the state values from the current DC solution.
@@ -16,10 +16,5 @@ namespace SpiceSharp.Behaviors
         /// and the result is stored in each respective <see cref="IDerivative" /> or <see cref="IIntegrationState" />.
         /// </remarks>
         void InitializeStates();
-
-        /// <summary>
-        /// Load the Y-matrix and Rhs-vector.
-        /// </summary>
-        void Load();
     }
 }

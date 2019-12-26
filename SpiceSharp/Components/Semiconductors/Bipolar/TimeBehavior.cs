@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
+    public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the transient matrix elements.
@@ -94,11 +94,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private int _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             _baseNode = BiasingState.Map[context.Nodes[1]];
             _substrateNode = BiasingState.Map[context.Nodes[3]];
@@ -148,9 +148,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Transient behavior
         /// </summary>
-        void ITimeBehavior.Load()
+        protected override void Load()
         {
+            base.Load();
             var state = BiasingState;
+            if (state.UseDc)
+                return;
             var gpi = 0.0;
             var gmu = 0.0;
             var cb = 0.0;

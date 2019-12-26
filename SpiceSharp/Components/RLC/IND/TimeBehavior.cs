@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// Transient behavior for an <see cref="Inductor" />.
     /// </summary>
-    public class TransientBehavior : BiasingBehavior, ITimeBehavior
+    public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
         /// An event called when the flux can be updated
@@ -39,11 +39,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         private int _branchEq;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             _branchEq = BiasingState.Map[Branch];
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
@@ -67,10 +67,14 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void ITimeBehavior.Load()
+        protected override void Load()
         {
+            base.Load();
+            if (BiasingState.UseDc)
+                return;
+
             // Initialize
             _flux.ThrowIfNotBound(this).Value = Inductance * BiasingState.Solution[_branchEq];
             

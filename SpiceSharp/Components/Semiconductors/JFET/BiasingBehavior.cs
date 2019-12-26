@@ -139,7 +139,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void IBiasingBehavior.Load()
+        protected virtual void Load()
         {
             var state = BiasingState;
 
@@ -309,6 +309,11 @@ namespace SpiceSharp.Components.JFETBehaviors
                 cdreq + ceqgs
                 );
         }
+
+        /// <summary>
+        /// Loads the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load() => Load();
 
         /// <summary>
         /// Initializes the voltages for the current iteration.

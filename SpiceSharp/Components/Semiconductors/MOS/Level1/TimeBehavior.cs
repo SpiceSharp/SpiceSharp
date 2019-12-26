@@ -4,14 +4,12 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.IntegrationMethods;
 
-namespace SpiceSharp.Components.MosfetBehaviors.Level3
+namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Mosfet3" />.
+    /// Transient behavior for a <see cref="Mosfet1" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.MosfetBehaviors.Level3.DynamicParameterBehavior" />
-    /// <seealso cref="SpiceSharp.Behaviors.ITimeBehavior" />
-    public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
+    public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets or sets the stored bulk-source charge.
@@ -125,11 +123,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         private int _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="context"></param>
-        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             _gateNode = BiasingState.Map[context.Nodes[1]];
             _bulkNode = BiasingState.Map[context.Nodes[3]];
@@ -207,9 +205,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Perform time-dependent calculations.
         /// </summary>
-        void ITimeBehavior.Load()
+        protected override void Load()
         {
-            BiasingState.ThrowIfNotBound(this);
+            base.Load();
+            if (BiasingState.UseDc)
+                return;
             var vbd = VoltageBd;
             var vbs = VoltageBs;
             var vgs = VoltageGs;
@@ -218,7 +218,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var vgb = vgs - vbs;
 
             CalculateCapacitances(vgs, vds, vbs);
-
+            
             _chargeBd.Integrate();
             var gbd = _chargeBd.GetContributions(CapBd).Jacobian;
             var cbd = _chargeBd.Derivative;
@@ -260,7 +260,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             // Load current vector
             var ceqbs = ModelParameters.MosfetType * (cbs - gbs * vbs);
             var ceqbd = ModelParameters.MosfetType * (cbd - gbd * vbd);
-            
+
             TransientElements.Add(
                 // Y-matrix
                 gcgd + gcgs + gcgb,
@@ -281,7 +281,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 -ModelParameters.MosfetType * (ceqgs + ceqgb + ceqgd),
                 -(ceqbs + ceqbd - ModelParameters.MosfetType * ceqgb),
                 ceqbd + ModelParameters.MosfetType * ceqgd,
-                ceqbs + ModelParameters.MosfetType * ceqgs);
+                ceqbs + ModelParameters.MosfetType * ceqgs
+                );
         }
     }
 }

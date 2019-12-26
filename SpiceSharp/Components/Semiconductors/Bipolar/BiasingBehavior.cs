@@ -207,9 +207,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void IBiasingBehavior.Load()
+        protected virtual void Load()
         {
             double gben;
             double cben;
@@ -352,6 +352,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 // RHS vector
                 ceqbc, -ceqbe - ceqbc, ceqbe);
         }
+
+        /// <summary>
+        /// Loads the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load() => Load();
 
         /// <summary>
         /// Excess phase calculation.

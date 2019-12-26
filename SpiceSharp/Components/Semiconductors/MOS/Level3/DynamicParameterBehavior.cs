@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// <summary>
     /// This class allows calculation of dynamic (time-dependent) parameters for a <see cref="Mosfet3" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.MosfetBehaviors.Level3.BiasingBehavior" />
+    /// <seealso cref="BiasingBehavior" />
     public abstract class DynamicParameterBehavior : BiasingBehavior
     {
         /// <summary>

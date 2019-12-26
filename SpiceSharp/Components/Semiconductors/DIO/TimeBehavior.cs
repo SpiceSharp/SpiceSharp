@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TransientBehavior : DynamicParameterBehavior, ITimeBehavior
+    public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the capacitor current.
@@ -22,11 +22,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private int _negNode, _posPrimeNode;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             _negNode = BiasingState.Map[context.Nodes[1]];
             _posPrimeNode = BiasingState.Map[PosPrime];
@@ -48,10 +48,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Transient behavior
         /// </summary>
-        void ITimeBehavior.Load()
+        protected override void Load()
         {
+            base.Load();
+
             // Calculate the capacitance
             var state = BiasingState;
+            if (state.UseDc)
+                return;
             var n = BaseParameters.SeriesMultiplier;
             double vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / n;
             CalculateCapacitance(vd);

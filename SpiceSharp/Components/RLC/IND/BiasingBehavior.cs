@@ -76,11 +76,16 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void IBiasingBehavior.Load()
+        protected virtual void Load()
         {
             Elements.Add(1, -1, -1, 1);
         }
+
+        /// <summary>
+        /// Loads the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load() => Load();
     }
 }

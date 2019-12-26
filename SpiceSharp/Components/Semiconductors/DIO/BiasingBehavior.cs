@@ -96,9 +96,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void IBiasingBehavior.Load()
+        protected virtual void Load()
         {
             var state = BiasingState;
             double cd, gd;
@@ -161,6 +161,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 // RHS vector
                 cdeq, -cdeq);
         }
+
+        /// <summary>
+        /// Loads the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load() => Load();
 
         /// <summary>
         /// Initialize the device based on the current iteration state.

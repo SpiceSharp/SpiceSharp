@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// <summary>
     /// Time behavior for a <see cref="VoltageDelay"/>.
     /// </summary>
-    public class TransientBehavior : BiasingBehavior, ITimeBehavior
+    public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the vector elements.
@@ -25,11 +25,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         private int _contPosNode, _contNegNode, _branchEq;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context)
+        public TimeBehavior(string name, ComponentBindingContext context)
             : base(name, context)
         {
             _contPosNode = BiasingState.Map[context.Nodes[2]];
@@ -50,14 +50,21 @@ namespace SpiceSharp.Components.DelayBehaviors
         }
 
         /// <summary>
-        /// Perform time-dependent calculations.
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void ITimeBehavior.Load()
+        void IBiasingBehavior.Load()
         {
             var sol = BiasingState.Solution;
             var input = sol[_contPosNode] - sol[_contNegNode];
             Signal.SetProbedValues(input);
-            TransientElements.Add(Signal.Values[0]);
+
+            if (BiasingState.UseDc)
+                Elements.Add(1, -1, 1, -1, -1, 1);
+            else
+            {
+                Elements.Add(1, -1, 1, -1);
+                TransientElements.Add(Signal.Values[0]);
+            }
         }
     }
 }

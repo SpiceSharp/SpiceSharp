@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="JFET" />.
     /// </summary>
-    public class TransientBehavior : BiasingBehavior, ITimeBehavior
+    public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the state tracking gate-source charge.
@@ -41,11 +41,11 @@ namespace SpiceSharp.Components.JFETBehaviors
         private int _gateNode, _drainPrimeNode, _sourcePrimeNode;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             var method = context.GetState<IIntegrationMethod>();
             Qgs = method.CreateDerivative();
@@ -76,10 +76,14 @@ namespace SpiceSharp.Components.JFETBehaviors
         }
 
         /// <summary>
-        /// Perform time-dependent calculations.
+        /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void ITimeBehavior.Load()
+        protected override void Load()
         {
+            base.Load();
+            if (BiasingState.UseDc)
+                return;
+
             // Calculate the states
             var vgs = Vgs;
             var vgd = Vgd;

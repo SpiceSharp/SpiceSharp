@@ -552,20 +552,12 @@ namespace SpiceSharp.Simulations
 
             // Clear rhs and matrix
             BiasingState.Solver.Reset();
-            LoadBehaviors();
+            foreach (var behavior in _loadBehaviors)
+                behavior.Load();
 
             // Keep statistics
             OnAfterLoad(_realStateLoadArgs);
             Statistics.LoadTime.Stop();
-        }
-
-        /// <summary>
-        /// Loads the current simulation state solver.
-        /// </summary>
-        protected virtual void LoadBehaviors()
-        {
-            foreach (var behavior in _loadBehaviors)
-                behavior.Load();
         }
 
         /// <summary>

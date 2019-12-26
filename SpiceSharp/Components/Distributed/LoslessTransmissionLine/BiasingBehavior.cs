@@ -122,7 +122,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void IBiasingBehavior.Load()
+        protected virtual void Load()
         {
             var y = BaseParameters.Admittance;
             if (BiasingState.UseDc)
@@ -141,5 +141,10 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                     );
             }
         }
+
+        /// <summary>
+        /// Loads the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load() => Load();
     }
 }

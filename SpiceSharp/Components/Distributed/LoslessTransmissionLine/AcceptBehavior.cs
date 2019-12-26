@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         private BaseParameters _bp;
 
         // Necessary behaviors and parameters
-        private TransientBehavior _tran;
+        private TimeBehavior _tran;
         private double _oldSlope1, _oldSlope2;
         private bool _wasBreak = false;
 
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             : base(name)
         {
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            _tran = context.Behaviors.GetValue<TransientBehavior>();
+            _tran = context.Behaviors.GetValue<TimeBehavior>();
             _method = context.GetState<IIntegrationMethod>();
         }
 

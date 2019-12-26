@@ -8,17 +8,17 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="MutualInductance"/>
     /// </summary>
-    public class TransientBehavior : TemperatureBehavior, ITimeBehavior
+    public class TimeBehavior : TemperatureBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the transient behavior of the primary inductor.
         /// </summary>
-        protected InductorBehaviors.TransientBehavior Load1 { get; private set; }
+        protected InductorBehaviors.TimeBehavior Load1 { get; private set; }
 
         /// <summary>
         /// Gets the transient behavior of secondary inductor.
         /// </summary>
-        protected InductorBehaviors.TransientBehavior Load2 { get; private set; }
+        protected InductorBehaviors.TimeBehavior Load2 { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -44,16 +44,16 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         private int _br1, _br2;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior"/> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context"></param>
-        public TransientBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
+        public TimeBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
         {
             BiasingState = context.GetState<IBiasingSimulationState>();
-            Load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
+            Load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
             _br1 = BiasingState.Map[Load1.Branch];
-            Load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TransientBehavior>();
+            Load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
             _br2 = BiasingState.Map[Load2.Branch];
 
             // Register events for modifying the flux through the inductors
@@ -98,8 +98,11 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        void ITimeBehavior.Load()
+        void IBiasingBehavior.Load()
         {
+            if (BiasingState.UseDc)
+                return;
+
             // Load Y-matrix
             Elements.Add(-Conductance, -Conductance);
         }

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    public class TransientBehavior : BiasingBehavior, ITimeBehavior
+    public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
         /// <summary>
         /// Gets the delayed signals.
@@ -25,11 +25,11 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         private int _pos1, _neg1, _pos2, _neg2, _br1, _br2;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientBehavior" /> class.
+        /// Initializes a new instance of the <see cref="TimeBehavior" /> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public TransientBehavior(string name, ComponentBindingContext context)
+        public TimeBehavior(string name, ComponentBindingContext context)
             : base(name, context)
         {
             _pos1 = BiasingState.Map[context.Nodes[0]];
@@ -58,8 +58,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        void ITimeBehavior.Load()
+        protected override void Load()
         {
+            base.Load();
             var sol = BiasingState.Solution;
 
             // Calculate inputs

@@ -398,21 +398,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Load all behaviors for time simulation.
-        /// </summary>
-        protected override void LoadBehaviors()
-        {
-            base.LoadBehaviors();
-
-            // Not calculating DC behavior
-            if (!BiasingState.UseDc)
-            {
-                foreach (var behavior in _transientBehaviors)
-                    behavior.Load();
-            }
-        }
-
-        /// <summary>
         /// Accepts the current simulation state as a valid timepoint.
         /// </summary>
         protected void Accept()

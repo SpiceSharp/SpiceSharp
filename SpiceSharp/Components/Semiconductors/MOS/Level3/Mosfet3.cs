@@ -40,7 +40,7 @@ namespace SpiceSharp.Components
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TransientBehavior(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);

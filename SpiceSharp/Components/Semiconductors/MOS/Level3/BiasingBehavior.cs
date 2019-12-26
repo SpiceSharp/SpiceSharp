@@ -197,7 +197,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        void IBiasingBehavior.Load()
+        protected virtual void Load()
         {
             var state = BiasingState.ThrowIfNotBound(this);
 
@@ -309,6 +309,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 ceqbd - cdreq,
                 cdreq + ceqbs);
         }
+
+        /// <summary>
+        /// Loads the Y-matrix and Rhs-vector.
+        /// </summary>
+        void IBiasingBehavior.Load() => Load();
 
         /// <summary>
         /// Initializes the voltages to be used for the current iteration.

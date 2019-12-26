@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.DelayBehaviors
     {
         // Necessary behaviors parameters
         private BaseParameters _bp;
-        private TransientBehavior _tran;
+        private TimeBehavior _tran;
         private double _oldSlope;
         private bool _wasBreak;
         private IIntegrationMethod _method;
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             context.ThrowIfNull(nameof(context));
 
             _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            _tran = context.Behaviors.GetValue<TransientBehavior>();
+            _tran = context.Behaviors.GetValue<TimeBehavior>();
             _method = context.GetState<IIntegrationMethod>();
         }
 
