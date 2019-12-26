@@ -68,6 +68,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         private LoadStateEventArgs _realStateLoadArgs;
         private BehaviorList<IBiasingBehavior> _loadBehaviors;
+        private BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
         private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
         private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
@@ -144,6 +145,7 @@ namespace SpiceSharp.Simulations
             // Cache local variables
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
+            _convergenceBehaviors = EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
             _updateBehaviors = EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
             _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
             BiasingState.Setup();
@@ -625,7 +627,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Device-level convergence tests
-            foreach (var behavior in _loadBehaviors)
+            foreach (var behavior in _convergenceBehaviors)
             {
                 if (!behavior.IsConvergent())
                 {

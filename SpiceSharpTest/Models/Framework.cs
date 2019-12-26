@@ -32,7 +32,6 @@ namespace SpiceSharpTest.Models
                         variables.MapNode(node, VariableType.Voltage);
                 }
                 void IBiasingBehavior.Load() { }
-                bool IBiasingBehavior.IsConvergent() => true;
             }
             readonly List<string> _nodes = new List<string>();
             public NodeMapper(params string[] nodes) : base("Mapper")

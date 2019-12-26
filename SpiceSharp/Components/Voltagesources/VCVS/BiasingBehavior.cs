@@ -94,13 +94,5 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             var val = BaseParameters.Coefficient;
             Elements.Add(1, -1, 1, -1, -val, val);
         }
-
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

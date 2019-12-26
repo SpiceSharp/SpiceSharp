@@ -13,6 +13,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
     /// <seealso cref="IBiasingBehavior" />
     public partial class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
     {
+        private readonly BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
+
         /// <summary>
         /// Prepares the specified simulation for biasing behaviors.
         /// </summary>
@@ -41,6 +43,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         {
             if (simulation.LocalStates.TryGetValue(out _state))
                 _state.Initialize(simulation.SharedVariables);
+            _convergenceBehaviors = simulation.EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         {
             _state?.Update();
             var result = true;
-            foreach (var behavior in Behaviors)
+            foreach (var behavior in _convergenceBehaviors)
                 result &= behavior.IsConvergent();
             return result;
         }

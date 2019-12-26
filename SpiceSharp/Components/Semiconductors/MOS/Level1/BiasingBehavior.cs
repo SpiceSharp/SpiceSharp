@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// Biasing behavior for a <see cref="Mosfet1" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
         /// <summary>
         /// The maximum exponent argument
@@ -484,7 +484,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        bool IBiasingBehavior.IsConvergent()
+        bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState.ThrowIfNotBound(this);
             double cdhat;

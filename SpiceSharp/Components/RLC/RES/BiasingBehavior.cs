@@ -67,13 +67,5 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             Elements.Add(Conductance, -Conductance, -Conductance, Conductance);
         }
-
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

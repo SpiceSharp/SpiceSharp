@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
         /// <summary>
         /// Gets the base configuration of the simulation.
@@ -410,7 +410,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Check if the BJT is convergent
         /// </summary>
         /// <returns></returns>
-        bool IBiasingBehavior.IsConvergent()
+        bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState;
             var vbe = ModelParameters.BipolarType * (state.Solution[_basePrimeNode] - state.Solution[_emitterPrimeNode]);

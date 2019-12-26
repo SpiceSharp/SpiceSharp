@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// <summary>
     /// General behavior of a <see cref="Mosfet2" />
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
         /// <summary>
         /// Signs used in the model
@@ -955,7 +955,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <returns>
         /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
         /// </returns>
-        bool IBiasingBehavior.IsConvergent()
+        bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState.ThrowIfNotBound(this);
             double cdhat;

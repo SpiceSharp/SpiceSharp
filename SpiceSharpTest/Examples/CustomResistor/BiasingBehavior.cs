@@ -78,10 +78,5 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
                 // RHS-vector
                 c, -c);
         }
-
-        /// <summary>
-        /// Check for convergence.
-        /// </summary>
-        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

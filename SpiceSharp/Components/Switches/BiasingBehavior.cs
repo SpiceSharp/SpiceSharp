@@ -193,13 +193,5 @@ namespace SpiceSharp.Components.SwitchBehaviors
             // Load the Y-matrix
             Elements.Add(gNow, -gNow, -gNow, gNow);
         }
-
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

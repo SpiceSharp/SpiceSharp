@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="Diode" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
         /// <summary>
         /// Gets the positive internal node.
@@ -200,7 +200,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Check convergence for the diode
         /// </summary>
         /// <returns></returns>
-        bool IBiasingBehavior.IsConvergent()
+        bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState;
             var vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / BaseParameters.SeriesMultiplier;

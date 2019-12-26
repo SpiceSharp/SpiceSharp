@@ -124,13 +124,5 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             Elements.Add(-value, value);
             Current = value;
         }
-
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        bool IBiasingBehavior.IsConvergent() => true;
     }
 }

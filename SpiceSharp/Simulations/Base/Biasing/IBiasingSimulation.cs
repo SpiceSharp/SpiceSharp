@@ -10,6 +10,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IStateful{T}" />
     public interface IBiasingSimulation : ITemperatureSimulation,
         IBehavioral<IBiasingBehavior>,
+        IBehavioral<IConvergenceBehavior>,
         IStateful<IBiasingSimulationState>
     {
     }

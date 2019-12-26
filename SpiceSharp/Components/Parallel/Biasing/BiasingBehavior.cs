@@ -31,7 +31,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
         private readonly SimulationState _state;
         private readonly Workload _load;
         private readonly Workload<bool> _convergence;
-        private readonly BehaviorList<IBiasingBehavior> _biasing;
+        private readonly BehaviorList<IBiasingBehavior> _biasingBehaviors;
+        private readonly BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -51,10 +52,9 @@ namespace SpiceSharp.Components.ParallelBehaviors
                 foreach (var container in simulation.EntityBehaviors)
                 {
                     if (container.TryGetValue(out IBiasingBehavior biasing))
-                    {
                         _load?.Actions.Add(biasing.Load);
-                        _convergence?.Functions.Add(biasing.IsConvergent);
-                    }
+                    if (container.TryGetValue(out IConvergenceBehavior convergence))
+                        _convergence?.Functions.Add(convergence.IsConvergent);
                 }
             }
             else
@@ -65,7 +65,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
             }
 
             // Get all behaviors
-            _biasing = simulation.EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
+            _biasingBehaviors = simulation.EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
+            _convergenceBehaviors = simulation.EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             else
             {
                 var convergence = true;
-                foreach (var behavior in _biasing)
+                foreach (var behavior in _convergenceBehaviors)
                     convergence &= behavior.IsConvergent();
                 return convergence;
             }
@@ -100,7 +101,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             }
             else
             {
-                foreach (var behavior in _biasing)
+                foreach (var behavior in _biasingBehaviors)
                     behavior.Load();
             }
         }

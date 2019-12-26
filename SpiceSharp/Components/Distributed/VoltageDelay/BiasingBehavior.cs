@@ -74,13 +74,5 @@ namespace SpiceSharp.Components.DelayBehaviors
             else
                 Elements.Add(1, -1, 1, -1);
         }
-
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        bool IBiasingBehavior.IsConvergent() => true;
     }
 }
