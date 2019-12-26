@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using System;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -9,7 +8,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IBiasingBehavior" />
-    public partial class BiasingBehavior : ParallelBehavior<IBiasingBehavior>, IBiasingBehavior
+    public partial class BiasingBehavior : Behavior, IBiasingBehavior
     {
         /// <summary>
         /// Prepares the specified simulation.
@@ -17,6 +16,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(ParallelSimulation simulation)
         {
+            if (!simulation.UsesState<IBiasingSimulationState>())
+                return;
             if (simulation.LocalConfigurations.TryGetValue<BiasingParameters>(out var result))
             {
                 if (result.LoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
@@ -27,9 +28,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
             }
         }
 
-        private readonly IWorkDistributor _load;
-        private readonly IWorkDistributor<bool> _convergence;
         private readonly SimulationState _state;
+        private readonly Workload _load;
+        private readonly Workload<bool> _convergence;
+        private readonly BehaviorList<IBiasingBehavior> _biasing;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -37,13 +39,23 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <param name="name">The name of the behavior.</param>
         /// <param name="simulation">The parallel simulation.</param>
         public BiasingBehavior(string name, ParallelSimulation simulation)
-            : base(name, simulation)
+            : base(name)
         {
             if (simulation.LocalConfigurations.TryGetValue<BiasingParameters>(out var result))
             {
-                _convergence = result.ConvergenceDistributor;
-                _load = result.LoadDistributor;
                 _state = simulation.GetState<SimulationState>();
+                if (result.LoadDistributor != null)
+                    _load = new Workload(result.LoadDistributor, simulation.EntityBehaviors.Count);
+                if (result.ConvergenceDistributor != null)
+                    _convergence = new Workload<bool>(result.ConvergenceDistributor, simulation.EntityBehaviors.Count);
+                foreach (var container in simulation.EntityBehaviors)
+                {
+                    if (container.TryGetValue(out IBiasingBehavior biasing))
+                    {
+                        _load?.Actions.Add(biasing.Load);
+                        _convergence?.Functions.Add(biasing.IsConvergent);
+                    }
+                }
             }
             else
             {
@@ -51,6 +63,9 @@ namespace SpiceSharp.Components.ParallelBehaviors
                 _load = null;
                 _state = null;
             }
+
+            // Get all behaviors
+            _biasing = simulation.EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
         }
 
         /// <summary>
@@ -62,19 +77,11 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public bool IsConvergent()
         {
             if (_convergence != null)
-            {
-                var methods = new Func<bool>[Behaviors.Count];
-                for (var i = 0; i < methods.Length; i++)
-                {
-                    var behavior = Behaviors[i];
-                    methods[i] = () => behavior.IsConvergent();
-                }
-                return _convergence.Execute(methods);
-            }
+                return _convergence.Execute();
             else
             {
                 var convergence = true;
-                foreach (var behavior in Behaviors)
+                foreach (var behavior in _biasing)
                     convergence &= behavior.IsConvergent();
                 return convergence;
             }
@@ -83,26 +90,17 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <summary>
         /// Loads the Y-matrix and Rhs-vector.
         /// </summary>
-        public void Load()
+        public virtual void Load()
         {
             if (_load != null)
             {
                 _state.Reset();
-
-                var methods = new Action[Behaviors.Count];
-                for (var i = 0; i < methods.Length; i++)
-                {
-                    var behavior = Behaviors[i];
-                    methods[i] = () => behavior.Load();
-                }
-                _load.Execute(methods);
-
-                // Apply the changes to the parent
+                _load.Execute();
                 _state.Apply();
             }
             else
             {
-                foreach (var behavior in Behaviors)
+                foreach (var behavior in _biasing)
                     behavior.Load();
             }
         }

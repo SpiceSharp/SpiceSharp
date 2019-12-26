@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// An interface that describes a collection of <see cref="IBehaviorContainer"/> instances.
     /// </summary>
-    public interface IBehaviorContainerCollection
+    public interface IBehaviorContainerCollection : IEnumerable<IBehaviorContainer>
     {
         /// <summary>
         /// Occurs when a behavior has not been found.

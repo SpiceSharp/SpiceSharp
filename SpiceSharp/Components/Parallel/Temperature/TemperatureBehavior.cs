@@ -1,16 +1,16 @@
 ﻿using SpiceSharp.Behaviors;
-using System;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
     /// <summary>
     /// An <see cref="ITemperatureBehavior"/> for a <see cref="ParallelComponents"/>.
     /// </summary>
-    /// <seealso cref="ParallelBehavior{T}" />
+    /// <seealso cref="Behavior" />
     /// <seealso cref="ITemperatureBehavior" />
-    public class TemperatureBehavior : ParallelBehavior<ITemperatureBehavior>, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
-        private readonly IWorkDistributor _temperature;
+        private readonly Workload _temperature;
+        private readonly BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -18,10 +18,19 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <param name="name">The name of the behavior.</param>
         /// <param name="simulation">The parallel simulation.</param>
         public TemperatureBehavior(string name, ParallelSimulation simulation)
-            : base(name, simulation)
+            : base(name)
         {
             if (simulation.LocalConfigurations.TryGetValue(out TemperatureParameters result))
-                _temperature = result.TemperatureDistributor;
+            {
+                if (result.TemperatureDistributor != null)
+                    _temperature = new Workload(result.TemperatureDistributor, simulation.EntityBehaviors.Count);
+                foreach (var container in simulation.EntityBehaviors)
+                {
+                    if (container.TryGetValue(out ITemperatureBehavior temperature))
+                        _temperature.Actions.Add(temperature.Temperature);
+                }
+            }
+            _temperatureBehaviors = simulation.EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
         }
 
         /// <summary>
@@ -30,19 +39,11 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public void Temperature()
         {
             if (_temperature != null)
-            {
-                var methods = new Action[Behaviors.Count];
-                for (var i = 0; i < methods.Length; i++)
-                {
-                    var behavior = Behaviors[i];
-                    methods[i] = () => behavior.Temperature();
-                }
-                _temperature.Execute(methods);
-            }
+                _temperature.Execute();
             else
             {
-                for (var i = 0; i < Behaviors.Count; i++)
-                    Behaviors[i].Temperature();
+                foreach (var behavior in _temperatureBehaviors)
+                    behavior.Temperature();
             }
         }
     }

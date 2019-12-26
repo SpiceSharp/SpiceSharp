@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components
 {
@@ -11,7 +12,7 @@ namespace SpiceSharp.Components
         /// Executes the specified methods.
         /// </summary>
         /// <param name="methods">The methods to be executed.</param>
-        void Execute(Action[] methods);
+        void Execute(IReadOnlyList<Action> methods);
     }
 
     /// <summary>
@@ -25,6 +26,6 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="methods">The methods to be executed.</param>
         /// <returns>The result.</returns>
-        R Execute(Func<R>[] methods);
+        R Execute(IReadOnlyList<Func<R>> methods);
     }
 }

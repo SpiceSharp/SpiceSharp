@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -220,5 +221,21 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="args">The <see cref="BehaviorsNotFoundEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBehaviorsNotFound(BehaviorsNotFoundEventArgs args) => BehaviorsNotFound?.Invoke(this, args);
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<IBehaviorContainer> GetEnumerator() => _values.GetEnumerator();
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

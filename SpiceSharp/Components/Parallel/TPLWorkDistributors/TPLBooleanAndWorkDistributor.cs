@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SpiceSharp.Components.ParallelBehaviors
@@ -16,11 +17,11 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <returns>
         /// The result.
         /// </returns>
-        public bool Execute(Func<bool>[] methods)
+        public bool Execute(IReadOnlyList<Func<bool>> methods)
         {
             methods.ThrowIfNull(nameof(methods));
-            var tasks = new Task<bool>[methods.Length];
-            for (int i = 0; i < methods.Length; i++)
+            var tasks = new Task<bool>[methods.Count];
+            for (int i = 0; i < methods.Count; i++)
                 tasks[i] = Task.Run(methods[i]);
             Task.WaitAll(tasks);
 

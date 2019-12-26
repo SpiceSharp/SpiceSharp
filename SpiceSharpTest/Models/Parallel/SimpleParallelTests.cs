@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Components.ParallelBehaviors;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
@@ -33,9 +34,9 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
                 new ParallelComponents("PC1", new Resistor("R1", "in", "out", 1e3), new Resistor("R2", "out", "0", 1e3)));
-            ckt["PC1"].Parameters.Add(new SpiceSharp.Components.ParallelBehaviors.BiasingParameters
+            ckt["PC1"].Parameters.Add(new BiasingParameters
             {
-                LoadDistributor = new SpiceSharp.Components.ParallelBehaviors.TPLWorkDistributor()
+                LoadDistributor = new TPLWorkDistributor()
             });
 
             var op = new OP("op");
