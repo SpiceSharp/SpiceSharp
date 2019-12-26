@@ -71,10 +71,8 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var dcconfig = Configurations.GetValue<DCConfiguration>().ThrowIfNull("dc configuration");
-            BiasingState.Init = InitializationModes.Junction;
-            BiasingState.UseIc = false; // UseIC is only used in transient simulations
-            BiasingState.UseDc = true;
-
+            Iteration.Mode = IterationModes.Junction;
+            
             // Initialize
             var sweeps = dcconfig.Sweeps.ToArray();
             _enumerators = new IEnumerator<double>[dcconfig.Sweeps.Count];
@@ -97,7 +95,7 @@ namespace SpiceSharp.Simulations
                     _enumerators[level] = sweeps[level].CreatePoints(this);
                     if (!_enumerators[level].MoveNext())
                         throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[level].Name));
-                    BiasingState.Init = InitializationModes.Junction;
+                    Iteration.Mode = IterationModes.Junction;
                 }
 
                 // Calculate the solution

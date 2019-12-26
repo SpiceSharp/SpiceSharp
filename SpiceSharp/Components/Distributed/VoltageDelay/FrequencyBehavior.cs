@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
 
-        private int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
+        private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -36,11 +36,12 @@ namespace SpiceSharp.Components.DelayBehaviors
         public FrequencyBehavior(string name, ComponentBindingContext context)
             : base(name, context)
         {
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-            _contPosNode = BiasingState.Map[context.Nodes[2]];
-            _contNegNode = BiasingState.Map[context.Nodes[3]];
-            _branchEq = BiasingState.Map[Branch];
+            var state = context.GetState<IBiasingSimulationState>();
+            _posNode = state.Map[context.Nodes[0]];
+            _negNode = state.Map[context.Nodes[1]];
+            _contPosNode = state.Map[context.Nodes[2]];
+            _contNegNode = state.Map[context.Nodes[3]];
+            _branchEq = state.Map[Branch];
             ComplexState = context.GetState<IComplexSimulationState>();
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
                 new MatrixLocation(_posNode, _branchEq),

@@ -38,7 +38,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         public double CapGd { get; private set; }
 
-        private int _gateNode, _drainPrimeNode, _sourcePrimeNode;
+        private readonly int _gateNode, _drainPrimeNode, _sourcePrimeNode;
+        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -47,6 +48,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <param name="context">The context.</param>
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
+            _time = context.GetState<ITimeSimulationState>();
             var method = context.GetState<IIntegrationMethod>();
             Qgs = method.CreateDerivative();
             Qgd = method.CreateDerivative();
@@ -81,7 +83,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         protected override void Load()
         {
             base.Load();
-            if (BiasingState.UseDc)
+            if (_time.UseDc)
                 return;
 
             // Calculate the states

@@ -65,6 +65,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         protected IBiasingSimulationState BiasingState { get; private set; }
 
         private IIntegrationMethod _method;
+        private IIterationSimulationState _iteration;
         private int _posNode, _negNode, _brNode;
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             context.Nodes.CheckNodes(2);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
-
+            _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _method);
             if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
                 Waveform = wdesc.Create(_method);
@@ -127,11 +128,11 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 if (Waveform != null)
                     value = Waveform.Value;
                 else
-                    value = BaseParameters.DcValue * state.SourceFactor;
+                    value = BaseParameters.DcValue * _iteration.SourceFactor;
             }
             else
             {
-                value = BaseParameters.DcValue * state.SourceFactor;
+                value = BaseParameters.DcValue * _iteration.SourceFactor;
             }
 
             Voltage = value;

@@ -18,8 +18,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// The charge on the junction capacitance
         /// </summary>
-        private IDerivative _capCharge;
-        private int _negNode, _posPrimeNode;
+        private readonly IDerivative _capCharge;
+        private readonly int _negNode, _posPrimeNode;
+        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -28,6 +29,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="context">The context.</param>
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
+            _time = context.GetState<ITimeSimulationState>();
             _negNode = BiasingState.Map[context.Nodes[1]];
             _posPrimeNode = BiasingState.Map[PosPrime];
 
@@ -51,11 +53,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected override void Load()
         {
             base.Load();
+            if (_time.UseDc)
+                return;
 
             // Calculate the capacitance
             var state = BiasingState;
-            if (state.UseDc)
-                return;
             var n = BaseParameters.SeriesMultiplier;
             double vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / n;
             CalculateCapacitance(vd);

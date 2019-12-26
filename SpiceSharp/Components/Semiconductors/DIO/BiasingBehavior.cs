@@ -64,7 +64,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         protected double LocalConductance;
 
-        private int _posNode, _negNode, _posPrimeNode;
+        private readonly int _posNode, _negNode, _posPrimeNode;
+        private readonly IIterationSimulationState _iteration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -75,6 +76,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             context.Nodes.CheckNodes(2);
 
+            _iteration = context.GetState<IIterationSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             var variables = context.Variables;
@@ -137,10 +139,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Check convergence
-            if (state.Init != InitializationModes.Fix || !BaseParameters.Off)
+            if (_iteration.Mode != IterationModes.Fix || !BaseParameters.Off)
             {
                 if (check)
-                    state.IsConvergent = false;
+                    _iteration.IsConvergent = false;
             }
 
             // Store for next time
@@ -174,11 +176,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             var state = BiasingState;
             check = false;
-            if (state.Init == InitializationModes.Junction)
+            if (_iteration.Mode == IterationModes.Junction)
             {
                 vd = BaseParameters.Off ? 0.0 : TempVCritical;
             }
-            else if (state.Init == InitializationModes.Fix && BaseParameters.Off)
+            else if (_iteration.Mode == IterationModes.Fix && BaseParameters.Off)
             {
                 vd = 0.0;
             }
@@ -218,7 +220,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
-                state.IsConvergent = false;
+                _iteration.IsConvergent = false;
                 return false;
             }
             return true;

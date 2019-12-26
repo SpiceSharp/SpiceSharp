@@ -26,17 +26,14 @@ namespace SpiceSharp.Components.InductorBehaviors
         protected ElementSet<double> TransientElements { get; private set; }
 
         /// <summary>
-        /// The state tracking the flux.
-        /// </summary>
-        private IDerivative _flux;
-
-        /// <summary>
         /// Gets the flux of the inductor.
         /// </summary>
         [ParameterName("flux"), ParameterInfo("The flux through the inductor.")]
         public double Flux => _flux.Value;
 
         private int _branchEq;
+        private IDerivative _flux;
+        private ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -46,6 +43,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             _branchEq = BiasingState.Map[Branch];
+            _time = context.GetState<ITimeSimulationState>();
             TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_branchEq, _branchEq)
             }, new[] { _branchEq });
@@ -72,7 +70,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         protected override void Load()
         {
             base.Load();
-            if (BiasingState.UseDc)
+            if (_time.UseDc)
                 return;
 
             // Initialize

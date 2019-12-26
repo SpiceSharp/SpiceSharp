@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-6, 20e-6);
             var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.State.Time),
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "a"),
                 new RealVoltageExport(tran, "b")
             };

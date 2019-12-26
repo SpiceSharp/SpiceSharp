@@ -20,14 +20,7 @@
         protected override void Execute()
         {
             base.Execute();
-
-            // Setup the state
-            var state = BiasingState;
-            state.UseIc = false; // UseIC is only used in transient simulations
-            state.UseDc = true;
-
             Op(DcMaxIterations);
-
             var exportargs = new ExportDataEventArgs(this);
             OnExport(exportargs);
         }

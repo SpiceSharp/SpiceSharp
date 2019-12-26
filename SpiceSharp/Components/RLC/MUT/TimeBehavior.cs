@@ -41,7 +41,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
-        private int _br1, _br2;
+        private readonly int _br1, _br2;
+        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -50,6 +51,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="context"></param>
         public TimeBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
         {
+            _time = context.GetState<ITimeSimulationState>();
             BiasingState = context.GetState<IBiasingSimulationState>();
             Load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
             _br1 = BiasingState.Map[Load1.Branch];
@@ -100,7 +102,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            if (BiasingState.UseDc)
+            if (_time.UseDc)
                 return;
 
             // Load Y-matrix

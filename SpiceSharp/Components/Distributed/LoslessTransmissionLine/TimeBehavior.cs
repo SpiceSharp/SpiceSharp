@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
@@ -23,6 +24,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         protected ElementSet<double> TransientElements { get; private set; }
 
         private int _pos1, _neg1, _pos2, _neg2, _br1, _br2;
+        private ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior" /> class.
@@ -32,6 +34,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public TimeBehavior(string name, ComponentBindingContext context)
             : base(name, context)
         {
+            _time = context.GetState<ITimeSimulationState>();
             _pos1 = BiasingState.Map[context.Nodes[0]];
             _neg1 = BiasingState.Map[context.Nodes[1]];
             _pos2 = BiasingState.Map[context.Nodes[2]];
@@ -58,9 +61,25 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector.
         /// </summary>
-        protected override void Load()
+        void IBiasingBehavior.Load()
         {
-            base.Load();
+            var y = BaseParameters.Admittance;
+            if (_time.UseDc)
+            {
+                Elements.Add(
+                    y, -y, -y, y, 1, 0, -1, -1,
+                    y, -y, -y, y, 1, 0, -1, 0,
+                    1, -1, 1, 1, 1
+                    );
+            }
+            else
+            {
+                Elements.Add(
+                    y, -y, -y, y, 1, 1, -1, -1,
+                    y, -y, -y, y, 1, 1, -1, -1
+                    );
+            }
+
             var sol = BiasingState.Solution;
 
             // Calculate inputs

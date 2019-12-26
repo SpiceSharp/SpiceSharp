@@ -135,7 +135,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         protected ElementSet<double> Elements { get; private set; }
 
         private IIntegrationMethod _method;
-        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly ITimeSimulationState _time;
+        private readonly IIterationSimulationState _iteration;
+        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -147,6 +149,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             context.Nodes.CheckNodes(4);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
+            _iteration = context.GetState<IIterationSimulationState>();
+            context.TryGetState(out _time);
             context.TryGetState(out _method);
             SaturationVoltageDs = 0;
             Von = 0;
@@ -262,10 +266,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             DrainCurrent = Mode * cdrain - BdCurrent;
 
             // Check convergence
-            if (!BaseParameters.Off || state.Init != InitializationModes.Fix)
+            if (!BaseParameters.Off || _iteration.Mode != IterationModes.Fix)
             {
                 if (check)
-                    state.IsConvergent = false;
+                    _iteration.IsConvergent = false;
             }
 
             // Load current vector
@@ -327,8 +331,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var state = BiasingState;
             check = true;
 
-            if (state.Init == InitializationModes.Float || (_method != null && _method.BaseTime.Equals(0.0)) ||
-                state.Init == InitializationModes.Fix && !BaseParameters.Off)
+            if (_iteration.Mode == IterationModes.Float || (_method != null && _method.BaseTime.Equals(0.0)) ||
+                _iteration.Mode == IterationModes.Fix && !BaseParameters.Off)
             {
                 // General iteration
                 vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
@@ -377,14 +381,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				 * look at all of the possibilities for why we were
 				 * called.  We still just initialize the three voltages
 				 */
-                if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
+                if (_iteration.Mode == IterationModes.Junction && !BaseParameters.Off)
                 {
                     vds = ModelParameters.MosfetType * BaseParameters.InitialVoltageDs;
                     vgs = ModelParameters.MosfetType * BaseParameters.InitialVoltageGs;
                     vbs = ModelParameters.MosfetType * BaseParameters.InitialVoltageBs;
 
                     // TODO: At some point, check what this is supposed to do
-                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (state.UseDc || !state.UseIc))
+                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))
                     {
                         vbs = -1;
                         vgs = ModelParameters.MosfetType * TempVt0;
@@ -765,14 +769,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
-                state.IsConvergent = false;
+                _iteration.IsConvergent = false;
                 return false;
             }
 
             tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cbhat - (BsCurrent + BdCurrent)) > tol)
             {
-                state.IsConvergent = false;
+                _iteration.IsConvergent = false;
                 return false;
             }
             return true;

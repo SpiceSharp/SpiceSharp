@@ -143,8 +143,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         public double Dqbdve { get; protected set; }
 
-        private IIntegrationMethod _method;
-        private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
+        private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
+
+        /// <summary>
+        /// Gets the iteration.
+        /// </summary>
+        /// <value>
+        /// The iteration.
+        /// </value>
+        protected IIterationSimulationState Iteration { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -159,7 +166,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
 
             // Get states
-            context.TryGetState(out _method);
+            Iteration = context.GetState<IIterationSimulationState>();
             _collectorNode = BiasingState.Map[context.Nodes[0]];
             _baseNode = BiasingState.Map[context.Nodes[1]];
             _emitterNode = BiasingState.Map[context.Nodes[2]];
@@ -374,23 +381,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         /// <param name="vbe">The VBE.</param>
         /// <param name="vbc">The VBC.</param>
-        protected void Initialize(out double vbe, out double vbc)
+        protected virtual void Initialize(out double vbe, out double vbc)
         {
             var state = BiasingState;
 
             // Initialization
-            if (state.Init == InitializationModes.Junction && (_method != null) && state.UseDc && state.UseIc)
-            {
-                vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
-                var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;
-                vbc = vbe - vce;
-            }
-            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
+            if (Iteration.Mode == IterationModes.Junction && !BaseParameters.Off)
             {
                 vbe = TempVCritical;
                 vbc = 0;
             }
-            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
+            else if (Iteration.Mode == IterationModes.Junction || Iteration.Mode == IterationModes.Fix && BaseParameters.Off)
             {
                 vbe = 0;
                 vbc = 0;
@@ -406,7 +407,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 vbe = Semiconductor.LimitJunction(vbe, VoltageBe, Vt, TempVCritical, ref limited);
                 vbc = Semiconductor.LimitJunction(vbc, VoltageBc, Vt, TempVCritical, ref limited);
                 if (limited)
-                    state.IsConvergent = false;
+                    Iteration.IsConvergent = false;
             }
         }
 
@@ -431,14 +432,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cchat - cc) > tol)
             {
-                state.IsConvergent = false;
+                Iteration.IsConvergent = false;
                 return false;
             }
 
             tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + BaseConfiguration.AbsoluteTolerance;
             if (Math.Abs(cbhat - cb) > tol)
             {
-                state.IsConvergent = false;
+                Iteration.IsConvergent = false;
                 return false;
             }
             return true;

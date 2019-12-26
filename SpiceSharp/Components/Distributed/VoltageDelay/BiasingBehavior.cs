@@ -27,11 +27,6 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </value>
         protected ElementSet<double> Elements { get; private set; }
 
-        /// <summary>
-        /// Gets the real state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
         private int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
         /// <summary>
@@ -46,15 +41,15 @@ namespace SpiceSharp.Components.DelayBehaviors
             context.Nodes.CheckNodes(4);
 
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-            _contPosNode = BiasingState.Map[context.Nodes[2]];
-            _contNegNode = BiasingState.Map[context.Nodes[3]];
+            var state = context.GetState<IBiasingSimulationState>();
+            _posNode = state.Map[context.Nodes[0]];
+            _negNode = state.Map[context.Nodes[1]];
+            _contPosNode = state.Map[context.Nodes[2]];
+            _contNegNode = state.Map[context.Nodes[3]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
-            _branchEq = BiasingState.Map[Branch];
+            _branchEq = state.Map[Branch];
 
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+            Elements = new ElementSet<double>(state.Solver, new[] {
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),
                 new MatrixLocation(_branchEq, _posNode),
@@ -69,10 +64,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            if (BiasingState.UseDc)
-                Elements.Add(1, -1, 1, -1, -1, 1);
-            else
-                Elements.Add(1, -1, 1, -1);
+            Elements.Add(1, -1, 1, -1, -1, 1);
         }
     }
 }

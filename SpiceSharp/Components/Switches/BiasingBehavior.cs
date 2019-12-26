@@ -80,7 +80,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         protected Controller Method { get; }
 
-        private int _posNode, _negNode;
+        private readonly int _posNode, _negNode;
+        private IIterationSimulationState _iteration;
 
         /// <summary>
         /// Gets the state of the biasing.
@@ -99,6 +100,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             context.ThrowIfNull(nameof(context));
 
+            _iteration = context.GetState<IIterationSimulationState>();
             if (context is ControlledBindingContext ctx)
                 Method = new CurrentControlled(ctx);
             else
@@ -124,7 +126,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             var state = BiasingState.ThrowIfNotBound(this);
 
             // decide the state of the switch
-            if (state.Init == InitializationModes.Fix || state.Init == InitializationModes.Junction)
+            if (_iteration.Mode == IterationModes.Fix || _iteration.Mode == IterationModes.Junction)
             {
                 if (BaseParameters.ZeroState)
                 {
@@ -175,7 +177,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
 
                     // Ensure one more iteration
                     if (currentState != PreviousState)
-                        state.IsConvergent = false;
+                        _iteration.IsConvergent = false;
                 }
 
                 // Store the current state
@@ -183,7 +185,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
 
                 // If the state changed, ensure one more iteration
                 if (currentState != PreviousState)
-                    state.IsConvergent = false;
+                    _iteration.IsConvergent = false;
             }
 
             // Get the current conduction

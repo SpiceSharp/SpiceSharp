@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -13,38 +12,6 @@ namespace SpiceSharp.Components.ParallelBehaviors
         protected class SimulationState : IBiasingSimulationState
         {
             private readonly IBiasingSimulationState _parent;
-
-            /// <summary>
-            /// Gets or sets the initialization flag.
-            /// </summary>
-            public InitializationModes Init => _parent.Init;
-
-            /// <summary>
-            /// Gets or sets the flag for ignoring time-related effects. If true, each device should assume the circuit is not moving in time.
-            /// </summary>
-            public bool UseDc => _parent.UseDc;
-
-            /// <summary>
-            /// Gets or sets the flag for using initial conditions. If true, the operating point will not be calculated, and initial conditions will be used instead.
-            /// </summary>
-            public bool UseIc => _parent.UseIc;
-
-            /// <summary>
-            /// The current source factor.
-            /// This parameter is changed when doing source stepping for aiding convergence.
-            /// </summary>
-            public double SourceFactor => _parent.SourceFactor;
-
-            /// <summary>
-            /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
-            /// </summary>
-            public double Gmin => _parent.Gmin;
-
-            /// <summary>
-            /// Is the current iteration convergent?
-            /// This parameter is used to communicate convergence.
-            /// </summary>
-            public bool IsConvergent { get; set; }
 
             /// <summary>
             /// The current temperature for this circuit in Kelvin.

@@ -54,8 +54,6 @@ namespace SpiceSharp.Simulations
             
             // Calculate the operating point
             cstate.Laplace = 0.0;
-            BiasingState.UseIc = false;
-            BiasingState.UseDc = true;
             Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices

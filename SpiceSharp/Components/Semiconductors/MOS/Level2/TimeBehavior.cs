@@ -122,7 +122,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </value>
         protected ElementSet<double> TransientElements { get; private set; }
 
-        private int _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly int _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -131,6 +132,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="context">The context.</param>
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
+            _time = context.GetState<ITimeSimulationState>();
             _gateNode = BiasingState.Map[context.Nodes[1]];
             _bulkNode = BiasingState.Map[context.Nodes[3]];
             _drainNodePrime = BiasingState.Map[DrainPrime];
@@ -210,7 +212,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         protected override void Load()
         {
             base.Load();
-            if (BiasingState.UseDc)
+            if (_time.UseDc)
                 return;
             var vbd = VoltageBd;
             var vbs = VoltageBs;

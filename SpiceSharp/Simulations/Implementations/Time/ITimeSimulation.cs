@@ -10,7 +10,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IStateful{T}" />
     public interface ITimeSimulation : IBiasingSimulation,
         IBehavioral<ITimeBehavior>,
-        IStateful<IIntegrationMethod>
+        IStateful<IIntegrationMethod>,
+        IStateful<ITimeSimulationState>
     {
     }
 }

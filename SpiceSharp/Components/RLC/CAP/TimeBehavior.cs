@@ -50,6 +50,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         protected IDerivative QCap { get; private set; }
 
         private int _posNode, _negNode;
+        private ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -60,6 +61,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             context.Nodes.CheckNodes(2);
 
+            _time = context.GetState<ITimeSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             Elements = new ElementSet<double>(BiasingState.Solver, new[] {
@@ -80,7 +82,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             // Calculate the state for DC
             var sol = BiasingState.Solution;
-            if (BiasingState.UseIc)
+            if (_time.UseIc)
                 QCap.Value = Capacitance * BaseParameters.InitialCondition;
             else
                 QCap.Value = Capacitance * (sol[_posNode] - sol[_negNode]);
@@ -92,7 +94,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         void IBiasingBehavior.Load()
         {
             // Don't matter for DC analysis
-            if (BiasingState.UseDc)
+            if (_time.UseDc)
                 return;
             var vcap = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
 

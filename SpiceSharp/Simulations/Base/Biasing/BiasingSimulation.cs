@@ -14,6 +14,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IBehavioral{T}" />
     public abstract partial class BiasingSimulation : Simulation,
         IBiasingSimulation,
+        IStateful<IIterationSimulationState>,
         IBehavioral<IBiasingUpdateBehavior>
     {
         /// <summary>
@@ -23,6 +24,22 @@ namespace SpiceSharp.Simulations
         /// This variable can be used to close in on the problem in case of non-convergence.
         /// </remarks>
         public Variable ProblemVariable { get; protected set; }
+
+        /// <summary>
+        /// Gets the iteration state.
+        /// </summary>
+        /// <value>
+        /// The iteration state.
+        /// </value>
+        protected IterationState Iteration { get; } = new IterationState();
+
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        IIterationSimulationState IStateful<IIterationSimulationState>.State => Iteration;
 
         #region Events
 
@@ -74,14 +91,7 @@ namespace SpiceSharp.Simulations
         private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
-
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected BiasingSimulationState BiasingState { get; private set; }
+        private SimulationState _state;
         
         /// <summary>
         /// Gets the maximum number of allowed iterations for DC analysis.
@@ -112,7 +122,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The state.
         /// </value>
-        public IBiasingSimulationState State => BiasingState;
+        public IBiasingSimulationState State => _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulation"/> class.
@@ -147,8 +157,8 @@ namespace SpiceSharp.Simulations
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _convergenceBehaviors = EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
             _updateBehaviors = EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
-            _realStateLoadArgs = new LoadStateEventArgs(BiasingState);
-            BiasingState.Setup();
+            _realStateLoadArgs = new LoadStateEventArgs(_state);
+            _state.Setup();
 
             // Set up nodesets
             foreach (var ns in config.Nodesets)
@@ -165,10 +175,10 @@ namespace SpiceSharp.Simulations
 
             // Create the state for this simulation
             ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
-            BiasingState = new BiasingSimulationState(
-                config.Solver ?? Algebra.LUHelper.CreateSparseRealSolver(),
+            _state = new SimulationState(
+                config.Solver ?? LUHelper.CreateSparseRealSolver(),
                 config.Map ?? new VariableMap(Variables.Ground));
-            BiasingState.Gmin = config.Gmin;
+            Iteration.Gmin = config.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
             /* var strategy = _state.Solver.Strategy;
@@ -201,7 +211,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Temperature()
         {
-            var args = new LoadStateEventArgs(BiasingState);
+            var args = new LoadStateEventArgs(_state);
             OnBeforeTemperature(args);
             foreach (var behavior in _temperatureBehaviors)
                 behavior.Temperature();
@@ -232,9 +242,8 @@ namespace SpiceSharp.Simulations
         /// <param name="maxIterations">The maximum amount of allowed iterations.</param>
         protected void Op(int maxIterations)
         {
-            var state = BiasingState;
             var config = Configurations.GetValue<BiasingConfiguration>().ThrowIfNull("base configuration");
-            state.Init = InitializationModes.Junction;
+            Iteration.Mode = IterationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
@@ -273,44 +282,46 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="maxIterations">The maximum number of iterations per step.</param>
         /// <param name="steps">The number of steps.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> if the gmin stepping succeeded; otherwise <c>false</c>.
+        /// </returns>
         protected bool IterateGminStepping(int maxIterations, int steps)
         {
-            var state = BiasingState;
+            var state = _state;
 
             // We will shunt all PN-junctions with a conductance (should be implemented by the components)
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartGminStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= BiasingState.Solution.Length; i++)
-                BiasingState.Solution[i] = 0.0;
+            for (var i = 0; i <= _state.Solution.Length; i++)
+                _state.Solution[i] = 0.0;
 
             // Let's make it a bit easier for our iterations to converge
-            var original = state.Gmin;
-            if (state.Gmin <= 0)
-                state.Gmin = 1e-12;
+            var original = Iteration.Gmin;
+            if (Iteration.Gmin <= 0)
+                Iteration.Gmin = 1e-12;
             for (var i = 0; i < steps; i++)
-                state.Gmin *= 10.0;
+                Iteration.Gmin *= 10.0;
 
             // Start GMIN stepping
-            state.Init = InitializationModes.Junction;
+            Iteration.Mode = IterationModes.Junction;
             for (var i = 0; i <= steps; i++)
             {
-                state.IsConvergent = false;
+                Iteration.IsConvergent = false;
                 if (!Iterate(maxIterations))
                 {
-                    state.Gmin = original;
+                    Iteration.Gmin = original;
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulation_Biasing_GminSteppingFailed);
                     break;
                 }
 
                 // Success! Let's try to get more accurate now
-                state.Gmin /= 10.0;
-                state.Init = InitializationModes.Float;
+                Iteration.Gmin /= 10.0;
+                Iteration.Mode = IterationModes.Float;
             }
 
             // Try one more time with the original gmin
-            state.Gmin = original;
+            Iteration.Gmin = original;
             return Iterate(maxIterations);
         }
 
@@ -319,35 +330,37 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="maxIterations">The maximum number of iterations per step.</param>
         /// <param name="steps">The number of steps.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> if the diagonal gmin stepping succeeded; otherwise <c>false</c>.
+        /// </returns>
         protected bool IterateDiagonalGminStepping(int maxIterations, int steps)
         {
-            var state = BiasingState;
+            var state = _state;
 
             // We will add a DC path to ground to all nodes to aid convergence
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartDiagonalGminStepping);
 
             // We'll hack into the loading algorithm to apply our diagonal contributions
-            _diagonalGmin = state.Gmin;
+            _diagonalGmin = Iteration.Gmin;
             if (_diagonalGmin <= 0)
                 _diagonalGmin = 1e-12;
             void ApplyGminStep(object sender, LoadStateEventArgs args)
-                => BiasingState.Solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.ApplyDiagonalGmin(matrix, _diagonalGmin));
+                => _state.Solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.ApplyDiagonalGmin(matrix, _diagonalGmin));
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= BiasingState.Solution.Length; i++)
-                BiasingState.Solution[i] = 0.0;
+            for (var i = 0; i <= _state.Solution.Length; i++)
+                _state.Solution[i] = 0.0;
                 
             // Let's make it a bit easier for our iterations to converge
             for (var i = 0; i < steps; i++)
                 _diagonalGmin *= 10.0;
 
             // Start GMIN stepping
-            state.Init = InitializationModes.Junction;
+            Iteration.Mode = IterationModes.Junction;
             for (var i = 0; i <= steps; i++)
             {
-                state.IsConvergent = false;
+                Iteration.IsConvergent = false;
                 if (!Iterate(maxIterations))
                 {
                     _diagonalGmin = 0.0;
@@ -355,7 +368,7 @@ namespace SpiceSharp.Simulations
                     break;
                 }
                 _diagonalGmin /= 10.0;
-                state.Init = InitializationModes.Float;
+                Iteration.Mode = IterationModes.Float;
             }
 
             // Try one more time without the gmin stepping
@@ -369,27 +382,29 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="maxIterations">The maximum number of iterations per step.</param>
         /// <param name="steps">The number of steps.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> if source stepping succeeded; otherwise <c>false</c>.
+        /// </returns>
         protected bool IterateSourceStepping(int maxIterations, int steps)
         {
-            var state = BiasingState;
+            var state = _state;
 
             // We will slowly ramp up voltages starting at 0 to make sure it converges
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartSourceStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= BiasingState.Solution.Length; i++)
-                BiasingState.Solution[i] = 0.0;
+            for (var i = 0; i <= _state.Solution.Length; i++)
+                _state.Solution[i] = 0.0;
 
             // Start SRC stepping
             bool success = true;
-            state.Init = InitializationModes.Junction;
+            Iteration.Mode = IterationModes.Junction;
             for (var i = 0; i <= steps; i++)
             {
-                state.SourceFactor = i / (double)steps;
+                Iteration.SourceFactor = i / (double)steps;
                 if (!Iterate(maxIterations))
                 {
-                    state.SourceFactor = 1.0;
+                    Iteration.SourceFactor = 1.0;
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_SourceSteppingFailed);
                     success = false;
                     break;
@@ -406,29 +421,18 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
         /// </returns>
-        protected bool Iterate(int maxIterations)
+        protected virtual bool Iterate(int maxIterations)
         {
-            var state = BiasingState;
-            var solver = BiasingState.Solver;
+            var state = _state;
+            var solver = _state.Solver;
             var pass = false;
             var iterno = 0;
-
-            // Ignore operating condition point, just use the solution as-is
-            if (state.UseIc)
-            {
-                state.StoreSolution();
-
-                // Voltages are set using IC statement on the nodes
-                // Internal initial conditions are calculated by the components
-                Load();
-                return true;
-            }
 
             // Perform iteration
             while (true)
             {
                 // Reset convergence flag
-                state.IsConvergent = true;
+                Iteration.IsConvergent = true;
 
                 try
                 {
@@ -449,7 +453,7 @@ namespace SpiceSharp.Simulations
                         => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Size - solver.Degeneracy));
                     _isPreordered = true;
                 }
-                if (state.Init == InitializationModes.Junction)
+                if (Iteration.Mode == IterationModes.Junction)
                     _shouldReorder = true;
 
                 // Reorder
@@ -498,40 +502,40 @@ namespace SpiceSharp.Simulations
                     return false;
                 }
 
-                if (state.IsConvergent && iterno != 1)
-                    state.IsConvergent = IsConvergent();
+                if (Iteration.IsConvergent && iterno != 1)
+                    Iteration.IsConvergent = IsConvergent();
                 else
-                    state.IsConvergent = false;
+                    Iteration.IsConvergent = false;
 
-                switch (state.Init)
+                switch (Iteration.Mode)
                 {
-                    case InitializationModes.Float:
-                        if (state.UseDc && _nodesets.Count > 0)
+                    case IterationModes.Float:
+                        if (_nodesets.Count > 0)
                         {
                             if (pass)
-                                state.IsConvergent = false;
+                                Iteration.IsConvergent = false;
                             pass = false;
                         }
-                        if (state.IsConvergent)
+                        if (Iteration.IsConvergent)
                         {
                             Statistics.Iterations += iterno;
                             return true;
                         }
                         break;
 
-                    case InitializationModes.Junction:
-                        state.Init = InitializationModes.Fix;
+                    case IterationModes.Junction:
+                        Iteration.Mode = IterationModes.Fix;
                         _shouldReorder = true;
                         break;
 
-                    case InitializationModes.Fix:
-                        if (state.IsConvergent)
-                            state.Init = InitializationModes.Float;
+                    case IterationModes.Fix:
+                        if (Iteration.IsConvergent)
+                            Iteration.Mode = IterationModes.Float;
                         pass = true;
                         break;
 
-                    case InitializationModes.None:
-                        state.Init = InitializationModes.Float;
+                    case IterationModes.None:
+                        Iteration.Mode = IterationModes.Float;
                         break;
 
                     default:
@@ -540,6 +544,11 @@ namespace SpiceSharp.Simulations
                 }
             }
         }
+
+        /// <summary>
+        /// Stores the solution.
+        /// </summary>
+        protected void StoreSolution() => _state.StoreSolution();
 
         /// <summary>
         /// Load the current simulation state solver.
@@ -551,7 +560,7 @@ namespace SpiceSharp.Simulations
             OnBeforeLoad(_realStateLoadArgs);
 
             // Clear rhs and matrix
-            BiasingState.Solver.Reset();
+            _state.Solver.Reset();
             foreach (var behavior in _loadBehaviors)
                 behavior.Load();
 
@@ -567,10 +576,8 @@ namespace SpiceSharp.Simulations
         /// <param name="e">Arguments</param>
         protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
-            var state = BiasingState;
-
             // Consider doing nodeset assignments when we're starting out or in trouble
-            if ((state.Init & (InitializationModes.Junction | InitializationModes.Fix)) == 0) 
+            if (Iteration.Mode != IterationModes.Junction && Iteration.Mode != IterationModes.Fix)
                 return;
 
             // Aid in convergence
@@ -586,7 +593,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool IsConvergent()
         {
-            var rstate = BiasingState;
+            var rstate = _state;
 
             // Check convergence for each node
             foreach (var v in rstate.Map)

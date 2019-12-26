@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         {
             base.Execute();
 
-            var state = BiasingState;
+            var state = GetState<IBiasingSimulationState>();
             var cstate = ComplexState;
             var nstate = NoiseState;
 
@@ -127,8 +127,6 @@ namespace SpiceSharp.Simulations
                 return;
             nstate.Reset(freq.Current);
             cstate.Laplace = 0;
-            state.UseIc = false;
-            state.UseDc = true;
             Op(DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices

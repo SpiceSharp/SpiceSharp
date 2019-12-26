@@ -90,8 +90,10 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 
-        private IIntegrationMethod _method;
-        private int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
+        private readonly IIntegrationMethod _method;
+        private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
+        private readonly IIterationSimulationState _iteration;
+        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -103,6 +105,8 @@ namespace SpiceSharp.Components.JFETBehaviors
             context.Nodes.CheckNodes(3);
 
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
+            _iteration = context.GetState<IIterationSimulationState>();
+            context.TryGetState(out _time);
             context.TryGetState(out _method);
             _drainNode = BiasingState.Map[context.Nodes[0]];
             _gateNode = BiasingState.Map[context.Nodes[1]];
@@ -275,10 +279,10 @@ namespace SpiceSharp.Components.JFETBehaviors
             Ggd = ggd;
 
             // Check convergence
-            if (state.Init != InitializationModes.Fix || !state.UseIc)
+            if (_iteration.Mode != IterationModes.Fix || (_time != null && !_time.UseIc))
             {
                 if (check)
-                    state.IsConvergent = false;
+                    _iteration.IsConvergent = false;
             }
 
             // Load current vector
@@ -327,18 +331,18 @@ namespace SpiceSharp.Components.JFETBehaviors
 
             // Initialization
             check = true;
-            if (state.Init == InitializationModes.Junction && _method != null && state.UseDc && state.UseIc)
+            if (_iteration.Mode == IterationModes.Junction && _method != null && (_time != null && _time.UseDc && _time.UseIc))
             {
                 var vds = ModelParameters.JFETType * BaseParameters.InitialVds;
                 vgs = ModelParameters.JFETType * BaseParameters.InitialVgs;
                 vgd = vgs - vds;
             }
-            else if (state.Init == InitializationModes.Junction && !BaseParameters.Off)
+            else if (_iteration.Mode == IterationModes.Junction && !BaseParameters.Off)
             {
                 vgs = -1;
                 vgd = -1;
             }
-            else if (state.Init == InitializationModes.Junction || state.Init == InitializationModes.Fix && BaseParameters.Off)
+            else if (_iteration.Mode == IterationModes.Junction || _iteration.Mode == IterationModes.Fix && BaseParameters.Off)
             {
                 vgs = 0;
                 vgd = 0;

@@ -62,6 +62,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         protected IBiasingSimulationState BiasingState { get; private set; }
 
         private IIntegrationMethod _method;
+        private IIterationSimulationState _iteration;
         private int _posNode, _negNode;
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             context.Nodes.CheckNodes(2);
 
             BiasingState = context.GetState<IBiasingSimulationState>();
+            _iteration = context.GetState<IIterationSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
 
@@ -111,12 +113,12 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 if (Waveform != null)
                     value = Waveform.Value;
                 else
-                    value = BaseParameters.DcValue * BiasingState.SourceFactor;
+                    value = BaseParameters.DcValue * _iteration.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = BaseParameters.DcValue * BiasingState.SourceFactor;
+                value = BaseParameters.DcValue * _iteration.SourceFactor;
             }
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE

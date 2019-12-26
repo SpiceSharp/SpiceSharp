@@ -239,7 +239,6 @@ namespace SpiceSharp.Simulations
         protected void InitializeAcParameters()
         {
             // Support legacy models
-            BiasingState.UseDc = false;
             Load();
             foreach (var behavior in _frequencyBehaviors)
                 behavior.InitializeParameters();
