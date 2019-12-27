@@ -19,26 +19,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <value>
         /// The parameters.
         /// </value>
-        public BaseParameters BaseParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
+        public BaseParameters Parameters { get; }
 
         /// <summary>
         /// Gets the capacitance.
         /// </summary>
         [ParameterName("capacitance"), ParameterInfo("The capacitance of the capacitor.")]
         public double Capacitance { get; private set; }
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -50,13 +37,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             context.ThrowIfNull(nameof(context));
 
             // Get parameters
-            BaseParameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<BaseParameters>();
             if (context.ModelBehaviors != null)
                 _mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
 
             // Connections
             _temperature = context.GetState<ITemperatureSimulationState>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>
@@ -64,37 +50,37 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = _temperature.Temperature;
+            if (!Parameters.Temperature.Given)
+                Parameters.Temperature.RawValue = _temperature.Temperature;
 
             double capacitance;
-            if (!BaseParameters.Capacitance.Given)
+            if (!Parameters.Capacitance.Given)
             {
                 if (_mbp == null)
                     throw new ModelNotFoundException(Name);
 
-                var width = BaseParameters.Width.Given
-                    ? BaseParameters.Width.Value
+                var width = Parameters.Width.Given
+                    ? Parameters.Width.Value
                     : _mbp.DefaultWidth.Value;
                 capacitance = _mbp.JunctionCap *
                               (width - _mbp.Narrow) *
-                              (BaseParameters.Length - _mbp.Narrow) +
+                              (Parameters.Length - _mbp.Narrow) +
                               _mbp.JunctionCapSidewall * 2 * (
-                                  BaseParameters.Length - _mbp.Narrow +
+                                  Parameters.Length - _mbp.Narrow +
                                   (width - _mbp.Narrow));
             }
             else
-                capacitance = BaseParameters.Capacitance;
+                capacitance = Parameters.Capacitance;
 
             double factor = 1.0;
 
             if (_mbp != null)
             {
-                double temperatureDiff = BaseParameters.Temperature - _mbp.NominalTemperature;
+                double temperatureDiff = Parameters.Temperature - _mbp.NominalTemperature;
                 factor = 1.0 + _mbp.TemperatureCoefficient1 * temperatureDiff + _mbp.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
             }
 
-            Capacitance = factor * capacitance * BaseParameters.ParallelMultiplier;
+            Capacitance = factor * capacitance * Parameters.ParallelMultiplier;
         }
     }
 }

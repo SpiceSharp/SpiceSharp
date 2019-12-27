@@ -11,6 +11,11 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// </summary>
     public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
+        private readonly ElementSet<double> _elements;
+        private readonly int _branchEq;
+        private readonly IDerivative _flux;
+        private readonly ITimeSimulationState _time;
+
         /// <summary>
         /// An event called when the flux can be updated
         /// Can be used by mutual inductances
@@ -18,22 +23,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         public event EventHandler<UpdateFluxEventArgs> UpdateFlux;
 
         /// <summary>
-        /// Gets the transient matrix elements.
-        /// </summary>
-        /// <value>
-        /// The transient matrix elements.
-        /// </value>
-        protected ElementSet<double> TransientElements { get; private set; }
-
-        /// <summary>
         /// Gets the flux of the inductor.
         /// </summary>
         [ParameterName("flux"), ParameterInfo("The flux through the inductor.")]
         public double Flux => _flux.Value;
-
-        private int _branchEq;
-        private IDerivative _flux;
-        private ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -44,7 +37,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             _branchEq = BiasingState.Map[Branch];
             _time = context.GetState<ITimeSimulationState>();
-            TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_branchEq, _branchEq)
             }, new[] { _branchEq });
 
@@ -58,8 +51,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         void ITimeBehavior.InitializeStates()
         {
             // Get the current through
-            if (BaseParameters.InitialCondition.Given)
-                _flux.Value = BaseParameters.InitialCondition * Inductance;
+            if (Parameters.InitialCondition.Given)
+                _flux.Value = Parameters.InitialCondition * Inductance;
             else
                 _flux.Value = BiasingState.Solution[_branchEq] * Inductance;
         }
@@ -86,7 +79,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             // Finally load the Y-matrix
             _flux.Integrate();
             var info = _flux.GetContributions(Inductance);
-            TransientElements.Add(
+            _elements.Add(
                 -info.Jacobian,
                 info.Rhs
                 );

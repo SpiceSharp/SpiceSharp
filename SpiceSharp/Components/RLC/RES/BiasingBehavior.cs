@@ -11,44 +11,32 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
         private readonly int _posNode, _negNode;
-
-        /// <summary>
-        /// Gets the elements.
-        /// </summary>
-        /// <value>
-        /// The elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        /// <summary>
-        /// Gets the state of the biasing.
-        /// </summary>
-        /// <value>
-        /// The state of the biasing.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; }
+        private readonly ElementSet<double> _elements;
+        private readonly IBiasingSimulationState _biasing;
 
         /// <summary>
         /// Gets the voltage across the resistor.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
+        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
 
         /// <summary>
         /// Gets the current through the resistor.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Current")]
-        public double GetCurrent() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode]) * Conductance;
+        public double Current => (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the resistor.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
-        public double GetPower()
+        public double Power
         {
-            BiasingState.ThrowIfNotBound(this);
-            var v = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
-            return v * v * Conductance;
+            get
+            {
+                var v = _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+                return v * v * Conductance;
+            }
         }
 
         /// <summary>
@@ -59,10 +47,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-            Elements = new ElementSet<double>(BiasingState.Solver,
+            _biasing = context.GetState<IBiasingSimulationState>();
+            _posNode = _biasing.Map[context.Nodes[0]];
+            _negNode = _biasing.Map[context.Nodes[1]];
+            _elements = new ElementSet<double>(_biasing.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
@@ -74,7 +62,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            Elements.Add(Conductance, -Conductance, -Conductance, Conductance);
+            _elements.Add(Conductance, -Conductance, -Conductance, Conductance);
         }
     }
 }

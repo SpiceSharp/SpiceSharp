@@ -12,15 +12,13 @@ namespace SpiceSharp.Components
     public class Inductor : Component,
         IParameterized<BaseParameters>
     {
-        private readonly BaseParameters _bp = new BaseParameters();
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
         /// <value>
         /// The parameter set.
         /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+        public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
         /// Constants
@@ -47,7 +45,7 @@ namespace SpiceSharp.Components
         public Inductor(string name, string pos, string neg, double inductance) 
             : this(name)
         {
-            _bp.Inductance.Value = inductance;
+            Parameters.Inductance.Value = inductance;
             Connect(pos, neg);
         }
 

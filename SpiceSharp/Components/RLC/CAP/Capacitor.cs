@@ -12,15 +12,13 @@ namespace SpiceSharp.Components
     public class Capacitor : Component,
         IParameterized<BaseParameters>
     {
-        private readonly BaseParameters _bp = new BaseParameters();
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
         /// <value>
         /// The parameter set.
         /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+        public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
         /// Constants
@@ -32,7 +30,8 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="Capacitor"/> class.
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(string name) : base(name, CapacitorPinCount)
+        public Capacitor(string name) 
+            : base(name, CapacitorPinCount)
         {
         }
 
@@ -44,9 +43,9 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
         public Capacitor(string name, string pos, string neg, double cap) 
-            : base(name, CapacitorPinCount)
+            : this(name)
         {
-            _bp.Capacitance.Value = cap;
+            Parameters.Capacitance.Value = cap;
             Connect(pos, neg);
         }
 

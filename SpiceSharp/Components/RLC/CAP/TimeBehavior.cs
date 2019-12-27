@@ -12,46 +12,32 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <seealso cref="ITimeBehavior" />
     public class TimeBehavior : TemperatureBehavior, ITimeBehavior
     {
+        private readonly IBiasingSimulationState _biasing;
+        private readonly ElementSet<double> _elements;
+        private readonly IDerivative _qcap;
+        private readonly int _posNode, _negNode;
+        private readonly ITimeSimulationState _time;
+
         /// <summary>
         /// Gets the current through the capacitor.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Device current")]
-        public double Current => QCap.Derivative;
+        public double Current => _qcap.Derivative;
 
         /// <summary>
         /// Gets the instantaneous power dissipated by the capacitor.
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterInfo("Instantaneous device power")]
-        public double GetPower()
-        {
-            BiasingState.ThrowIfNotBound(this);
-            return QCap.Derivative * (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]);
-        }
+        public double Power => _qcap.Derivative * (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]);
 
         /// <summary>
         /// Gets the voltage across the capacitor.
         /// </summary>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
-
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        /// <summary>
-        /// Gets the state tracking the charge.
-        /// </summary>
-        protected IDerivative QCap { get; private set; }
-
-        private int _posNode, _negNode;
-        private ITimeSimulationState _time;
-
+        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
@@ -60,11 +46,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
-
+            _biasing = context.GetState<IBiasingSimulationState>();
             _time = context.GetState<ITimeSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _posNode = _biasing.Map[context.Nodes[0]];
+            _negNode = _biasing.Map[context.Nodes[1]];
+            _elements = new ElementSet<double>(_biasing.Solver, new[] {
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
@@ -72,7 +58,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             }, new[] { _posNode, _negNode });
 
             var method = context.GetState<IIntegrationMethod>();
-            QCap = method.CreateDerivative();
+            _qcap = method.CreateDerivative();
         }
 
         /// <summary>
@@ -81,11 +67,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         void ITimeBehavior.InitializeStates()
         {
             // Calculate the state for DC
-            var sol = BiasingState.Solution;
+            var sol = _biasing.Solution;
             if (_time.UseIc)
-                QCap.Value = Capacitance * BaseParameters.InitialCondition;
+                _qcap.Value = Capacitance * Parameters.InitialCondition;
             else
-                QCap.Value = Capacitance * (sol[_posNode] - sol[_negNode]);
+                _qcap.Value = Capacitance * (sol[_posNode] - sol[_negNode]);
         }
 
         /// <summary>
@@ -96,17 +82,17 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             // Don't matter for DC analysis
             if (_time.UseDc)
                 return;
-            var vcap = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
+            var vcap = _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
 
             // Integrate
-            QCap.Value = Capacitance * vcap;
-            QCap.Integrate();
-            var info = QCap.GetContributions(Capacitance);
+            _qcap.Value = Capacitance * vcap;
+            _qcap.Integrate();
+            var info = _qcap.GetContributions(Capacitance);
             var geq = info.Jacobian;
             var ceq = info.Rhs;
 
             // Load matrix and rhs vector
-            Elements.Add(geq, -geq, -geq, geq, -ceq, ceq);
+            _elements.Add(geq, -geq, -geq, geq, -ceq, ceq);
         }
     }
 }

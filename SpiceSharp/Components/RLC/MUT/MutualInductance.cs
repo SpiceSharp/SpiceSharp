@@ -11,15 +11,13 @@ namespace SpiceSharp.Components
     public class MutualInductance : Component,
         IParameterized<BaseParameters>
     {
-        private readonly BaseParameters _bp = new BaseParameters();
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
         /// <value>
         /// The parameter set.
         /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+        public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
         /// Gets or sets the name of the primary inductor.
@@ -51,7 +49,7 @@ namespace SpiceSharp.Components
         public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
             : this(name)
         {
-            _bp.Coupling.Value = coupling;
+            Parameters.Coupling.Value = coupling;
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
         }

@@ -10,24 +10,10 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// </summary>
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _br1, _br2;
-
+        private readonly int _br1, _br2;
+        private readonly ElementSet<Complex> _elements;
+        private readonly IComplexSimulationState _complex;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
@@ -35,13 +21,13 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, MutualInductanceBindingContext context) : base(name, context) 
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
+            _complex = context.GetState<IComplexSimulationState>();
             var bias = context.Inductor1Behaviors.GetValue<IBranchedBehavior>();
-            _br1 = ComplexState.Map[bias.Branch];
+            _br1 = _complex.Map[bias.Branch];
             bias = context.Inductor2Behaviors.GetValue<IBranchedBehavior>();
-            _br2 = ComplexState.Map[bias.Branch];
+            _br2 = _complex.Map[bias.Branch];
 
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_br1, _br2),
                 new MatrixLocation(_br2, _br1));
         }
@@ -58,8 +44,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var value = ComplexState.Laplace * Factor;
-            ComplexElements.Add(-value, -value);
+            var value = _complex.Laplace * Factor;
+            _elements.Add(-value, -value);
         }
     }
 }

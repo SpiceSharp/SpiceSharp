@@ -7,7 +7,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// <summary>
     /// Temperature-dependent calculations for a <see cref="MutualInductance"/>.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<BaseParameters>
     {
         /// <summary>
         /// Gets the coupling factor.
@@ -17,7 +18,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        public BaseParameters Parameters { get;  }
 
         /// <summary>
         /// Gets the temperature behavior of inductor 1.
@@ -38,7 +39,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
             context.ThrowIfNull(nameof(context));
 
-            BaseParameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<BaseParameters>();
             InductanceBehavior1 = context.Inductor1Behaviors.GetValue<IInductanceBehavior>();
             InductanceBehavior2 = context.Inductor2Behaviors.GetValue<IInductanceBehavior>();
         }
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void ITemperatureBehavior.Temperature()
         {
             // Calculate coupling factor
-            Factor = BaseParameters.Coupling * Math.Sqrt(InductanceBehavior1.Inductance * InductanceBehavior2.Inductance);
+            Factor = Parameters.Coupling * Math.Sqrt(InductanceBehavior1.Inductance * InductanceBehavior2.Inductance);
         }
     }
 }

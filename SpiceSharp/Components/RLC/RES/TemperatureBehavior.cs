@@ -25,15 +25,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <value>
         /// The base parameters.
         /// </value>
-        public BaseParameters BaseParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
+        public BaseParameters Parameters { get; }
 
         /// <summary>
         /// Gets the default conductance for this model
@@ -50,7 +42,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            BaseParameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<BaseParameters>();
             if (context.ModelBehaviors != null)
                 _mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
         }
@@ -61,20 +53,20 @@ namespace SpiceSharp.Components.ResistorBehaviors
         void ITemperatureBehavior.Temperature()
         {
             double factor;
-            double resistance = BaseParameters.Resistance;
+            double resistance = Parameters.Resistance;
 
             // Default Value Processing for Resistor Instance
-            if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = _temperature.Temperature;
-            if (!BaseParameters.Width.Given)
-                BaseParameters.Width.RawValue = _mbp?.DefaultWidth ?? 0.0;
+            if (!Parameters.Temperature.Given)
+                Parameters.Temperature.RawValue = _temperature.Temperature;
+            if (!Parameters.Width.Given)
+                Parameters.Width.RawValue = _mbp?.DefaultWidth ?? 0.0;
 
             if (_mbp != null)
             {
-                if (!BaseParameters.Resistance.Given)
+                if (!Parameters.Resistance.Given)
                 {
-                    if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && BaseParameters.Length > 0)
-                        resistance = _mbp.SheetResistance * (BaseParameters.Length - _mbp.Narrow) / (BaseParameters.Width - _mbp.Narrow);
+                    if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && Parameters.Length > 0)
+                        resistance = _mbp.SheetResistance * (Parameters.Length - _mbp.Narrow) / (Parameters.Width - _mbp.Narrow);
                     else
                     {
                         SpiceSharpWarning.Warning(this, Properties.Resources.Resistors_ZeroResistance.FormatString(Name));
@@ -82,7 +74,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
                     }
                 }
 
-                var difference = BaseParameters.Temperature - _mbp.NominalTemperature;
+                var difference = Parameters.Temperature - _mbp.NominalTemperature;
 
                 if (_mbp.ExponentialCoefficient.Given)
                     factor = Math.Pow(1.01, _mbp.ExponentialCoefficient * difference);
@@ -98,7 +90,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 resistance = MinimumResistance;
 
             // Calculate the final conductance
-            Conductance = BaseParameters.ParallelMultiplier / BaseParameters.SeriesMultiplier / (resistance * factor);
+            Conductance = Parameters.ParallelMultiplier / Parameters.SeriesMultiplier / (resistance * factor);
         }
     }
 }

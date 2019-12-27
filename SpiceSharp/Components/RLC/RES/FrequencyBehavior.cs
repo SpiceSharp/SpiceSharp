@@ -11,51 +11,41 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
+        private readonly int _posNode, _negNode;
+        private readonly IComplexSimulationState _complex;
+        private readonly ElementSet<Complex> _elements;
+
         /// <summary>
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
         [ParameterName("v_c"), ParameterInfo("Complex voltage across the capacitor.")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posNode] - ComplexState.Solution[_negNode];
+        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
 
         /// <summary>
         /// Gets the (complex) current through the resistor.
         /// </summary>
         [ParameterName("i_c"), ParameterInfo("Complex current through the capacitor.")]
-        public Complex GetComplexCurrent()
+        public Complex ComplexCurrent
         {
-            ComplexState.ThrowIfNotBound(this);
-            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
-            return voltage * Conductance;
+            get
+            {
+                var voltage = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                return voltage * Conductance;
+            }
         }
 
         /// <summary>
         /// Gets the (complex) power dissipated by the resistor.
         /// </summary>
         [ParameterName("p_c"), ParameterInfo("Power")]
-        public Complex GetComplexPower()
+        public Complex ComplexPower
         {
-            ComplexState.ThrowIfNotBound(this);
-            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
-            return voltage * Complex.Conjugate(voltage) * Conductance;
+            get
+            {
+                var voltage = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                return voltage * Complex.Conjugate(voltage) * Conductance;
+            }
         }
-
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _posNode, _negNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -64,10 +54,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _posNode = ComplexState.Map[context.Nodes[0]];
-            _negNode = ComplexState.Map[context.Nodes[1]];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _complex = context.GetState<IComplexSimulationState>();
+            _posNode = _complex.Map[context.Nodes[0]];
+            _negNode = _complex.Map[context.Nodes[1]];
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
@@ -87,7 +77,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexElements.Add(Conductance, -Conductance, -Conductance, Conductance);
+            _elements.Add(Conductance, -Conductance, -Conductance, Conductance);
         }
     }
 }

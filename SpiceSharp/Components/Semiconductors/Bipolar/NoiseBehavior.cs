@@ -10,8 +10,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class NoiseBehavior : BiasingBehavior, INoiseBehavior
     {
-        private readonly ModelNoiseParameters _mnp;
-        private readonly INoiseSimulationState _state;
+        private readonly INoiseSimulationState _noise;
 
         /// <summary>
         /// Gets the noise parameters.
@@ -48,7 +47,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             NoiseParameters = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
-            _state = context.GetState<INoiseSimulationState>();
+            _noise = context.GetState<INoiseSimulationState>();
             BipolarJunctionTransistorNoise.Bind(context, context.Nodes[0], context.Nodes[1], context.Nodes[2], context.Nodes[3],
                 CollectorPrime, BasePrime, EmitterPrime);
         }
@@ -67,7 +66,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             generators[_icNoise].SetCoefficients(CollectorCurrent);
             generators[_ibNoise].SetCoefficients(BaseCurrent);
             generators[_flickerNoise].SetCoefficients(NoiseParameters.FlickerNoiseCoefficient * Math.Exp(NoiseParameters.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(BaseCurrent), 1e-38))) / _state.Frequency);
+                * Math.Log(Math.Max(Math.Abs(BaseCurrent), 1e-38))) / _noise.Frequency);
 
             // Evaluate all noise sources
             BipolarJunctionTransistorNoise.Evaluate();

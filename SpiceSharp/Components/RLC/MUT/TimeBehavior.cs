@@ -10,39 +10,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// </summary>
     public class TimeBehavior : TemperatureBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Gets the transient behavior of the primary inductor.
-        /// </summary>
-        protected InductorBehaviors.TimeBehavior Load1 { get; private set; }
-
-        /// <summary>
-        /// Gets the transient behavior of secondary inductor.
-        /// </summary>
-        protected InductorBehaviors.TimeBehavior Load2 { get; private set; }
-
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        /// <summary>
-        /// Gets the equivalent conductance.
-        /// </summary>
-        protected double Conductance { get; private set; }
-
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
+        private readonly ElementSet<double> _elements;
+        private double _conductance;
+        private readonly InductorBehaviors.TimeBehavior _load1, _load2;
         private readonly int _br1, _br2;
         private readonly ITimeSimulationState _time;
+        private readonly IBiasingSimulationState _biasing;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -52,17 +25,17 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public TimeBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            Load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
-            _br1 = BiasingState.Map[Load1.Branch];
-            Load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
-            _br2 = BiasingState.Map[Load2.Branch];
+            _biasing = context.GetState<IBiasingSimulationState>();
+            _load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
+            _br1 = _biasing.Map[_load1.Branch];
+            _load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
+            _br2 = _biasing.Map[_load2.Branch];
 
             // Register events for modifying the flux through the inductors
-            Load1.UpdateFlux += UpdateFlux1;
-            Load2.UpdateFlux += UpdateFlux2;
+            _load1.UpdateFlux += UpdateFlux1;
+            _load2.UpdateFlux += UpdateFlux2;
 
-            Elements = new ElementSet<double>(BiasingState.Solver,
+            _elements = new ElementSet<double>(_biasing.Solver,
                 new MatrixLocation(_br1, _br2),
                 new MatrixLocation(_br2, _br1));
         }
@@ -86,7 +59,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         private void UpdateFlux1(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
-            Conductance = args.Flux.GetContributions(Factor).Jacobian;
+            _conductance = args.Flux.GetContributions(Factor).Jacobian;
             args.Flux.Value += Factor * state.Solution[_br2];
         }
 
@@ -106,7 +79,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
                 return;
 
             // Load Y-matrix
-            Elements.Add(-Conductance, -Conductance);
+            _elements.Add(-_conductance, -_conductance);
         }
     }
 }

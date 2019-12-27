@@ -8,15 +8,13 @@ namespace SpiceSharp.Components
     public class ResistorModel : Model,
         IParameterized<ModelBaseParameters>
     {
-        private readonly ModelBaseParameters _mbp = new ModelBaseParameters();
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
         /// <value>
         /// The parameter set.
         /// </value>
-        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => _mbp;
+        public ModelBaseParameters Parameters { get; } = new ModelBaseParameters();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResistorModel"/> class.

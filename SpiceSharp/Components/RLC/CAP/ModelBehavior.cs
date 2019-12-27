@@ -12,15 +12,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <seealso cref="IParameterized{T}" />
     public class ModelBehavior : Behavior, IParameterized<ModelBaseParameters>
     {
-        private readonly ModelBaseParameters _mbp;
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
         /// <value>
         /// The parameter set.
         /// </value>
-        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => _mbp;
+        public ModelBaseParameters Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBehavior"/> class.
@@ -30,7 +28,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public ModelBehavior(string name, ModelBindingContext context)
             : base(name)
         {
-            _mbp = context.GetParameterSet<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<ModelBaseParameters>();
         }
     }
 }

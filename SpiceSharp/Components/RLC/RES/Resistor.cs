@@ -13,13 +13,18 @@ namespace SpiceSharp.Components
         IParameterized<BaseParameters>
     {
         /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
+        /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int ResistorPinCount = 2;
-
-        private readonly BaseParameters _bp = new BaseParameters();
-        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Resistor"/> class.
@@ -40,7 +45,7 @@ namespace SpiceSharp.Components
         public Resistor(string name, string pos, string neg, double res) 
             : this(name)
         {
-            _bp.Resistance.Value = res;
+            Parameters.Resistance.Value = res;
             Connect(pos, neg);
         }
 

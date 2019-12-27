@@ -18,12 +18,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         public double Inductance { get; private set; }
 
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the parameters.
         /// </summary>
         /// <value>
-        /// The base parameters.
+        /// The parameters.
         /// </value>
-        protected BaseParameters BaseParameters { get; private set; }
+        public BaseParameters Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             : base(name)
         {
             context.ThrowIfNull(nameof(context));
-            BaseParameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<BaseParameters>();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            Inductance = BaseParameters.Inductance * BaseParameters.SeriesMultiplier / BaseParameters.ParallelMultiplier;
+            Inductance = Parameters.Inductance * Parameters.SeriesMultiplier / Parameters.ParallelMultiplier;
         }
     }
 }

@@ -11,52 +11,42 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// </summary>
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
+        private readonly IComplexSimulationState _complex;
+        private readonly int _posNode, _negNode;
+        private readonly ElementSet<Complex> _elements;
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Capacitor voltage")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posNode] - ComplexState.Solution[_negNode];
+        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
-        public Complex GetComplexCurrent()
+        public Complex ComplexCurrent
         {
-            ComplexState.ThrowIfNotBound(this);
-            var conductance = ComplexState.Laplace * Capacitance;
-            return (ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode]) * conductance;
+            get
+            {
+                var conductance = _complex.Laplace * Capacitance;
+                return (_complex.Solution[_posNode] - _complex.Solution[_negNode]) * conductance;
+            }
         }
 
         /// <summary>
         /// Gets the power.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Capacitor power")]
-        public Complex GetComplexPower()
+        public Complex ComplexPower
         {
-            ComplexState.ThrowIfNotBound(this);
-            var conductance = ComplexState.Laplace * Capacitance;
-            var voltage = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
-            return voltage * Complex.Conjugate(voltage * conductance);
+            get
+            {
+                var conductance = _complex.Laplace * Capacitance;
+                var voltage = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                return voltage * Complex.Conjugate(voltage * conductance);
+            }
         }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _posNode, _negNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -67,10 +57,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             context.Nodes.CheckNodes(2);
 
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _posNode = ComplexState.Map[context.Nodes[0]];
-            _negNode = ComplexState.Map[context.Nodes[1]];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _complex = context.GetState<IComplexSimulationState>();
+            _posNode = _complex.Map[context.Nodes[0]];
+            _negNode = _complex.Map[context.Nodes[1]];
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
@@ -90,8 +80,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var val = ComplexState.Laplace * Capacitance;
-            ComplexElements.Add(val, -val, -val, val);
+            var val = _complex.Laplace * Capacitance;
+            _elements.Add(val, -val, -val, val);
         }
     }
 }
