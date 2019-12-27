@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <value>
         /// The local configurations.
         /// </value>
-        public IParameterSetDictionary LocalConfigurations { get; }
+        public IParameterized LocalConfigurations { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelSimulation"/> class.
         /// </summary>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="configurations">The parallel configurations.</param>
-        public ParallelSimulation(ISimulation parent, IParameterSetDictionary configurations)
+        public ParallelSimulation(ISimulation parent, IParameterized configurations)
             : base(parent, 
                   parent?.Configurations,
                   new BehaviorContainerCollection(parent?.EntityBehaviors.Comparer),

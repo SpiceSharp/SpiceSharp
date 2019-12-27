@@ -12,47 +12,35 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
+        private readonly int _posNode, _negNode, _brNode;
+        private readonly IComplexSimulationState _complex;
+        private readonly ElementSet<Complex> _elements;
+
         /// <summary>
         /// Get the voltage. 
         /// </summary>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public Complex GetComplexVoltage() => ComplexState.ThrowIfNotBound(this).Solution[_posNode] - ComplexState.Solution[_negNode];
+        public Complex ComplexVoltage => _complex.ThrowIfNotBound(this).Solution[_posNode] - _complex.Solution[_negNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[_brNode] * BaseParameters.Coefficient.Value;
+        public Complex ComplexCurrent => _complex.ThrowIfNotBound(this).Solution[_brNode] * Parameters.Coefficient.Value;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
-        public Complex GetComplexPower()
+        public Complex ComplexPower
         {
-            ComplexState.ThrowIfNotBound(this);
-            var v = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
-            var i = ComplexState.Solution[_brNode] * BaseParameters.Coefficient.Value;
-            return -v * Complex.Conjugate(i);
+            get
+            {
+                var v = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                var i = _complex.Solution[_brNode] * Parameters.Coefficient.Value;
+                return -v * Complex.Conjugate(i);
+            }
         }
-
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _posNode, _negNode, _brNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -61,11 +49,11 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ControlledBindingContext context) : base(name, context)
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _posNode = ComplexState.Map[context.Nodes[0]];
-            _negNode = ComplexState.Map[context.Nodes[1]];
-            _brNode = ComplexState.Map[ControlBranch];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _complex = context.GetState<IComplexSimulationState>();
+            _posNode = _complex.Map[context.Nodes[0]];
+            _negNode = _complex.Map[context.Nodes[1]];
+            _brNode = _complex.Map[ControlBranch];
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_negNode, _brNode));
         }
@@ -82,8 +70,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var value = BaseParameters.Coefficient.Value;
-            ComplexElements.Add(value, -value);
+            var value = Parameters.Coefficient.Value;
+            _elements.Add(value, -value);
         }
     }
 }

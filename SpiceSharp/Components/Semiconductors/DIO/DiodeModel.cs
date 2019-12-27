@@ -7,16 +7,23 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Diode"/>
     /// </summary>
-    public class DiodeModel : Model
+    public class DiodeModel : Model,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
+        private readonly ModelBaseParameters _mbp = new ModelBaseParameters();
+        private readonly ModelNoiseParameters _mnp = new ModelNoiseParameters();
+
+        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => _mbp;
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => _mnp;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DiodeModel"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public DiodeModel(string name) : base(name)
+        public DiodeModel(string name)
+            : base(name)
         {
-            Parameters.Add(new ModelBaseParameters());
-            Parameters.Add(new ModelNoiseParameters());
         }
 
         /// <summary>
@@ -25,10 +32,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ModelBindingContext(simulation, behaviors);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ModelBindingContext(this, simulation);
             behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }

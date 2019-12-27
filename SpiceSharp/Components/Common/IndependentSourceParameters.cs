@@ -14,6 +14,15 @@ namespace SpiceSharp.Components.CommonBehaviors
         public GivenParameter<double> DcValue { get; } = new GivenParameter<double>();
 
         /// <summary>
+        /// Gets or sets the waveform.
+        /// </summary>
+        /// <value>
+        /// The waveform.
+        /// </value>
+        [ParameterName("waveform"), ParameterInfo("The waveform")]
+        public IWaveformDescription Waveform { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IndependentSourceParameters"/> class.
         /// </summary>
         public IndependentSourceParameters()

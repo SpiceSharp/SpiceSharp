@@ -7,10 +7,33 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="JFETModel" />.
     /// </summary>
-    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
-        // Necessary behaviors and parameters
-        private ModelBaseParameters _mbp;
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public ModelBaseParameters Parameters { get; }
+
+        /// <summary>
+        /// Gets the noise parameters.
+        /// </summary>
+        /// <value>
+        /// The noise parameters.
+        /// </value>
+        public ModelNoiseParameters NoiseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
 
         /// <summary>
         /// Gets the implementation-specific factor 2.
@@ -60,7 +83,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<ModelBaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
         
@@ -69,32 +92,32 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            if (_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = _temperature.NominalTemperature;
+            if (Parameters.NominalTemperature.Given)
+                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
 
-            var vtnom = Constants.KOverQ * _mbp.NominalTemperature;
-            var fact1 = _mbp.NominalTemperature / Constants.ReferenceTemperature;
-            var kt1 = Constants.Boltzmann * _mbp.NominalTemperature;
-            var egfet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) /
-                         (_mbp.NominalTemperature + 1108);
+            var vtnom = Constants.KOverQ * Parameters.NominalTemperature;
+            var fact1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
+            var kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
+            var egfet1 = 1.16 - (7.02e-4 * Parameters.NominalTemperature * Parameters.NominalTemperature) /
+                         (Parameters.NominalTemperature + 1108);
             var arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Constants.Boltzmann * 2 * Constants.ReferenceTemperature);
             var pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Constants.Charge * arg1);
-            Pbo = (_mbp.GatePotential - pbfact1) / fact1;
-            var gmaold = (_mbp.GatePotential - Pbo) / Pbo;
-            Cjfact = 1 / (1 + .5 * (4e-4 * (_mbp.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
+            Pbo = (Parameters.GatePotential - pbfact1) / fact1;
+            var gmaold = (Parameters.GatePotential - Pbo) / Pbo;
+            Cjfact = 1 / (1 + .5 * (4e-4 * (Parameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
 
-            if (_mbp.DepletionCapCoefficient > 0.95)
+            if (Parameters.DepletionCapCoefficient > 0.95)
             {
                 SpiceSharpWarning.Warning(this,
-                    Properties.Resources.JFETs_DepletionCapCoefficientTooLarge.FormatString(Name, _mbp.DepletionCapCoefficient.Value));
-                _mbp.DepletionCapCoefficient.Value = .95;
+                    Properties.Resources.JFETs_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient.Value));
+                Parameters.DepletionCapCoefficient.Value = .95;
             }
 
-            Xfc = Math.Log(1 - _mbp.DepletionCapCoefficient);
+            Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);
             F2 = Math.Exp((1 + 0.5) * Xfc);
-            F3 = 1 - _mbp.DepletionCapCoefficient * (1 + 0.5);
+            F3 = 1 - Parameters.DepletionCapCoefficient * (1 + 0.5);
             /* Modification for Sydney University JFET model */
-            BFactor = (1 - _mbp.B) / (_mbp.GatePotential - _mbp.Threshold);
+            BFactor = (1 - Parameters.B) / (Parameters.GatePotential - Parameters.Threshold);
         }
     }
 }

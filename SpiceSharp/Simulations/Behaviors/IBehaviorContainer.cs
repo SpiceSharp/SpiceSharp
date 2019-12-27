@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     /// <seealso cref="ITypeDictionary{T}" />
     public interface IBehaviorContainer : 
-        ITypeDictionary<IBehavior>, IExportPropertySet
+        ITypeDictionary<IBehavior>, IExportPropertySet, IParameterized
     {
         /// <summary>
         /// Gets the name.
@@ -17,14 +17,6 @@ namespace SpiceSharp.Behaviors
         /// The name.
         /// </value>
         string Name { get; }
-
-        /// <summary>
-        /// Gets the parameters.
-        /// </summary>
-        /// <value>
-        /// The parameters.
-        /// </value>
-        IParameterSetDictionary Parameters { get; }
 
         /// <summary>
         /// Adds a behavior if the specified behavior does not yet exist in the container.

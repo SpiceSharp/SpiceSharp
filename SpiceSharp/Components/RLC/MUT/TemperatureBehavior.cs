@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
             context.ThrowIfNull(nameof(context));
 
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             InductanceBehavior1 = context.Inductor1Behaviors.GetValue<IInductanceBehavior>();
             InductanceBehavior2 = context.Inductor2Behaviors.GetValue<IInductanceBehavior>();
         }

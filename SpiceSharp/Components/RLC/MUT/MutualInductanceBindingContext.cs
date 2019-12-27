@@ -43,14 +43,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public IBehaviorContainer Inductor2Behaviors => Simulation.EntityBehaviors[InductorName2];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MutualInductanceBindingContext"/> class.
+        /// Initializes a new instance of the <see cref="MutualInductanceBindingContext" /> class.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="eb">The eb.</param>
+        /// <param name="component">The component that creates the behavior.</param>
+        /// <param name="simulation">The simulation for which the behavior is created.</param>
         /// <param name="inductor1">The name of the primary inductor.</param>
         /// <param name="inductor2">The name of the secondary inductor.</param>
-        public MutualInductanceBindingContext(ISimulation simulation, IBehaviorContainer eb, string inductor1, string inductor2)
-            : base(simulation, eb)
+        public MutualInductanceBindingContext(Component component, ISimulation simulation, string inductor1, string inductor2)
+            : base(component, simulation)
         {
             InductorName1 = inductor1.ThrowIfNull(nameof(inductor1));
             InductorName2 = inductor2.ThrowIfNull(nameof(inductor2));

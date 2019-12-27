@@ -1,17 +1,43 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Components.CurrentSourceBehaviors;
-using SpiceSharp.General;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// An independent current source
+    /// An independent current source.
     /// </summary>
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
-    public class CurrentSource : Component
+    public class CurrentSource : Component,
+        IParameterized<IndependentSourceParameters>,
+        IParameterized<IndependentSourceFrequencyParameters>
     {
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public IndependentSourceParameters Parameters { get; } = new IndependentSourceParameters();
+
+        /// <summary>
+        /// Gets the frequency parameters.
+        /// </summary>
+        /// <value>
+        /// The frequency parameters.
+        /// </value>
+        public IndependentSourceFrequencyParameters FrequencyParameters { get; } = new IndependentSourceFrequencyParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        IndependentSourceFrequencyParameters IParameterized<IndependentSourceFrequencyParameters>.Parameters => FrequencyParameters;
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -22,11 +48,9 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public CurrentSource(string name) 
-            : base(name, CurrentSourcePinCount, new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
+        public CurrentSource(string name)
+            : base(name, CurrentSourcePinCount)
         {
-            Parameters.Add(new CommonBehaviors.IndependentSourceParameters());
-            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
         }
 
         /// <summary>
@@ -39,7 +63,7 @@ namespace SpiceSharp.Components
         public CurrentSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>().DcValue.Value = dc;
+            Parameters.DcValue.Value = dc;
             Connect(pos, neg);
         }
 
@@ -53,7 +77,7 @@ namespace SpiceSharp.Components
         public CurrentSource(string name, string pos, string neg, IWaveformDescription waveform)
             : this(name)
         {
-            Parameters.Add(waveform);
+            Parameters.Waveform = waveform;
             Connect(pos, neg);
         }
 
@@ -63,10 +87,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), null);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

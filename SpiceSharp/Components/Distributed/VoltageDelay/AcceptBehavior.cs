@@ -8,14 +8,11 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// <summary>
     /// Behavior for accepting time-points for a <see cref="VoltageDelay"/>.
     /// </summary>
-    public class AcceptBehavior : Behavior, IAcceptBehavior
+    public class AcceptBehavior : TimeBehavior, IAcceptBehavior
     {
-        // Necessary behaviors parameters
-        private BaseParameters _bp;
-        private TimeBehavior _tran;
         private double _oldSlope;
         private bool _wasBreak;
-        private IIntegrationMethod _method;
+        private readonly IIntegrationMethod _method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
@@ -23,12 +20,9 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         public AcceptBehavior(string name, ComponentBindingContext context)
-            : base(name)
+            : base(name, context)
         {
             context.ThrowIfNull(nameof(context));
-
-            _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            _tran = context.Behaviors.GetValue<TimeBehavior>();
             _method = context.GetState<IIntegrationMethod>();
         }
 
@@ -41,7 +35,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             var breakpoint = _wasBreak;
             if (_method is IBreakpointMethod method)
                 breakpoint |= method.Break;
-            _tran.Signal.Probe(_method.Time, breakpoint);
+            Signal.Probe(_method.Time, breakpoint);
         }
 
         /// <summary>
@@ -57,15 +51,15 @@ namespace SpiceSharp.Components.DelayBehaviors
                     // Calculate the slope of the accepted timepoint
                     var slope = method.Time.Equals(0.0)
                         ? 0.0
-                        : (_tran.Signal.GetValue(0, 0) - _tran.Signal.GetValue(1, 0)) /
-                          (_tran.Signal.GetTime(0) - _tran.Signal.GetTime(1));
+                        : (Signal.GetValue(0, 0) - Signal.GetValue(1, 0)) /
+                          (Signal.GetTime(0) - Signal.GetTime(1));
 
                     // The previous point was a breakpoint, let's see if we need to add another breakpoint
                     if (_wasBreak)
                     {
-                        var tol = _bp.RelativeTolerance * Math.Max(Math.Abs(_oldSlope), Math.Abs(slope)) + _bp.AbsoluteTolerance;
+                        var tol = Parameters.RelativeTolerance * Math.Max(Math.Abs(_oldSlope), Math.Abs(slope)) + Parameters.AbsoluteTolerance;
                         if (Math.Abs(slope - _oldSlope) > tol)
-                            method.Breakpoints.SetBreakpoint(_tran.Signal.GetTime(1) + _tran.Signal.Delay);
+                            method.Breakpoints.SetBreakpoint(Signal.GetTime(1) + Signal.Delay);
                     }
 
                     // Track for the next time
@@ -75,7 +69,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             }
 
             // Move to the next probed value
-            _tran.Signal.AcceptProbedValues();
+            Signal.AcceptProbedValues();
         }
     }
 }

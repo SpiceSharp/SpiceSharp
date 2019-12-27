@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// Interface that describes an entity collection for a <see cref="Subcircuit"/>.
     /// </summary>
-    public interface ISubcircuitDefinition : IParameterSet
+    public interface ISubcircuitDefinition : IParameterized
     {
         /// <summary>
         /// Gets the entities defined in the subcircuit.
@@ -28,9 +28,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Creates the behaviors for the entities in the subcircuit.
         /// </summary>
+        /// <param name="subcircuit">The subcircuit that wants to create the behaviors through the definition.</param>
         /// <param name="parentSimulation">The parent simulation.</param>
-        /// <param name="behaviors">The <see cref="IBehaviorContainer"/> used for this subcircuit.</param>
-        /// <param name="nodes">The nodes on the outside of the subcircuit.</param>
-        void CreateBehaviors(ISimulation parentSimulation, IBehaviorContainer behaviors, string[] nodes);
+        /// <param name="behaviors">The <see cref="IBehaviorContainer" /> used for the subcircuit.</param>
+        void CreateBehaviors(Subcircuit subcircuit, ISimulation parentSimulation, IBehaviorContainer behaviors);
     }
 }

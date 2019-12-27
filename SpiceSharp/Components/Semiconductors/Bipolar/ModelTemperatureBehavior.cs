@@ -8,12 +8,28 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="BipolarJunctionTransistorModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
+        private readonly ModelBaseParameters _mbp;
+        private readonly ModelNoiseParameters _mnp;
+
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the parameter set.
         /// </summary>
-        private ModelBaseParameters _mbp;
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => _mbp;
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => _mnp;
 
         /// <summary>
         /// Gets the inverse Early voltage (forward).
@@ -111,7 +127,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
+            _mbp = context.GetParameterSet<ModelBaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 

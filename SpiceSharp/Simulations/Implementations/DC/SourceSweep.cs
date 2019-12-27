@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
         public IEnumerator<double> CreatePoints(IBiasingSimulation simulation)
         {
             var behavior = simulation.EntityBehaviors[Name];
-            if (!behavior.Parameters.TryGetProperty<Parameter<double>>("dc", out var parameter))
+            if (!behavior.TryGetProperty<Parameter<double>>("dc", out var parameter))
                 throw new SpiceSharpException(Properties.Resources.Simulations_DC_CannotFindSource.FormatString(Name));
             foreach (var pt in Points)
             {

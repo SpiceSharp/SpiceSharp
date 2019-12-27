@@ -19,14 +19,13 @@ namespace SpiceSharpTest
             );
 
             // Change the value of the resistor
-            var resParameters = ckt["R1"].Parameters;
-            resParameters.GetValue<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
+            ckt["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = 2.0e3;
             // </example_structure_resistor>
 
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
             ckt["R1"].SetParameter("resistance", 2.0e3);
-            ckt["R1"].Parameters.SetParameter("resistance", 2.0e3);
+            ckt["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().SetParameter("resistance", 2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -54,8 +53,7 @@ namespace SpiceSharpTest
         {
             // Create the mosfet
             var model = new Mosfet1Model("M1");
-            var parameters =
-                model.Parameters.GetValue<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
+            var parameters = model.GetParameterSet<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
 
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model
@@ -250,7 +248,7 @@ namespace SpiceSharpTest
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation) sender;
-                sim.EntityBehaviors["R1"].Parameters.SetParameter("resistance", value);
+                sim.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance.Value = value;
             };
             op.AfterExecute += (sender, args) =>
             {
@@ -275,6 +273,7 @@ namespace SpiceSharpTest
         [Test]
         public void When_Documentation_Expect_NoException()
         {
+            /*
             // <example_EntityDocumentation>
             var entity = new ResistorModel("RM1");
             foreach (var parameter in Documentation.Parameters(entity))
@@ -314,6 +313,7 @@ namespace SpiceSharpTest
             };
             op.Run(ckt);
             // </example_BehaviorDocumentation>
+            */
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SpiceSharp
     /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
     /// </remarks>
     public abstract class ParameterSet : 
-        IChainableImportParameterSet<ParameterSet>, IParameterSet, ICloneable
+        IChainableParameterSet<ParameterSet>, IParameterSet, ICloneable
     {
         /// <summary>
         /// Method for calculating the default values of derived parameters.

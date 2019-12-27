@@ -163,7 +163,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             context.Nodes.CheckNodes(4);
 
             // Get configurations
-            BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
 
             // Get states
             Iteration = context.GetState<IIterationSimulationState>();

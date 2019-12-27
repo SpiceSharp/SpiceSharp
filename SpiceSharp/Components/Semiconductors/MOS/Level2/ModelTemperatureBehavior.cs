@@ -7,17 +7,38 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// <summary>
     /// Temperature behavior for a <see cref="Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
+        /// <summary>
+        /// Gets the model parameters.
+        /// </summary>
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        public ModelBaseParameters Parameters { get; }
+
+        /// <summary>
+        /// Gets the noise parameters.
+        /// </summary>
+        /// <value>
+        /// The noise parameters.
+        /// </value>
+        public ModelNoiseParameters NoiseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
+
         /// <summary>
         /// The permittivity of silicon
         /// </summary>
         protected const double EpsilonSilicon = 11.7 * 8.854214871e-12;
-
-        /// <summary>
-        /// Necessary behaviors and parameters
-        /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
 
         /// <summary>
         /// Gets the implementation-specific factor 1.
@@ -61,8 +82,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
+            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>();
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<ModelBaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
@@ -72,58 +94,58 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         void ITemperatureBehavior.Temperature()
         {
             // Perform model defaulting
-            if (!ModelParameters.NominalTemperature.Given)
-                ModelParameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
-            Factor1 = ModelParameters.NominalTemperature / Constants.ReferenceTemperature;
-            VtNominal = ModelParameters.NominalTemperature * Constants.KOverQ;
-            var kt1 = Constants.Boltzmann * ModelParameters.NominalTemperature;
-            EgFet1 = 1.16 - 7.02e-4 * ModelParameters.NominalTemperature * ModelParameters.NominalTemperature / (ModelParameters.NominalTemperature + 1108);
+            if (!Parameters.NominalTemperature.Given)
+                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
+            Factor1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
+            VtNominal = Parameters.NominalTemperature * Constants.KOverQ;
+            var kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
+            EgFet1 = 1.16 - 7.02e-4 * Parameters.NominalTemperature * Parameters.NominalTemperature / (Parameters.NominalTemperature + 1108);
             var arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
             PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Factor1) + Constants.Charge * arg1);
 
-            if (ModelParameters.SubstrateDoping.Given)
+            if (Parameters.SubstrateDoping.Given)
             {
-                if (ModelParameters.SubstrateDoping * 1e6 > 1.45e16)
+                if (Parameters.SubstrateDoping * 1e6 > 1.45e16)
                 {
-                    if (!ModelParameters.Phi.Given)
+                    if (!Parameters.Phi.Given)
                     {
-                        ModelParameters.Phi.RawValue = 2 * VtNominal * Math.Log(ModelParameters.SubstrateDoping * 1e6 / 1.45e16);
-                        ModelParameters.Phi.RawValue = Math.Max(.1, ModelParameters.Phi);
+                        Parameters.Phi.RawValue = 2 * VtNominal * Math.Log(Parameters.SubstrateDoping * 1e6 / 1.45e16);
+                        Parameters.Phi.RawValue = Math.Max(.1, Parameters.Phi);
                     }
-                    var fermis = ModelParameters.MosfetType * .5 * ModelParameters.Phi;
+                    var fermis = Parameters.MosfetType * .5 * Parameters.Phi;
                     var wkfng = 3.2;
-                    if (!ModelParameters.GateType.Given)
-                        ModelParameters.GateType.RawValue = 1;
-                    if (!ModelParameters.GateType.RawValue.Equals(0))
+                    if (!Parameters.GateType.Given)
+                        Parameters.GateType.RawValue = 1;
+                    if (!Parameters.GateType.RawValue.Equals(0))
                     {
-                        var fermig = ModelParameters.MosfetType * ModelParameters.GateType * .5 * EgFet1;
+                        var fermig = Parameters.MosfetType * Parameters.GateType * .5 * EgFet1;
                         wkfng = 3.25 + .5 * EgFet1 - fermig;
                     }
                     var wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
-                    if (!ModelParameters.Gamma.Given)
+                    if (!Parameters.Gamma.Given)
                     {
-                        ModelParameters.Gamma.RawValue = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * ModelParameters.SubstrateDoping * 1e6) / ModelParameters.OxideCapFactor;
+                        Parameters.Gamma.RawValue = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6) / Parameters.OxideCapFactor;
                     }
-                    if (!ModelParameters.Vt0.Given)
+                    if (!Parameters.Vt0.Given)
                     {
-                        if (!ModelParameters.SurfaceStateDensity.Given)
-                            ModelParameters.SurfaceStateDensity.RawValue = 0;
-                        var vfb = wkfngs - ModelParameters.SurfaceStateDensity * 1e4 * Constants.Charge / ModelParameters.OxideCapFactor;
-                        ModelParameters.Vt0.RawValue = vfb + ModelParameters.MosfetType * (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi) + ModelParameters.Phi);
+                        if (!Parameters.SurfaceStateDensity.Given)
+                            Parameters.SurfaceStateDensity.RawValue = 0;
+                        var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 * Constants.Charge / Parameters.OxideCapFactor;
+                        Parameters.Vt0.RawValue = vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi);
                     }
 
-                    Xd = Math.Sqrt((EpsilonSilicon + EpsilonSilicon) / (Constants.Charge * ModelParameters.SubstrateDoping * 1e6));
+                    Xd = Math.Sqrt((EpsilonSilicon + EpsilonSilicon) / (Constants.Charge * Parameters.SubstrateDoping * 1e6));
                 }
                 else
                 {
-                    ModelParameters.SubstrateDoping.RawValue = 0;
+                    Parameters.SubstrateDoping.RawValue = 0;
                     throw new BadParameterException("Nsub", Properties.Resources.Mosfets_NsubTooSmall);
                 }
             }
-            if (!ModelParameters.BulkCapFactor.Given)
+            if (!Parameters.BulkCapFactor.Given)
             {
-                ModelParameters.BulkCapFactor.RawValue = Math.Sqrt(EpsilonSilicon * Constants.Charge * ModelParameters.SubstrateDoping * 1e6 /* cm**3/m**3 */  / (2 *
-                    ModelParameters.BulkJunctionPotential));
+                Parameters.BulkCapFactor.RawValue = Math.Sqrt(EpsilonSilicon * Constants.Charge * Parameters.SubstrateDoping * 1e6 /* cm**3/m**3 */  / (2 *
+                    Parameters.BulkJunctionPotential));
             }
         }
     }

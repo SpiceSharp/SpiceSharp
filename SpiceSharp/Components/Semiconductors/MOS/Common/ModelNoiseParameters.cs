@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.MosfetBehaviors.Common
+namespace SpiceSharp.Components.MosfetBehaviors
 {
     /// <summary>
     /// Noise parameters for a <see cref="Model"/>

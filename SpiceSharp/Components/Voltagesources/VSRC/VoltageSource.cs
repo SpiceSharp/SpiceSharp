@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Components.VoltageSourceBehaviors;
-using SpiceSharp.General;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
@@ -10,8 +10,13 @@ namespace SpiceSharp.Components
     /// An independent voltage source
     /// </summary>
     [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
-    public class VoltageSource : Component
+    public class VoltageSource : Component,
+        IParameterized<IndependentSourceParameters>,
+        IParameterized<IndependentSourceFrequencyParameters>
     {
+        private readonly IndependentSourceParameters _isp = new IndependentSourceParameters();
+        private readonly IndependentSourceFrequencyParameters _isfp = new IndependentSourceFrequencyParameters();
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -19,14 +24,28 @@ namespace SpiceSharp.Components
 		public const int VoltageSourcePinCount = 2;
 
         /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        IndependentSourceParameters IParameterized<IndependentSourceParameters>.Parameters => _isp;
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        IndependentSourceFrequencyParameters IParameterized<IndependentSourceFrequencyParameters>.Parameters => _isfp;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name</param>
         public VoltageSource(string name) 
-            : base(name, VoltageSourcePinCount, new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
+            : base(name, VoltageSourcePinCount)
         {
-            Parameters.Add(new CommonBehaviors.IndependentSourceParameters());
-            Parameters.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
         }
 
         /// <summary>
@@ -39,7 +58,7 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>().DcValue.Value = dc;
+            _isp.DcValue.Value = dc;
             Connect(pos, neg);
         }
 
@@ -53,7 +72,7 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, IWaveformDescription waveform) 
             : this(name)
         {
-            Parameters.Add(waveform);
+            _isp.Waveform = waveform;
             Connect(pos, neg);
         }
 
@@ -63,11 +82,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

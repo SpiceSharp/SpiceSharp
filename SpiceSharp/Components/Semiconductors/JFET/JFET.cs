@@ -10,8 +10,19 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Component" />
     [Pin(0, "drain"), Pin(1, "gate"), Pin(2, "source")]
-    public class JFET : Component
+    public class JFET : Component,
+        IParameterized<BaseParameters>
     {
+        private readonly BaseParameters _bp = new BaseParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+
         /// <summary>
         /// The number of pins on a JFET.
         /// </summary>
@@ -24,7 +35,6 @@ namespace SpiceSharp.Components
         public JFET(string name)
             : base(name, JFETPinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -38,7 +48,6 @@ namespace SpiceSharp.Components
         public JFET(string name, string drain, string gate, string source, string model)
             : base(name, JFETPinCount)
         {
-            Parameters.Add(new BaseParameters());
             Model = model;
             Connect(drain, gate, source);
         }
@@ -49,10 +58,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))

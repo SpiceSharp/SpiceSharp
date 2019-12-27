@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.MosfetBehaviors;
 using SpiceSharp.Components.MosfetBehaviors.Level1;
 using SpiceSharp.Simulations;
 
@@ -7,16 +8,40 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Mosfet1"/>
     /// </summary>
-    public class Mosfet1Model : Model
+    public class Mosfet1Model : Model,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public ModelBaseParameters Parameters { get; } = new ModelBaseParameters();
+
+        /// <summary>
+        /// Gets the noise parameters.
+        /// </summary>
+        /// <value>
+        /// The noise parameters.
+        /// </value>
+        public ModelNoiseParameters NoiseParameters { get; } = new ModelNoiseParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet1Model"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
         public Mosfet1Model(string name) : base(name)
         {
-            Parameters.Add(new ModelBaseParameters());
-            Parameters.Add(new MosfetBehaviors.Common.ModelNoiseParameters());
         }
 
         /// <summary>
@@ -25,10 +50,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ModelBindingContext(simulation, behaviors);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ModelBindingContext(this, simulation);
             behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }

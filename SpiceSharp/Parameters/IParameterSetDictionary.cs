@@ -7,7 +7,7 @@
     /// <seealso cref="ITypeDictionary{T}" />
     public interface IParameterSetDictionary :
         ITypeDictionary<IParameterSet>,
-        IChainableImportParameterSet<IParameterSetDictionary>,
+        IChainableParameterSet<IParameterSetDictionary>,
         IParameterSet
     {
     }

@@ -12,11 +12,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
+        private IIntegrationMethod _method;
+        private IIterationSimulationState _iteration;
+        private readonly ITimeSimulationState _time;
+        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+
         /// <summary>
         /// Signs used in the model
         /// </summary>
-        private static readonly double[] Sig1 = { 1.0, -1.0, 1.0, -1.0 };
-        private static readonly double[] Sig2 = { 1.0, 1.0, -1.0, -1.0 };
+        private static readonly double[] _sig1 = { 1.0, -1.0, 1.0, -1.0 };
+        private static readonly double[] _sig2 = { 1.0, 1.0, -1.0, -1.0 };
 
         /// <summary>
         /// The permittivity of silicon.
@@ -140,11 +145,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </value>
         protected ElementSet<double> Elements { get; private set; }
 
-        private IIntegrationMethod _method;
-        private IIterationSimulationState _iteration;
-        private readonly ITimeSimulationState _time;
-        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -154,7 +154,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             context.Nodes.CheckNodes(4);
 
-            BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
             _iteration = context.GetState<IIterationSimulationState>();
@@ -720,8 +720,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 var b3 = Math.Sqrt(y3 * y3 / 4.0 - d1);
                 for (var i = 1; i <= 4; i++)
                 {
-                    a4[i - 1] = a1 / 2.0 + Sig1[i - 1] * a3;
-                    b4[i - 1] = y3 / 2.0 + Sig2[i - 1] * b3;
+                    a4[i - 1] = a1 / 2.0 + _sig1[i - 1] * a3;
+                    b4[i - 1] = y3 / 2.0 + _sig2[i - 1] * b3;
                     var delta4 = a4[i - 1] * a4[i - 1] / 4.0 - b4[i - 1];
                     if (delta4 < 0)
                         continue;

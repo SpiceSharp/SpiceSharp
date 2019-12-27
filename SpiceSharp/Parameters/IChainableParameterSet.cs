@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="T">The class type that will be chained.</typeparam>
     /// <seealso cref="IParameterSet" />
-    public interface IChainableImportParameterSet<T> : IImportParameterSet
+    public interface IChainableParameterSet<T> : IImportParameterSet
     {
         /// <summary>
         /// Call a parameter method with the specified name.

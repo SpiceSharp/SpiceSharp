@@ -8,8 +8,16 @@ namespace SpiceSharp.Components
     /// Model for a <see cref="JFET" />.
     /// </summary>
     /// <seealso cref="Model" />
-    public class JFETModel : Model
+    public class JFETModel : Model,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
+        private readonly ModelBaseParameters _mbp = new ModelBaseParameters();
+        private readonly ModelNoiseParameters _mnp = new ModelNoiseParameters();
+
+        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => _mbp;
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => _mnp;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="JFETModel"/> class.
         /// </summary>
@@ -17,8 +25,6 @@ namespace SpiceSharp.Components
         public JFETModel(string name)
             : base(name)
         {
-            Parameters.Add(new ModelBaseParameters());
-            Parameters.Add(new ModelNoiseParameters());
         }
 
         /// <summary>
@@ -27,10 +33,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ModelBindingContext(simulation, behaviors);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ModelBindingContext(this, simulation);
             behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }

@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(SubcircuitSimulation simulation)
         {
-            if (simulation.LocalConfiguration.TryGetValue(out FrequencyParameters result))
+            if (simulation.TryGetParameterSet(out FrequencyParameters result))
             {
                 if (result.LocalSolver && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
                 {

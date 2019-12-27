@@ -7,22 +7,31 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<BaseParameters>
     {
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        protected BaseParameters BaseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
+        protected ModelBaseParameters ModelParameters { get; }
 
         /// <summary>
         /// Gets the model temperature behavior.
         /// </summary>
-        protected ModelTemperatureBehavior ModelTemperature { get; private set; }
+        protected ModelTemperatureBehavior ModelTemperature { get; }
 
         /// <summary>
         /// Gets the temperature-modified saturation current.
@@ -114,9 +123,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 

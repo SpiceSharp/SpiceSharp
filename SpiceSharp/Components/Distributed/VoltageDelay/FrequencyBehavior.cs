@@ -10,22 +10,8 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the elements.
-        /// </summary>
-        /// <value>
-        /// The elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
+        private readonly ElementSet<Complex> _elements;
+        private readonly IComplexSimulationState _complex;
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
         /// <summary>
@@ -42,8 +28,8 @@ namespace SpiceSharp.Components.DelayBehaviors
             _contPosNode = state.Map[context.Nodes[2]];
             _contNegNode = state.Map[context.Nodes[3]];
             _branchEq = state.Map[Branch];
-            ComplexState = context.GetState<IComplexSimulationState>();
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
+            _complex = context.GetState<IComplexSimulationState>();
+            _elements = new ElementSet<Complex>(_complex.Solver, new[] {
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),
                 new MatrixLocation(_branchEq, _posNode),
@@ -65,11 +51,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var laplace = ComplexState.Laplace;
-            var factor = Complex.Exp(-laplace * BaseParameters.Delay);
+            var laplace = _complex.Laplace;
+            var factor = Complex.Exp(-laplace * Parameters.Delay);
 
             // Load the Y-matrix and RHS-vector
-            ComplexElements.Add(1, -1, 1, -1, -factor, factor);
+            _elements.Add(1, -1, 1, -1, -factor, factor);
         }
     }
 }

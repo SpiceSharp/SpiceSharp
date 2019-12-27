@@ -9,8 +9,19 @@ namespace SpiceSharp.Components
     /// A capacitor
     /// </summary>
     [Pin(0, "C+"), Pin(1, "C-"), Connected]
-    public class Capacitor : Component
+    public class Capacitor : Component,
+        IParameterized<BaseParameters>
     {
+        private readonly BaseParameters _bp = new BaseParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -23,7 +34,6 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(string name) : base(name, CapacitorPinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -36,7 +46,7 @@ namespace SpiceSharp.Components
         public Capacitor(string name, string pos, string neg, double cap) 
             : base(name, CapacitorPinCount)
         {
-            Parameters.Add(new BaseParameters(cap));
+            _bp.Capacitance.Value = cap;
             Connect(pos, neg);
         }
 
@@ -46,10 +56,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

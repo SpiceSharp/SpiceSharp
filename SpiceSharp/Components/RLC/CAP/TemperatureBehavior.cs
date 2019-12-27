@@ -7,17 +7,27 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Capacitor" />.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<BaseParameters>
     {
-        /// <summary>
-        /// Gets the model parameters.
-        /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
+        private readonly ModelBaseParameters _mbp = null;
+        private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
-        /// Gets the base parameters.
+        /// Gets the parameters.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The parameters.
+        /// </value>
+        public BaseParameters BaseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the capacitance.
@@ -30,8 +40,6 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
-        private readonly ITemperatureSimulationState _temperature;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
@@ -42,9 +50,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             context.ThrowIfNull(nameof(context));
 
             // Get parameters
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             if (context.ModelBehaviors != null)
-                ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+                _mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
 
             // Connections
             _temperature = context.GetState<ITemperatureSimulationState>();
@@ -62,28 +70,28 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             double capacitance;
             if (!BaseParameters.Capacitance.Given)
             {
-                if (ModelParameters == null)
+                if (_mbp == null)
                     throw new ModelNotFoundException(Name);
 
                 var width = BaseParameters.Width.Given
                     ? BaseParameters.Width.Value
-                    : ModelParameters.DefaultWidth.Value;
-                capacitance = ModelParameters.JunctionCap *
-                              (width - ModelParameters.Narrow) *
-                              (BaseParameters.Length - ModelParameters.Narrow) +
-                              ModelParameters.JunctionCapSidewall * 2 * (
-                                  BaseParameters.Length - ModelParameters.Narrow +
-                                  (width - ModelParameters.Narrow));
+                    : _mbp.DefaultWidth.Value;
+                capacitance = _mbp.JunctionCap *
+                              (width - _mbp.Narrow) *
+                              (BaseParameters.Length - _mbp.Narrow) +
+                              _mbp.JunctionCapSidewall * 2 * (
+                                  BaseParameters.Length - _mbp.Narrow +
+                                  (width - _mbp.Narrow));
             }
             else
                 capacitance = BaseParameters.Capacitance;
 
             double factor = 1.0;
 
-            if (ModelParameters != null)
+            if (_mbp != null)
             {
-                double temperatureDiff = BaseParameters.Temperature - ModelParameters.NominalTemperature;
-                factor = 1.0 + ModelParameters.TemperatureCoefficient1 * temperatureDiff + ModelParameters.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
+                double temperatureDiff = BaseParameters.Temperature - _mbp.NominalTemperature;
+                factor = 1.0 + _mbp.TemperatureCoefficient1 * temperatureDiff + _mbp.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
             }
 
             Capacitance = factor * capacitance * BaseParameters.ParallelMultiplier;

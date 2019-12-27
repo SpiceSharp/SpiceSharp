@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Algebra;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -9,6 +10,24 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
+        private readonly int _posNode, _negNode;
+
+        /// <summary>
+        /// Gets the elements.
+        /// </summary>
+        /// <value>
+        /// The elements.
+        /// </value>
+        protected ElementSet<double> Elements { get; private set; }
+
+        /// <summary>
+        /// Gets the state of the biasing.
+        /// </summary>
+        /// <value>
+        /// The state of the biasing.
+        /// </value>
+        protected IBiasingSimulationState BiasingState { get; }
+
         /// <summary>
         /// Gets the voltage across the resistor.
         /// </summary>
@@ -33,16 +52,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        private int _posNode, _negNode;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -50,7 +59,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
-
+            BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
             Elements = new ElementSet<double>(BiasingState.Solver,

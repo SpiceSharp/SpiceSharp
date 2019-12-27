@@ -8,34 +8,38 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<BaseParameters>
     {
+        private readonly ITemperatureSimulationState _temperature;
+        private readonly ModelBaseParameters _mbp = null;
+
         /// <summary>
         /// The minimum resistance for any resistor.
         /// </summary>
         protected const double MinimumResistance = 1e-12;
 
         /// <summary>
-        /// Gets the model parameters.
-        /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
-
-        /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        public BaseParameters BaseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the default conductance for this model
         /// </summary>
         [ParameterName("g"), ParameterInfo("The conductance of the resistor.")]
         public double Conductance { get; private set; }
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-        private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -46,10 +50,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             if (context.ModelBehaviors != null)
-                ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
+                _mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
         }
 
         /// <summary>
@@ -64,14 +67,14 @@ namespace SpiceSharp.Components.ResistorBehaviors
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = _temperature.Temperature;
             if (!BaseParameters.Width.Given)
-                BaseParameters.Width.RawValue = ModelParameters?.DefaultWidth ?? 0.0;
+                BaseParameters.Width.RawValue = _mbp?.DefaultWidth ?? 0.0;
 
-            if (ModelParameters != null)
+            if (_mbp != null)
             {
                 if (!BaseParameters.Resistance.Given)
                 {
-                    if (ModelParameters.SheetResistance.Given && ModelParameters.SheetResistance > 0 && BaseParameters.Length > 0)
-                        resistance = ModelParameters.SheetResistance * (BaseParameters.Length - ModelParameters.Narrow) / (BaseParameters.Width - ModelParameters.Narrow);
+                    if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && BaseParameters.Length > 0)
+                        resistance = _mbp.SheetResistance * (BaseParameters.Length - _mbp.Narrow) / (BaseParameters.Width - _mbp.Narrow);
                     else
                     {
                         SpiceSharpWarning.Warning(this, Properties.Resources.Resistors_ZeroResistance.FormatString(Name));
@@ -79,12 +82,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
                     }
                 }
 
-                var difference = BaseParameters.Temperature - ModelParameters.NominalTemperature;
+                var difference = BaseParameters.Temperature - _mbp.NominalTemperature;
 
-                if (ModelParameters.ExponentialCoefficient.Given)
-                    factor = Math.Pow(1.01, ModelParameters.ExponentialCoefficient * difference);
+                if (_mbp.ExponentialCoefficient.Given)
+                    factor = Math.Pow(1.01, _mbp.ExponentialCoefficient * difference);
                 else
-                    factor = 1.0 + ModelParameters.TemperatureCoefficient1 * difference + ModelParameters.TemperatureCoefficient2 * difference * difference;
+                    factor = 1.0 + _mbp.TemperatureCoefficient1 * difference + _mbp.TemperatureCoefficient2 * difference * difference;
             }
             else
             {

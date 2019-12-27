@@ -10,8 +10,17 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Component" />
     [Pin(0, "Pos1"), Pin(1, "Neg1"), Pin(2, "Pos2"), Pin(3, "Neg2"), Connected(0, 2), Connected(1, 3), VoltageDriver(0, 2), VoltageDriver(1, 3)]
-    public class LosslessTransmissionLine : Component
+    public class LosslessTransmissionLine : Component,
+        IParameterized<BaseParameters>
     {
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
         /// <summary>
         /// The number of pins for a lossless transmission line
         /// </summary>
@@ -24,7 +33,6 @@ namespace SpiceSharp.Components
         public LosslessTransmissionLine(string name)
             : base(name, LosslessTransmissionLinePinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -55,9 +63,8 @@ namespace SpiceSharp.Components
             : this(name)
         {
             Connect(pos1, neg1, pos2, neg2);
-            var bp = Parameters.GetValue<BaseParameters>();
-            bp.Impedance = impedance;
-            bp.Delay.Value = delay;
+            Parameters.Impedance = impedance;
+            Parameters.Delay.Value = delay;
         }
 
         /// <summary>
@@ -66,15 +73,14 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
+                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context));
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

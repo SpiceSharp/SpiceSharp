@@ -9,8 +9,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// <seealso cref="ITemperatureBehavior" />
     public class TemperatureBehavior : Behavior, ITemperatureBehavior
     {
-        private readonly Workload _temperature;
-        private readonly BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
+        private readonly Workload _workload;
+        private readonly BehaviorList<ITemperatureBehavior> _behaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -20,17 +20,17 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public TemperatureBehavior(string name, ParallelSimulation simulation)
             : base(name)
         {
-            if (simulation.LocalConfigurations.TryGetValue(out TemperatureParameters result))
+            var parameters = simulation.LocalConfigurations.GetParameterSet<BaseParameters>();
+            if (parameters.TemperatureDistributor != null)
             {
-                if (result.TemperatureDistributor != null)
-                    _temperature = new Workload(result.TemperatureDistributor, simulation.EntityBehaviors.Count);
+                _workload = new Workload(parameters.TemperatureDistributor, simulation.EntityBehaviors.Count);
                 foreach (var container in simulation.EntityBehaviors)
                 {
                     if (container.TryGetValue(out ITemperatureBehavior temperature))
-                        _temperature.Actions.Add(temperature.Temperature);
+                        _workload.Actions.Add(temperature.Temperature);
                 }
             }
-            _temperatureBehaviors = simulation.EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
+            _behaviors = simulation.EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
         }
 
         /// <summary>
@@ -38,11 +38,11 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         public void Temperature()
         {
-            if (_temperature != null)
-                _temperature.Execute();
+            if (_workload != null)
+                _workload.Execute();
             else
             {
-                foreach (var behavior in _temperatureBehaviors)
+                foreach (var behavior in _behaviors)
                     behavior.Temperature();
             }
         }

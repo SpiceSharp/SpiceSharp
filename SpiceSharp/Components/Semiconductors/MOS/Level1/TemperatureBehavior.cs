@@ -137,9 +137,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 

@@ -9,37 +9,37 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="CurrentControlledCurrentSource" />.
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior,
+        IParameterized<BaseParameters>
     {
-        /// <summary>
-        /// Necessary parameters and behaviors
-        /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        private readonly int _posNode, _negNode, _brNode;
+        private readonly IBiasingSimulationState _biasing;
+        private readonly ElementSet<double> _elements;
 
         /// <summary>
-        /// Nodes
-        /// </summary>
-        public Variable ControlBranch { get; private set; }
-
-        /// <summary>
-        /// Gets the matrix elements.
+        /// Gets the parameter set.
         /// </summary>
         /// <value>
-        /// The matrix elements.
+        /// The parameter set.
         /// </value>
-        protected ElementSet<double> Elements { get; private set; }
+        public BaseParameters Parameters { get; }
+
+        /// <summary>
+        /// The branch variable controlling this source.
+        /// </summary>
+        protected Variable ControlBranch { get; }
 
         /// <summary>
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[_brNode] * BaseParameters.Coefficient;
+        public double GetCurrent() => _biasing.Solution[_brNode] * Parameters.Coefficient;
 
         /// <summary>
         /// Gets the volage over the source.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
+        public double GetVoltage() => _biasing.ThrowIfNotBound(this).Solution[_posNode] - _biasing.Solution[_negNode];
 
         /// <summary>
         /// The power dissipation by the source.
@@ -47,19 +47,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
         public double GetPower()
         {
-            BiasingState.ThrowIfNotBound(this);
-            return (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]) * BiasingState.Solution[_brNode] * BaseParameters.Coefficient;
+            return (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * _biasing.Solution[_brNode] * Parameters.Coefficient;
         }
-
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
-        private int _posNode, _negNode, _brNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -70,15 +59,14 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);
-
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
+            Parameters = context.GetParameterSet<BaseParameters>();
+            _biasing = context.GetState<IBiasingSimulationState>();
+            _posNode = _biasing.Map[context.Nodes[0]];
+            _negNode = _biasing.Map[context.Nodes[1]];
             var load = context.ControlBehaviors.GetValue<IBranchedBehavior>();
             ControlBranch = load.Branch;
-            _brNode = BiasingState.Map[ControlBranch];
-            Elements = new ElementSet<double>(BiasingState.Solver,
+            _brNode = _biasing.Map[ControlBranch];
+            _elements = new ElementSet<double>(_biasing.Solver,
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_negNode, _brNode));
         }
@@ -88,16 +76,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var value = BaseParameters.Coefficient.Value;
-            Elements.Add(value, -value);
+            var value = Parameters.Coefficient.Value;
+            _elements.Add(value, -value);
         }
-
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsConvergent() => true;
     }
 }

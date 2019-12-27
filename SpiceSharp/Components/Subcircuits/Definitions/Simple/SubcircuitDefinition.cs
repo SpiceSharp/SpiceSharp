@@ -7,6 +7,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using SpiceSharp.Validation.Rules;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -16,9 +17,18 @@ namespace SpiceSharp.Components
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="ISubcircuitDefinition" />
     /// <seealso cref="ISubcircuitRuleSubject" />
-    public class SubcircuitDefinition : ParameterSet, ISubcircuitDefinition, ISubcircuitRuleSubject
+    public class SubcircuitDefinition : Parameterized, ISubcircuitDefinition, ISubcircuitRuleSubject,
+        IParameterized<BaseParameters>
     {
         private string[] _pins;
+
+        /// <summary>
+        /// Gets the parameters.
+        /// </summary>
+        /// <value>
+        /// The parameters.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
         /// Gets the entities defined in the subcircuit.
@@ -59,13 +69,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Creates the behaviors for the entities in the subcircuit.
         /// </summary>
+        /// <param name="subcircuit">The subcircuit that wants to create the behaviors through the definition.</param>
         /// <param name="parentSimulation">The parent simulation.</param>
-        /// <param name="behaviors">The <see cref="IBehaviorContainer" /> used for this subcircuit.</param>
-        /// <param name="nodes">The nodes on the outside of the subcircuit.</param>
-        public virtual void CreateBehaviors(ISimulation parentSimulation, IBehaviorContainer behaviors, string[] nodes)
+        /// <param name="behaviors">The <see cref="IBehaviorContainer" /> used for the subcircuit.</param>
+        /// <exception cref="NodeMismatchException">Thrown if the number of nodes do not match.</exception>
+        public virtual void CreateBehaviors(Subcircuit subcircuit, ISimulation parentSimulation, IBehaviorContainer behaviors)
         {
             if (Entities.Count == 0)
                 return;
+            var nodes = subcircuit.MapNodes(parentSimulation.Variables).ToArray();
             if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
                 throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
 
@@ -73,8 +85,8 @@ namespace SpiceSharp.Components
             string name = behaviors.Name;
             Variable[] sharedNodes = new Variable[_pins.Length];
             for (var i = 0; i < sharedNodes.Length; i++)
-                sharedNodes[i] = parentSimulation.Variables.MapNode(nodes[i], VariableType.Voltage);
-            var simulation = new SubcircuitSimulation(name, parentSimulation, behaviors.Parameters, sharedNodes);
+                sharedNodes[i] = parentSimulation.Variables.MapNode(subcircuit.GetNode(i), VariableType.Voltage);
+            var simulation = new SubcircuitSimulation(name, parentSimulation, this, sharedNodes);
 
             // We can now prepare the subcircuit simulation
             for (var i = 0; i < sharedNodes.Length; i++)
@@ -95,35 +107,6 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
                 .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
                 .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
-        }
-
-        /// <summary>
-        /// Creates a clone of the parameter set.
-        /// </summary>
-        /// <returns>
-        /// A clone of the parameter set.
-        /// </returns>
-        protected override ICloneable Clone()
-        {
-            var clone = new SubcircuitDefinition((IEntityCollection)Entities.Clone(), _pins);
-            return clone;
-        }
-
-        /// <summary>
-        /// Copy properties and fields from another parameter set.
-        /// </summary>
-        /// <param name="source">The source parameter set.</param>
-        protected override void CopyFrom(ICloneable source)
-        {
-            base.CopyFrom(source);
-            var sd = (SubcircuitDefinition)source;
-            _pins = new string[sd._pins.Length];
-            for (var i = 0; i < _pins.Length; i++)
-                _pins[i] = sd._pins[i];
-
-            Entities.Clear();
-            foreach (var entity in sd.Entities)
-                Entities.Add(entity);
         }
 
         /// <summary>
@@ -158,7 +141,6 @@ namespace SpiceSharp.Components
             // Restore the original variables
             vconfig.Variables = original;
         }
-
 
         /// <summary>
         /// Gets the subjects that can apply to rules.

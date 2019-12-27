@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Examples
             {
                 var eb = tran.EntityBehaviors["R2"];
                 eb.TryGetValue(out tb);
-                eb.Parameters.TryGetValue(out bp);
+                eb.TryGetParameterSet(out bp);
             };
             // </example_change_parameter_setup>
             // <example_change_parameter_load>

@@ -9,8 +9,19 @@ namespace SpiceSharp.Components
     /// An inductor
     /// </summary>
     [Pin(0, "L+"), Pin(1, "L-"), VoltageDriver(0, 1)]
-    public class Inductor : Component
+    public class Inductor : Component,
+        IParameterized<BaseParameters>
     {
+        private readonly BaseParameters _bp = new BaseParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -24,7 +35,6 @@ namespace SpiceSharp.Components
         public Inductor(string name)
             : base(name, InductorPinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -35,9 +45,9 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="inductance">The inductance</param>
         public Inductor(string name, string pos, string neg, double inductance) 
-            : base(name, InductorPinCount)
+            : this(name)
         {
-            Parameters.Add(new BaseParameters(inductance));
+            _bp.Inductance.Value = inductance;
             Connect(pos, neg);
         }
 
@@ -47,10 +57,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

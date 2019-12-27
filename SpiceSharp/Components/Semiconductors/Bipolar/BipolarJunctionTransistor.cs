@@ -9,13 +9,17 @@ namespace SpiceSharp.Components
     /// A bipolar junction transistor (BJT)
     /// </summary>
     [Pin(0, "Collector"), Pin(1, "Base"), Pin(2, "Emitter"), Pin(3, "Substrate")]
-    public class BipolarJunctionTransistor : Component
+    public class BipolarJunctionTransistor : Component,
+        IParameterized<BaseParameters>
     {
         /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int BipolarJunctionTransistorPinCount = 4;
+
+        private readonly BaseParameters _bp = new BaseParameters();
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BipolarJunctionTransistor"/> class.
@@ -24,7 +28,6 @@ namespace SpiceSharp.Components
         public BipolarJunctionTransistor(string name) 
             : base(name, BipolarJunctionTransistorPinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -49,10 +52,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

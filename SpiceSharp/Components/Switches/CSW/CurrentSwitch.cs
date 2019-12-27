@@ -10,7 +10,8 @@ namespace SpiceSharp.Components
     /// A current-controlled switch
     /// </summary>
     [Pin(0, "W+"), Pin(1, "W-"), Connected(0, 1)]
-    public class CurrentSwitch : Component
+    public class CurrentSwitch : Component,
+        IParameterized<BaseParameters>
     {
         /// <summary>
         /// Controlling source name
@@ -25,13 +26,20 @@ namespace SpiceSharp.Components
 		public const int CurrentSwitchPinCount = 2;
 
         /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
         public CurrentSwitch(string name) 
             : base(name, CurrentSwitchPinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -44,7 +52,6 @@ namespace SpiceSharp.Components
         public CurrentSwitch(string name, string pos, string neg, string controllingSource)
             : base(name, CurrentSwitchPinCount)
         {
-            Parameters.Add(new BaseParameters());
             Connect(pos, neg);
             ControllingName = controllingSource;
         }
@@ -55,10 +62,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ControlledBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model, ControllingName);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ControlledBindingContext(this, simulation, ControllingName);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

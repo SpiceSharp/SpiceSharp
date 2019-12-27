@@ -148,7 +148,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             context.Nodes.CheckNodes(4);
 
-            BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);

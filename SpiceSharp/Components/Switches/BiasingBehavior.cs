@@ -9,12 +9,19 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <summary>
     /// (DC) biasing behavior for switches.
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior,
+        IParameterized<BaseParameters>
     {
+        private readonly int _posNode, _negNode;
+        private readonly IIterationSimulationState _iteration;
+
         /// <summary>
-        /// Gets the base parameters.
+        /// Gets the parameter set.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; }
 
         /// <summary>
         /// Gets the model parameters.
@@ -80,8 +87,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         protected Controller Method { get; }
 
-        private readonly int _posNode, _negNode;
-        private IIterationSimulationState _iteration;
 
         /// <summary>
         /// Gets the state of the biasing.
@@ -108,8 +113,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
             BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
-            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<BaseParameters>();
             Elements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
@@ -128,7 +133,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             // decide the state of the switch
             if (_iteration.Mode == IterationModes.Fix || _iteration.Mode == IterationModes.Junction)
             {
-                if (BaseParameters.ZeroState)
+                if (Parameters.ZeroState)
                 {
                     // Switch specified "on"
                     CurrentState = true;

@@ -18,19 +18,17 @@ namespace SpiceSharp.Components.ParallelBehaviors
         {
             if (!simulation.UsesState<IBiasingSimulationState>())
                 return;
-            if (simulation.LocalConfigurations.TryGetValue<BiasingParameters>(out var result))
+            var parameters = simulation.LocalConfigurations.GetParameterSet<BaseParameters>();
+            if (parameters.LoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
             {
-                if (result.LoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
-                {
-                    var state = simulation.GetParentState<IBiasingSimulationState>();
-                    simulation.LocalStates.Add(new SimulationState(state));
-                }
+                var state = simulation.GetParentState<IBiasingSimulationState>();
+                simulation.LocalStates.Add(new SimulationState(state));
             }
         }
 
         private readonly SimulationState _state;
-        private readonly Workload _load;
-        private readonly Workload<bool> _convergence;
+        private readonly Workload _loadWorkload;
+        private readonly Workload<bool> _convergenceWorkload;
         private readonly BehaviorList<IBiasingBehavior> _biasingBehaviors;
         private readonly BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
 
@@ -42,26 +40,21 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public BiasingBehavior(string name, ParallelSimulation simulation)
             : base(name)
         {
-            if (simulation.LocalConfigurations.TryGetValue<BiasingParameters>(out var result))
+            var parameters = simulation.LocalConfigurations.GetParameterSet<BaseParameters>();
+            _state = simulation.GetState<SimulationState>();
+            if (parameters.LoadDistributor != null)
+                _loadWorkload = new Workload(parameters.LoadDistributor, simulation.EntityBehaviors.Count);
+            if (parameters.ConvergenceDistributor != null)
+                _convergenceWorkload = new Workload<bool>(parameters.ConvergenceDistributor, simulation.EntityBehaviors.Count);
+            if (_loadWorkload != null || _convergenceWorkload != null)
             {
-                _state = simulation.GetState<SimulationState>();
-                if (result.LoadDistributor != null)
-                    _load = new Workload(result.LoadDistributor, simulation.EntityBehaviors.Count);
-                if (result.ConvergenceDistributor != null)
-                    _convergence = new Workload<bool>(result.ConvergenceDistributor, simulation.EntityBehaviors.Count);
                 foreach (var container in simulation.EntityBehaviors)
                 {
                     if (container.TryGetValue(out IBiasingBehavior biasing))
-                        _load?.Actions.Add(biasing.Load);
+                        _loadWorkload?.Actions.Add(biasing.Load);
                     if (container.TryGetValue(out IConvergenceBehavior convergence))
-                        _convergence?.Functions.Add(convergence.IsConvergent);
+                        _convergenceWorkload?.Functions.Add(convergence.IsConvergent);
                 }
-            }
-            else
-            {
-                _convergence = null;
-                _load = null;
-                _state = null;
             }
 
             // Get all behaviors
@@ -77,8 +70,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </returns>
         public bool IsConvergent()
         {
-            if (_convergence != null)
-                return _convergence.Execute();
+            if (_convergenceWorkload != null)
+                return _convergenceWorkload.Execute();
             else
             {
                 var convergence = true;
@@ -93,10 +86,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         public virtual void Load()
         {
-            if (_load != null)
+            if (_loadWorkload != null)
             {
                 _state.Reset();
-                _load.Execute();
+                _loadWorkload.Execute();
                 _state.Apply();
             }
             else

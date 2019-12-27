@@ -8,8 +8,17 @@ namespace SpiceSharp.Components
     /// A nonlinear resistor
     /// </summary>
     /// <seealso cref="Component" />
-    public class NonlinearResistor : Component
+    public class NonlinearResistor : Component,
+        IParameterized<BaseParameters>
     {
+        /// <summary>
+        /// Gets the base parameters.
+        /// </summary>
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NonlinearResistor"/> class.
         /// </summary>
@@ -18,10 +27,6 @@ namespace SpiceSharp.Components
         /// <param name="nodeB">Node B</param>
         public NonlinearResistor(string name, string nodeA, string nodeB) : base(name, 2)
         {
-            // Add a NonlinearResistorBehaviors.BaseParameters
-            Parameters.Add(new BaseParameters());
-
-            // Connect the entity
             Connect(nodeA, nodeB);
         }
 
@@ -31,9 +36,8 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            var context = new ComponentBindingContext(this, simulation);
             if (simulation.UsesBehaviors<IBiasingBehavior>())
                 behaviors.Add(new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);

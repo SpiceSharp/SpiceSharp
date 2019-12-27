@@ -10,8 +10,17 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Component" />
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected(0, 1), VoltageDriver(0, 1)]
-    public class VoltageDelay : Component
+    public class VoltageDelay : Component,
+        IParameterized<BaseParameters>
     {
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
         /// <summary>
         /// The voltage delay pin count
         /// </summary>
@@ -25,7 +34,6 @@ namespace SpiceSharp.Components
         public VoltageDelay(string name)
             : base(name, VoltageDelayPinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -40,7 +48,7 @@ namespace SpiceSharp.Components
         public VoltageDelay(string name, string pos, string neg, string controlPos, string controlNeg, double delay)
             : this(name)
         {
-            Parameters.GetValue<BaseParameters>().Delay = delay;
+            Parameters.Delay = delay;
             Connect(pos, neg, controlPos, controlNeg);
         }
 
@@ -50,15 +58,14 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
+                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context));
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

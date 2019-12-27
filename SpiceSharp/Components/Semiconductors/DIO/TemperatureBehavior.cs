@@ -7,17 +7,29 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Diode" />.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<BaseParameters>
     {
+        /// <summary>
+        /// Gets the model parameters.
+        /// </summary>
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        protected ModelBaseParameters ModelParameters { get; }
+
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
         protected BaseParameters BaseParameters { get; private set; }
 
         /// <summary>
-        /// Gets the model parameters.
+        /// Gets the parameter set.
         /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the model temperature behavior.
@@ -89,10 +101,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 

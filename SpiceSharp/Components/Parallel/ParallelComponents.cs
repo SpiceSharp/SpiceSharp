@@ -13,10 +13,19 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class ParallelComponents : Entity, IComponent
+    public class ParallelComponents : Entity, IComponent,
+        IParameterized<BaseParameters>
     {
         private readonly IComponent[] _components;
         private readonly IEntityCollection _collection;
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
         /// Gets or sets the model of the component.
@@ -90,11 +99,11 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var parameters = LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone();
-            var container = new BehaviorContainer(Name, parameters);
+            var container = new BehaviorContainer(Name);
+            CalculateDefaults();
 
             // Create our parallel simulation
-            var psim = new ParallelSimulation(simulation, parameters);
+            var psim = new ParallelSimulation(simulation, this);
             BiasingBehavior.Prepare(psim);
 
             // Create the behaviors

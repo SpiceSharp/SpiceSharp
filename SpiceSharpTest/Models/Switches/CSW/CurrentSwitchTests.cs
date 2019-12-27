@@ -305,14 +305,14 @@ namespace SpiceSharpTest.Models
         {
             // Create voltage source
             var s = new CurrentSwitch("SW 1");
-            var p = s.Parameters.GetValue<SpiceSharp.Components.SwitchBehaviors.BaseParameters>();
+            var p = s.Parameters;
 
             // Check on
-            s.Parameters.SetParameter("on");
+            s.SetParameter("on");
             Assert.AreEqual(true, p.ZeroState);
 
             // Check off
-            s.Parameters.SetParameter("off");
+            s.SetParameter("off");
             Assert.AreEqual(false, p.ZeroState);
         }
 

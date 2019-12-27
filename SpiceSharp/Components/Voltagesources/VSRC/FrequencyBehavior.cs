@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            FrequencyParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceFrequencyParameters>();
+            FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
 
             // Connections
             ComplexState = context.GetState<IComplexSimulationState>();

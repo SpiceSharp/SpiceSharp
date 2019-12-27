@@ -10,8 +10,17 @@ namespace SpiceSharp.Components
     /// A current-controlled current source.
     /// </summary>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
-    public class CurrentControlledCurrentSource : Component
+    public class CurrentControlledCurrentSource : Component,
+        IParameterized<BaseParameters>
     {
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -31,7 +40,6 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name) 
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -45,7 +53,7 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
             : this(name)
         {
-            Parameters.GetValue<BaseParameters>().Coefficient.Value = gain;
+            Parameters.Coefficient.Value = gain;
             Connect(pos, neg);
             ControllingSource = voltageSource;
         }
@@ -56,10 +64,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ControlledBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model, ControllingSource);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ControlledBindingContext(this, simulation, ControllingSource);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));

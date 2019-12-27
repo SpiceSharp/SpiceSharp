@@ -5,7 +5,7 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.
     /// </summary>
-    public interface IEntity : ICloneable, IParameterized<IEntity>
+    public interface IEntity : ICloneable, IParameterized, IChainableParameterSet<IEntity>
     {
         /// <summary>
         /// Gets the name of the entity.

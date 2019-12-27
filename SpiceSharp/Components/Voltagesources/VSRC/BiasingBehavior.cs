@@ -2,18 +2,35 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
     /// <summary>
     /// General behavior for <see cref="VoltageSource"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior,
+        IParameterized<IndependentSourceParameters>
     {
+        private readonly IIntegrationMethod _method;
+        private readonly IIterationSimulationState _iteration;
+        private readonly int _posNode, _negNode, _brNode;
+
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        public IndependentSourceParameters BaseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        IndependentSourceParameters IParameterized<IndependentSourceParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the waveform.
@@ -64,10 +81,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
-        private IIntegrationMethod _method;
-        private IIterationSimulationState _iteration;
-        private int _posNode, _negNode, _brNode;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -78,11 +91,10 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);
 
-            BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
+            BaseParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _method);
-            if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
-                Waveform = wdesc.Create(_method);
+            Waveform = BaseParameters.Waveform?.Create(_method);
             if (!BaseParameters.DcValue.Given)
             {
                 // No DC value: either have a transient value or none

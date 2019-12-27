@@ -46,18 +46,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Component"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="nodeCount">The node count.</param>
-        /// <param name="parameters">The parameters.</param>
-        protected Component(string name, int nodeCount, IParameterSetDictionary parameters)
-            : base(name, parameters)
-        {
-            _connections = nodeCount > 0 ? new string[nodeCount] : null;
-        }
-
-        /// <summary>
         /// Connects the component in the circuit.
         /// </summary>
         /// <param name="nodes">The node indices.</param>
@@ -111,7 +99,7 @@ namespace SpiceSharp.Components
         /// <returns>
         /// The cloned instance.
         /// </returns>
-        protected override ICloneable Clone()
+        protected override Entity Clone()
         {
             var clone = (Component)base.Clone();
             for (var i = 0; i < _connections.Length; i++)

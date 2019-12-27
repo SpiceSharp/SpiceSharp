@@ -8,8 +8,19 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A mutual inductance
     /// </summary>
-    public class MutualInductance : Component
+    public class MutualInductance : Component,
+        IParameterized<BaseParameters>
     {
+        private readonly BaseParameters _bp = new BaseParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+
         /// <summary>
         /// Gets or sets the name of the primary inductor.
         /// </summary>
@@ -28,7 +39,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the mutual inductance</param>
         public MutualInductance(string name) : base(name, 0)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -39,9 +49,9 @@ namespace SpiceSharp.Components
         /// <param name="inductorName2">Inductor 2</param>
         /// <param name="coupling">Mutual inductance</param>
         public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
-            : base(name, 0)
+            : this(name)
         {
-            Parameters.Add(new BaseParameters(coupling));
+            _bp.Coupling.Value = coupling;
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
         }
@@ -52,10 +62,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new MutualInductanceBindingContext(simulation, behaviors, InductorName1, InductorName2);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new MutualInductanceBindingContext(this, simulation, InductorName1, InductorName2);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))

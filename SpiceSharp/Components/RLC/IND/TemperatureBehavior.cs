@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             : base(name)
         {
             context.ThrowIfNull(nameof(context));
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
         }
 
         /// <summary>

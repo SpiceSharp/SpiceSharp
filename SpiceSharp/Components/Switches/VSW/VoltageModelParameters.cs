@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <summary>
     /// Model parameters for a <see cref="VoltageSwitchModel" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.SwitchBehaviors.ModelBaseParameters" />
+    /// <seealso cref="ModelBaseParameters" />
     public class VoltageModelParameters : ModelBaseParameters
     {
         /// <summary>

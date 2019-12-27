@@ -6,11 +6,20 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A voltage-controlled current source
+    /// A voltage-controlled current source.
     /// </summary>
     [Pin(0, "G+"), Pin(1, "G-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected()]
-    public class VoltageControlledCurrentSource : Component
+    public class VoltageControlledCurrentSource : Component,
+        IParameterized<BaseParameters>
     {
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public BaseParameters Parameters { get; } = new BaseParameters();
+
         /// <summary>
         /// Private constants
         /// </summary>
@@ -24,7 +33,6 @@ namespace SpiceSharp.Components
         public VoltageControlledCurrentSource(string name)
             : base(name, VoltageControlledCurrentSourcePinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -37,9 +45,9 @@ namespace SpiceSharp.Components
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The transconductance gain</param>
         public VoltageControlledCurrentSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain)
-            : base(name, VoltageControlledCurrentSourcePinCount)
+            : this(name)
         {
-            Parameters.Add(new BaseParameters(gain));
+            Parameters.Coefficient.Value = gain;
             Connect(pos, neg, controlPos, controlNeg);
         }
 
@@ -49,10 +57,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), null);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));

@@ -75,8 +75,8 @@ namespace SpiceSharp.Components.JFETBehaviors
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 

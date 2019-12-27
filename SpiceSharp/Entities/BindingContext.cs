@@ -6,18 +6,14 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Context for binding an <see cref="IBehavior"/> to an <see cref="ISimulation"/>.
     /// </summary>
+    /// <remarks>
+    /// This is an additional layer that allows to shield entities, simulations, etc. from the behavior that
+    /// is being created. This makes sure that behaviors are only using the data that matters.
+    /// </remarks>
     public class BindingContext
     {
         /// <summary>
-        /// Gets the name of the entity.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        protected string Name { get; }
-
-        /// <summary>
-        /// Gets the simulation to bind to.
+        /// Gets the simulation to bind to without exposing the simulation itself.
         /// </summary>
         /// <value>
         /// The simulation.
@@ -25,28 +21,21 @@ namespace SpiceSharp.Entities
         protected ISimulation Simulation { get; }
 
         /// <summary>
-        /// Gets the entity behaviors.
+        /// Gets the entity that provides the parameters without exposing the entity itself.
         /// </summary>
         /// <value>
-        /// The behaviors.
+        /// The entity.
         /// </value>
-        public virtual IBehaviorContainer Behaviors { get; }
+        protected IEntity Entity { get; }
 
         /// <summary>
-        /// Gets the simulation variables.
+        /// Gets a value indicating whether parameters should be linked. If not, then
+        /// the parameters are cloned instead of referenced.
         /// </summary>
         /// <value>
-        /// The variables.
+        ///   <c>true</c> if parameters should be linked; otherwise, <c>false</c>.
         /// </value>
-        public virtual IVariableSet Variables => Simulation.Variables;
-
-        /// <summary>
-        /// Gets the simulation configurations.
-        /// </summary>
-        /// <value>
-        /// The configurations.
-        /// </value>
-        public virtual IParameterSetDictionary Configurations => Simulation.Configurations;
+        protected bool LinkParameters { get; }
 
         /// <summary>
         /// Gets a simulation state.
@@ -76,15 +65,79 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
+        /// Gets the simulation configuration.
+        /// </summary>
+        /// <typeparam name="P">The configuration type.</typeparam>
+        /// <returns>The configuration.</returns>
+        public P GetSimulationConfiguration<P>() where P : IParameterSet
+            => Simulation.Configurations.GetValue<P>();
+
+        /// <summary>
+        /// Gets the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <returns>
+        /// The parameter set.
+        /// </returns>
+        public P GetParameterSet<P>() where P : IParameterSet
+        {
+            var parameters = Entity.GetParameterSet<P>();
+            if (LinkParameters)
+                return parameters;
+            return (P)parameters.Clone();
+        }
+
+        /// <summary>
+        /// Tries to get the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <param name="value">The parameter set.</param>
+        /// <returns>
+        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
+        /// </returns>
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        {
+            if (Entity.TryGetParameterSet(out value))
+            {
+                if (!LinkParameters)
+                    value = (P)value.Clone();
+                return true;
+            }
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the variables.
+        /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
+        public IVariableSet Variables => Simulation.Variables;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BindingContext"/> class.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="behaviors">The entity behaviors.</param>
-        public BindingContext(ISimulation simulation, IBehaviorContainer behaviors)
+        /// <param name="entity">The entity creating the behavior.</param>
+        /// <param name="simulation">The simulation for which a behavior is created.</param>
+        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
+        public BindingContext(IEntity entity, ISimulation simulation, bool linkParameters)
         {
+            Entity = entity.ThrowIfNull(nameof(entity));
             Simulation = simulation.ThrowIfNull(nameof(simulation));
-            Behaviors = behaviors.ThrowIfNull(nameof(behaviors));
-            Name = behaviors.Name;
+            LinkParameters = linkParameters;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingContext"/> class.
+        /// </summary>
+        /// <param name="entity">The entity creating the behavior.</param>
+        /// <param name="simulation">The simulation for which a behavior is created.</param>
+        public BindingContext(Entity entity, ISimulation simulation)
+        {
+            Entity = entity.ThrowIfNull(nameof(entity));
+            Simulation = simulation.ThrowIfNull(nameof(simulation));
+            LinkParameters = entity.LinkParameters;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Template for a behavior.
     /// </summary>
-    public abstract class Behavior : IBehavior
+    public abstract class Behavior : Parameterized, IBehavior
     {
         /// <summary>
         /// Gets the name of the behavior.
@@ -35,8 +35,12 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// The value.
         /// </returns>
-        public virtual P GetProperty<P>(string name)
-            => Reflection.Get<P>(this, name);
+        public override P GetProperty<P>(string name)
+        {
+            if (base.TryGetProperty(name, out P result))
+                return result;
+            return Reflection.Get<P>(this, name);
+        }
 
         /// <summary>
         /// Tries to get the value of the parameter with the specified name.
@@ -47,8 +51,12 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
-        public virtual bool TryGetProperty<P>(string name, out P value)
-            => Reflection.TryGet(this, name, out value);
+        public override bool TryGetProperty<P>(string name, out P value)
+        {
+            if (base.TryGetProperty(name, out value))
+                return true;
+            return Reflection.TryGet(this, name, out value);
+        }
 
         /// <summary>
         /// Creates a getter for a parameter with the specified name.
@@ -58,7 +66,12 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// A getter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
-        public virtual Func<P> CreatePropertyGetter<P>(string name)
-            => Reflection.CreateGetter<P>(this, name);
+        public override Func<P> CreatePropertyGetter<P>(string name)
+        {
+            var getter = base.CreatePropertyGetter<P>(name);
+            if (getter == null)
+                getter = Reflection.CreateGetter<P>(this, name);
+            return getter;
+        }
     }
 }

@@ -8,12 +8,33 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="DiodeModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior
+    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<ModelBaseParameters>,
+        IParameterized<ModelNoiseParameters>
     {
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the noise parameters.
         /// </summary>
-        private ModelBaseParameters _mbp;
+        /// <value>
+        /// The noise parameters.
+        /// </value>
+        public ModelNoiseParameters NoiseParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public ModelBaseParameters Parameters { get; }
 
         /// <summary>
         /// Conductance
@@ -58,8 +79,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
+            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>();
             _temperature = context.GetState<ITemperatureSimulationState>();
-            _mbp = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<ModelBaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
@@ -68,42 +90,42 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            if (!_mbp.NominalTemperature.Given)
-                _mbp.NominalTemperature.RawValue = _temperature.NominalTemperature;
-            VtNominal = Constants.KOverQ * _mbp.NominalTemperature;
+            if (!Parameters.NominalTemperature.Given)
+                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
+            VtNominal = Constants.KOverQ * Parameters.NominalTemperature;
 
             // limit grading coeff to max of 0.9
-            if (_mbp.GradingCoefficient > 0.9)
+            if (Parameters.GradingCoefficient > 0.9)
             {
-                _mbp.GradingCoefficient.RawValue = 0.9;
+                Parameters.GradingCoefficient.RawValue = 0.9;
                 SpiceSharpWarning.Warning(this, 
-                    Properties.Resources.Diodes_GradingCoefficientTooLarge.FormatString(Name, _mbp.GradingCoefficient.Value));
+                    Properties.Resources.Diodes_GradingCoefficientTooLarge.FormatString(Name, Parameters.GradingCoefficient.Value));
             }
 
             // limit activation energy to min of 0.1
-            if (_mbp.ActivationEnergy < 0.1)
+            if (Parameters.ActivationEnergy < 0.1)
             {
-                _mbp.ActivationEnergy.RawValue = 0.1;
+                Parameters.ActivationEnergy.RawValue = 0.1;
                 SpiceSharpWarning.Warning(this, 
-                    Properties.Resources.Diodes_ActivationEnergyTooSmall.FormatString(Name, _mbp.ActivationEnergy.Value));
+                    Properties.Resources.Diodes_ActivationEnergyTooSmall.FormatString(Name, Parameters.ActivationEnergy.Value));
             }
 
             // limit depletion cap coeff to max of .95
-            if (_mbp.DepletionCapCoefficient > 0.95)
+            if (Parameters.DepletionCapCoefficient > 0.95)
             {
-                _mbp.DepletionCapCoefficient.RawValue = 0.95;
+                Parameters.DepletionCapCoefficient.RawValue = 0.95;
                 SpiceSharpWarning.Warning(this, 
-                    Properties.Resources.Diodes_DepletionCapCoefficientTooLarge.FormatString(Name, _mbp.DepletionCapCoefficient.Value));
+                    Properties.Resources.Diodes_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient.Value));
             }
 
-            if (_mbp.Resistance > 0)
-                Conductance = 1 / _mbp.Resistance;
+            if (Parameters.Resistance > 0)
+                Conductance = 1 / Parameters.Resistance;
             else
                 Conductance = 0;
-            Xfc = Math.Log(1 - _mbp.DepletionCapCoefficient);
+            Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);
 
-            F2 = Math.Exp((1 + _mbp.GradingCoefficient) * Xfc);
-            F3 = 1 - _mbp.DepletionCapCoefficient * (1 + _mbp.GradingCoefficient);
+            F2 = Math.Exp((1 + Parameters.GradingCoefficient) * Xfc);
+            F3 = 1 - Parameters.DepletionCapCoefficient * (1 + Parameters.GradingCoefficient);
         }
     }
 }

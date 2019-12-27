@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
-using SpiceSharp.General;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
@@ -19,6 +18,14 @@ namespace SpiceSharp.Components
         private string[] _connections;
 
         /// <summary>
+        /// Gets the subcircuit definition.
+        /// </summary>
+        /// <value>
+        /// The definition.
+        /// </value>
+        public ISubcircuitDefinition Definition { get; }
+
+        /// <summary>
         /// Gets or sets the model of the component.
         /// </summary>
         /// <value>
@@ -32,26 +39,18 @@ namespace SpiceSharp.Components
         /// <value>
         /// The number of nodes.
         /// </value>
-        public int PinCount
-        {
-            get
-            {
-                if (Parameters.TryGetValue<ISubcircuitDefinition>(out var result))
-                    return result.PinCount;
-                return 0;
-            }
-        }
+        public int PinCount => Definition.PinCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subcircuit"/> class.
         /// </summary>
         /// <param name="name">The name of the subcircuit.</param>
-        /// <param name="entities">The entities in the subcircuit.</param>
+        /// <param name="definition">The subcircuit definition.</param>
         /// <param name="nodes">The nodes that the subcircuit is connected to.</param>
-        public Subcircuit(string name, ISubcircuitDefinition entities, params string[] nodes)
-            : base(name, new ParameterSetDictionary(new InterfaceTypeDictionary<IParameterSet>()))
+        public Subcircuit(string name, ISubcircuitDefinition definition, params string[] nodes)
+            : base(name)
         {
-            Parameters.Add(entities);
+            Definition = definition.ThrowIfNull(nameof(definition));
             Connect(nodes);
         }
 
@@ -61,11 +60,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var definition = Parameters.GetValue<ISubcircuitDefinition>();
-            definition.CreateBehaviors(simulation, behaviors, _connections);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            Definition.CreateBehaviors(this, simulation, behaviors);
             simulation.EntityBehaviors.Add(behaviors);
         }
 
@@ -141,8 +138,8 @@ namespace SpiceSharp.Components
                 rule.ApplyConductivePath(this);
 
             // Validate the subcircuit definition if possible
-            if (Parameters.TryGetValue<ISubcircuitRuleSubject>(out var result))
-                result.ApplyTo(this, _connections, container);
+            if (Definition is ISubcircuitRuleSubject subject)
+                subject.ApplyTo(this, _connections, container);
         }
     }
 }

@@ -10,8 +10,19 @@ namespace SpiceSharp.Components
     /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
-    public class Mosfet3 : Component
+    public class Mosfet3 : Component,
+        IParameterized<BaseParameters>
     {
+        private readonly BaseParameters _bp = new BaseParameters();
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+
         /// <summary>
         /// Constants
         /// </summary>
@@ -22,9 +33,9 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="Mosfet3"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Mosfet3(string name) : base(name, Mosfet3PinCount)
+        public Mosfet3(string name) 
+            : base(name, Mosfet3PinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -33,10 +44,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

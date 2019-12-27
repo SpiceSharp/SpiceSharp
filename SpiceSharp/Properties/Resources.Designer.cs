@@ -395,6 +395,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A parameter set of type &apos;{0}&apos; could not be found..
+        /// </summary>
+        internal static string Parameters_ParameterSetNotFound {
+            get {
+                return ResourceManager.GetString("Parameters.ParameterSetNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: resistance is 0, set to 1000..
         /// </summary>
         internal static string Resistors_ZeroResistance {

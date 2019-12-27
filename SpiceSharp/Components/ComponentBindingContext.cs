@@ -26,21 +26,33 @@ namespace SpiceSharp.Components
         /// <value>
         /// The pins.
         /// </value>
-        public Variable[] Nodes { get; }
+        public IReadOnlyList<Variable> Nodes { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingContext"/> class.
+        /// </summary>
+        /// <param name="component">The component creating the behavior.</param>
+        /// <param name="simulation">The simulation for which a behavior is created.</param>
+        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
+        public ComponentBindingContext(IComponent component, ISimulation simulation, bool linkParameters)
+            : base(component, simulation, linkParameters)
+        {
+            Nodes = component.MapNodes(simulation.Variables).ToArray();
+            if (component.Model != null)
+                ModelBehaviors = simulation.EntityBehaviors[component.Model];
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentBindingContext"/> class.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="behaviors">The behaviors.</param>
-        /// <param name="nodes">The nodes that the component is connected to.</param>
-        /// <param name="model">The model.</param>
-        public ComponentBindingContext(ISimulation simulation, IBehaviorContainer behaviors, IEnumerable<Variable> nodes, string model)
-            : base(simulation, behaviors)
+        /// <param name="component">The component creating the behavior.</param>
+        /// <param name="simulation">The simulation for which a behavior is created.</param>
+        public ComponentBindingContext(Component component, ISimulation simulation)
+            : base(component, simulation)
         {
-            Nodes = nodes.ThrowIfNull(nameof(nodes)).ToArray();
-            if (model != null)
-                ModelBehaviors = simulation.EntityBehaviors[model];
+            Nodes = component.MapNodes(simulation.Variables).ToArray();
+            if (component.Model != null)
+                ModelBehaviors = simulation.EntityBehaviors[component.Model];
         }
     }
 }

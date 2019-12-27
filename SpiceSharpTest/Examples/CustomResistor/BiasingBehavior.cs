@@ -24,9 +24,9 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
-            _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            _bp = context.GetParameterSet<BaseParameters>();
             _state = context.GetState<IBiasingSimulationState>();
-            _baseConfig = context.Configurations.GetValue<BiasingConfiguration>();
+            _baseConfig = context.GetSimulationConfiguration<BiasingConfiguration>();
 
             // Find the nodes that the resistor is connected to
             _nodeA = _state.Map[context.Nodes[0]];

@@ -6,7 +6,7 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Base class for any circuit object that can take part in simulations.
     /// </summary>
-    public abstract class Entity : Parameterized<IEntity>, IEntity
+    public abstract class Entity : Parameterized, IEntity
     {
         /// <summary>
         /// Gets or sets a value indicating whether the parameters should reference that of the entity.
@@ -27,18 +27,6 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         protected Entity(string name)
-            : base(new ParameterSetDictionary())
-        {
-            Name = name;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Entity"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="parameters">The parameters.</param>
-        protected Entity(string name, IParameterSetDictionary parameters)
-            : base(parameters)
         {
             Name = name;
         }
@@ -55,22 +43,36 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The cloned instance.
         /// </returns>
-        protected override ICloneable Clone()
+        protected virtual Entity Clone()
         {
-            var clone = (IEntity)Activator.CreateInstance(GetType(), Name);
+            var clone = (Entity)Activator.CreateInstance(GetType(), Name);
             Reflection.CopyPropertiesAndFields(this, clone);
             return clone;
         }
 
         /// <summary>
+        /// Clones the instance.
+        /// </summary>
+        /// <returns>
+        /// The cloned instance.
+        /// </returns>
+        ICloneable ICloneable.Clone() => Clone();
+
+        /// <summary>
         /// Copy properties from another entity.
         /// </summary>
         /// <param name="source">The source entity.</param>
-        protected override void CopyFrom(ICloneable source)
+        protected virtual void CopyFrom(ICloneable source)
         {
             source.ThrowIfNull(nameof(source));
             Reflection.CopyPropertiesAndFields(source, this);
         }
+
+        /// <summary>
+        /// Copies the contents of one interface to this one.
+        /// </summary>
+        /// <param name="source">The source parameter.</param>
+        void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <summary>
         /// Call a parameter method with the specified name.
@@ -79,9 +81,9 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public override IEntity SetParameter(string name)
+        public new IEntity SetParameter(string name)
         {
-            Parameters.SetParameter(name);
+            base.SetParameter(name);
             return this;
         }
 
@@ -94,9 +96,9 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The current instance for chaining.
         /// </returns>
-        public override IEntity SetParameter<P>(string name, P value)
+        public new IEntity SetParameter<P>(string name, P value)
         {
-            Parameters.SetParameter(name, value);
+            base.SetParameter(name, value);
             return this;
         }
     }

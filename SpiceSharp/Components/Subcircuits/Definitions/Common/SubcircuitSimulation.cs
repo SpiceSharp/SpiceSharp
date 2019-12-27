@@ -14,12 +14,22 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class SubcircuitSimulation : SimulationWrapper
     {
         /// <summary>
-        /// Gets the local parameters.
+        /// Gets the subcircuit.
         /// </summary>
         /// <value>
-        /// The local parameters.
+        /// The subcircuit.
         /// </value>
-        public IParameterSetDictionary LocalConfiguration { get; }
+        protected SubcircuitDefinition Definition { get; }
+
+        /// <summary>
+        /// Tries the get parameter set.
+        /// </summary>
+        /// <typeparam name="P">The parameter set.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the parameter set was found; otherwise <c>false</c>.
+        /// </returns>
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet => Definition.TryGetParameterSet(out value);
 
         /// <summary>
         /// Gets the variables that are shared between the subcircuit simulation and the parent simulation.
@@ -34,16 +44,16 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="parent">The parent simulation.</param>
-        /// <param name="configuration">The configuration for the subcircuit.</param>
+        /// <param name="definition">The subcircuit definition.</param>
         /// <param name="shared">The shared variables.</param>
-        public SubcircuitSimulation(string name, ISimulation parent, IParameterSetDictionary configuration, IEnumerable<Variable> shared)
+        public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IEnumerable<Variable> shared)
             : base(parent,
                   parent?.Configurations,
                   new BehaviorContainerCollection(),
                   new InterfaceTypeDictionary<ISimulationState>(),
                   new SubcircuitVariableSet(name, parent?.Variables))
         {
-            LocalConfiguration = configuration.ThrowIfNull(nameof(configuration));
+            Definition = definition.ThrowIfNull(nameof(definition));
             SharedVariables = shared.ThrowIfNull(nameof(shared));
         }
 

@@ -81,7 +81,20 @@ namespace SpiceSharp.Simulations
         public IEnumerator<double> CreatePoints(IBiasingSimulation simulation)
         {
             var behaviors = simulation.EntityBehaviors[Name];
-            var setter = behaviors.Parameters.CreateParameterSetter<double>(Property);
+            Action<double> setter = null;
+            foreach (var behavior in behaviors.Values)
+            {
+                foreach (var ps in behavior.ParameterSets)
+                {
+                    setter = ps.CreateParameterSetter<double>(Property);
+                    if (setter != null)
+                        break;
+                }
+                if (setter != null)
+                    break;
+            }
+
+            // Enumerate the points
             foreach (var pt in Points)
             {
                 setter(pt);

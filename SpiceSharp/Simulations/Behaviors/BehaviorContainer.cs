@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Simulations;
 using SpiceSharp.General;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Behaviors
 {
@@ -9,7 +10,7 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     /// <seealso cref="IBehaviorContainer" />
     /// <seealso cref="InterfaceTypeDictionary{Behavior}" />
-    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer
+    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer, IParameterized
     {
         /// <summary>
         /// Gets the source name.
@@ -17,23 +18,67 @@ namespace SpiceSharp.Behaviors
         public string Name { get; }
 
         /// <summary>
-        /// Gets the parameters used by the behaviors.
-        /// </summary>
-        /// <value>
-        /// The parameters.
-        /// </value>
-        public IParameterSetDictionary Parameters { get; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
         /// <param name="source">The entity name that will provide the behaviors.</param>
-        /// <param name="parameters">The parameters.</param>
-        public BehaviorContainer(string source, IParameterSetDictionary parameters)
-            : base()
+        public BehaviorContainer(string source)
         {
             Name = source.ThrowIfNull(nameof(source));
-            Parameters = parameters.ThrowIfNull(nameof(parameters));
+        }
+
+        /// <summary>
+        /// Gets the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <returns>
+        /// The parameter set.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
+        public P GetParameterSet<P>() where P : IParameterSet
+        {
+            foreach (var behavior in Values)
+            {
+                if (behavior.TryGetParameterSet(out P value))
+                    return value;
+            }
+            throw new ArgumentException(Properties.Resources.Parameters_ParameterSetNotFound);
+        }
+
+        /// <summary>
+        /// Tries to get the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <param name="value">The parameter set.</param>
+        /// <returns>
+        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
+        /// </returns>
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        {
+            foreach (var behavior in Values)
+            {
+                if (behavior.TryGetParameterSet(out value))
+                    return true;
+            }
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets all parameter sets.
+        /// </summary>
+        /// <value>
+        /// The parameter sets.
+        /// </value>
+        public IEnumerable<IParameterSet> ParameterSets
+        {
+            get
+            {
+                foreach (var behavior in Values)
+                {
+                    foreach (var ps in behavior.ParameterSets)
+                        yield return ps;
+                }
+            }
         }
 
         /// <summary>
@@ -51,7 +96,7 @@ namespace SpiceSharp.Behaviors
                 if (behavior.TryGetProperty(name, out P value))
                     return value;
             }
-            return Parameters.GetProperty<P>(name);
+            throw new ParameterNotFoundException(name, this);
         }
 
         /// <summary>
@@ -70,7 +115,8 @@ namespace SpiceSharp.Behaviors
                 if (behavior.TryGetProperty(name, out value))
                     return true;
             }
-            return Parameters.TryGetProperty(name, out value);
+            value = default;
+            return false;
         }
 
         /// <summary>
@@ -89,7 +135,7 @@ namespace SpiceSharp.Behaviors
                 if (result != null)
                     return result;
             }
-            return Parameters.CreatePropertyGetter<P>(name);
+            return null;
         }
 
         /// <summary>

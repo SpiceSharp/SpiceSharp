@@ -8,17 +8,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// <summary>
     /// Temperature behavior for a <see cref="Mosfet2"/>
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+        IParameterized<BaseParameters>
     {
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; }
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        protected ModelBaseParameters ModelParameters { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the model temperature behavior.
@@ -137,9 +152,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
+            ModelParameters = ModelTemperature.GetParameterSet<ModelBaseParameters>();
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 

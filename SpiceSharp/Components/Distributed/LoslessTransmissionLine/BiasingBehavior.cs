@@ -7,12 +7,42 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Load behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior,
+        IParameterized<BaseParameters>
     {
+        private readonly int _pos1, _neg1, _pos2, _neg2, _int1, _int2, _br1, _br2;
+
+        /// <summary>
+        /// Gets the biasing elements.
+        /// </summary>
+        /// <value>
+        /// The biasing elements.
+        /// </value>
+        protected ElementSet<double> BiasingElements { get; }
+
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
-        protected BaseParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The base parameters.
+        /// </value>
+        protected BaseParameters BaseParameters { get; }
+
+        /// <summary>
+        /// Gets the state of the biasing.
+        /// </summary>
+        /// <value>
+        /// The state of the biasing.
+        /// </value>
+        protected IBiasingSimulationState BiasingState { get; }
+
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the left-side internal node.
@@ -20,7 +50,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The left internal node.
         /// </value>
-        public Variable Internal1 { get; private set; }
+        protected Variable Internal1 { get; private set; }
 
         /// <summary>
         /// Gets the right-side internal node.
@@ -28,7 +58,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The right internal node.
         /// </value>
-        public Variable Internal2 { get; private set; }
+        protected Variable Internal2 { get; private set; }
 
         /// <summary>
         /// Gets the left-side branch.
@@ -36,7 +66,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The left branch.
         /// </value>
-        public Variable Branch1 { get; private set; }
+        protected Variable Branch1 { get; private set; }
 
         /// <summary>
         /// Gets the right-side branch.
@@ -44,22 +74,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The right branch.
         /// </value>
-        public Variable Branch2 { get; private set; }
-
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
-        private int _pos1, _neg1, _pos2, _neg2, _int1, _int2, _br1, _br2;
+        protected Variable Branch2 { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -73,11 +88,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             context.Nodes.CheckNodes(4);
 
             // Get parameters
-            BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
-
-            // Connect
+            BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
-
             _pos1 = BiasingState.Map[context.Nodes[0]];
             _neg1 = BiasingState.Map[context.Nodes[1]];
             _pos2 = BiasingState.Map[context.Nodes[2]];
@@ -91,9 +103,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             _br1 = BiasingState.Map[Branch1];
             Branch2 = variables.Create(Name.Combine("branch2"), VariableType.Current);
             _br2 = BiasingState.Map[Branch2];
-
-            // Get matrix elements
-            Elements = new ElementSet<double>(BiasingState.Solver,
+            BiasingElements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_pos1, _pos1),
                 new MatrixLocation(_pos1, _int1),
                 new MatrixLocation(_int1, _pos1),
@@ -125,7 +135,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         void IBiasingBehavior.Load()
         {
             var y = BaseParameters.Admittance;
-            Elements.Add(
+            BiasingElements.Add(
                 y, -y, -y, y, 1, 0, -1, -1,
                 y, -y, -y, y, 1, 0, -1, 0,
                 1, -1, 1, 1, 1

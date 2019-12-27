@@ -121,23 +121,24 @@ namespace SpiceSharpTest.Models
         {
             // Let's check cloning of entities here.
             var isrc = (CurrentSource) new CurrentSource("I1", "A", "B", 1.0)
-                .SetParameter("ac", new double[] { 1.0, 2.0 });
-            isrc.Parameters.Add(new Pulse(0.0, 1.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5));
+                .SetParameter("ac", new double[] { 1.0, 2.0 })
+                .SetParameter("waveform", new Pulse(0.0, 1.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5));
 
             // Clone the entity
             var clone = (CurrentSource)((ICloneable)isrc).Clone();
 
             // Change some stuff (should not be reflected in the clone)
-            isrc.SetParameter("v2", 2.0);
+            isrc.GetProperty<IWaveformDescription>("waveform").SetParameter("v2", 2.0);
 
             // Check
             Assert.AreEqual(isrc.Name, clone.Name);
             Assert.AreEqual(isrc.GetNode(0), clone.GetNode(0));
             Assert.AreEqual(isrc.GetNode(1), clone.GetNode(1));
-            var waveform = (Pulse) clone.Parameters.GetValue<IWaveformDescription>();
+            var waveform = (Pulse)clone.GetProperty<IWaveformDescription>("waveform");
             Assert.AreEqual(0.0, waveform.InitialValue.Value, 1e-12);
             Assert.AreEqual(1.0, waveform.PulsedValue.Value, 1e-12);
-            Assert.AreEqual(2.0, isrc.GetProperty<double>("v2"));
+            Assert.AreEqual(2.0, isrc.GetProperty<IWaveformDescription>("waveform").GetProperty<double>("v2"));
+            Assert.AreEqual(1.0, waveform.GetProperty<double>("v2"));
             Assert.AreEqual(1e-5, waveform.GetProperty<double>("per"), 1e-12);
         }
 

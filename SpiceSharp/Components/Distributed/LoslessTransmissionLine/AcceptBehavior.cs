@@ -8,16 +8,11 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    public class AcceptBehavior : Behavior, IAcceptBehavior
+    public class AcceptBehavior : TimeBehavior, IAcceptBehavior
     {
-        private BaseParameters _bp;
-
-        // Necessary behaviors and parameters
-        private TimeBehavior _tran;
         private double _oldSlope1, _oldSlope2;
         private bool _wasBreak = false;
-
-        private IIntegrationMethod _method;
+        private readonly IIntegrationMethod _method;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
@@ -25,10 +20,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         public AcceptBehavior(string name, ComponentBindingContext context)
-            : base(name)
+            : base(name, context)
         {
-            _bp = context.Behaviors.Parameters.GetValue<BaseParameters>();
-            _tran = context.Behaviors.GetValue<TimeBehavior>();
             _method = context.GetState<IIntegrationMethod>();
         }
 
@@ -40,7 +33,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var breakpoint = _wasBreak;
             if (_method is IBreakpointMethod method)
                 breakpoint |= method.Break;
-            _tran.Signals.Probe(_method.Time, breakpoint);
+            Signals.Probe(_method.Time, breakpoint);
         }
 
         /// <summary>
@@ -63,7 +56,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                     }
                     else
                     {
-                        var signals = _tran.Signals;
+                        var signals = Signals;
                         var delta = signals.GetTime(0) - signals.GetTime(1);
                         slope1 = (signals.GetValue(0, 0) - signals.GetValue(1, 0)) / delta;
                         slope2 = (signals.GetValue(0, 1) - signals.GetValue(1, 1)) / delta;
@@ -72,12 +65,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                     // If the previous point was a breakpoint, let's decide if we need another in the future
                     if (_wasBreak)
                     {
-                        var tol1 = _bp.RelativeTolerance * Math.Max(Math.Abs(slope1), Math.Abs(_oldSlope1)) +
-                                  _bp.AbsoluteTolerance;
-                        var tol2 = _bp.RelativeTolerance * Math.Max(Math.Abs(slope2), Math.Abs(_oldSlope2)) +
-                                   _bp.AbsoluteTolerance;
+                        var tol1 = BaseParameters.RelativeTolerance * Math.Max(Math.Abs(slope1), Math.Abs(_oldSlope1)) +
+                                  BaseParameters.AbsoluteTolerance;
+                        var tol2 = BaseParameters.RelativeTolerance * Math.Max(Math.Abs(slope2), Math.Abs(_oldSlope2)) +
+                                   BaseParameters.AbsoluteTolerance;
                         if (Math.Abs(slope1 - _oldSlope1) > tol1 || Math.Abs(slope2 - _oldSlope2) > tol2)
-                            method.Breakpoints.SetBreakpoint(_tran.Signals.GetTime(1) + _bp.Delay);
+                            method.Breakpoints.SetBreakpoint(Signals.GetTime(1) + BaseParameters.Delay);
                     }
 
                     // Track for the next time
@@ -86,8 +79,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
                     _wasBreak = method.Break;
                 }
             }
-
-            _tran.Signals.AcceptProbedValues();
+            Signals.AcceptProbedValues();
         }
     }
 }

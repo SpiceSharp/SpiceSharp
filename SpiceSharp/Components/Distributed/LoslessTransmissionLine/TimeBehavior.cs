@@ -10,21 +10,14 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// </summary>
     public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
+        private readonly int _pos1, _neg1, _pos2, _neg2, _br1, _br2;
+        private readonly ITimeSimulationState _time;
+        private readonly ElementSet<double> _elements;
+
         /// <summary>
         /// Gets the delayed signals.
         /// </summary>
         public DelayedSignal Signals { get; private set; }
-
-        /// <summary>
-        /// Gets the transient vector elements.
-        /// </summary>
-        /// <value>
-        /// The transient vector elements.
-        /// </value>
-        protected ElementSet<double> TransientElements { get; private set; }
-
-        private int _pos1, _neg1, _pos2, _neg2, _br1, _br2;
-        private ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior" /> class.
@@ -41,7 +34,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             _neg2 = BiasingState.Map[context.Nodes[3]];
             _br1 = BiasingState.Map[Branch1];
             _br2 = BiasingState.Map[Branch2];
-            TransientElements = new ElementSet<double>(BiasingState.Solver, null, new[] { _br1, _br2 });
+            _elements = new ElementSet<double>(BiasingState.Solver, null, new[] { _br1, _br2 });
             Signals = new DelayedSignal(2, BaseParameters.Delay);
         }
 
@@ -66,7 +59,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             var y = BaseParameters.Admittance;
             if (_time.UseDc)
             {
-                Elements.Add(
+                BiasingElements.Add(
                     y, -y, -y, y, 1, 0, -1, -1,
                     y, -y, -y, y, 1, 0, -1, 0,
                     1, -1, 1, 1, 1
@@ -74,7 +67,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             }
             else
             {
-                Elements.Add(
+                BiasingElements.Add(
                     y, -y, -y, y, 1, 1, -1, -1,
                     y, -y, -y, y, 1, 1, -1, -1
                     );
@@ -88,7 +81,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             Signals.SetProbedValues(input1, input2);
 
             // Update the branch equations
-            TransientElements.Add(Signals.Values[0], Signals.Values[1]);
+            _elements.Add(Signals.Values[0], Signals.Values[1]);
         }
     }
 }

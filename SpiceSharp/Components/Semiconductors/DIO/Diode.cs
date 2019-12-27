@@ -9,7 +9,8 @@ namespace SpiceSharp.Components
     /// A diode
     /// </summary>
     [Pin(0, "D+"), Pin(1, "D-")]
-    public class Diode : Component
+    public class Diode : Component,
+        IParameterized<BaseParameters>
     {
         /// <summary>
         /// Constants
@@ -17,13 +18,16 @@ namespace SpiceSharp.Components
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int DiodePinCount = 2;
 
+        private BaseParameters _bp = new BaseParameters();
+        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Diode"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(string name) : base(name, DiodePinCount)
+        public Diode(string name) 
+            : base(name, DiodePinCount)
         {
-            Parameters.Add(new BaseParameters());
         }
 
         /// <summary>
@@ -46,10 +50,9 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            var behaviors = new BehaviorContainer(Name,
-                LinkParameters ? Parameters : (IParameterSetDictionary)Parameters.Clone());
-            behaviors.Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(simulation, behaviors, MapNodes(simulation.Variables), Model);
+            var behaviors = new BehaviorContainer(Name);
+            CalculateDefaults();
+            var context = new ComponentBindingContext(this, simulation);
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

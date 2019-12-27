@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using IndependentSourceParameters = SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -12,12 +13,22 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
     /// This behavior also includes transient behavior logic. When transient analysis is
     /// performed, then waveforms need to be used to calculate the operating point anyway.
     /// </remarks>
-    public class BiasingBehavior : Behavior, IBiasingBehavior
+    public class BiasingBehavior : Behavior, IBiasingBehavior,
+        IParameterized<IndependentSourceParameters>
     {
+        private readonly IBiasingSimulationState _biasing;
+        private readonly IIntegrationMethod _method;
+        private readonly IIterationSimulationState _iteration;
+        private readonly int _posNode, _negNode;
+        private readonly ElementSet<double> _elements;
+
         /// <summary>
-        /// Necessary behaviors and parameters
+        /// Gets the parameter set.
         /// </summary>
-        protected CommonBehaviors.IndependentSourceParameters BaseParameters { get; private set; }
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public IndependentSourceParameters Parameters { get; }
 
         /// <summary>
         /// Gets the waveform.
@@ -31,39 +42,19 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
-        public double GetVoltage() => BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode];
+        public double GetVoltage() => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
-        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_posNode]) * -Current;
+        public double GetPower() => (_biasing.Solution[_posNode] - _biasing.Solution[_posNode]) * -Current;
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("c"), ParameterName("i"), ParameterName("i_r"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
-
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
-        private IIntegrationMethod _method;
-        private IIterationSimulationState _iteration;
-        private int _posNode, _negNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -75,19 +66,17 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);
 
-            BiasingState = context.GetState<IBiasingSimulationState>();
+            Parameters = context.GetParameterSet<IndependentSourceParameters>();
+            _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-
-            BaseParameters = context.Behaviors.Parameters.GetValue<CommonBehaviors.IndependentSourceParameters>();
+            _posNode = _biasing.Map[context.Nodes[0]];
+            _negNode = _biasing.Map[context.Nodes[1]];
 
             context.TryGetState(out _method);
-            if (context.Behaviors.Parameters.TryGetValue(out IWaveformDescription wdesc))
-                Waveform = wdesc.Create(_method);
+            Waveform = Parameters.Waveform?.Create(_method);
 
             // Give some warnings if no value is given
-            if (!BaseParameters.DcValue.Given)
+            if (!Parameters.DcValue.Given)
             {
                 // no DC value - either have a transient value or none
                 SpiceSharpWarning.Warning(this,
@@ -96,7 +85,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                         : Properties.Resources.IndependentSources_NoDc.FormatString(Name));
             }
 
-            Elements = new ElementSet<double>(BiasingState.Solver, null, new[] { _posNode, _negNode });
+            _elements = new ElementSet<double>(_biasing.Solver, null, new[] { _posNode, _negNode });
         }
 
         /// <summary>
@@ -113,17 +102,17 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                 if (Waveform != null)
                     value = Waveform.Value;
                 else
-                    value = BaseParameters.DcValue * _iteration.SourceFactor;
+                    value = Parameters.DcValue * _iteration.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = BaseParameters.DcValue * _iteration.SourceFactor;
+                value = Parameters.DcValue * _iteration.SourceFactor;
             }
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector
-            Elements.Add(-value, value);
+            _elements.Add(-value, value);
             Current = value;
         }
     }

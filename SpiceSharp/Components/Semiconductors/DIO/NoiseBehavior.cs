@@ -10,17 +10,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// </summary>
     public class NoiseBehavior : FrequencyBehavior, INoiseBehavior
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private ModelNoiseParameters _mnp;
+        private readonly INoiseSimulationState _state;
+        private readonly ModelNoiseParameters _mnp;
 
         /// <summary>
         /// Noise sources by their index
         /// </summary>
-        private const int RsNoise = 0;
-        private const int IdNoise = 1;
-        private const int FlickerNoise = 2;
+        private const int _rsNoise = 0;
+        private const int _idNoise = 1;
+        private const int _flickerNoise = 2;
 
         /// <summary>
         /// Noise generators
@@ -30,8 +28,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
             new NoiseShot("id", 1, 2),
             new NoiseGain("1overf", 1, 2));
 
-        private INoiseSimulationState _state;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
@@ -39,7 +35,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="context">The context.</param>
         public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            _mnp = context.ModelBehaviors.Parameters.GetValue<ModelNoiseParameters>();
+            _mnp = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
             _state = context.GetState<INoiseSimulationState>();
             DiodeNoise.Bind(context, context.Nodes[0], PosPrime, context.Nodes[1]);
         }
@@ -54,9 +50,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var n = BaseParameters.SeriesMultiplier;
 
             // Set noise parameters
-            DiodeNoise.Generators[RsNoise].SetCoefficients(ModelTemperature.Conductance * m / n * BaseParameters.Area);
-            DiodeNoise.Generators[IdNoise].SetCoefficients(LocalCurrent * m / n);
-            DiodeNoise.Generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * m / n * Math.Exp(_mnp.FlickerNoiseExponent 
+            DiodeNoise.Generators[_rsNoise].SetCoefficients(ModelTemperature.Conductance * m / n * BaseParameters.Area);
+            DiodeNoise.Generators[_idNoise].SetCoefficients(LocalCurrent * m / n);
+            DiodeNoise.Generators[_flickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * m / n * Math.Exp(_mnp.FlickerNoiseExponent 
                 * Math.Log(Math.Max(Math.Abs(LocalCurrent), 1e-38))) / noise.Frequency);
 
             // Evaluate noise

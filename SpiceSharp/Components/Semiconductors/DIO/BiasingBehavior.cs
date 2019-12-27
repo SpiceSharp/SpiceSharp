@@ -12,6 +12,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
+        private readonly int _posNode, _negNode, _posPrimeNode;
+        private readonly IIterationSimulationState _iteration;
+
         /// <summary>
         /// Gets the positive internal node.
         /// </summary>
@@ -63,9 +66,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// The conductance through a single diode (not including paralle or series multipliers).
         /// </summary>
         protected double LocalConductance;
-
-        private readonly int _posNode, _negNode, _posPrimeNode;
-        private readonly IIterationSimulationState _iteration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.

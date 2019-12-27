@@ -30,8 +30,7 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                var ifs = GetType().GetTypeInfo().GetInterfaces();
-                foreach (var i in ifs)
+                foreach (var i in InterfaceCache.Get(GetType()))
                 {
                     var info = i.GetTypeInfo();
                     if (info.IsGenericType && info.GetGenericTypeDefinition() == typeof(IStateful<>))

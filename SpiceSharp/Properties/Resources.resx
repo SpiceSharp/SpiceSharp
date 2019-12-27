@@ -228,6 +228,9 @@
   <data name="ParameterNotFound" xml:space="preserve">
     <value>Could not find parameter '{0}' for {1}.</value>
   </data>
+  <data name="Parameters.ParameterSetNotFound" xml:space="preserve">
+    <value>A parameter set of type '{0}' could not be found.</value>
+  </data>
   <data name="Resistors.ZeroResistance" xml:space="preserve">
     <value>{0}: resistance is 0, set to 1000.</value>
   </data>

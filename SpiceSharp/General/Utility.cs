@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Simulations;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace SpiceSharp
@@ -71,12 +72,12 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="nodes">The nodes.</param>
         /// <param name="count">The number of expected nodes.</param>
-        public static void CheckNodes(this Variable[] nodes, int count)
+        public static void CheckNodes(this IReadOnlyCollection<Variable> nodes, int count)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (nodes.Length != count)
-                throw new NodeMismatchException(count, nodes.Length);
+            if (nodes.Count != count)
+                throw new NodeMismatchException(count, nodes.Count);
             foreach (var node in nodes)
                 node.ThrowIfNull(nameof(node));
         }

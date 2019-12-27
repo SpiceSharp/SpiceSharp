@@ -10,22 +10,18 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// </summary>
     public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Gets the vector elements.
-        /// </summary>
-        /// <value>
-        /// The vector elements.
-        /// </value>
-        protected ElementSet<double> TransientElements { get; private set; }
+        private readonly int _contPosNode, _contNegNode, _branchEq;
+        private readonly ElementSet<double> _elements;
+        private readonly ITimeSimulationState _time;
+        private readonly IBiasingSimulationState _biasing;
 
         /// <summary>
         /// Gets the delayed signal.
         /// </summary>
-        public DelayedSignal Signal { get; private set; }
-
-        private int _contPosNode, _contNegNode, _branchEq;
-        private ITimeSimulationState _time;
-        private IBiasingSimulationState _state;
+        /// <value>
+        /// The signal.
+        /// </value>
+        protected DelayedSignal Signal { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -36,12 +32,12 @@ namespace SpiceSharp.Components.DelayBehaviors
             : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            _state = context.GetState<IBiasingSimulationState>();
-            _contPosNode = _state.Map[context.Nodes[2]];
-            _contNegNode = _state.Map[context.Nodes[3]];
-            _branchEq = _state.Map[Branch];
-            TransientElements = new ElementSet<double>(_state.Solver, null, new[] { _branchEq });
-            Signal = new DelayedSignal(1, BaseParameters.Delay);
+            _biasing = context.GetState<IBiasingSimulationState>();
+            _contPosNode = _biasing.Map[context.Nodes[2]];
+            _contNegNode = _biasing.Map[context.Nodes[3]];
+            _branchEq = _biasing.Map[Branch];
+            _elements = new ElementSet<double>(_biasing.Solver, null, new[] { _branchEq });
+            Signal = new DelayedSignal(1, Parameters.Delay);
         }
 
         /// <summary>
@@ -49,7 +45,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            var sol = _state.Solution;
+            var sol = _biasing.Solution;
             var input = sol[_contPosNode] - sol[_contNegNode];
             Signal.SetProbedValues(input);
         }
@@ -59,16 +55,16 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var sol = _state.Solution;
+            var sol = _biasing.Solution;
             var input = sol[_contPosNode] - sol[_contNegNode];
             Signal.SetProbedValues(input);
 
             if (_time.UseDc)
-                Elements.Add(1, -1, 1, -1, -1, 1);
+                BiasingElements.Add(1, -1, 1, -1, -1, 1);
             else
             {
-                Elements.Add(1, -1, 1, -1);
-                TransientElements.Add(Signal.Values[0]);
+                BiasingElements.Add(1, -1, 1, -1);
+                _elements.Add(Signal.Values[0]);
             }
         }
     }
