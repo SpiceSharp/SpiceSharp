@@ -22,16 +22,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         protected SubcircuitDefinition Definition { get; }
 
         /// <summary>
-        /// Tries the get parameter set.
-        /// </summary>
-        /// <typeparam name="P">The parameter set.</typeparam>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// <c>true</c> if the parameter set was found; otherwise <c>false</c>.
-        /// </returns>
-        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet => Definition.TryGetParameterSet(out value);
-
-        /// <summary>
         /// Gets the variables that are shared between the subcircuit simulation and the parent simulation.
         /// </summary>
         /// <value>
@@ -48,7 +38,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="shared">The shared variables.</param>
         public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IEnumerable<Variable> shared)
             : base(parent,
-                  parent?.Configurations,
                   new BehaviorContainerCollection(),
                   new InterfaceTypeDictionary<ISimulationState>(),
                   new SubcircuitVariableSet(name, parent?.Variables))
@@ -69,6 +58,35 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             if (LocalStates.TryGetValue(out S result))
                 return result;
             return Parent.GetState<S>();
+        }
+
+        /// <summary>
+        /// Gets the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <returns>
+        /// The parameter set.
+        /// </returns>
+        public override P GetParameterSet<P>()
+        {
+            if (Definition.TryGetParameterSet(out P result))
+                return result;
+            return base.GetParameterSet<P>();
+        }
+
+        /// <summary>
+        /// Tries to get the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <param name="value">The parameter set.</param>
+        /// <returns>
+        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool TryGetParameterSet<P>(out P value)
+        {
+            if (Definition.TryGetParameterSet(out value))
+                return true;
+            return base.TryGetParameterSet(out value);
         }
     }
 }

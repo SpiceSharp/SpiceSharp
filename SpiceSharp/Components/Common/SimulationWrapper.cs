@@ -62,14 +62,6 @@ namespace SpiceSharp.Components.Common
         public SimulationStatus Status => Parent.Status;
 
         /// <summary>
-        /// Gets a set of configurations for the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The configuration.
-        /// </value>
-        public IParameterSetDictionary Configurations { get; }
-
-        /// <summary>
         /// Gets the variables.
         /// </summary>
         /// <value>
@@ -86,21 +78,26 @@ namespace SpiceSharp.Components.Common
         public IBehaviorContainerCollection EntityBehaviors { get; }
 
         /// <summary>
+        /// Gets all parameter sets.
+        /// </summary>
+        /// <value>
+        /// The parameter sets.
+        /// </value>
+        public virtual IEnumerable<IParameterSet> ParameterSets => Parent.ParameterSets;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SimulationWrapper"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        /// <param name="configurations">The configurations.</param>
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="states">The simulation states.</param>
         /// <param name="variables">The variables.</param>
         public SimulationWrapper(ISimulation parent, 
-            IParameterSetDictionary configurations,
             IBehaviorContainerCollection behaviors,
             ITypeDictionary<ISimulationState> states,
             IVariableSet variables)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
-            Configurations = configurations.ThrowIfNull(nameof(configurations));
             EntityBehaviors = behaviors.ThrowIfNull(nameof(behaviors));
             LocalStates = states.ThrowIfNull(nameof(states));
             Variables = variables.ThrowIfNull(nameof(variables));
@@ -178,5 +175,26 @@ namespace SpiceSharp.Components.Common
         ///   <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
         /// </returns>
         public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
+
+        /// <summary>
+        /// Gets the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <returns>
+        /// The parameter set.
+        /// </returns>
+        public virtual P GetParameterSet<P>() where P : IParameterSet
+            => Parent.GetParameterSet<P>();
+
+        /// <summary>
+        /// Tries to get the parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <param name="value">The parameter set.</param>
+        /// <returns>
+        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+            => Parent.TryGetParameterSet(out value);
     }
 }

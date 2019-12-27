@@ -36,7 +36,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
-            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions["1"] = 0;
+            tran.TimeParameters.InitialConditions["1"] = 0;
 
             // Create exports
             var exports = new IExport<double>[1];

@@ -262,7 +262,7 @@ namespace SpiceSharpTest.Models
                         }
                         catch (Exception ex)
                         {
-                            var sweeps = sim.Configurations.GetValue<DCConfiguration>().Sweeps;
+                            var sweeps = sim.DCParameters.Sweeps;
                             var values = sim.GetSweepValues();
                             string msg = ex.Message + " at ";
                             var index = 0;
@@ -304,7 +304,7 @@ namespace SpiceSharpTest.Models
                         }
                         catch (Exception ex)
                         {
-                            var sweeps = sim.Configurations.GetValue<DCConfiguration>().Sweeps;
+                            var sweeps = sim.DCParameters.Sweeps;
                             var values = sim.GetSweepValues();
                             string msg = ex.Message + " at ";
                             var index = 0;

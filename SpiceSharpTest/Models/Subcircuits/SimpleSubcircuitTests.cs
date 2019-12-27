@@ -157,7 +157,7 @@ namespace SpiceSharpTest.Models
                 new Subcircuit("X1", subckt, "in", "out"));
 
             var tran = new Transient("transient", 1e-6, 1e-3);
-            tran.Configurations.GetValue<TimeConfiguration>().InitialConditions.Add("out", 0.0);
+            tran.TimeParameters.InitialConditions.Add("out", 0.0);
             IExport<double>[] exports = new[] { new RealVoltageExport(tran, "out") };
             IEnumerable<Func<double, double>> references = new Func<double, double>[] { t => 1.0 - Math.Exp(-t * 1e3) };
             AnalyzeTransient(tran, ckt, exports, references);

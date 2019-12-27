@@ -6,7 +6,10 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Interface that describes a simulation.
     /// </summary>
-    public interface ISimulation : IStateful, IBehavioral
+    /// <seealso cref="IStateful" />
+    /// <seealso cref="IBehavioral" />
+    /// <seealso cref="IParameterized" />
+    public interface ISimulation : IStateful, IBehavioral, IParameterized
     {
         /// <summary>
         /// Gets the name of the <see cref="ISimulation"/>.
@@ -23,14 +26,6 @@ namespace SpiceSharp.Simulations
         /// The status.
         /// </value>
         SimulationStatus Status { get; }
-
-        /// <summary>
-        /// Gets a set of configurations for the <see cref="ISimulation"/>.
-        /// </summary>
-        /// <value>
-        /// The configuration.
-        /// </value>
-        IParameterSetDictionary Configurations { get; }
 
         /// <summary>
         /// Gets the variables.

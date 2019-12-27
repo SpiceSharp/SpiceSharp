@@ -13,7 +13,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="BiasingSimulation" />
     public abstract partial class FrequencySimulation : BiasingSimulation,
         IFrequencySimulation,
-        IBehavioral<IFrequencyUpdateBehavior>
+        IBehavioral<IFrequencyUpdateBehavior>,
+        IParameterized<FrequencyParameters>
     {
         /// <summary>
         /// Private variables
@@ -22,6 +23,14 @@ namespace SpiceSharp.Simulations
         private BehaviorList<IFrequencyUpdateBehavior> _frequencyUpdateBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
+
+        /// <summary>
+        /// Gets the frequency parameters.
+        /// </summary>
+        /// <value>
+        /// The frequency parameters.
+        /// </value>
+        public FrequencyParameters FrequencyParameters { get; } = new FrequencyParameters();
 
         /// <summary>
         /// Gets the statistics.
@@ -57,28 +66,8 @@ namespace SpiceSharp.Simulations
         /// </value>
         protected ComplexSimulationState ComplexState { get; private set; }
 
-        /// <summary>
-        /// Gets the frequency points.
-        /// </summary>
-        /// <value>
-        /// The frequency points.
-        /// </value>
-        protected IEnumerable<double> Frequencies
-        {
-            get
-            {
-                var config = Configurations.GetValue<FrequencyConfiguration>();
-                return config.Frequencies;
-            }
-        }
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
-        public new IComplexSimulationState State => ComplexState;
+        IComplexSimulationState IStateful<IComplexSimulationState>.State => ComplexState;
+        FrequencyParameters IParameterized<FrequencyParameters>.Parameters => FrequencyParameters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
@@ -87,7 +76,7 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(string name) 
             : base(name)
         {
-            Configurations.Add(new FrequencyConfiguration());
+            ModifiedNodalAnalysisHelper<Complex>.Magnitude = ComplexMagnitude;
             Statistics = new ComplexSimulationStatistics();
         }
 
@@ -97,10 +86,9 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         protected FrequencySimulation(string name, IEnumerable<double> frequencySweep) 
-            : base(name)
+            : this(name)
         {
-            Configurations.Add(new FrequencyConfiguration(frequencySweep));
-            Statistics = new ComplexSimulationStatistics();
+            FrequencyParameters.Frequencies = frequencySweep;
         }
 
         /// <summary>
@@ -135,12 +123,9 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)
         {
-            var config = Configurations.GetValue<FrequencyConfiguration>();
-
-            ModifiedNodalAnalysisHelper<Complex>.Magnitude = ComplexMagnitude;
             ComplexState = new ComplexSimulationState(
-                config.Solver ?? Algebra.LUHelper.CreateSparseComplexSolver(),
-                config.Map ?? new VariableMap(Variables.Ground)
+                FrequencyParameters.Solver ?? LUHelper.CreateSparseComplexSolver(),
+                FrequencyParameters.Map ?? new VariableMap(Variables.Ground)
                 );
             /* var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;

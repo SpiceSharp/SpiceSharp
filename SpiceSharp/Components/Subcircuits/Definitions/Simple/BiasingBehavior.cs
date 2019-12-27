@@ -21,14 +21,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(SubcircuitSimulation simulation)
         {
-            if (simulation.TryGetParameterSet(out BaseParameters result))
+            var parameters = simulation.GetParameterSet<BaseParameters>();
+            if (parameters.LocalBiasingSolver && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
             {
-                if (result.LocalBiasingSolver && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
-                {
-                    var parent = simulation.GetState<IBiasingSimulationState>();
-                    var state = new SimulationState(parent, LUHelper.CreateSparseRealSolver());
-                    simulation.LocalStates.Add(state);
-                }
+                var parent = simulation.GetState<IBiasingSimulationState>();
+                var state = new SimulationState(parent, LUHelper.CreateSparseRealSolver());
+                simulation.LocalStates.Add(state);
             }
         }
         private readonly SimulationState _state;

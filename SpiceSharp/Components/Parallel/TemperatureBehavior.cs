@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public TemperatureBehavior(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalConfigurations.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
             if (parameters.TemperatureDistributor != null)
             {
                 _workload = new Workload(parameters.TemperatureDistributor, simulation.EntityBehaviors.Count);

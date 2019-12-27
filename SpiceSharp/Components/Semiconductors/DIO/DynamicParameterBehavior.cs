@@ -10,14 +10,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public abstract class DynamicParameterBehavior : BiasingBehavior
     {
         /// <summary>
-        /// Gets the model parameters.
-        /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
-        protected ModelBaseParameters ModelParameters { get; }
-
-        /// <summary>
         /// Diode capacitance
         /// </summary>
         [ParameterName("cd"), ParameterInfo("Diode capacitance")]
@@ -44,9 +36,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        protected DynamicParameterBehavior(string name, ComponentBindingContext context) : base(name, context)
+        protected DynamicParameterBehavior(string name, ComponentBindingContext context)
+            : base(name, context)
         {
-            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
         }
 
         /// <summary>

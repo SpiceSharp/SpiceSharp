@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base configuration of the simulation.
         /// </summary>
-        protected BiasingConfiguration BaseConfiguration { get; private set; }
+        protected BiasingParameters BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets the base-emitter voltage.
@@ -163,7 +163,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             context.Nodes.CheckNodes(4);
 
             // Get configurations
-            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
 
             // Get states
             Iteration = context.GetState<IIterationSimulationState>();

@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the base configuration.
         /// </summary>
-        protected BiasingConfiguration BaseConfiguration { get; private set; }
+        protected BiasingParameters BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets the drain node.
@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             context.Nodes.CheckNodes(3);
 
-            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);

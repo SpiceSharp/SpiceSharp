@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="FrequencySimulation" />.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class FrequencyConfiguration : ParameterSet
+    public class FrequencyParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets a value indicating whether the operation point should be exported.
@@ -51,19 +51,19 @@ namespace SpiceSharp.Simulations
         public IVariableMap Map { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyParameters"/> class.
         /// </summary>
-        public FrequencyConfiguration()
+        public FrequencyParameters()
         {
             // Default frequency-sweep
             Frequencies = new DecadeSweep(1, 100, 10);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyParameters"/> class.
         /// </summary>
         /// <param name="frequencySweep">The frequency points.</param>
-        public FrequencyConfiguration(IEnumerable<double> frequencySweep)
+        public FrequencyParameters(IEnumerable<double> frequencySweep)
         {
             Frequencies = frequencySweep;
         }

@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="DC" /> simulation.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class DCConfiguration : ParameterSet
+    public class DCParameters : ParameterSet
     {
         /// <summary>
         /// Gets the list of sweeps that need to be executed.

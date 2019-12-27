@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="ITimeSimulation"/> with all the necessary parameters to do a transient analysis.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public abstract class TimeConfiguration : ParameterSet
+    public abstract class TimeParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the start time.
@@ -87,18 +87,18 @@ namespace SpiceSharp.Simulations
         public Dictionary<string, double> InitialConditions { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="TimeParameters"/> class.
         /// </summary>
-        public TimeConfiguration()
+        public TimeParameters()
         {
             InitialConditions = new Dictionary<string, double>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="TimeParameters"/> class.
         /// </summary>
         /// <param name="ic">The initial conditions.</param>
-        public TimeConfiguration(Dictionary<string, double> ic)
+        public TimeParameters(Dictionary<string, double> ic)
         {
             InitialConditions = ic.ThrowIfNull(nameof(ic));
         }

@@ -69,27 +69,6 @@ namespace SpiceSharpTest.Simulations
         }
 
         [Test]
-        public void When_ChangeIntegrationMethod_Expect_Reference()
-        {
-            // Create the circuit
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 10.0),
-                new Resistor("R1", "in", "out", 10),
-                new Capacitor("C1", "out", "0", 20));
-
-            // Create the transient analysis
-            var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-10);
-            };
-            tran.Run(ckt);
-            tran.Configurations.Remove(tran.Configurations.GetValue<TimeConfiguration>());
-            tran.Configurations.Add(new Trapezoidal { InitialStep = 1, StopTime = 10 });
-            tran.Run(ckt);
-        }
-
-        [Test]
         public void When_FloatingRTransient_Expect_Reference()
         {
             // Create the circuit
@@ -172,7 +151,7 @@ namespace SpiceSharpTest.Simulations
             };
 
             // Set initial conditions
-            var ic = tran.Configurations.GetValue<TimeConfiguration>().InitialConditions;
+            var ic = tran.TimeParameters.InitialConditions;
             ic["in"] = 0.0;
 
             // Analyze

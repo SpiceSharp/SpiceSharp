@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A configuration for a <see cref="Noise"/> analysis.
     /// </summary>
-    public class NoiseConfiguration : ParameterSet
+    public class NoiseParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the noise output node name.
@@ -20,18 +20,18 @@ namespace SpiceSharp.Simulations
         public string OutputRef { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoiseConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="NoiseParameters"/> class.
         /// </summary>
-        public NoiseConfiguration()
+        public NoiseParameters()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoiseConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="NoiseParameters"/> class.
         /// </summary>
         /// <param name="output">The output node name.</param>
         /// <param name="reference">The reference node name.</param>
-        public NoiseConfiguration(string output, string reference)
+        public NoiseParameters(string output, string reference)
         {
             Output = output;
             OutputRef = reference;

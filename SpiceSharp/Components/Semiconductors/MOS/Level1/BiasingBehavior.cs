@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Gets the base configuration.
         /// </summary>
-        protected BiasingConfiguration BaseConfiguration { get; private set; }
+        protected BiasingParameters BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets or sets the drain current.
@@ -143,7 +143,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             context.Nodes.CheckNodes(4);
 
-            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);

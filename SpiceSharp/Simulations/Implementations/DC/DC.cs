@@ -8,8 +8,19 @@ namespace SpiceSharp.Simulations
     /// Class that implements a DC sweep analysis.
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
-    public class DC : BiasingSimulation
+    public class DC : BiasingSimulation,
+        IParameterized<DCParameters>
     {
+        /// <summary>
+        /// Gets the dc parameters.
+        /// </summary>
+        /// <value>
+        /// The dc parameters.
+        /// </value>
+        public DCParameters DCParameters { get; } = new DCParameters();
+
+        DCParameters IParameterized<DCParameters>.Parameters => DCParameters;
+
         /// <summary>
         /// Occurs when iterating to a solution has failed.
         /// </summary>
@@ -26,7 +37,6 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation.</param>
         public DC(string name) : base(name)
         {
-            Configurations.Add(new DCConfiguration());
         }
 
         /// <summary>
@@ -37,11 +47,10 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value.</param>
         /// <param name="stop">The stop value.</param>
         /// <param name="step">The step value.</param>
-        public DC(string name, string source, double start, double stop, double step) : base(name)
+        public DC(string name, string source, double start, double stop, double step) 
+            : this(name)
         {
-            var config = new DCConfiguration();
-            config.Sweeps.Add(new SourceSweep(source, new LinearSweep(start, stop, step)));
-            Configurations.Add(config);
+            DCParameters.Sweeps.Add(new SourceSweep(source, new LinearSweep(start, stop, step)));
         }
 
         /// <summary>
@@ -49,14 +58,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
-        public DC(string name, IEnumerable<ISweep> sweeps) : base(name)
+        public DC(string name, IEnumerable<ISweep> sweeps) 
+            : this(name)
         {
             sweeps.ThrowIfNull(nameof(sweeps));
-
-            var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
-                dcconfig.Sweeps.Add(sweep);
-            Configurations.Add(dcconfig);
+                DCParameters.Sweeps.Add(sweep);
         }
 
         /// <summary>
@@ -70,12 +77,11 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Setup the state
-            var dcconfig = Configurations.GetValue<DCConfiguration>().ThrowIfNull("dc configuration");
             Iteration.Mode = IterationModes.Junction;
             
             // Initialize
-            var sweeps = dcconfig.Sweeps.ToArray();
-            _enumerators = new IEnumerator<double>[dcconfig.Sweeps.Count];
+            var sweeps = DCParameters.Sweeps.ToArray();
+            _enumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];
             for (var i = 0; i < sweeps.Length; i++)
             {
                 sweeps[i].CalculateDefaults();
@@ -99,10 +105,10 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!Iterate(dcconfig.SweepMaxIterations))
+                if (!Iterate(DCParameters.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, EventArgs.Empty);
-                    Op(DcMaxIterations);
+                    Op(BiasingParameters.DcMaxIterations);
                 }
 
                 // Export data

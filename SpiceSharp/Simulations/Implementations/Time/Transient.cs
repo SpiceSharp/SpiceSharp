@@ -12,7 +12,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="BiasingSimulation" />
     public partial class Transient : BiasingSimulation,
         ITimeSimulation,
-        IBehavioral<IAcceptBehavior>
+        IBehavioral<IAcceptBehavior>,
+        IParameterized<TimeParameters>
     {
         /// <summary>
         /// Time-domain behaviors.
@@ -25,6 +26,14 @@ namespace SpiceSharp.Simulations
         private SimulationState _time;
 
         /// <summary>
+        /// Gets the time parameters.
+        /// </summary>
+        /// <value>
+        /// The time parameters.
+        /// </value>
+        public TimeParameters TimeParameters { get; }
+
+        /// <summary>
         /// Gets the statistics.
         /// </summary>
         /// <value>
@@ -32,20 +41,8 @@ namespace SpiceSharp.Simulations
         /// </value>
         public new TimeSimulationStatistics Statistics { get; }
 
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
+        TimeParameters IParameterized<TimeParameters>.Parameters => TimeParameters;
         ITimeSimulationState IStateful<ITimeSimulationState>.State => _time;
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
         IIntegrationMethod IStateful<IIntegrationMethod>.State => _method;
 
         /// <summary>
@@ -55,7 +52,7 @@ namespace SpiceSharp.Simulations
         public Transient(string name) 
             : base(name)
         {
-            Configurations.Add(new Trapezoidal());
+            TimeParameters = new Trapezoidal();
             Statistics = new TimeSimulationStatistics();
             _time = new SimulationState();
         }
@@ -64,11 +61,11 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        /// <param name="configuration">The time configuration.</param>
-        public Transient(string name, TimeConfiguration configuration)
+        /// <param name="parameters">The time parameters.</param>
+        public Transient(string name, TimeParameters parameters)
             : base(name)
         {
-            Configurations.Add(configuration);
+            TimeParameters = parameters.ThrowIfNull(nameof(parameters));
             Statistics = new TimeSimulationStatistics();
             _time = new SimulationState();
         }
@@ -82,7 +79,7 @@ namespace SpiceSharp.Simulations
         public Transient(string name, double step, double final)
             : base(name)
         {
-            Configurations.Add(new Trapezoidal { InitialStep = step, StopTime = final });
+            TimeParameters = new Trapezoidal { InitialStep = step, StopTime = final };
             Statistics = new TimeSimulationStatistics();
             _time = new SimulationState();
         }
@@ -97,7 +94,7 @@ namespace SpiceSharp.Simulations
         public Transient(string name, double step, double final, double maxStep)
             : base(name)
         {
-            Configurations.Add(new Trapezoidal { InitialStep = step, StopTime = final, MaxStep = maxStep });
+            TimeParameters = new Trapezoidal { InitialStep = step, StopTime = final, MaxStep = maxStep };
             Statistics = new TimeSimulationStatistics();
             _time = new SimulationState();
         }
@@ -111,8 +108,7 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors and configurations
-            var config = Configurations.GetValue<TimeConfiguration>();
-            _method = config.Create(this);
+            _method = TimeParameters.Create(this);
 
             // Setup
             base.Setup(entities);
@@ -122,7 +118,7 @@ namespace SpiceSharp.Simulations
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 
             // Set up initial conditions
-            foreach (var ic in config.InitialConditions)
+            foreach (var ic in TimeParameters.InitialConditions)
                 _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
 
             // Initialize the integration method (all components have been able to allocate integration states).
@@ -147,9 +143,9 @@ namespace SpiceSharp.Simulations
             }
 
             // Calculate the operating point of the circuit
-            _time.UseIc = Configurations.GetValue<TimeConfiguration>().UseIc;
+            _time.UseIc = TimeParameters.UseIc;
             _time.UseDc = true;
-            Op(DcMaxIterations);
+            Op(BiasingParameters.DcMaxIterations);
             Statistics.TimePoints++;
 
             // Stop calculating the operating point
@@ -159,8 +155,7 @@ namespace SpiceSharp.Simulations
             AfterLoad -= LoadInitialConditions;
 
             var exportargs = new ExportDataEventArgs(this);
-            var config = Configurations.GetValue<TimeConfiguration>();
-
+            
             // Start our statistics
             Statistics.TransientTime.Start();
             var stats = ((BiasingSimulation)this).Statistics;
@@ -175,11 +170,11 @@ namespace SpiceSharp.Simulations
                     Accept();
 
                     // Export the current timepoint
-                    if (_method.Time >= config.StartTime)
+                    if (_method.Time >= TimeParameters.StartTime)
                         OnExport(exportargs);
 
                     // Detect the end of the simulation
-                    if (_method.Time >= config.StopTime)
+                    if (_method.Time >= TimeParameters.StopTime)
                     {
                         // Keep our statistics
                         Statistics.TransientTime.Stop();
@@ -200,7 +195,7 @@ namespace SpiceSharp.Simulations
                         Probe();
 
                         // Try to solve the new point
-                        var converged = TimeIterate(config.TransientMaxIterations);
+                        var converged = TimeIterate(TimeParameters.TransientMaxIterations);
                         Statistics.TimePoints++;
 
                         // Did we fail to converge to a solution?

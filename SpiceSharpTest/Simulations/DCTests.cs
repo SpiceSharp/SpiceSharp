@@ -36,12 +36,11 @@ namespace SpiceSharpTest.Simulations
 
             // Do a DC sweep where one of the sweeps is a parameter
             var dc = new DC("DC 1");
-            var config = dc.Configurations.GetValue<DCConfiguration>();
-            config.Sweeps.Add(new ParameterSweep("R2", "resistance", new LinearSweep(0.0, 1e4, 1e3), container =>
+            dc.DCParameters.Sweeps.Add(new ParameterSweep("R2", "resistance", new LinearSweep(0.0, 1e4, 1e3), container =>
             {
                 container.GetValue<ITemperatureBehavior>().Temperature();
             })); // Sweep R2 from 0 to 10k per 1k
-            config.Sweeps.Add(new SourceSweep("V1", new LinearSweep(0, 5, 0.1))); // Sweep V1 from 0V to 5V per 100mV
+            dc.DCParameters.Sweeps.Add(new SourceSweep("V1", new LinearSweep(0, 5, 0.1))); // Sweep V1 from 0V to 5V per 100mV
 
             // Run simulation
             dc.ExportSimulationData += (sender, args) =>

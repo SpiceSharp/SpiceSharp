@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         private ElementSet<double> _elements;
         private BaseParameters _bp;
         private IBiasingSimulationState _state;
-        private BiasingConfiguration _baseConfig;
+        private BiasingParameters _baseConfig;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
                 throw new ArgumentNullException(nameof(context));
             _bp = context.GetParameterSet<BaseParameters>();
             _state = context.GetState<IBiasingSimulationState>();
-            _baseConfig = context.GetSimulationConfiguration<BiasingConfiguration>();
+            _baseConfig = context.GetSimulationParameterSet<BiasingParameters>();
 
             // Find the nodes that the resistor is connected to
             _nodeA = _state.Map[context.Nodes[0]];

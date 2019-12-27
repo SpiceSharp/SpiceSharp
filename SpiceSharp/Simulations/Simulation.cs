@@ -10,7 +10,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation : IEventfulSimulation
+    public abstract class Simulation : Parameterized, IEventfulSimulation,
+        IParameterized<CollectionParameters>
     {
         /// <summary>
         /// Gets the current status of the <see cref="ISimulation" />.
@@ -19,6 +20,16 @@ namespace SpiceSharp.Simulations
         /// The status.
         /// </value>
         public SimulationStatus Status { get; private set; }
+
+        /// <summary>
+        /// Gets the collection parameters.
+        /// </summary>
+        /// <value>
+        /// The collection parameters.
+        /// </value>
+        public CollectionParameters CollectionParameters { get; } = new CollectionParameters();
+
+        CollectionParameters IParameterized<CollectionParameters>.Parameters => CollectionParameters;
 
         /// <summary>
         /// Gets all the state types that are used by the class.
@@ -58,14 +69,6 @@ namespace SpiceSharp.Simulations
                 }
             }
         }
-
-        /// <summary>
-        /// Gets a set of configurations for the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The configuration.
-        /// </value>
-        public IParameterSetDictionary Configurations { get; } = new ParameterSetDictionary(new InheritedTypeDictionary<IParameterSet>());
 
         /// <summary>
         /// Gets the variables.
@@ -206,10 +209,7 @@ namespace SpiceSharp.Simulations
                 throw new SpiceSharpException(Properties.Resources.Simulations_NoEntities.FormatString(Name));
 
             // Create the set of variables
-            if (Configurations.TryGetValue(out CollectionConfiguration cconfig))
-                Variables = cconfig.Variables ?? new VariableSet();
-            else
-                Variables = new VariableSet();
+            Variables = CollectionParameters.Variables ?? new VariableSet();
             Variables.Clear();
 
             // Create all entity behaviors

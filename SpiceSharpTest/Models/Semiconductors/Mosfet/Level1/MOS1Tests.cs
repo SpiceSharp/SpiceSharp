@@ -421,13 +421,11 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                var v = op.State.Solution;
+                var v = op.GetState<IBiasingSimulationState>().Solution;
             };
 
             // Disable source stepping and see if it converges
-            var config = op.Configurations.GetValue<BiasingConfiguration>();
-            // config.SourceSteps = 0;
-
+            // op.BiasingParameters.SourceSteps = 0;
             op.Run(ckt);
         }
 

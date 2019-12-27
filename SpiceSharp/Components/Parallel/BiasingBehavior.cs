@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         {
             if (!simulation.UsesState<IBiasingSimulationState>())
                 return;
-            var parameters = simulation.LocalConfigurations.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
             if (parameters.LoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
             {
                 var state = simulation.GetParentState<IBiasingSimulationState>();
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public BiasingBehavior(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalConfigurations.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
             _state = simulation.GetState<SimulationState>();
             if (parameters.LoadDistributor != null)
                 _loadWorkload = new Workload(parameters.LoadDistributor, simulation.EntityBehaviors.Count);

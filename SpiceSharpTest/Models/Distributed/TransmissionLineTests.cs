@@ -332,13 +332,13 @@ namespace SpiceSharpTest.Models
             {
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.State.Laplace * delay);
+                    var k = Complex.Exp(-ac.GetState<IComplexSimulationState>().Laplace * delay);
                     k = (k * k - 1) / (k * k + 1);
                     return (k - rlnorm) / ((1 + rlnorm * rsnorm) * k - rsnorm - rlnorm);
                 },
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.State.Laplace * delay);
+                    var k = Complex.Exp(-ac.GetState<IComplexSimulationState>().Laplace * delay);
                     return -2 * rlnorm * k / (k * k + 1) /
                            ((1 + rlnorm * rsnorm) * (k * k - 1) / (k * k + 1) - rsnorm - rlnorm);
                 }

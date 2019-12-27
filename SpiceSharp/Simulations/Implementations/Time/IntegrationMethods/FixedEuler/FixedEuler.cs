@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
     /// A configuration that allows doing transient analysis using a fixed-timestep backward Euler integration method.
     /// This method is one of the fastest, but can also lead to inaccurate results.
     /// </summary>
-    /// <seealso cref="TimeConfiguration" />
-    public partial class FixedEuler : TimeConfiguration
+    /// <seealso cref="TimeParameters" />
+    public partial class FixedEuler : TimeParameters
     {
         /// <summary>
         /// Gets or sets the step.

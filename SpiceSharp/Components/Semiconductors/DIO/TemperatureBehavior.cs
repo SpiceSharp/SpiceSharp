@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the base configuration of the simulation.
         /// </summary>
-        protected BiasingConfiguration BaseConfiguration { get; private set; }
+        protected BiasingParameters BaseConfiguration { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified junction capacitance.
@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _temperature = context.GetState<ITemperatureSimulationState>();
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            BaseConfiguration = context.GetSimulationConfiguration<BiasingConfiguration>();
+            BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
             BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }

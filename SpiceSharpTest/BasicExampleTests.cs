@@ -37,14 +37,12 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1");
 
             // Add a sweep
-            var dcConfig = dc.Configurations.GetValue<DCConfiguration>();
-            dcConfig.Sweeps.Add(new SourceSweep("V1", new LinearSweep(0.0, 3.3, 0.1)));
+            dc.DCParameters.Sweeps.Add(new SourceSweep("V1", new LinearSweep(0.0, 3.3, 0.1)));
             // </example_structure_dc>
 
             // <example_structure_dc_2>
-            var baseConfig = dc.Configurations.GetValue<BiasingConfiguration>();
-            baseConfig.RelativeTolerance = 1e-4;
-            baseConfig.AbsoluteTolerance = 1e-10;
+            dc.BiasingParameters.RelativeTolerance = 1e-4;
+            dc.BiasingParameters.AbsoluteTolerance = 1e-10;
             // </example_structure_dc_2>
         }
 

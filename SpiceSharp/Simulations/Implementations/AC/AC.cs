@@ -36,9 +36,7 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The circuit that will be used.</param>
         protected override void Setup(IEntityCollection entities)
         {
-            var config = Configurations.GetValue<FrequencyConfiguration>();
-            _keepOpInfo = config.KeepOpInfo;
-
+            _keepOpInfo = FrequencyParameters.KeepOpInfo;
             base.Setup(entities);
         }
 
@@ -54,7 +52,7 @@ namespace SpiceSharp.Simulations
             
             // Calculate the operating point
             cstate.Laplace = 0.0;
-            Op(DcMaxIterations);
+            Op(BiasingParameters.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             Statistics.ComplexTime.Start();
@@ -68,7 +66,7 @@ namespace SpiceSharp.Simulations
                     OnExport(exportargs);
 
                 // Sweep the frequency
-                foreach (var freq in Frequencies)
+                foreach (var freq in FrequencyParameters.Frequencies)
                 {
                     // Calculate the current frequency
                     cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);

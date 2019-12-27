@@ -11,39 +11,30 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="FrequencySimulation" />
     public partial class Noise : FrequencySimulation,
-        INoiseSimulation
+        INoiseSimulation,
+        IParameterized<NoiseParameters>
     {
-        /// <summary>
-        /// Gets the currently active noise configuration.
-        /// </summary>
-        public NoiseConfiguration NoiseConfiguration { get; protected set; }
+        private NoiseSimulationState _state;
+        private BehaviorList<INoiseBehavior> _noiseBehaviors;
 
         /// <summary>
-        /// Gets the noise simulation state.
-        /// </summary>
-        protected NoiseSimulationState NoiseState { get; }
-
-        /// <summary>
-        /// Gets the state.
+        /// Gets the noise parameters.
         /// </summary>
         /// <value>
-        /// The state.
+        /// The noise parameters.
         /// </value>
-        public new INoiseSimulationState State => NoiseState;
+        public NoiseParameters NoiseParameters { get; } = new NoiseParameters();
 
-        /// <summary>
-        /// Noise behaviors
-        /// </summary>
-        private BehaviorList<INoiseBehavior> _noiseBehaviors;
+        NoiseParameters IParameterized<NoiseParameters>.Parameters => NoiseParameters;
+        INoiseSimulationState IStateful<INoiseSimulationState>.State => _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        public Noise(string name) : base(name)
+        public Noise(string name) 
+            : base(name)
         {
-            Configurations.Add(new NoiseConfiguration());
-            NoiseState = new NoiseSimulationState();
         }
 
         /// <summary>
@@ -55,8 +46,7 @@ namespace SpiceSharp.Simulations
         public Noise(string name, string output, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
-            Configurations.Add(new NoiseConfiguration(output, null));
-            NoiseState = new NoiseSimulationState();
+            NoiseParameters.Output = output;
         }
 
         /// <summary>
@@ -69,8 +59,8 @@ namespace SpiceSharp.Simulations
         public Noise(string name, string output, string reference, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
-            Configurations.Add(new NoiseConfiguration(output, reference));
-            NoiseState = new NoiseSimulationState();
+            NoiseParameters.Output = output;
+            NoiseParameters.OutputRef = reference;
         }
 
         /// <summary>
@@ -82,8 +72,8 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors, parameters and states
-            NoiseConfiguration = Configurations.GetValue<NoiseConfiguration>();
-            NoiseState.Setup(this);
+            _state = new NoiseSimulationState();
+            _state.Setup(this);
             base.Setup(entities);
 
             // Cache local variables
@@ -96,9 +86,8 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            NoiseState.Unsetup();
+            _state.Unsetup();
             _noiseBehaviors = null;
-            NoiseConfiguration = null;
 
             base.Unsetup();
         }
@@ -112,9 +101,8 @@ namespace SpiceSharp.Simulations
 
             var state = GetState<IBiasingSimulationState>();
             var cstate = ComplexState;
-            var nstate = NoiseState;
 
-            var noiseconfig = NoiseConfiguration;
+            var noiseconfig = NoiseParameters;
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
@@ -122,12 +110,12 @@ namespace SpiceSharp.Simulations
             var negOutNode = noiseconfig.OutputRef != null ? state.Map[Variables[noiseconfig.OutputRef]] : 0;
 
             // Initialize
-            var freq = Frequencies.GetEnumerator();
+            var freq = FrequencyParameters.Frequencies.GetEnumerator();
             if (!freq.MoveNext())
                 return;
-            nstate.Reset(freq.Current);
+            _state.Reset(freq.Current);
             cstate.Laplace = 0;
-            Op(DcMaxIterations);
+            Op(BiasingParameters.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             InitializeAcParameters();
@@ -135,19 +123,19 @@ namespace SpiceSharp.Simulations
             // Loop through noise figures
             do
             {
-                nstate.Frequency = freq.Current;
+                _state.Frequency = freq.Current;
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq.Current);
                 AcIterate();
 
                 var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                nstate.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                _state.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
                 NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
-                nstate.OutputNoiseDensity = 0.0;
+                _state.OutputNoiseDensity = 0.0;
                 foreach (var behavior in _noiseBehaviors)
                     behavior.Noise();
 

@@ -15,8 +15,19 @@ namespace SpiceSharp.Simulations
     public abstract partial class BiasingSimulation : Simulation,
         IBiasingSimulation, IStateful<TemperatureSimulationState>,
         IStateful<IIterationSimulationState>,
-        IBehavioral<IBiasingUpdateBehavior>
+        IBehavioral<IBiasingUpdateBehavior>,
+        IParameterized<BiasingParameters>
     {
+        private LoadStateEventArgs _realStateLoadArgs;
+        private BehaviorList<IBiasingBehavior> _loadBehaviors;
+        private BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
+        private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
+        private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
+        private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
+        private bool _isPreordered, _shouldReorder;
+        private SimulationState _state;
+        private TemperatureSimulationState _temperature;
+
         /// <summary>
         /// Gets the variable that causes issues.
         /// </summary>
@@ -24,6 +35,14 @@ namespace SpiceSharp.Simulations
         /// This variable can be used to close in on the problem in case of non-convergence.
         /// </remarks>
         public Variable ProblemVariable { get; protected set; }
+
+        /// <summary>
+        /// Gets the biasing parameters.
+        /// </summary>
+        /// <value>
+        /// The biasing parameters.
+        /// </value>
+        public BiasingParameters BiasingParameters { get; } = new BiasingParameters();
 
         /// <summary>
         /// Gets the iteration state.
@@ -35,7 +54,9 @@ namespace SpiceSharp.Simulations
 
         IIterationSimulationState IStateful<IIterationSimulationState>.State => Iteration;
         ITemperatureSimulationState IStateful<ITemperatureSimulationState>.State => _temperature;
+        IBiasingSimulationState IStateful<IBiasingSimulationState>.State => _state;
         TemperatureSimulationState IStateful<TemperatureSimulationState>.State => _temperature;
+        BiasingParameters IParameterized<BiasingParameters>.Parameters => BiasingParameters;
 
         #region Events
 
@@ -75,36 +96,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterTemperature;
         #endregion
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private LoadStateEventArgs _realStateLoadArgs;
-        private BehaviorList<IBiasingBehavior> _loadBehaviors;
-        private BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
-        private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
-        private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
-        private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
-        private double _diagonalGmin;
-        private bool _isPreordered, _shouldReorder;
-        private SimulationState _state;
-        private TemperatureSimulationState _temperature;
         
-        /// <summary>
-        /// Gets the maximum number of allowed iterations for DC analysis.
-        /// </summary>
-        protected int DcMaxIterations { get; private set; }
-
-        /// <summary>
-        /// Gets the (cached) absolute tolerance on values to check convergence.
-        /// </summary>
-        protected double AbsTol { get; private set; }
-
-        /// <summary>
-        /// Gets the (cached) relative tolerance on values to check convergence.
-        /// </summary>
-        protected double RelTol { get; private set; }
-
         /// <summary>
         /// Gets the statistics.
         /// </summary>
@@ -119,7 +111,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The state.
         /// </value>
-        public IBiasingSimulationState State => _state;
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulation"/> class.
@@ -128,7 +120,7 @@ namespace SpiceSharp.Simulations
         protected BiasingSimulation(string name)
             : base(name)
         {
-            Configurations.Add(new BiasingConfiguration());
+            ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
             Statistics = new BiasingSimulationStatistics();
         }
 
@@ -141,11 +133,7 @@ namespace SpiceSharp.Simulations
             circuit.ThrowIfNull(nameof(circuit));
 
             // Get behaviors and configuration data
-            var config = Configurations.GetValue<BiasingConfiguration>();
-            DcMaxIterations = config.DcMaxIterations;
-            AbsTol = config.AbsoluteTolerance;
-            RelTol = config.RelativeTolerance;
-            _temperature = new TemperatureSimulationState(config.Temperature, config.NominalTemperature);
+            _temperature = new TemperatureSimulationState(BiasingParameters.Temperature, BiasingParameters.NominalTemperature);
 
             // Setup the rest of the circuit.
             base.Setup(circuit);
@@ -159,7 +147,7 @@ namespace SpiceSharp.Simulations
             _state.Setup();
 
             // Set up nodesets
-            foreach (var ns in config.Nodesets)
+            foreach (var ns in BiasingParameters.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
         }
 
@@ -169,14 +157,12 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)
         {
-            var config = Configurations.GetValue<BiasingConfiguration>();
-
             // Create the state for this simulation
-            ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
+            // TODO: This may not be a terribly good idea (sharing solvers).
             _state = new SimulationState(
-                config.Solver ?? LUHelper.CreateSparseRealSolver(),
-                config.Map ?? new VariableMap(Variables.Ground));
-            Iteration.Gmin = config.Gmin;
+                BiasingParameters.Solver ?? LUHelper.CreateSparseRealSolver(),
+                BiasingParameters.Map ?? new VariableMap(Variables.Ground));
+            Iteration.Gmin = BiasingParameters.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
             /* var strategy = _state.Solver.Strategy;
@@ -240,34 +226,33 @@ namespace SpiceSharp.Simulations
         /// <param name="maxIterations">The maximum amount of allowed iterations.</param>
         protected void Op(int maxIterations)
         {
-            var config = Configurations.GetValue<BiasingConfiguration>().ThrowIfNull("base configuration");
             Iteration.Mode = IterationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
-            if (!config.NoOperatingPointIterations)
+            if (!BiasingParameters.NoOperatingPointIterations)
             {
                 if (Iterate(maxIterations))
                     return;
             }
 
             // Try Gmin stepping
-            if (config.GminSteps > 1)
+            if (BiasingParameters.GminSteps > 1)
             {
-                if (IterateGminStepping(maxIterations, config.GminSteps))
+                if (IterateGminStepping(maxIterations, BiasingParameters.GminSteps))
                     return;
             }
 
             // No convergence..., try GMIN stepping on the diagonal elements
-            if (config.GminSteps > 1)
+            if (BiasingParameters.GminSteps > 1)
             {
-                if (IterateDiagonalGminStepping(maxIterations, config.GminSteps))
+                if (IterateDiagonalGminStepping(maxIterations, BiasingParameters.GminSteps))
                     return;
             }
 
             // Nope, still not converging, let's try source stepping
-            if (config.SourceSteps > 1)
+            if (BiasingParameters.SourceSteps > 1)
             {
-                if (IterateSourceStepping(maxIterations, config.SourceSteps))
+                if (IterateSourceStepping(maxIterations, BiasingParameters.SourceSteps))
                     return;
             }
 
@@ -285,8 +270,6 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool IterateGminStepping(int maxIterations, int steps)
         {
-            var state = _state;
-
             // We will shunt all PN-junctions with a conductance (should be implemented by the components)
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartGminStepping);
 
@@ -333,17 +316,13 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool IterateDiagonalGminStepping(int maxIterations, int steps)
         {
-            var state = _state;
-
             // We will add a DC path to ground to all nodes to aid convergence
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartDiagonalGminStepping);
 
             // We'll hack into the loading algorithm to apply our diagonal contributions
-            _diagonalGmin = Iteration.Gmin;
-            if (_diagonalGmin <= 0)
-                _diagonalGmin = 1e-12;
+            var diagonalGmin = Math.Min(Iteration.Gmin, 1e-12);
             void ApplyGminStep(object sender, LoadStateEventArgs args)
-                => _state.Solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.ApplyDiagonalGmin(matrix, _diagonalGmin));
+                => _state.Solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.ApplyDiagonalGmin(matrix, diagonalGmin));
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
@@ -352,7 +331,7 @@ namespace SpiceSharp.Simulations
                 
             // Let's make it a bit easier for our iterations to converge
             for (var i = 0; i < steps; i++)
-                _diagonalGmin *= 10.0;
+                diagonalGmin *= 10.0;
 
             // Start GMIN stepping
             Iteration.Mode = IterationModes.Junction;
@@ -361,17 +340,17 @@ namespace SpiceSharp.Simulations
                 Iteration.IsConvergent = false;
                 if (!Iterate(maxIterations))
                 {
-                    _diagonalGmin = 0.0;
+                    diagonalGmin = 0.0;
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulation_Biasing_GminSteppingFailed);
                     break;
                 }
-                _diagonalGmin /= 10.0;
+                diagonalGmin /= 10.0;
                 Iteration.Mode = IterationModes.Float;
             }
 
             // Try one more time without the gmin stepping
             AfterLoad -= ApplyGminStep;
-            _diagonalGmin = 0.0;
+            diagonalGmin = 0.0;
             return Iterate(maxIterations);
         }
 
@@ -385,8 +364,6 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool IterateSourceStepping(int maxIterations, int steps)
         {
-            var state = _state;
-
             // We will slowly ramp up voltages starting at 0 to make sure it converges
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartSourceStepping);
 
@@ -421,7 +398,6 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected virtual bool Iterate(int maxIterations)
         {
-            var state = _state;
             var solver = _state.Solver;
             var pass = false;
             var iterno = 0;
@@ -478,17 +454,17 @@ namespace SpiceSharp.Simulations
                 }
 
                 // The current solution becomes the old solution
-                state.StoreSolution();
+                _state.StoreSolution();
 
                 // Solve the equation
                 Statistics.SolveTime.Start();
-                solver.Solve(state.Solution);
+                solver.Solve(_state.Solution);
                 Statistics.SolveTime.Stop();
 
                 // Reset ground nodes
                 solver.GetElement(0).Value = 0.0;
-                state.Solution[0] = 0.0;
-                state.OldSolution[0] = 0.0;
+                _state.Solution[0] = 0.0;
+                _state.OldSolution[0] = 0.0;
 
                 foreach (var behavior in _updateBehaviors)
                     behavior.Update();
@@ -591,21 +567,19 @@ namespace SpiceSharp.Simulations
         /// </returns>
         protected bool IsConvergent()
         {
-            var rstate = _state;
-
             // Check convergence for each node
-            foreach (var v in rstate.Map)
+            foreach (var v in _state.Map)
             {
                 var node = v.Key;
-                var n = rstate.Solution[v.Value];
-                var o = rstate.OldSolution[v.Value];
+                var n = _state.Solution[v.Value];
+                var o = _state.OldSolution[v.Value];
 
                 if (double.IsNaN(n))
                     throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(node));
 
                 if (node.UnknownType == VariableType.Voltage)
                 {
-                    var tol = RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + AbsTol;
+                    var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
@@ -614,7 +588,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    var tol = RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + AbsTol;
+                    var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;

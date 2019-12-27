@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="BiasingSimulation" />.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class BiasingConfiguration : ParameterSet
+    public class BiasingParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should go straight to gmin stepping.

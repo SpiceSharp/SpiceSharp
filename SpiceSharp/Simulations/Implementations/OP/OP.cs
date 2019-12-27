@@ -20,7 +20,7 @@
         protected override void Execute()
         {
             base.Execute();
-            Op(DcMaxIterations);
+            Op(BiasingParameters.DcMaxIterations);
             var exportargs = new ExportDataEventArgs(this);
             OnExport(exportargs);
         }

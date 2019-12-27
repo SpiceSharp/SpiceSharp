@@ -65,12 +65,21 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Gets the simulation configuration.
+        /// Gets a simulation parameter set of the specified type.
         /// </summary>
-        /// <typeparam name="P">The configuration type.</typeparam>
-        /// <returns>The configuration.</returns>
-        public P GetSimulationConfiguration<P>() where P : IParameterSet
-            => Simulation.Configurations.GetValue<P>();
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <returns>The parameter set.</returns>
+        public P GetSimulationParameterSet<P>() where P : IParameterSet
+            => Simulation.GetParameterSet<P>();
+
+        /// <summary>
+        /// Tries to get a simulation parameter set of the specified type.
+        /// </summary>
+        /// <typeparam name="P">The parameter set type.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>The parameter set.</returns>
+        public bool TryGetSimulationParameterSet<P>(out P value) where P : IParameterSet
+            => Simulation.TryGetParameterSet(out value);
 
         /// <summary>
         /// Gets the parameter set of the specified type.

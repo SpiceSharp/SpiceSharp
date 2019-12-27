@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
     /// <summary>
     /// A configuration for an integration method that has a variable timestep.
     /// </summary>
-    /// <seealso cref="TimeConfiguration" />
-    public abstract class VariableTimestepConfiguration : TimeConfiguration
+    /// <seealso cref="TimeParameters" />
+    public abstract class VariableTimestepConfiguration : TimeParameters
     {
         /// <summary>
         /// Gets or sets the maximum step.
