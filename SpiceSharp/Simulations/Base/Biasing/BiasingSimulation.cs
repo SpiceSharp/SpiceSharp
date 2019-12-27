@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IBiasingSimulation"/>
     /// <seealso cref="IBehavioral{T}" />
     public abstract partial class BiasingSimulation : Simulation,
-        IBiasingSimulation,
+        IBiasingSimulation, IStateful<TemperatureSimulationState>,
         IStateful<IIterationSimulationState>,
         IBehavioral<IBiasingUpdateBehavior>
     {
@@ -33,21 +33,9 @@ namespace SpiceSharp.Simulations
         /// </value>
         protected IterationState Iteration { get; } = new IterationState();
 
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
         IIterationSimulationState IStateful<IIterationSimulationState>.State => Iteration;
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
         ITemperatureSimulationState IStateful<ITemperatureSimulationState>.State => _temperature;
+        TemperatureSimulationState IStateful<TemperatureSimulationState>.State => _temperature;
 
         #region Events
 

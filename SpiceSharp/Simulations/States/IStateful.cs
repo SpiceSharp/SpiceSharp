@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
     /// Contract for a class that uses an <see cref="ISimulationState"/>.
     /// </summary>
     /// <typeparam name="S">The type of simulation state.</typeparam>
-    public interface IStateful<S> : IStateful where S : ISimulationState
+    public interface IStateful<out S> : IStateful where S : ISimulationState
     {
         /// <summary>
         /// Gets the state.
