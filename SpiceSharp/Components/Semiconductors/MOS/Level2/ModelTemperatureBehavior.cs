@@ -51,6 +51,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// The biasing simulation state.
         /// </value>
         protected IBiasingSimulationState BiasingState { get; private set; }
+        private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
@@ -60,6 +61,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
+            _temperature = context.GetState<ITemperatureSimulationState>();
             ModelParameters = context.Behaviors.Parameters.GetValue<ModelBaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
@@ -71,7 +73,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             // Perform model defaulting
             if (!ModelParameters.NominalTemperature.Given)
-                ModelParameters.NominalTemperature.RawValue = BiasingState.NominalTemperature;
+                ModelParameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
             Factor1 = ModelParameters.NominalTemperature / Constants.ReferenceTemperature;
             VtNominal = ModelParameters.NominalTemperature * Constants.KOverQ;
             var kt1 = Constants.Boltzmann * ModelParameters.NominalTemperature;

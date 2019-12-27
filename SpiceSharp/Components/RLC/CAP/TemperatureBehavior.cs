@@ -30,6 +30,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
 
+        private readonly ITemperatureSimulationState _temperature;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
@@ -45,6 +47,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
 
             // Connections
+            _temperature = context.GetState<ITemperatureSimulationState>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
@@ -54,7 +57,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
+                BaseParameters.Temperature.RawValue = _temperature.Temperature;
 
             double capacitance;
             if (!BaseParameters.Capacitance.Given)

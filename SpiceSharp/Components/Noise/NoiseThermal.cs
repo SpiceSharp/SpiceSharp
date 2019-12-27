@@ -46,7 +46,7 @@
         {
             var val = ComplexState.Solution[Nodes[0]] - ComplexState.Solution[Nodes[1]];
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 4.0 * Constants.Boltzmann * BiasingState.Temperature * Conductance * gain;
+            return 4.0 * Constants.Boltzmann * TemperatureState.Temperature * Conductance * gain;
         }
     }
 }

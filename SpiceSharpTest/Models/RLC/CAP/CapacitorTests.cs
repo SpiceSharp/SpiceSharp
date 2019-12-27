@@ -131,7 +131,8 @@ namespace SpiceSharpTest.Models
 
             tran.BeforeTemperature += (sender, args) =>
                 {
-                    ((IBiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
+                    var state = tran.GetState<ITemperatureSimulationState>();
+                    ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
             IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
@@ -178,7 +179,8 @@ namespace SpiceSharpTest.Models
 
             tran.BeforeTemperature += (sender, args) =>
                 {
-                    ((IBiasingSimulationState)args.State).Temperature = Constants.CelsiusKelvin + 30.0;
+                    var state = tran.GetState<ITemperatureSimulationState>();
+                    ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
             IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };

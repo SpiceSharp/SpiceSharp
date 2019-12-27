@@ -63,6 +63,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
+        private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -72,6 +73,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         public TemperatureBehavior(string name, ComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
+            _temperature = context.GetState<ITemperatureSimulationState>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
@@ -85,7 +87,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             BiasingState.ThrowIfNotBound(this);
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
+                BaseParameters.Temperature.RawValue = _temperature.Temperature;
             var vt = BaseParameters.Temperature * Constants.KOverQ;
             var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
             var ratio1 = BaseParameters.Temperature / ModelParameters.NominalTemperature - 1;

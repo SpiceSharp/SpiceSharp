@@ -78,6 +78,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
+        private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -87,7 +88,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public TemperatureBehavior(string name, ComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
-
+            _temperature = context.GetState<ITemperatureSimulationState>();
             ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BaseConfiguration = context.Configurations.GetValue<BiasingConfiguration>();
@@ -105,7 +106,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // loop through all the instances
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
+                BaseParameters.Temperature.RawValue = _temperature.Temperature;
             Vt = Constants.KOverQ * BaseParameters.Temperature;
             Vte = ModelParameters.EmissionCoefficient * Vt;
 

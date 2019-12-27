@@ -8,6 +8,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="ISimulation" />
     /// <seealso cref="IBehavioral{T}" />
     public interface ITemperatureSimulation : IEventfulSimulation,
+        IStateful<ITemperatureSimulationState>,
         IBehavioral<ITemperatureBehavior>
     {
     }

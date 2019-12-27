@@ -14,17 +14,6 @@ namespace SpiceSharp.Components.ParallelBehaviors
             private readonly IBiasingSimulationState _parent;
 
             /// <summary>
-            /// The current temperature for this circuit in Kelvin.
-            /// </summary>
-            public double Temperature { get; set; }
-
-            /// <summary>
-            /// The nominal temperature for the circuit in Kelvin.
-            /// Used by models as the default temperature where the parameters were measured.
-            /// </summary>
-            public double NominalTemperature => _parent.NominalTemperature;
-
-            /// <summary>
             /// Gets the previous solution vector.
             /// </summary>
             /// <remarks>

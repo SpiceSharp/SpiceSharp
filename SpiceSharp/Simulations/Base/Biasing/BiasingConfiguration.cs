@@ -107,5 +107,47 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("biasing.map"), ParameterInfo("The mapper used to map variables to node indices.")]
         public IVariableMap Map { get; set; }
+
+        /// <summary>
+        /// Gets or sets the (initial) temperature in Kelvin of the simulation.
+        /// </summary>
+        /// <value>
+        /// The temperature.
+        /// </value>
+        public double Temperature { get; set; } = 300.15;
+
+        /// <summary>
+        /// Gets or sets the (initial) temperature in degrees celsius of the simulation.
+        /// </summary>
+        /// <value>
+        /// The temperature.
+        /// </value>
+        [ParameterName("temp"), ParameterName("temperature"), ParameterInfo("The temperature of the circuit in degrees Celsius.")]
+        public double TemperatureCelsius
+        {
+            get => Temperature - Constants.CelsiusKelvin; 
+            set => Temperature = value + Constants.CelsiusKelvin;
+        }
+
+        /// <summary>
+        /// Gets or sets the nominal temperature in Kelvin.
+        /// </summary>
+        /// <value>
+        /// The nominal temperature.
+        /// </value>
+        public double NominalTemperature { get; set; } = 300.15;
+
+        /// <summary>
+        /// Gets or sets the nominal temperature in degrees celsius.
+        /// </summary>
+        /// <value>
+        /// The nominal temperature.
+        /// </value>
+        [ParameterName("tnom"), ParameterName("nominaltemperature"), ParameterInfo("The nominal temperature of the circuit in degrees Celsius")]
+        public double NominalTemperatureCelsius 
+        {
+            get => NominalTemperature - Constants.CelsiusKelvin;
+            set => NominalTemperature = value + Constants.CelsiusKelvin;
+        }
     }
 }

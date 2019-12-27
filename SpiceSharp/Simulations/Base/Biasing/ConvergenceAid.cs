@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The amount with which a value is forced to the convergence aid value.
         /// </summary>
-        private const double Force = 1.0e10;
+        private const double _force = 1.0e10;
 
         /// <summary>
         /// Gets the name of the variable.
@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
         public virtual void Initialize(IBiasingSimulation simulation)
         {
             simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.State;
+            var state = simulation.GetState<IBiasingSimulationState>();
             Variables = state.Map;
             Solver = state.Solver;
 
@@ -125,9 +125,9 @@ namespace SpiceSharp.Simulations
             // If there are current contributions, then we can't just hard-set the value
             if (hasOtherTypes)
             {
-                Diagonal.Value = Force;
+                Diagonal.Value = _force;
                 if (Rhs != null)
-                    Rhs.Value = Force * Value;
+                    Rhs.Value = _force * Value;
             }
             else
             {

@@ -41,6 +41,14 @@ namespace SpiceSharp.Simulations
         /// </value>
         IIterationSimulationState IStateful<IIterationSimulationState>.State => Iteration;
 
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        ITemperatureSimulationState IStateful<ITemperatureSimulationState>.State => _temperature;
+
         #region Events
 
         /// <summary>
@@ -92,6 +100,7 @@ namespace SpiceSharp.Simulations
         private double _diagonalGmin;
         private bool _isPreordered, _shouldReorder;
         private SimulationState _state;
+        private TemperatureSimulationState _temperature;
         
         /// <summary>
         /// Gets the maximum number of allowed iterations for DC analysis.
@@ -148,6 +157,7 @@ namespace SpiceSharp.Simulations
             DcMaxIterations = config.DcMaxIterations;
             AbsTol = config.AbsoluteTolerance;
             RelTol = config.RelativeTolerance;
+            _temperature = new TemperatureSimulationState(config.Temperature, config.NominalTemperature);
 
             // Setup the rest of the circuit.
             base.Setup(circuit);

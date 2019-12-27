@@ -9,22 +9,14 @@ namespace SpiceSharp.Simulations
     public interface IBiasingSimulationState : ISolverSimulationState<double>
     {
         /// <summary>
-        /// The current temperature for this circuit in Kelvin.
-        /// </summary>
-        double Temperature { get; set; }
-
-        /// <summary>
-        /// The nominal temperature for the circuit in Kelvin.
-        /// Used by models as the default temperature where the parameters were measured.
-        /// </summary>
-        double NominalTemperature { get; }
-
-        /// <summary>
-        /// Gets the previous solution vector.
+        /// Gets the solution vector of the last computed iteration.
         /// </summary>
         /// <remarks>
         /// This vector is needed for determining convergence.
         /// </remarks>
+        /// <value>
+        /// The solution to the last iteration.
+        /// </value>
         IVector<double> OldSolution { get; }
     }
 }

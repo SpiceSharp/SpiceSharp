@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <value>
         /// The biasing simulation state.
         /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
+        protected ITemperatureSimulationState TemperatureState { get; private set; }
 
         /// <summary>
         /// Gets the noise simulation state.
@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.NoiseSources
         {
             context.ThrowIfNull(nameof(context));
             nodes.ThrowIfNull(nameof(nodes));
-            BiasingState = context.GetState<IBiasingSimulationState>();
+            TemperatureState = context.GetState<ITemperatureSimulationState>();
             ComplexState = context.GetState<IComplexSimulationState>();
             NoiseState = context.GetState<INoiseSimulationState>();
 

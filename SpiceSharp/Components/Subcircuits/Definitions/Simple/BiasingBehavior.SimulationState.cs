@@ -13,19 +13,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <seealso cref="IBiasingSimulationState" />
         protected class SimulationState : LocalSolverState<double>, IBiasingSimulationState
         {
-            private readonly IBiasingSimulationState _parent;
-
-            /// <summary>
-            /// The current temperature for this circuit in Kelvin.
-            /// </summary>
-            public double Temperature { get; set; }
-
-            /// <summary>
-            /// The nominal temperature for the circuit in Kelvin.
-            /// Used by models as the default temperature where the parameters were measured.
-            /// </summary>
-            public double NominalTemperature => _parent.NominalTemperature;
-
             /// <summary>
             /// Gets the previous solution vector.
             /// </summary>
@@ -42,7 +29,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             public SimulationState(IBiasingSimulationState parent, ISparseSolver<double> solver)
                 : base(parent, solver)
             {
-                _parent = parent.ThrowIfNull(nameof(parent));
             }
 
             /// <summary>
@@ -52,19 +38,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             {
                 base.Initialize(shared);
                 OldSolution = new DenseVector<double>(Solver.Size);
-            }
-
-            /// <summary>
-            /// Applies the local solver to the parent solver.
-            /// </summary>
-            /// <returns>
-            /// <c>true</c> if the application was successful; otherwise, <c>false</c>.
-            /// </returns>
-            /// <exception cref="NoEquivalentSubcircuitException">Thrown if no equivalent contributions could be calculated.</exception>
-            public override bool Apply()
-            {
-                Temperature = _parent.Temperature;
-                return base.Apply();
             }
 
             /// <summary>

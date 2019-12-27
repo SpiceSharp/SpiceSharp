@@ -35,6 +35,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
+        private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
@@ -44,7 +45,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public TemperatureBehavior(string name, ComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
-
+            _temperature = context.GetState<ITemperatureSimulationState>();
             BaseParameters = context.Behaviors.Parameters.GetValue<BaseParameters>();
             if (context.ModelBehaviors != null)
                 ModelParameters = context.ModelBehaviors.Parameters.GetValue<ModelBaseParameters>();
@@ -61,7 +62,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             // Default Value Processing for Resistor Instance
             if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = BiasingState.Temperature;
+                BaseParameters.Temperature.RawValue = _temperature.Temperature;
             if (!BaseParameters.Width.Given)
                 BaseParameters.Width.RawValue = ModelParameters?.DefaultWidth ?? 0.0;
 
