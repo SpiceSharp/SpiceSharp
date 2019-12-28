@@ -300,6 +300,9 @@
   <data name="Simulations.Time.TimeTooSmall" xml:space="preserve">
     <value>A timepoint cannot be negative.</value>
   </data>
+  <data name="Simulations.ValidationFailed" xml:space="preserve">
+    <value>The simulation '{0}' has {1} rule violations.</value>
+  </data>
   <data name="SizeMismatch1" xml:space="preserve">
     <value>Size mismatch of {0} and {1}.</value>
   </data>

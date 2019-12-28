@@ -611,6 +611,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The simulation &apos;{0}&apos; has {1} rule violations..
+        /// </summary>
+        internal static string Simulations_ValidationFailed {
+            get {
+                return ResourceManager.GetString("Simulations.ValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Size mismatch of {0} and {1}..
         /// </summary>
         internal static string SizeMismatch1 {

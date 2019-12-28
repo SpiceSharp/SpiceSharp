@@ -4,6 +4,7 @@ using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.General;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -208,7 +209,7 @@ namespace SpiceSharp.Simulations
                 throw new SpiceSharpException(Properties.Resources.Simulations_NoEntities.FormatString(Name));
 
             // Create the set of variables
-            Variables = CollectionParameters.Variables ?? new VariableSet();
+            Variables = CollectionParameters.Variables?.Invoke() ?? new VariableSet();
             Variables.Clear();
 
             // Create all entity behaviors
@@ -257,6 +258,22 @@ namespace SpiceSharp.Simulations
             Statistics.BehaviorCreationTime.Stop();
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
+
+            // Validate these behaviors if necessary
+            var provider = CollectionParameters.RuleProvider?.Invoke();
+            if (provider != null)
+            {
+                foreach (var container in EntityBehaviors)
+                {
+                    foreach (var behavior in container.Values)
+                    {
+                        if (behavior is IRuleSubject subject)
+                            subject.Apply(provider);
+                    }
+                }
+                if (provider.ViolationCount > 0)
+                    throw new SimulationValidationFailed(this, provider);
+            }
         }
 
         /// <summary>
