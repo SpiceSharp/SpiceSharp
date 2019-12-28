@@ -1,7 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {

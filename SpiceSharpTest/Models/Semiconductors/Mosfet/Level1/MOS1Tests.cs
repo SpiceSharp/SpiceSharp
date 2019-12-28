@@ -3,7 +3,6 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -427,24 +426,6 @@ namespace SpiceSharpTest.Models
             // Disable source stepping and see if it converges
             // op.BiasingParameters.SourceSteps = 0;
             op.Run(ckt);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new Mosfet1("M1", "in", "in", "in", "in", "nomod"));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_FloatingGateValidation_Expect_FloatingNodeException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new Mosfet1("M1", "in", "gate", "0", "0", "nomod"));
-            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
         }
     }
 }

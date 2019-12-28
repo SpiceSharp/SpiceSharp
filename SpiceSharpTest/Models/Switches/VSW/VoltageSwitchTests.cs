@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
@@ -312,33 +311,6 @@ namespace SpiceSharpTest.Models
             // Check off
             s.SetParameter("off");
             Assert.AreEqual(false, p.ZeroState);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new VoltageSwitch("S1", "in", "in", "in", "in"));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_FloatingInputValidation_Expect_FloatingNodeException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new VoltageSwitch("S1", "out", "0", "in2", "0"));
-            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_ConnectedOutputValidation_Expect_NoException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new VoltageSwitch("S1", "out", "in", "in", "0"));
-            ckt.Validate();
         }
     }
 }

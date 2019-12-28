@@ -3,8 +3,6 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using NUnit.Framework;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
 
 namespace SpiceSharpTest.Waveforms
 {

@@ -4,7 +4,6 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -220,15 +219,6 @@ namespace SpiceSharpTest.Models
 
             Compare(noise, cktReference, cktActual, exports);
             DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new Resistor("R1", "in", "in", 1e3));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

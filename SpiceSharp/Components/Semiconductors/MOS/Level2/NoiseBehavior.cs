@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.MosfetBehaviors.Common;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 

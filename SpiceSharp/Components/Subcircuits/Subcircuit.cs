@@ -2,7 +2,6 @@
 using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
-using SpiceSharp.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +12,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity, IComponent, IRuleSubject
+    public class Subcircuit : Entity, IComponent
     {
         private string[] _connections;
 
@@ -121,25 +120,6 @@ namespace SpiceSharp.Components
             _connections = new string[_connections.Length];
             for (var i = 0; i < _connections.Length; i++)
                 _connections[i] = s._connections[i];
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        /// <param name="container">The container with all the rules that should be validated.</param>
-        public void ApplyTo(IRuleContainer container)
-        {
-            // Also allow checks on the subcircuit
-            foreach (var rule in container.GetAllValues<IComponentRule>())
-                rule.ApplyComponent(this);
-
-            // We don't know about conductive paths (this should be taken care of by the subcircuit definition)
-            foreach (var rule in container.GetAllValues<IConductivePathRule>())
-                rule.ApplyConductivePath(this);
-
-            // Validate the subcircuit definition if possible
-            if (Definition is ISubcircuitRuleSubject subject)
-                subject.ApplyTo(this, _connections, container);
         }
     }
 }

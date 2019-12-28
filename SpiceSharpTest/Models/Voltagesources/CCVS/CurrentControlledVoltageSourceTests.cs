@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -51,25 +50,6 @@ namespace SpiceSharpTest.Models
             Func<double, Complex>[] references = { sweep => transimpedance * magnitude };
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new CurrentControlledVoltageSource("E1", "in", "in", "V1", 1));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_VoltageLoopValidation_Expect_VoltageLoopException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
-                new CurrentControlledVoltageSource("E1", "out", "0", "V1", 1),
-                new VoltageSource("V2", "out", "0", 0));
-            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
     }
 }

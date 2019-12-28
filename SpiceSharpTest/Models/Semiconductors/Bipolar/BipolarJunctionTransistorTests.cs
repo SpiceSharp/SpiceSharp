@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -250,15 +249,6 @@ namespace SpiceSharpTest.Models
 
             op.Run(ckt);
             ac.Run(ckt);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new BipolarJunctionTransistor("Q1", "in", "in", "in", "in", "nomod"));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
 
         /*

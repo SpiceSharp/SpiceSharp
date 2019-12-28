@@ -4,9 +4,6 @@ using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
-using SpiceSharp.Validation;
-using SpiceSharp.Validation.Rules;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SpiceSharp.Components
@@ -16,8 +13,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="ISubcircuitDefinition" />
-    /// <seealso cref="ISubcircuitRuleSubject" />
-    public class SubcircuitDefinition : Parameterized, ISubcircuitDefinition, ISubcircuitRuleSubject,
+    public class SubcircuitDefinition : Parameterized, ISubcircuitDefinition,
         IParameterized<BaseParameters>
     {
         private string[] _pins;
@@ -107,59 +103,6 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
                 .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
                 .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
-        }
-
-        /// <summary>
-        /// Validates the subcircuit definition.
-        /// </summary>
-        /// <param name="subckt">The subcircuit entity that needs to validated.</param>
-        /// <param name="nodes">The nodes that the subcircuit definition is connected to.</param>
-        /// <param name="container">The rule container.</param>
-        public void ApplyTo(Subcircuit subckt, string[] nodes, IRuleContainer container)
-        {
-            if (Entities == null || Entities.Count == 0)
-                return;
-            if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
-                throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
-
-            // Change the variable set to work with subcircuits
-            var vconfig = container.Configuration.GetValue<VariableParameters>();
-            var original = vconfig.Variables;
-            vconfig.Variables = new SubcircuitVariableSet(subckt.Name, original);
-
-            // We can now alias the inside- and outside nodes
-            for (var i = 0; i < nodes.Length; i++)
-            {
-                var node = original.MapNode(nodes[i], VariableType.Voltage);
-                vconfig.Variables.AliasNode(node, _pins[i]);
-            }
-
-            // Run the rules on the entities using these variables
-            foreach (var subject in Subjects)
-                subject.ApplyTo(container);
-
-            // Restore the original variables
-            vconfig.Variables = original;
-        }
-
-        /// <summary>
-        /// Gets the subjects that can apply to rules.
-        /// </summary>
-        /// <value>
-        /// The subjects.
-        /// </value>
-        protected IEnumerable<IRuleSubject> Subjects
-        {
-            get
-            {
-                if (Entities == null)
-                    yield break;
-                foreach (var entity in Entities)
-                {
-                    if (entity is IRuleSubject subject)
-                        yield return subject;
-                }
-            }
         }
     }
 }

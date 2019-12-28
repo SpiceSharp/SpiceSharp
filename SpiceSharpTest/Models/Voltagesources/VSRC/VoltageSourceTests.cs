@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
@@ -42,23 +41,6 @@ namespace SpiceSharpTest.Models
             var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "in") };
             var references = new Func<double, Complex>[] { f => new Complex(1.0, 0.0) };
             AnalyzeAC(ac, ckt, exports, references);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "0", "0", 1));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_VoltageLoopValidation_Expect_VoltageLoopException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
-                new VoltageSource("V2", "in", "0", 0));
-            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
     }
 }

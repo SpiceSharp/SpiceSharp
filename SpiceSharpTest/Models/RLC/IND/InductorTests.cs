@@ -4,7 +4,6 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using NUnit.Framework;
-using SpiceSharp.Diagnostics.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -135,23 +134,5 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
         */
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new Inductor("L1", "in", "in", 1e-9));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_VoltageLoopValidation_Expect_VoltageLoopException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new Inductor("L1", "in", "0", 1e-9));
-            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
-        }
     }
 }

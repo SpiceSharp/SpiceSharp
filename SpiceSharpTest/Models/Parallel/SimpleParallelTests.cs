@@ -3,11 +3,6 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Components.ParallelBehaviors;
 using SpiceSharp.Simulations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharpTest.Models
 {

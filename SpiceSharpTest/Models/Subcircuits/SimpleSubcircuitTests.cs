@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
@@ -179,50 +178,6 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
             Assert.Throws<NoEquivalentSubcircuitException>(() => op.Run(ckt));
-        }
-
-        [Test]
-        public void When_InternalFloatingNodeValidation_Expect_FloatingNodeException()
-        {
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Capacitor("C1", "in", "out", 1e-6)), "in");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
-                new Subcircuit("X1", subckt).Connect("in"));
-            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_ExternalFloatingNodeValidation_Expect_FloatingNodeException()
-        {
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Resistor("R1", "in", "0", 1e3)), "in", "out");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
-                new Subcircuit("X1", subckt, "in", "out"));
-            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_IndependentSourceValidation_Expect_NoException()
-        {
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new VoltageSource("V1", "out", "0", 0)), "out");
-            var ckt = new Circuit(
-                new Subcircuit("X1", subckt, "out"),
-                new Resistor("R1", "out", "0", 1e3));
-            ckt.Validate();
-        }
-
-        [Test]
-        public void When_VoltageLoopValidation_Expect_VoltageLoopException()
-        {
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new VoltageSource("V1", "out", "0", 0)), "out");
-            var ckt = new Circuit(
-                new Subcircuit("X1", subckt, "out"),
-                new VoltageSource("V1", "out", "0", 1));
-            Assert.Throws<VoltageLoopException>(() => ckt.Validate());
         }
     }
 }

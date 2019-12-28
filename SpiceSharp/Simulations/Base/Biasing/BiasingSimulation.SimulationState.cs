@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
             /// <value>
             /// The map.
             /// </value>
-            public IVariableMap Map { get; private set; }
+            public IVariableMap Map { get; }
 
             /// <summary>
             /// Gets the sparse solver.
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
             /// Initializes a new instance of the <see cref="SimulationState" /> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            /// <param name="map">The map.</param>
+            /// <param name="map">The variable map.</param>
             public SimulationState(ISparseSolver<double> solver, IVariableMap map)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));

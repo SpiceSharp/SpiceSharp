@@ -3,8 +3,6 @@ using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Components.CapacitorBehaviors;
-using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 
@@ -267,24 +265,6 @@ namespace SpiceSharpTest.Models
             // Run 
             Compare(ac, ckt_reference, ckt_actual, exports);
             DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_DecoupledNodeValidation_Expect_FloatingNodeException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
-                new Capacitor("C1", "in", "out", 1e-6));
-            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
-                new Capacitor("C1", "in", "in", 1e-5));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

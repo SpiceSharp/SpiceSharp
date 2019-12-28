@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -70,26 +69,6 @@ namespace SpiceSharpTest.Models
             // Make the simulation and run it
             var dc = new DC("DC 1", "I1", -10.0, 10.0, 1e-3);
             Assert.Throws<SingularException>(() => dc.Run(ckt));
-        }
-
-        [Test]
-        public void When_FloatingOutputValidation_Expect_FloatingNodeException()
-        {
-            var ckt = new Circuit(
-                new CurrentSource("I1", "0", "in", 0),
-                new VoltageSource("V1", "in", "0", 0),
-                new CurrentControlledCurrentSource("F1", "out", "0", "V1", 12.0));
-
-            Assert.Throws<FloatingNodeException>(() => ckt.Validate());
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "0", "in", 0),
-                new CurrentControlledCurrentSource("F1", "in", "in", "V1", 2.0));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }

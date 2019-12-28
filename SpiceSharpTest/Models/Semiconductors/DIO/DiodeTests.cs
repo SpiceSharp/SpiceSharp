@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Diagnostics.Validation;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
@@ -292,15 +291,6 @@ namespace SpiceSharpTest.Models
             IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
             Compare(tran, cktReference, cktActual, exports);
             DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_ShortedValidation_Expect_ShortCircuitComponentException()
-        {
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1),
-                new Diode("D1", "in", "in", "nomod"));
-            Assert.Throws<ShortCircuitComponentException>(() => ckt.Validate());
         }
     }
 }
