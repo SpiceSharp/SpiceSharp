@@ -28,7 +28,6 @@ namespace SpiceSharp.Simulations
         /// The collection parameters.
         /// </value>
         public CollectionParameters CollectionParameters { get; } = new CollectionParameters();
-
         CollectionParameters IParameterized<CollectionParameters>.Parameters => CollectionParameters;
 
         /// <summary>
