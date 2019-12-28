@@ -10,23 +10,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode, _substrateNode;
+        private readonly ElementSet<Complex> _elements;
+        private readonly IComplexSimulationState _complex;
+        private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode, _substrateNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -35,15 +21,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _collectorNode = ComplexState.Map[context.Nodes[0]];
-            _baseNode = ComplexState.Map[context.Nodes[1]];
-            _emitterNode = ComplexState.Map[context.Nodes[2]];
-            _substrateNode = ComplexState.Map[context.Nodes[3]];
-            _collectorPrimeNode = ComplexState.Map[CollectorPrime];
-            _basePrimeNode = ComplexState.Map[BasePrime];
-            _emitterPrimeNode = ComplexState.Map[EmitterPrime];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _complex = context.GetState<IComplexSimulationState>();
+            _collectorNode = _complex.Map[context.Nodes[0]];
+            _baseNode = _complex.Map[context.Nodes[1]];
+            _emitterNode = _complex.Map[context.Nodes[2]];
+            _substrateNode = _complex.Map[context.Nodes[3]];
+            _collectorPrimeNode = _complex.Map[CollectorPrime];
+            _basePrimeNode = _complex.Map[BasePrime];
+            _emitterPrimeNode = _complex.Map[EmitterPrime];
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_collectorNode, _collectorNode),
                 new MatrixLocation(_baseNode, _baseNode),
                 new MatrixLocation(_emitterNode, _emitterNode),
@@ -86,9 +72,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var cstate = ComplexState;
-            var gcpr = ModelTemperature.CollectorConduct * BaseParameters.Area;
-            var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
+            var cstate = _complex;
+            var gcpr = ModelTemperature.CollectorConduct * Parameters.Area;
+            var gepr = ModelTemperature.EmitterConduct * Parameters.Area;
             var gpi = ConductancePi;
             var gmu = ConductanceMu;
             Complex gm = Transconductance;
@@ -109,7 +95,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var xccs = CapCs * cstate.Laplace;
             var xcmcb = Geqcb * cstate.Laplace;
 
-            ComplexElements.Add(
+            _elements.Add(
                 gcpr,
                 gx + xcbx,
                 gepr,

@@ -32,19 +32,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
-        public double Voltage => LocalVoltage * BaseParameters.SeriesMultiplier;
+        public double Voltage => LocalVoltage * Parameters.SeriesMultiplier;
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
-        public double Current => LocalCurrent * BaseParameters.ParallelMultiplier;
+        public double Current => LocalCurrent * Parameters.ParallelMultiplier;
 
         /// <summary>
         /// Gets the small-signal conductance.
         /// </summary>
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
-        public double Conductance => LocalConductance * BaseParameters.ParallelMultiplier;
+        public double Conductance => LocalConductance * Parameters.ParallelMultiplier;
 
         /// <summary>
         /// Gets the power dissipated.
@@ -111,35 +111,35 @@ namespace SpiceSharp.Components.DiodeBehaviors
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-            var csat = TempSaturationCurrent * BaseParameters.Area;
-            var gspr = ModelTemperature.Conductance * BaseParameters.Area;
+            var csat = TempSaturationCurrent * Parameters.Area;
+            var gspr = ModelTemperature.Conductance * Parameters.Area;
 
             // compute dc current and derivatives
             if (vd >= -3 * Vte)
             {
                 // Forward bias
                 var evd = Math.Exp(vd / Vte);
-                cd = csat * (evd - 1) + BaseConfiguration.Gmin * vd;
-                gd = csat * evd / Vte + BaseConfiguration.Gmin;
+                cd = csat * (evd - 1) + BiasingParameters.Gmin * vd;
+                gd = csat * evd / Vte + BiasingParameters.Gmin;
             }
             else if (!ModelParameters.BreakdownVoltage.Given || vd >= -TempBreakdownVoltage)
             {
                 // Reverse bias
                 var arg = 3 * Vte / (vd * Math.E);
                 arg = arg * arg * arg;
-                cd = -csat * (1 + arg) + BaseConfiguration.Gmin * vd;
-                gd = csat * 3 * arg / vd + BaseConfiguration.Gmin;
+                cd = -csat * (1 + arg) + BiasingParameters.Gmin * vd;
+                gd = csat * 3 * arg / vd + BiasingParameters.Gmin;
             }
             else
             {
                 // Reverse breakdown
                 var evrev = Math.Exp(-(TempBreakdownVoltage + vd) / Vte);
-                cd = -csat * evrev + BaseConfiguration.Gmin * vd;
-                gd = csat * evrev / Vte + BaseConfiguration.Gmin;
+                cd = -csat * evrev + BiasingParameters.Gmin * vd;
+                gd = csat * evrev / Vte + BiasingParameters.Gmin;
             }
 
             // Check convergence
-            if (_iteration.Mode != IterationModes.Fix || !BaseParameters.Off)
+            if (_iteration.Mode != IterationModes.Fix || !Parameters.Off)
             {
                 if (check)
                     _iteration.IsConvergent = false;
@@ -150,8 +150,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             LocalCurrent = cd;
             LocalConductance = gd;
 
-            var m = BaseParameters.ParallelMultiplier;
-            var n = BaseParameters.SeriesMultiplier;
+            var m = Parameters.ParallelMultiplier;
+            var n = Parameters.SeriesMultiplier;
 
             var cdeq = cd - gd * vd;
             gd *= m / n;
@@ -178,16 +178,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
             check = false;
             if (_iteration.Mode == IterationModes.Junction)
             {
-                vd = BaseParameters.Off ? 0.0 : TempVCritical;
+                vd = Parameters.Off ? 0.0 : TempVCritical;
             }
-            else if (_iteration.Mode == IterationModes.Fix && BaseParameters.Off)
+            else if (_iteration.Mode == IterationModes.Fix && Parameters.Off)
             {
                 vd = 0.0;
             }
             else
             {
                 // Get voltage over the diodes (without series resistance).
-                vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
+                vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / Parameters.SeriesMultiplier;
 
                 // Limit new junction voltage.
                 if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
@@ -210,14 +210,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState;
-            var vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
+            var vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / Parameters.SeriesMultiplier;
 
             var delvd = vd - LocalVoltage;
             var cdhat = LocalCurrent + LocalConductance * delvd;
             var cd = LocalCurrent;
 
             // check convergence
-            var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + BaseConfiguration.AbsoluteTolerance;
+            var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + BiasingParameters.AbsoluteTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 _iteration.IsConvergent = false;

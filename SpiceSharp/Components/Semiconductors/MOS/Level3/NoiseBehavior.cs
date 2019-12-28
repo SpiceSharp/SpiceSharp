@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.MosfetBehaviors.Common;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
@@ -11,6 +10,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// </summary>
     public class NoiseBehavior : FrequencyBehavior, INoiseBehavior
     {
+        private readonly INoiseSimulationState _noise;
+
         /// <summary>
         /// Gets the noise parameters.
         /// </summary>
@@ -46,8 +47,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             new NoiseGain("1overf", 4, 5)
         );
 
-        private INoiseSimulationState _state;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
         /// </summary>
@@ -56,7 +55,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             NoiseParameters = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
-            _state = context.GetState<INoiseSimulationState>();
+            _noise = context.GetState<INoiseSimulationState>();
             MosfetNoise.Bind(context, context.Nodes[0], context.Nodes[1], context.Nodes[2], context.Nodes[3], DrainPrime, SourcePrime);
         }
 
@@ -65,8 +64,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         void INoiseBehavior.Noise()
         {
-            var noise = _state.ThrowIfNotBound(this);
-
             double coxSquared;
             if (ModelParameters.OxideCapFactor > 0.0)
                 coxSquared = ModelParameters.OxideCapFactor;
@@ -81,8 +78,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             MosfetNoise.Generators[FlickerNoise].SetCoefficients(
                 NoiseParameters.FlickerNoiseCoefficient *
                 Math.Exp(NoiseParameters.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(DrainCurrent), 1e-38))) /
-                (BaseParameters.Width * (BaseParameters.Length - 2 * ModelParameters.LateralDiffusion) *
-                 coxSquared) / noise.Frequency);
+                (Parameters.Width * (Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
+                 coxSquared) / _noise.Frequency);
 
             // Evaluate noise sources
             MosfetNoise.Evaluate();

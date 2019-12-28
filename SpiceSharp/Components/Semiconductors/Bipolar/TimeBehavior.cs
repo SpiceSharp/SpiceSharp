@@ -11,13 +11,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Gets the transient matrix elements.
-        /// </summary>
-        /// <value>
-        /// The transient matrix elements.
-        /// </value>
-        protected ElementSet<double> TransientElements { get; private set; }
+        private readonly ElementSet<double> _elements;
 
         /// <summary>
         /// Gets the base-emitter capacitor current.
@@ -107,7 +101,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
             _basePrimeNode = BiasingState.Map[BasePrime];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
-            TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_baseNode, _baseNode),
                 new MatrixLocation(_collectorPrimeNode, _collectorPrimeNode),
                 new MatrixLocation(_basePrimeNode, _basePrimeNode),
@@ -189,7 +183,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var ceqbe = ModelParameters.BipolarType * (cc + cb - vbe * gpi + vbc * -geqcb);
             var ceqbc = ModelParameters.BipolarType * (-cc + -vbc * gmu);
 
-            TransientElements.Add(
+            _elements.Add(
                 // Y-matrix
                 geqbx,
                 gmu + gccs + geqbx,
@@ -222,8 +216,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             if (Iteration.Mode == IterationModes.Junction && _time.UseDc && _time.UseIc)
             {
-                vbe = ModelParameters.BipolarType * BaseParameters.InitialVoltageBe;
-                var vce = ModelParameters.BipolarType * BaseParameters.InitialVoltageCe;
+                vbe = ModelParameters.BipolarType * Parameters.InitialVoltageBe;
+                var vce = ModelParameters.BipolarType * Parameters.InitialVoltageCe;
                 vbc = vbe - vce;
                 return;
             }

@@ -138,7 +138,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         protected void CalculateBaseCapacitances()
         {
-            EffectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
+            EffectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion;
 
             var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
             var gmaold = (ModelParameters.BulkJunctionPotential - pbo) / pbo;
@@ -153,12 +153,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             TempJunctionCapSidewall = ModelParameters.SidewallCapFactor * capfact;
             var gmanew = (TempBulkPotential - pbo) / pbo;
             capfact = 1 + ModelParameters.BulkJunctionBotGradingCoefficient *
-                      (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
+                      (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew);
             TempCapBd *= capfact;
             TempCapBs *= capfact;
             TempJunctionCap *= capfact;
             capfact = 1 + ModelParameters.BulkJunctionSideGradingCoefficient *
-                      (4e-4 * (BaseParameters.Temperature - Constants.ReferenceTemperature) - gmanew);
+                      (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew);
             TempJunctionCapSidewall *= capfact;
             TempDepletionCap = ModelParameters.ForwardCapDepletionCoefficient * TempBulkPotential;
 
@@ -168,13 +168,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             else
             {
                 if (ModelParameters.BulkCapFactor.Given)
-                    cz = TempJunctionCap * BaseParameters.DrainArea;
+                    cz = TempJunctionCap * Parameters.DrainArea;
                 else
                     cz = 0;
             }
 
             if (ModelParameters.SidewallCapFactor.Given)
-                czsw = TempJunctionCapSidewall * BaseParameters.DrainPerimeter;
+                czsw = TempJunctionCapSidewall * Parameters.DrainPerimeter;
             else
                 czsw = 0;
             CapBd = cz;
@@ -209,13 +209,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             else
             {
                 if (ModelParameters.BulkCapFactor.Given)
-                    cz = TempJunctionCap * BaseParameters.SourceArea;
+                    cz = TempJunctionCap * Parameters.SourceArea;
                 else
                     cz = 0;
             }
 
             if (ModelParameters.SidewallCapFactor.Given)
-                czsw = TempJunctionCapSidewall * BaseParameters.SourcePerimeter;
+                czsw = TempJunctionCapSidewall * Parameters.SourcePerimeter;
             else
                 czsw = 0;
             CapBs = cz;
@@ -355,7 +355,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             var von = ModelParameters.MosfetType * Von;
             var vdsat = ModelParameters.MosfetType * SaturationVoltageDs;
-            var oxideCap = ModelParameters.OxideCapFactor * EffectiveLength * BaseParameters.Width;
+            var oxideCap = ModelParameters.OxideCapFactor * EffectiveLength * Parameters.Width;
 
             /* 
              * calculate meyer's capacitors

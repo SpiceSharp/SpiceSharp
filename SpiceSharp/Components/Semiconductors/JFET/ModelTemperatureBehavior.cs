@@ -26,13 +26,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// The noise parameters.
         /// </value>
         public ModelNoiseParameters NoiseParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
         ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
 
         /// <summary>

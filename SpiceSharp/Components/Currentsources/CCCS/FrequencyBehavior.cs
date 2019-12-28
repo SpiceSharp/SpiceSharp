@@ -20,13 +20,13 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Get the voltage. 
         /// </summary>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public Complex ComplexVoltage => _complex.ThrowIfNotBound(this).Solution[_posNode] - _complex.Solution[_negNode];
+        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => _complex.ThrowIfNotBound(this).Solution[_brNode] * Parameters.Coefficient.Value;
+        public Complex ComplexCurrent => _complex.Solution[_brNode] * Parameters.Coefficient.Value;
 
         /// <summary>
         /// Get the power dissipation.

@@ -10,15 +10,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        private int _posNode, _negNode;
+        private readonly ElementSet<Complex> _elements;
+        private readonly int _posNode, _negNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -30,7 +23,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             var state = context.GetState<IComplexSimulationState>();
             _posNode = state.Map[context.Nodes[0]];
             _negNode = state.Map[context.Nodes[1]];
-            ComplexElements = new ElementSet<Complex>(state.Solver, new[] {
+            _elements = new ElementSet<Complex>(state.Solver, new[] {
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),
                 new MatrixLocation(_negNode, _posNode),
@@ -50,14 +43,12 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexElements.ThrowIfNotBound(this);
-
             // Get the current state
             var currentState = CurrentState;
             var gNow = currentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
 
             // Load the Y-matrix
-            ComplexElements.Add(gNow, -gNow, -gNow, gNow);
+            _elements.Add(gNow, -gNow, -gNow, gNow);
         }
     }
 }

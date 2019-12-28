@@ -11,51 +11,34 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// </summary>
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
+        private readonly ElementSet<Complex> _elements;
+        private readonly int _posNode, _negNode, _posPrimeNode;
+        private readonly IComplexSimulationState _complex;
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
-        public Complex GetComplexVoltage()
-        {
-            ComplexState.ThrowIfNotBound(this);
-            return (ComplexState.Solution[_posPrimeNode] - ComplexState.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
-        }
+        public Complex ComplexVoltage => (_complex.Solution[_posPrimeNode] - _complex.Solution[_negNode]) / Parameters.SeriesMultiplier;
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i_c"), ParameterName("id_c"), ParameterInfo("Current through the diode")]
-        public Complex GetComplexCurrent()
+        public Complex ComplexCurrent
         {
-            ComplexState.ThrowIfNotBound(this);
-            var geq = LocalCapacitance * ComplexState.Laplace + LocalConductance;
-            return GetComplexVoltage() * geq * BaseParameters.ParallelMultiplier;
+            get
+            {
+                var geq = LocalCapacitance * _complex.Laplace + LocalConductance;
+                return ComplexVoltage * geq * Parameters.ParallelMultiplier;
+            }
         }
 
         /// <summary>
         /// Gets the power.
         /// </summary>
         [ParameterName("p_c"), ParameterName("pd_c"), ParameterInfo("Power")]
-        public Complex GetComplexPower()
-            => GetComplexVoltage() * Complex.Conjugate(GetComplexCurrent());
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _posNode, _negNode, _posPrimeNode;
+        public Complex ComplexPower => ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -64,11 +47,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _posNode = ComplexState.Map[context.Nodes[0]];
-            _negNode = ComplexState.Map[context.Nodes[1]];
-            _posPrimeNode = ComplexState.Map[PosPrime];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _complex = context.GetState<IComplexSimulationState>();
+            _posNode = _complex.Map[context.Nodes[0]];
+            _negNode = _complex.Map[context.Nodes[1]];
+            _posPrimeNode = _complex.Map[PosPrime];
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_negNode, _negNode),
                 new MatrixLocation(_posPrimeNode, _posPrimeNode),
@@ -91,19 +74,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var state = ComplexState;
+            var state = _complex;
 
-            var gspr = ModelTemperature.Conductance * BaseParameters.Area;
+            var gspr = ModelTemperature.Conductance * Parameters.Area;
             var geq = LocalConductance;
             var xceq = LocalCapacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix
-            var m = BaseParameters.ParallelMultiplier;
-            var n = BaseParameters.SeriesMultiplier;
+            var m = Parameters.ParallelMultiplier;
+            var n = Parameters.SeriesMultiplier;
             geq *= m / n;
             gspr *= m / n;
             xceq *= m / n;
-            ComplexElements.Add(
+            _elements.Add(
                 gspr, new Complex(geq, xceq), new Complex(geq + gspr, xceq),
                 -gspr, -new Complex(geq, xceq), -gspr, -new Complex(geq, xceq));
         }

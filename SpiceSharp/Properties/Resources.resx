@@ -204,12 +204,6 @@
   <data name="IndependentSources.NoDcUseWaveform" xml:space="preserve">
     <value>{0} has no DC value, waveform value at time 0 used.</value>
   </data>
-  <data name="InstanceNotBound" xml:space="preserve">
-    <value>The instance has not been bound to any simulation.</value>
-  </data>
-  <data name="InstanceNotBoundNamed" xml:space="preserve">
-    <value>{0} has not been bound to any simulation.</value>
-  </data>
   <data name="JFETs.DepletionCapCoefficientTooLarge" xml:space="preserve">
     <value>{0}: depletion capacitance coefficient too large, limited to {1:g}.</value>
   </data>

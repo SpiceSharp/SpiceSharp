@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            var sol = BiasingState.ThrowIfNotBound(this).Solution;
+            var sol = BiasingState.Solution;
 
             // Calculate the inputs
             var input1 = sol[_pos2] - sol[_neg2] + BaseParameters.Impedance * sol[_br2];

@@ -109,7 +109,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var omega = ComplexState.ThrowIfNotBound(this).Laplace.Imaginary;
+            var omega = ComplexState.Laplace.Imaginary;
 
             var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;
             var gspr = ModelParameters.SourceConductance * BaseParameters.Area;

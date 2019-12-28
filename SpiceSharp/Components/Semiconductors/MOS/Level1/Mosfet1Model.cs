@@ -27,13 +27,6 @@ namespace SpiceSharp.Components
         /// The noise parameters.
         /// </value>
         public ModelNoiseParameters NoiseParameters { get; } = new ModelNoiseParameters();
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
         ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
 
         /// <summary>

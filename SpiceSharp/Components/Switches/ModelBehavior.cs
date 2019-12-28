@@ -15,15 +15,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <value>
         /// The model parameters.
         /// </value>
-        public ModelBaseParameters ModelParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => ModelParameters;
+        public ModelBaseParameters Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBehavior"/> class.
@@ -33,7 +25,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public ModelBehavior(string name, ModelBindingContext context)
             : base(name)
         {
-            ModelParameters = context.GetParameterSet<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<ModelBaseParameters>();
         }
     }
 }

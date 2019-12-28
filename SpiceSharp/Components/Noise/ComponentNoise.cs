@@ -79,9 +79,6 @@ namespace SpiceSharp.Components
         /// </summary>
         public void Evaluate()
         {
-            if (_nstate == null || _cstate == null)
-                throw new InstanceNotBoundException();
-
             // Calculate the output noise density
             Noise = 0.0;
             TotalInNoise = 0.0;

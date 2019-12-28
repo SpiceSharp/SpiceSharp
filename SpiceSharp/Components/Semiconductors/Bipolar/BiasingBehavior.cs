@@ -12,6 +12,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
+        private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
+        private readonly ElementSet<double> _elements;
+
         /// <summary>
         /// Gets the base configuration of the simulation.
         /// </summary>
@@ -74,13 +77,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the dissipated power.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power dissipation")]
-        public virtual double GetPower(IBiasingSimulationState state)
+        public virtual double Power
         {
-            state.ThrowIfNull(nameof(state));
-            var value = CollectorCurrent * state.Solution[_collectorNode];
-            value += BaseCurrent * state.Solution[_baseNode];
-            value -= (CollectorCurrent + BaseCurrent) * state.Solution[_emitterNode];
-            return value;
+            get
+            {
+                var value = CollectorCurrent * BiasingState.Solution[_collectorNode];
+                value += BaseCurrent * BiasingState.Solution[_baseNode];
+                value -= (CollectorCurrent + BaseCurrent) * BiasingState.Solution[_emitterNode];
+                return value;
+            }
         }
 
         /// <summary>
@@ -97,14 +102,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the emitter prime node index.
         /// </summary>
         public Variable EmitterPrime { get; private set; }
-
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets or modifies the base-emitter current.
@@ -142,8 +139,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets or sets the charge to emitter voltage derivative.
         /// </summary>
         public double Dqbdve { get; protected set; }
-
-        private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
 
         /// <summary>
         /// Gets the iteration.
@@ -191,7 +186,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
 
             // Get solver pointers
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_collectorNode, _collectorNode),
                 new MatrixLocation(_baseNode, _baseNode),
                 new MatrixLocation(_emitterNode, _emitterNode),
@@ -224,18 +219,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cbcn;
 
             // DC model parameters
-            var csat = TempSaturationCurrent * BaseParameters.Area;
-            var rbpr = ModelParameters.MinimumBaseResistance / BaseParameters.Area;
-            var rbpi = ModelParameters.BaseResist / BaseParameters.Area - rbpr;
-            var gcpr = ModelTemperature.CollectorConduct * BaseParameters.Area;
-            var gepr = ModelTemperature.EmitterConduct * BaseParameters.Area;
-            var oik = ModelTemperature.InverseRollOffForward / BaseParameters.Area;
-            var c2 = TempBeLeakageCurrent * BaseParameters.Area;
+            var csat = TempSaturationCurrent * Parameters.Area;
+            var rbpr = ModelParameters.MinimumBaseResistance / Parameters.Area;
+            var rbpi = ModelParameters.BaseResist / Parameters.Area - rbpr;
+            var gcpr = ModelTemperature.CollectorConduct * Parameters.Area;
+            var gepr = ModelTemperature.EmitterConduct * Parameters.Area;
+            var oik = ModelTemperature.InverseRollOffForward / Parameters.Area;
+            var c2 = TempBeLeakageCurrent * Parameters.Area;
             var vte = ModelParameters.LeakBeEmissionCoefficient * Vt;
-            var oikr = ModelTemperature.InverseRollOffReverse / BaseParameters.Area;
-            var c4 = TempBcLeakageCurrent * BaseParameters.Area;
+            var oikr = ModelTemperature.InverseRollOffReverse / Parameters.Area;
+            var c4 = TempBcLeakageCurrent * Parameters.Area;
             var vtc = ModelParameters.LeakBcEmissionCoefficient * Vt;
-            var xjrb = ModelParameters.BaseCurrentHalfResist * BaseParameters.Area;
+            var xjrb = ModelParameters.BaseCurrentHalfResist * Parameters.Area;
 
             // Get the current voltages
             Initialize(out var vbe, out var vbc);
@@ -351,7 +346,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var ceqbe = ModelParameters.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
             var ceqbc = ModelParameters.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
-            Elements.Add(
+            _elements.Add(
                 // Y-matrix
                 gcpr, gx, gepr, gmu + go + gcpr, gx + gpi + gmu, gpi + gepr + gm + go,
                 -gcpr, -gx, -gepr, -gcpr, -gmu + gm, -gm - go, -gx, -gmu, -gpi, -gepr, -go, 
@@ -386,12 +381,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var state = BiasingState;
 
             // Initialization
-            if (Iteration.Mode == IterationModes.Junction && !BaseParameters.Off)
+            if (Iteration.Mode == IterationModes.Junction && !Parameters.Off)
             {
                 vbe = TempVCritical;
                 vbc = 0;
             }
-            else if (Iteration.Mode == IterationModes.Junction || Iteration.Mode == IterationModes.Fix && BaseParameters.Off)
+            else if (Iteration.Mode == IterationModes.Junction || Iteration.Mode == IterationModes.Fix && Parameters.Off)
             {
                 vbe = 0;
                 vbc = 0;

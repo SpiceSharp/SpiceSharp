@@ -11,13 +11,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     public class TemperatureBehavior : Behavior, ITemperatureBehavior,
         IParameterized<BaseParameters>
     {
+        private readonly ITemperatureSimulationState _temperature;
+
         /// <summary>
         /// Gets the base parameters.
         /// </summary>
         /// <value>
         /// The base parameters.
         /// </value>
-        protected BaseParameters BaseParameters { get; }
+        public BaseParameters Parameters { get; }
 
         /// <summary>
         /// Gets the model parameters.
@@ -26,14 +28,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// The model parameters.
         /// </value>
         protected ModelBaseParameters ModelParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => BaseParameters;
 
         /// <summary>
         /// Gets the model temperature behavior.
@@ -138,12 +132,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         protected double SourceSatCurrent { get; private set; }
 
         /// <summary>
-        /// Gets the state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-        private readonly ITemperatureSimulationState _temperature;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -154,8 +142,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             _temperature = context.GetState<ITemperatureSimulationState>();
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             ModelParameters = ModelTemperature.GetParameterSet<ModelBaseParameters>();
-            BaseParameters = context.GetParameterSet<BaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
+            Parameters = context.GetParameterSet<BaseParameters>();
         }
 
         /// <summary>
@@ -164,18 +151,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         void ITemperatureBehavior.Temperature()
         {
             // Update the width and length if they are not given and if the model specifies them
-            if (!BaseParameters.Width.Given && ModelParameters.Width.Given)
-                BaseParameters.Width.RawValue = ModelParameters.Width.Value;
-            if (!BaseParameters.Length.Given && ModelParameters.Length.Given)
-                BaseParameters.Length.RawValue = ModelParameters.Length.Value;
+            if (!Parameters.Width.Given && ModelParameters.Width.Given)
+                Parameters.Width.RawValue = ModelParameters.Width.Value;
+            if (!Parameters.Length.Given && ModelParameters.Length.Given)
+                Parameters.Length.RawValue = ModelParameters.Length.Value;
 
-            if (!BaseParameters.Temperature.Given)
-                BaseParameters.Temperature.RawValue = _temperature.Temperature;
-            Vt = BaseParameters.Temperature * Constants.KOverQ;
-            var ratio = BaseParameters.Temperature / ModelParameters.NominalTemperature;
-            var fact2 = BaseParameters.Temperature / Constants.ReferenceTemperature;
-            var kt = BaseParameters.Temperature * Constants.Boltzmann;
-            var egfet = 1.16 - 7.02e-4 * BaseParameters.Temperature * BaseParameters.Temperature / (BaseParameters.Temperature + 1108);
+            if (!Parameters.Temperature.Given)
+                Parameters.Temperature.RawValue = _temperature.Temperature;
+            Vt = Parameters.Temperature * Constants.KOverQ;
+            var ratio = Parameters.Temperature / ModelParameters.NominalTemperature;
+            var fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
+            var kt = Parameters.Temperature * Constants.Boltzmann;
+            var egfet = 1.16 - 7.02e-4 * Parameters.Temperature * Parameters.Temperature / (Parameters.Temperature + 1108);
             var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
             var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
@@ -189,7 +176,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             else if (ModelParameters.SheetResistance.Given)
             {
                 if (!ModelParameters.SheetResistance.Value.Equals(0.0))
-                    DrainConductance = 1 / (ModelParameters.SheetResistance * BaseParameters.DrainSquares);
+                    DrainConductance = 1 / (ModelParameters.SheetResistance * Parameters.DrainSquares);
                 else
                     DrainConductance = 0;
             }
@@ -205,14 +192,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             else if (ModelParameters.SheetResistance.Given)
             {
                 if (!ModelParameters.SheetResistance.Value.Equals(0.0))
-                    SourceConductance = 1 / (ModelParameters.SheetResistance * BaseParameters.SourceSquares);
+                    SourceConductance = 1 / (ModelParameters.SheetResistance * Parameters.SourceSquares);
                 else
                     SourceConductance = 0;
             }
             else
                 SourceConductance = 0;
 
-            if (BaseParameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
+            if (Parameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
                 SpiceSharpWarning.Warning(this, Properties.Resources.Mosfets_EffectiveChannelTooSmall.FormatString(Name));
             var ratio4 = ratio * Math.Sqrt(ratio);
             TempTransconductance = ModelParameters.Transconductance / ratio4;
@@ -227,25 +214,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
             TempBulkPotential = fact2 * pbo + pbfact;
 
-            if (tempSaturationCurrentDensity <= 0 || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
+            if (tempSaturationCurrentDensity <= 0 || Parameters.DrainArea.Value <= 0 || Parameters.SourceArea.Value <= 0)
             {
                 SourceVCritical = DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrent));
             }
             else
             {
-                DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrentDensity * BaseParameters.DrainArea));
-                SourceVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrentDensity * BaseParameters.SourceArea));
+                DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrentDensity * Parameters.DrainArea));
+                SourceVCritical = Vt * Math.Log(Vt / (Constants.Root2 * tempSaturationCurrentDensity * Parameters.SourceArea));
             }
 
-            if (tempSaturationCurrentDensity.Equals(0) || BaseParameters.DrainArea.Value <= 0 || BaseParameters.SourceArea.Value <= 0)
+            if (tempSaturationCurrentDensity.Equals(0) || Parameters.DrainArea.Value <= 0 || Parameters.SourceArea.Value <= 0)
             {
                 DrainSatCurrent = tempSaturationCurrent;
                 SourceSatCurrent = tempSaturationCurrent;
             }
             else
             {
-                DrainSatCurrent = tempSaturationCurrentDensity * BaseParameters.DrainArea;
-                SourceSatCurrent = tempSaturationCurrentDensity * BaseParameters.SourceArea;
+                DrainSatCurrent = tempSaturationCurrentDensity * Parameters.DrainArea;
+                SourceSatCurrent = tempSaturationCurrentDensity * Parameters.SourceArea;
             }
         }
     }

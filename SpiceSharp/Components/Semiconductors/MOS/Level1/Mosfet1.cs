@@ -13,15 +13,13 @@ namespace SpiceSharp.Components
     public class Mosfet1 : Component,
         IParameterized<BaseParameters>
     {
-        private readonly BaseParameters _bp = new BaseParameters();
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
         /// <value>
         /// The parameter set.
         /// </value>
-        BaseParameters IParameterized<BaseParameters>.Parameters => _bp;
+        public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
         /// Constants

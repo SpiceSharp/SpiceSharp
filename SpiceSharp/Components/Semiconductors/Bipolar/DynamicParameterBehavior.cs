@@ -86,22 +86,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Charge storage elements
             double tf = ModelParameters.TransitTimeForward;
             double tr = ModelParameters.TransitTimeReverse;
-            var czbe = TempBeCap * BaseParameters.Area;
+            var czbe = TempBeCap * Parameters.Area;
             var pe = TempBePotential;
             double xme = ModelParameters.JunctionExpBe;
             double cdis = ModelParameters.BaseFractionBcCap;
-            var ctot = TempBcCap * BaseParameters.Area;
+            var ctot = TempBcCap * Parameters.Area;
             var czbc = ctot * cdis;
             var czbx = ctot - czbc;
             var pc = TempBcPotential;
             double xmc = ModelParameters.JunctionExpBc;
             var fcpe = TempDepletionCap;
-            var czcs = ModelParameters.CapCs * BaseParameters.Area;
+            var czcs = ModelParameters.CapCs * Parameters.Area;
             double ps = ModelParameters.PotentialSubstrate;
             double xms = ModelParameters.ExponentialSubstrate;
             double xtf = ModelParameters.TransitTimeBiasCoefficientForward;
             var ovtf = ModelTemperature.TransitTimeVoltageBcFactor;
-            var xjtf = ModelParameters.TransitTimeHighCurrentForward * BaseParameters.Area;
+            var xjtf = ModelParameters.TransitTimeHighCurrentForward * Parameters.Area;
             if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
                 double argtf = 0;

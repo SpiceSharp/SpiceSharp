@@ -29,13 +29,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// The noise parameters.
         /// </value>
         public ModelNoiseParameters NoiseParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
         ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
 
         /// <summary>
@@ -76,14 +69,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public double PbFactor1 { get; private set; }
 
         /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -94,7 +79,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             NoiseParameters = context.GetParameterSet<ModelNoiseParameters>();
             _temperature = context.GetState<ITemperatureSimulationState>();
             Parameters = context.GetParameterSet<ModelBaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>

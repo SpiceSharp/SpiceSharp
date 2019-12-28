@@ -9,18 +9,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// </summary>
     public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
+        private readonly IDerivative _capCharge;
+        private readonly int _negNode, _posPrimeNode;
+        private readonly ITimeSimulationState _time;
+
         /// <summary>
         /// Gets the capacitor current.
         /// </summary>
         [ParameterName("capcur"), ParameterInfo("Diode capacitor current")]
         public double CapCurrent => _capCharge.Derivative;
-
-        /// <summary>
-        /// The charge on the junction capacitance
-        /// </summary>
-        private readonly IDerivative _capCharge;
-        private readonly int _negNode, _posPrimeNode;
-        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -42,7 +39,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            double vd = (BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode]) / BaseParameters.SeriesMultiplier;
+            double vd = (BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode]) / Parameters.SeriesMultiplier;
             CalculateCapacitance(vd);
             _capCharge.Value = LocalCapCharge;
         }
@@ -58,7 +55,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Calculate the capacitance
             var state = BiasingState;
-            var n = BaseParameters.SeriesMultiplier;
+            var n = Parameters.SeriesMultiplier;
             double vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / n;
             CalculateCapacitance(vd);
 
@@ -72,7 +69,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             // Store the current
             LocalCurrent += _capCharge.Derivative;
 
-            var m = BaseParameters.ParallelMultiplier;
+            var m = Parameters.ParallelMultiplier;
             geq *= m / n;
             ceq *= m;
             Elements.Add(

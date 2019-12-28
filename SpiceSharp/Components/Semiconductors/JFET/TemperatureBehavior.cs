@@ -85,7 +85,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         void ITemperatureBehavior.Temperature()
         {
-            BiasingState.ThrowIfNotBound(this);
             if (!BaseParameters.Temperature.Given)
                 BaseParameters.Temperature.RawValue = _temperature.Temperature;
             var vt = BaseParameters.Temperature * Constants.KOverQ;

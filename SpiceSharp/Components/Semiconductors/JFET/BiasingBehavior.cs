@@ -13,10 +13,19 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
+        private readonly IIntegrationMethod _method;
+        private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
+        private readonly IIterationSimulationState _iteration;
+        private readonly ITimeSimulationState _time;
+        private readonly ElementSet<double> _elements;
+
         /// <summary>
-        /// Gets the base configuration.
+        /// Gets the biasing parameters.
         /// </summary>
-        protected BiasingParameters BaseConfiguration { get; private set; }
+        /// <value>
+        /// The biasing parameters.
+        /// </value>
+        protected BiasingParameters BiasingParameters { get; }
 
         /// <summary>
         /// Gets the drain node.
@@ -27,14 +36,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Gets the source node.
         /// </summary>
         public Variable SourcePrime { get; private set; }
-
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
@@ -90,11 +91,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         [ParameterName("ggd"), ParameterInfo("Conductance G-D")]
         public double Ggd { get; private set; }
 
-        private readonly IIntegrationMethod _method;
-        private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
-        private readonly IIterationSimulationState _iteration;
-        private readonly ITimeSimulationState _time;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
@@ -104,7 +100,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             context.Nodes.CheckNodes(3);
 
-            BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
+            BiasingParameters = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
@@ -121,7 +117,7 @@ namespace SpiceSharp.Components.JFETBehaviors
                 context.Nodes[2];
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
             
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_drainNode, _drainPrimeNode),
                 new MatrixLocation(_gateNode, _drainPrimeNode),
                 new MatrixLocation(_gateNode, _sourcePrimeNode),
@@ -145,8 +141,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         protected virtual void Load()
         {
-            var state = BiasingState;
-
             // DC model parameters
             var beta = ModelParameters.Beta * BaseParameters.Area;
             var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;
@@ -164,26 +158,26 @@ namespace SpiceSharp.Components.JFETBehaviors
             // Determine dc current and derivatives 
             if (vgs <= -5 * BaseParameters.Temperature * Constants.KOverQ)
             {
-                ggs = -csat / vgs + BaseConfiguration.Gmin;
+                ggs = -csat / vgs + BiasingParameters.Gmin;
                 cg = ggs * vgs;
             }
             else
             {
                 var evgs = Math.Exp(vgs / (BaseParameters.Temperature * Constants.KOverQ));
-                ggs = csat * evgs / (BaseParameters.Temperature * Constants.KOverQ) + BaseConfiguration.Gmin;
-                cg = csat * (evgs - 1) + BaseConfiguration.Gmin * vgs;
+                ggs = csat * evgs / (BaseParameters.Temperature * Constants.KOverQ) + BiasingParameters.Gmin;
+                cg = csat * (evgs - 1) + BiasingParameters.Gmin * vgs;
             }
 
             if (vgd <= -5 * (BaseParameters.Temperature * Constants.KOverQ))
             {
-                ggd = -csat / vgd + BaseConfiguration.Gmin;
+                ggd = -csat / vgd + BiasingParameters.Gmin;
                 cgd = ggd * vgd;
             }
             else
             {
                 var evgd = Math.Exp(vgd / (BaseParameters.Temperature * Constants.KOverQ));
-                ggd = csat * evgd / (BaseParameters.Temperature * Constants.KOverQ) + BaseConfiguration.Gmin;
-                cgd = csat * (evgd - 1) + BaseConfiguration.Gmin * vgd;
+                ggd = csat * evgd / (BaseParameters.Temperature * Constants.KOverQ) + BiasingParameters.Gmin;
+                cgd = csat * (evgd - 1) + BiasingParameters.Gmin * vgd;
             }
 
             cg += cgd;
@@ -290,7 +284,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
             var cdreq = ModelParameters.JFETType * (cd + cgd - gds * vds - gm * vgs);
 
-            Elements.Add(
+            _elements.Add(
                 // Y-matrix
                 -gdpr,
                 -ggd,

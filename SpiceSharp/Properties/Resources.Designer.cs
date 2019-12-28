@@ -323,24 +323,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The instance has not been bound to any simulation..
-        /// </summary>
-        internal static string InstanceNotBound {
-            get {
-                return ResourceManager.GetString("InstanceNotBound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} has not been bound to any simulation..
-        /// </summary>
-        internal static string InstanceNotBoundNamed {
-            get {
-                return ResourceManager.GetString("InstanceNotBoundNamed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}: depletion capacitance coefficient too large, limited to {1:g}..
         /// </summary>
         internal static string JFETs_DepletionCapCoefficientTooLarge {

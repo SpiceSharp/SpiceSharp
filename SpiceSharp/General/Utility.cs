@@ -54,20 +54,6 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Throws an exception if the behavior is null saying that the behavior is not bound.
-        /// </summary>
-        /// <typeparam name="T">The base type.</typeparam>
-        /// <param name="source">The object.</param>
-        /// <param name="behavior">The behavior that is supposed to be bound.</param>
-        /// <returns></returns>
-        public static T ThrowIfNotBound<T>(this T source, Behaviors.Behavior behavior) where T : class
-        {
-            if (source == null)
-                throw new InstanceNotBoundException(behavior.Name);
-            return source;
-        }
-
-        /// <summary>
         /// Checks the number of specified nodes.
         /// </summary>
         /// <param name="nodes">The nodes.</param>

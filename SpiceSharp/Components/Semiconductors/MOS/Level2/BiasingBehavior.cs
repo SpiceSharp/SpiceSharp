@@ -12,10 +12,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
-        private IIntegrationMethod _method;
-        private IIterationSimulationState _iteration;
+        private readonly IIntegrationMethod _method;
         private readonly ITimeSimulationState _time;
+        private readonly IIterationSimulationState _iteration;
         private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly ElementSet<double> _elements;
 
         /// <summary>
         /// Signs used in the model
@@ -138,12 +139,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         protected Variable SourcePrime { get; private set; }
 
         /// <summary>
-        /// Gets the matrix elements.
+        /// Gets the state of the biasing.
         /// </summary>
         /// <value>
-        /// The matrix elements.
+        /// The state of the biasing.
         /// </value>
-        protected ElementSet<double> Elements { get; private set; }
+        protected IBiasingSimulationState BiasingState { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -153,7 +154,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(4);
-
+            BiasingState = context.GetState<IBiasingSimulationState>();
             BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
@@ -169,21 +170,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var variables = context.Variables;
 
             // Add series drain node if necessary
-            if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.DrainSquares > 0)
+            if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.DrainSquares > 0)
                 DrainPrime = variables.Create(Name.Combine("drain"), VariableType.Voltage);
             else
                 DrainPrime = context.Nodes[0];
             _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
-            if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && BaseParameters.SourceSquares > 0)
+            if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.SourceSquares > 0)
                 SourcePrime = variables.Create(Name.Combine("source"), VariableType.Voltage);
             else
                 SourcePrime = context.Nodes[2];
             _sourceNodePrime = BiasingState.Map[SourcePrime];
 
             // Get matrix pointers
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_drainNode, _drainNode),
                 new MatrixLocation(_sourceNode, _sourceNode),
                 new MatrixLocation(_bulkNode, _bulkNode),
@@ -209,8 +210,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </summary>
         protected virtual void Load()
         {
-            var state = BiasingState.ThrowIfNotBound(this);
-
             // Get the current voltages
             Initialize(out var vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;
@@ -272,7 +271,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             DrainCurrent = Mode * cdrain - BdCurrent;
 
             // Check convergence
-            if (!BaseParameters.Off || _iteration.Mode != IterationModes.Fix)
+            if (!Parameters.Off || _iteration.Mode != IterationModes.Fix)
             {
                 if (check)
                     _iteration.IsConvergent = false;
@@ -295,7 +294,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 cdreq = -ModelParameters.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
             }
 
-            Elements.Add(
+            _elements.Add(
                 // Y-matrix
                 DrainConductance,
                 SourceConductance,
@@ -338,7 +337,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             check = true;
 
             if (_iteration.Mode == IterationModes.Float || (_method != null && _method.BaseTime.Equals(0.0)) ||
-                _iteration.Mode == IterationModes.Fix && !BaseParameters.Off)
+                _iteration.Mode == IterationModes.Fix && !Parameters.Off)
             {
                 // General iteration
                 vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
@@ -387,11 +386,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				 * look at all of the possibilities for why we were
 				 * called.  We still just initialize the three voltages
 				 */
-                if (_iteration.Mode == IterationModes.Junction && !BaseParameters.Off)
+                if (_iteration.Mode == IterationModes.Junction && !Parameters.Off)
                 {
-                    vds = ModelParameters.MosfetType * BaseParameters.InitialVoltageDs;
-                    vgs = ModelParameters.MosfetType * BaseParameters.InitialVoltageGs;
-                    vbs = ModelParameters.MosfetType * BaseParameters.InitialVoltageBs;
+                    vds = ModelParameters.MosfetType * Parameters.InitialVoltageDs;
+                    vgs = ModelParameters.MosfetType * Parameters.InitialVoltageGs;
+                    vbs = ModelParameters.MosfetType * Parameters.InitialVoltageBs;
 
                     // TODO: At some point, check what this is supposed to do
                     if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))
@@ -416,10 +415,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             double von;
             double vdsat, cdrain = 0.0;
 
-            var Vt = Constants.KOverQ * BaseParameters.Temperature;
-            var effectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
-            var beta = TempTransconductance * BaseParameters.Width / effectiveLength;
-            var oxideCap = ModelParameters.OxideCapFactor * effectiveLength * BaseParameters.Width;
+            var Vt = Constants.KOverQ * Parameters.Temperature;
+            var effectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion;
+            var beta = TempTransconductance * Parameters.Width / effectiveLength;
+            var oxideCap = ModelParameters.OxideCapFactor * effectiveLength * Parameters.Width;
 
             /*
             * this routine evaluates the drain current, its derivatives and
@@ -578,7 +577,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 // XXX constant per model
                 var cfs = Constants.Charge * ModelParameters.FastSurfaceStateDensity * 1e4;
                 var cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
-                xn = 1.0 + cfs / oxideCap * BaseParameters.Width * effectiveLength + cdonco;
+                xn = 1.0 + cfs / oxideCap * Parameters.Width * effectiveLength + cdonco;
                 tmp = Vt * xn;
                 von = von + tmp;
                 argg = 1.0 / tmp;
@@ -966,12 +965,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </returns>
         bool IConvergenceBehavior.IsConvergent()
         {
-            var state = BiasingState.ThrowIfNotBound(this);
             double cdhat;
 
-            var vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
-            var vgs = ModelParameters.MosfetType * (state.Solution[_gateNode] - state.Solution[_sourceNodePrime]);
-            var vds = ModelParameters.MosfetType * (state.Solution[_drainNodePrime] - state.Solution[_sourceNodePrime]);
+            var vbs = ModelParameters.MosfetType * (BiasingState.Solution[_bulkNode] - BiasingState.Solution[_sourceNodePrime]);
+            var vgs = ModelParameters.MosfetType * (BiasingState.Solution[_gateNode] - BiasingState.Solution[_sourceNodePrime]);
+            var vds = ModelParameters.MosfetType * (BiasingState.Solution[_drainNodePrime] - BiasingState.Solution[_sourceNodePrime]);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
             var vgdo = VoltageGs - VoltageDs;

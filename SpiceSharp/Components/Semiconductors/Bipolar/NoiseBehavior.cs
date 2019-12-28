@@ -11,11 +11,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     public class NoiseBehavior : BiasingBehavior, INoiseBehavior
     {
         private readonly INoiseSimulationState _noise;
-
-        /// <summary>
-        /// Gets the noise parameters.
-        /// </summary>
-        protected ModelNoiseParameters NoiseParameters { get; private set; }
+        private readonly ModelNoiseParameters _mnp;
 
         /// <summary>
         /// Noise sources by their index
@@ -46,7 +42,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="context">The context.</param>
         public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
-            NoiseParameters = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
+            _mnp = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
             _noise = context.GetState<INoiseSimulationState>();
             BipolarJunctionTransistorNoise.Bind(context, context.Nodes[0], context.Nodes[1], context.Nodes[2], context.Nodes[3],
                 CollectorPrime, BasePrime, EmitterPrime);
@@ -60,12 +56,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var generators = BipolarJunctionTransistorNoise.Generators;
 
             // Set noise parameters
-            generators[_rcNoise].SetCoefficients(ModelTemperature.CollectorConduct * BaseParameters.Area);
+            generators[_rcNoise].SetCoefficients(ModelTemperature.CollectorConduct * Parameters.Area);
             generators[_rbNoise].SetCoefficients(ConductanceX);
-            generators[_reNoise].SetCoefficients(ModelTemperature.EmitterConduct * BaseParameters.Area);
+            generators[_reNoise].SetCoefficients(ModelTemperature.EmitterConduct * Parameters.Area);
             generators[_icNoise].SetCoefficients(CollectorCurrent);
             generators[_ibNoise].SetCoefficients(BaseCurrent);
-            generators[_flickerNoise].SetCoefficients(NoiseParameters.FlickerNoiseCoefficient * Math.Exp(NoiseParameters.FlickerNoiseExponent 
+            generators[_flickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent 
                 * Math.Log(Math.Max(Math.Abs(BaseCurrent), 1e-38))) / _noise.Frequency);
 
             // Evaluate all noise sources

@@ -10,23 +10,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
     /// </summary>
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly ElementSet<Complex> _elements;
+        private readonly IComplexSimulationState _complex;
+        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -35,14 +21,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _drainNode = ComplexState.Map[context.Nodes[0]];
-            _gateNode = ComplexState.Map[context.Nodes[1]];
-            _sourceNode = ComplexState.Map[context.Nodes[2]];
-            _bulkNode = ComplexState.Map[context.Nodes[3]];
-            _drainNodePrime = ComplexState.Map[DrainPrime];
-            _sourceNodePrime = ComplexState.Map[SourcePrime];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
+            _complex = context.GetState<IComplexSimulationState>();
+            _drainNode = _complex.Map[context.Nodes[0]];
+            _gateNode = _complex.Map[context.Nodes[1]];
+            _sourceNode = _complex.Map[context.Nodes[2]];
+            _bulkNode = _complex.Map[context.Nodes[3]];
+            _drainNodePrime = _complex.Map[DrainPrime];
+            _sourceNodePrime = _complex.Map[SourcePrime];
+            _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_gateNode, _gateNode),
                 new MatrixLocation(_bulkNode, _bulkNode),
                 new MatrixLocation(_drainNodePrime, _drainNodePrime),
@@ -82,7 +68,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var cstate = ComplexState.ThrowIfNotBound(this);
             int xnrm, xrev;
 
             if (Mode < 0)
@@ -97,23 +82,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
 
             // Charge oriented model parameters
-            var effectiveLength = BaseParameters.Length - 2 * ModelParameters.LateralDiffusion;
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * BaseParameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * BaseParameters.Width;
+            var effectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion;
+            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
+            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
             var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * effectiveLength;
 
             // Meyer"s model parameters
             var capgs = CapGs + CapGs + gateSourceOverlapCap;
             var capgd = CapGd + CapGd + gateDrainOverlapCap;
             var capgb = CapGb + CapGb + gateBulkOverlapCap;
-            var xgs = capgs * cstate.Laplace.Imaginary;
-            var xgd = capgd * cstate.Laplace.Imaginary;
-            var xgb = capgb * cstate.Laplace.Imaginary;
-            var xbd = CapBd * cstate.Laplace.Imaginary;
-            var xbs = CapBs * cstate.Laplace.Imaginary;
+            var xgs = capgs * _complex.Laplace.Imaginary;
+            var xgd = capgd * _complex.Laplace.Imaginary;
+            var xgb = capgb * _complex.Laplace.Imaginary;
+            var xbd = CapBd * _complex.Laplace.Imaginary;
+            var xbs = CapBs * _complex.Laplace.Imaginary;
 
             // Load Y-matrix
-            ComplexElements.Add(
+            _elements.Add(
                 new Complex(0.0, xgd + xgs + xgb),
                 new Complex(CondBd + CondBs, xgb + xbd + xbs),
                 new Complex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd),

@@ -15,6 +15,8 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         private readonly IIntegrationMethod _method;
         private readonly IIterationSimulationState _iteration;
         private readonly int _posNode, _negNode, _brNode;
+        private readonly ElementSet<double> _elements;
+        private readonly IBiasingSimulationState _biasing;
 
         /// <summary>
         /// Gets the base parameters.
@@ -22,15 +24,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <value>
         /// The base parameters.
         /// </value>
-        public IndependentSourceParameters BaseParameters { get; }
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        IndependentSourceParameters IParameterized<IndependentSourceParameters>.Parameters => BaseParameters;
+        public IndependentSourceParameters Parameters { get; }
 
         /// <summary>
         /// Gets the waveform.
@@ -45,14 +39,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("i_r"), ParameterInfo("Voltage source current")]
-        public double GetCurrent() => BiasingState.ThrowIfNotBound(this).Solution[_brNode];
+        public double Current => _biasing.Solution[_brNode];
 
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Instantaneous power")]
-        public double GetPower() => (BiasingState.ThrowIfNotBound(this).Solution[_posNode] - BiasingState.Solution[_negNode]) * -BiasingState.Solution[_brNode];
+        public double Power => (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * -_biasing.Solution[_brNode];
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -66,22 +60,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public Variable Branch { get; private set; }
 
         /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
-
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -91,18 +69,18 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);
 
-            BaseParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceParameters>();
+            Parameters = context.GetParameterSet<IndependentSourceParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _method);
-            Waveform = BaseParameters.Waveform?.Create(_method);
-            if (!BaseParameters.DcValue.Given)
+            Waveform = Parameters.Waveform?.Create(_method);
+            if (!Parameters.DcValue.Given)
             {
                 // No DC value: either have a transient value or none
                 if (Waveform != null)
                 {
                     SpiceSharpWarning.Warning(this, 
                         Properties.Resources.IndependentSources_NoDcUseWaveform.FormatString(Name));
-                    BaseParameters.DcValue.RawValue = Waveform.Value;
+                    Parameters.DcValue.RawValue = Waveform.Value;
                 }
                 else
                 {
@@ -112,13 +90,13 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             }
 
             // Connections
-            BiasingState = context.GetState<IBiasingSimulationState>();
+            _biasing = context.GetState<IBiasingSimulationState>();
             context.TryGetState(out _method);
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
+            _posNode = _biasing.Map[context.Nodes[0]];
+            _negNode = _biasing.Map[context.Nodes[1]];
             Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
-            _brNode = BiasingState.Map[Branch];
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _brNode = _biasing.Map[Branch];
+            _elements = new ElementSet<double>(_biasing.Solver, new[] {
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_brNode, _posNode),
                 new MatrixLocation(_negNode, _brNode),
@@ -131,7 +109,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var state = BiasingState.ThrowIfNotBound(this);
             double value;
 
             if (_method != null)
@@ -140,15 +117,15 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 if (Waveform != null)
                     value = Waveform.Value;
                 else
-                    value = BaseParameters.DcValue * _iteration.SourceFactor;
+                    value = Parameters.DcValue * _iteration.SourceFactor;
             }
             else
             {
-                value = BaseParameters.DcValue * _iteration.SourceFactor;
+                value = Parameters.DcValue * _iteration.SourceFactor;
             }
 
             Voltage = value;
-            Elements.Add(1, 1, -1, -1, value);
+            _elements.Add(1, 1, -1, -1, value);
         }
     }
 }

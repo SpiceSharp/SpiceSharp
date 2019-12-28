@@ -33,22 +33,19 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double GetCurrent() => _biasing.Solution[_brNode] * Parameters.Coefficient;
+        public double Current => _biasing.Solution[_brNode] * Parameters.Coefficient;
 
         /// <summary>
         /// Gets the volage over the source.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
-        public double GetVoltage() => _biasing.ThrowIfNotBound(this).Solution[_posNode] - _biasing.Solution[_negNode];
+        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
 
         /// <summary>
         /// The power dissipation by the source.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
-        public double GetPower()
-        {
-            return (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * _biasing.Solution[_brNode] * Parameters.Coefficient;
-        }
+        public double Power => (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * _biasing.Solution[_brNode] * Parameters.Coefficient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.

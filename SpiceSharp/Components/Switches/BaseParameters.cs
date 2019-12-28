@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <summary>
     /// Base parameters for a switch.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public class BaseParameters : ParameterSet
     {
         /// <summary>

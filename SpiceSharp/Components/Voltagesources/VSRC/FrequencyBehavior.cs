@@ -3,62 +3,56 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.VoltageSourceBehaviors
 {
     /// <summary>
     /// AC behavior for <see cref="VoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior,
+        IParameterized<IndependentSourceFrequencyParameters>
     {
+        private readonly int _posNode, _negNode, _brNode;
+        private readonly ElementSet<Complex> _elements;
+        private readonly IComplexSimulationState _complex;
+
         /// <summary>
         /// Gets the frequency parameters.
         /// </summary>
-        protected CommonBehaviors.IndependentSourceFrequencyParameters FrequencyParameters { get; private set; }
-
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
         /// <value>
-        /// The complex matrix elements.
+        /// The frequency parameters.
         /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
+        public IndependentSourceFrequencyParameters FrequencyParameters { get; }
+        IndependentSourceFrequencyParameters IParameterized<IndependentSourceFrequencyParameters>.Parameters => FrequencyParameters;
 
         /// <summary>
         /// Gets the complex voltage applied by the source.
         /// </summary>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public new Complex Voltage => FrequencyParameters.Phasor;
+        public Complex ComplexVoltage => FrequencyParameters.Phasor;
 
         /// <summary>
         /// Gets the current through the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex GetComplexCurrent() => ComplexState.ThrowIfNotBound(this).Solution[_brNode];
+        public Complex ComplexCurrent => _complex.Solution[_brNode];
 
         /// <summary>
         /// Gets the power through the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
-        public Complex GetComplexPower()
+        public Complex ComplexPower
         {
-            ComplexState.ThrowIfNotBound(this);
-            var v = ComplexState.Solution[_posNode] - ComplexState.Solution[_negNode];
-            var i = ComplexState.Solution[_brNode];
-            return -v * Complex.Conjugate(i);
+            get
+            {
+                var v = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                var i = _complex.Solution[_brNode];
+                return -v * Complex.Conjugate(i);
+            }
         }
-
-        private int _posNode, _negNode, _brNode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -67,14 +61,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
-            FrequencyParameters = context.GetParameterSet<CommonBehaviors.IndependentSourceFrequencyParameters>();
+            FrequencyParameters = context.GetParameterSet<IndependentSourceFrequencyParameters>();
 
             // Connections
-            ComplexState = context.GetState<IComplexSimulationState>();
-            _posNode = ComplexState.Map[context.Nodes[0]];
-            _negNode = ComplexState.Map[context.Nodes[1]];
-            _brNode = ComplexState.Map[Branch];
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver, new[] {
+            _complex = context.GetState<IComplexSimulationState>();
+            _posNode = _complex.Map[context.Nodes[0]];
+            _negNode = _complex.Map[context.Nodes[1]];
+            _brNode = _complex.Map[Branch];
+            _elements = new ElementSet<Complex>(_complex.Solver, new[] {
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_brNode, _posNode),
                 new MatrixLocation(_negNode, _brNode),
@@ -94,9 +88,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            ComplexElements
-                .ThrowIfNotBound(this)
-                .Add(1, 1, -1, -1, FrequencyParameters.Phasor);
+            _elements.Add(1, 1, -1, -1, FrequencyParameters.Phasor);
         }
     }
 }

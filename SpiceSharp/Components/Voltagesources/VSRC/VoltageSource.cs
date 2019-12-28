@@ -14,30 +14,28 @@ namespace SpiceSharp.Components
         IParameterized<IndependentSourceParameters>,
         IParameterized<IndependentSourceFrequencyParameters>
     {
-        private readonly IndependentSourceParameters _isp = new IndependentSourceParameters();
-        private readonly IndependentSourceFrequencyParameters _isfp = new IndependentSourceFrequencyParameters();
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public IndependentSourceParameters Parameters { get; } = new IndependentSourceParameters();
+
+        /// <summary>
+        /// Gets the frequency parameters.
+        /// </summary>
+        /// <value>
+        /// The frequency parameters.
+        /// </value>
+        public IndependentSourceFrequencyParameters FrequencyParameters { get; } = new IndependentSourceFrequencyParameters();
+        IndependentSourceFrequencyParameters IParameterized<IndependentSourceFrequencyParameters>.Parameters => FrequencyParameters;
 
         /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
 		public const int VoltageSourcePinCount = 2;
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        IndependentSourceParameters IParameterized<IndependentSourceParameters>.Parameters => _isp;
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        IndependentSourceFrequencyParameters IParameterized<IndependentSourceFrequencyParameters>.Parameters => _isfp;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageSource"/> class.
@@ -58,7 +56,7 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            _isp.DcValue.Value = dc;
+            Parameters.DcValue.Value = dc;
             Connect(pos, neg);
         }
 
@@ -72,7 +70,7 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, IWaveformDescription waveform) 
             : this(name)
         {
-            _isp.Waveform = waveform;
+            Parameters.Waveform = waveform;
             Connect(pos, neg);
         }
 

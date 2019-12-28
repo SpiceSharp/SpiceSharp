@@ -11,11 +11,23 @@ namespace SpiceSharp.Components
         IParameterized<ModelBaseParameters>,
         IParameterized<ModelNoiseParameters>
     {
-        private readonly ModelBaseParameters _mbp = new ModelBaseParameters();
-        private readonly ModelNoiseParameters _mnp = new ModelNoiseParameters();
+        /// <summary>
+        /// Gets the parameter set.
+        /// </summary>
+        /// <value>
+        /// The parameter set.
+        /// </value>
+        public ModelBaseParameters Parameters { get; } = new ModelBaseParameters();
 
-        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => _mbp;
-        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => _mnp;
+        /// <summary>
+        /// Gets the noise parameters.
+        /// </summary>
+        /// <value>
+        /// The noise parameters.
+        /// </value>
+        public ModelNoiseParameters NoiseParameters { get; } = new ModelNoiseParameters();
+
+        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BipolarJunctionTransistorModel"/> class.

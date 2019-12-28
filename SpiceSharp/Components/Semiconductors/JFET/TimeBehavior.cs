@@ -10,23 +10,10 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// </summary>
     public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
-        /// <summary>
-        /// Gets the state tracking gate-source charge.
-        /// </summary>
-        protected IDerivative Qgs { get; private set; }
-
-        /// <summary>
-        /// Gets the state tracking gate-drain charge.
-        /// </summary>
-        protected IDerivative Qgd { get; private set; }
-
-        /// <summary>
-        /// Gets the transient matrix elements.
-        /// </summary>
-        /// <value>
-        /// The transient matrix elements.
-        /// </value>
-        protected ElementSet<double> TransientMatrixElements { get; private set; }
+        private readonly int _gateNode, _drainPrimeNode, _sourcePrimeNode;
+        private readonly ITimeSimulationState _time;
+        private readonly ElementSet<double> _elements;
+        private readonly IDerivative _qgs, _qgd;
 
         /// <summary>
         /// Gets the G-S capacitance.
@@ -38,9 +25,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </summary>
         public double CapGd { get; private set; }
 
-        private readonly int _gateNode, _drainPrimeNode, _sourcePrimeNode;
-        private readonly ITimeSimulationState _time;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
         /// </summary>
@@ -50,13 +34,13 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             _time = context.GetState<ITimeSimulationState>();
             var method = context.GetState<IIntegrationMethod>();
-            Qgs = method.CreateDerivative();
-            Qgd = method.CreateDerivative();
+            _qgs = method.CreateDerivative();
+            _qgd = method.CreateDerivative();
 
             _gateNode = BiasingState.Map[context.Nodes[1]];
             _drainPrimeNode = BiasingState.Map[DrainPrime];
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
-            TransientMatrixElements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_gateNode, _drainPrimeNode),
                 new MatrixLocation(_gateNode, _sourcePrimeNode),
                 new MatrixLocation(_drainPrimeNode, _gateNode),
@@ -92,20 +76,20 @@ namespace SpiceSharp.Components.JFETBehaviors
             CalculateStates(vgs, vgd);
 
             // Integrate and add contributions
-            Qgs.Integrate();
-            var ggs = Qgs.GetContributions(CapGs).Jacobian;
-            var cg = Qgs.Derivative;
-            Qgd.Integrate();
-            var ggd = Qgd.GetContributions(CapGd).Jacobian;
-            cg += Qgd.Derivative;
-            var cd = -Qgd.Derivative;
-            var cgd = Qgd.Derivative;
+            _qgs.Integrate();
+            var ggs = _qgs.GetContributions(CapGs).Jacobian;
+            var cg = _qgs.Derivative;
+            _qgd.Integrate();
+            var ggd = _qgd.GetContributions(CapGd).Jacobian;
+            cg += _qgd.Derivative;
+            var cd = -_qgd.Derivative;
+            var cgd = _qgd.Derivative;
 
             var ceqgd = ModelParameters.JFETType * (cgd - ggd * vgd);
             var ceqgs = ModelParameters.JFETType * (cg - cgd - ggs * vgs);
             var cdreq = ModelParameters.JFETType * (cd + cgd);
 
-            TransientMatrixElements.Add(
+            _elements.Add(
                 // Y-matrix
                 -ggd,
                 -ggs,
@@ -137,12 +121,12 @@ namespace SpiceSharp.Components.JFETBehaviors
             if (vgs < CorDepCap)
             {
                 var sarg = Math.Sqrt(1 - vgs / TempGatePotential);
-                Qgs.Value = twop * czgs * (1 - sarg);
+                _qgs.Value = twop * czgs * (1 - sarg);
                 CapGs = czgs / sarg;
             }
             else
             {
-                Qgs.Value = czgs * F1 + czgsf2 *
+                _qgs.Value = czgs * F1 + czgsf2 *
                               (ModelTemperature.F3 * (vgs - CorDepCap) + (vgs * vgs - fcpb2) / (twop + twop));
                 CapGs = czgsf2 * (ModelTemperature.F3 + vgs / twop);
             }
@@ -150,12 +134,12 @@ namespace SpiceSharp.Components.JFETBehaviors
             if (vgd < CorDepCap)
             {
                 var sarg = Math.Sqrt(1 - vgd / TempGatePotential);
-                Qgd.Value = twop * czgd * (1 - sarg);
+                _qgd.Value = twop * czgd * (1 - sarg);
                 CapGd = czgd / sarg;
             }
             else
             {
-                Qgd.Value = czgd * F1 + czgdf2 *
+                _qgd.Value = czgd * F1 + czgdf2 *
                               (ModelTemperature.F3 * (vgd - CorDepCap) + (vgd * vgd - fcpb2) / (twop + twop));
                 CapGd = czgdf2 * (ModelTemperature.F3 + vgd / twop);
             }

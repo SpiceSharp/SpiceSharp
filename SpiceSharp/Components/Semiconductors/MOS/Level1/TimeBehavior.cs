@@ -11,6 +11,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// </summary>
     public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
+        private readonly int _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly ITimeSimulationState _time;
+        private readonly ElementSet<double> _elements;
+        private readonly IDerivative _chargeBs, _chargeBd, _chargeGs, _chargeGd, _chargeGb;
+        private readonly StateValue<double> _capGs, _capGd, _capGb, _voltageGs, _voltageBs;
+
         /// <summary>
         /// Gets or sets the stored bulk-source charge.
         /// </summary>
@@ -19,7 +25,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _chargeBs.Value;
             protected set => _chargeBs.Value = value;
         }
-        private IDerivative _chargeBs;
 
         /// <summary>
         /// Gets or sets the stored bulk-drain charge.
@@ -29,7 +34,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _chargeBd.Value;
             protected set => _chargeBd.Value = value;
         }
-        private IDerivative _chargeBd;
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-source charge storage.
@@ -39,7 +43,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _capGs.Value;
             protected set => _capGs.Value = value;
         }
-        private StateValue<double> _capGs;
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-drain charge storage.
@@ -49,7 +52,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _capGd.Value;
             protected set => _capGd.Value = value;
         }
-        private StateValue<double> _capGd;
 
         /// <summary>
         /// Gets or sets the capacitance due to gate-bulk charge storage.
@@ -59,28 +61,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _capGb.Value;
             protected set => _capGb.Value = value;
         }
-        private StateValue<double> _capGb;
 
         /// <summary>
         /// Gets the stored gate-source charge.
         /// </summary>
         [ParameterName("qgs"), ParameterName("Gate-Source charge storage")]
         public double ChargeGs => _chargeGs.Value;
-        private IDerivative _chargeGs;
 
         /// <summary>
         /// Gets the stored gate-drain charge.
         /// </summary>
         [ParameterName("qgd"), ParameterName("Gate-Drain storage")]
         public double ChargeGd => _chargeGd.Value;
-        private IDerivative _chargeGd;
 
         /// <summary>
         /// Gets the stored gate-bulk charge.
         /// </summary>
         [ParameterName("qgb"), ParameterInfo("Gate-Bulk charge")]
         public double ChargeGb => _chargeGb.Value;
-        private IDerivative _chargeGb;
 
         /// <summary>
         /// Gets the drain-source voltage.
@@ -100,7 +98,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _voltageGs.Value;
             protected set => _voltageGs.Value = value;
         }
-        private StateValue<double> _voltageGs;
 
         /// <summary>
         /// Gets the bulk-source voltage.
@@ -110,18 +107,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _voltageBs.Value;
             protected set => _voltageBs.Value = value;
         }
-        private StateValue<double> _voltageBs;
-
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> TransientElements { get; private set; }
-
-        private readonly int _gateNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
-        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -135,7 +120,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             _bulkNode = BiasingState.Map[context.Nodes[3]];
             _drainNodePrime = BiasingState.Map[DrainPrime];
             _sourceNodePrime = BiasingState.Map[SourcePrime];
-            TransientElements = new ElementSet<double>(BiasingState.Solver, new[] {
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_gateNode, _gateNode),
                 new MatrixLocation(_bulkNode, _bulkNode),
                 new MatrixLocation(_drainNodePrime, _drainNodePrime),
@@ -175,7 +160,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </remarks>
         void ITimeBehavior.InitializeStates()
         {
-            BiasingState.ThrowIfNotBound(this);
             var vgs = VoltageGs;
             var vds = VoltageDs;
             var vbs = VoltageBs;
@@ -188,8 +172,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             // Calculate Meyer capacitance
             CalculateMeyerCharges(vgs, vgd);
 
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * BaseParameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * BaseParameters.Width;
+            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
+            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
             var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * EffectiveLength;
 
             var capgs = 2 * CapGs + gateSourceOverlapCap;
@@ -231,8 +215,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             // Calculate Meyer's capacitors
             CalculateMeyerCharges(vgs, vgd);
 
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * BaseParameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * BaseParameters.Width;
+            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
+            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
             var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * EffectiveLength;
 
             var vgs1 = _voltageGs.GetPreviousValue(1);
@@ -263,7 +247,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var ceqbs = ModelParameters.MosfetType * (cbs - gbs * vbs);
             var ceqbd = ModelParameters.MosfetType * (cbd - gbd * vbd);
 
-            TransientElements.Add(
+            _elements.Add(
                 // Y-matrix
                 gcgd + gcgs + gcgb,
                 gbd + gbs + gcgb,

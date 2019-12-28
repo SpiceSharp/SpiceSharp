@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Diode capacitance
         /// </summary>
         [ParameterName("cd"), ParameterInfo("Diode capacitance")]
-        public double Capacitance => LocalCapacitance * BaseParameters.ParallelMultiplier / BaseParameters.SeriesMultiplier;
+        public double Capacitance => LocalCapacitance * Parameters.ParallelMultiplier / Parameters.SeriesMultiplier;
 
         /// <summary>
         /// The junction capacitance of a single diode (not including parallel or series multipliers).
@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets or sets the capacitor charge.
         /// </summary>
         [ParameterName("charge"), ParameterInfo("Diode capacitor charge")]
-        public double CapCharge => LocalCapCharge * BaseParameters.ParallelMultiplier;
+        public double CapCharge => LocalCapCharge * Parameters.ParallelMultiplier;
 
         /// <summary>
         /// The charge on the junction capacitance of a single diode (not including parallel or series multipliers).
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected void CalculateCapacitance(double vd)
         {
             // charge storage elements
-            var czero = TempJunctionCap * BaseParameters.Area;
+            var czero = TempJunctionCap * Parameters.Area;
             if (vd < TempDepletionCap)
             {
                 var arg = 1 - vd / ModelParameters.JunctionPotential;

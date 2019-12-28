@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.InductorBehaviors
                 return;
 
             // Initialize
-            _flux.ThrowIfNotBound(this).Value = Inductance * BiasingState.Solution[_branchEq];
+            _flux.Value = Inductance * BiasingState.Solution[_branchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
