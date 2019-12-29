@@ -1,4 +1,4 @@
-﻿namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations.Biasing
 {
     /// <summary>
     /// An <see cref="ITemperatureSimulationState"/> for an <see cref="ITemperatureSimulation"/>.

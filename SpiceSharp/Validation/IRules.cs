@@ -7,7 +7,7 @@ namespace SpiceSharp.Validation
     /// </summary>
     /// <seealso cref="IParameterized" />
     /// <seealso cref="IEnumerable{IRule}" />
-    public interface IRuleProvider : IParameterized, IEnumerable<IRule>
+    public interface IRules : IParameterized, IEnumerable<IRule>
     {
         /// <summary>
         /// Gets the number of rule violations.

@@ -87,6 +87,15 @@ namespace SpiceSharp.Simulations
         public Dictionary<string, double> InitialConditions { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the simulation should be validated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the simulation should be validated; otherwise, <c>false</c>.
+        /// </value>
+        [ParameterName("time.validate"), ParameterInfo("Flag indicating whether the simulation should validate the circuit before executing")]
+        public bool Validate { get; set; } = true;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TimeParameters"/> class.
         /// </summary>
         public TimeParameters()

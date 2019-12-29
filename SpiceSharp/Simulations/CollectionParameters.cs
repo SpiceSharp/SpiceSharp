@@ -23,6 +23,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The rule provider.
         /// </value>
-        public Func<IRuleProvider> RuleProvider { get; set; }
+        public Func<IRules> RuleProvider { get; set; }
     }
 }

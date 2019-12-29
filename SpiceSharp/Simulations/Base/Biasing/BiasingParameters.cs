@@ -156,7 +156,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         ///   <c>true</c> if the simulation should be validated; otherwise, <c>false</c>.
         /// </value>
-        [ParameterName("validation"), ParameterInfo("Flag indicating whether the simulation should validate the circuit before executing")]
-        public bool Validation { get; set; } = true;
+        [ParameterName("biasing.validate"), ParameterInfo("Flag indicating whether the simulation should validate the circuit before executing")]
+        public bool Validate { get; set; } = true;
     }
 }

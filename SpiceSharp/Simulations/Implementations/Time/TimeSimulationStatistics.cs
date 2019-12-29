@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Simulations
+namespace SpiceSharp.Simulations.Time
 {
     /// <summary>
     /// Statistics for a <see cref="TimeSimulationStatistics" />.

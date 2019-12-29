@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {
@@ -10,7 +11,8 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "C+"), Pin(1, "C-"), Connected]
     public class Capacitor : Component,
-        IParameterized<BaseParameters>
+        IParameterized<BaseParameters>,
+        IRuleSubject
     {
         /// <summary>
         /// Gets the parameter set.
@@ -63,6 +65,21 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        void IRuleSubject.Apply(IRules rules)
+        {
+            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            var nodes = MapNodes(p.Variables);
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+            {
+                rule.Apply(this, nodes[0]);
+                rule.Apply(this, nodes[1]);
+            }
         }
     }
 }

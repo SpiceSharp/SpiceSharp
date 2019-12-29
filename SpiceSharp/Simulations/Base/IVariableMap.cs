@@ -37,6 +37,18 @@ namespace SpiceSharp.Simulations
         int this[Variable variable] { get; }
 
         /// <summary>
+        /// Gets the <see cref="Variable"/> at assiciated to the specified index.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Variable"/>.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The associated variable.
+        /// </returns>
+        Variable this[int index] { get; }
+
+        /// <summary>
         /// Gets all the variables in the map.
         /// </summary>
         /// <value>

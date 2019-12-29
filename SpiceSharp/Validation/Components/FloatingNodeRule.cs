@@ -14,12 +14,28 @@ namespace SpiceSharp.Validation
         private readonly Dictionary<Variable, int> _groups = new Dictionary<Variable, int>();
 
         /// <summary>
+        /// Gets or sets the fixed-potential node.
+        /// </summary>
+        /// <value>
+        /// The fixed-potential node.
+        /// </value>
+        public Variable FixedVariable { get; }
+
+        /// <summary>
+        /// Gets the groups.
+        /// </summary>
+        /// <value>
+        /// The groups.
+        /// </value>
+        protected virtual IEnumerable<int> Groups => _groups.Values.Distinct();
+
+        /// <summary>
         /// Gets the number of violations of this rule.
         /// </summary>
         /// <value>
         /// The violation count.
         /// </value>
-        public int ViolationCount => _groups.Values.Distinct().Count() - 1;
+        public virtual int ViolationCount => Groups.Count() - 1;
 
         /// <summary>
         /// Gets the violations.
@@ -27,43 +43,43 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The violations.
         /// </value>
-        public IEnumerable<IRuleViolation> Violations
+        public virtual IEnumerable<IRuleViolation> Violations
         {
             get
             {
-                int bulk = -1;
-                int bulkCount = 0;
-                foreach (var group in _groups.Values.Distinct())
+                int bulk;
+                if (FixedVariable != null)
                 {
-                    var count = _groups.Count(p => p.Value == group);
-                    if (count > bulkCount)
-                    {
-                        if (bulk >= 0)
-                            yield return new FloatingNodeRuleViolation(this, _groups.Where(p => p.Value == bulk).Select(p => p.Key));
+                    if (!_groups.TryGetValue(FixedVariable, out bulk))
+                        bulk = -2;
+                }
+                else
+                    bulk = -1;
+                foreach (var group in Groups)
+                {
+                    if (bulk == -1)
                         bulk = group;
-                        bulkCount = count;
-                    }
                     else if (group != bulk)
-                        yield return new FloatingNodeRuleViolation(this, _groups.Where(p => p.Value == group).Select(p => p.Key));
+                        yield return new FloatingNodeRuleViolation(this, GetGroupVariables(group));
                 }
             }
         }
 
         /// <summary>
-        /// Gets the violations.
+        /// Initializes a new instance of the <see cref="FloatingNodeRule"/> class.
         /// </summary>
-        /// <param name="bulkNode">A node that is part of the bulk circuit.</param>
-        /// <returns>
-        /// Rule violations for any group not part of the bulk group.
-        /// </returns>
-        public IEnumerable<IRuleViolation> GetViolations(Variable bulkNode)
+        public FloatingNodeRule()
         {
-            _groups.TryGetValue(bulkNode, out var bulk);
-            foreach (var group in _groups.Values.Distinct())
-            {
-                if (group != bulk)
-                    yield return new FloatingNodeRuleViolation(this, _groups.Where(p => p.Value == group).Select(p => p.Key));
-            }
+            FixedVariable = null;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FloatingNodeRule"/> class.
+        /// </summary>
+        /// <param name="fixedVariable">The fixed-potential variable.</param>
+        public FloatingNodeRule(Variable fixedVariable)
+        {
+            FixedVariable = fixedVariable;
         }
 
         /// <summary>
@@ -74,6 +90,63 @@ namespace SpiceSharp.Validation
         ///   <c>true</c> if the specified variable was encountered; otherwise, <c>false</c>.
         /// </returns>
         public bool Contains(Variable variable) => _groups.ContainsKey(variable);
+
+        /// <summary>
+        /// Gets the group.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <returns>
+        /// The group number assigned to the variable.
+        /// </returns>
+        protected int GetGroup(Variable variable)
+        {
+            if (!_groups.TryGetValue(variable, out int result))
+            {
+                result = _cgroup++;
+                _groups.Add(variable, result);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Tries the get group.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <param name="group">The group.</param>
+        /// <returns>
+        /// <c>true</c> if the group exists; otherwise <c>false</c>.
+        /// </returns>
+        protected bool TryGetGroup(Variable variable, out int group) => _groups.TryGetValue(variable, out group);
+
+        /// <summary>
+        /// Gets the variables in the specified group.
+        /// </summary>
+        /// <param name="group">The group.</param>
+        /// <returns>
+        /// The variables in the specified group.
+        /// </returns>
+        protected virtual IEnumerable<Variable> GetGroupVariables(int group) => _groups.Where(p => p.Value == group).Select(p => p.Key);
+
+        /// <summary>
+        /// Connects the specified groups together. The combined group will get the lowest group index.
+        /// </summary>
+        /// <param name="groupA">The first group.</param>
+        /// <param name="groupB">The second group.</param>
+        protected virtual void Connect(int groupA, int groupB)
+        {
+            if (groupA == groupB)
+                return;
+            if (groupA < groupB)
+            {
+                foreach (var variable in _groups.Where(p => p.Value == groupB).Select(p => p.Key).ToArray())
+                    _groups[variable] = groupA;
+            }
+            else
+            {
+                foreach (var variable in _groups.Where(p => p.Value == groupA).Select(p => p.Key).ToArray())
+                    _groups[variable] = groupB;
+            }
+        }
 
         /// <summary>
         /// Applies the specified variables as being connected by a conductive path.
@@ -101,23 +174,19 @@ namespace SpiceSharp.Validation
         /// <param name="second">The second.</param>
         private void Apply(Variable first, Variable second)
         {
+            first.ThrowIfNull(nameof(first));
+            second.ThrowIfNull(nameof(second));
             var hasA = _groups.TryGetValue(first, out var groupA);
             var hasB = _groups.TryGetValue(second, out var groupB);
             if (hasA && hasB)
-            {
-                if (groupA != groupB)
-                {
-                    // Join the groups
-                    foreach (var v in _groups.Where(p => p.Value == groupB).Select(p => p.Key).ToArray())
-                        _groups[v] = groupA;
-                }
-            }
+                Connect(groupA, groupB);
             else if (hasA)
-                _groups[second] = groupA;
+                _groups.Add(second, groupA);
             else if (hasB)
-                _groups[first] = groupB;
+                _groups.Add(first, groupB);
             else
             {
+                // Create a new group
                 _groups.Add(first, _cgroup);
                 _groups.Add(second, _cgroup);
                 _cgroup++;

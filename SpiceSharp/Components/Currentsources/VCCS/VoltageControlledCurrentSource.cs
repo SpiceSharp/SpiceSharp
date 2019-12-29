@@ -72,7 +72,7 @@ namespace SpiceSharp.Components
         /// Applies the subject to any rules in the validation provider.
         /// </summary>
         /// <param name="rules">The provider.</param>
-        void IRuleSubject.Apply(IRuleProvider rules)
+        void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentValidationParameters>();
             foreach (var variable in MapNodes(p.Variables))

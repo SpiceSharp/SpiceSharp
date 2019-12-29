@@ -4,6 +4,7 @@ using System.Linq;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.Simulations.Biasing;
 using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
@@ -142,34 +143,23 @@ namespace SpiceSharp.Simulations
 
             // Set up nodesets
             foreach (var ns in BiasingParameters.Nodesets)
-                _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
-
-            // Let's validate the biasing simulation
-            Validate(entities);
+            {
+                if (Variables.TryGetNode(ns.Key, out var variable))
+                    _nodesets.Add(new ConvergenceAid(variable, _state, ns.Value));
+                else
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(ns.Key));
+            }
         }
 
         /// <summary>
         /// Validates the circuit.
         /// </summary>
-        /// <exception cref="SimulationValidationFailed">Thrown if the simulation fails its validation.</exception>
-        protected virtual void Validate(IEntityCollection entities)
+        /// <param name="entities">The entities to be validated.</param>
+        /// <exception cref="SimulationValidationFailed">Thrown if the simulation failed its validation.</exception>
+        protected override void Validate(IEntityCollection entities)
         {
-            if (BiasingParameters.Validation)
-            {
-                var provider = new Biasing.BiasingSimulationValidation(Variables);
-                foreach (var entity in entities)
-                {
-                    if (entity is IRuleSubject subject)
-                        subject.Apply(provider);
-                }
-                foreach (var behavior in EntityBehaviors.SelectMany(e => e.Values))
-                {
-                    if (behavior is IRuleSubject subject)
-                        subject.Apply(provider);
-                }
-                if (provider.ViolationCount > 0)
-                    throw new SimulationValidationFailed(this, provider);
-            }
+            if (BiasingParameters.Validate)
+                Validate(new Rules(Variables), entities);
         }
 
         /// <summary>
@@ -203,12 +193,7 @@ namespace SpiceSharp.Simulations
 
             // Apply nodesets if they are specified
             if (_nodesets.Count > 0)
-            {
-                // Initialize the nodesets
-                foreach (var aid in _nodesets)
-                    aid.Initialize(this);
                 AfterLoad += LoadNodeSets;
-            }
         }
 
         /// <summary>

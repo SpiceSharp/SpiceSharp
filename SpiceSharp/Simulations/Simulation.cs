@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.General;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -94,6 +96,16 @@ namespace SpiceSharp.Simulations
         public event EventHandler<EventArgs> AfterSetup;
 
         /// <summary>
+        /// Occurs before the simulation starts validating the input.
+        /// </summary>
+        public event EventHandler<EventArgs> BeforeValidation;
+
+        /// <summary>
+        /// Occurs after the simulation has validated the input.
+        /// </summary>
+        public event EventHandler<EventArgs> AfterValidation;
+
+        /// <summary>
         /// Occurs before the simulation starts its execution.
         /// </summary>
         public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
@@ -158,9 +170,13 @@ namespace SpiceSharp.Simulations
             Statistics.SetupTime.Stop();
             OnAfterSetup(EventArgs.Empty);
 
-            // Check that at least something is simulated
-            if (Variables.Count < 1)
-                throw new SpiceSharpException(Properties.Resources.Simulations_NoVariables.FormatString(Name));
+            // Validate the input
+            OnBeforeValidation(EventArgs.Empty);
+            Statistics.ValidationTime.Start();
+            Status = SimulationStatus.Validation;
+            Validate(entities);
+            Statistics.ValidationTime.Stop();
+            OnAfterValidation(EventArgs.Empty);
 
             // Execute the simulation
             Status = SimulationStatus.Running;
@@ -213,6 +229,41 @@ namespace SpiceSharp.Simulations
 
             // Create all entity behaviors
             CreateBehaviors(entities);
+        }
+
+        /// <summary>
+        /// Validates the input.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        protected abstract void Validate(IEntityCollection entities);
+
+        /// <summary>
+        /// A default implementation for validating entities and behaviors using the specified rules.
+        /// </summary>
+        /// <param name="rules">The rules.</param>
+        /// <param name="entities">The entities.</param>
+        /// <exception cref="SimulationValidationFailed">Thrown if the validation failed.</exception>
+        protected void Validate(IRules rules, IEntityCollection entities)
+        {
+            if (rules == null)
+                return;
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    if (entity is IRuleSubject subject)
+                        subject.Apply(rules);
+                }
+            }
+            foreach (var behavior in EntityBehaviors.SelectMany(p => p.Values))
+            {
+                if (behavior is IRuleSubject subject)
+                    subject.Apply(rules);
+            }
+
+            // Are there still violated rules?
+            if (rules.ViolationCount > 0)
+                throw new SimulationValidationFailed(this, rules);
         }
 
         /// <summary>
@@ -321,6 +372,18 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="BeforeValidation" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnBeforeValidation(EventArgs args) => BeforeValidation?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="AfterValidation" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnAfterValidation(EventArgs args) => AfterValidation?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="AfterSetup" /> event.

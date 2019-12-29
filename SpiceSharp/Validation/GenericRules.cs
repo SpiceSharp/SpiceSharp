@@ -5,33 +5,33 @@ namespace SpiceSharp.Validation
     /// <summary>
     /// A generic rule provider that can have any custom set of rules.
     /// </summary>
-    /// <seealso cref="IRuleProvider" />
-    public class GenericRuleProvider : BaseRuleProvider
+    /// <seealso cref="IRules" />
+    public class GenericRules : BaseRules
     {
         private readonly HashSet<IRule> _rules = new HashSet<IRule>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericRuleProvider"/> class.
+        /// Initializes a new instance of the <see cref="GenericRules"/> class.
         /// </summary>
-        public GenericRuleProvider()
+        public GenericRules()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericRuleProvider"/> class.
+        /// Initializes a new instance of the <see cref="GenericRules"/> class.
         /// </summary>
         /// <param name="rules">The rules.</param>
-        public GenericRuleProvider(params IRule[] rules)
+        public GenericRules(params IRule[] rules)
         {
             foreach (var rule in rules)
                 _rules.Add(rule);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericRuleProvider"/> class.
+        /// Initializes a new instance of the <see cref="GenericRules"/> class.
         /// </summary>
         /// <param name="rules">The rules.</param>
-        public GenericRuleProvider(IEnumerable<IRule> rules)
+        public GenericRules(IEnumerable<IRule> rules)
         {
             foreach (var rule in rules)
                 _rules.Add(rule);

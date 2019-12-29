@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -58,6 +59,27 @@ namespace SpiceSharp.Simulations
                     _map.Add(variable, index);
                 }
                 return index;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Variable" /> at assiciated to the specified index.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Variable" />.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The associated variable.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
+        public Variable this[int index]
+        {
+            get
+            {
+                if (index < 0 || index > Count)
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                return _map.FirstOrDefault(p => p.Value == index).Key;
             }
         }
 

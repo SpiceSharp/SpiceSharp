@@ -7,8 +7,8 @@ namespace SpiceSharp.Validation
     /// <summary>
     /// A base rule provider implementation.
     /// </summary>
-    /// <seealso cref="IRuleProvider" />
-    public abstract class BaseRuleProvider : Parameterized, IRuleProvider
+    /// <seealso cref="IRules" />
+    public abstract class BaseRules : Parameterized, IRules
     {
         /// <summary>
         /// Gets the number of rules that are violated.

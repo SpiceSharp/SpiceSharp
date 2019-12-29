@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace SpiceSharp.Simulations.Biasing
 {
     /// <summary>
-    /// Necessary validation for biasing simulations.
+    /// Necessary rules for biasing simulations.
     /// </summary>
-    /// <seealso cref="BaseRuleProvider" />
-    public class BiasingSimulationValidation : BaseRuleProvider,
+    /// <seealso cref="BaseRules" />
+    public class Rules : BaseRules,
         IParameterized<ComponentValidationParameters>
     {
         private readonly FloatingNodeRule _floatingNode = new FloatingNodeRule();
@@ -23,10 +23,10 @@ namespace SpiceSharp.Simulations.Biasing
         public ComponentValidationParameters Parameters { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingSimulationValidation"/> class.
+        /// Initializes a new instance of the <see cref="Rules"/> class.
         /// </summary>
         /// <param name="parent">The parent variable set.</param>
-        public BiasingSimulationValidation(IVariableSet parent)
+        public Rules(IVariableSet parent)
         {
             _groundPresence = new VariablePresenceRule(parent.Ground);
             Parameters = new ComponentValidationParameters(parent);

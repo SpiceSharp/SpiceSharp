@@ -12,15 +12,22 @@ namespace SpiceSharp.Simulations
     /// </remarks>
     public class ConvergenceAid
     {
+        private readonly IBiasingSimulationState _state;
+        private readonly int _index;
+        private readonly Element<double> _diagonal, _rhs;
+
         /// <summary>
         /// The amount with which a value is forced to the convergence aid value.
         /// </summary>
         private const double _force = 1.0e10;
 
         /// <summary>
-        /// Gets the name of the variable.
+        /// Gets the variable.
         /// </summary>
-        public string Name { get; }
+        /// <value>
+        /// The variable.
+        /// </value>
+        public Variable Variable { get; }
 
         /// <summary>
         /// Gets the value for the convergence aid.
@@ -28,72 +35,23 @@ namespace SpiceSharp.Simulations
         public double Value { get; }
 
         /// <summary>
-        /// Gets the unknown variables.
-        /// </summary>
-        protected IVariableMap Variables { get; private set; }
-
-        /// <summary>
-        /// Gets the solver of the system of equations.
-        /// </summary>
-        protected ISparseSolver<double> Solver { get; private set; }
-
-        /// <summary>
-        /// Gets the diagonal element.
-        /// </summary>
-        protected Element<double> Diagonal { get; private set; }
-
-        /// <summary>
-        /// Gets the right-hand side element.
-        /// </summary>
-        protected Element<double> Rhs { get; private set; }
-
-        /// <summary>
-        /// Gets the variable index.
-        /// </summary>
-        /// <value>
-        /// The index.
-        /// </value>
-        protected int Index { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ConvergenceAid"/> class.
         /// </summary>
-        /// <param name="name">The name of the variable.</param>
+        /// <param name="variable">The variable.</param>
+        /// <param name="state">The biasing simulation state.</param>
         /// <param name="value">The value.</param>
-        public ConvergenceAid(string name, double value)
+        public ConvergenceAid(Variable variable, IBiasingSimulationState state, double value)
         {
-            Name = name;
+            Variable = variable.ThrowIfNull(nameof(variable));
             Value = value;
-        }
 
-        /// <summary>
-        /// Sets up the convergence aid for a specific simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public virtual void Initialize(IBiasingSimulation simulation)
-        {
-            simulation.ThrowIfNull(nameof(simulation));
-            var state = simulation.GetState<IBiasingSimulationState>();
-            Variables = state.Map;
-            Solver = state.Solver;
-
-            // Get the node
-            if (!simulation.Variables.TryGetNode(Name, out var node) || !Variables.Contains(node))
-            {
-                SpiceSharpWarning.Warning(this, Properties.Resources.ConvergenceAidVariableNotFound.FormatString(Name));
-                Index = 0;
-                Diagonal = null;
-                Rhs = null;
-                return;
-            }
-
-            // Get the necessary elements
-            Index = state.Map[node];
-            Diagonal = Solver.GetElement(Index, Index);
-            Rhs = !Value.Equals(0.0) ? Solver.GetElement(Index) : Solver.FindElement(Index);
-
-            // Update the current solution to reflect our convergence aid value
-            state.Solution[Index] = Value;
+            _state = state.ThrowIfNull(nameof(state));
+            if (!state.Map.Contains(variable))
+                throw new VariableNotFoundException(variable.Name);
+            _index = state.Map[variable];
+            _diagonal = _state.Solver.GetElement(_index, _index);
+            _rhs = !Value.Equals(0.0) ? _state.Solver.GetElement(_index) : _state.Solver.FindElement(_index);
+            _state.Solution[_index] = Value;
         }
 
         /// <summary>
@@ -101,22 +59,16 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public virtual void Aid()
         {
-            Solver.ThrowIfNull("solver");
-
-            // Don't execute if the convergence aid wasn't initialized properly
-            if (Diagonal == null)
-                return;
-
             // Clear the row
             var hasOtherTypes = false;
-            foreach (var v in Variables)
+            foreach (var v in _state.Map)
             {
                 // If the variable is a current, then we can't just set it to 0... 
                 if (v.Key.UnknownType == VariableType.Current)
                     hasOtherTypes = true;
                 else
                 {
-                    var elt = Solver.FindElement(Index, v.Value);
+                    var elt = _state.Solver.FindElement(_index, v.Value);
                     if (elt != null)
                         elt.Value = 0.0;
                 }
@@ -125,15 +77,15 @@ namespace SpiceSharp.Simulations
             // If there are current contributions, then we can't just hard-set the value
             if (hasOtherTypes)
             {
-                Diagonal.Value = _force;
-                if (Rhs != null)
-                    Rhs.Value = _force * Value;
+                _diagonal.Value = _force;
+                if (_rhs != null)
+                    _rhs.Value = _force * Value;
             }
             else
             {
-                Diagonal.Value = 1.0;
-                if (Rhs != null)
-                    Rhs.Value = Value;
+                _diagonal.Value = 1.0;
+                if (_rhs != null)
+                    _rhs.Value = Value;
             }
         }
     }

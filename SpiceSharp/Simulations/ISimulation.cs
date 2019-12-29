@@ -66,6 +66,11 @@ namespace SpiceSharp.Simulations
         Setup,
 
         /// <summary>
+        /// Indicates that the simulation is validating the input.
+        /// </summary>
+        Validation,
+
+        /// <summary>
         /// Indicates that the simulation is running.
         /// </summary>
         Running,

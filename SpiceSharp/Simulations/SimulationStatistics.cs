@@ -11,24 +11,45 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the time spent during setup.
         /// </summary>
+        /// <value>
+        /// The setup time.
+        /// </value>
         [ParameterName("tsetup"), ParameterInfo("The time spent during setup")]
         public Stopwatch SetupTime { get; } = new Stopwatch();
 
         /// <summary>
+        /// Gets the time spent during validation.
+        /// </summary>
+        /// <value>
+        /// The validation time.
+        /// </value>
+        [ParameterName("tvalidation"), ParameterInfo("The time spent validating the input")]
+        public Stopwatch ValidationTime { get; } = new Stopwatch();
+
+        /// <summary>
         /// Gets the time spent during execution.
         /// </summary>
+        /// <value>
+        /// The execution time.
+        /// </value>
         [ParameterName("texecution"), ParameterName("texec"), ParameterInfo("Time spent during execution")]
         public Stopwatch ExecutionTime { get; } = new Stopwatch();
 
         /// <summary>
         /// Gets the time spent during unsetup.
         /// </summary>
+        /// <value>
+        /// The unsetup time.
+        /// </value>
         [ParameterName("tunsetup"), ParameterInfo("Time spent during unsetup")]
         public Stopwatch UnsetupTime { get; } = new Stopwatch();
 
         /// <summary>
         /// Gets the time spent creating behaviors.
         /// </summary>
+        /// <value>
+        /// The behavior creation time.
+        /// </value>
         [ParameterName("tbehavior"), ParameterInfo("Time spent creating behaviors")]
         public Stopwatch BehaviorCreationTime { get; } = new Stopwatch();
 
@@ -38,6 +59,7 @@ namespace SpiceSharp.Simulations
         public void Reset()
         {
             SetupTime.Reset();
+            ValidationTime.Reset();
             ExecutionTime.Reset();
             UnsetupTime.Reset();
             BehaviorCreationTime.Reset();

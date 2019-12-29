@@ -215,15 +215,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not set convergence aid: variable &apos;{0}&apos; could not be found..
-        /// </summary>
-        internal static string ConvergenceAidVariableNotFound {
-            get {
-                return ResourceManager.GetString("ConvergenceAidVariableNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The absolute tolerance should be greater than 0..
         /// </summary>
         internal static string Delays_AbsoluteToleranceTooSmall {
@@ -454,6 +445,15 @@ namespace SpiceSharp.Properties {
         internal static string Simulations_Biasing_StartSourceStepping {
             get {
                 return ResourceManager.GetString("Simulations.Biasing.StartSourceStepping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not set convergence aid: variable &apos;{0}&apos; could not be found..
+        /// </summary>
+        internal static string Simulations_ConvergenceAidVariableNotFound {
+            get {
+                return ResourceManager.GetString("Simulations.ConvergenceAidVariableNotFound", resourceCulture);
             }
         }
         

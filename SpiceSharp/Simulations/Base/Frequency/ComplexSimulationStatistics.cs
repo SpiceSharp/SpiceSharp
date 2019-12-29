@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Simulations
+namespace SpiceSharp.Simulations.Frequency
 {
     /// <summary>
     /// Statistics for a <see cref="FrequencySimulation"/>.

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.Simulations.Frequency;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -108,6 +111,19 @@ namespace SpiceSharp.Simulations
             _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
 
             ComplexState.Setup(this);
+        }
+
+        /// <summary>
+        /// Validates the circuit.
+        /// </summary>
+        /// <param name="entities">The entities to be validated.</param>
+        /// <exception cref="SimulationValidationFailed">Thrown if the simulation failed its validation.</exception>
+        protected override void Validate(IEntityCollection entities)
+        {
+            if (FrequencyParameters.Validate)
+                Validate(new Rules(Variables, FrequencyParameters.Frequencies), entities);
+            else
+                base.Validate(entities);
         }
 
         /// <summary>

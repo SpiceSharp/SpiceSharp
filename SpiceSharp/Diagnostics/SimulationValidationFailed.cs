@@ -15,14 +15,14 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The rules.
         /// </value>
-        public IRuleProvider Rules { get; }
+        public IRules Rules { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimulationValidationFailed"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="rules">The rule provider.</param>
-        public SimulationValidationFailed(ISimulation simulation, IRuleProvider rules) 
+        public SimulationValidationFailed(ISimulation simulation, IRules rules) 
             : base(Properties.Resources.Simulations_ValidationFailed.FormatString(simulation?.Name, rules?.ViolationCount))
         {
             Rules = rules;
@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="rules">The rule provider.</param>
         /// <param name="innerException">The inner exception.</param>
-        public SimulationValidationFailed(ISimulation simulation, IRuleProvider rules, Exception innerException)
+        public SimulationValidationFailed(ISimulation simulation, IRules rules, Exception innerException)
             : base(Properties.Resources.Simulations_ValidationFailed.FormatString(simulation?.Name, rules?.ViolationCount), innerException)
         {
             Rules = rules;

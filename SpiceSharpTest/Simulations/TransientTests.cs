@@ -152,6 +152,10 @@ namespace SpiceSharpTest.Simulations
 
             // Set initial conditions
             var ic = tran.TimeParameters.InitialConditions;
+
+            // TODO: Do something about validation with initial conditions
+            tran.TimeParameters.Validate = false;
+            tran.BiasingParameters.Validate = false;
             ic["in"] = 0.0;
 
             // Analyze

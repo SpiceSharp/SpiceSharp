@@ -9,6 +9,6 @@
         /// Applies the subject to any rules in the validation provider.
         /// </summary>
         /// <param name="rules">The provider.</param>
-        void Apply(IRuleProvider rules);
+        void Apply(IRules rules);
     }
 }

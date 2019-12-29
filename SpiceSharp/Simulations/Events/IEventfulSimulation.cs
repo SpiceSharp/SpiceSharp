@@ -24,6 +24,16 @@ namespace SpiceSharp.Simulations
         event EventHandler<EventArgs> AfterSetup;
 
         /// <summary>
+        /// Occurs before the simulation starts validating the input.
+        /// </summary>
+        event EventHandler<EventArgs> BeforeValidation;
+
+        /// <summary>
+        /// Occurs after the simulation has validated the input.
+        /// </summary>
+        event EventHandler<EventArgs> AfterValidation;
+
+        /// <summary>
         /// Occurs before the simulation starts its execution.
         /// </summary>
         event EventHandler<BeforeExecuteEventArgs> BeforeExecute;

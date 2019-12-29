@@ -3,6 +3,7 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations.IntegrationMethods;
+using SpiceSharp.Simulations.Time;
 
 namespace SpiceSharp.Simulations
 {
@@ -119,7 +120,12 @@ namespace SpiceSharp.Simulations
 
             // Set up initial conditions
             foreach (var ic in TimeParameters.InitialConditions)
-                _initialConditions.Add(new ConvergenceAid(ic.Key, ic.Value));
+            {
+                if (Variables.TryGetNode(ic.Key, out var variable))
+                    _initialConditions.Add(new ConvergenceAid(variable, GetState<IBiasingSimulationState>(), ic.Value));
+                else
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(ic.Key));
+            }
 
             // Initialize the integration method (all components have been able to allocate integration states).
             _method.Initialize();
@@ -135,12 +141,7 @@ namespace SpiceSharp.Simulations
 
             // Apply initial conditions if they are not set for the devices (UseIc).
             if (_initialConditions.Count > 0 && !_time.UseIc)
-            {
-                // Initialize initial conditions
-                foreach (var ic in _initialConditions)
-                    ic.Initialize(this);
                 AfterLoad += LoadInitialConditions;
-            }
 
             // Calculate the operating point of the circuit
             _time.UseIc = TimeParameters.UseIc;

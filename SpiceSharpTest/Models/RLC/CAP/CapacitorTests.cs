@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Biasing;
 using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharpTest.Models
