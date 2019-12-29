@@ -65,6 +65,8 @@ namespace SpiceSharp.Components
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
             var context = new ControlledBindingContext(this, simulation, ControllingName);
+            if (context.ModelBehaviors == null)
+                throw new ModelNotFoundException(Model);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

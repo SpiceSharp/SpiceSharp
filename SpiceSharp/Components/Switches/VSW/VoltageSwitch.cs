@@ -45,6 +45,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
+        /// <param name="model">The model.</param>
         public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg, string model) 
             : this(name)
         {
@@ -61,6 +62,8 @@ namespace SpiceSharp.Components
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
+            if (context.ModelBehaviors == null)
+                throw new ModelNotFoundException(Model);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
