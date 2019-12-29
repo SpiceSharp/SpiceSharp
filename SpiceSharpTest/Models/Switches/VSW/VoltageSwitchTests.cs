@@ -2,7 +2,9 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 using System;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
@@ -12,7 +14,7 @@ namespace SpiceSharpTest.Models
     {
         private VoltageSwitch CreateVoltageSwitch(string name, string pos, string neg, string contPos, string contNeg, string model)
         {
-            var vsw = new VoltageSwitch(name, pos, neg, contPos, contNeg) {Model = model};
+            var vsw = new VoltageSwitch(name, pos, neg, contPos, contNeg, model);
             return vsw;
         }
 
@@ -311,6 +313,23 @@ namespace SpiceSharpTest.Models
             // Check off
             s.SetParameter("off");
             Assert.AreEqual(false, p.ZeroState);
+        }
+
+        [Test]
+        public void When_OpenCircuitInput_Expect_SimulationValidationFailedException()
+        {
+            var ckt = new Circuit(
+                CreateVoltageSwitchModel("MYSW", "Ron=1 Roff=1e6 Vt=0.5 Vh=-0.4"),
+                new VoltageSwitch("S1", "out", "0", "in", "0", "MYSW"));
+
+            // Make the simulation and run it
+            var op = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var violations = ex.Rules.Violations.ToArray();
+            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[0]);
+            Assert.AreEqual(1, (violations[0] as FloatingNodeRuleViolation).Variables.Count());
+            Assert.AreEqual("in", (violations[0] as FloatingNodeRuleViolation).Variables.First().Name);
         }
     }
 }

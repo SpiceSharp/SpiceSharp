@@ -5,13 +5,15 @@ namespace SpiceSharp.Validation
     /// <summary>
     /// Describes a rule provider.
     /// </summary>
-    public interface IRuleProvider : IEnumerable<IRule>
+    /// <seealso cref="IParameterized" />
+    /// <seealso cref="IEnumerable{IRule}" />
+    public interface IRuleProvider : IParameterized, IEnumerable<IRule>
     {
         /// <summary>
-        /// Gets the number of rules that are violated.
+        /// Gets the number of rule violations.
         /// </summary>
         /// <value>
-        /// The number of violated rules.
+        /// The number of rule violations.
         /// </value>
         int ViolationCount { get; }
 

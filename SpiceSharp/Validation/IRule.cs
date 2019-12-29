@@ -8,12 +8,12 @@ namespace SpiceSharp.Validation
     public interface IRule
     {
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IRule"/> is being violated.
+        /// Gets the number of violations of this rule.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if violated; otherwise, <c>false</c>.
+        /// The violation count.
         /// </value>
-        bool IsViolated { get; }
+        int ViolationCount { get; }
 
         /// <summary>
         /// Gets the rule violations.

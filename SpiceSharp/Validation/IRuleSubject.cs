@@ -8,7 +8,7 @@
         /// <summary>
         /// Applies the subject to any rules in the validation provider.
         /// </summary>
-        /// <param name="provider">The provider.</param>
-        void Apply(IRuleProvider provider);
+        /// <param name="rules">The provider.</param>
+        void Apply(IRuleProvider rules);
     }
 }

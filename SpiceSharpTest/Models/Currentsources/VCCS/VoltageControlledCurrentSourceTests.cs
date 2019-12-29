@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -69,6 +71,27 @@ namespace SpiceSharpTest.Models
             op.ExportSimulationData += (sender, args) => Assert.AreEqual(300.0, current.Value, 1e-12);
             op.Run(ckt);
             current.Destroy();
+        }
+
+        [Test]
+        public void When_FloatingOutput_Expect_SimulationValidationFailedException()
+        {
+            var ckt = new Circuit(
+                new Resistor("R1", "0", "1", 1e3),
+                new VoltageControlledCurrentSource("F1", "out", "0", "in", "0", 12.0)
+                );
+
+            // Make the simulation and run it
+            var dc = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => dc.Run(ckt));
+            Assert.AreEqual(2, ex.Rules.ViolationCount);
+            var violations = ex.Rules.Violations.ToArray();
+            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[0]);
+            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[1]);
+            Assert.AreEqual(1, (violations[0] as FloatingNodeRuleViolation).Variables.Count());            
+            Assert.AreEqual(1, (violations[1] as FloatingNodeRuleViolation).Variables.Count());
+            Assert.AreEqual("out", (violations[0] as FloatingNodeRuleViolation).Variables.First().Name);
+            Assert.AreEqual("in", (violations[1] as FloatingNodeRuleViolation).Variables.First().Name);
         }
     }
 }

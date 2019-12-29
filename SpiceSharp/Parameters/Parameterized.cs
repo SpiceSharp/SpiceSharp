@@ -22,8 +22,8 @@ namespace SpiceSharp
         /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
         public P GetParameterSet<P>() where P : IParameterSet
         {
-            if (this is IParameterized<P> parameterized)
-                return parameterized.Parameters;
+            if (this is IParameterized<P> parameterized && parameterized.Parameters != null)
+                    return parameterized.Parameters;
             throw new ArgumentException(Properties.Resources.Parameters_ParameterSetNotFound.FormatString(typeof(P)));
         }
 

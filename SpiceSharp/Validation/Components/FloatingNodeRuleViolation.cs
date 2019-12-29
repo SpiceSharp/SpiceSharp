@@ -47,10 +47,12 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="rule">The rule.</param>
         /// <param name="group">The group.</param>
-        public FloatingNodeRuleViolation(IRule rule, HashSet<Variable> group)
+        public FloatingNodeRuleViolation(IRule rule, IEnumerable<Variable> group)
         {
             Rule = rule.ThrowIfNull(nameof(rule));
-            _group = group.ThrowIfNull(nameof(group));
+            _group = new HashSet<Variable>();
+            foreach (var v in group)
+                _group.Add(v);
         }
 
         /// <summary>

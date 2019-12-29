@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Simulations;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Validation
 {
@@ -10,16 +11,17 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IAppliedVoltageRule" />
     public class VoltageLoopRule : IAppliedVoltageRule
     {
-        private readonly Dictionary<Variable, HashSet<Variable>> _groups = new Dictionary<Variable, HashSet<Variable>>();
+        private int _cgroup = 0;
+        private readonly Dictionary<Variable, int> _groups = new Dictionary<Variable, int>();
         private readonly List<VoltageLoopRuleViolation> _violations = new List<VoltageLoopRuleViolation>();
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IRule" /> is being violated.
+        /// Gets the number of violations of this rule.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if violated; otherwise, <c>false</c>.
+        /// The violation count.
         /// </value>
-        public bool IsViolated => _violations.Count > 0;
+        public int ViolationCount => _violations.Count;
 
         /// <summary>
         /// Gets the rule violations.
@@ -53,36 +55,19 @@ namespace SpiceSharp.Validation
                     _violations.Add(new VoltageLoopRuleViolation(this, subject, first, second));
                 else
                 {
-                    // They're different fixed groups, so let's join them together
-                    if (groupA.Count < groupB.Count)
-                    {
-                        foreach (var v in groupA)
-                            _groups[v] = groupB;
-                        groupB.UnionWith(groupA);
-                    }
-                    else
-                    {
-                        foreach (var v in groupB)
-                            _groups[v] = groupA;
-                        groupA.UnionWith(groupB);
-                    }
+                    foreach (var v in _groups.Where(p => p.Value == groupB).Select(p => p.Key).ToArray())
+                        _groups[v] = groupA;
                 }
             }
             else if (hasA)
-            {
-                groupA.Add(second);
                 _groups.Add(second, groupA);
-            }
             else if (hasB)
-            {
-                groupB.Add(first);
                 _groups.Add(first, groupB);
-            }
             else
             {
-                var group = new HashSet<Variable>() { first, second };
-                _groups.Add(first, group);
-                _groups.Add(second, group);
+                _groups.Add(first, _cgroup);
+                _groups.Add(second, _cgroup);
+                _cgroup++;
             }
         }
     }

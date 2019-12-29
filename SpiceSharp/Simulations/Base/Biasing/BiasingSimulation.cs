@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -96,7 +98,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterTemperature;
         #endregion
-        
+
         /// <summary>
         /// Gets the statistics.
         /// </summary>
@@ -104,14 +106,6 @@ namespace SpiceSharp.Simulations
         /// The statistics.
         /// </value>
         public new BiasingSimulationStatistics Statistics { get; }
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        /// <value>
-        /// The state.
-        /// </value>
-        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingSimulation"/> class.
@@ -127,16 +121,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set up the simulation.
         /// </summary>
-        /// <param name="circuit">The circuit that will be used.</param>
-        protected override void Setup(IEntityCollection circuit)
+        /// <param name="entities">The entities that are included in the simulation.</param>
+        protected override void Setup(IEntityCollection entities)
         {
-            circuit.ThrowIfNull(nameof(circuit));
+            entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors and configuration data
             _temperature = new TemperatureSimulationState(BiasingParameters.Temperature, BiasingParameters.NominalTemperature);
 
             // Setup the rest of the circuit.
-            base.Setup(circuit);
+            base.Setup(entities);
 
             // Cache local variables
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
@@ -149,6 +143,33 @@ namespace SpiceSharp.Simulations
             // Set up nodesets
             foreach (var ns in BiasingParameters.Nodesets)
                 _nodesets.Add(new ConvergenceAid(ns.Key, ns.Value));
+
+            // Let's validate the biasing simulation
+            Validate(entities);
+        }
+
+        /// <summary>
+        /// Validates the circuit.
+        /// </summary>
+        /// <exception cref="SimulationValidationFailed">Thrown if the simulation fails its validation.</exception>
+        protected virtual void Validate(IEntityCollection entities)
+        {
+            if (BiasingParameters.Validation)
+            {
+                var provider = new Biasing.BiasingSimulationValidation(Variables);
+                foreach (var entity in entities)
+                {
+                    if (entity is IRuleSubject subject)
+                        subject.Apply(provider);
+                }
+                foreach (var behavior in EntityBehaviors.SelectMany(e => e.Values))
+                {
+                    if (behavior is IRuleSubject subject)
+                        subject.Apply(provider);
+                }
+                if (provider.ViolationCount > 0)
+                    throw new SimulationValidationFailed(this, provider);
+            }
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         public ComponentBindingContext(IComponent component, ISimulation simulation, bool linkParameters)
             : base(component, simulation, linkParameters)
         {
-            Nodes = component.MapNodes(simulation.Variables).ToArray();
+            Nodes = component.MapNodes(simulation.Variables);
             if (component.Model != null)
                 ModelBehaviors = simulation.EntityBehaviors[component.Model];
         }
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components
         public ComponentBindingContext(Component component, ISimulation simulation)
             : base(component, simulation)
         {
-            Nodes = component.MapNodes(simulation.Variables).ToArray();
+            Nodes = component.MapNodes(simulation.Variables);
             if (component.Model != null)
                 ModelBehaviors = simulation.EntityBehaviors[component.Model];
         }

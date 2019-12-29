@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SwitchBehaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {
@@ -10,7 +11,8 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "S+"), Pin(1, "S-"), Pin(2, "SC+"), Pin(3, "SC-"), Connected(0, 1)]
     public class VoltageSwitch : Component,
-        IParameterized<BaseParameters>
+        IParameterized<BaseParameters>,
+        IRuleSubject
     {
         /// <summary>
         /// Constants
@@ -43,9 +45,10 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
-        public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg) 
+        public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg, string model) 
             : this(name)
         {
+            Model = model;
             Connect(pos, neg, controlPos, controlNeg);
         }
 
@@ -63,6 +66,22 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        void IRuleSubject.Apply(IRuleProvider rules)
+        {
+            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            var nodes = MapNodes(p.Variables);
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+            {
+                rule.Apply(this, nodes[0], nodes[1]);
+                rule.Apply(this, nodes[2]);
+                rule.Apply(this, nodes[2]);
+            }
         }
     }
 }

@@ -149,5 +149,14 @@ namespace SpiceSharp.Simulations
             get => NominalTemperature - Constants.CelsiusKelvin;
             set => NominalTemperature = value + Constants.CelsiusKelvin;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the simulation should be validated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the simulation should be validated; otherwise, <c>false</c>.
+        /// </value>
+        [ParameterName("validation"), ParameterInfo("Flag indicating whether the simulation should validate the circuit before executing")]
+        public bool Validation { get; set; } = true;
     }
 }

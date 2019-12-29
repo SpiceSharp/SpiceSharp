@@ -97,16 +97,13 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="variables">The set of variables.</param>
         /// <returns>An enumerable for all nodes.</returns>
-        public IEnumerable<Variable> MapNodes(IVariableSet variables)
+        public IReadOnlyList<Variable> MapNodes(IVariableSet variables)
         {
             variables.ThrowIfNull(nameof(variables));
-
-            // Map connected nodes
-            foreach (var c in _connections)
-            {
-                var node = variables.MapNode(c, VariableType.Voltage);
-                yield return node;
-            }
+            var list = new Variable[_connections.Length];
+            for (var i = 0; i < _connections.Length; i++)
+                list[i] = variables.MapNode(_connections[i], VariableType.Voltage);
+            return list;
         }
 
         /// <summary>

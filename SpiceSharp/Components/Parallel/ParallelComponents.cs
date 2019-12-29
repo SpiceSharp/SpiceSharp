@@ -147,14 +147,17 @@ namespace SpiceSharp.Components
         /// <returns>
         /// An enumerable for all nodes.
         /// </returns>
-        public IEnumerable<Variable> MapNodes(IVariableSet variables)
+        public IReadOnlyList<Variable> MapNodes(IVariableSet variables)
         {
             variables.ThrowIfNull(nameof(variables));
+            var list = new Variable[PinCount];
+            var index = 0;
             foreach (var component in _components)
             {
                 foreach (var variable in component.MapNodes(variables))
-                    yield return variable;
+                    list[index++] = variable;
             }
+            return list;
         }
     }
 }

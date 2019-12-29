@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A class that represents a (Spice) component/device.
     /// </summary>
-    public abstract class Component : Entity, IComponent
+    public abstract class Component : Entity, IComponent,
+        IRuleSubject
     {
         /// <summary>
         /// Private variables
@@ -78,16 +81,15 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="variables">The set of variables.</param>
         /// <returns>An enumerable for all nodes.</returns>
-        public IEnumerable<Variable> MapNodes(IVariableSet variables)
+        public IReadOnlyList<Variable> MapNodes(IVariableSet variables)
         {
             variables.ThrowIfNull(nameof(variables));
-
-            // Map connected nodes
-            foreach (var c in _connections)
-            {
-                var node = variables.MapNode(c, VariableType.Voltage);
-                yield return node;
-            }
+            if (_connections == null)
+                return new Variable[0];
+            var list = new Variable[_connections.Length];
+            for (var i = 0; i < _connections.Length; i++)
+                list[i] = variables.MapNode(_connections[i], VariableType.Voltage);
+            return list;
         }
 
         /// <summary>
@@ -115,6 +117,17 @@ namespace SpiceSharp.Components
             var c = (Component)source;
             for (var i = 0; i < PinCount; i++)
                 _connections[i] = c._connections[i];
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        void IRuleSubject.Apply(IRuleProvider rules)
+        {
+            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+                rule.Apply(this, MapNodes(p.Variables).ToArray());
         }
     }
 }

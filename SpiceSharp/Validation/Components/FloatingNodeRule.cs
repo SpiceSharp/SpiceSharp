@@ -10,32 +10,19 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IConductiveRule" />
     public class FloatingNodeRule : IConductiveRule
     {
-        private readonly Dictionary<Variable, HashSet<Variable>> _groups = new Dictionary<Variable, HashSet<Variable>>();
+        int _cgroup = 0;
+        private readonly Dictionary<Variable, int> _groups = new Dictionary<Variable, int>();
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IRule" /> is being violated.
+        /// Gets the number of violations of this rule.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if violated; otherwise, <c>false</c>.
+        /// The violation count.
         /// </value>
-        public bool IsViolated
-        {
-            get
-            {
-                HashSet<Variable> bulk = null;
-                foreach (var group in _groups.Values)
-                {
-                    if (bulk == null)
-                        bulk = group;
-                    else if (bulk != group)
-                        return true;
-                }
-                return false;
-            }
-        }
+        public int ViolationCount => _groups.Values.Distinct().Count() - 1;
 
         /// <summary>
-        /// Gets or sets the violations.
+        /// Gets the violations.
         /// </summary>
         /// <value>
         /// The violations.
@@ -44,21 +31,38 @@ namespace SpiceSharp.Validation
         {
             get
             {
-                HashSet<Variable> bulk = null;
+                int bulk = -1;
                 int bulkCount = 0;
                 foreach (var group in _groups.Values.Distinct())
                 {
-                    // The new group is essentially the bulk of the circuit
-                    if (group.Count > bulkCount)
+                    var count = _groups.Count(p => p.Value == group);
+                    if (count > bulkCount)
                     {
-                        if (bulk != null)
-                            yield return new FloatingNodeRuleViolation(this, bulk);
+                        if (bulk >= 0)
+                            yield return new FloatingNodeRuleViolation(this, _groups.Where(p => p.Value == bulk).Select(p => p.Key));
                         bulk = group;
-                        bulkCount = group.Count;
+                        bulkCount = count;
                     }
                     else if (group != bulk)
-                        yield return new FloatingNodeRuleViolation(this, group);
+                        yield return new FloatingNodeRuleViolation(this, _groups.Where(p => p.Value == group).Select(p => p.Key));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the violations.
+        /// </summary>
+        /// <param name="bulkNode">A node that is part of the bulk circuit.</param>
+        /// <returns>
+        /// Rule violations for any group not part of the bulk group.
+        /// </returns>
+        public IEnumerable<IRuleViolation> GetViolations(Variable bulkNode)
+        {
+            _groups.TryGetValue(bulkNode, out var bulk);
+            foreach (var group in _groups.Values.Distinct())
+            {
+                if (group != bulk)
+                    yield return new FloatingNodeRuleViolation(this, _groups.Where(p => p.Value == group).Select(p => p.Key));
             }
         }
 
@@ -80,8 +84,8 @@ namespace SpiceSharp.Validation
         {
             if (variables == null || variables.Length == 0)
                 return;
-            if (variables.Length == 1)
-                _groups.Add(variables[0], new HashSet<Variable>() { variables[0] });
+            if (variables.Length == 1 && !_groups.ContainsKey(variables[0]))
+                _groups[variables[0]] = _cgroup++;
 
             for (var i = 0; i < variables.Length; i++)
             {
@@ -101,35 +105,22 @@ namespace SpiceSharp.Validation
             var hasB = _groups.TryGetValue(second, out var groupB);
             if (hasA && hasB)
             {
-                // Join the groups
-                if (groupA.Count < groupB.Count)
+                if (groupA != groupB)
                 {
-                    foreach (var v in groupA)
-                        _groups[v] = groupB;
-                    groupB.UnionWith(groupA);
-                }
-                else
-                {
-                    foreach (var v in groupB)
+                    // Join the groups
+                    foreach (var v in _groups.Where(p => p.Value == groupB).Select(p => p.Key).ToArray())
                         _groups[v] = groupA;
-                    groupA.UnionWith(groupB);
                 }
             }
             else if (hasA)
-            {
-                groupA.Add(second);
-                _groups.Add(second, groupA);
-            }
+                _groups[second] = groupA;
             else if (hasB)
-            {
-                groupB.Add(first);
-                _groups.Add(first, groupB);
-            }
+                _groups[first] = groupB;
             else
             {
-                var group = new HashSet<Variable>() { first, second };
-                _groups.Add(first, group);
-                _groups.Add(second, group);
+                _groups.Add(first, _cgroup);
+                _groups.Add(second, _cgroup);
+                _cgroup++;
             }
         }
     }

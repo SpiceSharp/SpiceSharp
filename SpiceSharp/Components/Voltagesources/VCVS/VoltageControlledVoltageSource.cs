@@ -2,6 +2,8 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -10,7 +12,8 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), VoltageDriver(0, 1), Connected(0, 1)]
     public class VoltageControlledVoltageSource : Component,
-        IParameterized<BaseParameters>
+        IParameterized<BaseParameters>,
+        IRuleSubject
     {
         /// <summary>
         /// Gets the parameter set.
@@ -64,6 +67,24 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        void IRuleSubject.Apply(IRuleProvider rules)
+        {
+            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            var nodes = MapNodes(p.Variables);
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+            {
+                rule.Apply(this, nodes[0], nodes[1]);
+                rule.Apply(this, nodes[2]);
+                rule.Apply(this, nodes[3]);
+            }
+            foreach (var rule in rules.GetRules<IAppliedVoltageRule>())
+                rule.Apply(this, nodes[0], nodes[1]);
         }
     }
 }

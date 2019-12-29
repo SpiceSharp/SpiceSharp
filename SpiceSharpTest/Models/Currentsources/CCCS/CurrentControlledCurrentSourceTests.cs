@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -58,7 +60,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_FloatingOutput_Expect_SingularException()
+        public void When_FloatingOutput_Expect_SimulationValidationFailedException()
         {
             var ckt = new Circuit(
                 new CurrentSource("I1", "0", "in", 0),
@@ -67,8 +69,13 @@ namespace SpiceSharpTest.Models
                 );
 
             // Make the simulation and run it
-            var dc = new DC("DC 1", "I1", -10.0, 10.0, 1e-3);
-            Assert.Throws<SingularException>(() => dc.Run(ckt));
+            var op = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var violations = ex.Rules.Violations.ToArray();
+            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[0]);
+            Assert.AreEqual(1, (violations[0] as FloatingNodeRuleViolation).Variables.Count());
+            Assert.AreEqual("out", (violations[0] as FloatingNodeRuleViolation).Variables.First().Name);
         }
     }
 }

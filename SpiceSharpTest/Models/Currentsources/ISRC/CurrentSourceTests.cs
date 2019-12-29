@@ -3,6 +3,8 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
+using System.Linq;
+using SpiceSharp.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -139,6 +141,17 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual(2.0, isrc.GetProperty<IWaveformDescription>("waveform").GetProperty<double>("v2"));
             Assert.AreEqual(1.0, waveform.GetProperty<double>("v2"));
             Assert.AreEqual(1e-5, waveform.GetProperty<double>("per"), 1e-12);
+        }
+
+        [Test]
+        public void When_OpenCircuit_Expect_SimulationValidationFailedException()
+        {
+            var ckt = new Circuit(
+                new CurrentSource("I1", "0", "in", 1.0));
+            var op = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            Assert.IsInstanceOf<FloatingNodeRuleViolation>(ex.Rules.Violations.First());
         }
     }
 }

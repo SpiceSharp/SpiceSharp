@@ -4,7 +4,6 @@ using System.Reflection;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.General;
-using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -112,7 +111,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Occurs after the simulation is destroyed.
         /// </summary>
-        public event EventHandler<EventArgs> AfterUnsetup; 
+        public event EventHandler<EventArgs> AfterUnsetup;
         #endregion
 
         /// <summary>
@@ -150,7 +149,7 @@ namespace SpiceSharp.Simulations
         public virtual void Run(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
-            
+
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
             Statistics.SetupTime.Start();
@@ -258,22 +257,6 @@ namespace SpiceSharp.Simulations
             Statistics.BehaviorCreationTime.Stop();
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
-
-            // Validate these behaviors if necessary
-            var provider = CollectionParameters.RuleProvider?.Invoke();
-            if (provider != null)
-            {
-                foreach (var container in EntityBehaviors)
-                {
-                    foreach (var behavior in container.Values)
-                    {
-                        if (behavior is IRuleSubject subject)
-                            subject.Apply(provider);
-                    }
-                }
-                if (provider.ViolationCount > 0)
-                    throw new SimulationValidationFailed(this, provider);
-            }
         }
 
         /// <summary>

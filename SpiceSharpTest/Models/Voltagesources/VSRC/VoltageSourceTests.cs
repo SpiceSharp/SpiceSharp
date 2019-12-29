@@ -2,7 +2,9 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 using System;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
@@ -41,6 +43,33 @@ namespace SpiceSharpTest.Models
             var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "in") };
             var references = new Func<double, Complex>[] { f => new Complex(1.0, 0.0) };
             AnalyzeAC(ac, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_VoltageLoop1_Expect_SimulationValidationFailedException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new VoltageSource("V2", "in", "0", 2.0));
+            var op = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var violation = ex.Rules.Violations.First();
+            Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+        }
+
+        [Test]
+        public void When_VoltageLoop2_Expect_SimulationValidationFailedException()
+        {
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new VoltageSource("V2", "in", "out", 2.0),
+                new VoltageSource("V3", "out", "0", 3.0));
+            var op = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var violation = ex.Rules.Violations.First();
+            Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
         }
     }
 }

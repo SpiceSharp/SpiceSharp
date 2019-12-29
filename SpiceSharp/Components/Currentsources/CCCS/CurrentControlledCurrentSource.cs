@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {
@@ -11,7 +12,8 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
     public class CurrentControlledCurrentSource : Component,
-        IParameterized<BaseParameters>
+        IParameterized<BaseParameters>,
+        IRuleSubject
     {
         /// <summary>
         /// Gets the parameter set.
@@ -71,6 +73,20 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        void IRuleSubject.Apply(IRuleProvider rules)
+        {
+            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            foreach (var v in MapNodes(p.Variables))
+            {
+                foreach (var r in rules.GetRules<IConductiveRule>())
+                    r.Apply(this, v);
+            }
         }
     }
 }
