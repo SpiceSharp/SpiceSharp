@@ -4,6 +4,7 @@ using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 using System.Linq;
 
 namespace SpiceSharp.Components
@@ -103,6 +104,21 @@ namespace SpiceSharp.Components
                 .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
                 .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
                 .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="subcircuit">The subcircuit instance.</param>
+        /// <param name="rules">The rule provider.</param>
+        public void Apply(Subcircuit subcircuit, IRules rules)
+        {
+            var newRules = new SubcircuitRules(subcircuit.Name, rules);
+            foreach (var c in Entities)
+            {
+                if (c is IRuleSubject subject)
+                    subject.Apply(newRules);
+            }
         }
     }
 }

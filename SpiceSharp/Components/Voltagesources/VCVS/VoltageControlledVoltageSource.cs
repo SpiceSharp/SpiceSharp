@@ -79,9 +79,9 @@ namespace SpiceSharp.Components
             var nodes = MapNodes(p.Variables);
             foreach (var rule in rules.GetRules<IConductiveRule>())
             {
-                rule.Apply(this, nodes[0], nodes[1]);
-                rule.Apply(this, nodes[2]);
-                rule.Apply(this, nodes[3]);
+                rule.AddPath(this, nodes[0], nodes[1]);
+                rule.AddPath(this, nodes[2]);
+                rule.AddPath(this, nodes[3]);
             }
             foreach (var rule in rules.GetRules<IAppliedVoltageRule>())
                 rule.Apply(this, nodes[0], nodes[1]);

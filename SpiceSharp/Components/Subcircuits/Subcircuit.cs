@@ -2,6 +2,7 @@
 using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +13,8 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity, IComponent
+    public class Subcircuit : Entity, IComponent,
+        IRuleSubject
     {
         private string[] _connections;
 
@@ -117,6 +119,15 @@ namespace SpiceSharp.Components
             _connections = new string[_connections.Length];
             for (var i = 0; i < _connections.Length; i++)
                 _connections[i] = s._connections[i];
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        public void Apply(IRules rules)
+        {
+            Definition.Apply(this, rules);
         }
     }
 }

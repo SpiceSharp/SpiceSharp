@@ -85,7 +85,7 @@ namespace SpiceSharp.Components
             foreach (var v in MapNodes(p.Variables))
             {
                 foreach (var r in rules.GetRules<IConductiveRule>())
-                    r.Apply(this, v);
+                    r.AddPath(this, v);
             }
         }
     }

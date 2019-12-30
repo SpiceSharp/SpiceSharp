@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {
@@ -32,5 +33,12 @@ namespace SpiceSharp.Components
         /// <param name="parentSimulation">The parent simulation.</param>
         /// <param name="behaviors">The <see cref="IBehaviorContainer" /> used for the subcircuit.</param>
         void CreateBehaviors(Subcircuit subcircuit, ISimulation parentSimulation, IBehaviorContainer behaviors);
+
+        /// <summary>
+        /// Applies the rules to the entities in the subcircuit.
+        /// </summary>
+        /// <param name="subcircuit">The subcircuit.</param>
+        /// <param name="rules">The rules.</param>
+        void Apply(Subcircuit subcircuit, IRules rules);
     }
 }

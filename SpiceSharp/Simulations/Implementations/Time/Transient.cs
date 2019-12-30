@@ -4,6 +4,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharp.Simulations.Time;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -129,6 +130,26 @@ namespace SpiceSharp.Simulations
 
             // Initialize the integration method (all components have been able to allocate integration states).
             _method.Initialize();
+        }
+
+        /// <summary>
+        /// Validates the circuit.
+        /// </summary>
+        /// <param name="entities">The entities to be validated.</param>
+        protected override void Validate(IEntityCollection entities)
+        {
+            if (TimeParameters.Validate)
+            {
+                var rules = new Biasing.Rules(Variables);
+
+                // We want to add our own connections
+                foreach (var ic in _initialConditions)
+                {
+                    foreach (var rule in rules.GetRules<IConductiveRule>())
+                        rule.AddPath(null, ConductionTypes.Dc, ic.Variable, Variables.Ground);
+                }
+                Validate(rules, entities);
+            }
         }
 
         /// <summary>

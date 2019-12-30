@@ -127,7 +127,7 @@ namespace SpiceSharp.Components
         {
             var p = rules.GetParameterSet<ComponentValidationParameters>();
             foreach (var rule in rules.GetRules<IConductiveRule>())
-                rule.Apply(this, MapNodes(p.Variables).ToArray());
+                rule.AddPath(this, MapNodes(p.Variables).ToArray());
         }
     }
 }

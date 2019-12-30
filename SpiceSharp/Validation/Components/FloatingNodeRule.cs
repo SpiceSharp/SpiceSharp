@@ -8,10 +8,11 @@ namespace SpiceSharp.Validation
     /// An <see cref="IConductiveRule"/> that checks for the presence of a floating node.
     /// </summary>
     /// <seealso cref="IConductiveRule" />
-    public class FloatingNodeRule : IConductiveRule
+    public partial class FloatingNodeRule : IConductiveRule
     {
         int _cgroup = 0;
         private readonly Dictionary<Variable, int> _groups = new Dictionary<Variable, int>();
+        private readonly Dictionary<Path, ConductionTypes> _paths = new Dictionary<Path, ConductionTypes>();
 
         /// <summary>
         /// Gets or sets the fixed-potential node.
@@ -47,19 +48,9 @@ namespace SpiceSharp.Validation
         {
             get
             {
-                int bulk;
-                if (FixedVariable != null)
-                {
-                    if (!_groups.TryGetValue(FixedVariable, out bulk))
-                        bulk = -2;
-                }
-                else
-                    bulk = -1;
                 foreach (var group in Groups)
                 {
-                    if (bulk == -1)
-                        bulk = group;
-                    else if (group != bulk)
+                    if (group > 0)
                         yield return new FloatingNodeRuleViolation(this, GetGroupVariables(group));
                 }
             }
@@ -80,6 +71,7 @@ namespace SpiceSharp.Validation
         public FloatingNodeRule(Variable fixedVariable)
         {
             FixedVariable = fixedVariable;
+            _groups.Add(FixedVariable, _cgroup++);
         }
 
         /// <summary>
@@ -92,33 +84,6 @@ namespace SpiceSharp.Validation
         public bool Contains(Variable variable) => _groups.ContainsKey(variable);
 
         /// <summary>
-        /// Gets the group.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <returns>
-        /// The group number assigned to the variable.
-        /// </returns>
-        protected int GetGroup(Variable variable)
-        {
-            if (!_groups.TryGetValue(variable, out int result))
-            {
-                result = _cgroup++;
-                _groups.Add(variable, result);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Tries the get group.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <param name="group">The group.</param>
-        /// <returns>
-        /// <c>true</c> if the group exists; otherwise <c>false</c>.
-        /// </returns>
-        protected bool TryGetGroup(Variable variable, out int group) => _groups.TryGetValue(variable, out group);
-
-        /// <summary>
         /// Gets the variables in the specified group.
         /// </summary>
         /// <param name="group">The group.</param>
@@ -128,23 +93,79 @@ namespace SpiceSharp.Validation
         protected virtual IEnumerable<Variable> GetGroupVariables(int group) => _groups.Where(p => p.Value == group).Select(p => p.Key);
 
         /// <summary>
-        /// Connects the specified groups together. The combined group will get the lowest group index.
+        /// Connects two existing groups together. The combined group will get the lowest group index.
         /// </summary>
         /// <param name="groupA">The first group.</param>
         /// <param name="groupB">The second group.</param>
-        protected virtual void Connect(int groupA, int groupB)
+        /// <param name="type">The conduction path type.</param>
+        protected virtual void Connect(int groupA, int groupB, ConductionTypes type)
         {
             if (groupA == groupB)
                 return;
-            if (groupA < groupB)
+
+            // Modify the type with what's already been specified.
+            var key = new Path(groupA, groupB);
+            if (_paths.TryGetValue(key, out var existing))
+                type |= existing;
+
+            // If the two groups became unconditionally conducting, then just merge the groups
+            if (type == ConductionTypes.All)
             {
-                foreach (var variable in _groups.Where(p => p.Value == groupB).Select(p => p.Key).ToArray())
-                    _groups[variable] = groupA;
+                // The path becomes obsolete
+                if (_paths.ContainsKey(key))
+                    _paths.Remove(key);
+
+                // Try to make it a little bit easier
+                int oldGroup, newGroup;
+                if (groupA < groupB)
+                {
+                    oldGroup = groupB;
+                    newGroup = groupA;
+                }
+                else
+                {
+                    oldGroup = groupA;
+                    newGroup = groupB;
+                }
+
+                // Map all variables from the old group to the new one
+                foreach (var variable in _groups.Where(p => p.Value == oldGroup).Select(p => p.Key).ToArray())
+                    _groups[variable] = newGroup;
+
+                // Combine any unresolved paths that will now short together
+                foreach (var path in _paths.ToArray())
+                {
+                    // Combine the path with an existing one
+                    if (path.Key.Group1 == oldGroup)
+                    {
+                        _paths.Remove(path.Key);
+                        var nkey = new Path(path.Key.Group2, newGroup);
+                        if (_paths.TryGetValue(nkey, out var ct))
+                        {
+                            ct |= path.Value;
+                            Connect(path.Key.Group2, newGroup, ct);
+                        }
+                        else
+                            _paths.Add(nkey, path.Value);
+                    }
+                    else if (path.Key.Group2 == oldGroup)
+                    {
+                        _paths.Remove(path.Key);
+                        var nkey = new Path(path.Key.Group1, newGroup);
+                        if (_paths.TryGetValue(nkey, out var ct))
+                        {
+                            ct |= path.Value;
+                            Connect(path.Key.Group1, newGroup, ct);
+                        }
+                        else
+                            _paths.Add(nkey, path.Value);
+                    }
+                }
             }
             else
             {
-                foreach (var variable in _groups.Where(p => p.Value == groupA).Select(p => p.Key).ToArray())
-                    _groups[variable] = groupB;
+                // We can't merge the groups, we just modify the bridge between these two groups
+                _paths[key] = type;
             }
         }
 
@@ -153,7 +174,7 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="subject">The rule subject.</param>
         /// <param name="variables">The variables.</param>
-        public void Apply(IRuleSubject subject, params Variable[] variables)
+        public void AddPath(IRuleSubject subject, params Variable[] variables)
         {
             if (variables == null || variables.Length == 0)
                 return;
@@ -163,7 +184,27 @@ namespace SpiceSharp.Validation
             for (var i = 0; i < variables.Length; i++)
             {
                 for (var j = i + 1; j < variables.Length; j++)
-                    Apply(variables[i], variables[j]);
+                    Apply(variables[i], variables[j], ConductionTypes.All);
+            }
+        }
+
+        /// <summary>
+        /// Specifies variables as being connected by a conductive path of the specified type.
+        /// </summary>
+        /// <param name="subject">The subject that applies the conductive paths.</param>
+        /// <param name="type">The type of path between these variables.</param>
+        /// <param name="variables">The variables that are connected.</param>
+        public void AddPath(IRuleSubject subject, ConductionTypes type, params Variable[] variables)
+        {
+            if (variables == null || variables.Length == 0)
+                return;
+            if (variables.Length == 1 && !_groups.ContainsKey(variables[0]))
+                _groups[variables[0]] = _cgroup++;
+
+            for (var i = 0; i < variables.Length; i++)
+            {
+                for (var j = i + 1; j < variables.Length; j++)
+                    Apply(variables[i], variables[j], type);
             }
         }
 
@@ -172,24 +213,51 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="first">The first.</param>
         /// <param name="second">The second.</param>
-        private void Apply(Variable first, Variable second)
+        /// <param name="type">The conduction type.</param>
+        private void Apply(Variable first, Variable second, ConductionTypes type)
         {
             first.ThrowIfNull(nameof(first));
             second.ThrowIfNull(nameof(second));
             var hasA = _groups.TryGetValue(first, out var groupA);
             var hasB = _groups.TryGetValue(second, out var groupB);
             if (hasA && hasB)
-                Connect(groupA, groupB);
+                Connect(groupA, groupB, type);
             else if (hasA)
-                _groups.Add(second, groupA);
+            {
+                if (type == ConductionTypes.All)
+                    _groups.Add(second, groupA);
+                else
+                {
+                    if (type != ConductionTypes.None)
+                        _paths.Add(new Path(groupA, _cgroup), type);
+                    _groups.Add(second, _cgroup++);
+                }
+            }
             else if (hasB)
-                _groups.Add(first, groupB);
+            {
+                if (type == ConductionTypes.All)
+                    _groups.Add(first, groupB);
+                else
+                {
+                    if (type != ConductionTypes.None)
+                        _paths.Add(new Path(groupB, _cgroup), type);
+                    _groups.Add(first, _cgroup++);
+                }
+            }
             else
             {
-                // Create a new group
-                _groups.Add(first, _cgroup);
-                _groups.Add(second, _cgroup);
-                _cgroup++;
+                if (type == ConductionTypes.All)
+                {
+                    _groups.Add(first, _cgroup);
+                    _groups.Add(second, _cgroup++);
+                }
+                else
+                {
+                    if (type != ConductionTypes.None)
+                        _paths.Add(new Path(_cgroup, _cgroup + 1), type);
+                    _groups.Add(first, _cgroup++);
+                    _groups.Add(second, _cgroup++);
+                }
             }
         }
     }

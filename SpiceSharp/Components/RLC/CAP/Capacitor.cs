@@ -76,10 +76,7 @@ namespace SpiceSharp.Components
             var p = rules.GetParameterSet<ComponentValidationParameters>();
             var nodes = MapNodes(p.Variables);
             foreach (var rule in rules.GetRules<IConductiveRule>())
-            {
-                rule.Apply(this, nodes[0]);
-                rule.Apply(this, nodes[1]);
-            }
+                rule.AddPath(this, ConductionTypes.Ac, nodes[0], nodes[1]);
         }
     }
 }

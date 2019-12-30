@@ -49,7 +49,22 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="subject">The rule subject.</param>
         /// <param name="variables">The variables.</param>
-        public void Apply(IRuleSubject subject, params Variable[] variables)
+        public void AddPath(IRuleSubject subject, params Variable[] variables)
+        {
+            foreach (var v in variables)
+            {
+                if (v.Equals(_search))
+                    ViolationCount = 0;
+            }
+        }
+
+        /// <summary>
+        /// Specifies variables as being connected by a conductive path of the specified type.
+        /// </summary>
+        /// <param name="subject">The subject that applies the conductive paths.</param>
+        /// <param name="type">The type of path between these variables.</param>
+        /// <param name="variables">The variables that are connected.</param>
+        public void AddPath(IRuleSubject subject, ConductionTypes type, params Variable[] variables)
         {
             foreach (var v in variables)
             {
