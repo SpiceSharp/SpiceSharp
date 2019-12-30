@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MosfetBehaviors.Level3;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharp.Components
 {
@@ -11,7 +12,8 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
     public class Mosfet3 : Component,
-        IParameterized<BaseParameters>
+        IParameterized<BaseParameters>,
+        IRuleSubject
     {
         /// <summary>
         /// Gets the parameter set.
@@ -54,6 +56,21 @@ namespace SpiceSharp.Components
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
+        }
+
+        /// <summary>
+        /// Applies the subject to any rules in the validation provider.
+        /// </summary>
+        /// <param name="rules">The provider.</param>
+        void IRuleSubject.Apply(IRules rules)
+        {
+            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            var nodes = MapNodes(p.Variables);
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+            {
+                rule.AddPath(this, nodes[0], nodes[2], nodes[3]);
+                rule.AddPath(this, ConductionTypes.Ac, nodes[0], nodes[1]); // Gate-source capacitance
+            }
         }
     }
 }

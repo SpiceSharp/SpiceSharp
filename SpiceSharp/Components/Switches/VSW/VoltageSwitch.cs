@@ -82,8 +82,7 @@ namespace SpiceSharp.Components
             foreach (var rule in rules.GetRules<IConductiveRule>())
             {
                 rule.AddPath(this, nodes[0], nodes[1]);
-                rule.AddPath(this, nodes[2]);
-                rule.AddPath(this, nodes[2]);
+                rule.AddPath(this, ConductionTypes.None, nodes[2], nodes[2]);
             }
         }
     }

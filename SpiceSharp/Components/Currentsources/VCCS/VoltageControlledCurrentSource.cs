@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -75,11 +76,9 @@ namespace SpiceSharp.Components
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentValidationParameters>();
-            foreach (var variable in MapNodes(p.Variables))
-            {
-                foreach (var rule in rules.GetRules<IConductiveRule>())
-                    rule.AddPath(this, variable);
-            }
+            var nodes = MapNodes(p.Variables).ToArray();
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+                rule.AddPath(this, ConductionTypes.None, nodes);
         }
     }
 }
