@@ -66,6 +66,13 @@ namespace SpiceSharp.Validation
             /// <param name="type">The conductive path type.</param>
             public void Connect(Variable node1, Variable node2, ConductionTypes type)
             {
+                node1.ThrowIfNull(nameof(node1));
+                node2.ThrowIfNull(nameof(node2));
+                if (node1 == node2)
+                {
+                    Add(node1);
+                    return;
+                }
                 var has1 = _groups.TryGetValue(node1, out var group1);
                 var has2 = _groups.TryGetValue(node2, out var group2);
 
