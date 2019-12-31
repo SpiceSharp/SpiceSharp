@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Simulations;
 using System.Collections.Generic;
 using System.Linq;
+using SpiceSharp.Validation.Components;
 
 namespace SpiceSharp.Validation
 {
@@ -11,8 +12,7 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IAppliedVoltageRule" />
     public class VoltageLoopRule : IAppliedVoltageRule
     {
-        private int _cgroup = 0;
-        private readonly Dictionary<Variable, int> _groups = new Dictionary<Variable, int>();
+        private readonly Dictionary<Variable, Group> _groups = new Dictionary<Variable, Group>();
         private readonly List<VoltageLoopRuleViolation> _violations = new List<VoltageLoopRuleViolation>();
 
         /// <summary>
@@ -39,35 +39,42 @@ namespace SpiceSharp.Validation
         }
 
         /// <summary>
-        /// Applies a fixed-voltage relation between two variables.
+        /// Fixes the voltage difference between two node variables.
         /// </summary>
         /// <param name="subject">The subject that applies to the rule.</param>
-        /// <param name="first">The first variable.</param>
-        /// <param name="second">The second variable.</param>
-        public void Apply(IRuleSubject subject, Variable first, Variable second)
+        /// <param name="a">The first variable.</param>
+        /// <param name="b">The second variable.</param>
+        public void Fix(IRuleSubject subject, Variable a, Variable b)
         {
             // If both variables are part of the same fixed-voltage group, then this rule is violated
-            bool hasA = _groups.TryGetValue(first, out var groupA);
-            bool hasB = _groups.TryGetValue(second, out var groupB);
+            bool hasA = _groups.TryGetValue(a, out var groupA);
+            bool hasB = _groups.TryGetValue(b, out var groupB);
             if (hasA && hasB)
             {
                 if (groupA == groupB)
-                    _violations.Add(new VoltageLoopRuleViolation(this, subject, first, second));
+                    _violations.Add(new VoltageLoopRuleViolation(this, subject, a, b));
                 else
                 {
-                    foreach (var v in _groups.Where(p => p.Value == groupB).Select(p => p.Key).ToArray())
-                        _groups[v] = groupA;
+                    foreach (var variable in groupB)
+                        _groups[variable] = groupA;
+                    groupA.Join(groupB);
                 }
             }
             else if (hasA)
-                _groups.Add(second, groupA);
+            {
+                _groups.Add(b, groupA);
+                groupA.Add(b);
+            }
             else if (hasB)
-                _groups.Add(first, groupB);
+            {
+                _groups.Add(a, groupB);
+                groupB.Add(a);
+            }
             else
             {
-                _groups.Add(first, _cgroup);
-                _groups.Add(second, _cgroup);
-                _cgroup++;
+                var group = new Group(a, b);
+                _groups.Add(a, group);
+                _groups.Add(b, group);
             }
         }
     }

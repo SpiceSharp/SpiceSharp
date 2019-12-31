@@ -7,7 +7,7 @@ namespace SpiceSharp.Validation
     /// Validation parameters for <see cref="IComponent"/>. This means interconnected entities.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class ComponentValidationParameters : ParameterSet
+    public class ComponentRuleParameters : ParameterSet
     {
         /// <summary>
         /// Gets the variables.
@@ -18,18 +18,18 @@ namespace SpiceSharp.Validation
         public IVariableSet Variables { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComponentValidationParameters"/> class.
+        /// Initializes a new instance of the <see cref="ComponentRuleParameters"/> class.
         /// </summary>
         /// <param name="variables">The variables.</param>
-        public ComponentValidationParameters(IVariableSet variables)
+        public ComponentRuleParameters(IVariableSet variables)
         {
             Variables = variables.ThrowIfNull(nameof(variables));
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComponentValidationParameters"/> class.
+        /// Initializes a new instance of the <see cref="ComponentRuleParameters"/> class.
         /// </summary>
-        public ComponentValidationParameters()
+        public ComponentRuleParameters()
         {
             Variables = new VariableSet();
         }

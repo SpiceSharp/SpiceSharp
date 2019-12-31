@@ -4,6 +4,8 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using NUnit.Framework;
+using System.Linq;
+using SpiceSharp.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -108,31 +110,19 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
-        /*
-         * Parallel inductors cause a singular exception, because they are short-circuited at DC. If multiple
-         * short-circuit components are in parallel, the simulator can't find the current through each of the
-         * inductors, and this shows as a singular matrix.
         [Test]
-        public void When_InductorMultiplierSmallSignal_Expect_Reference()
+        public void When_InductorLoop_Expect_SimulationValidationFailedException()
         {
-            // Create circuit
-            var cktReference = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
-                new Resistor("R1", "out", "0", 1e3));
-            ParallelSeries(cktReference, name => new Inductor(name, "", "", 1e-6), "in", "out", 2, 1);
-            var cktActual = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
-                new Inductor("L1", "in", "out", 1e-6).SetParameter("m", 2.0).SetParameter("n", 1.0),
-                new Resistor("R1", "out", "0", 1e3));
+            var ckt = new Circuit(
+                new CurrentSource("I1", "in", "0", 1e-3),
+                new Inductor("L1", "in", "0", 1e-6),
+                new Inductor("L2", "in", "0", 1e-6));
 
-            // Create simulation
-            var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 10));
-            var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "out") };
-
-            // Run test
-            Compare(ac, cktReference, cktActual, exports);
-            DestroyExports(exports);
+            var op = new OP("op");
+            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var violation = ex.Rules.Violations.First();
+            Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
         }
-        */
     }
 }

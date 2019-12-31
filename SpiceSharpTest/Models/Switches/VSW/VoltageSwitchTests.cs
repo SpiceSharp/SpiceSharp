@@ -326,7 +326,9 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
             Assert.AreEqual(1, ex.Rules.ViolationCount);
-            // TODO: Check more
+            var violation = ex.Rules.Violations.First();
+            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violation);
+            Assert.AreEqual("in", ((FloatingNodeRuleViolation)violation).FloatingVariable.Name);
         }
     }
 }

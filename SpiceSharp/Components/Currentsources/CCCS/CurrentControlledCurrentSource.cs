@@ -81,7 +81,7 @@ namespace SpiceSharp.Components
         /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
-            var p = rules.GetParameterSet<ComponentValidationParameters>();
+            var p = rules.GetParameterSet<ComponentRuleParameters>();
             var nodes = MapNodes(p.Variables);
             foreach (var r in rules.GetRules<IConductiveRule>())
                 r.AddPath(this, ConductionTypes.None, nodes[0], nodes[1]);

@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations.Biasing
     /// </summary>
     /// <seealso cref="BaseRules" />
     public class Rules : BaseRules,
-        IParameterized<ComponentValidationParameters>
+        IParameterized<ComponentRuleParameters>
     {
         private readonly FloatingNodeRule _floatingNode;
         private readonly VoltageLoopRule _voltageLoop = new VoltageLoopRule();
@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations.Biasing
         /// <value>
         /// The parameter set.
         /// </value>
-        public ComponentValidationParameters Parameters { get; }
+        public ComponentRuleParameters Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Rules"/> class.
@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations.Biasing
         {
             _floatingNode = new FloatingNodeRule(parent.Ground);
             _groundPresence = new VariablePresenceRule(parent.Ground);
-            Parameters = new ComponentValidationParameters(parent);
+            Parameters = new ComponentRuleParameters(parent);
         }
 
         /// <summary>

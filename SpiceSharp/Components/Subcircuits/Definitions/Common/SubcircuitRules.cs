@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public class SubcircuitRules : IRules
     {
         private readonly IRules _parent;
-        private readonly ComponentValidationParameters _validationParameters, _parentValidationParameters;
+        private readonly ComponentRuleParameters _validationParameters, _parentValidationParameters;
 
         /// <summary>
         /// Gets the number of rule violations.
@@ -60,8 +60,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         public SubcircuitRules(string name, IRules parent)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
-            _parentValidationParameters = _parent.GetParameterSet<ComponentValidationParameters>();
-            _validationParameters = new ComponentValidationParameters(new SubcircuitVariableSet(name, _parentValidationParameters.Variables));
+            _parentValidationParameters = _parent.GetParameterSet<ComponentRuleParameters>();
+            _validationParameters = new ComponentRuleParameters(new SubcircuitVariableSet(name, _parentValidationParameters.Variables));
         }
 
         /// <summary>

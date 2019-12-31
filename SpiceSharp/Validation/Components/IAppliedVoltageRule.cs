@@ -9,11 +9,11 @@ namespace SpiceSharp.Validation
     public interface IAppliedVoltageRule : IRule
     {
         /// <summary>
-        /// Applies a fixed-voltage relation between two variables.
+        /// Fixes the voltage difference between two node variables.
         /// </summary>
         /// <param name="subject">The subject that applies to the rule.</param>
         /// <param name="first">The first variable.</param>
         /// <param name="second">The second variable.</param>
-        void Apply(IRuleSubject subject, Variable first, Variable second);
+        void Fix(IRuleSubject subject, Variable first, Variable second);
     }
 }
