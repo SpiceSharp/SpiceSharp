@@ -67,6 +67,20 @@ namespace SpiceSharp.Validation
         }
 
         /// <summary>
+        /// Resets the rule.
+        /// </summary>
+        public void Reset()
+        {
+            _acGroups.Clear();
+            _acGroups.Add(FixedVariable, _representative);
+            _acGroupCount = 1;
+
+            _dcGroups.Clear();
+            _dcGroups.Add(FixedVariable, _representative);
+            _dcGroupCount = 1;
+        }
+
+        /// <summary>
         /// Determines whether this rule encountered the specified variable.
         /// </summary>
         /// <param name="variable">The variable.</param>

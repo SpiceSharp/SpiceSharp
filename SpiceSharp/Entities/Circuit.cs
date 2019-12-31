@@ -7,7 +7,8 @@ namespace SpiceSharp
     /// <summary>
     /// Represents an electronic circuit.
     /// </summary>
-    public class Circuit : IEntityCollection
+    /// <seealso cref="IEntityCollection" />
+    public partial class Circuit : IEntityCollection
     {
         private IEntityCollection _entities;
 

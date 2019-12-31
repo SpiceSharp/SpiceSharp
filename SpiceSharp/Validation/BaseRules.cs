@@ -45,6 +45,15 @@ namespace SpiceSharp.Validation
         public abstract IEnumerator<IRule> GetEnumerator();
 
         /// <summary>
+        /// Resets all the rules.
+        /// </summary>
+        public virtual void Reset()
+        {
+            foreach (var rule in this)
+                rule.Reset();
+        }
+
+        /// <summary>
         /// Gets all rules of the specified type.
         /// </summary>
         /// <typeparam name="R">The rule type.</typeparam>

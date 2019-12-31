@@ -25,12 +25,12 @@ namespace SpiceSharp.Simulations.Biasing
         /// <summary>
         /// Initializes a new instance of the <see cref="Rules"/> class.
         /// </summary>
-        /// <param name="parent">The parent variable set.</param>
-        public Rules(IVariableSet parent)
+        /// <param name="variables">The variable set.</param>
+        public Rules(IVariableSet variables)
         {
-            _floatingNode = new FloatingNodeRule(parent.Ground);
-            _groundPresence = new VariablePresenceRule(parent.Ground);
-            Parameters = new ComponentRuleParameters(parent);
+            _floatingNode = new FloatingNodeRule(variables.Ground);
+            _groundPresence = new VariablePresenceRule(variables.Ground);
+            Parameters = new ComponentRuleParameters(variables);
         }
 
         /// <summary>

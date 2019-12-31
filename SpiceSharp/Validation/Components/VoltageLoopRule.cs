@@ -39,6 +39,15 @@ namespace SpiceSharp.Validation
         }
 
         /// <summary>
+        /// Resets the rule.
+        /// </summary>
+        public void Reset()
+        {
+            _violations.Clear();
+            _groups.Clear();
+        }
+
+        /// <summary>
         /// Fixes the voltage difference between two node variables.
         /// </summary>
         /// <param name="subject">The subject that applies to the rule.</param>

@@ -26,6 +26,11 @@ namespace SpiceSharp.Validation
         IEnumerable<IRuleViolation> Violations { get; }
 
         /// <summary>
+        /// Resets all the rules.
+        /// </summary>
+        void Reset();
+
+        /// <summary>
         /// Gets all rules of the specified type.
         /// </summary>
         /// <typeparam name="R">The rule type.</typeparam>

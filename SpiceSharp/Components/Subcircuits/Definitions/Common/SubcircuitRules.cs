@@ -1,9 +1,7 @@
-﻿using SpiceSharp.Simulations;
-using SpiceSharp.Validation;
+﻿using SpiceSharp.Validation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
@@ -63,6 +61,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             _parentValidationParameters = _parent.GetParameterSet<ComponentRuleParameters>();
             _validationParameters = new ComponentRuleParameters(new SubcircuitVariableSet(name, _parentValidationParameters.Variables));
         }
+
+        /// <summary>
+        /// Resets all the rules.
+        /// </summary>
+        public void Reset() => _parent.Reset();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

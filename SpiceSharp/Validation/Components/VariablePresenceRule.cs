@@ -45,6 +45,14 @@ namespace SpiceSharp.Validation
         }
 
         /// <summary>
+        /// Resets the rule.
+        /// </summary>
+        public void Reset()
+        {
+            ViolationCount = 1;
+        }
+
+        /// <summary>
         /// Applies the specified variables as being connected by a conductive path.
         /// </summary>
         /// <param name="subject">The rule subject.</param>

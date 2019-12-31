@@ -22,5 +22,10 @@ namespace SpiceSharp.Validation
         /// The rule violations.
         /// </value>
         IEnumerable<IRuleViolation> Violations { get; }
+
+        /// <summary>
+        /// Resets the rule.
+        /// </summary>
+        void Reset();
     }
 }
