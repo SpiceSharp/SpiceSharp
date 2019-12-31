@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Simulations;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Validation
 {
@@ -9,7 +8,29 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IRuleViolation" />
     public class FloatingNodeRuleViolation : IRuleViolation
     {
-        private readonly HashSet<Variable> _group;
+        /// <summary>
+        /// Gets the floating node variable.
+        /// </summary>
+        /// <value>
+        /// The floating node variable.
+        /// </value>
+        public Variable FloatingVariable { get; }
+
+        /// <summary>
+        /// Gets the fixed node variable.
+        /// </summary>
+        /// <value>
+        /// The fixed node variable.
+        /// </value>
+        public Variable FixedVariable { get; }
+
+        /// <summary>
+        /// Gets the type of connection to the fixed variable.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
+        public ConductionTypes Type { get; }
 
         /// <summary>
         /// Gets the rule that was violated.
@@ -28,40 +49,20 @@ namespace SpiceSharp.Validation
         public IRuleSubject Subject => null;
 
         /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IEnumerable<Variable> Variables
-        {
-            get
-            {
-                foreach (var v in _group)
-                    yield return v;
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FloatingNodeRuleViolation"/> class.
+        /// Initializes a new instance of the <see cref="FloatingNodeRuleViolation" /> class.
         /// </summary>
         /// <param name="rule">The rule.</param>
-        /// <param name="group">The group.</param>
-        public FloatingNodeRuleViolation(IRule rule, IEnumerable<Variable> group)
+        /// <param name="floatingVariable">The floating node variable.</param>
+        /// <param name="fixedVariable">The fixed node variable.</param>
+        /// <param name="type">The path type.</param>
+        public FloatingNodeRuleViolation(IRule rule, Variable floatingVariable, Variable fixedVariable, ConductionTypes type)
         {
             Rule = rule.ThrowIfNull(nameof(rule));
-            _group = new HashSet<Variable>();
-            foreach (var v in group)
-                _group.Add(v);
+            if (type == ConductionTypes.All)
+                throw new SpiceSharpException("This is not a floating node!");
+            FixedVariable = fixedVariable;
+            FloatingVariable = floatingVariable;
+            Type = type;
         }
-
-        /// <summary>
-        /// Determines whether the specified variable has variable.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified variable has variable; otherwise, <c>false</c>.
-        /// </returns>
-        public bool HasVariable(Variable variable) => _group.Contains(variable);
     }
 }

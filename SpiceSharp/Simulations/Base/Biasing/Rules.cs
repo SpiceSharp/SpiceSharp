@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations.Biasing
         /// <param name="parent">The parent variable set.</param>
         public Rules(IVariableSet parent)
         {
-            _floatingNode = new FloatingNodeRule();
+            _floatingNode = new FloatingNodeRule(parent.Ground);
             _groundPresence = new VariablePresenceRule(parent.Ground);
             Parameters = new ComponentValidationParameters(parent);
         }
