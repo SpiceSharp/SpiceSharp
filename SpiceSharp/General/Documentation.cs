@@ -48,5 +48,47 @@ namespace SpiceSharp
                 pins[attr.Index] = attr.Name;
             return pins;
         }
+
+        /// <summary>
+        /// Enumerates all the named members.
+        /// </summary>
+        /// <param name="parameterized">The parameterized object.</param>
+        /// <returns>
+        /// The named parameters.
+        /// </returns>
+        public static IEnumerable<MemberDescription> Parameters(IParameterized parameterized)
+        {
+            foreach (var ps in parameterized.ParameterSets)
+            {
+                // Allow recursive parameterized objects
+                if (ps is IParameterized child)
+                {
+                    foreach (var md in Parameters(child))
+                        yield return md;
+                }
+
+                // Show the parameters in the parameter set
+                foreach (var md in Parameters(ps))
+                    yield return md;
+            }
+        }
+
+        /// <summary>
+        /// Enumerates all the named members.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>
+        /// The named parameters.
+        /// </returns>
+        public static IEnumerable<MemberDescription> Parameters(IParameterSet parameters)
+        {
+            // Show the parameters in the parameter set
+            foreach (var parameter in Reflection.GetMembers(parameters.GetType()))
+            {
+                if (parameter.Names.Length == 0)
+                    continue;
+                yield return parameter;
+            }
+        }
     }
 }

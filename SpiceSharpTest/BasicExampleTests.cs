@@ -292,13 +292,12 @@ namespace SpiceSharpTest
         [Test]
         public void When_Documentation_Expect_NoException()
         {
-            /*
             // <example_EntityDocumentation>
             var entity = new ResistorModel("RM1");
             foreach (var parameter in Documentation.Parameters(entity))
             {
                 Console.Write(string.Join(", ", parameter.Names));
-                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType})");
+                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType.Name})");
             }
             // </example_EntityDocumentation>
 
@@ -309,7 +308,7 @@ namespace SpiceSharpTest
             foreach (var parameter in Documentation.Parameters(simulation))
             {
                 Console.Write(string.Join(", ", parameter.Names));
-                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType})");
+                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType.Name})");
             }
             // </example_SimulationDocumentation>
 
@@ -332,7 +331,6 @@ namespace SpiceSharpTest
             };
             op.Run(ckt);
             // </example_BehaviorDocumentation>
-            */
         }
     }
 }
