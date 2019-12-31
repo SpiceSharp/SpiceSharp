@@ -198,28 +198,5 @@ namespace SpiceSharpTest.Parameters
             var param = p.GetProperty<Parameter<double>>("parameter1");
             Assert.AreEqual(p.Parameter1, param);
         }
-
-        /*
-        [Test]
-        public void When_PrincipalParameter_Expect_DirectAccess()
-        {
-            var p = new ParameterExample();
-            var param = p.Get<Parameter<double>>();
-            Assert.AreEqual(param, p.PrincipalTest);
-        }
-        */
-
-        /*
-        [Test]
-        public void When_PrincipalSetter_Expect_DirectAccess()
-        {
-            var p = new ParameterExample();
-            var setter = p.CreateSetter<double>();
-            setter(1.0);
-            Assert.AreEqual(1.0, p.PrincipalTest.Value, 1e-12);
-            setter(10.0);
-            Assert.AreEqual(10.0, p.PrincipalTest.Value, 1e-12);
-        }
-        */
     }
 }
