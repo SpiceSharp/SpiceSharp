@@ -58,7 +58,6 @@
     <Compile Include="Algebra\DenseVectorTests.cs" />
     <Compile Include="BasicExampleTests.cs" />
     <Compile Include="Circuits\CircuitTests.cs" />
-    <Compile Include="Circuits\ValidationTests.cs" />
     <Compile Include="Examples\ChangingParameter\Changing.cs" />
     <Compile Include="Examples\CustomResistor\BaseParameters.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistor.cs" />

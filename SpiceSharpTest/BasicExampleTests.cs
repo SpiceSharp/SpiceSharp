@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 namespace SpiceSharpTest
 {
@@ -266,6 +267,26 @@ namespace SpiceSharpTest
             };
             op.Run(ckt);
             // </example_Stochastic>
+        }
+
+        [Test]
+        public void When_SimpleValidation_Expect_Reference()
+        {
+            // <example_Validation>
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new VoltageSource("V2", "in", "0", 2.0));
+            var rules = ckt.Validate();
+            if (rules.ViolationCount > 0)
+            {
+                // We have rules that were violated
+                foreach (var violation in rules.Violations)
+                {
+                    // Handle rule violations
+                }
+            }
+            // </example_Validation>
+            Assert.AreEqual(1, rules.ViolationCount);
         }
 
         [Test]
