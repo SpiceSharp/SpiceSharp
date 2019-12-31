@@ -11,8 +11,9 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IConductiveRule" />
     public partial class FloatingNodeRule : IConductiveRule
     {
-        private readonly Dictionary<Variable, int> _dcGroup = new Dictionary<Variable, int>(), _acGroup = new Dictionary<Variable, int>();
-        private int _dcGroups = 1, _acGroups = 1;
+        private readonly Group _representative;
+        private readonly Dictionary<Variable, Group> _dcGroups = new Dictionary<Variable, Group>(), _acGroups = new Dictionary<Variable, Group>();
+        private int _dcGroupCount, _acGroupCount;
 
         /// <summary>
         /// Gets or sets the fixed-potential node.
@@ -28,7 +29,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The violation count.
         /// </value>
-        public int ViolationCount => Math.Max(_dcGroups, _acGroups) - 1;
+        public int ViolationCount => Math.Max(_dcGroupCount, _acGroupCount) - 1;
 
         /// <summary>
         /// Gets the violations.
@@ -40,12 +41,12 @@ namespace SpiceSharp.Validation
         {
             get
             {
-                foreach (var pair in _dcGroup)
+                foreach (var pair in _dcGroups)
                 {
                     ConductionTypes type = ConductionTypes.None;
-                    if (pair.Value == 0)
+                    if (pair.Value == _representative)
                         type |= ConductionTypes.Dc;
-                    if (_acGroup[pair.Key] == 0)
+                    if (_acGroups[pair.Key] == _representative)
                         type |= ConductionTypes.Ac;
                     if (type != ConductionTypes.All)
                         yield return new FloatingNodeRuleViolation(this, pair.Key, FixedVariable, type);
@@ -60,8 +61,9 @@ namespace SpiceSharp.Validation
         public FloatingNodeRule(Variable fixedVariable)
         {
             FixedVariable = fixedVariable.ThrowIfNull(nameof(fixedVariable));
-            _dcGroup.Add(fixedVariable, 0);
-            _acGroup.Add(fixedVariable, 0);
+            _representative = new Group(fixedVariable);
+            _dcGroups.Add(fixedVariable, _representative); _dcGroupCount = 1;
+            _acGroups.Add(fixedVariable, _representative); _acGroupCount = 1;
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace SpiceSharp.Validation
         /// <returns>
         ///   <c>true</c> if the specified variable was encountered; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(Variable variable) => _dcGroup.ContainsKey(variable);
+        public bool Contains(Variable variable) => _dcGroups.ContainsKey(variable);
 
         /// <summary>
         /// Applies the specified variables as being connected by a conductive path.
@@ -97,8 +99,8 @@ namespace SpiceSharp.Validation
             {
                 foreach (var variable in variables)
                 {
-                    Add(variable, _dcGroup, ref _dcGroups);
-                    Add(variable, _acGroup, ref _acGroups);
+                    Add(variable, _dcGroups, ref _dcGroupCount);
+                    Add(variable, _acGroups, ref _acGroupCount);
                 }
             }
             else
@@ -122,9 +124,9 @@ namespace SpiceSharp.Validation
             if (type == ConductionTypes.None)
                 throw new SpiceSharpException("Invalid path");
             if ((type & ConductionTypes.Dc) != 0)
-                Connect(a, b, _dcGroup, ref _dcGroups);
+                Connect(a, b, _dcGroups, ref _dcGroupCount);
             if ((type & ConductionTypes.Ac) != 0)
-                Connect(a, b, _acGroup, ref _acGroups);
+                Connect(a, b, _acGroups, ref _acGroupCount);
         }
 
         /// <summary>
@@ -132,40 +134,63 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="a">The first variable.</param>
         /// <param name="b">The second variable.</param>
-        /// <param name="group">The group.</param>
+        /// <param name="groups">The group.</param>
         /// <param name="counter">The counter to keep track of the number of distinct groups.</param>
-        private void Connect(Variable a, Variable b, Dictionary<Variable, int> group, ref int counter)
+        private void Connect(Variable a, Variable b, Dictionary<Variable, Group> groups, ref int counter)
         {
             // Add to DC group
-            var hasA = group.TryGetValue(a, out var groupA);
-            var hasB = group.TryGetValue(b, out var groupB);
+            var hasA = groups.TryGetValue(a, out var groupA);
+            var hasB = groups.TryGetValue(b, out var groupB);
             if (hasA && hasB)
             {
                 // Join the groups
                 if (groupA != groupB)
                 {
-                    if (groupA < groupB)
+                    if (groupA == _representative)
                     {
-                        foreach (var pair in group.Where(p => p.Value == groupB).ToArray())
-                            group[pair.Key] = groupA;
+                        foreach (var variable in groupB)
+                            groups[variable] = _representative;
+                    }
+                    else if (groupB == _representative)
+                    {
+                        foreach (var variable in groupA)
+                            groups[variable] = _representative;
                     }
                     else
                     {
-                        foreach (var pair in _dcGroup.Where(p => p.Value == groupA).ToArray())
-                            group[pair.Key] = groupB;
+                        if (groupA.Count < groupB.Count)
+                        {
+                            foreach (var variable in groupA)
+                                groups[variable] = groupB;
+                            groupB.Join(groupA);
+                        }
+                        else
+                        {
+                            foreach (var variable in groupB)
+                                groups[variable] = groupA;
+                            groupA.Join(groupB);
+                        }
                     }
                     counter--;
                 }
             }
             else if (hasA)
-                group.Add(b, groupA);
+            {
+                groups.Add(b, groupA);
+                if (groupA != _representative)
+                    groupA.Add(b);
+            }
             else if (hasB)
-                group.Add(a, groupB);
+            {
+                groups.Add(a, groupB);
+                if (groupB != _representative)
+                    groupB.Add(a);
+            }
             else
             {
-                var index = group.Count;
-                group.Add(a, index);
-                group.Add(b, index);
+                var group = new Group(a, b);
+                groups[a] = group;
+                groups[b] = group;
                 counter++;
             }
         }
@@ -174,13 +199,13 @@ namespace SpiceSharp.Validation
         /// Adds the specified variable as a new group.
         /// </summary>
         /// <param name="a">The variable.</param>
-        /// <param name="group">The group.</param>
+        /// <param name="groups">The group.</param>
         /// <param name="counter">The counter to keep track of the number of distinct groups.</param>
-        private void Add(Variable a, Dictionary<Variable, int> group, ref int counter)
+        private void Add(Variable a, Dictionary<Variable, Group> groups, ref int counter)
         {
-            if (group.ContainsKey(a))
+            if (groups.ContainsKey(a))
                 return;
-            group.Add(a, group.Count);
+            groups.Add(a, new Group(a));
             counter++;
         }
     }
