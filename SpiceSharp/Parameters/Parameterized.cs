@@ -10,7 +10,7 @@ namespace SpiceSharp
     /// A base class for instances that define <see cref="IParameterSet"/>.
     /// </summary>
     /// <seealso cref="IParameterized"/>
-    public abstract class Parameterized : IParameterized
+    public abstract class Parameterized : IParameterized, IImportParameterSet, IExportPropertySet
     {
         /// <summary>
         /// Gets the parameter set of the specified type.
