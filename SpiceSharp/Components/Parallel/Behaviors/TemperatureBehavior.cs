@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <summary>
         /// Perform temperature-dependent calculations.
         /// </summary>
-        public void Temperature()
+        void ITemperatureBehavior.Temperature()
         {
             if (_workload != null)
                 _workload.Execute();

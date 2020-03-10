@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// An <see cref="IComplexSimulationState"/> that will insert a custom solver that allows concurrent write access.
         /// </summary>
         /// <seealso cref="IComplexSimulationState" />
-        protected class SimulationState : IComplexSimulationState
+        protected class ComplexSimulationState : IComplexSimulationState
         {
             private readonly IComplexSimulationState _parent;
 
@@ -45,12 +45,13 @@ namespace SpiceSharp.Components.ParallelBehaviors
             public IVariableMap Map => _parent.Map;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulationState"/> class.
+            /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
-            public SimulationState(IComplexSimulationState parent)
+            public ComplexSimulationState(IComplexSimulationState parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
+                _solver = new ParallelSolver<Complex>(_parent.Solver);
             }
 
             /// <summary>

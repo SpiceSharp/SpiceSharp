@@ -22,11 +22,11 @@ namespace SpiceSharp.Components.ParallelBehaviors
             if (parameters.AcLoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
             {
                 var state = simulation.GetParentState<IComplexSimulationState>();
-                simulation.LocalStates.Add(new SimulationState(state));
+                simulation.LocalStates.Add(new ComplexSimulationState(state));
             }
         }
 
-        private readonly SimulationState _state;
+        private readonly ComplexSimulationState _state;
         private readonly Workload _loadWorkload, _initWorkload;
         private readonly BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
 
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             : base(name)
         {
             var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
-            _state = simulation.GetState<SimulationState>();
+            _state = simulation.GetState<ComplexSimulationState>();
             if (parameters.AcLoadDistributor != null)
                 _loadWorkload = new Workload(parameters.AcLoadDistributor, simulation.EntityBehaviors.Count);
             if (parameters.AcInitDistributor != null)
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <summary>
         /// Initializes the parameters.
         /// </summary>
-        public void InitializeParameters()
+        void IFrequencyBehavior.InitializeParameters()
         {
             if (_initWorkload != null)
                 _initWorkload.Execute();
@@ -77,7 +77,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <summary>
         /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
         /// </summary>
-        public virtual void Load()
+        void IFrequencyBehavior.Load()
         {
             if (_loadWorkload != null)
             {

@@ -104,8 +104,9 @@ namespace SpiceSharp.Components
 
             // Create our parallel simulation
             var psim = new ParallelSimulation(simulation, this);
-            BiasingBehavior.Prepare(psim);
+            ConvergenceBehavior.Prepare(psim);
             FrequencyBehavior.Prepare(psim);
+            NoiseBehavior.Prepare(psim);
 
             // Create the behaviors
             psim.Run(_collection);
@@ -113,8 +114,14 @@ namespace SpiceSharp.Components
             // Create the parallel behaviors
             container
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, psim))
+                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, psim))
+                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, psim))
+                .AddIfNo<IConvergenceBehavior>(simulation, () => new ConvergenceBehavior(Name, psim))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, psim))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, psim));
+                .AddIfNo<IBiasingUpdateBehavior>(simulation, () => new BiasingUpdateBehavior(Name, psim))
+                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, psim))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, psim))
+                .AddIfNo<IFrequencyUpdateBehavior>(simulation, () => new FrequencyUpdateBehavior(Name, psim));
             simulation.EntityBehaviors.Add(container);
         }
 

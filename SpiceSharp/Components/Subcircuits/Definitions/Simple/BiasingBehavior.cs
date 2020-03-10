@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IBiasingBehavior" />
-    public partial class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior
+    public partial class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior, IConvergenceBehavior
     {
         private readonly BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
 
@@ -37,7 +37,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         public BiasingBehavior(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
-            // TODO: Check concurrent access to the iteration state
             if (simulation.LocalStates.TryGetValue(out _state))
                 _state.Initialize(simulation.SharedVariables);
             _convergenceBehaviors = simulation.EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();

@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// An <see cref="IBiasingSimulationState"/> that will insert a custom solver that allows concurrent write access.
         /// </summary>
         /// <seealso cref="IBiasingSimulationState" />
-        protected class SimulationState : IBiasingSimulationState
+        protected class BiasingSimulationState : IBiasingSimulationState
         {
             private readonly IBiasingSimulationState _parent;
 
@@ -47,10 +47,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
             public IVariableMap Map => _parent.Map;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulationState"/> class.
+            /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
             /// </summary>
             /// <param name="parent">The parent biasing simulation state.</param>
-            public SimulationState(IBiasingSimulationState parent)
+            public BiasingSimulationState(IBiasingSimulationState parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
                 _solver = new ParallelSolver<double>(parent.Solver);

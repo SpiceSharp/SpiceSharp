@@ -25,16 +25,5 @@ namespace SpiceSharpTest.General
             Assert.AreEqual(b, d.GetValue<IB>());
             Assert.Throws<AmbiguousTypeException>(() => d.GetValue<IA>());
         }
-
-        [Test]
-        public void When_Inheritance2_Expect_Reference()
-        {
-            var a = new A();
-            var b = new B();
-            var d = new InheritedTypeDictionary<IA>();
-            d.Add(a);
-            d.Add(b);
-
-        }
     }
 }
