@@ -81,7 +81,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the node index of a pin.
+        /// Gets the node name by pin index.
         /// </summary>
         /// <param name="index">The pin index.</param>
         /// <returns>

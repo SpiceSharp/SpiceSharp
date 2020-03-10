@@ -34,5 +34,23 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </value>
         [ParameterName("biasing.isconvergent"), ParameterInfo("Work distributor for testing convergence.")]
         public IWorkDistributor<bool> ConvergenceDistributor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ac load distributor.
+        /// </summary>
+        /// <value>
+        /// The ac load distributor.
+        /// </value>
+        [ParameterName("frequency.load"), ParameterInfo("Work distributor for loading the small-signal components.")]
+        public IWorkDistributor AcLoadDistributor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ac initialize distributor.
+        /// </summary>
+        /// <value>
+        /// The ac initialize distributor.
+        /// </value>
+        [ParameterName("frequency.init"), ParameterName("frequency.initialize"), ParameterInfo("Work distributor for initializing small-signal parameters.")]
+        public IWorkDistributor AcInitDistributor { get; set; }
     }
 }

@@ -9,11 +9,6 @@ namespace SpiceSharp.Simulations
     public interface IComplexSimulationState : ISolverSimulationState<Complex>
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the solution converges.
-        /// </summary>
-        bool IsConvergent { get; set; }
-
-        /// <summary>
         /// Gets or sets the current laplace variable.
         /// </summary>
         Complex Laplace { get; }

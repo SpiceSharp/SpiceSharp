@@ -44,16 +44,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <c>true</c> if the application was successful; otherwise, <c>false</c>.
             /// </returns>
             /// <exception cref="NoEquivalentSubcircuitException">Thrown if no equivalent contributions could be calculated.</exception>
-            public override bool Apply()
-            {
-                if (base.Apply())
-                {
-                    if (!IsConvergent)
-                        _parent.IsConvergent = false;
-                    return true;
-                }
-                return false;
-            }
+            public override bool Apply() => base.Apply();
         }
     }
 }

@@ -1,25 +1,23 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
-    public partial class BiasingBehavior
+    public partial class FrequencyBehavior
     {
         /// <summary>
-        /// An <see cref="IBiasingSimulationState"/> that will insert a custom solver that allows concurrent write access.
+        /// An <see cref="IComplexSimulationState"/> that will insert a custom solver that allows concurrent write access.
         /// </summary>
-        /// <seealso cref="IBiasingSimulationState" />
-        protected class SimulationState : IBiasingSimulationState
+        /// <seealso cref="IComplexSimulationState" />
+        protected class SimulationState : IComplexSimulationState
         {
-            private readonly IBiasingSimulationState _parent;
+            private readonly IComplexSimulationState _parent;
 
             /// <summary>
-            /// Gets the previous solution vector.
+            /// Gets or sets the current laplace variable.
             /// </summary>
-            /// <remarks>
-            /// This vector is needed for determining convergence.
-            /// </remarks>
-            public IVector<double> OldSolution => _parent.OldSolution;
+            public Complex Laplace => _parent.Laplace;
 
             /// <summary>
             /// Gets the solver used to solve the system of equations.
@@ -27,8 +25,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <value>
             /// The solver.
             /// </value>
-            public ISparseSolver<double> Solver => _solver;
-            private readonly ParallelSolver<double> _solver;
+            public ISparseSolver<Complex> Solver => _solver;
+            private readonly ParallelSolver<Complex> _solver;
 
             /// <summary>
             /// Gets the solution.
@@ -36,7 +34,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <value>
             /// The solution.
             /// </value>
-            public IVector<double> Solution => _parent.Solution;
+            public IVector<Complex> Solution => _parent.Solution;
 
             /// <summary>
             /// Gets the map that maps <see cref="Variable" /> to indices for the solver.
@@ -49,11 +47,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <summary>
             /// Initializes a new instance of the <see cref="SimulationState"/> class.
             /// </summary>
-            /// <param name="parent">The parent biasing simulation state.</param>
-            public SimulationState(IBiasingSimulationState parent)
+            /// <param name="parent">The parent.</param>
+            public SimulationState(IComplexSimulationState parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
-                _solver = new ParallelSolver<double>(parent.Solver);
             }
 
             /// <summary>

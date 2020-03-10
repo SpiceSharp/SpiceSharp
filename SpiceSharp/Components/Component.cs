@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the node index of a pin.
+        /// Gets the node name by pin index.
         /// </summary>
         /// <param name="index">The pin index.</param>
         /// <returns>The node index.</returns>
@@ -104,7 +104,6 @@ namespace SpiceSharp.Components
             for (var i = 0; i < _connections.Length; i++)
                 clone._connections[i] = _connections[i];
             return clone;
-
         }
 
         /// <summary>

@@ -105,6 +105,7 @@ namespace SpiceSharp.Components
             // Create our parallel simulation
             var psim = new ParallelSimulation(simulation, this);
             BiasingBehavior.Prepare(psim);
+            FrequencyBehavior.Prepare(psim);
 
             // Create the behaviors
             psim.Run(_collection);
@@ -112,12 +113,13 @@ namespace SpiceSharp.Components
             // Create the parallel behaviors
             container
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, psim))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, psim));
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, psim))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, psim));
             simulation.EntityBehaviors.Add(container);
         }
 
         /// <summary>
-        /// Gets the node index of a pin.
+        /// Gets the node name by pin index.
         /// </summary>
         /// <param name="index">The pin index.</param>
         /// <returns>

@@ -182,7 +182,6 @@ namespace SpiceSharp.Simulations
             var solver = cstate.Solver;
 
             retry:
-            cstate.IsConvergent = true;
 
             // Load AC
             FrequencyLoad();

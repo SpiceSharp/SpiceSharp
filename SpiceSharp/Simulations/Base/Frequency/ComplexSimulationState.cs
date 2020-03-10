@@ -12,11 +12,6 @@ namespace SpiceSharp.Simulations
         protected class ComplexSimulationState : IComplexSimulationState
         {
             /// <summary>
-            /// Gets or sets a value indicating whether the solution converges.
-            /// </summary>
-            public bool IsConvergent { get; set; }
-
-            /// <summary>
             /// Gets the solution.
             /// </summary>
             public IVector<Complex> Solution { get; protected set; }

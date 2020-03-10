@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
         IComponent Connect(params string[] nodes);
 
         /// <summary>
-        /// Gets the node index of a pin.
+        /// Gets the node name by pin index.
         /// </summary>
         /// <param name="index">The pin index.</param>
         /// <returns>The node index.</returns>
