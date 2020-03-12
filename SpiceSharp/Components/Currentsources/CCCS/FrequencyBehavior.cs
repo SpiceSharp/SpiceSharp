@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, ControlledBindingContext context) : base(name, context)
+        public FrequencyBehavior(string name, ICurrentControlledBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
             _posNode = _complex.Map[context.Nodes[0]];

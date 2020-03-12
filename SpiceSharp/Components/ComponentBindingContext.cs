@@ -2,7 +2,6 @@
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -10,7 +9,7 @@ namespace SpiceSharp.Components
     /// Context for binding an <see cref="IBehavior"/> created by an <see cref="IComponent"/> to an <see cref="ISimulation"/>.
     /// </summary>
     /// <seealso cref="BindingContext" />
-    public class ComponentBindingContext : BindingContext
+    public class ComponentBindingContext : BindingContext, IComponentBindingContext
     {
         /// <summary>
         /// Gets the model behaviors.

@@ -22,7 +22,7 @@ namespace SpiceSharp.Validation
             => Validate(entities).ViolationCount > 0;
 
         /// <summary>
-        /// Violationses the specified entities.
+        /// Validates the circuit using the default rules.
         /// </summary>
         /// <param name="entities">The entities.</param>
         /// <returns>

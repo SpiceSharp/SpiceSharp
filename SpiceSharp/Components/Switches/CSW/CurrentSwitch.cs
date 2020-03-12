@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
-            var context = new ControlledBindingContext(this, simulation, ControllingName);
+            var context = new CurrentControlledBindingContext(this, simulation, ControllingName);
             if (context.ModelBehaviors == null)
                 throw new ModelNotFoundException(Model);
             behaviors

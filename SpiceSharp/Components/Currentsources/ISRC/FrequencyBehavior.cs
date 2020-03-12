@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="context"></param>
-        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             FrequencyParameters = context.GetParameterSet<IndependentSourceFrequencyParameters>();
             _complex = context.GetState<IComplexSimulationState>();

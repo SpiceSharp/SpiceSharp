@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, ControlledBindingContext context) : base(name)
+        public BiasingBehavior(string name, ICurrentControlledBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);

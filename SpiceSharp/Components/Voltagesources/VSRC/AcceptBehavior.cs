@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public AcceptBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public AcceptBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
         }
 

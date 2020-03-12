@@ -6,6 +6,10 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 using System.Linq;
 using SpiceSharp.Validation;
+using System.Collections.Generic;
+using SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors;
+using SpiceSharp.Behaviors;
+using NSubstitute;
 
 namespace SpiceSharpTest.Models
 {
@@ -90,6 +94,91 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual(1, ex.Rules.ViolationCount);
             var violation = ex.Rules.Violations.First();
             Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+        }
+
+        [TestCaseSource(nameof(Biasing))]
+        public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new BiasingBehavior("E1", context.Value);
+            ((IBiasingBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+
+        [TestCaseSource(nameof(Frequency))]
+        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
+        {
+            var behavior = new FrequencyBehavior("E1", context.Value);
+            ((IFrequencyBehavior)behavior).InitializeParameters();
+            ((IFrequencyBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
+        }
+
+        [TestCaseSource(nameof(Rules))]
+        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
+        {
+            foreach (var entity in ckt)
+            {
+                if (entity is IRuleSubject subject)
+                    subject.Apply(rules);
+            }
+            Assert.AreEqual(violations.Length, rules.ViolationCount);
+            int index = 0;
+            foreach (var violation in rules.Violations)
+                Assert.AreEqual(violations[index++], violation.GetType());
+        }
+
+        public static IEnumerable<TestCaseData> Biasing
+        {
+            get
+            {
+                IComponentBindingContext context;
+                var ibr = new Variable("branch", VariableType.Current);
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b", "c", "d").Bias(ibr).CreateVariable(ibr)
+                    .Parameter(new BaseParameters(2.0));
+                yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        double.NaN, double.NaN, double.NaN, double.NaN, 1.0, double.NaN,
+                        double.NaN, double.NaN, double.NaN, double.NaN, -1.0, double.NaN,
+                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,
+                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,
+                        1.0, -1.0, -2.0, 2.0, double.NaN, double.NaN
+                    }).SetName("{m}(DC)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Frequency
+        {
+            get
+            {
+                IComponentBindingContext context;
+                var ibr = new Variable("branch", VariableType.Current);
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b", "c", "d").Bias(ibr).CreateVariable(ibr)
+                    .Frequency(ibr).Parameter(new BaseParameters(2.0));
+                context.Variables.Create(Arg.Any<string>(), VariableType.Current).Returns(ibr);
+                yield return new TestCaseData(context.AsProxy(), new Complex[]
+                    {
+                        double.NaN, double.NaN, double.NaN, double.NaN, 1.0, double.NaN,
+                        double.NaN, double.NaN, double.NaN, double.NaN, -1.0, double.NaN,
+                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,
+                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,
+                        1.0, -1.0, -2.0, 2.0, double.NaN, double.NaN
+                    }).SetName("{m}(AC)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Rules
+        {
+            get
+            {
+                ComponentRuleParameters parameters;
+
+                yield return new TestCaseData(
+                    new Circuit(new VoltageControlledVoltageSource("E1", "out", "0", "inp", "inn", 1.0)),
+                    new ComponentRules(parameters = new ComponentRuleParameters(), new FloatingNodeRule(parameters.Variables.Ground)),
+                    new[] { typeof(FloatingNodeRuleViolation), typeof(FloatingNodeRuleViolation) });
+            }
         }
     }
 }

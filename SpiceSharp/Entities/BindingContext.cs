@@ -10,7 +10,7 @@ namespace SpiceSharp.Entities
     /// This is an additional layer that allows to shield entities, simulations, etc. from the behavior that
     /// is being created. This makes sure that behaviors are only using the data that matters.
     /// </remarks>
-    public class BindingContext
+    public class BindingContext : IBindingContext
     {
         /// <summary>
         /// Gets the simulation to bind to without exposing the simulation itself.

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// A binding context for controlled sources.
     /// </summary>
     /// <seealso cref="ComponentBindingContext" />
-    public class ControlledBindingContext : ComponentBindingContext
+    public class CurrentControlledBindingContext : ComponentBindingContext, ICurrentControlledBindingContext
     {
         /// <summary>
         /// Gets the name of the controlling source.
@@ -26,12 +26,12 @@ namespace SpiceSharp.Components.CommonBehaviors
         public IBehaviorContainer ControlBehaviors => Simulation.EntityBehaviors[ControlSource];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ControlledBindingContext" /> class.
+        /// Initializes a new instance of the <see cref="CurrentControlledBindingContext" /> class.
         /// </summary>
         /// <param name="component">The component that creates the behavior.</param>
         /// <param name="simulation">The simulation for which the behavior is created.</param>
         /// <param name="control">The controlling source identifier.</param>
-        public ControlledBindingContext(Component component, ISimulation simulation, string control)
+        public CurrentControlledBindingContext(Component component, ISimulation simulation, string control)
             : base(component, simulation)
         {
             ControlSource = control.ThrowIfNull(nameof(control));

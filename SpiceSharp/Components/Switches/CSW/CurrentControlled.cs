@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Initializes a new instance of the <see cref="CurrentControlled"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        public CurrentControlled(ControlledBindingContext context)
+        public CurrentControlled(CurrentControlledBindingContext context)
         {
             var state = context.GetState<IBiasingSimulationState>();
             var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior>();

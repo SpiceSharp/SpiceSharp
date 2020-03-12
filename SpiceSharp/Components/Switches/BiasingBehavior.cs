@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             context.ThrowIfNull(nameof(context));
 
             _iteration = context.GetState<IIterationSimulationState>();
-            if (context is ControlledBindingContext ctx)
+            if (context is CurrentControlledBindingContext ctx)
                 Method = new CurrentControlled(ctx);
             else
                 Method = new VoltageControlled(context);

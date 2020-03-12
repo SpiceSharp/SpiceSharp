@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
+        public BiasingBehavior(string name, IComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(4);

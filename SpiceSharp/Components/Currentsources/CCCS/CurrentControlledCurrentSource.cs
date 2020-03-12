@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
-            var context = new ControlledBindingContext(this, simulation, ControllingSource);
+            var context = new CurrentControlledBindingContext(this, simulation, ControllingSource);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));

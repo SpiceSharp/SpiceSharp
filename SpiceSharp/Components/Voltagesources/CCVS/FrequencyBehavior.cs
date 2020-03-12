@@ -56,7 +56,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="context"></param>
-        public FrequencyBehavior(string name, ControlledBindingContext context) : base(name, context)
+        public FrequencyBehavior(string name, ICurrentControlledBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
             _posNode = _complex.Map[context.Nodes[0]];
