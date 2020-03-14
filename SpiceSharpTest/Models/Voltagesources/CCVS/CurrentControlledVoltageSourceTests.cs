@@ -124,8 +124,8 @@ namespace SpiceSharpTest.Models
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
-                    .BranchControlled(ibrc).CreateVariable(ibr)
-                    .Nodes("a", "b").Bias(ibr, ibrc).Parameter(new BaseParameters { Coefficient = 2 });
+                    .Nodes("a", "b").CreateVariable(ibr).BranchControlled(ibrc)
+                    .Bias().Parameter(new BaseParameters { Coefficient = 2 });
                 yield return new TestCaseData(context.AsProxy(), new[]
                     {
                         double.NaN, double.NaN, 1.0, double.NaN, double.NaN,
@@ -146,9 +146,8 @@ namespace SpiceSharpTest.Models
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
-                    .BranchControlled(ibrc).CreateVariable(ibr)
-                    .Nodes("a", "b").Bias(ibr, ibrc).Frequency(ibr, ibrc)
-                    .Parameter(new BaseParameters { Coefficient = 2 });
+                    .Nodes("a", "b").CreateVariable(ibr).BranchControlled(ibrc)
+                    .Frequency().Parameter(new BaseParameters { Coefficient = 2 });
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                     {
                         double.NaN, double.NaN, 1.0, double.NaN, double.NaN,

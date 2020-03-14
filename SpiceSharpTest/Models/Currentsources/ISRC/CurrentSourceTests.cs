@@ -200,7 +200,7 @@ namespace SpiceSharpTest.Models
 
                 // Using SourceFactor
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(b => { }, i => i.SourceFactor.Returns(0.5))
+                    .Nodes("a", "b").Bias(null, i => i.SourceFactor.Returns(0.5))
                     .Parameter(new IndependentSourceParameters(-3.0));
                 yield return new TestCaseData(context.AsProxy(), 
                     new[] { 
@@ -231,7 +231,7 @@ namespace SpiceSharpTest.Models
                 context = Substitute.For<IComponentBindingContext>()
                     .Nodes("a", "b").Bias().Frequency(1)
                     .Parameter(new IndependentSourceParameters(1))
-                    .Parameter(new IndependentSourceFrequencyParameters(), p => p.SetParameter("acmag", 0.5).SetParameter("acphase", 90.0));
+                    .Parameter(new IndependentSourceFrequencyParameters { AcMagnitude = 0.5, AcPhase = 90 });
                 yield return new TestCaseData(context.AsProxy(), 
                     new Complex[] {
                         double.NaN, double.NaN, -v,
@@ -247,10 +247,7 @@ namespace SpiceSharpTest.Models
 
                 // Transient analysis with waveform
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias().Transient(0.3, 0.01).Parameter(new IndependentSourceParameters
-                    {
-                        Waveform = new Sine(0, 1, 1)
-                    });
+                    .Nodes("a", "b").Bias().Transient(0.3, 0.01).Parameter(new IndependentSourceParameters { Waveform = new Sine(0, 1, 1) });
                 var v = Math.Sin(0.3 * 2 * Math.PI);
                 yield return new TestCaseData(context.AsProxy(), 
                     new[] { 

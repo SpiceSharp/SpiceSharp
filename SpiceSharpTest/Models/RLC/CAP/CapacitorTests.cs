@@ -324,7 +324,7 @@ namespace SpiceSharpTest.Models
             {
                 IComponentBindingContext context;
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias().Frequency(5.0).Parameter(new BaseParameters(2e-6));
+                    .Nodes("a", "b").Frequency(5.0).Parameter(new BaseParameters(2e-6));
                 var g = new Complex(0.0, 5 * 2 * Math.PI * 2e-6);
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                 {
@@ -340,7 +340,7 @@ namespace SpiceSharpTest.Models
                 IComponentBindingContext context;
 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias().Transient(0.5, 1e-3)
+                    .Nodes("a", "b").Transient(0.5, 1e-3)
                     .Parameter(new BaseParameters(1e-6));
                 var g = 1e-6 / 1e-3;
                 yield return new TestCaseData(context.AsProxy(), new double[]

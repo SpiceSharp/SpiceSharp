@@ -7,11 +7,12 @@ using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
-    public static class ComponentBindingContext
+    public static class BindingContextHelper
     {
         private class TmpDerivative : IDerivative
         {
@@ -41,49 +42,112 @@ namespace SpiceSharpTest.Models
             }
         }
 
-        public static T Nodes<T>(this T context, params string[] nodeNames) where T : IComponentBindingContext
+        public static T Variable<T>(this T context, params Variable[] variables) where T : IBindingContext
         {
-            var variables = new Variable[nodeNames.Length];
-            for (var i = 0; i < variables.Length; i++)
-                variables[i] = new Variable(nodeNames[i], VariableType.Voltage);
+            if (variables == null || variables.Length == 0)
+                return context;
+            var count = context.Variables.Count;
 
-            for (var i = 0; i < nodeNames.Length; i++)
+            var newVariables = new Variable[count + variables.Length];
+            int index = 0;
+            foreach (var v in context.Variables)
+                newVariables[index++] = v;
+
+            for (var i = 0; i < variables.Length; i++)
             {
-                context.Variables.MapNode(nodeNames[i], VariableType.Voltage).Returns(variables[i]);
-                context.Variables.ContainsNode(nodeNames[i]).Returns(true);
-                context.Variables.TryGetNode(nodeNames[i], out Arg.Any<Variable>()).Returns(x => { x[0] = variables[i]; return true; });
-                context.Nodes[i].Returns(variables[i]);
+                context.Variables.Contains(variables[i].Name).Returns(true);
+                context.Variables[variables[i].Name].Returns(variables[i]);
+                newVariables[index] = variables[i];
+                if (variables[i].UnknownType == VariableType.Voltage)
+                {
+                    context.Variables.MapNode(variables[i].Name, VariableType.Voltage).Returns(variables[i]);
+                    context.Variables.TryGetNode(variables[i].Name, out Arg.Any<Variable>()).Returns(x => { x[0] = variables[i]; return true; });
+                    context.Variables.ContainsNode(variables[i].Name).Returns(true);
+                }
+                index++;
+                count++;
             }
-            context.Nodes.Count.Returns(nodeNames.Length);
+            context.Variables.Count.Returns(count);
+            context.Variables.GetEnumerator().Returns(_ => ((IEnumerable<Variable>)newVariables).GetEnumerator());
             return context;
         }
-        public static T Temperature<T>(this T context, double temperature) where T : IBindingContext
+        public static T Nodes<T>(this T context, params string[] nodeNames) where T : IComponentBindingContext
         {
+            // Create our variables
+            var variables = new Variable[nodeNames.Length];
+            for (var i = 0; i < variables.Length; i++)
+            {
+                variables[i] = new Variable(nodeNames[i], VariableType.Voltage);
+                context.Nodes[i].Returns(variables[i]);
+            }
+            context.Nodes.Count.Returns(variables.Length);
+            context.Variable(variables);
+            return context;
+        }
+        public static T CreateVariable<T>(this T context, params Variable[] variables) where T : IBindingContext
+        {
+            context.Variable(variables);
+
+            // Make sure the context returns these variables when a new one is requested
+            var next = new Variable[variables.Length - 1];
+            for (var i = 1; i < next.Length; i++)
+                next[i - 1] = variables[i];
+            context.Variables.Create(Arg.Any<string>(), VariableType.Current).Returns(variables[0], next);
+            return context;
+        }
+        public static T BranchControlled<T>(this T context, Variable variable) where T : ICurrentControlledBindingContext
+        {
+            context.Variable(variable);
+            var behavior = Substitute.For<IBranchedBehavior>();
+            behavior.Branch.Returns(variable);
+            context.ControlBehaviors.GetValue<IBranchedBehavior>().Returns(behavior);
+            return context;
+        }
+        public static T Parameter<T, P>(this T context, P parameters) where T : IBindingContext where P : IParameterSet
+        {
+            // Make sure the defaults are calculated
+            parameters.CalculateDefaults();
+
+            // Make the context return these parameters
+            context.GetParameterSet<P>().Returns(parameters);
+            context.TryGetParameterSet(out Arg.Any<P>()).Returns(x => { x[0] = parameters; return true; });
+            return context;
+        }
+        public static T Temperature<T>(this T context, 
+            double temperature = Constants.ReferenceTemperature, 
+            double nominalTemperature = Constants.ReferenceTemperature) where T : IBindingContext
+        {
+            // An ITemperatureSimulation has an ITemperatureSimulationState
             var state = Substitute.For<ITemperatureSimulationState>();
             state.Temperature.Returns(temperature);
-            state.NominalTemperature.Returns(300.15);
+            state.NominalTemperature.Returns(nominalTemperature);
 
             context.GetState<ITemperatureSimulationState>().Returns(state);
             context.TryGetState(out Arg.Any<ITemperatureSimulationState>()).Returns(x => { x[0] = state; return true; });
             return context;
         }
-        public static T Bias<T>(this T context, Action<IBiasingSimulationState> changeBiasing = null, Action<IIterationSimulationState> changeIteration = null) where T : IComponentBindingContext
+        public static T Bias<T>(this T context, Action<IBiasingSimulationState> changeBiasing = null, Action<IIterationSimulationState> changeIteration = null) where T : IBindingContext
         {
-            // Biasing simulation state
+            // An IBiasingSimulation implements ITemperatureSimulation
+            if (!context.TryGetState(out ITemperatureSimulationState _))
+                context.Temperature();
+
+            // An IBiasingSimulation has an IBiasingSimulationState
             var state = Substitute.For<IBiasingSimulationState>();
             state.Solver.Returns(LUHelper.CreateSparseRealSolver());
-            var solution = new DenseVector<double>(context.Nodes.Count);
+            var solution = new DenseVector<double>(context.Variables.Count);
             state.Solution.Returns(solution);
-            var count = context.Nodes.Count;
-            for (var i = 0; i < count; i++)
-                state.Map[context.Nodes[i]].Returns(i + 1);
+            int index = 1, count = context.Variables.Count;
+            foreach (var v in context.Variables)
+                state.Map[v].Returns(index++);
             state.Map.Count.Returns(count);
 
             changeBiasing?.Invoke(state);
             context.GetState<IBiasingSimulationState>().Returns(state);
             context.TryGetState(out Arg.Any<IBiasingSimulationState>()).Returns(x => { x[0] = state; return true; });
 
-            // Iteration simulation state
+            // Not required for an IBiasingSimulation, but the implementation
+            // BiasingSimulation has an IIterationSimulationState
             var istate = Substitute.For<IIterationSimulationState>();
             istate.SourceFactor.Returns(1.0);
             istate.Gmin.Returns(1e-20);
@@ -96,64 +160,40 @@ namespace SpiceSharpTest.Models
 
             return context;
         }
-        public static T Bias<T>(this T context, params Variable[] extra) where T : IComponentBindingContext
+        public static T Frequency<T>(this T context, Action<IComplexSimulationState> changeComplex = null) where T : IBindingContext
         {
-            return Bias(context, biasing =>
-            {
-                var count = biasing.Map.Count;
-                for (var i = 0; i < extra.Length; i++)
-                    biasing.Map[extra[i]].Returns(count + i + 1);
-                biasing.Map.Count.Returns(count + extra.Length);
-            });
-        }
-        public static T Frequency<T>(this T context, Action<IComplexSimulationState> changeComplex = null) where T : IComponentBindingContext
-        {
+            // An IFrequencySimulation implements an IBiasingSimulation
+            if (!context.TryGetState(out IBiasingSimulationState _))
+                context.Bias();
+
             var state = Substitute.For<IComplexSimulationState>();
             state.Solver.Returns(LUHelper.CreateSparseComplexSolver());
-            var solution = new DenseVector<Complex>(context.Nodes.Count);
+            var solution = new DenseVector<Complex>(context.Variables.Count);
             state.Solution.Returns(solution);
-            var count = context.Nodes.Count;
-            for (var i = 0; i < count; i++)
-                state.Map[context.Nodes[i]].Returns(i + 1);
-            state.Map.Count.Returns(count);
             state.Laplace.Returns(0.0);
+            int index = 1, count = context.Variables.Count;
+            foreach (var v in context.Variables)
+                state.Map[v].Returns(index++);
+            state.Map.Count.Returns(count);
 
             changeComplex?.Invoke(state);
             context.GetState<IComplexSimulationState>().Returns(state);
             context.TryGetState(out Arg.Any<IComplexSimulationState>()).Returns(x => { x[0] = state; return true; });
             return context;
         }
-        public static T Frequency<T>(this T context, params Variable[] extra) where T : IComponentBindingContext
+        public static T Frequency<T>(this T context, double frequency) where T : IBindingContext
         {
             return context.Frequency(cplx =>
             {
-                var count = cplx.Map.Count;
-                for (var i = 0; i < extra.Length; i++)
-                    cplx.Map[extra[i]].Returns(count + i + 1);
-                cplx.Map.Count.Returns(count + extra.Length);
-            });
-        }
-        public static T Frequency<T>(this T context, double frequency, params Variable[] extra) where T : IComponentBindingContext
-        {
-            return context.Frequency(cplx =>
-            {
-                var count = cplx.Map.Count;
-                for (var i = 0; i < extra.Length; i++)
-                    cplx.Map[extra[i]].Returns(count + i + 1);
-                cplx.Map.Count.Returns(count + extra.Length);
-                cplx.Laplace.Returns(new Complex(0, frequency * 2 * Math.PI));
-            });
-        }
-        public static T Frequency<T>(this T context, double frequency, Action<IComplexSimulationState> changeComplex = null) where T : IComponentBindingContext
-        {
-            return context.Frequency(cplx =>
-            {
-                changeComplex?.Invoke(cplx);
                 cplx.Laplace.Returns(new Complex(0, frequency * 2 * Math.PI));
             });
         }
         public static T Transient<T>(this T context, Action<IIntegrationMethod> changeIntegration = null, Action<ITimeSimulationState> changeTime = null) where T : IBindingContext
         {
+            // An ITimeSimulation implements an IBiasingSimulation
+            if (!context.TryGetState(out IBiasingSimulationState _))
+                context.Bias();
+
             // Create the time simulation state
             var state = Substitute.For<ITimeSimulationState>();
             state.UseDc.Returns(true);
@@ -176,7 +216,7 @@ namespace SpiceSharpTest.Models
             context.TryGetState(out Arg.Any<IIntegrationMethod>()).Returns(x => { x[0] = method; return true; });
             return context;
         }
-        public static T Transient<T>(this T context, double time, double dt, Action<IIntegrationMethod> changeIntegration = null, Action<ITimeSimulationState> changeTime = null) where T : IBindingContext
+        public static T Transient<T>(this T context, double time, double dt, Action<IIntegrationMethod> changeIntegration = null, Action<ITimeSimulationState> changeTime = null) where T : IComponentBindingContext
         {
             return context.Transient(method =>
             {
@@ -192,8 +232,12 @@ namespace SpiceSharpTest.Models
                 state.UseDc.Returns(time <= 0.0);
             });
         }
-        public static T Noise<T>(this T context, Action<INoiseSimulationState> changeNoise = null) where T : IBindingContext
+        public static T Noise<T>(this T context, Action<INoiseSimulationState> changeNoise = null) where T : IComponentBindingContext
         {
+            // An Noise simulation implements IFrequencySimulation
+            if (!context.TryGetState(out IComplexSimulationState _))
+                context.Frequency();
+
             // Create the noise simulation state
             var state = Substitute.For<INoiseSimulationState>();
             state.DeltaFrequency.Returns(1.0);
@@ -207,26 +251,7 @@ namespace SpiceSharpTest.Models
             context.TryGetState(out Arg.Any<INoiseSimulationState>()).Returns(x => { x[0] = state; return true; });
             return context;
         }
-        public static T Parameter<T, P>(this T context, P parameters, Action<P> changeParameters = null) where T : IBindingContext where P : IParameterSet
-        {
-            changeParameters?.Invoke(parameters);
-            parameters.CalculateDefaults();
-            context.GetParameterSet<P>().Returns(parameters);
-            context.TryGetParameterSet(out Arg.Any<P>()).Returns(x => { x[0] = parameters; return true; });
-            return context;
-        }
-        public static T CreateVariable<T>(this T context, Variable variable, params Variable[] variables) where T : IBindingContext
-        {
-            context.Variables.Create(Arg.Any<string>(), VariableType.Current).Returns(variable, variables);
-            return context;
-        }
-        public static T BranchControlled<T>(this T context, Variable variable) where T : ICurrentControlledBindingContext
-        {
-            var behavior = Substitute.For<IBranchedBehavior>();
-            behavior.Branch.Returns(variable);
-            context.ControlBehaviors.GetValue<IBranchedBehavior>().Returns(behavior);
-            return context;
-        }
+
         public static T Model<T, B>(this T context, B modelBehavior) where T : IComponentBindingContext where B : ITemperatureBehavior
         {
             context.ModelBehaviors.GetValue<ITemperatureBehavior>().Returns(modelBehavior);

@@ -147,7 +147,7 @@ namespace SpiceSharpTest.Models
                 IComponentBindingContext context;
 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b", "c", "d").Bias().Frequency().Parameter(new BaseParameters { Coefficient = 2 });
+                    .Nodes("a", "b", "c", "d").Frequency().Parameter(new BaseParameters { Coefficient = 2 });
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                     {
                         double.NaN, double.NaN, 2.0, -2.0, double.NaN,

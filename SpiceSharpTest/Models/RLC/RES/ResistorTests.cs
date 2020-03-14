@@ -298,7 +298,7 @@ namespace SpiceSharpTest.Models
             {
                 IComponentBindingContext context;
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias().Frequency().Parameter(new BaseParameters(1e3));
+                    .Nodes("a", "b").Frequency().Parameter(new BaseParameters(1e3));
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                 {
                     1e-3, -1e-3, double.NaN,
@@ -312,8 +312,8 @@ namespace SpiceSharpTest.Models
             {
                 IComponentBindingContext context;
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Temperature(300.15).Bias()
-                    .Frequency(state => { state.Solution[2] = 1e10; }).Noise().Parameter(new BaseParameters(1e3));
+                    .Nodes("a", "b").Frequency(state => { state.Solution[2] = 1e10; })
+                    .Noise().Parameter(new BaseParameters(1e3));
                 yield return new TestCaseData(context.AsProxy(), 1.65757549356e-3).SetName("{m}(Noise)");
             }
         }

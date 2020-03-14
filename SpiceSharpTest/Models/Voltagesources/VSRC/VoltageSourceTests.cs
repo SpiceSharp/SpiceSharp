@@ -91,13 +91,11 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
 
                 // Simple DC
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).CreateVariable(ibr)
-                    .Parameter(new IndependentSourceParameters(2.0));
-                context.Variables.Create(Arg.Any<string>(), VariableType.Current).Returns(ibr);
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Bias().Parameter(new IndependentSourceParameters(2.0));
                 yield return new TestCaseData(context.AsProxy(), new double[]
                     {
                         double.NaN, double.NaN, 1.0, double.NaN,
@@ -107,8 +105,8 @@ namespace SpiceSharpTest.Models
 
                 // Using SourceFactor
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(state => { state.Map[ibr].Returns(3); }, i => i.SourceFactor.Returns(0.5))
-                    .CreateVariable(ibr).Parameter(new IndependentSourceParameters(-3.0));
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Bias(null, i => i.SourceFactor.Returns(0.5)).Parameter(new IndependentSourceParameters(-3.0));
                 yield return new TestCaseData(context.AsProxy(),
                     new[] {
                         double.NaN, double.NaN, 1.0, double.NaN,
@@ -126,8 +124,8 @@ namespace SpiceSharpTest.Models
 
                 // Simple AC magnitude 1
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).Frequency(ibr)
-                    .CreateVariable(ibr).Parameter(new IndependentSourceParameters(1))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Frequency().Parameter(new IndependentSourceParameters(1))
                     .Parameter(new IndependentSourceFrequencyParameters(1, 0));
                 yield return new TestCaseData(context.AsProxy(),
                     new Complex[] {
@@ -139,9 +137,9 @@ namespace SpiceSharpTest.Models
                 // Simple AC magnitude 1
                 var v = new Complex(Math.Cos(0.5 * Math.PI), Math.Sin(0.5 * Math.PI)) * 0.5;
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).Frequency(ibr)
-                    .CreateVariable(ibr).Parameter(new IndependentSourceParameters(1))
-                    .Parameter(new IndependentSourceFrequencyParameters(), p => p.SetParameter("acmag", 0.5).SetParameter("acphase", 90.0));
+                    .Nodes("a", "b").CreateVariable(ibr)
+                    .Frequency().Parameter(new IndependentSourceParameters(1))
+                    .Parameter(new IndependentSourceFrequencyParameters { AcMagnitude = 0.5, AcPhase = 90 });
                 yield return new TestCaseData(context.AsProxy(),
                     new Complex[] {
                         double.NaN, double.NaN, 1.0, double.NaN,
@@ -159,9 +157,8 @@ namespace SpiceSharpTest.Models
 
                 // Transient analysis with waveform
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).Transient(0.3, 0.01)
-                    .CreateVariable(ibr)
-                    .Parameter(new IndependentSourceParameters { Waveform = new Sine(0, 1, 1) });
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Transient(0.3, 0.01).Parameter(new IndependentSourceParameters { Waveform = new Sine(0, 1, 1) });
                 var v = Math.Sin(0.3 * 2 * Math.PI);
                 yield return new TestCaseData(context.AsProxy(),
                     new[] {
@@ -181,7 +178,7 @@ namespace SpiceSharpTest.Models
                     new Circuit(
                         new VoltageSource("V1", "a", "b", 1.0),
                         new VoltageSource("V2", "b", "a", 2.0)),
-                    new ComponentRules(parameters = new ComponentRuleParameters(), new VoltageLoopRule()),
+                    new ComponentRules(new ComponentRuleParameters(), new VoltageLoopRule()),
                     new[] { typeof(VoltageLoopRuleViolation) });
 
                 yield return new TestCaseData(
@@ -189,7 +186,7 @@ namespace SpiceSharpTest.Models
                         new VoltageSource("V1", "a", "b", 1.0),
                         new VoltageSource("V2", "b", "c", 2.0),
                         new VoltageSource("V3", "c", "a", 3.0)),
-                    new ComponentRules(parameters = new ComponentRuleParameters(), new VoltageLoopRule()),
+                    new ComponentRules(new ComponentRuleParameters(), new VoltageLoopRule()),
                     new[] { typeof(VoltageLoopRuleViolation) });
             }
         }

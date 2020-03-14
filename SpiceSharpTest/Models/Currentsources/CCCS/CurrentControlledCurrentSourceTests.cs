@@ -112,12 +112,11 @@ namespace SpiceSharpTest.Models
             get
             {
                 ICurrentControlledBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
-                    .Nodes("a", "b").Bias(state => { state.Map[ibr].Returns(3); })
-                    .BranchControlled(ibr).Parameter(new BaseParameters { Coefficient = 1 });
+                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", VariableType.Current))
+                    .Bias().Parameter(new BaseParameters { Coefficient = 1 });
                 yield return new TestCaseData(context.AsProxy(), new[]
                     {
                         double.NaN, double.NaN, 1.0, double.NaN,
@@ -136,9 +135,8 @@ namespace SpiceSharpTest.Models
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
-                    .Nodes("a", "b").Bias(state => { state.Map[ibr].Returns(3); })
-                    .Frequency(state => { state.Map[ibr].Returns(3); })
-                    .BranchControlled(ibr).Parameter(new BaseParameters { Coefficient = 1 });
+                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", VariableType.Current)).Frequency()
+                    .Parameter(new BaseParameters { Coefficient = 1 });
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                     {
                         double.NaN, double.NaN, 1.0, double.NaN,

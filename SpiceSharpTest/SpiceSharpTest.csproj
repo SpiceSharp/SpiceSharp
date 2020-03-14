@@ -82,7 +82,7 @@
     <Compile Include="Models\Currentsources\VCCS\VoltageControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Distributed\DelayTests.cs" />
     <Compile Include="Models\Distributed\TransmissionLineTests.cs" />
-    <Compile Include="Models\ComponentBiasingContext.cs" />
+    <Compile Include="Models\BindingContextHelper.cs" />
     <Compile Include="Models\Parallel\SimpleParallelTests.cs" />
     <Compile Include="Models\Proxy.cs" />
     <Compile Include="Models\RLC\CAP\CapacitorTests.cs" />

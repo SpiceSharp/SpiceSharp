@@ -188,10 +188,10 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
-
+                
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).CreateVariable(ibr).Parameter(new BaseParameters(1e-9));
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Bias().Parameter(new BaseParameters(1e-9));
                 yield return new TestCaseData(context.AsProxy(), new double[]
                 {
                     double.NaN, double.NaN, 1.0, double.NaN,
@@ -205,11 +205,10 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).Frequency(1.0, ibr).CreateVariable(ibr)
-                    .Parameter(new BaseParameters(1e-9));
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Frequency(1.0).Parameter(new BaseParameters(1e-9));
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                 {
                     double.NaN, double.NaN, 1.0, double.NaN,
@@ -226,7 +225,7 @@ namespace SpiceSharpTest.Models
                 var ibr = new Variable("branch", VariableType.Current);
 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias(ibr).CreateVariable(ibr)
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
                     .Transient(0.5, 1e-3).Parameter(new BaseParameters(1e-6));
                 double g = 1e-6 / 1e-3;
                 double c = 1.0;
