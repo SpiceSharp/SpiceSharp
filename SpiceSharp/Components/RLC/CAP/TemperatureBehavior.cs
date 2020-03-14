@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TemperatureBehavior(string name, ComponentBindingContext context) : base(name) 
+        public TemperatureBehavior(string name, IComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
 

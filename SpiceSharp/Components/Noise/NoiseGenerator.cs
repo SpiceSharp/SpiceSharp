@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="nodes">The nodes.</param>
-        public virtual void Bind(ComponentBindingContext context, Variable[] nodes)
+        public virtual void Bind(IComponentBindingContext context, Variable[] nodes)
         {
             context.ThrowIfNull(nameof(context));
             nodes.ThrowIfNull(nameof(nodes));

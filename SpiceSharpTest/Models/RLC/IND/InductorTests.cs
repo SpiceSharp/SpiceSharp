@@ -6,6 +6,10 @@ using SpiceSharp.Simulations;
 using NUnit.Framework;
 using System.Linq;
 using SpiceSharp.Validation;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Components.InductorBehaviors;
+using System.Collections.Generic;
+using NSubstitute;
 
 namespace SpiceSharpTest.Models
 {
@@ -123,6 +127,132 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual(1, ex.Rules.ViolationCount);
             var violation = ex.Rules.Violations.First();
             Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+        }
+
+        [TestCaseSource(nameof(Temperature))]
+        public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double expected)
+        {
+            var behavior = new TemperatureBehavior("L1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            Check.Double(behavior.Inductance, expected);
+        }
+        [TestCaseSource(nameof(Biasing))]
+        public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new BiasingBehavior("L1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            ((IBiasingBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Frequency))]
+        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
+        {
+            var behavior = new FrequencyBehavior("L1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            ((IBiasingBehavior)behavior).Load();
+            ((IFrequencyBehavior)behavior).InitializeParameters();
+            ((IFrequencyBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Transient))]
+        public void When_TimeBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new TimeBehavior("L1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            ((ITimeBehavior)behavior).InitializeStates();
+            ((ITimeBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Rules))]
+        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
+        {
+            ckt.Validate(rules);
+            Assert.AreEqual(violations.Length, rules.ViolationCount);
+            int index = 0;
+            foreach (var violation in rules.Violations)
+                Assert.AreEqual(violations[index++], violation.GetType());
+        }
+
+        public static IEnumerable<TestCaseData> Temperature
+        {
+            get
+            {
+                IComponentBindingContext context;
+                context = Substitute.For<IComponentBindingContext>()
+                    .Parameter(new BaseParameters(1e-9));
+                yield return new TestCaseData(context.AsProxy(), 1e-9).SetName("{m}(L=1n)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Biasing
+        {
+            get
+            {
+                IComponentBindingContext context;
+                var ibr = new Variable("branch", VariableType.Current);
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Bias(ibr).CreateVariable(ibr).Parameter(new BaseParameters(1e-9));
+                yield return new TestCaseData(context.AsProxy(), new double[]
+                {
+                    double.NaN, double.NaN, 1.0, double.NaN,
+                    double.NaN, double.NaN, -1.0, double.NaN,
+                    1.0, -1.0, double.NaN, double.NaN
+                });
+            }
+        }
+        public static IEnumerable<TestCaseData> Frequency
+        {
+            get
+            {
+                IComponentBindingContext context;
+                var ibr = new Variable("branch", VariableType.Current);
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Bias(ibr).Frequency(1.0, ibr).CreateVariable(ibr)
+                    .Parameter(new BaseParameters(1e-9));
+                yield return new TestCaseData(context.AsProxy(), new Complex[]
+                {
+                    double.NaN, double.NaN, 1.0, double.NaN,
+                    double.NaN, double.NaN, -1.0, double.NaN,
+                    1.0, -1.0, new Complex(0, -2e-9 * Math.PI), double.NaN
+                }).SetName("{m}(L=1e-9, f=1Hz)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Transient
+        {
+            get
+            {
+                IComponentBindingContext context;
+                var ibr = new Variable("branch", VariableType.Current);
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Bias(ibr).CreateVariable(ibr)
+                    .Transient(0.5, 1e-3).Parameter(new BaseParameters(1e-6));
+                double g = 1e-6 / 1e-3;
+                double c = 1.0;
+                yield return new TestCaseData(context.AsProxy(), new double[]
+                {
+                    double.NaN, double.NaN, 1, double.NaN,
+                    double.NaN, double.NaN, -1, double.NaN,
+                    1, -1, -g, c
+                }).SetName("{m}(L=1u dt=1n dvdt=1)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Rules
+        {
+            get
+            {
+                ComponentRuleParameters parameters;
+                yield return new TestCaseData(
+                    new Circuit(new Inductor("L1", "a", "b", 1.0), new Inductor("L2", "b", "a", 2.0)),
+                    new ComponentRules(parameters = new ComponentRuleParameters(), new VoltageLoopRule()),
+                    new[] { typeof(VoltageLoopRuleViolation) });
+
+                yield return new TestCaseData(
+                    new Circuit(new Inductor("L1", "a", "b", 1.0), new Inductor("L2", "b", "c", 2.0), new Inductor("L3", "c", "a", 3.0)),
+                    new ComponentRules(parameters = new ComponentRuleParameters(), new VoltageLoopRule()),
+                    new[] { typeof(VoltageLoopRuleViolation) });
+            }
         }
     }
 }

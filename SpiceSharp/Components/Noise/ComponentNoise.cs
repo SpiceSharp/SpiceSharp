@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="nodes">The nodes.</param>
-        public void Bind(ComponentBindingContext context, params Variable[] nodes)
+        public void Bind(IComponentBindingContext context, params Variable[] nodes)
         {
             context.ThrowIfNull(nameof(context));
             _cstate = context.GetState<IComplexSimulationState>();

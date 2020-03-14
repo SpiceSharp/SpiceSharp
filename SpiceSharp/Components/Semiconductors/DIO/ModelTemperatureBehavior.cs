@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DiodeBehaviors
@@ -62,13 +63,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         public double F3 { get; protected set; }
 
-        /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
         private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
@@ -76,13 +70,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name) 
+        public ModelTemperatureBehavior(string name, IBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
             NoiseParameters = context.GetParameterSet<ModelNoiseParameters>();
             _temperature = context.GetState<ITemperatureSimulationState>();
             Parameters = context.GetParameterSet<ModelBaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>

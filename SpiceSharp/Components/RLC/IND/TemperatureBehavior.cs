@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TemperatureBehavior(string name, ComponentBindingContext context)
+        public TemperatureBehavior(string name, IComponentBindingContext context)
             : base(name)
         {
             context.ThrowIfNull(nameof(context));

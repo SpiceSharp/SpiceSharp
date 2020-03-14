@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
             _posNode = _complex.Map[context.Nodes[0]];

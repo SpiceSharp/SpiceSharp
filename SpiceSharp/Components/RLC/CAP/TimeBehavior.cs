@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public TimeBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
             _biasing = context.GetState<IBiasingSimulationState>();

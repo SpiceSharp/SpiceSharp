@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="context"></param>
-        public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public NoiseBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             ResistorNoise.Bind(context, context.Nodes[0], context.Nodes[1]);
         }

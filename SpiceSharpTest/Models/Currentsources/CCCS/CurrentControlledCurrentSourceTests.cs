@@ -100,11 +100,7 @@ namespace SpiceSharpTest.Models
         [TestCaseSource(nameof(Rules))]
         public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
         {
-            foreach (var entity in ckt)
-            {
-                if (entity is IRuleSubject subject)
-                    subject.Apply(rules);
-            }
+            ckt.Validate(rules);
             Assert.AreEqual(violations.Length, rules.ViolationCount);
             int index = 0;
             foreach (var violation in rules.Violations)

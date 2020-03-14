@@ -139,8 +139,18 @@ namespace SpiceSharp.Validation
                 throw new SpiceSharpException("Invalid path");
             if ((type & ConductionTypes.Dc) != 0)
                 Connect(a, b, _dcGroups, ref _dcGroupCount);
+            else
+            {
+                Add(a, _dcGroups, ref _dcGroupCount);
+                Add(b, _dcGroups, ref _dcGroupCount);
+            }
             if ((type & ConductionTypes.Ac) != 0)
                 Connect(a, b, _acGroups, ref _acGroupCount);
+            else
+            {
+                Add(a, _acGroups, ref _acGroupCount);
+                Add(b, _acGroups, ref _acGroupCount);
+            }
         }
 
         /// <summary>

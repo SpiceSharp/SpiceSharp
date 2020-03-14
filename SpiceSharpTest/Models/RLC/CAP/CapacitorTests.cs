@@ -6,6 +6,11 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Biasing;
 using SpiceSharp.Simulations.IntegrationMethods;
+using SpiceSharp.Components.CapacitorBehaviors;
+using SpiceSharp.Behaviors;
+using System.Collections.Generic;
+using NSubstitute;
+using SpiceSharp.Validation;
 
 namespace SpiceSharpTest.Models
 {
@@ -266,6 +271,95 @@ namespace SpiceSharpTest.Models
             // Run 
             Compare(ac, ckt_reference, ckt_actual, exports);
             DestroyExports(exports);
+        }
+
+        [TestCaseSource(nameof(Temperature))]
+        public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double expected)
+        {
+            var behavior = new TemperatureBehavior("C1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            Check.Double(behavior.Capacitance, expected);
+        }
+        [TestCaseSource(nameof(Frequency))]
+        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
+        {
+            var behavior = new FrequencyBehavior("C1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            ((IFrequencyBehavior)behavior).InitializeParameters();
+            ((IFrequencyBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Transient))]
+        public void When_TimeBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new TimeBehavior("C1", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            ((ITimeBehavior)behavior).InitializeStates();
+            ((ITimeBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Rules))]
+        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
+        {
+            ckt.Validate(rules);
+            Assert.AreEqual(violations.Length, rules.ViolationCount);
+            int index = 0;
+            foreach (var violation in rules.Violations)
+                Assert.AreEqual(violations[index++], violation.GetType());
+        }
+
+        public static IEnumerable<TestCaseData> Temperature
+        {
+            get
+            {
+                IComponentBindingContext context;
+                context = Substitute.For<IComponentBindingContext>()
+                    .Parameter(new BaseParameters(1e-6));
+                yield return new TestCaseData(context.AsProxy(), 1e-6).SetName("{m}(C=1u)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Frequency
+        {
+            get
+            {
+                IComponentBindingContext context;
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Bias().Frequency(5.0).Parameter(new BaseParameters(2e-6));
+                var g = new Complex(0.0, 5 * 2 * Math.PI * 2e-6);
+                yield return new TestCaseData(context.AsProxy(), new Complex[]
+                {
+                    g, -g, double.NaN,
+                    -g, g, double.NaN
+                }).SetName("{m}(AC)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Transient
+        {
+            get
+            {
+                IComponentBindingContext context;
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Bias().Transient(0.5, 1e-3)
+                    .Parameter(new BaseParameters(1e-6));
+                var g = 1e-6 / 1e-3;
+                yield return new TestCaseData(context.AsProxy(), new double[]
+                {
+                    g, -g, -1,
+                    -g, g, 1
+                }).SetName("{m}(C=1u dt=1n dvdt=1)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Rules
+        {
+            get
+            {
+                ComponentRuleParameters parameters;
+                yield return new TestCaseData(
+                    new Circuit(new Capacitor("C1", "in", "0", 1.0)),
+                    new ComponentRules(parameters = new ComponentRuleParameters(), new FloatingNodeRule(parameters.Variables.Ground)),
+                    new[] { typeof(FloatingNodeRuleViolation) });
+            }
         }
     }
 }

@@ -50,20 +50,6 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-        [TestCaseSource(nameof(Rules))]
-        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
-        {
-            foreach (var entity in ckt)
-            {
-                if (entity is IRuleSubject subject)
-                    subject.Apply(rules);
-            }
-            Assert.AreEqual(violations.Length, rules.ViolationCount);
-            int index = 0;
-            foreach (var violation in rules.Violations)
-                Assert.AreEqual(violations[index++], violation.GetType());
-        }
-
         [TestCaseSource(nameof(Biasing))]
         public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
         {
@@ -89,6 +75,16 @@ namespace SpiceSharpTest.Models
             ((IBiasingBehavior)behavior).Load();
             Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
         }
+        [TestCaseSource(nameof(Rules))]
+        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
+        {
+            ckt.Validate(rules);
+            Assert.AreEqual(violations.Length, rules.ViolationCount);
+            int index = 0;
+            foreach (var violation in rules.Violations)
+                Assert.AreEqual(violations[index++], violation.GetType());
+        }
+
 
         public static IEnumerable<TestCaseData> Biasing
         {

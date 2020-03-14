@@ -22,15 +22,34 @@ namespace SpiceSharp.Validation
             => Validate(entities).ViolationCount > 0;
 
         /// <summary>
-        /// Validates the circuit using the default rules.
+        /// Validates the collection of entities using the default rules.
         /// </summary>
         /// <param name="entities">The entities.</param>
         /// <returns>
-        /// The rule violations detected by the default rules.
+        /// The rules used to validate the collection.
         /// </returns>
         public static IRules Validate(this IEntityCollection entities)
         {
             var rules = _defaultRules();
+            foreach (var entity in entities)
+            {
+                if (entity is IRuleSubject subject)
+                    subject.Apply(rules);
+            }
+            return rules;
+        }
+
+        /// <summary>
+        /// Validates the collection of entities using the specified rules.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="rules">The rules.</param>
+        /// <returns>
+        /// The rules passed by the 
+        /// </returns>
+        public static IRules Validate(this IEntityCollection entities, IRules rules)
+        {
+            rules.ThrowIfNull(nameof(rules));
             foreach (var entity in entities)
             {
                 if (entity is IRuleSubject subject)
