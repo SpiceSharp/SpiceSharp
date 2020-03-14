@@ -33,7 +33,7 @@ namespace SpiceSharpTest.Simulations
                 {
                     container.GetValue<ITemperatureBehavior>().Temperature();
                 })); // Sweep R2 from 0 to 10k per 1k
-                dc.DCParameters.Sweeps.Add(new SourceSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
+                dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
                 dc.ExportSimulationData += (sender, args) =>
                 {
                     var resistance = dc.GetSweepValues()[0];

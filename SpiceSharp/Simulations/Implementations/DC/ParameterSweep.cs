@@ -46,13 +46,25 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterSweep"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="property">The property.</param>
+        /// <param name="name">The name of the entity.</param>
+        /// <param name="property">The property name.</param>
         /// <param name="points">The points.</param>
         public ParameterSweep(string name, string property, IEnumerable<double> points)
         {
             Name = name.ThrowIfNull(nameof(name));
             Property = property.ThrowIfNull(nameof(property));
+            Points = points.ThrowIfNull(nameof(points));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterSweep"/> class.
+        /// </summary>
+        /// <param name="name">The name of the entity.</param>
+        /// <param name="points">The points.</param>
+        public ParameterSweep(string name, IEnumerable<double> points)
+        {
+            Name = name.ThrowIfNull(nameof(name));
+            Property = "dc";
             Points = points.ThrowIfNull(nameof(points));
         }
 

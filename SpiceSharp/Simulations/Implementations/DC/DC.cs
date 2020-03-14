@@ -50,7 +50,7 @@ namespace SpiceSharp.Simulations
         public DC(string name, string source, double start, double stop, double step) 
             : this(name)
         {
-            DCParameters.Sweeps.Add(new SourceSweep(source, new LinearSweep(start, stop, step)));
+            DCParameters.Sweeps.Add(new ParameterSweep(source, new LinearSweep(start, stop, step)));
         }
 
         /// <summary>

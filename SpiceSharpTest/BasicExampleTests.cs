@@ -38,7 +38,7 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1");
 
             // Add a sweep
-            dc.DCParameters.Sweeps.Add(new SourceSweep("V1", new LinearSweep(0.0, 3.3, 0.1)));
+            dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(0.0, 3.3, 0.1)));
             // </example_structure_dc>
 
             // <example_structure_dc_2>
@@ -153,8 +153,8 @@ namespace SpiceSharpTest
             // Sweep the base current and vce voltage
             var dc = new DC("DC 1", new[]
             {
-                new SourceSweep("Vgs", new LinearSweep(0, 3, 0.2)),
-                new SourceSweep("Vds", new LinearSweep(0, 5, 0.1)),
+                new ParameterSweep("Vgs", new LinearSweep(0, 3, 0.2)),
+                new ParameterSweep("Vds", new LinearSweep(0, 5, 0.1)),
             });
             
             // Export the collector current
