@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
             : this(name)
         {
-            Parameters.Coefficient.Value = gain;
+            Parameters.Coefficient = gain;
             Connect(pos, neg);
             ControllingSource = voltageSource;
         }

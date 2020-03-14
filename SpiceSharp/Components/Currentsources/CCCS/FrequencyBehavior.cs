@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => _complex.Solution[_brNode] * Parameters.Coefficient.Value;
+        public Complex ComplexCurrent => _complex.Solution[_brNode] * Parameters.Coefficient;
 
         /// <summary>
         /// Get the power dissipation.
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             get
             {
                 var v = _complex.Solution[_posNode] - _complex.Solution[_negNode];
-                var i = _complex.Solution[_brNode] * Parameters.Coefficient.Value;
+                var i = _complex.Solution[_brNode] * Parameters.Coefficient;
                 return -v * Complex.Conjugate(i);
             }
         }
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var value = Parameters.Coefficient.Value;
+            var value = Parameters.Coefficient;
             _elements.Add(value, -value);
         }
     }

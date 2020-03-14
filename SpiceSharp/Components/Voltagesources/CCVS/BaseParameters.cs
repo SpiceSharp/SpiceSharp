@@ -11,20 +11,13 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("gain"), ParameterInfo("Transresistance (gain)")]
-        public GivenParameter<double> Coefficient { get; } = new GivenParameter<double>();
+        public double Coefficient { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
-        public BaseParameters() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
-        /// </summary>
-        /// <param name="gain"></param>
-        public BaseParameters(double gain)
+        public BaseParameters() 
         {
-            Coefficient.Value = gain;
         }
     }
 }

@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var value = Parameters.Coefficient.Value;
+            var value = Parameters.Coefficient;
             _elements.Add(1, 1, -1, -1, -value, value);
         }
     }

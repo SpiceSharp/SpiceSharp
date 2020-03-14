@@ -58,13 +58,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the drain ohmic resistance.
         /// </summary>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance")]
-        public GivenParameter<double> DrainResistance { get; } = new GivenParameter<double>();
+        public double DrainResistance { get; set; }
 
         /// <summary>
         /// Gets the source ohmic resistance.
         /// </summary>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance")]
-        public GivenParameter<double> SourceResistance { get; } = new GivenParameter<double>();
+        public double SourceResistance { get; set; }
 
         /// <summary>
         /// Gets the bulk-drain junction capacitance.
@@ -82,31 +82,31 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the bulk junction saturation current.
         /// </summary>
         [ParameterName("is"), ParameterInfo("Bulk junction sat. current")]
-        public GivenParameter<double> JunctionSatCur { get; } = new GivenParameter<double>(1e-14);
+        public double JunctionSatCur { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets the bulk junction potential.
         /// </summary>
         [ParameterName("pb"), ParameterInfo("Bulk junction potential")]
-        public GivenParameter<double> BulkJunctionPotential { get; } = new GivenParameter<double>(.8);
+        public double BulkJunctionPotential { get; set; } = 0.8;
 
         /// <summary>
         /// Gets the gate-source overlap capacitance.
         /// </summary>
         [ParameterName("cgso"), ParameterInfo("Gate-source overlap cap.")]
-        public GivenParameter<double> GateSourceOverlapCapFactor { get; } = new GivenParameter<double>();
+        public double GateSourceOverlapCapFactor { get; set; }
 
         /// <summary>
         /// Gets the gate-drain overlap capacitance.
         /// </summary>
         [ParameterName("cgdo"), ParameterInfo("Gate-drain overlap cap.")]
-        public GivenParameter<double> GateDrainOverlapCapFactor { get; } = new GivenParameter<double>();
+        public double GateDrainOverlapCapFactor { get; set; }
 
         /// <summary>
         /// Gets the gate-bulk overlap capacitance.
         /// </summary>
         [ParameterName("cgbo"), ParameterInfo("Gate-bulk overlap cap.")]
-        public GivenParameter<double> GateBulkOverlapCapFactor { get; } = new GivenParameter<double>();
+        public double GateBulkOverlapCapFactor { get; set; }
 
         /// <summary>
         /// Gets the bottom junction capacitance per area.
@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the bulk junction bottom grading coefficient.
         /// </summary>
         [ParameterName("mj"), ParameterInfo("Bottom grading coefficient")]
-        public GivenParameter<double> BulkJunctionBotGradingCoefficient { get; } = new GivenParameter<double>(0.5);
+        public double BulkJunctionBotGradingCoefficient { get; set; } = 0.5;
 
         /// <summary>
         /// Gets the sidewall capacitance.
@@ -130,13 +130,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the bulk junction side grading coefficient.
         /// </summary>
         [ParameterName("mjsw"), ParameterInfo("Side grading coefficient")]
-        public GivenParameter<double> BulkJunctionSideGradingCoefficient { get; } = new GivenParameter<double>(0.33);
+        public double BulkJunctionSideGradingCoefficient { get; set; } = 0.33;
 
         /// <summary>
         /// Gets the bulk junction saturation current density.
         /// </summary>
         [ParameterName("js"), ParameterInfo("Bulk jct. sat. current density")]
-        public GivenParameter<double> JunctionSatCurDensity { get; } = new GivenParameter<double>();
+        public double JunctionSatCurDensity { get; set; }
 
         /// <summary>
         /// Gets the oxide thickness.
@@ -148,25 +148,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the lateral diffusion.
         /// </summary>
         [ParameterName("ld"), ParameterInfo("Lateral diffusion")]
-        public GivenParameter<double> LateralDiffusion { get; } = new GivenParameter<double>();
+        public double LateralDiffusion { get; set; }
 
         /// <summary>
         /// Gets the sheet resistance.
         /// </summary>
         [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
-        public GivenParameter<double> SheetResistance { get; } = new GivenParameter<double>();
+        public double SheetResistance { get; set; }
 
         /// <summary>
         /// Gets the surface mobility.
         /// </summary>
         [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility")]
-        public GivenParameter<double> SurfaceMobility { get; } = new GivenParameter<double>(600);
+        public double SurfaceMobility { get; set; } = 600;
 
         /// <summary>
         /// Gets the forward bias junction fitting parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias jct. fit parm.")]
-        public GivenParameter<double> ForwardCapDepletionCoefficient { get; } = new GivenParameter<double>(0.5);
+        public double ForwardCapDepletionCoefficient { get; set; } = 0.5;
 
         /// <summary>
         /// Gets the type of the gate.

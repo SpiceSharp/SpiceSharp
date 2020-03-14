@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the saturation current parameter.
         /// </summary>
         [ParameterName("is"), ParameterInfo("Saturation current")]
-        public GivenParameter<double> SaturationCurrent { get; } = new GivenParameter<double>(1e-14);
+        public double SaturationCurrent { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
@@ -32,55 +32,55 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the ohmic resistance parameter.
         /// </summary>
         [ParameterName("rs"), ParameterInfo("Ohmic resistance")]
-        public GivenParameter<double> Resistance { get; } = new GivenParameter<double>();
+        public double Resistance { get; set; }
 
         /// <summary>
         /// Gets the mission coefficient parameter.
         /// </summary>
         [ParameterName("n"), ParameterInfo("Emission Coefficient")]
-        public GivenParameter<double> EmissionCoefficient { get; } = new GivenParameter<double>(1);
+        public double EmissionCoefficient { get; set; } = 1;
 
         /// <summary>
         /// Gets the transit time parameter.
         /// </summary>
         [ParameterName("tt"), ParameterInfo("Transit Time")]
-        public GivenParameter<double> TransitTime { get; } = new GivenParameter<double>();
+        public double TransitTime { get; set; }
 
         /// <summary>
         /// Gets the junction capacitance parameter.
         /// </summary>
         [ParameterName("cjo"), ParameterName("cj0"), ParameterInfo("Junction capacitance")]
-        public GivenParameter<double> JunctionCap { get; } = new GivenParameter<double>();
+        public double JunctionCap { get; set; }
 
         /// <summary>
         /// Gets the junction built-in potential parameter.
         /// </summary>
         [ParameterName("vj"), ParameterInfo("Junction potential")]
-        public GivenParameter<double> JunctionPotential { get; } = new GivenParameter<double>(1);
+        public double JunctionPotential { get; set; } = 1;
 
         /// <summary>
         /// Gets the grading coefficient parameter.
         /// </summary>
         [ParameterName("m"), ParameterInfo("Grading coefficient")]
-        public GivenParameter<double> GradingCoefficient { get; } = new GivenParameter<double>(.5);
+        public double GradingCoefficient { get; set; } = 0.5;
 
         /// <summary>
         /// Gets the activation energy parameter.
         /// </summary>
         [ParameterName("eg"), ParameterInfo("Activation energy")]
-        public GivenParameter<double> ActivationEnergy { get; } = new GivenParameter<double>(1.11);
+        public double ActivationEnergy { get; set; } = 1.11;
 
         /// <summary>
         /// Gets the saturation current temperature exponent parameter.
         /// </summary>
         [ParameterName("xti"), ParameterInfo("Saturation current temperature exponent")]
-        public GivenParameter<double> SaturationCurrentExp { get; } = new GivenParameter<double>(3);
+        public double SaturationCurrentExp { get; set; } = 3;
 
         /// <summary>
         /// Gets the forward bias junction fit parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        public GivenParameter<double> DepletionCapCoefficient { get; } = new GivenParameter<double>(.5);
+        public double DepletionCapCoefficient { get; set; } = 0.5;
 
         /// <summary>
         /// Gets the reverse breakdown voltage parameter.
@@ -92,6 +92,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the current parameter at the reverse breakdown voltage.
         /// </summary>
         [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage")]
-        public GivenParameter<double> BreakdownCurrent { get; } = new GivenParameter<double>(1e-3);
+        public double BreakdownCurrent { get; set; } = 1e-3;
     }
 }

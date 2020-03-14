@@ -50,7 +50,7 @@ namespace SpiceSharp.Components
         public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain) 
             : this(name)
         {
-            Parameters.Coefficient.Value = gain;
+            Parameters.Coefficient = gain;
             Connect(pos, neg, controlPos, controlNeg);
         }
 

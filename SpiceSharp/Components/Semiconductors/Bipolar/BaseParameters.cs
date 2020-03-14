@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the area parameter.
         /// </summary>
         [ParameterName("area"), ParameterInfo("Area factor")]
-        public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
+        public double Area { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets whether or not the device is initially off (non-conducting).
@@ -38,13 +38,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the initial base-emitter voltage parameter.
         /// </summary>
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage")]
-        public GivenParameter<double> InitialVoltageBe { get; } = new GivenParameter<double>();
+        public double InitialVoltageBe { get; set; }
 
         /// <summary>
         /// Gets the initial collector-emitter voltage parameter.
         /// </summary>
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage")]
-        public GivenParameter<double> InitialVoltageCe { get; } = new GivenParameter<double>();
+        public double InitialVoltageCe { get; set; }
 
         /// <summary>
         /// Set initial conditions of the device.
@@ -58,10 +58,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             switch (value.Length)
             {
                 case 2:
-                    InitialVoltageCe.Value = value[1];
+                    InitialVoltageCe = value[1];
                     goto case 1;
                 case 1:
-                    InitialVoltageBe.Value = value[0];
+                    InitialVoltageBe = value[0];
                     break;
                 default:
                     throw new BadParameterException(nameof(value));

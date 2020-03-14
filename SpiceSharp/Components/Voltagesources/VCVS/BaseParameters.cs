@@ -11,20 +11,13 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// Parameters
         /// </summary>
         [ParameterName("gain"), ParameterInfo("Voltage gain")]
-        public GivenParameter<double> Coefficient { get; } = new GivenParameter<double>();
+        public double Coefficient { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseParameters"/> class.
         /// </summary>
-        public BaseParameters() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
-        /// </summary>
-        /// <param name="gain">Gain</param>
-        public BaseParameters(double gain)
+        public BaseParameters() 
         {
-            Coefficient.Value = gain;
         }
     }
 }

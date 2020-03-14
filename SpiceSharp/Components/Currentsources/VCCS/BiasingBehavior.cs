@@ -78,7 +78,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// </summary>
         void IBiasingBehavior.Load()
         {
-            var value = Parameters.Coefficient.Value;
+            var value = Parameters.Coefficient;
             _elements.Add(value, -value, -value, value);
         }
     }

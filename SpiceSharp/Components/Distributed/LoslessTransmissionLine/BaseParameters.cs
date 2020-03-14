@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
     /// <summary>
     /// Base parameters for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public class BaseParameters : ParameterSet
     {
         /// <summary>
@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// Gets the frequency parameter of the transmission line.
         /// </summary>
         [ParameterName("f"), ParameterInfo("Frequency")]
-        public GivenParameter<double> Frequency { get; } = new GivenParameter<double>(1e9);
+        public double Frequency { get; set; } = 1.0e9;
 
         /// <summary>
         /// Gets or sets the transmission delay of the transmission line.
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// Gets normalized length parameter at the given frequency.
         /// </summary>
         [ParameterName("nl"), ParameterInfo("Normalized length at the given frequency")]
-        public GivenParameter<double> NormalizedLength { get; } = new GivenParameter<double>(0.25);
+        public double NormalizedLength { get; set; } = 0.25;
 
         /// <summary>
         /// Gets or sets the relative tolerance used to determine if a breakpoint (where harsh nonlinear behavior occurs) needs to be added.
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public override void CalculateDefaults()
         {
             if (!Delay.Given)
-                Delay.RawValue = NormalizedLength.Value / Frequency.Value;
+                Delay.Value = NormalizedLength / Frequency;
 
             if (Delay < 0.0)
                 throw new BadParameterException(nameof(Delay), Delay, 

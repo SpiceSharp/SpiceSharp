@@ -12,23 +12,23 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// Gets the resistance parameter when closed.
         /// </summary>
         [ParameterName("ron"), ParameterInfo("Closed resistance")]
-        public GivenParameter<double> OnResistance { get; } = new GivenParameter<double>(1.0);
+        public double OnResistance { get; set; } = 1;
 
         /// <summary>
         /// Gets the resistance parameter when open.
         /// </summary>
         [ParameterName("roff"), ParameterInfo("Open resistance")]
-        public GivenParameter<double> OffResistance { get; } = new GivenParameter<double>(1.0e12);
+        public double OffResistance { get; set; } = 1e12;
 
         /// <summary>
         /// Gets the threshold parameter.
         /// </summary>
-        public virtual GivenParameter<double> Threshold { get; } = new GivenParameter<double>();
+        public virtual double Threshold { get; set; }
 
         /// <summary>
         /// Gets the hysteresis parameter.
         /// </summary>
-        public virtual GivenParameter<double> Hysteresis { get; } = new GivenParameter<double>();
+        public virtual double Hysteresis { get; set; }
 
         /// <summary>
         /// Gets the on conductance.
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public override void CalculateDefaults()
         {
             // Only positive hysteresis values!
-            Hysteresis.RawValue = Math.Abs(Hysteresis.RawValue);
-
+            if (Hysteresis < 0)
+                Hysteresis = -Hysteresis;
             OnConductance = 1.0 / OnResistance;
             OffConductance = 1.0 / OffResistance;
         }

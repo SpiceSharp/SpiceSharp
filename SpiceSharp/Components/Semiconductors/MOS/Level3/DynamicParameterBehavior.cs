@@ -257,9 +257,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (ModelParameters.BulkJunctionBotGradingCoefficient.Value.Equals(ModelParameters.BulkJunctionSideGradingCoefficient))
+                if (ModelParameters.BulkJunctionBotGradingCoefficient.Equals(ModelParameters.BulkJunctionSideGradingCoefficient))
                 {
-                    if (ModelParameters.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
+                    if (ModelParameters.BulkJunctionBotGradingCoefficient.Equals(0.5))
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -270,7 +270,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 }
                 else
                 {
-                    if (ModelParameters.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
+                    if (ModelParameters.BulkJunctionBotGradingCoefficient.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -279,7 +279,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                         /* NOSQRT */
                         sarg = Math.Exp(-ModelParameters.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (ModelParameters.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
+                    if (ModelParameters.BulkJunctionSideGradingCoefficient.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -309,13 +309,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (ModelParameters.BulkJunctionBotGradingCoefficient.Value.Equals(0.5) && ModelParameters.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
+                if (ModelParameters.BulkJunctionBotGradingCoefficient.Equals(0.5) && ModelParameters.BulkJunctionSideGradingCoefficient.Equals(0.5))
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (ModelParameters.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
+                    if (ModelParameters.BulkJunctionBotGradingCoefficient.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -324,7 +324,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                         /* NOSQRT */
                         sarg = Math.Exp(-ModelParameters.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (ModelParameters.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
+                    if (ModelParameters.BulkJunctionSideGradingCoefficient.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }

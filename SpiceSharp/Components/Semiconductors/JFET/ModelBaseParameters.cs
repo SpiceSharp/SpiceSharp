@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// <summary>
     /// Base parameters for a <see cref="JFETModel" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public class ModelBaseParameters : ParameterSet
     {
         /// <summary>
@@ -27,67 +27,67 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Gets the threshold voltage.
         /// </summary>
         [ParameterName("vt0"), ParameterName("vto"), ParameterInfo("Threshold voltage")]
-        public GivenParameter<double> Threshold { get; } = new GivenParameter<double>(-2);
+        public double Threshold { get; set; } = -2;
 
         /// <summary>
         /// Gets the transconductance.
         /// </summary>
         [ParameterName("beta"), ParameterInfo("Transconductance parameter")]
-        public GivenParameter<double> Beta { get; } = new GivenParameter<double>(1e-4);
+        public double Beta { get; set; } = 1e-4;
 
         /// <summary>
         /// Gets the channel length modulation parameter.
         /// </summary>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation parameter")]
-        public GivenParameter<double> LModulation { get; } = new GivenParameter<double>();
+        public double LModulation { get; set; }
 
         /// <summary>
         /// Gets the drain resistance.
         /// </summary>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance")]
-        public GivenParameter<double> DrainResistance { get; } = new GivenParameter<double>();
+        public double DrainResistance { get; set; }
 
         /// <summary>
         /// Gets the source resistance.
         /// </summary>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance")]
-        public GivenParameter<double> SourceResistance { get; } = new GivenParameter<double>();
+        public double SourceResistance { get; set; }
 
         /// <summary>
         /// Gets the gate-source junction capacitance.
         /// </summary>
         [ParameterName("cgs"), ParameterInfo("G-S junction capacitance")]
-        public GivenParameter<double> CapGs { get; } = new GivenParameter<double>();
+        public double CapGs { get; set; }
 
         /// <summary>
         /// Gets the gate-drain junction capacitance.
         /// </summary>
         [ParameterName("cgd"), ParameterInfo("G-D junction capacitance")]
-        public GivenParameter<double> CapGd { get; } = new GivenParameter<double>();
+        public double CapGd { get; set; }
 
         /// <summary>
         /// Gets the gate junction potential.
         /// </summary>
         [ParameterName("pb"), ParameterInfo("Gate junction potential")]
-        public GivenParameter<double> GatePotential { get; } = new GivenParameter<double>(1);
+        public double GatePotential { get; set; } = 1;
 
         /// <summary>
         /// Gets the gate saturation current.
         /// </summary>
         [ParameterName("is"), ParameterInfo("Gate junction saturation current")]
-        public GivenParameter<double> GateSaturationCurrent { get; } = new GivenParameter<double>(1e-14);
+        public double GateSaturationCurrent { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets the forward bias junction fitting parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fitting parameter")]
-        public GivenParameter<double> DepletionCapCoefficient { get; } = new GivenParameter<double>(0.5);
+        public double DepletionCapCoefficient { get; set; } = 0.5;
 
         /// <summary>
         /// Gets the doping tail parameter.
         /// </summary>
         [ParameterName("b"), ParameterInfo("Doping tail parameter")]
-        public GivenParameter<double> B { get; } = new GivenParameter<double>(1);
+        public double B { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets the type of the jfet.

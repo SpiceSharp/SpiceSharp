@@ -184,15 +184,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 InverseRollOffReverse = 1 / Parameters.RollOffReverse;
             else
                 InverseRollOffReverse = 0;
-            if (Parameters.CollectorResistance.Given && !Parameters.CollectorResistance.Value.Equals(0.0))
+            if (Parameters.CollectorResistance > 0)
                 CollectorConduct = 1 / Parameters.CollectorResistance;
             else
                 CollectorConduct = 0;
-            if (Parameters.EmitterResistance.Given && !Parameters.EmitterResistance.Value.Equals(0.0))
+            if (Parameters.EmitterResistance > 0)
                 EmitterConduct = 1 / Parameters.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (Parameters.TransitTimeForwardVoltageBc.Given && !Parameters.TransitTimeForwardVoltageBc.Value.Equals(0.0))
+            if (Parameters.TransitTimeForwardVoltageBc > 0)
                 TransitTimeVoltageBcFactor = 1 / (Parameters.TransitTimeForwardVoltageBc * 1.44);
             else
                 TransitTimeVoltageBcFactor = 0;

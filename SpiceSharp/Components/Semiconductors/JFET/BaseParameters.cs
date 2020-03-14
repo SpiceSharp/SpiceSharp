@@ -27,19 +27,19 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Gets the area.
         /// </summary>
         [ParameterName("area"), ParameterInfo("Area factor")]
-        public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
+        public double Area { get; set; } = 1;
 
         /// <summary>
         /// Gets the initial D-S voltage.
         /// </summary>
         [ParameterName("ic-vds"), ParameterInfo("Initial D-S voltage")]
-        public GivenParameter<double> InitialVds { get; } = new GivenParameter<double>();
+        public double InitialVds { get; set; }
 
         /// <summary>
         /// Gets the initial G-S voltage.
         /// </summary>
         [ParameterName("ic-vgs"), ParameterInfo("Initial G-S voltage")]
-        public GivenParameter<double> InitialVgs { get; } = new GivenParameter<double>();
+        public double InitialVgs { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is off.
@@ -58,10 +58,10 @@ namespace SpiceSharp.Components.JFETBehaviors
             switch (values.Length)
             {
                 case 2:
-                    InitialVgs.Value = values[1];
+                    InitialVgs = values[1];
                     goto case 1;
                 case 1:
-                    InitialVds.Value = values[0];
+                    InitialVds = values[0];
                     break;
                 default:
                     throw new BadParameterException(nameof(values));

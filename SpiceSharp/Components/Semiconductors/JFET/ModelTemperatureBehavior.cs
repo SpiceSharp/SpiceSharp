@@ -102,8 +102,8 @@ namespace SpiceSharp.Components.JFETBehaviors
             if (Parameters.DepletionCapCoefficient > 0.95)
             {
                 SpiceSharpWarning.Warning(this,
-                    Properties.Resources.JFETs_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient.Value));
-                Parameters.DepletionCapCoefficient.Value = .95;
+                    Properties.Resources.JFETs_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient));
+                Parameters.DepletionCapCoefficient = .95;
             }
 
             Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);

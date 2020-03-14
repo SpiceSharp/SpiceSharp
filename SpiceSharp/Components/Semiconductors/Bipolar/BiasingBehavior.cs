@@ -168,19 +168,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var variables = context.Variables;
 
             // Add a series collector node if necessary
-            CollectorPrime = ModelParameters.CollectorResistance.Value > 0 ?
+            CollectorPrime = ModelParameters.CollectorResistance > 0 ?
                 variables.Create(Name.Combine("col"), VariableType.Voltage) :
                 context.Nodes[0];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
 
             // Add a series base node if necessary
-            BasePrime = ModelParameters.BaseResist.Value > 0 ?
+            BasePrime = ModelParameters.BaseResist > 0 ?
                 variables.Create(Name.Combine("base"), VariableType.Voltage) :
                 context.Nodes[1];
             _basePrimeNode = BiasingState.Map[BasePrime];
 
             // Add a series emitter node if necessary
-            EmitterPrime = ModelParameters.EmitterResistance.Value > 0 ?
+            EmitterPrime = ModelParameters.EmitterResistance > 0 ?
                 variables.Create(Name.Combine("emit"), VariableType.Voltage) :
                 context.Nodes[2];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];

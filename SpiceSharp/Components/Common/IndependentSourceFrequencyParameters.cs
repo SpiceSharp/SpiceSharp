@@ -13,13 +13,13 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// Small-signal magnitude.
         /// </summary>
         [ParameterName("acmag"), ParameterInfo("AC magnitude value")]
-        public GivenParameter<double> AcMagnitude { get; } = new GivenParameter<double>();
+        public double AcMagnitude { get; set; }
 
         /// <summary>
         /// Small-signal phase.
         /// </summary>
         [ParameterName("acphase"), ParameterInfo("AC phase value")]
-        public GivenParameter<double> AcPhase { get; } = new GivenParameter<double>();
+        public double AcPhase { get; set; }
 
         /// <summary>
         /// Sets the small-signal parameters of the source.
@@ -32,13 +32,13 @@ namespace SpiceSharp.Components.CommonBehaviors
             switch (ac.Length)
             {
                 case 2:
-                    AcPhase.Value = ac[1];
+                    AcPhase = ac[1];
                     goto case 1;
                 case 1:
-                    AcMagnitude.Value = ac[0];
+                    AcMagnitude = ac[0];
                     break;
                 case 0:
-                    AcMagnitude.Value = 0.0;
+                    AcMagnitude = 0.0;
                     break;
                 default:
                     throw new BadParameterException(nameof(ac));
@@ -64,8 +64,8 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <param name="phase">Phase</param>
         public IndependentSourceFrequencyParameters(double magnitude, double phase)
         {
-            AcMagnitude.Value = magnitude;
-            AcPhase.Value = phase;
+            AcMagnitude = magnitude;
+            AcPhase = phase;
         }
 
         /// <summary>
