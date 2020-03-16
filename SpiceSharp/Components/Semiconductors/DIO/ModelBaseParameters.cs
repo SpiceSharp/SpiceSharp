@@ -83,14 +83,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public double DepletionCapCoefficient { get; set; } = 0.5;
 
         /// <summary>
-        /// Gets the reverse breakdown voltage parameter.
+        /// Gets or sets the reverse breakdown voltage parameter. When NaN, the breakdown voltage is ignored.
         /// </summary>
+        /// <value>
+        /// The breakdown voltage.
+        /// </value>
         [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage")]
-        public GivenParameter<double> BreakdownVoltage { get; } = new GivenParameter<double>();
+        public double BreakdownVoltage { get; set; } = double.NaN;
 
         /// <summary>
         /// Gets the current parameter at the reverse breakdown voltage.
         /// </summary>
+        /// <value>
+        /// The breakdown current.
+        /// </value>
         [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage")]
         public double BreakdownCurrent { get; set; } = 1e-3;
     }

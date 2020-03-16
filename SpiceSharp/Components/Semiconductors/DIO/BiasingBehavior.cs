@@ -68,14 +68,23 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected double LocalConductance;
 
         /// <summary>
+        /// Gets the biasing state.
+        /// </summary>
+        /// <value>
+        /// The biasing state.
+        /// </value>
+        protected IBiasingSimulationState BiasingState { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public BiasingBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             context.Nodes.CheckNodes(2);
 
+            BiasingState = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
@@ -102,7 +111,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         protected virtual void Load()
         {
-            var state = BiasingState;
             double cd, gd;
 
             // Get the current voltage across (one diode).
@@ -122,7 +130,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cd = csat * (evd - 1) + BiasingParameters.Gmin * vd;
                 gd = csat * evd / Vte + BiasingParameters.Gmin;
             }
-            else if (!ModelParameters.BreakdownVoltage.Given || vd >= -TempBreakdownVoltage)
+            else if (double.IsNaN(ModelParameters.BreakdownVoltage) || vd >= -TempBreakdownVoltage)
             {
                 // Reverse bias
                 var arg = 3 * Vte / (vd * Math.E);
@@ -190,7 +198,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / Parameters.SeriesMultiplier;
 
                 // Limit new junction voltage.
-                if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
+                if (!double.IsNaN(ModelParameters.BreakdownVoltage) && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
                 {
                     var vdtemp = -(vd + TempBreakdownVoltage);
                     vdtemp = Semiconductor.LimitJunction(vdtemp, -(LocalVoltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);

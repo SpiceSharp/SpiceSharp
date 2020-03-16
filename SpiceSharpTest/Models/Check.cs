@@ -2,7 +2,10 @@
 using SpiceSharp;
 using SpiceSharp.Algebra;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Reflection;
 
 namespace SpiceSharpTest.Models
 {
@@ -33,7 +36,6 @@ namespace SpiceSharpTest.Models
                 index++;
             }
         }
-
         public static void Solver(ISparseSolver<Complex> solver, params Complex[] expected)
         {
             if (expected.Length != solver.Size * (solver.Size + 1))
@@ -56,17 +58,37 @@ namespace SpiceSharpTest.Models
                 index++;
             }
         }
-
-        public static void Double(double expected, double actual)
+        public static void Properties(object obj, IDictionary<string, double> expected)
         {
-            var tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * RelativeTolerance + AbsoluteTolerance;
-            Assert.AreEqual(expected, actual, tol);
+            var used = new HashSet<string>();
+
+            // Use reflection to compare all their values
+            foreach (var property in obj.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .Where(x => x.PropertyType == typeof(double)))
+            {
+                var getter = property.GetGetMethod(true);
+                if (getter != null && expected.TryGetValue(property.Name, out var expectedValue))
+                {
+                    used.Add(property.Name);
+                    var actualValue = (double)getter.Invoke(obj, null);
+                    Double(expectedValue, actualValue, "Mismatch for property '{0}'".FormatString(property.Name));
+                }
+            }
+
+            // Make sure we tested all the properties
+            Assert.AreEqual(expected.Count, used.Count);
         }
 
-        public static void Complex(Complex expected, Complex actual)
+        public static void Double(double expected, double actual, string message = null)
         {
-            Double(expected.Real, actual.Real);
-            Double(expected.Imaginary, actual.Imaginary);
+            var tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * RelativeTolerance + AbsoluteTolerance;
+            Assert.AreEqual(expected, actual, tol, message);
+        }
+        public static void Complex(Complex expected, Complex actual, string message = null)
+        {
+            Double(expected.Real, actual.Real, message);
+            Double(expected.Imaginary, actual.Imaginary, message);
         }
     }
 }

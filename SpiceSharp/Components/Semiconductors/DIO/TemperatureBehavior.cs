@@ -87,11 +87,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected double Vte { get; private set; }
 
         /// <summary>
-        /// Gets the state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-        
-        /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -104,7 +99,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
             ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
             BiasingParameters = context.GetSimulationParameterSet<BiasingParameters>();
             Parameters = context.GetParameterSet<BaseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
         /// <summary>
@@ -151,7 +145,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             TempVCritical = vte * Math.Log(vte / (Constants.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
-            if (ModelParameters.BreakdownVoltage.Given)
+            if (!double.IsNaN(ModelParameters.BreakdownVoltage))
             {
                 double cbv = ModelParameters.BreakdownCurrent;
                 double xbv;

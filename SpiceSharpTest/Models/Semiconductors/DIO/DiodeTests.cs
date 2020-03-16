@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using NSubstitute;
 using NUnit.Framework;
@@ -296,6 +297,211 @@ namespace SpiceSharpTest.Models
             IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
             Compare(tran, cktReference, cktActual, exports);
             DestroyExports(exports);
+        }
+
+        [TestCaseSource(nameof(ModelTemperature))]
+        public void When_ModelTemperatureBehavior_Expect_Reference(Proxy<IBindingContext> context, IDictionary<string, double> expected)
+        {
+            var behavior = new ModelTemperatureBehavior("model", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            Check.Properties(behavior, expected);
+        }
+        [TestCaseSource(nameof(Temperature))]
+        public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, IDictionary<string, double> expected)
+        {
+            var behavior = new TemperatureBehavior("entity", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            Check.Properties(behavior, expected);
+        }
+        [TestCaseSource(nameof(Biasing))]
+        public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new BiasingBehavior("entity", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            var state = context.Value.GetState<IBiasingSimulationState>();
+            var it = context.Value.GetState<IIterationSimulationState>();
+            var counter = 0;
+            do
+            {
+                state.Solver.Reset();
+                ((IBiasingBehavior)behavior).Load();
+                Assert.Greater(20, counter++); // Limit the maximum number of iterations
+            }
+            while (!state.Solution[1].Equals(behavior.Voltage) && it.Mode != IterationModes.Junction);
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+
+        private static IDictionary<string, double> ExpectedModelTemperature(
+            double conductance, double vtNominal, double xfc, double f2, double f3)
+        {
+            return new Dictionary<string, double>
+            {
+                { nameof(ModelTemperatureBehavior.Conductance), conductance },
+                { nameof(ModelTemperatureBehavior.VtNominal), vtNominal },
+                { nameof(ModelTemperatureBehavior.Xfc), xfc },
+                { nameof(ModelTemperatureBehavior.F2), f2 },
+                { nameof(ModelTemperatureBehavior.F3), f3 }
+            };
+        }
+        private static IDictionary<string, double> ExpectedTemperature(
+            double tempJunctionCap, double tempJunctionPot, double tempSaturationCurrent,
+            double tempFactor1, double tempDepletionCap, double tempVCritical, double tempBreakdownVoltage,
+            double vt, double vte)
+        {
+            return new Dictionary<string, double>
+            {
+                { nameof(TemperatureBehavior.TempJunctionCap), tempJunctionCap },
+                { nameof(TemperatureBehavior.TempJunctionPot), tempJunctionPot },
+                { nameof(TemperatureBehavior.TempSaturationCurrent), tempSaturationCurrent },
+                { nameof(TemperatureBehavior.TempFactor1), tempFactor1 },
+                { nameof(TemperatureBehavior.TempDepletionCap), tempDepletionCap },
+                { nameof(TemperatureBehavior.TempVCritical), tempVCritical },
+                { nameof(TemperatureBehavior.TempBreakdownVoltage), tempBreakdownVoltage },
+                { "Vt", vt },
+                { "Vte", vte }
+            };
+        }
+        public static IEnumerable<TestCaseData> ModelTemperature
+        {
+            get
+            {
+                IBindingContext context;
+
+                /// 1N914 Is= 2.52n Rs = .568 N= 1.752 Cjo= 4p M = .4 tt= 20n
+                context = Substitute.For<IBindingContext>()
+                    .Temperature().Parameter(new ModelBaseParameters
+                    {
+                        SaturationCurrent = 2.52e-9,
+                        Resistance = 0.568,
+                        EmissionCoefficient = 1.752,
+                        TransitTime = 20e-9,
+                        GradingCoefficient = 0.4,
+                        JunctionCap = 4e-12
+                    });
+                yield return new TestCaseData(context.AsProxy(), ExpectedModelTemperature(
+                    conductance: 1.7605633802816902,
+                    vtNominal: 0.025864186384551461, 
+                    xfc: -0.69314718055994529, 
+                    f2: 0.37892914162759955, 
+                    f3: 0.3)).SetName("{m}(1N914)");
+
+                // Check default values and non-default temperature
+                context = Substitute.For<IBindingContext>()
+                    .Temperature(360).Parameter(new ModelBaseParameters());
+                yield return new TestCaseData(context.AsProxy(), ExpectedModelTemperature(
+                    conductance: 0,
+                    vtNominal: 0.025864186384551461,
+                    xfc: -0.69314718055994529,
+                    f2: 0.35355339059327379,
+                    f3: 0.25)).SetName("{m}(default)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Temperature
+        {
+            get
+            {
+                IComponentBindingContext context;
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Temperature(300.0)
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("1N914", bc))
+                    .Parameter(new BaseParameters());
+                yield return new TestCaseData(context.AsProxy(), ExpectedTemperature(
+                    tempJunctionCap: 9.9962771890637727E-13,
+                    tempJunctionPot: 0.60033628105424341,
+                    tempSaturationCurrent: 9.817043778553681E-10,
+                    tempFactor1: 1.048023829997228,
+                    tempDepletionCap: 0.57031946700153124,
+                    tempVCritical: 0.52494861470597376,
+                    tempBreakdownVoltage: 0,
+                    vt: 0.025851260754174377,
+                    vte: 0.031021512905009249
+                    )).SetName("{m}(regular)");
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Temperature(350).SimulationParameter(new BiasingParameters())
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        BreakdownVoltage = 5,
+                        BreakdownCurrent = 1e-3
+                    }, bc => new ModelTemperatureBehavior("breakdown", bc))
+                    .Parameter(new BaseParameters());
+                yield return new TestCaseData(context.AsProxy(), ExpectedTemperature(
+                    tempJunctionCap: 0,
+                    tempJunctionPot: 0.9529143523274588,
+                    tempSaturationCurrent: 7.1586116556187464E-12,
+                    tempFactor1: 0.55820430381345143,
+                    tempDepletionCap: 0.4764571761637294,
+                    tempVCritical: 0.6579326978972041,
+                    tempBreakdownVoltage: 4.434354418206393,
+                    vt: 0.030159804213203439,
+                    vte: 0.030159804213203439
+                    )).SetName("{m}(breakdown)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Biasing
+        {
+            get
+            {
+                IComponentBindingContext context;
+
+                // Init Junction - use initial condition that allows us to
+                // converge quickly to wherever.
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Temperature(300.0).Bias()
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("model", bc))
+                    .Parameter(new BaseParameters());
+                yield return new TestCaseData(context.AsProxy(), new double[]
+                {
+                    0.707106781187548, -0.707106781187548, 0.349259204076985,
+                    -0.707106781187548, 0.707106781187548, -0.349259204076985
+                }).SetName("{m}(V=0, InitJunction)");
+
+                // Init Float - use Solution as the current iteration
+                context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b")
+                    .Temperature(300.0).Bias(state =>
+                    {
+                        state.Solution[1] = 0.7;
+                    }, state =>
+                    {
+                        state.Mode.Returns(IterationModes.Float);
+                    })
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("model", bc))
+                    .Parameter(new BaseParameters());
+                yield return new TestCaseData(context.AsProxy(), new double[]
+                {
+                    199.602784638856, -199.602784638856, 133.52996888863,
+                    -199.602784638856, 199.602784638856, -133.52996888863
+                }).SetName("{m}(V=0.7)");
+            }
         }
     }
 }

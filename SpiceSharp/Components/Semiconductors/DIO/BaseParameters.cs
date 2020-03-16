@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the area parameter.
         /// </summary>
         [ParameterName("area"), ParameterInfo("Area factor")]
-        public GivenParameter<double> Area { get; } = new GivenParameter<double>(1);
+        public double Area { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets whether or not the diode is initially off (non-conducting).

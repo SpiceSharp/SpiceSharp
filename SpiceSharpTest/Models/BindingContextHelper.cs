@@ -132,6 +132,9 @@ namespace SpiceSharpTest.Models
             if (!context.TryGetState(out ITemperatureSimulationState _))
                 context.Temperature();
 
+            // A BiasingSimulation defines BiasingParameters
+            context.SimulationParameter(new BiasingParameters());
+
             // An IBiasingSimulation has an IBiasingSimulationState
             var state = Substitute.For<IBiasingSimulationState>();
             state.Solver.Returns(LUHelper.CreateSparseRealSolver());
@@ -251,16 +254,45 @@ namespace SpiceSharpTest.Models
             context.TryGetState(out Arg.Any<INoiseSimulationState>()).Returns(x => { x[0] = state; return true; });
             return context;
         }
-
-        public static T Model<T, B>(this T context, B modelBehavior) where T : IComponentBindingContext where B : ITemperatureBehavior
+        public static T ModelBehavior<T, B>(this T context, B behavior) where T : IComponentBindingContext where B : IBehavior
         {
-            context.ModelBehaviors.GetValue<ITemperatureBehavior>().Returns(modelBehavior);
-            context.ModelBehaviors.GetValue<B>().Returns(modelBehavior);
+            void Register<TB>(TB behavior) where TB : IBehavior
+            {
+                context.ModelBehaviors.GetValue<TB>().Returns(behavior);
+                context.ModelBehaviors.TryGetValue<TB>(out Arg.Any<TB>()).Returns(x => { x[0] = behavior; return true; });
+                context.ModelBehaviors.TryGetValue(typeof(TB), out Arg.Any<IBehavior>()).Returns(x => { x[0] = behavior; return true; });
+            }
+            Register(behavior);
+            if (behavior is ITemperatureBehavior temperature)
+                Register(temperature);
+            if (behavior is IBiasingBehavior biasing)
+                Register(biasing);
+            if (behavior is IBiasingUpdateBehavior biasingUpdate)
+                Register(biasingUpdate);
+            if (behavior is IFrequencyBehavior frequency)
+                Register(frequency);
+            if (behavior is IFrequencyUpdateBehavior frequencyUpdate)
+                Register(frequencyUpdate);
+            if (behavior is INoiseBehavior noise)
+                Register(noise);
+            if (behavior is ITimeBehavior time)
+                Register(time);
+            if (behavior is IAcceptBehavior accept)
+                Register(accept);
+            if (behavior is IConvergenceBehavior convergence)
+                Register(convergence);
             return context;
         }
         public static T ModelParameters<T, B>(this T context, B modelParameters) where T : IComponentBindingContext where B : IParameterSet
         {
             context.ModelBehaviors.GetParameterSet<B>().Returns(modelParameters);
+            context.ModelBehaviors.TryGetParameterSet(out Arg.Any<B>()).Returns(x => { x[0] = modelParameters; return true; });
+            return context;
+        }
+        public static T SimulationParameter<T, P>(this T context, P parameters) where T : IBindingContext where P : IParameterSet
+        {
+            context.GetSimulationParameterSet<P>().Returns(parameters);
+            context.TryGetSimulationParameterSet(out Arg.Any<P>()).Returns(x => { x[0] = parameters; return true; });
             return context;
         }
 
