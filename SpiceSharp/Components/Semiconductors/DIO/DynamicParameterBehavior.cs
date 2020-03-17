@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        protected DynamicParameterBehavior(string name, ComponentBindingContext context)
+        protected DynamicParameterBehavior(string name, IComponentBindingContext context)
             : base(name, context)
         {
         }

@@ -92,7 +92,7 @@ namespace SpiceSharpTest.Models
             var next = new Variable[variables.Length - 1];
             for (var i = 1; i < next.Length; i++)
                 next[i - 1] = variables[i];
-            context.Variables.Create(Arg.Any<string>(), VariableType.Current).Returns(variables[0], next);
+            context.Variables.Create(Arg.Any<string>(), Arg.Any<VariableType>()).Returns(variables[0], next);
             return context;
         }
         public static T BranchControlled<T>(this T context, Variable variable) where T : ICurrentControlledBindingContext
