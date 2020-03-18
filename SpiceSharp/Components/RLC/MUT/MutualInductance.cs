@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         public MutualInductance(string name, string inductorName1, string inductorName2, double coupling)
             : this(name)
         {
-            Parameters.Coupling.Value = coupling;
+            Parameters.Coupling = coupling;
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
         }

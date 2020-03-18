@@ -55,7 +55,7 @@ namespace SpiceSharpTest.Examples
                 // Now let's update the parameter
                 if (bp == null || tb == null)
                     return;
-                bp.Resistance.Value = resistance;
+                bp.Resistance = resistance;
                 tb.Temperature();
             };
 

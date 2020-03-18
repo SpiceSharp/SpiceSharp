@@ -149,12 +149,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             // Update the width and length if they are not given and if the model specifies them
             if (!Parameters.Width.Given && ModelParameters.Width.Given)
-                Parameters.Width.RawValue = ModelParameters.Width.Value;
+                Parameters.Width = new GivenParameter<double>(ModelParameters.Width.Value, false);
             if (!Parameters.Length.Given && ModelParameters.Length.Given)
-                Parameters.Length.RawValue = ModelParameters.Length.Value;
+                Parameters.Length = new GivenParameter<double>(ModelParameters.Length.Value, false);
 
             if (!Parameters.Temperature.Given)
-                Parameters.Temperature.RawValue = _temperature.Temperature;
+                Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
             Vt = Parameters.Temperature * Constants.KOverQ;
             var ratio = Parameters.Temperature / ModelParameters.NominalTemperature;
             var fact2 = Parameters.Temperature / Constants.ReferenceTemperature;

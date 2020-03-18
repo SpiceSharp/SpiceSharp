@@ -12,13 +12,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the default width for transistors using this model.
         /// </summary>
         [ParameterName("w"), ParameterInfo("The default width for transistors using this model")]
-        public GivenParameter<double> Width { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Width { get; set; }
 
         /// <summary>
         /// Gets the default length for transistors using this model.
         /// </summary>
         [ParameterName("l"), ParameterInfo("The default length for transistors using this model")]
-        public GivenParameter<double> Length { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Length { get; set; }
 
         /// <summary>
         /// Gets or sets the nominal temperature in degrees celsius.
@@ -27,32 +27,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
+            set => NominalTemperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the base threshold voltage.
         /// </summary>
         [ParameterName("vto"), ParameterName("vt0"), ParameterInfo("Threshold voltage")]
-        public GivenParameter<double> Vt0 { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Vt0 { get; set; }
 
         /// <summary>
         /// Gets the transconductance.
         /// </summary>
         [ParameterName("kp"), ParameterInfo("Transconductance parameter")]
-        public GivenParameter<double> Transconductance { get; } = new GivenParameter<double>(2e-5);
+        public GivenParameter<double> Transconductance { get; set; } = new GivenParameter<double>(2e-5, false);
 
         /// <summary>
         /// Gets the bulk threshold parameter.
         /// </summary>
         [ParameterName("gamma"), ParameterInfo("Bulk threshold parameter")]
-        public GivenParameter<double> Gamma { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Gamma { get; set; }
 
         /// <summary>
         /// Gets the surface potential.
         /// </summary>
         [ParameterName("phi"), ParameterInfo("Surface potential")]
-        public GivenParameter<double> Phi { get; } = new GivenParameter<double>(0.6);
+        public GivenParameter<double> Phi { get; set; } = new GivenParameter<double>(0.6, false);
 
         /// <summary>
         /// Gets the drain ohmic resistance.
@@ -70,13 +70,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the bulk-drain junction capacitance.
         /// </summary>
         [ParameterName("cbd"), ParameterInfo("B-D junction capacitance")]
-        public GivenParameter<double> CapBd { get; } = new GivenParameter<double>();
+        public GivenParameter<double> CapBd { get; set; }
 
         /// <summary>
         /// Gets the bulk-source junction capacitance
         /// </summary>
         [ParameterName("cbs"), ParameterInfo("B-S junction capacitance")]
-        public GivenParameter<double> CapBs { get; } = new GivenParameter<double>();
+        public GivenParameter<double> CapBs { get; set; }
 
         /// <summary>
         /// Gets the bulk junction saturation current.
@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the bottom junction capacitance per area.
         /// </summary>
         [ParameterName("cj"), ParameterInfo("Bottom junction cap per area")]
-        public GivenParameter<double> BulkCapFactor { get; } = new GivenParameter<double>();
+        public GivenParameter<double> BulkCapFactor { get; set; }
 
         /// <summary>
         /// Gets the bulk junction bottom grading coefficient.
@@ -124,7 +124,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the sidewall capacitance.
         /// </summary>
         [ParameterName("cjsw"), ParameterInfo("Side junction cap per area")]
-        public GivenParameter<double> SidewallCapFactor { get; } = new GivenParameter<double>();
+        public GivenParameter<double> SidewallCapFactor { get; set; }
 
         /// <summary>
         /// Gets the bulk junction side grading coefficient.
@@ -142,7 +142,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the oxide thickness.
         /// </summary>
         [ParameterName("tox"), ParameterInfo("Oxide thickness")]
-        public GivenParameter<double> OxideThickness { get; } = new GivenParameter<double>();
+        public GivenParameter<double> OxideThickness { get; set; }
 
         /// <summary>
         /// Gets the lateral diffusion.
@@ -172,24 +172,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the type of the gate.
         /// </summary>
         [ParameterName("tpg"), ParameterInfo("Gate type")]
-        public GivenParameter<double> GateType { get; } = new GivenParameter<double>();
+        public GivenParameter<double> GateType { get; set; }
 
         /// <summary>
         /// Gets the substrate doping level.
         /// </summary>
         [ParameterName("nsub"), ParameterInfo("Substrate doping")]
-        public GivenParameter<double> SubstrateDoping { get; } = new GivenParameter<double>();
+        public GivenParameter<double> SubstrateDoping { get; set; }
 
         /// <summary>
         /// Gets the surface state density.
         /// </summary>
         [ParameterName("nss"), ParameterInfo("Surface state density")]
-        public GivenParameter<double> SurfaceStateDensity { get; } = new GivenParameter<double>();
+        public GivenParameter<double> SurfaceStateDensity { get; set; }
 
         /// <summary>
         /// Gets the nominal temperature in Kelvin.
         /// </summary>
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+        public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the mosfet type.
@@ -254,7 +254,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
 
             // Calculate the default transconductance
             if (!Transconductance.Given)
-                Transconductance.RawValue = SurfaceMobility * 1e-4 * OxideCapFactor; // m^2/cm^2
+                Transconductance = new GivenParameter<double>(SurfaceMobility * 1e-4 * OxideCapFactor, false); // m^2/cm^2
         }
 
         /// <summary>

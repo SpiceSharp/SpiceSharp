@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
         {
             Connect(pos1, neg1, pos2, neg2);
             Parameters.Impedance = impedance;
-            Parameters.Delay.Value = delay;
+            Parameters.Delay = delay;
         }
 
         /// <summary>

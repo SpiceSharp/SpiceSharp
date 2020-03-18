@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
         public Capacitor(string name, string pos, string neg, double cap) 
             : this(name)
         {
-            Parameters.Capacitance.Value = cap;
+            Parameters.Capacitance = cap;
             Connect(pos, neg);
         }
 

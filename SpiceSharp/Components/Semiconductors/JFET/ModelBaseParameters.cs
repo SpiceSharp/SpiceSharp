@@ -14,14 +14,14 @@ namespace SpiceSharp.Components.JFETBehaviors
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
+            set => NominalTemperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the measurement temperature in Kelvin.
         /// </summary>
         [ParameterName("tnom")]
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(300.15);
+        public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(300.15, false);
 
         /// <summary>
         /// Gets the threshold voltage.

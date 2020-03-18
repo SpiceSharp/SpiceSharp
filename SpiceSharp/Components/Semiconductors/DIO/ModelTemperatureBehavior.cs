@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.NominalTemperature.Given)
-                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
+                Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
             VtNominal = Constants.KOverQ * Parameters.NominalTemperature;
 
             // limit grading coeff to max of 0.9

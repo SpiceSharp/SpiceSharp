@@ -78,7 +78,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         {
             // Perform model defaulting
             if (!Parameters.NominalTemperature.Given)
-                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
+                Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
             Factor1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
             VtNominal = Parameters.NominalTemperature * Constants.KOverQ;
             var kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
@@ -94,15 +94,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     {
                         if (!Parameters.Phi.Given)
                         {
-                            Parameters.Phi.RawValue = 2 * VtNominal * Math.Log(Parameters.SubstrateDoping * 1e6 / 1.45e16);
-                            Parameters.Phi.RawValue = Math.Max(.1, Parameters.Phi);
+                            Parameters.Phi = new GivenParameter<double>(2 * VtNominal * Math.Log(Parameters.SubstrateDoping * 1e6 / 1.45e16), false);
+                            Parameters.Phi = new GivenParameter<double>(Math.Max(.1, Parameters.Phi), false);
                         }
 
                         var fermis = Parameters.MosfetType * .5 * Parameters.Phi;
                         var wkfng = 3.2;
                         if (!Parameters.GateType.Given)
-                            Parameters.GateType.RawValue = 1;
-                        if (!Parameters.GateType.RawValue.Equals(0))
+                            Parameters.GateType = new GivenParameter<double>(1, false);
+                        if (!Parameters.GateType.Value.Equals(0))
                         {
                             var fermig = Parameters.MosfetType * Parameters.GateType * .5 * EgFet1;
                             wkfng = 3.25 + .5 * EgFet1 - fermig;
@@ -111,22 +111,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         var wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
                         if (!Parameters.Gamma.Given)
                         {
-                            Parameters.Gamma.RawValue =
+                            Parameters.Gamma = new GivenParameter<double>(
                                 Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6) /
-                                Parameters.OxideCapFactor;
+                                Parameters.OxideCapFactor, false);
                         }
 
                         if (!Parameters.Vt0.Given)
                         {
                             if (!Parameters.SurfaceStateDensity.Given)
-                                Parameters.SurfaceStateDensity.RawValue = 0;
+                                Parameters.SurfaceStateDensity = new GivenParameter<double>(0, false);
                             var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 * Constants.Charge / Parameters.OxideCapFactor;
-                            Parameters.Vt0.RawValue = vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi);
+                            Parameters.Vt0 = new GivenParameter<double>(vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi), false);
                         }
                     }
                     else
                     {
-                        Parameters.SubstrateDoping.RawValue = 0;
+                        Parameters.SubstrateDoping = new GivenParameter<double>(0, false);
                         throw new BadParameterException("Nsub", Properties.Resources.Mosfets_NsubTooSmall);
                     }
                 }

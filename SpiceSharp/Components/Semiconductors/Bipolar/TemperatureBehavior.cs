@@ -127,7 +127,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.Temperature.Given)
-                Parameters.Temperature.RawValue = _temperature.Temperature;
+                Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
             Vt = Parameters.Temperature * Constants.KOverQ;
             var fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
             var egfet = 1.16 - 7.02e-4 * Parameters.Temperature * Parameters.Temperature / (Parameters.Temperature + 1108);

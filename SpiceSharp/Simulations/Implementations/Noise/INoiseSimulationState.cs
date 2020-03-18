@@ -9,26 +9,41 @@
         /// <summary>
         /// Gets or sets the current frequency.
         /// </summary>
+        /// <value>
+        /// The frequency.
+        /// </value>
         double Frequency { get; }
 
         /// <summary>
         /// Gets or sets the frequency step.
         /// </summary>
+        /// <value>
+        /// The frequency step.
+        /// </value>
         double DeltaFrequency { get; }
 
         /// <summary>
-        /// Output referred noise
+        /// Gets or sets the total output referred noise
         /// </summary>
+        /// <value>
+        /// The total output referred noise.
+        /// </value>
         double OutputNoise { get; set; }
 
         /// <summary>
         /// Gets or sets the total input-referred noise.
         /// </summary>
+        /// <value>
+        /// The total input referred noise.
+        /// </value>
         double InputNoise { get; set; }
 
         /// <summary>
         /// Gets or sets the total output noise density.
         /// </summary>
+        /// <value>
+        /// The total output noise density.
+        /// </value>
         double OutputNoiseDensity { get; set; }
 
         /// <summary>
@@ -37,11 +52,17 @@
         /// <remarks>
         /// This value is used to compute the input noise density from the output noise density.
         /// </remarks>
+        /// <value>
+        /// The inverse gain squared.
+        /// </value>
         double GainInverseSquared { get; }
 
         /// <summary>
         /// Gets the logarithm of the gain squared.
         /// </summary>
+        /// <value>
+        /// The natural logarithm of the inverse gain.
+        /// </value>
         double LogInverseGain { get; }
 
         /// <summary>

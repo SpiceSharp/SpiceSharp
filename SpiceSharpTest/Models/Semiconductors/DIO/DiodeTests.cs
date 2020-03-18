@@ -685,7 +685,6 @@ namespace SpiceSharpTest.Models
                         JunctionPotential = 0.6
                     }, bc => new ModelTemperatureBehavior("model", bc))
                     .Parameter(new BaseParameters());
-                    var g = 0.707106781187548;
                     yield return new TestCaseData(context.AsProxy(), new double[]
                     {
                         0.707107780815267, -0.707107780815267, -0.650740795923015,

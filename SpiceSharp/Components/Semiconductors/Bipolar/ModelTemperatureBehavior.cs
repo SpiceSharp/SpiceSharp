@@ -136,25 +136,25 @@ namespace SpiceSharp.Components.BipolarBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.NominalTemperature.Given)
-                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
+                Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
             Factor1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
 
             if (!Parameters.LeakBeCurrent.Given)
             {
                 if (Parameters.C2.Given)
-                    Parameters.LeakBeCurrent.RawValue = Parameters.C2 * Parameters.SatCur;
+                    Parameters.LeakBeCurrent = Parameters.C2 * Parameters.SatCur;
                 else
-                    Parameters.LeakBeCurrent.RawValue = 0;
+                    Parameters.LeakBeCurrent = new GivenParameter<double>(0, false);
             }
             if (!Parameters.LeakBcCurrent.Given)
             {
                 if (Parameters.C4.Given)
-                    Parameters.LeakBcCurrent.RawValue = Parameters.C4 * Parameters.SatCur;
+                    Parameters.LeakBcCurrent = Parameters.C4 * Parameters.SatCur;
                 else
-                    Parameters.LeakBcCurrent.RawValue = 0;
+                    Parameters.LeakBcCurrent = new GivenParameter<double>(0, false);
             }
             if (!Parameters.MinimumBaseResistance.Given)
-                Parameters.MinimumBaseResistance.RawValue = Parameters.BaseResist;
+                Parameters.MinimumBaseResistance = new GivenParameter<double>(Parameters.BaseResist, false);
 
             /* 
 			 * COMPATABILITY WARNING!
@@ -201,15 +201,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 if (Parameters.DepletionCapCoefficient > 0.9999)
                 {
-                    Parameters.DepletionCapCoefficient.RawValue = 0.9999;
+                    Parameters.DepletionCapCoefficient = 0.9999;
                     SpiceSharpWarning.Warning(this,
                         Properties.Resources.BJTs_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient.Value));
                 }
             }
             else
-            {
-                Parameters.DepletionCapCoefficient.RawValue = 0.5;
-            }
+                Parameters.DepletionCapCoefficient = new GivenParameter<double>(0.5, false);
             Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);
             F2 = Math.Exp((1 + Parameters.JunctionExpBe) * Xfc);
             F3 = 1 - Parameters.DepletionCapCoefficient * (1 + Parameters.JunctionExpBe);

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the resistance parameter.
         /// </summary>
         [ParameterName("resistance"), ParameterInfo("Resistance", IsPrincipal = true)]
-        public GivenParameter<double> Resistance { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Resistance { get; set; }
 
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
@@ -20,25 +20,25 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
-            set => Temperature.Value = value + Constants.CelsiusKelvin;
+            set => Temperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the temperature parameter in degrees Kelvin.
         /// </summary>
-        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature);
 
         /// <summary>
         /// Gets the width parameter of the resistor.
         /// </summary>
         [ParameterName("w"), ParameterInfo("Width", Interesting = false)]
-        public GivenParameter<double> Width { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Width { get; set; }
 
         /// <summary>
         /// Gets the length parameter of the resistor.
         /// </summary>
         [ParameterName("l"), ParameterInfo("Length", Interesting = false)]
-        public GivenParameter<double> Length { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Length { get; set; }
 
         /// <summary>
         /// Gets or sets the parallel multiplier.
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="res">Resistor</param>
         public BaseParameters(double res)
         {
-            Resistance.Value = res;
+            Resistance = res;
         }
     }
 }

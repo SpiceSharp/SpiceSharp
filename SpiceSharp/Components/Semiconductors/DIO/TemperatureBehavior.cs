@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // loop through all the instances
             if (!Parameters.Temperature.Given)
-                Parameters.Temperature.RawValue = _temperature.Temperature;
+                Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
             Vt = Constants.KOverQ * Parameters.Temperature;
             Vte = ModelParameters.EmissionCoefficient * Vt;
 

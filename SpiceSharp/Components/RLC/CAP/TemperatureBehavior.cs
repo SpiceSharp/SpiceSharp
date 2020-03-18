@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.Temperature.Given)
-                Parameters.Temperature.RawValue = _temperature.Temperature;
+                Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
 
             double capacitance;
             if (!Parameters.Capacitance.Given)

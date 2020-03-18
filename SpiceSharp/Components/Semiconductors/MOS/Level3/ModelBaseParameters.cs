@@ -17,37 +17,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Parameters
         /// </summary>
         [ParameterName("eta"), ParameterInfo("Vds dependence of threshold voltage")]
-        public GivenParameter<double> Eta { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Eta { get; set; }
 
         /// <summary>
         /// Gets the kappa parameter.
         /// </summary>
         [ParameterName("kappa"), ParameterInfo("Kappa")]
-        public GivenParameter<double> Kappa { get; } = new GivenParameter<double>(0.2);
+        public GivenParameter<double> Kappa { get; set; } = new GivenParameter<double>(0.2, false);
 
         /// <summary>
         /// Gets the gate-source voltage dependence on mobility.
         /// </summary>
         [ParameterName("theta"), ParameterInfo("Vgs dependence on mobility")]
-        public GivenParameter<double> Theta { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Theta { get; set; }
 
         /// <summary>
         /// Gets the fast surface state density.
         /// </summary>
         [ParameterName("nfs"), ParameterInfo("Fast surface state density")]
-        public GivenParameter<double> FastSurfaceStateDensity { get; } = new GivenParameter<double>();
+        public GivenParameter<double> FastSurfaceStateDensity { get; set; }
 
         /// <summary>
         /// Gets the maximum drift velocity.
         /// </summary>
         [ParameterName("vmax"), ParameterInfo("Maximum carrier drift velocity")]
-        public GivenParameter<double> MaxDriftVelocity { get; } = new GivenParameter<double>();
+        public GivenParameter<double> MaxDriftVelocity { get; set; }
 
         /// <summary>
         /// Gets the junction depth.
         /// </summary>
         [ParameterName("xj"), ParameterInfo("Junction depth")]
-        public GivenParameter<double> JunctionDepth { get; } = new GivenParameter<double>();
+        public GivenParameter<double> JunctionDepth { get; set; }
 
         /// <summary>
         /// Gets or sets the width effect on the threshold voltage.
@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             // Set the default oxide thickness
             if (!OxideThickness.Given)
-                OxideThickness.RawValue = 1e-7;
+                OxideThickness = new GivenParameter<double>(1e-7, false);
 
             // Calculate base defaults
             base.CalculateDefaults();

@@ -13,37 +13,37 @@ namespace SpiceSharp.Components
         /// Gets the offset.
         /// </summary>
         [ParameterName("vo"), ParameterInfo("The offset of the sine wave")]
-        public GivenParameter<double> Offset { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Offset { get; set; }
 
         /// <summary>
         /// Gets the amplitude of the sine wave.
         /// </summary>
         [ParameterName("va"), ParameterInfo("The amplitude of the sine wave")]
-        public GivenParameter<double> Amplitude { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Amplitude { get; set; }
 
         /// <summary>
         /// Gets the frequency of the sine wave in Hertz (Hz).
         /// </summary>
         [ParameterName("freq"), ParameterInfo("The frequency in Hz")]
-        public GivenParameter<double> Frequency { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Frequency { get; set; }
 
         /// <summary>
         /// Gets the delay of the sine wave in seconds.
         /// </summary>
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
-        public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Delay { get; set; }
 
         /// <summary>
         /// Gets the damping factor theta of the sinewave.
         /// </summary>
         [ParameterName("theta"), ParameterInfo("The damping factor")]
-        public GivenParameter<double> Theta { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Theta { get; set; }
 
         /// <summary>
         /// Gets the phase of the sinewave.
         /// </summary>
         [ParameterName("phase"), ParameterInfo("The phase")]
-        public GivenParameter<double> Phase { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Phase { get; set; }
 
         /// <summary>
         /// Sets all the sine parameters.
@@ -56,22 +56,22 @@ namespace SpiceSharp.Components
             switch (parameters.Length)
             {
                 case 6:
-                    Phase.Value = parameters[5];
+                    Phase = parameters[5];
                     goto case 5;
                 case 5:
-                    Theta.Value = parameters[4];
+                    Theta = parameters[4];
                     goto case 4;
                 case 4:
-                    Delay.Value = parameters[3];
+                    Delay = parameters[3];
                     goto case 3;
                 case 3:
-                    Frequency.Value = parameters[2];
+                    Frequency = parameters[2];
                     goto case 2;
                 case 2:
-                    Amplitude.Value = parameters[1];
+                    Amplitude = parameters[1];
                     goto case 1;
                 case 1:
-                    Offset.Value = parameters[0];
+                    Offset = parameters[0];
                     break;
                 default:
                     throw new BadParameterException(nameof(parameters));
@@ -106,12 +106,12 @@ namespace SpiceSharp.Components
         /// <param name="phase">The phase.</param>
         public Sine(double offset, double amplitude, double frequency, double delay, double theta, double phase)
         {
-            Offset.Value = offset;
-            Amplitude.Value = amplitude;
-            Frequency.Value = frequency;
-            Delay.Value = delay;
-            Theta.Value = theta;
-            Phase.Value = phase;
+            Offset = offset;
+            Amplitude = amplitude;
+            Frequency = frequency;
+            Delay = delay;
+            Theta = theta;
+            Phase = phase;
         }
 
         /// <summary>
@@ -124,11 +124,11 @@ namespace SpiceSharp.Components
         /// <param name="theta">The theta.</param>
         public Sine(double offset, double amplitude, double frequency, double delay, double theta)
         {
-            Offset.Value = offset;
-            Amplitude.Value = amplitude;
-            Frequency.Value = frequency;
-            Delay.Value = delay;
-            Theta.Value = theta;
+            Offset = offset;
+            Amplitude = amplitude;
+            Frequency = frequency;
+            Delay = delay;
+            Theta = theta;
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace SpiceSharp.Components
         /// <param name="frequency">The frequency.</param>
         public Sine(double offset, double amplitude, double frequency)
         {
-            Offset.Value = offset;
-            Amplitude.Value = amplitude;
-            Frequency.Value = frequency;
+            Offset = offset;
+            Amplitude = amplitude;
+            Frequency = frequency;
         }
     }
 }

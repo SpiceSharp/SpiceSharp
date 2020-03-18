@@ -14,43 +14,43 @@ namespace SpiceSharp.Components
         /// Gets the initial value.
         /// </summary>
         [ParameterName("v1"), ParameterInfo("The initial value")]
-        public GivenParameter<double> InitialValue { get; } = new GivenParameter<double>();
+        public GivenParameter<double> InitialValue { get; set; }
 
         /// <summary>
         /// Gets the pulsed value.
         /// </summary>
         [ParameterName("v2"), ParameterInfo("The peak value")]
-        public GivenParameter<double> PulsedValue { get; } = new GivenParameter<double>();
+        public GivenParameter<double> PulsedValue { get; set; }
 
         /// <summary>
         /// Gets the delay of the waveform in seconds.
         /// </summary>
         [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
-        public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Delay { get; set; }
 
         /// <summary>
         /// Gets the rise time in seconds.
         /// </summary>
         [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
-        public GivenParameter<double> RiseTime { get; } = new GivenParameter<double>();
+        public GivenParameter<double> RiseTime { get; set; }
 
         /// <summary>
         /// Gets the fall time in seconds.
         /// </summary>
         [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
-        public GivenParameter<double> FallTime { get; } = new GivenParameter<double>();
+        public GivenParameter<double> FallTime { get; set; }
 
         /// <summary>
         /// Gets the width of the pulse in seconds.
         /// </summary>
         [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
-        public GivenParameter<double> PulseWidth { get; } = new GivenParameter<double>(double.PositiveInfinity);
+        public GivenParameter<double> PulseWidth { get; set; } = new GivenParameter<double>(double.PositiveInfinity, false);
 
         /// <summary>
         /// Gets the period in seconds.
         /// </summary>
         [ParameterName("per"), ParameterInfo("The period in seconds")]
-        public GivenParameter<double> Period { get; } = new GivenParameter<double>(double.PositiveInfinity);
+        public GivenParameter<double> Period { get; set; } = new GivenParameter<double>(double.PositiveInfinity, false);
 
         /// <summary>
         /// Sets all the pulse parameters.
@@ -63,25 +63,25 @@ namespace SpiceSharp.Components
             switch (parameters.Length)
             {
                 case 7:
-                    Period.Value = parameters[6];
+                    Period = parameters[6];
                     goto case 6;
                 case 6:
-                    PulseWidth.Value = parameters[5];
+                    PulseWidth = parameters[5];
                     goto case 5;
                 case 5:
-                    FallTime.Value = parameters[4];
+                    FallTime = parameters[4];
                     goto case 4;
                 case 4:
-                    RiseTime.Value = parameters[3];
+                    RiseTime = parameters[3];
                     goto case 3;
                 case 3:
-                    Delay.Value = parameters[2];
+                    Delay = parameters[2];
                     goto case 2;
                 case 2:
-                    PulsedValue.Value = parameters[1];
+                    PulsedValue = parameters[1];
                     goto case 1;
                 case 1:
-                    InitialValue.Value = parameters[0];
+                    InitialValue = parameters[0];
                     break;
                 default:
                     throw new BadParameterException(nameof(parameters));
@@ -120,13 +120,13 @@ namespace SpiceSharp.Components
         /// <param name="period">The period in seconds.</param>
         public Pulse(double initialValue, double pulsedValue, double delay, double riseTime, double fallTime, double pulseWidth, double period)
         {
-            InitialValue.Value = initialValue;
-            PulsedValue.Value = pulsedValue;
-            Delay.Value = delay;
-            RiseTime.Value = riseTime;
-            FallTime.Value = fallTime;
-            PulseWidth.Value = pulseWidth;
-            Period.Value = period;
+            InitialValue = initialValue;
+            PulsedValue = pulsedValue;
+            Delay = delay;
+            RiseTime = riseTime;
+            FallTime = fallTime;
+            PulseWidth = pulseWidth;
+            Period = period;
         }
     }
 }

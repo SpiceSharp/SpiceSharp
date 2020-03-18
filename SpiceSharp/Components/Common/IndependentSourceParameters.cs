@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// The DC value of the source.
         /// </summary>
         [ParameterName("dc"), ParameterInfo("D.C. source value")]
-        public GivenParameter<double> DcValue { get; } = new GivenParameter<double>();
+        public GivenParameter<double> DcValue { get; set; }
 
         /// <summary>
         /// Gets or sets the waveform.
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <param name="dc">DC value</param>
         public IndependentSourceParameters(double dc)
         {
-            DcValue.Value = dc;
+            DcValue = dc;
         }
     }
 }

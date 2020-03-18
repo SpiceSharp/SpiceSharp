@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
                 {
                     SpiceSharpWarning.Warning(this, 
                         Properties.Resources.IndependentSources_NoDcUseWaveform.FormatString(Name));
-                    Parameters.DcValue.RawValue = Waveform.Value;
+                    Parameters.DcValue = new GivenParameter<double>(Waveform.Value, false);
                 }
                 else
                 {

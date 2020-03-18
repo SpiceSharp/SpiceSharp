@@ -20,13 +20,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
+            set => NominalTemperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the nominal temperature parameter in degrees Kelvin.
         /// </summary>
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+        public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets the ohmic resistance parameter.

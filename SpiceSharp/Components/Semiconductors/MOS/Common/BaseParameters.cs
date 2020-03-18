@@ -15,25 +15,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
-            set => Temperature.Value = value + Constants.CelsiusKelvin;
+            set => Temperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the temperature in Kelvin.
         /// </summary>
-        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets the mosfet width.
         /// </summary>
         [ParameterName("w"), ParameterInfo("Width")]
-        public GivenParameter<double> Width { get; } = new GivenParameter<double>(1e-4);
+        public GivenParameter<double> Width { get; set; } = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
         /// Gets the mosfet length.
         /// </summary>
         [ParameterName("l"), ParameterInfo("Length")]
-        public GivenParameter<double> Length { get; } = new GivenParameter<double>(1e-4);
+        public GivenParameter<double> Length { get; set; } = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
         /// Gets the source layout area.

@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
         public VoltageSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            Parameters.DcValue.Value = dc;
+            Parameters.DcValue = dc;
             Connect(pos, neg);
         }
 

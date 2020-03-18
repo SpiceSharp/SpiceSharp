@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.JFETBehaviors
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
-            set => Temperature.Value = value + Constants.CelsiusKelvin;
+            set => Temperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the temperature in Kelvin.
         /// </summary>
-        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(300.15);
+        public GivenParameter<double> Temperature { get; set; } = new GivenParameter<double>(300.15, false);
 
         /// <summary>
         /// Gets the area.

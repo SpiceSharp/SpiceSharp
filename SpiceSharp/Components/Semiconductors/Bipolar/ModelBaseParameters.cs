@@ -54,13 +54,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
-            set => NominalTemperature.Value = value + Constants.CelsiusKelvin;
+            set => NominalTemperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the nominal temperature parameter in degrees Kelvin.
         /// </summary>
-        public GivenParameter<double> NominalTemperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+        public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets the saturation current parameter.
@@ -84,19 +84,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the forward Early voltage parameter.
         /// </summary>
         [ParameterName("vaf"), ParameterName("va"), ParameterInfo("Forward Early voltage")]
-        public GivenParameter<double> EarlyVoltageForward { get; } = new GivenParameter<double>();
+        public GivenParameter<double> EarlyVoltageForward { get; set; }
 
         /// <summary>
         /// Gets the forward beta roll-off corner current parameter.
         /// </summary>
         [ParameterName("ikf"), ParameterName("ik"), ParameterInfo("Forward beta roll-off corner current")]
-        public GivenParameter<double> RollOffForward { get; } = new GivenParameter<double>();
+        public GivenParameter<double> RollOffForward { get; set; }
 
         /// <summary>
         /// Gets the base-emitter saturation current parameter.
         /// </summary>
         [ParameterName("ise"), ParameterInfo("B-E leakage saturation current")]
-        public GivenParameter<double> LeakBeCurrent { get; } = new GivenParameter<double>();
+        public GivenParameter<double> LeakBeCurrent { get; set; }
 
         /// <summary>
         /// Gets the base-emitter emission coefficient parameter.
@@ -120,19 +120,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the reverse Early voltage parameter.
         /// </summary>
         [ParameterName("var"), ParameterName("vb"), ParameterInfo("Reverse Early voltage")]
-        public GivenParameter<double> EarlyVoltageReverse { get; } = new GivenParameter<double>();
+        public GivenParameter<double> EarlyVoltageReverse { get; set; }
 
         /// <summary>
         /// Gets the reverse beta roll-off corner current parameter.
         /// </summary>
         [ParameterName("ikr"), ParameterInfo("reverse beta roll-off corner current")]
-        public GivenParameter<double> RollOffReverse { get; } = new GivenParameter<double>();
+        public GivenParameter<double> RollOffReverse { get; set; }
 
         /// <summary>
         /// Gets the base-collector saturation current parameter.
         /// </summary>
         [ParameterName("isc"), ParameterInfo("B-C leakage saturation current")]
-        public GivenParameter<double> LeakBcCurrent { get; } = new GivenParameter<double>();
+        public GivenParameter<double> LeakBcCurrent { get; set; }
 
         /// <summary>
         /// Gets the base-collector emission coefficient parameter.
@@ -156,7 +156,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the minimum base resistance parameter.
         /// </summary>
         [ParameterName("rbm"), ParameterInfo("Minimum base resistance")]
-        public GivenParameter<double> MinimumBaseResistance { get; } = new GivenParameter<double>();
+        public GivenParameter<double> MinimumBaseResistance { get; set; }
 
         /// <summary>
         /// Gets the emitter resistance parameter.
@@ -288,17 +288,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the forward bias junction fit parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        public GivenParameter<double> DepletionCapCoefficient { get; } = new GivenParameter<double>();
+        public GivenParameter<double> DepletionCapCoefficient { get; set; }
 
         /// <summary>
         /// Parameter that is not accessible in Spice 3f5
         /// </summary>
-        public GivenParameter<double> C2 { get; } = new GivenParameter<double>();
+        public GivenParameter<double> C2 { get; set; }
 
         /// <summary>
         /// Parameter that is not accessible in Spice 3f5
         /// </summary>
-        public GivenParameter<double> C4 { get; } = new GivenParameter<double>();
+        public GivenParameter<double> C4 { get; set; }
 
         /// <summary>
         /// Scalar used for NPN transistors.

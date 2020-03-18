@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
         public Inductor(string name, string pos, string neg, double inductance) 
             : this(name)
         {
-            Parameters.Inductance.Value = inductance;
+            Parameters.Inductance = inductance;
             Connect(pos, neg);
         }
 

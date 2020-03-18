@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Gets the channel length modulation parameter.
         /// </summary>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
-        public GivenParameter<double> Lambda { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Lambda { get; set; }
 
         /// <summary>
         /// Method for calculating the default values of derived parameters.
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             {
                 OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
                 if (!Transconductance.Given)
-                    Transconductance.RawValue = SurfaceMobility * OxideCapFactor * 1e-4; // m^2/cm^2
+                    Transconductance = new GivenParameter<double>(SurfaceMobility * OxideCapFactor * 1e-4, false); // m^2/cm^2
             }
         }
     }

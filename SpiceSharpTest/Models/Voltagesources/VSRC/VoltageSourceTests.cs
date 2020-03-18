@@ -172,8 +172,6 @@ namespace SpiceSharpTest.Models
         {
             get
             {
-                ComponentRuleParameters parameters;
-
                 yield return new TestCaseData(
                     new Circuit(
                         new VoltageSource("V1", "a", "b", 1.0),

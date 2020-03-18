@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         void ITemperatureBehavior.Temperature()
         {
             if (Parameters.NominalTemperature.Given)
-                Parameters.NominalTemperature.RawValue = _temperature.NominalTemperature;
+                Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
 
             var vtnom = Constants.KOverQ * Parameters.NominalTemperature;
             var fact1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;

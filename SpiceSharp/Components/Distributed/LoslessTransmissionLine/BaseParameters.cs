@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// Gets or sets the transmission delay of the transmission line.
         /// </summary>
         [ParameterName("td"), ParameterInfo("Transmission delay")]
-        public GivenParameter<double> Delay { get; } = new GivenParameter<double>();
+        public GivenParameter<double> Delay { get; set; }
 
         /// <summary>
         /// Gets normalized length parameter at the given frequency.
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         public override void CalculateDefaults()
         {
             if (!Delay.Given)
-                Delay.Value = NormalizedLength / Frequency;
+                Delay = NormalizedLength / Frequency;
 
             if (Delay < 0.0)
                 throw new BadParameterException(nameof(Delay), Delay, 

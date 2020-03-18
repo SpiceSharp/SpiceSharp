@@ -151,11 +151,8 @@ namespace SpiceSharp.General
                             return true;
                     }
                 }
-                else if (TryGet(source, out Parameter<P> p))
-                {
-                    p.Value = value;
+                else if (TrySet<GivenParameter<P>>(source, value))
                     return true;
-                }
             }
             return false;
         }
@@ -202,8 +199,12 @@ namespace SpiceSharp.General
                             break;
                     }
                 }
-                else if (TryGet(source, out Parameter<P> p))
-                    return value => p.Value = value;
+                else
+                {
+                    var setter = CreateSetter<GivenParameter<P>>(source);
+                    if (setter != null)
+                        return new Action<P>(value => setter(value));
+                }
             }
 
             return null;
@@ -244,13 +245,10 @@ namespace SpiceSharp.General
                         break;
                 }
             }
-            else if (typeof(Parameter<P>).GetTypeInfo().IsAssignableFrom(ReturnType))
+            else if (TryGet(source, out GivenParameter<P> gp))
             {
-                if (TryGet(source, out Parameter<P> p))
-                {
-                    value = p.Value;
-                    return true;
-                }
+                value = gp.Value;
+                return true;
             }
 
             value = default;
@@ -290,8 +288,13 @@ namespace SpiceSharp.General
                         break;
                 }
             }
-            else if (TryGet(source, out Parameter<P> p))
-                return () => p.Value;
+            else
+            {
+                var getter = CreateGetter<GivenParameter<P>>(source);
+                if (getter != null)
+                    return new Func<P>(() => getter());
+            }
+
             return null;
         }
     }

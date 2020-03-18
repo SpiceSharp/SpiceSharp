@@ -117,8 +117,8 @@ namespace SpiceSharpTest.Models
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
             var model = new CapacitorModel("model C1");
-            model.Parameters.TemperatureCoefficient1.Value = 0.0;
-            model.Parameters.TemperatureCoefficient2.Value = 0.0;
+            model.Parameters.TemperatureCoefficient1 = 0.0;
+            model.Parameters.TemperatureCoefficient2 = 0.0;
             capacitor.Model = model.Name;
 
             // Build circuit
@@ -165,8 +165,8 @@ namespace SpiceSharpTest.Models
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
             var model = new CapacitorModel("model C1");
-            model.Parameters.TemperatureCoefficient1.Value = 1.1;
-            model.Parameters.TemperatureCoefficient2.Value = 2.1;
+            model.Parameters.TemperatureCoefficient1 = 1.1;
+            model.Parameters.TemperatureCoefficient2 = 2.1;
             capacitor.Model = model.Name;
 
             // Build circuit

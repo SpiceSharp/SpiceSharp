@@ -255,10 +255,9 @@ namespace SpiceSharp
                     pi.SetValue(source, value);
                     return true;
                 }
-                if (pi.CanRead && info.IsAssignableFrom(typeof(Parameter<T>)))
+                if (pi.CanRead && info.IsAssignableFrom(typeof(GivenParameter<T>)))
                 {
-                    var p = (Parameter<T>)pi.GetValue(source);
-                    p.Value = value;
+                    pi.SetValue(source, new GivenParameter<T>(value));
                     return true;
                 }
             }
@@ -270,10 +269,9 @@ namespace SpiceSharp
                     fi.SetValue(source, value);
                     return true;
                 }
-                if (info.IsAssignableFrom(typeof(Parameter<T>)))
+                if (info.IsAssignableFrom(typeof(GivenParameter<T>)))
                 {
-                    var p = (Parameter<T>)fi.GetValue(source);
-                    p.Value = value;
+                    fi.SetValue(source, new GivenParameter<T>(value));
                     return true;
                 }
             }
@@ -371,27 +369,15 @@ namespace SpiceSharp
                         continue;
                     }
 
-                    if (pi.CanWrite)
+                    if (pi.CanWrite && pi.CanRead)
                     {
-                        if (pi.PropertyType == typeof(double))
-                            pi.SetValue(destination, (double)pi.GetValue(source));
-                        else if (pi.PropertyType == typeof(int))
-                            pi.SetValue(destination, (int)pi.GetValue(source));
-                        else if (pi.PropertyType == typeof(string))
-                            pi.SetValue(destination, (string)pi.GetValue(source));
-                        else if (pi.PropertyType == typeof(bool))
-                            pi.SetValue(destination, (bool)pi.GetValue(source));
-                        else if (pi.PropertyType.GetTypeInfo().GetInterfaces().Contains(typeof(ICloneable)))
-                        {
-                            var target = (ICloneable)pi.GetValue(destination);
-                            var from = (ICloneable)pi.GetValue(source);
-                            if (target != null && from != null)
-                                target.CopyFrom(from);
-                            else
-                                pi.SetValue(destination, from?.Clone());
-                        }
+                        var value = pi.GetValue(source);
+                        if (value is ICloneable cloneable)
+                            pi.SetValue(destination, cloneable.Clone());
+                        else
+                            pi.SetValue(destination, value);
                     }
-                    else
+                    else if (pi.CanRead)
                     {
                         // We can't write ourself, but maybe we can just copy
                         if (pi.PropertyType.GetTypeInfo().GetInterfaces().Contains(typeof(ICloneable)))
@@ -405,23 +391,11 @@ namespace SpiceSharp
                 }
                 else if (member is FieldInfo fi)
                 {
-                    if (fi.FieldType == typeof(double))
-                        fi.SetValue(destination, (double)fi.GetValue(source));
-                    else if (fi.FieldType == typeof(int))
-                        fi.SetValue(destination, (int)fi.GetValue(source));
-                    else if (fi.FieldType == typeof(string))
-                        fi.SetValue(destination, (string)fi.GetValue(source));
-                    else if (fi.FieldType == typeof(bool))
-                        fi.SetValue(destination, (bool)fi.GetValue(source));
-                    else if (fi.FieldType.GetTypeInfo().GetInterfaces().Contains(typeof(ICloneable)))
-                    {
-                        var target = (ICloneable)fi.GetValue(destination);
-                        var from = (ICloneable)fi.GetValue(source);
-                        if (target != null && from != null)
-                            target.CopyFrom(from);
-                        else
-                            fi.SetValue(destination, from?.Clone());
-                    }
+                    var value = fi.GetValue(source);
+                    if (value is ICloneable cloneable)
+                        fi.SetValue(destination, cloneable.Clone());
+                    else
+                        fi.SetValue(destination, value);
                 }
             }
         }

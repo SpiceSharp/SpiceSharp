@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         public Resistor(string name, string pos, string neg, double res) 
             : this(name)
         {
-            Parameters.Resistance.Value = res;
+            Parameters.Resistance = res;
             Connect(pos, neg);
         }
 

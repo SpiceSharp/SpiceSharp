@@ -34,13 +34,13 @@ namespace SpiceSharpTest.Parameters
             public double GetMethod() => 1.0;
 
             [ParameterName("parameter1")]
-            public GivenParameter<double> Parameter1 { get; } = new GivenParameter<double>();
+            public GivenParameter<double> Parameter1 { get; set; }
 
             [ParameterName("parameter2")]
             public GivenParameter<int> Parameter2 { get; set; } = new GivenParameter<int>();
 
             [ParameterName("principal"), ParameterInfo("Principal parameter", IsPrincipal = true)]
-            public Parameter<double> PrincipalTest { get; } = new GivenParameter<double>(0.8);
+            public GivenParameter<double> PrincipalTest { get; set; } = new GivenParameter<double>(0.8, false);
         }
 
         [Test]
@@ -106,17 +106,17 @@ namespace SpiceSharpTest.Parameters
         public void When_CopyPropertiesAndFields_CopiesReadonlyParameter()
         {
             var source = new ParameterExample();
-            source.Parameter1.Value = 1;
+            source.Parameter1 = 1;
             var destination = new ParameterExample();
             Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter1.Value);
 
-            destination.Parameter1.Value = 2;
+            destination.Parameter1 = 2;
 
             Assert.AreEqual(1, source.Parameter1.Value);
             Assert.AreEqual(2, destination.Parameter1.Value);
 
-            source.Parameter1.Value = 3;
+            source.Parameter1 = 3;
             Assert.AreEqual(3, source.Parameter1.Value);
             Assert.AreEqual(2, destination.Parameter1.Value);
         }
@@ -125,17 +125,17 @@ namespace SpiceSharpTest.Parameters
         public void When_CopyPropertiesAndFields_CopiesWritableParameter()
         {
             var source = new ParameterExample();
-            source.Parameter2.Value = 1;
+            source.Parameter2 = 1;
             var destination = new ParameterExample();
             Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter2.Value);
 
-            destination.Parameter2.Value = 2;
+            destination.Parameter2 = 2;
 
             Assert.AreEqual(1, source.Parameter2.Value);
             Assert.AreEqual(2, destination.Parameter2.Value);
 
-            source.Parameter2.Value = 3;
+            source.Parameter2 = 3;
             Assert.AreEqual(3, source.Parameter2.Value);
             Assert.AreEqual(2, destination.Parameter2.Value);
         }
@@ -195,7 +195,7 @@ namespace SpiceSharpTest.Parameters
         public void When_Get_Expect_Parameter()
         {
             var p = new ParameterExample();
-            var param = p.GetProperty<Parameter<double>>("parameter1");
+            var param = p.GetProperty<GivenParameter<double>>("parameter1");
             Assert.AreEqual(p.Parameter1, param);
         }
     }

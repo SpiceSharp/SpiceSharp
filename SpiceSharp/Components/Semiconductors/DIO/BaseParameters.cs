@@ -32,13 +32,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
-            set => Temperature.Value = value + Constants.CelsiusKelvin;
+            set => Temperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
         /// Gets the temperature parameter in degrees Kelvin.
         /// </summary>
-        public GivenParameter<double> Temperature { get; } = new GivenParameter<double>(Constants.ReferenceTemperature);
+        public GivenParameter<double> Temperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the parallel multiplier.
