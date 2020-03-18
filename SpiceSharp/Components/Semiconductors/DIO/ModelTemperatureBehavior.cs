@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                     Properties.Resources.Diodes_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient));
             }
 
-            if (Parameters.Resistance > 0)
+            if (!Parameters.Resistance.Equals(0.0))
                 Conductance = 1 / Parameters.Resistance;
             else
                 Conductance = 0;

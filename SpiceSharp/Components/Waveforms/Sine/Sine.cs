@@ -13,37 +13,37 @@ namespace SpiceSharp.Components
         /// Gets the offset.
         /// </summary>
         [ParameterName("vo"), ParameterInfo("The offset of the sine wave")]
-        public GivenParameter<double> Offset { get; set; }
+        public double Offset { get; set; }
 
         /// <summary>
         /// Gets the amplitude of the sine wave.
         /// </summary>
         [ParameterName("va"), ParameterInfo("The amplitude of the sine wave")]
-        public GivenParameter<double> Amplitude { get; set; }
+        public double Amplitude { get; set; }
 
         /// <summary>
         /// Gets the frequency of the sine wave in Hertz (Hz).
         /// </summary>
         [ParameterName("freq"), ParameterInfo("The frequency in Hz")]
-        public GivenParameter<double> Frequency { get; set; }
+        public double Frequency { get; set; }
 
         /// <summary>
         /// Gets the delay of the sine wave in seconds.
         /// </summary>
         [ParameterName("td"), ParameterInfo("The delay in seconds")]
-        public GivenParameter<double> Delay { get; set; }
+        public double Delay { get; set; }
 
         /// <summary>
         /// Gets the damping factor theta of the sinewave.
         /// </summary>
         [ParameterName("theta"), ParameterInfo("The damping factor")]
-        public GivenParameter<double> Theta { get; set; }
+        public double Theta { get; set; }
 
         /// <summary>
         /// Gets the phase of the sinewave.
         /// </summary>
         [ParameterName("phase"), ParameterInfo("The phase")]
-        public GivenParameter<double> Phase { get; set; }
+        public double Phase { get; set; }
 
         /// <summary>
         /// Sets all the sine parameters.

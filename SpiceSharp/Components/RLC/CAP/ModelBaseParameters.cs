@@ -11,37 +11,37 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Gets the bottom junction capacitance parameter.
         /// </summary>
         [ParameterName("cj"), ParameterInfo("Bottom capacitance per area")]
-        public GivenParameter<double> JunctionCap { get; set; }
+        public double JunctionCap { get; set; }
 
         /// <summary>
         /// Gets the junction sidewall capacitance parameter.
         /// </summary>
         [ParameterName("cjsw"), ParameterInfo("Sidewall capacitance per meter")]
-        public GivenParameter<double> JunctionCapSidewall { get; set; }
+        public double JunctionCapSidewall { get; set; }
 
         /// <summary>
         /// Gets the default width parameter.
         /// </summary>
         [ParameterName("defw"), ParameterInfo("Default width")]
-        public GivenParameter<double> DefaultWidth { get; set; } = new GivenParameter<double>(10.0e-6, false);
+        public double DefaultWidth { get; set; } = 10e-6;
 
         /// <summary>
         /// Gets the width correction factor parameter.
         /// </summary>
         [ParameterName("narrow"), ParameterInfo("Width correction factor")]
-        public GivenParameter<double> Narrow { get; set; }
+        public double Narrow { get; set; }
 
         /// <summary>
         /// Gets the first-order temperature coefficient parameter.
         /// </summary>
         [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
-        public GivenParameter<double> TemperatureCoefficient1 { get; set; }
+        public double TemperatureCoefficient1 { get; set; }
 
         /// <summary>
         /// Gets the second-order temperature coefficient parameter.
         /// </summary>
         [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient")]
-        public GivenParameter<double> TemperatureCoefficient2 { get; set; }
+        public double TemperatureCoefficient2 { get; set; }
 
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.

@@ -14,43 +14,43 @@ namespace SpiceSharp.Components
         /// Gets the initial value.
         /// </summary>
         [ParameterName("v1"), ParameterInfo("The initial value")]
-        public GivenParameter<double> InitialValue { get; set; }
+        public double InitialValue { get; set; }
 
         /// <summary>
         /// Gets the pulsed value.
         /// </summary>
         [ParameterName("v2"), ParameterInfo("The peak value")]
-        public GivenParameter<double> PulsedValue { get; set; }
+        public double PulsedValue { get; set; }
 
         /// <summary>
         /// Gets the delay of the waveform in seconds.
         /// </summary>
         [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
-        public GivenParameter<double> Delay { get; set; }
+        public double Delay { get; set; }
 
         /// <summary>
         /// Gets the rise time in seconds.
         /// </summary>
         [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
-        public GivenParameter<double> RiseTime { get; set; }
+        public double RiseTime { get; set; }
 
         /// <summary>
         /// Gets the fall time in seconds.
         /// </summary>
         [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
-        public GivenParameter<double> FallTime { get; set; }
+        public double FallTime { get; set; }
 
         /// <summary>
         /// Gets the width of the pulse in seconds.
         /// </summary>
         [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
-        public GivenParameter<double> PulseWidth { get; set; } = new GivenParameter<double>(double.PositiveInfinity, false);
+        public double PulseWidth { get; set; } = double.PositiveInfinity;
 
         /// <summary>
         /// Gets the period in seconds.
         /// </summary>
         [ParameterName("per"), ParameterInfo("The period in seconds")]
-        public GivenParameter<double> Period { get; set; } = new GivenParameter<double>(double.PositiveInfinity, false);
+        public double Period { get; set; } = double.PositiveInfinity;
 
         /// <summary>
         /// Sets all the pulse parameters.

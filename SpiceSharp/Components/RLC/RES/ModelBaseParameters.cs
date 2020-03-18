@@ -26,13 +26,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the first-order temperature coefficient parameter.
         /// </summary>
         [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
-        public GivenParameter<double> TemperatureCoefficient1 { get; set; }
+        public double TemperatureCoefficient1 { get; set; }
 
         /// <summary>
         /// Gets the second-order temperature coefficient parameter.
         /// </summary>
         [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient")]
-        public GivenParameter<double> TemperatureCoefficient2 { get; set; }
+        public double TemperatureCoefficient2 { get; set; }
 
         /// <summary>
         /// Gets the exponential temperature coefficient parameter.
@@ -44,18 +44,18 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the sheet resistance parameter.
         /// </summary>
         [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
-        public GivenParameter<double> SheetResistance { get; set; }
+        public double SheetResistance { get; set; }
 
         /// <summary>
         /// Gets the default width parameter.
         /// </summary>
         [ParameterName("defw"), ParameterInfo("Default device width")]
-        public GivenParameter<double> DefaultWidth { get; set; } = new GivenParameter<double>(10.0e-6, false);
+        public double DefaultWidth { get; set; } = 10e-6;
 
         /// <summary>
         /// Gets the narrowing coefficient parameter.
         /// </summary>
         [ParameterName("narrow"), ParameterInfo("Narrowing of resistor")]
-        public GivenParameter<double> Narrow { get; set; }
+        public double Narrow { get; set; }
     }
 }

@@ -84,13 +84,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the forward Early voltage parameter.
         /// </summary>
         [ParameterName("vaf"), ParameterName("va"), ParameterInfo("Forward Early voltage")]
-        public GivenParameter<double> EarlyVoltageForward { get; set; }
+        public double EarlyVoltageForward { get; set; }
 
         /// <summary>
         /// Gets the forward beta roll-off corner current parameter.
         /// </summary>
         [ParameterName("ikf"), ParameterName("ik"), ParameterInfo("Forward beta roll-off corner current")]
-        public GivenParameter<double> RollOffForward { get; set; }
+        public double RollOffForward { get; set; }
 
         /// <summary>
         /// Gets the base-emitter saturation current parameter.
@@ -120,13 +120,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the reverse Early voltage parameter.
         /// </summary>
         [ParameterName("var"), ParameterName("vb"), ParameterInfo("Reverse Early voltage")]
-        public GivenParameter<double> EarlyVoltageReverse { get; set; }
+        public double EarlyVoltageReverse { get; set; }
 
         /// <summary>
         /// Gets the reverse beta roll-off corner current parameter.
         /// </summary>
         [ParameterName("ikr"), ParameterInfo("reverse beta roll-off corner current")]
-        public GivenParameter<double> RollOffReverse { get; set; }
+        public double RollOffReverse { get; set; }
 
         /// <summary>
         /// Gets the base-collector saturation current parameter.

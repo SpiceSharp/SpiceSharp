@@ -140,19 +140,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             Factor1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
 
             if (!Parameters.LeakBeCurrent.Given)
-            {
-                if (Parameters.C2.Given)
-                    Parameters.LeakBeCurrent = Parameters.C2 * Parameters.SatCur;
-                else
-                    Parameters.LeakBeCurrent = new GivenParameter<double>(0, false);
-            }
+                    Parameters.LeakBeCurrent = new GivenParameter<double>(Parameters.C2 * Parameters.SatCur, false);
             if (!Parameters.LeakBcCurrent.Given)
-            {
-                if (Parameters.C4.Given)
-                    Parameters.LeakBcCurrent = Parameters.C4 * Parameters.SatCur;
-                else
-                    Parameters.LeakBcCurrent = new GivenParameter<double>(0, false);
-            }
+                Parameters.LeakBcCurrent = new GivenParameter<double>(Parameters.C4 * Parameters.SatCur, false);
             if (!Parameters.MinimumBaseResistance.Given)
                 Parameters.MinimumBaseResistance = new GivenParameter<double>(Parameters.BaseResist, false);
 
@@ -168,31 +158,31 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			 * leakage saturation current).   TQ  6/29/84
 			 */
 
-            if (Parameters.EarlyVoltageForward.Given && !Parameters.EarlyVoltageForward.Value.Equals(0.0))
+            if (!Parameters.EarlyVoltageForward.Equals(0.0))
                 InverseEarlyVoltForward = 1 / Parameters.EarlyVoltageForward;
             else
                 InverseEarlyVoltForward = 0;
-            if (Parameters.RollOffForward.Given && !Parameters.RollOffForward.Value.Equals(0.0))
+            if (!Parameters.RollOffForward.Equals(0.0))
                 InverseRollOffForward = 1 / Parameters.RollOffForward;
             else
                 InverseRollOffForward = 0;
-            if (Parameters.EarlyVoltageReverse.Given && !Parameters.EarlyVoltageReverse.Value.Equals(0.0))
+            if (!Parameters.EarlyVoltageReverse.Equals(0.0))
                 InverseEarlyVoltReverse = 1 / Parameters.EarlyVoltageReverse;
             else
                 InverseEarlyVoltReverse = 0;
-            if (Parameters.RollOffReverse.Given && !Parameters.RollOffReverse.Value.Equals(0.0))
+            if (!Parameters.RollOffReverse.Equals(0.0))
                 InverseRollOffReverse = 1 / Parameters.RollOffReverse;
             else
                 InverseRollOffReverse = 0;
-            if (Parameters.CollectorResistance > 0)
+            if (!Parameters.CollectorResistance.Equals(0.0))
                 CollectorConduct = 1 / Parameters.CollectorResistance;
             else
                 CollectorConduct = 0;
-            if (Parameters.EmitterResistance > 0)
+            if (!Parameters.EmitterResistance.Equals(0.0))
                 EmitterConduct = 1 / Parameters.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (Parameters.TransitTimeForwardVoltageBc > 0)
+            if (!Parameters.TransitTimeForwardVoltageBc.Equals(0.0))
                 TransitTimeVoltageBcFactor = 1 / (Parameters.TransitTimeForwardVoltageBc * 1.44);
             else
                 TransitTimeVoltageBcFactor = 0;

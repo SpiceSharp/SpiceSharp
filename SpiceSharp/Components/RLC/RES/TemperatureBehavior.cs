@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             {
                 if (!Parameters.Resistance.Given)
                 {
-                    if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && Parameters.Length > 0)
+                    if (!_mbp.SheetResistance.Equals(0.0) && Parameters.Length > 0)
                         resistance = _mbp.SheetResistance * (Parameters.Length - _mbp.Narrow) / (Parameters.Width - _mbp.Narrow);
                     else
                     {

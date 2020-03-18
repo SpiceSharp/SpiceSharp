@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp
+﻿using System;
+
+namespace SpiceSharp
 {
     /// <summary>
     /// This class describes a parameter that is optional. Whether or not it was specified can be
@@ -9,7 +11,7 @@
     /// want these parameters to return a default value.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct GivenParameter<T>
+    public struct GivenParameter<T> : IEquatable<T>, IEquatable<GivenParameter<T>> where T : IEquatable<T>
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
@@ -85,6 +87,31 @@
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified value is equal to this instance.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified value is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Equals(T value) => Value.Equals(value);
+
+        /// <summary>
+        /// Determines whether the specified value is equal to this instance.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified value is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Equals(GivenParameter<T> value)
+        {
+            if (!Value.Equals(value.Value))
+                return false;
+            if (!Given.Equals(value.Given))
+                return false;
+            return true;
         }
 
         /// <summary>

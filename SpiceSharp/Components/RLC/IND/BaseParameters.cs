@@ -11,13 +11,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets the inductance parameter.
         /// </summary>
         [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", IsPrincipal = true)]
-        public GivenParameter<double> Inductance { get; set; }
+        public double Inductance { get; set; }
 
         /// <summary>
         /// Gets the initial current parameter.
         /// </summary>
         [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Interesting = false)]
-        public GivenParameter<double> InitialCondition { get; set; }
+        public double InitialCondition { get; set; }
 
         /// <summary>
         /// Gets or sets the parallel multiplier.

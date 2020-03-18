@@ -163,15 +163,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
             var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
-            if (ModelParameters.DrainResistance > 0)
+            if (!ModelParameters.DrainResistance.Equals(0.0))
                 DrainConductance = 1 / ModelParameters.DrainResistance;
-            else if (ModelParameters.SheetResistance > 0)
+            else if (!ModelParameters.SheetResistance.Equals(0.0))
                 DrainConductance = 1 / (ModelParameters.SheetResistance * Parameters.DrainSquares);
             else
                 DrainConductance = 0;
-            if (ModelParameters.SourceResistance > 0)
+            if (!ModelParameters.SourceResistance.Equals(0.0))
                 SourceConductance = 1 / ModelParameters.SourceResistance;
-            else if (ModelParameters.SheetResistance > 0)
+            else if (!ModelParameters.SheetResistance.Equals(0.0))
                 SourceConductance = 1 / (ModelParameters.SheetResistance * Parameters.SourceSquares);
             else
                 SourceConductance = 0;
@@ -201,7 +201,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 SourceVCritical = Vt * Math.Log(Vt / (Constants.Root2 * ModelParameters.JunctionSatCurDensity * Parameters.SourceArea));
             }
 
-            if (tempSaturationCurrentDensity.Equals(0) || Parameters.DrainArea <= 0 || Parameters.SourceArea <= 0)
+            if (tempSaturationCurrentDensity.Equals(0.0) || Parameters.DrainArea <= 0 || Parameters.SourceArea <= 0)
             {
                 DrainSatCurrent = tempSaturationCurrent;
                 SourceSatCurrent = tempSaturationCurrent;

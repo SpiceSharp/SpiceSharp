@@ -159,14 +159,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var variables = context.Variables;
 
             // Add series drain node if necessary
-            if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.DrainSquares > 0)
+            if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
                 DrainPrime = variables.Create(Name.Combine("drain"), VariableType.Voltage);
             else
                 DrainPrime = context.Nodes[0];
             _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
-            if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.SourceSquares > 0)
+            if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
                 SourcePrime = variables.Create(Name.Combine("source"), VariableType.Voltage);
             else
                 SourcePrime = context.Nodes[2];
