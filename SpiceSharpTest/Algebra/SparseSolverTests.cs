@@ -15,7 +15,7 @@ namespace SpiceSharpTest.Algebra
         public void When_BigMatrix_Expect_NoException()
         {
             // Test factoring a big matrix
-            var solver = ReadMtxFile(Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine("Algebra", "Matrices", "fidapm05.mtx")));
+            var solver = ReadMtxFile(Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine("Algebra", "Matrices", "fidapm05")));
 
             // Order and factor this larger matrix
             Assert.AreEqual(solver.Size, solver.OrderAndFactor());

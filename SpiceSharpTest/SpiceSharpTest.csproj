@@ -126,9 +126,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
-    <Content Include="Algebra\Matrices\fidapm05.mtx">
+    <None Include="Algebra\Matrices\fidapm05">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpiceSharp\SpiceSharp.csproj">
