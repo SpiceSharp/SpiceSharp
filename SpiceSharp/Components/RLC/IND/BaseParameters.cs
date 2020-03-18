@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets the initial current parameter.
         /// </summary>
         [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Interesting = false)]
-        public double InitialCondition { get; set; }
+        public GivenParameter<double> InitialCondition { get; set; }
 
         /// <summary>
         /// Gets or sets the parallel multiplier.

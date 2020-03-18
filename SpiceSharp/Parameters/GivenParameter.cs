@@ -11,7 +11,7 @@ namespace SpiceSharp
     /// want these parameters to return a default value.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct GivenParameter<T> : IEquatable<T>, IEquatable<GivenParameter<T>> where T : IEquatable<T>
+    public struct GivenParameter<T> : IEquatable<T>, IEquatable<GivenParameter<T>>
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
@@ -82,8 +82,6 @@ namespace SpiceSharp
             {
                 if (!gp.Value.Equals(Value))
                     return false;
-                if (!gp.Given.Equals(Given))
-                    return false;
                 return true;
             }
             return false;
@@ -109,8 +107,6 @@ namespace SpiceSharp
         {
             if (!Value.Equals(value.Value))
                 return false;
-            if (!Given.Equals(value.Given))
-                return false;
             return true;
         }
 
@@ -122,7 +118,7 @@ namespace SpiceSharp
         /// </returns>
         public override int GetHashCode()
         {
-            return Value.GetHashCode() ^ Given.GetHashCode();
+            return Value.GetHashCode();
         }
 
         /// <summary>

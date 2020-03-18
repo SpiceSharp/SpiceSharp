@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 
                 var width = Parameters.Width.Given
                     ? Parameters.Width.Value
-                    : _mbp.DefaultWidth.Value;
+                    : _mbp.DefaultWidth;
                 capacitance = _mbp.JunctionCap *
                               (width - _mbp.Narrow) *
                               (Parameters.Length - _mbp.Narrow) +
