@@ -176,35 +176,32 @@ namespace SpiceSharp.General
                         return (Action<P>)mi.CreateDelegate(typeof(Action<P>), source);
                 }
             }
+            else if (ReturnType.GetTypeInfo().IsAssignableFrom(typeof(P)))
+            {
+                switch (Member)
+                {
+                    case PropertyInfo pi:
+                        var setter = pi.GetSetMethod();
+                        if (setter != null)
+                            return (Action<P>)setter.CreateDelegate(typeof(Action<P>), source);
+                        break;
+                    case FieldInfo fi:
+                        if (fi.FieldType == typeof(P))
+                        {
+                            var constThis = Expression.Constant(source);
+                            var constField = Expression.Field(constThis, fi);
+                            var paramValue = Expression.Parameter(typeof(P), "value");
+                            var assignField = Expression.Assign(constField, paramValue);
+                            return Expression.Lambda<Action<P>>(assignField, paramValue).Compile();
+                        }
+                        break;
+                }
+            }
             else
             {
-                if (ReturnType.GetTypeInfo().IsAssignableFrom(typeof(P)))
-                {
-                    switch (Member)
-                    {
-                        case PropertyInfo pi:
-                            var setter = pi.GetSetMethod();
-                            if (setter != null)
-                                return (Action<P>)setter.CreateDelegate(typeof(Action<P>), source);
-                            break;
-                        case FieldInfo fi:
-                            if (fi.FieldType == typeof(P))
-                            {
-                                var constThis = Expression.Constant(source);
-                                var constField = Expression.Field(constThis, fi);
-                                var paramValue = Expression.Parameter(typeof(P), "value");
-                                var assignField = Expression.Assign(constField, paramValue);
-                                return Expression.Lambda<Action<P>>(assignField, paramValue).Compile();
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    var setter = CreateSetter<GivenParameter<P>>(source);
-                    if (setter != null)
-                        return new Action<P>(value => setter(value));
-                }
+                var setter = CreateSetter<GivenParameter<P>>(source);
+                if (setter != null)
+                    return new Action<P>(value => setter(value));
             }
 
             return null;

@@ -14,35 +14,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
             private readonly IIterationSimulationState _parent;
             private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-            /// <summary>
-            /// Gets the iteration mode.
-            /// </summary>
-            /// <value>
-            /// The mode.
-            /// </value>
-            public IterationModes Mode => _parent.Mode;
-
-            /// <summary>
-            /// The current source factor.
-            /// This parameter is changed when doing source stepping for aiding convergence.
-            /// </summary>
-            /// <remarks>
-            /// In source stepping, all sources are considered to be at 0 which has typically only one single solution (all nodes and
-            /// currents are 0V and 0A). By increasing the source factor in small steps, it is possible to progressively reach a solution
-            /// without having non-convergence.
-            /// </remarks>
-            public double SourceFactor => _parent.SourceFactor;
-
-            /// <summary>
-            /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
-            /// </summary>
-            public double Gmin => _parent.Gmin;
-
-            /// <summary>
-            /// Is the current iteration convergent?
-            /// This parameter is used to communicate convergence.
-            /// </summary>
-            public bool IsConvergent
+            IterationModes IIterationSimulationState.Mode => _parent.Mode;
+            double IIterationSimulationState.SourceFactor => _parent.SourceFactor;
+            double IIterationSimulationState.Gmin => _parent.Gmin;
+            bool IIterationSimulationState.IsConvergent
             {
                 get
                 {

@@ -12,39 +12,12 @@ namespace SpiceSharp.Components.ParallelBehaviors
         protected class BiasingSimulationState : IBiasingSimulationState
         {
             private readonly IBiasingSimulationState _parent;
-
-            /// <summary>
-            /// Gets the previous solution vector.
-            /// </summary>
-            /// <remarks>
-            /// This vector is needed for determining convergence.
-            /// </remarks>
-            public IVector<double> OldSolution => _parent.OldSolution;
-
-            /// <summary>
-            /// Gets the solver used to solve the system of equations.
-            /// </summary>
-            /// <value>
-            /// The solver.
-            /// </value>
-            public ISparseSolver<double> Solver => _solver;
             private readonly ParallelSolver<double> _solver;
 
-            /// <summary>
-            /// Gets the solution.
-            /// </summary>
-            /// <value>
-            /// The solution.
-            /// </value>
-            public IVector<double> Solution => _parent.Solution;
-
-            /// <summary>
-            /// Gets the map that maps <see cref="Variable" /> to indices for the solver.
-            /// </summary>
-            /// <value>
-            /// The map.
-            /// </value>
-            public IVariableMap Map => _parent.Map;
+            IVector<double> ISolverSimulationState<double>.Solution => _parent.Solution;
+            IVector<double> IBiasingSimulationState.OldSolution => _parent.OldSolution;
+            ISparseSolver<double> ISolverSimulationState<double>.Solver => _solver;
+            IVariableMap ISolverSimulationState<double>.Map => _parent.Map;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
