@@ -4,7 +4,6 @@ using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -16,9 +15,6 @@ namespace SpiceSharp.Components
     public class ParallelComponents : Entity, IComponent,
         IParameterized<BaseParameters>
     {
-        private readonly IComponent[] _components;
-        private readonly IEntityCollection _collection;
-
         /// <summary>
         /// Gets the parameter set.
         /// </summary>
@@ -41,7 +37,19 @@ namespace SpiceSharp.Components
         /// <value>
         /// The number of nodes.
         /// </value>
-        public int PinCount { get; private set; }
+        public int PinCount
+        {
+            get
+            {
+                var count = 0;
+                foreach (var entity in Parameters.Entities)
+                {
+                    if (entity is IComponent component)
+                        count += component.PinCount;
+                }
+                return count;
+            }
+        }
 
         /// <summary>
         /// Connects the component in the circuit.
@@ -60,37 +68,37 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
-        /// <param name="components">The components that can be executed in parallel.</param>
-        public ParallelComponents(string name, IEnumerable<IComponent> components)
+        public ParallelComponents(string name)
             : base(name)
         {
-            PinCount = 0;
-            _collection = new EntityCollection();
-            foreach (var component in components)
-            {
-                PinCount += component.PinCount;
-                _collection.Add(component);
-            }
-            _components = components.ToArray();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
-        /// <param name="components">The components that can be executed in parallel.</param>
-        public ParallelComponents(string name, params IComponent[] components)
+        /// <param name="entities">The components that can be executed in parallel.</param>
+        public ParallelComponents(string name, params IEntity[] entities)
             : base(name)
         {
-            PinCount = 0;
-            _collection = new EntityCollection();
-            foreach (var component in components)
-            {
-                PinCount += component.PinCount;
-                _collection.Add(component);
-            }
-            _components = (IComponent[])components.Clone();
-            
+            var collection = new EntityCollection();
+            foreach (var entity in entities)
+                collection.Add(entity);
+            Parameters.Entities = collection;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// </summary>
+        /// <param name="name">The name of the component.</param>
+        /// <param name="entities">The components that can be executed in parallel.</param>
+        public ParallelComponents(string name, IEnumerable<IEntity> entities)
+            : base(name)
+        {
+            var collection = new EntityCollection();
+            foreach (var entity in entities)
+                collection.Add(entity);
+            Parameters.Entities = collection;
         }
 
         /// <summary>
@@ -99,6 +107,10 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
+            // Nothing to see here!
+            if (Parameters.Entities == null || Parameters.Entities.Count == 0)
+                return;
+
             var container = new BehaviorContainer(Name);
             CalculateDefaults();
 
@@ -109,7 +121,7 @@ namespace SpiceSharp.Components
             NoiseBehavior.Prepare(psim);
 
             // Create the behaviors
-            psim.Run(_collection);
+            psim.Run(Parameters.Entities);
 
             // Create the parallel behaviors
             container
@@ -135,17 +147,21 @@ namespace SpiceSharp.Components
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
         public string GetNode(int index)
         {
-            if (index < 0 || index >= PinCount)
+            if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            foreach (var component in _components)
+            if (Parameters.Entities != null)
             {
-                if (index > component.PinCount)
-                    index -= component.PinCount;
-                else
-                    return component.GetNode(index);
+                foreach (var entity in Parameters.Entities)
+                {
+                    if (entity is IComponent component)
+                    {
+                        if (index > component.PinCount)
+                            index -= component.PinCount;
+                        else
+                            return component.GetNode(index);
+                    }
+                }
             }
-
-            // This code should be unreachable
             throw new ArgumentOutOfRangeException(nameof(index));
         }
 
@@ -159,14 +175,19 @@ namespace SpiceSharp.Components
         public IReadOnlyList<Variable> MapNodes(IVariableSet variables)
         {
             variables.ThrowIfNull(nameof(variables));
-            var list = new Variable[PinCount];
-            var index = 0;
-            foreach (var component in _components)
+            var list = new List<Variable>();
+            if (Parameters.Entities != null)
             {
-                foreach (var variable in component.MapNodes(variables))
-                    list[index++] = variable;
+                foreach (var entity in Parameters.Entities)
+                {
+                    if (entity is IComponent component)
+                    {
+                        foreach (var variable in component.MapNodes(variables))
+                            list.Add(variable);
+                    }
+                }
             }
-            return list;
+            return list.AsReadOnly();
         }
     }
 }

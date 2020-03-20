@@ -14,6 +14,22 @@ namespace SpiceSharpTest.Models
     [TestFixture]
     public class ResistorTests : Framework
     {
+        [Test]
+        public void When_ClonedResistor_Expect_Original()
+        {
+            var resistor = new Resistor("R1", "a", "b", 1.0e3);
+            resistor.Parameters.SeriesMultiplier = 2.0;
+            resistor.Parameters.ParallelMultiplier = 3.0;
+            var clone = (Resistor)Activator.CreateInstance(typeof(Resistor), new object[] { "R1Clone" });
+            Reflection.CopyPropertiesAndFields(resistor, clone);
+
+            resistor.Parameters.ParallelMultiplier = 1.0;
+
+            Assert.AreEqual(clone.Parameters.Resistance, 1.0e3, 1e-20);
+            Assert.AreEqual(clone.Parameters.SeriesMultiplier, 2.0, 1e-20);
+            Assert.AreEqual(clone.Parameters.ParallelMultiplier, 3.0, 1e-20);
+        }
+
         /// <summary>
         /// Create a voltage source shunted by a resistor
         /// </summary>

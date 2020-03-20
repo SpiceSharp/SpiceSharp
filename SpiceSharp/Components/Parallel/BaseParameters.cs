@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Entities;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -8,6 +9,14 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// <seealso cref="ParameterSet" />
     public class BaseParameters : ParameterSet
     {
+        /// <summary>
+        /// Gets or sets the entities that should be run in parallel.
+        /// </summary>
+        /// <value>
+        /// The entities.
+        /// </value>
+        public IEntityCollection Entities { get; set; }
+
         /// <summary>
         /// Gets or sets the temperature distributor.
         /// </summary>
