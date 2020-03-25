@@ -692,6 +692,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The units are not matched..
+        /// </summary>
+        internal static string Units_UnitsNotMatched {
+            get {
+                return ResourceManager.GetString("Units.UnitsNotMatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Floating node detected: {0}..
         /// </summary>
         internal static string Validation_FloatingNodeFound {

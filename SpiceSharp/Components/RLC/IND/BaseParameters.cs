@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -10,13 +11,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the inductance parameter.
         /// </summary>
-        [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", IsPrincipal = true)]
+        [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units.Henry, IsPrincipal = true)]
         public double Inductance { get; set; }
 
         /// <summary>
         /// Gets the initial current parameter.
         /// </summary>
-        [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Interesting = false)]
+        [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Units.Volt, Interesting = false)]
         public GivenParameter<double> InitialCondition { get; set; }
 
         /// <summary>

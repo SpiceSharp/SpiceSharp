@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SpiceSharp.Diagnostics;
+using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace SpiceSharp.Simulations
@@ -17,6 +19,35 @@ namespace SpiceSharp.Simulations
         private const int _kOffset = 32;
         private const int _molOffset = 40;
         private const int _cdOffset = 48;
+        private const int _flagOffset = 56;
+
+        /// <summary>
+        /// A dictionary that contains all display names of derived units.
+        /// </summary>
+        public readonly static Dictionary<Units, string> Display = new Dictionary<Units, string>
+        {
+            { Volt, "V" }, { Ampere, "A" }, { Watt, "W" },
+            { VoltPerMeter, "V/m" },
+            { Ohm, "Ohm" }, { Mho, "Mho" },
+            { Farad, "F" }, { Henry, "H" }
+        };
+
+        /// <summary>
+        /// Flags when using alternate units.
+        /// </summary>
+        [Flags]
+        public enum Alternate : byte
+        {
+            /// <summary>
+            /// No alternate units.
+            /// </summary>
+            None = 0x00,
+
+            /// <summary>
+            /// Alternate units of temperature (Celsius).
+            /// </summary>
+            Celsius = 0x01,
+        }
 
         /// <summary>
         /// Voltage (Volt).
@@ -84,6 +115,11 @@ namespace SpiceSharp.Simulations
         public const ulong Kelvin = 0x01UL << _kOffset;
 
         /// <summary>
+        /// Temperature (Celsius).
+        /// </summary>
+        public const ulong Celsius = (((ulong)Alternate.Celsius) << _flagOffset) | (0x01UL << _kOffset);
+
+        /// <summary>
         /// Amount of substance (Mole).
         /// </summary>
         public const ulong Mole = 0x01UL << _molOffset;
@@ -142,16 +178,23 @@ namespace SpiceSharp.Simulations
         public readonly sbyte Candelas;
 
         /// <summary>
+        /// Flags for alternate
+        /// </summary>
+        [FieldOffset(_flagOffset / 8)]
+        public readonly Alternate Flags;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Units"/> struct.
         /// </summary>
         /// <param name="s">The exponent for seconds.</param>
         /// <param name="m">The exponent for meters.</param>
-        /// <param name="kg">The exponent for kg.</param>
-        /// <param name="a">The exponent for amps.</param>
+        /// <param name="kg">The exponent for kilograms.</param>
+        /// <param name="a">The exponent for amperes.</param>
         /// <param name="k">The exponent for kelvin.</param>
         /// <param name="mol">The exponent for mol.</param>
-        /// <param name="cd">The exponent for cd.</param>
-        public Units(sbyte s, sbyte m, sbyte kg, sbyte a, sbyte k, sbyte mol, sbyte cd)
+        /// <param name="cd">The exponent for candela.</param>
+        /// <param name="flags">Extra flags when using alternate units.</param>
+        private Units(sbyte s, sbyte m, sbyte kg, sbyte a, sbyte k, sbyte mol, sbyte cd, Alternate flags)
             : this()
         {
             Seconds = s;
@@ -223,35 +266,31 @@ namespace SpiceSharp.Simulations
         /// </returns>
         public override string ToString()
         {
-            switch (_id)
+            if (Display.TryGetValue(this, out var display))
+                return display;
+
+            // General representation
+            var result = new List<string>(7);
+            if (Second != 0)
+                result.Add("s" + (Seconds != 1 ? Seconds.ToString() : ""));
+            if (Meters != 0)
+                result.Add("m" + (Meters != 1 ? Meters.ToString() : ""));
+            if (Kilograms != 0)
+                result.Add("kg" + (Kilograms != 1 ? Kilograms.ToString() : ""));
+            if (Amperes != 0)
+                result.Add("A" + (Amperes != 1 ? Amperes.ToString() : ""));
+            if (Kelvins != 0)
             {
-                case Volt: return "V";
-                case Ampere: return "A";
-                case VoltPerMeter: return "V/m";
-                case Ohm: return "Ohm";
-                case Mho: return "Mho";
-                case Watt: return "W";
-                case Hertz: return "Hz";
-                case Farad: return "F";
-                case Henry: return "H";
-                default:
-                    var result = new List<string>(7);
-                    if (Second != 0)
-                        result.Add("s" + (Seconds != 1 ? Seconds.ToString() : ""));
-                    if (Meters != 0)
-                        result.Add("m" + (Meters != 1 ? Meters.ToString() : ""));
-                    if (Kilograms != 0)
-                        result.Add("kg" + (Kilograms != 1 ? Kilograms.ToString() : ""));
-                    if (Amperes != 0)
-                        result.Add("A" + (Amperes != 1 ? Amperes.ToString() : ""));
-                    if (Kelvins != 0)
-                        result.Add("K" + (Kelvins != 1 ? Kelvins.ToString() : ""));
-                    if (Moles != 0)
-                        result.Add("mol" + (Moles != 1 ? Moles.ToString() : ""));
-                    if (Candelas != 0)
-                        result.Add("cd" + (Candelas != 1 ? Candelas.ToString() : ""));
-                    return string.Join("*", result);
+                if (Flags == Alternate.Celsius)
+                    result.Add("\u2103C" + (Kelvins != 1 ? Kelvins.ToString() : ""));
+                else
+                    result.Add("K" + (Kelvins != 1 ? Kelvins.ToString() : ""));
             }
+            if (Moles != 0)
+                result.Add("mol" + (Moles != 1 ? Moles.ToString() : ""));
+            if (Candelas != 0)
+                result.Add("cd" + (Candelas != 1 ? Candelas.ToString() : ""));
+            return string.Join("*", result);
         }
 
         /// <summary>
@@ -262,6 +301,8 @@ namespace SpiceSharp.Simulations
         /// <returns>The multiplied units.</returns>
         public static Units operator *(Units left, Units right)
         {
+            if (left.Flags != right.Flags)
+                throw new UnitsNotMatchedException(left, right);
             return new Units(
                 (sbyte)(left.Seconds + right.Seconds),
                 (sbyte)(left.Meters + right.Meters),
@@ -269,7 +310,8 @@ namespace SpiceSharp.Simulations
                 (sbyte)(left.Amperes + right.Amperes),
                 (sbyte)(left.Kelvins + right.Kelvins),
                 (sbyte)(left.Moles + right.Moles),
-                (sbyte)(left.Candelas + right.Candelas)
+                (sbyte)(left.Candelas + right.Candelas),
+                left.Flags
                 );
         }
 
@@ -281,6 +323,8 @@ namespace SpiceSharp.Simulations
         /// <returns>The divided units.</returns>
         public static Units operator /(Units left, Units right)
         {
+            if (left.Flags != right.Flags)
+                throw new UnitsNotMatchedException(left, right);
             return new Units(
                 (sbyte)(left.Seconds - right.Seconds),
                 (sbyte)(left.Meters - right.Meters),
@@ -288,7 +332,8 @@ namespace SpiceSharp.Simulations
                 (sbyte)(left.Amperes - right.Amperes),
                 (sbyte)(left.Kelvins - right.Kelvins),
                 (sbyte)(left.Moles - right.Moles),
-                (sbyte)(left.Candelas - right.Candelas)
+                (sbyte)(left.Candelas - right.Candelas),
+                left.Flags
                 );
         }
 

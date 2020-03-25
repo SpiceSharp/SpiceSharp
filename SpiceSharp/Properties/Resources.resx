@@ -327,6 +327,9 @@
   <data name="UnexpectedType" xml:space="preserve">
     <value>"Unexpected type encountered: expected {0}, but got {1}.</value>
   </data>
+  <data name="Units.UnitsNotMatched" xml:space="preserve">
+    <value>The units are not matched.</value>
+  </data>
   <data name="Validation.FloatingNodeFound" xml:space="preserve">
     <value>Floating node detected: {0}.</value>
   </data>

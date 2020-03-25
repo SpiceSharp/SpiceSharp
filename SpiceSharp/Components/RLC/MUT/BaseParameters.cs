@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {

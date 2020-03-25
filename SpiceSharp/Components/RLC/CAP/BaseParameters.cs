@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
@@ -10,25 +11,25 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the capacitance parameter.
         /// </summary>
-        [ParameterName("capacitance"), ParameterInfo("Device capacitance", IsPrincipal = true)]
+        [ParameterName("capacitance"), ParameterInfo("Device capacitance", Units.Farad, IsPrincipal = true)]
         public GivenParameter<double> Capacitance { get; set; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the initial voltage parameter.
         /// </summary>
-        [ParameterName("ic"), ParameterInfo("Initial capacitor voltage", Interesting = false)]
+        [ParameterName("ic"), ParameterInfo("Initial capacitor voltage", Units.Volt, Interesting = false)]
         public double InitialCondition { get; set; }
 
         /// <summary>
         /// Gets the width parameter.
         /// </summary>
-        [ParameterName("w"), ParameterInfo("Device width", Interesting = false)]
+        [ParameterName("w"), ParameterInfo("Device width", Units.Meter, Interesting = false)]
         public GivenParameter<double> Width { get; set; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the length parameter.
         /// </summary>
-        [ParameterName("l"), ParameterInfo("Device length", Interesting = false)]
+        [ParameterName("l"), ParameterInfo("Device length", Units.Meter, Interesting = false)]
         public GivenParameter<double> Length { get; set; } = new GivenParameter<double>();
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Interesting = false)]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units.Celsius, Interesting = false)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
