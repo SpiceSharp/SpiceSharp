@@ -1,0 +1,196 @@
+﻿<#@ output extension = ".cs" #>
+using System;
+using System.Collections.Generic;
+using System.Text;
+<#
+var s = new Units(1, 0, 0, 0, 0, 0, 0, 0);
+var m = new Units(0, 1, 0, 0, 0, 0, 0, 0);
+var kg = new Units(0, 0, 1, 0, 0, 0, 0, 0);
+var A = new Units(0, 0, 0, 1, 0, 0, 0, 0);
+var K = new Units(0, 0, 0, 0, 1, 0, 0, 0);
+var mol = new Units(0, 0, 0, 0, 0, 1, 0, 0);
+var cd = new Units(0, 0, 0, 0, 0, 0, 1, 0);
+var V = kg * m.Pow(2) * s.Pow(-3) * A.Pow(-1); // 1V = 1 kg m^2 s^-3 A^-1
+
+var constants = new[]
+{
+    ("Second", s, "Time (seconds).", "s"),
+    ("Meter", m, "Distance (meters).", "m"),
+    ("Kilogram", kg, "Weight (kilograms).", "kg"),
+    ("Ampere", A, "Current (Ampere).", "A"),
+    ("Kelvin", K, "Temperature (Kelvin).", "K"),
+    ("Celsius", new Units(0, 0, 0, 0, 1, 0, 0, Units.Celsius), "Temperature (Celsius).", "\\u00b0C"),
+    ("Mole", mol, "Amount of substance (mole).", "mol"),
+    ("Candela", cd, "Luminous intensity (Candela).", "cd"),
+    
+    // Derived units
+    ("Hertz", s.Pow(-1), "Frequency (Hertz).", "Hz"), // 1Hz = 1s^-1
+    ("Volt", V, "Voltage (Volts).", "V"),
+    ("VoltPerMeter", V / m, "Electric field (Volts per meter).", "V/m"),
+    ("Coulomb", A * s, "Charge (Coulombs).", "C"), // 1C = 1A * 1s
+    ("Watt", V * A, "Power (Watts).", "W"), // 1W = 1V * 1A
+    ("Ohm", V / A, "Resistance (Ohms).", "\\u2126"), // 1Ohm = 1V / 1A
+    ("OhmPerKelvin", V / A / K, "Resistance per Kelvin (Ohms per Kelvin).", "\\u2126/K"),
+    ("OhmPerKelvin2", V / A / K.Pow(2), "Resistance per squared Kelvin (Ohms per squared Kelvin).", "\\u2126/K^2"),
+    ("Mho", A / V, "Conductance (Mho/Siemens).", "S"), // 1S = 1A / 1V
+    ("Farad", A * s / V, "Capacitance (Farads).", "F"), // Q = C * V => 1F = 1C / 1V
+    ("FaradPerMeter", A * s / V / m, "Capacitance per meter (Farads per meter).", "F/m"),
+    ("FaradPerArea", A * s / V / m.Pow(2), "Capacitance per area (Farads per squared meter).", "F/m^2"),
+    ("FaradPerKelvin", A * s / V / K, "Capacitance per Kelvin (Farads per Kelvin).", "F/K"),
+    ("FaradPerKelvin2", A * s / V / K.Pow(2), "Capacitance per squared Kelvin (Farads per squared Kelvin).", "F/K^2"),
+    ("Henry", V * s / A, "Inductance (Henries).", "H"), // v = L * di/dt => 1H = 1V * 1s / 1A
+};
+#>
+
+namespace SpiceSharp.Simulations
+{
+    public partial struct Units
+    {
+        private const int _sOffset = <#= Units.sOffset #>;
+        private const int _mOffset = <#= Units.mOffset #>;
+        private const int _kgOffset = <#= Units.kgOffset #>;
+        private const int _aOffset = <#= Units.aOffset #>;
+        private const int _kOffset = <#= Units.kOffset #>;
+        private const int _molOffset = <#= Units.molOffset #>;
+        private const int _cdOffset = <#= Units.cdOffset #>;
+        private const int _flagOffset = <#= Units.flagOffset #>;
+
+        /// <summary>
+        /// Flags when using alternate units.
+        /// </summary>
+        [Flags]
+        public enum Alternate : byte
+        {
+            /// <summary>
+            /// No alternate units.
+            /// </summary>
+            None = 0x00,
+
+            /// <summary>
+            /// Alternate units of temperature (Celsius).
+            /// </summary>
+            Celsius = 0x<#= Units.Celsius.ToString("x2") #>,
+        }
+
+        /// <summary>
+        /// Display names.
+        /// </summary>
+        public static readonly Dictionary<Units, string> Display = new Dictionary<Units, string>
+        {
+<#
+        foreach (var definition in constants) {
+#>
+            { 0x<#= ((ulong)definition.Item2).ToString("x16") #>UL, "<#= definition.Item4 #>" },
+<#
+        }
+#>
+        };
+        <#
+        foreach (var definition in constants)
+            WriteConstant(definition.Item1, definition.Item2, definition.Item3);
+        #>
+
+    }
+}
+<#+
+public void WriteConstant(string name, Units units, string description)
+{
+    #>
+
+        /// <summary>
+        /// <#= description #>
+        /// </summary>
+        public const ulong <#= name #> = 0x<#= ((ulong)units).ToString("x16") #>UL;
+    <#+
+}
+
+// Lightweight struct for calculating with units
+public struct Units
+{
+    public readonly sbyte Seconds, Meters, Kilograms, Amperes, Kelvins, Moles, Candelas;
+    public readonly byte Flags;
+
+    public const int sOffset = 0, mOffset = 8, kgOffset = 16, aOffset = 24, kOffset = 32, molOffset = 40, cdOffset = 48, flagOffset = 56;
+    public const byte Celsius = 0x01;
+
+    public Units(sbyte s, sbyte m, sbyte kg, sbyte a, sbyte k, sbyte mol, sbyte cd, byte flags)
+    {
+        Seconds = s;
+        Meters = m;
+        Kilograms = kg;
+        Amperes = a;
+        Kelvins = k;
+        Moles = mol;
+        Candelas = cd;
+        Flags = flags;
+    }
+
+    /// <summary>
+    /// Unit multiplication.
+    /// </summary>
+    /// <param name="left">Left factor.</param>
+    /// <param name="right">Right factor.</param>
+    /// <returns>The multiplied units.</returns>
+    public static Units operator *(Units left, Units right)
+    {
+        return new Units(
+            (sbyte)(left.Seconds + right.Seconds),
+            (sbyte)(left.Meters + right.Meters),
+            (sbyte)(left.Kilograms + right.Kilograms),
+            (sbyte)(left.Amperes + right.Amperes),
+            (sbyte)(left.Kelvins + right.Kelvins),
+            (sbyte)(left.Moles + right.Moles),
+            (sbyte)(left.Candelas + right.Candelas),
+            left.Flags
+            );
+    }
+
+    public Units Pow(int exponent)
+    {
+        return new Units(
+            (sbyte)(Seconds * exponent),
+            (sbyte)(Meters * exponent),
+            (sbyte)(Kilograms * exponent),
+            (sbyte)(Amperes * exponent),
+            (sbyte)(Kelvins * exponent),
+            (sbyte)(Moles * exponent),
+            (sbyte)(Candelas * exponent),
+            Flags
+            );
+    }
+
+    /// <summary>
+    /// Unit division.
+    /// </summary>
+    /// <param name="left">Numerator.</param>
+    /// <param name="right">Denominator.</param>
+    /// <returns>The divided units.</returns>
+    public static Units operator /(Units left, Units right)
+    {
+        return new Units(
+            (sbyte)(left.Seconds - right.Seconds),
+            (sbyte)(left.Meters - right.Meters),
+            (sbyte)(left.Kilograms - right.Kilograms),
+            (sbyte)(left.Amperes - right.Amperes),
+            (sbyte)(left.Kelvins - right.Kelvins),
+            (sbyte)(left.Moles - right.Moles),
+            (sbyte)(left.Candelas - right.Candelas),
+            left.Flags
+            );
+    }
+
+    public static implicit operator ulong(Units units)
+    {
+        ulong result = 0;
+        result |= (((ulong)units.Seconds) & 0x0ff) << sOffset;
+        result |= (((ulong)units.Meters) & 0x0ff) << mOffset;
+        result |= (((ulong)units.Kilograms) & 0x0ff) << kgOffset;
+        result |= (((ulong)units.Amperes) & 0x0ff) << aOffset;
+        result |= (((ulong)units.Kelvins) & 0x0ff) << kOffset;
+        result |= (((ulong)units.Moles) & 0x0ff) << molOffset;
+        result |= (((ulong)units.Candelas) & 0x0ff) << cdOffset;
+        result |= (((ulong)units.Flags) & 0x0ff) << flagOffset;
+        return result;
+    }
+}
+#>

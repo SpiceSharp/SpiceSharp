@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
@@ -11,7 +12,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets or sets the delay in seconds.
         /// </summary>
-        [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.")]
+        [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.", Units.Second)]
         public double Delay { get; set; }
 
         /// <summary>

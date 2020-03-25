@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
 {
@@ -11,19 +12,19 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <summary>
         /// Gets or sets the characteristic impedance.
         /// </summary>
-        [ParameterName("z0"), ParameterName("zo"), ParameterInfo("Characteristic impedance")]
+        [ParameterName("z0"), ParameterName("zo"), ParameterInfo("Characteristic impedance", Units.Ohm)]
         public double Impedance { get; set; } = 50.0;
 
         /// <summary>
         /// Gets the frequency parameter of the transmission line.
         /// </summary>
-        [ParameterName("f"), ParameterInfo("Frequency")]
+        [ParameterName("f"), ParameterInfo("Frequency", Units.Hertz)]
         public double Frequency { get; set; } = 1.0e9;
 
         /// <summary>
         /// Gets or sets the transmission delay of the transmission line.
         /// </summary>
-        [ParameterName("td"), ParameterInfo("Transmission delay")]
+        [ParameterName("td"), ParameterInfo("Transmission delay", Units.Second)]
         public GivenParameter<double> Delay { get; set; }
 
         /// <summary>

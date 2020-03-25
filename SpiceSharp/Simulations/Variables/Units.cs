@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Diagnostics;
+﻿
+using SpiceSharp.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -10,124 +11,9 @@ namespace SpiceSharp.Simulations
     /// The struct is interchangable with a <see cref="ulong"/>.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-    public struct Units
+    public partial struct Units
     {
-        private const int _sOffset = 0;
-        private const int _mOffset = 8;
-        private const int _kgOffset = 16;
-        private const int _aOffset = 24;
-        private const int _kOffset = 32;
-        private const int _molOffset = 40;
-        private const int _cdOffset = 48;
-        private const int _flagOffset = 56;
 
-        /// <summary>
-        /// A dictionary that contains all display names of derived units.
-        /// </summary>
-        public readonly static Dictionary<Units, string> Display = new Dictionary<Units, string>
-        {
-            { Volt, "V" }, { Ampere, "A" }, { Watt, "W" },
-            { VoltPerMeter, "V/m" },
-            { Ohm, "Ohm" }, { Mho, "Mho" },
-            { Farad, "F" }, { Henry, "H" }
-        };
-
-        /// <summary>
-        /// Flags when using alternate units.
-        /// </summary>
-        [Flags]
-        public enum Alternate : byte
-        {
-            /// <summary>
-            /// No alternate units.
-            /// </summary>
-            None = 0x00,
-
-            /// <summary>
-            /// Alternate units of temperature (Celsius).
-            /// </summary>
-            Celsius = 0x01,
-        }
-
-        /// <summary>
-        /// Voltage (Volt).
-        /// </summary>
-        public const ulong Volt = (0x01UL << _kgOffset) | (0x02UL << _mOffset) | (0xfdUL << _sOffset) | (0xffUL << _aOffset);
-
-        /// <summary>
-        /// Electric field (Volt per meter).
-        /// </summary>
-        public const ulong VoltPerMeter = (0x01UL << _kgOffset) | (0x01UL << _mOffset) | (0xfdUL << _sOffset) | (0xffUL << _aOffset);
-
-        /// <summary>
-        /// Current (Ampere).
-        /// </summary>
-        public const ulong Ampere = 0x01UL << _aOffset;
-
-        /// <summary>
-        /// Resistance (Ohm).
-        /// </summary>
-        public const ulong Ohm = (0x01UL << _kgOffset) | (0x02UL << _mOffset) | (0xfdUL << _sOffset) | (0xfeUL << _aOffset);
-
-        /// <summary>
-        /// Conductance (Mho).
-        /// </summary>
-        public const ulong Mho = (0xffUL << _kgOffset) | (0xfeUL << _mOffset) | (0x03UL << _sOffset) | (0x02UL << _aOffset);
-
-        /// <summary>
-        /// Inductance (Henry).
-        /// </summary>
-        public const ulong Henry = (0x01UL << _kgOffset) | (0x02UL << _mOffset) | (0xfeUL << _sOffset) | (0xfeUL << _aOffset);
-
-        /// <summary>
-        /// Capacitance (Farad).
-        /// </summary>
-        public const ulong Farad = (0xffUL << _kgOffset) | (0xfeUL << _mOffset) | (0x04UL << _sOffset) | (0x02UL << _aOffset);
-
-        /// <summary>
-        /// Power (Watt).
-        /// </summary>
-        public const ulong Watt = (0x01UL << _kgOffset) | (0x02UL << _mOffset) | (0xfd << _sOffset);
-
-        /// <summary>
-        /// Frequency (Hertz).
-        /// </summary>
-        public const ulong Hertz = (0xffUL << _sOffset);
-
-        /// <summary>
-        /// Time (Second).
-        /// </summary>
-        public const ulong Second = 0x01UL << _sOffset;
-
-        /// <summary>
-        /// Distance (Meter).
-        /// </summary>
-        public const ulong Meter = 0x01UL << _mOffset;
-
-        /// <summary>
-        /// Weight (Kilogram).
-        /// </summary>
-        public const ulong Kilogram = 0x01UL << _kgOffset;
-
-        /// <summary>
-        /// Temperature (Kelvin).
-        /// </summary>
-        public const ulong Kelvin = 0x01UL << _kOffset;
-
-        /// <summary>
-        /// Temperature (Celsius).
-        /// </summary>
-        public const ulong Celsius = (((ulong)Alternate.Celsius) << _flagOffset) | (0x01UL << _kOffset);
-
-        /// <summary>
-        /// Amount of substance (Mole).
-        /// </summary>
-        public const ulong Mole = 0x01UL << _molOffset;
-
-        /// <summary>
-        /// Luminous intensity (Candela).
-        /// </summary>
-        public const ulong Candela = 0x01UL << _cdOffset;
 
         /// <summary>
         /// The identifier.
@@ -267,11 +153,11 @@ namespace SpiceSharp.Simulations
         public override string ToString()
         {
             if (Display.TryGetValue(this, out var display))
-                return display;
+                 return display;
 
             // General representation
             var result = new List<string>(7);
-            if (Second != 0)
+            if (Seconds != 0)
                 result.Add("s" + (Seconds != 1 ? Seconds.ToString() : ""));
             if (Meters != 0)
                 result.Add("m" + (Meters != 1 ? Meters.ToString() : ""));

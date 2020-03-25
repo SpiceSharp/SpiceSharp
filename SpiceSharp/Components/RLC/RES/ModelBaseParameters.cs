@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -10,7 +11,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Interesting = false)]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units.Celsius, Interesting = false)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -25,13 +26,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the first-order temperature coefficient parameter.
         /// </summary>
-        [ParameterName("tc1"), ParameterInfo("First order temperature coefficient")]
+        [ParameterName("tc1"), ParameterInfo("First order temperature coefficient", Units.OhmPerKelvin)]
         public double TemperatureCoefficient1 { get; set; }
 
         /// <summary>
         /// Gets the second-order temperature coefficient parameter.
         /// </summary>
-        [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient")]
+        [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient", Units.OhmPerKelvin2)]
         public double TemperatureCoefficient2 { get; set; }
 
         /// <summary>
@@ -49,13 +50,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the default width parameter.
         /// </summary>
-        [ParameterName("defw"), ParameterInfo("Default device width")]
+        [ParameterName("defw"), ParameterInfo("Default device width", Units.Meter)]
         public double DefaultWidth { get; set; } = 10e-6;
 
         /// <summary>
         /// Gets the narrowing coefficient parameter.
         /// </summary>
-        [ParameterName("narrow"), ParameterInfo("Narrowing of resistor")]
+        [ParameterName("narrow"), ParameterInfo("Narrowing of resistor", Units.Meter)]
         public double Narrow { get; set; }
     }
 }
