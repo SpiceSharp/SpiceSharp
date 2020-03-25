@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the branch equation row.
         /// </summary>
-        public Variable Branch { get; }
+        public IVariable Branch { get; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.DelayBehaviors
             _negNode = state.Map[context.Nodes[1]];
             _contPosNode = state.Map[context.Nodes[2]];
             _contNegNode = state.Map[context.Nodes[3]];
-            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = state.Map[Branch];
 
             BiasingElements = new ElementSet<double>(state.Solver, new[] {

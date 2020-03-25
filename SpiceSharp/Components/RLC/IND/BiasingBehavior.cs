@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the branch equation index.
         /// </summary>
-        public Variable Branch { get; private set; }
+        public IVariable Branch { get; private set; }
 
         /// <summary>
         /// Gets the current.
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             BiasingState = context.GetState<IBiasingSimulationState>();
             _posNode = BiasingState.Map[context.Nodes[0]];
             _negNode = BiasingState.Map[context.Nodes[1]];
-            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = BiasingState.Map[Branch];
 
             _elements = new ElementSet<double>(BiasingState.Solver,

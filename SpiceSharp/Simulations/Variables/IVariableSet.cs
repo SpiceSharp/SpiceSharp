@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for a set of variables.
     /// </summary>
-    public interface IVariableSet : IEnumerable<Variable>
+    public interface IVariableSet : IEnumerable<IVariable>
     {
         /// <summary>
         /// Gets the number of variables.
@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The ground.
         /// </value>
-        Variable Ground { get; }
+        IVariable Ground { get; }
 
         /// <summary>
         /// Gets the comparer used for variables.
@@ -32,14 +32,14 @@ namespace SpiceSharp.Simulations
         IEqualityComparer<string> Comparer { get; }
 
         /// <summary>
-        /// Gets the <see cref="Variable"/> with the specified name.
+        /// Gets the <see cref="IVariable"/> with the specified name.
         /// </summary>
         /// <value>
-        /// The <see cref="Variable"/>.
+        /// The <see cref="IVariable"/>.
         /// </value>
         /// <param name="id">The name.</param>
-        /// <returns></returns>
-        Variable this[string id] { get; }
+        /// <returns>The variable.</returns>
+        IVariable this[string id] { get; }
 
         /// <summary>
         /// This method maps a variable in the circuit. If a variable with the same name already exists, then that variable is returned.
@@ -48,20 +48,20 @@ namespace SpiceSharp.Simulations
         /// If the variable already exists, the variable type is ignored.
         /// </remarks>
         /// <param name="id">The name of the variable.</param>
-        /// <param name="type">The type of the variable.</param>
+        /// <param name="units">The unit of the variable.</param>
         /// <returns>A new variable with the specified name and type, or a previously mapped variable if it already existed.</returns>
-        Variable MapNode(string id, VariableType type);
+        IVariable MapNode(string id, Units units);
 
         /// <summary>
         /// Creates a new variable.
         /// </summary>
         /// <remarks>
-        /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.
+        /// Variables created using this method cannot be found back using the <see cref="MapNode(string,Units)" /> method.
         /// </remarks>
         /// <param name="id">The name of the new variable.</param>
-        /// <param name="type">The type of the variable.</param>
+        /// <param name="units">The units of the variable.</param>
         /// <returns>A new variable.</returns>
-        Variable Create(string id, VariableType type);
+        IVariable Create(string id, Units units);
 
         /// <summary>
         /// Determines whether the set contains a mapped variable by a specified name.
@@ -90,7 +90,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         /// <param name="variable">The variable.</param>
         /// <param name="alias">The alias for the name.</param>
-        void AliasNode(Variable variable, string alias);
+        void AliasNode(IVariable variable, string alias);
 
         /// <summary>
         /// Tries to get a variable.
@@ -100,7 +100,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        bool TryGetNode(string id, out Variable node);
+        bool TryGetNode(string id, out IVariable node);
 
         /// <summary>
         /// Clears the set from any variables.

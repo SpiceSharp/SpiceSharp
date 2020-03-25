@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The pins.
         /// </value>
-        public IReadOnlyList<Variable> Nodes { get; }
+        public IReadOnlyList<IVariable> Nodes { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BindingContext"/> class.

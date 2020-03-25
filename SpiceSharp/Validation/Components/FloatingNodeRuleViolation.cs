@@ -14,7 +14,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The floating node variable.
         /// </value>
-        public Variable FloatingVariable { get; }
+        public IVariable FloatingVariable { get; }
 
         /// <summary>
         /// Gets the fixed node variable.
@@ -22,7 +22,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The fixed node variable.
         /// </value>
-        public Variable FixedVariable { get; }
+        public IVariable FixedVariable { get; }
 
         /// <summary>
         /// Gets the type of connection to the fixed variable.
@@ -55,7 +55,7 @@ namespace SpiceSharp.Validation
         /// <param name="floatingVariable">The floating node variable.</param>
         /// <param name="fixedVariable">The fixed node variable.</param>
         /// <param name="type">The path type.</param>
-        public FloatingNodeRuleViolation(IRule rule, Variable floatingVariable, Variable fixedVariable, ConductionTypes type)
+        public FloatingNodeRuleViolation(IRule rule, IVariable floatingVariable, IVariable fixedVariable, ConductionTypes type)
         {
             Rule = rule.ThrowIfNull(nameof(rule));
             if (type == ConductionTypes.All)

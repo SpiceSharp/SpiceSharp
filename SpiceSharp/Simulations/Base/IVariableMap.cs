@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// A template for mapping a variable to indices.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
-    public interface IVariableMap : IEnumerable<KeyValuePair<Variable, int>>
+    public interface IVariableMap : IEnumerable<KeyValuePair<IVariable, int>>
     {
         /// <summary>
         /// Gets the ground node variable.
@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The ground node variable.
         /// </value>
-        Variable Ground { get; }
+        IVariable Ground { get; }
 
         /// <summary>
         /// Gets the number of mapped variables.
@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The variable index.
         /// </returns>
-        int this[Variable variable] { get; }
+        int this[IVariable variable] { get; }
 
         /// <summary>
         /// Gets the <see cref="Variable"/> at assiciated to the specified index.
@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The associated variable.
         /// </returns>
-        Variable this[int index] { get; }
+        IVariable this[int index] { get; }
 
         /// <summary>
         /// Gets all the variables in the map.
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The variables.
         /// </value>
-        IEnumerable<Variable> Variables { get; }
+        IEnumerable<IVariable> Variables { get; }
 
         /// <summary>
         /// Determines whether a variable is mapped.
@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
         /// </returns>
-        bool Contains(Variable variable);
+        bool Contains(IVariable variable);
 
         /// <summary>
         /// Tries to get the associated index of the specified variable.
@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///     <c>true</c> if the variable has been found; otherwise, <c>false</c>.
         /// </returns>
-        bool TryGetIndex(Variable variable, out int index);
+        bool TryGetIndex(IVariable variable, out int index);
 
         /// <summary>
         /// Clears the map.

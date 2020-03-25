@@ -10,13 +10,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the variable.
         /// </summary>
-        public Variable Variable { get; }
+        public IVariable Variable { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableEventArgs"/> class.
         /// </summary>
         /// <param name="variable">The variable.</param>
-        public VariableEventArgs(Variable variable)
+        public VariableEventArgs(IVariable variable)
         {
             Variable = variable;
         }

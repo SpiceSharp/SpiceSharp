@@ -14,7 +14,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The searched variable.
         /// </value>
-        public Variable Variable { get; }
+        public IVariable Variable { get; }
 
         /// <summary>
         /// Gets the rule that was violated.
@@ -37,7 +37,7 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="rule">The rule.</param>
         /// <param name="variable">The variable.</param>
-        public VariablePresenceRuleViolation(IRule rule, Variable variable)
+        public VariablePresenceRuleViolation(IRule rule, IVariable variable)
         {
             Rule = rule.ThrowIfNull(nameof(rule));
             Variable = variable.ThrowIfNull(nameof(variable));

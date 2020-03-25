@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// The branch variable controlling this source.
         /// </summary>
-        protected Variable ControlBranch { get; }
+        protected IVariable ControlBranch { get; }
 
         /// <summary>
         /// Device methods and properties

@@ -14,6 +14,6 @@ namespace SpiceSharp.Components
         /// <value>
         /// The branch equation variable.
         /// </value>
-        Variable Branch { get; }
+        IVariable Branch { get; }
     }
 }

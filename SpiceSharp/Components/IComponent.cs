@@ -45,6 +45,6 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="variables">The set of variables.</param>
         /// <returns>An enumerable for all nodes.</returns>
-        IReadOnlyList<Variable> MapNodes(IVariableSet variables);
+        IReadOnlyList<IVariable> MapNodes(IVariableSet variables);
     }
 }

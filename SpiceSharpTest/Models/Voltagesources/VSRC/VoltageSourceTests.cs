@@ -94,7 +94,7 @@ namespace SpiceSharpTest.Models
 
                 // Simple DC
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Bias().Parameter(new IndependentSourceParameters(2.0));
                 yield return new TestCaseData(context.AsProxy(), new double[]
                     {
@@ -105,7 +105,7 @@ namespace SpiceSharpTest.Models
 
                 // Using SourceFactor
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Bias(null, i => i.SourceFactor.Returns(0.5)).Parameter(new IndependentSourceParameters(-3.0));
                 yield return new TestCaseData(context.AsProxy(),
                     new[] {
@@ -120,11 +120,11 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
+                var ibr = new Variable("branch", Units.Ampere);
 
                 // Simple AC magnitude 1
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Frequency().Parameter(new IndependentSourceParameters(1))
                     .Parameter(new IndependentSourceFrequencyParameters(1, 0));
                 yield return new TestCaseData(context.AsProxy(),
@@ -153,11 +153,11 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
+                var ibr = new Variable("branch", Units.Ampere);
 
                 // Transient analysis with waveform
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Transient(0.3, 0.01).Parameter(new IndependentSourceParameters { Waveform = new Sine(0, 1, 1) });
                 var v = Math.Sin(0.3 * 2 * Math.PI);
                 yield return new TestCaseData(context.AsProxy(),

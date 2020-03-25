@@ -39,6 +39,5 @@
         /// Normalized thermal voltage (V/K)
         /// </summary>
         public const double KOverQ = Boltzmann / Charge;
-
     }
 }

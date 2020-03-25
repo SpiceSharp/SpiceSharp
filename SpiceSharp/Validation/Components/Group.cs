@@ -8,13 +8,13 @@ namespace SpiceSharp.Validation.Components
     /// A group of variables.
     /// </summary>
     /// <seealso cref="IEnumerable{Variable}" />
-    public class Group : IEnumerable<Variable>
+    public class Group : IEnumerable<IVariable>
     {
         private class Node
         {
-            public Variable Variable { get; }
+            public IVariable Variable { get; }
             public Node Next { get; set; }
-            public Node(Variable variable) { Variable = variable.ThrowIfNull(nameof(variable)); }
+            public Node(IVariable variable) { Variable = variable.ThrowIfNull(nameof(variable)); }
         }
         private readonly Node _first;
         private Node _last;
@@ -32,7 +32,7 @@ namespace SpiceSharp.Validation.Components
         /// </summary>
         /// <param name="first">The first variable.</param>
         /// <param name="variables">Any other variables in the group.</param>
-        public Group(Variable first, params Variable[] variables)
+        public Group(IVariable first, params IVariable[] variables)
         {
             _first = new Node(first);
             _last = _first;
@@ -49,7 +49,7 @@ namespace SpiceSharp.Validation.Components
         /// Adds the specified variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
-        public void Add(Variable variable)
+        public void Add(IVariable variable)
         {
             variable.ThrowIfNull(nameof(variable));
             _last.Next = new Node(variable);
@@ -74,7 +74,7 @@ namespace SpiceSharp.Validation.Components
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Variable> GetEnumerator()
+        public IEnumerator<IVariable> GetEnumerator()
         {
             var elt = _first;
             while (elt != null)

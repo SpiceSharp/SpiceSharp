@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// This variable can be used to close in on the problem in case of non-convergence.
         /// </remarks>
-        public Variable ProblemVariable { get; protected set; }
+        public IVariable ProblemVariable { get; protected set; }
 
         /// <summary>
         /// Gets the biasing parameters.
@@ -581,7 +581,7 @@ namespace SpiceSharp.Simulations
                 if (double.IsNaN(n))
                     throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(node));
 
-                if (node.UnknownType == VariableType.Voltage)
+                if (node.Units == Units.Volt)
                 {
                     var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)

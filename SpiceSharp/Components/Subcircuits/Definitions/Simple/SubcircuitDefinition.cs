@@ -80,9 +80,9 @@ namespace SpiceSharp.Components
 
             // Keep all local behaviors in our subcircuit simulation
             string name = behaviors.Name;
-            Variable[] sharedNodes = new Variable[_pins.Length];
+            IVariable[] sharedNodes = new Variable[_pins.Length];
             for (var i = 0; i < sharedNodes.Length; i++)
-                sharedNodes[i] = parentSimulation.Variables.MapNode(subcircuit.GetNode(i), VariableType.Voltage);
+                sharedNodes[i] = parentSimulation.Variables.MapNode(subcircuit.GetNode(i), Units.Volt);
             var simulation = new SubcircuitSimulation(name, parentSimulation, this, sharedNodes);
 
             // We can now prepare the subcircuit simulation

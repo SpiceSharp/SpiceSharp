@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The shared variables.
         /// </value>
-        public IEnumerable<Variable> SharedVariables { get; }
+        public IEnumerable<IVariable> SharedVariables { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitSimulation" /> class.
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="parent">The parent simulation.</param>
         /// <param name="definition">The subcircuit definition.</param>
         /// <param name="shared">The shared variables.</param>
-        public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IEnumerable<Variable> shared)
+        public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IEnumerable<IVariable> shared)
             : base(parent,
                   new BehaviorContainerCollection(),
                   new InterfaceTypeDictionary<ISimulationState>(),

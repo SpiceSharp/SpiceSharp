@@ -509,7 +509,7 @@ namespace SpiceSharpTest.Models
                 // Init Float with extra node and series/parallel multiplier
                 {
                     var context = Substitute.For<IComponentBindingContext>()
-                        .Nodes("a", "b").CreateVariable(new Variable("posprime", VariableType.Voltage))
+                        .Nodes("a", "b").CreateVariable(new Variable("posprime", Units.Volt))
                         .Temperature(450.0).Bias(state =>
                         {
                             state.Solution[1] = 0.6;
@@ -612,7 +612,7 @@ namespace SpiceSharpTest.Models
                 // Init Float with extra node and series/parallel multiplier
                 {
                     var context = Substitute.For<IComponentBindingContext>()
-                        .Nodes("a", "b").CreateVariable(new Variable("posprime", VariableType.Voltage))
+                        .Nodes("a", "b").CreateVariable(new Variable("posprime", Units.Volt))
                         .Temperature(450.0).Bias(state =>
                         {
                             state.Solution[1] = 0.6;
@@ -722,7 +722,7 @@ namespace SpiceSharpTest.Models
                 // Init Float with extra node and series/parallel multiplier
                 {
                     var context = Substitute.For<IComponentBindingContext>()
-                        .Nodes("a", "b").CreateVariable(new Variable("posprime", VariableType.Voltage))
+                        .Nodes("a", "b").CreateVariable(new Variable("posprime", Units.Volt))
                         .Temperature(450.0).Bias(state =>
                         {
                             state.Solution[1] = 0.6;

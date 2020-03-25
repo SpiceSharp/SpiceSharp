@@ -19,7 +19,7 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// We just want to search by reference!
         /// </remarks>
-        private Dictionary<Variable, int> _map = new Dictionary<Variable, int>();
+        private Dictionary<IVariable, int> _map = new Dictionary<IVariable, int>();
 
         /// <summary>
         /// Gets the ground node.
@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The ground.
         /// </value>
-        public Variable Ground { get; }
+        public IVariable Ground { get; }
 
         /// <summary>
         /// Gets the number of mapped variables.
@@ -47,7 +47,8 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The variable index.
         /// </returns>
-        public int this[Variable variable]
+        /// <exception cref="ArgumentNullException">Thrown if the specified variable was null.</exception>
+        public int this[IVariable variable]
         {
             get
             {
@@ -63,17 +64,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the <see cref="Variable" /> at assiciated to the specified index.
+        /// Gets the <see cref="IVariable"/> at assiciated to the specified index.
         /// </summary>
         /// <value>
-        /// The <see cref="Variable" />.
+        /// The <see cref="IVariable"/>.
         /// </value>
         /// <param name="index">The index.</param>
         /// <returns>
         /// The associated variable.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
-        public Variable this[int index]
+        public IVariable this[int index]
         {
             get
             {
@@ -89,13 +90,13 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The variables.
         /// </value>
-        public IEnumerable<Variable> Variables => _map.Keys;
+        public IEnumerable<IVariable> Variables => _map.Keys;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableMap"/> class.
         /// </summary>
         /// <param name="ground">The ground variable.</param>
-        public VariableMap(Variable ground)
+        public VariableMap(IVariable ground)
         {
             Ground = ground.ThrowIfNull(nameof(ground));
             _map.Add(Ground, 0);
@@ -108,7 +109,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(Variable variable) => _map.ContainsKey(variable);
+        public bool Contains(IVariable variable) => _map.ContainsKey(variable);
 
         /// <summary>
         /// Tries to get the associated index of the specified variable.
@@ -118,7 +119,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable has been found; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetIndex(Variable variable, out int index)
+        public bool TryGetIndex(IVariable variable, out int index)
             => _map.TryGetValue(variable, out index);
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<KeyValuePair<Variable, int>> GetEnumerator() => _map.GetEnumerator();
+        public IEnumerator<KeyValuePair<IVariable, int>> GetEnumerator() => _map.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.

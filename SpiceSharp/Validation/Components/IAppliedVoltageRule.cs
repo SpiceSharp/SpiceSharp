@@ -14,6 +14,6 @@ namespace SpiceSharp.Validation
         /// <param name="subject">The subject that applies to the rule.</param>
         /// <param name="first">The first variable.</param>
         /// <param name="second">The second variable.</param>
-        void Fix(IRuleSubject subject, Variable first, Variable second);
+        void Fix(IRuleSubject subject, IVariable first, IVariable second);
     }
 }

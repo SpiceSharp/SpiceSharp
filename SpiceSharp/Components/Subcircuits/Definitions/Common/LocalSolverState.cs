@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes the specified shared.
         /// </summary>
         /// <param name="shared">The shared variables.</param>
-        public virtual void Initialize(IEnumerable<Variable> shared)
+        public virtual void Initialize(IEnumerable<IVariable> shared)
         {
             Solution = new DenseVector<T>(Solver.Size);
             _shouldPreorder = true;
@@ -79,7 +79,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Reorders the local solver.
         /// </summary>
         /// <param name="shared">The shared variables.</param>
-        private void ReorderLocalSolver(IEnumerable<Variable> shared)
+        private void ReorderLocalSolver(IEnumerable<IVariable> shared)
         {
             _sharedCount = 0;
             Solver.Precondition((matrix, vector) =>
@@ -117,7 +117,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="vector">The vector.</param>
         /// <param name="row">The row variable.</param>
-        private void LinkElement(ISparseVector<T> vector, Variable row)
+        private void LinkElement(ISparseVector<T> vector, IVariable row)
         {
             var local_index = Map[row];
             var parent_index = _parent.Map[row];
@@ -145,7 +145,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="matrix">The matrix.</param>
         /// <param name="row">The row variable.</param>
         /// <param name="column">The column variable.</param>
-        private void LinkElement(ISparseMatrix<T> matrix, Variable row, Variable column)
+        private void LinkElement(ISparseMatrix<T> matrix, IVariable row, IVariable column)
         {
             var loc = Solver.ExternalToInternal(new MatrixLocation(Map[row], Map[column]));
 

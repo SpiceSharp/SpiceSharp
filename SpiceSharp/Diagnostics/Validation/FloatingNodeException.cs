@@ -14,13 +14,13 @@ namespace SpiceSharp.Diagnostics.Validation
         /// <value>
         /// The variable.
         /// </value>
-        public Variable Variable { get; }
+        public IVariable Variable { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FloatingNodeException"/> class.
         /// </summary>
         /// <param name="variable">The variable.</param>
-        public FloatingNodeException(Variable variable)
+        public FloatingNodeException(IVariable variable)
             : base(Properties.Resources.Validation_FloatingNodeFound.FormatString(variable?.Name))
         {
             Variable = variable;

@@ -12,7 +12,7 @@ namespace SpiceSharp.Validation
     public partial class FloatingNodeRule : IConductiveRule
     {
         private readonly Group _representative;
-        private readonly Dictionary<Variable, Group> _dcGroups = new Dictionary<Variable, Group>(), _acGroups = new Dictionary<Variable, Group>();
+        private readonly Dictionary<IVariable, Group> _dcGroups = new Dictionary<IVariable, Group>(), _acGroups = new Dictionary<IVariable, Group>();
         private int _dcGroupCount, _acGroupCount;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The fixed-potential node.
         /// </value>
-        public Variable FixedVariable { get; }
+        public IVariable FixedVariable { get; }
 
         /// <summary>
         /// Gets the number of violations of this rule.
@@ -58,7 +58,7 @@ namespace SpiceSharp.Validation
         /// Initializes a new instance of the <see cref="FloatingNodeRule"/> class.
         /// </summary>
         /// <param name="fixedVariable">The fixed-potential variable.</param>
-        public FloatingNodeRule(Variable fixedVariable)
+        public FloatingNodeRule(IVariable fixedVariable)
         {
             FixedVariable = fixedVariable.ThrowIfNull(nameof(fixedVariable));
             _representative = new Group(fixedVariable);
@@ -94,7 +94,7 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="subject">The rule subject.</param>
         /// <param name="variables">The variables.</param>
-        public void AddPath(IRuleSubject subject, params Variable[] variables)
+        public void AddPath(IRuleSubject subject, params IVariable[] variables)
         {
             AddPath(subject, ConductionTypes.All, variables);
         }
@@ -105,7 +105,7 @@ namespace SpiceSharp.Validation
         /// <param name="subject">The subject that applies the conductive paths.</param>
         /// <param name="type">The type of path between these variables.</param>
         /// <param name="variables">The variables that are connected.</param>
-        public void AddPath(IRuleSubject subject, ConductionTypes type, params Variable[] variables)
+        public void AddPath(IRuleSubject subject, ConductionTypes type, params IVariable[] variables)
         {
             if (variables == null || variables.Length == 0)
                 return;
@@ -133,7 +133,7 @@ namespace SpiceSharp.Validation
         /// <param name="a">The first variable.</param>
         /// <param name="b">The second variable.</param>
         /// <param name="type">The path type.</param>
-        private void AddPath(Variable a, Variable b, ConductionTypes type)
+        private void AddPath(IVariable a, IVariable b, ConductionTypes type)
         {
             if (type == ConductionTypes.None)
                 throw new SpiceSharpException("Invalid path");
@@ -160,7 +160,7 @@ namespace SpiceSharp.Validation
         /// <param name="b">The second variable.</param>
         /// <param name="groups">The group.</param>
         /// <param name="counter">The counter to keep track of the number of distinct groups.</param>
-        private void Connect(Variable a, Variable b, Dictionary<Variable, Group> groups, ref int counter)
+        private void Connect(IVariable a, IVariable b, Dictionary<IVariable, Group> groups, ref int counter)
         {
             // Add to DC group
             var hasA = groups.TryGetValue(a, out var groupA);
@@ -225,7 +225,7 @@ namespace SpiceSharp.Validation
         /// <param name="a">The variable.</param>
         /// <param name="groups">The group.</param>
         /// <param name="counter">The counter to keep track of the number of distinct groups.</param>
-        private void Add(Variable a, Dictionary<Variable, Group> groups, ref int counter)
+        private void Add(IVariable a, Dictionary<IVariable, Group> groups, ref int counter)
         {
             if (groups.ContainsKey(a))
                 return;

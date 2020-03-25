@@ -115,7 +115,7 @@ namespace SpiceSharpTest.Models
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
-                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", VariableType.Current))
+                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", Units.Ampere))
                     .Bias().Parameter(new BaseParameters { Coefficient = 1 });
                 yield return new TestCaseData(context.AsProxy(), new[]
                     {
@@ -131,11 +131,11 @@ namespace SpiceSharpTest.Models
             get
             {
                 ICurrentControlledBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
+                var ibr = new Variable("branch", Units.Ampere);
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
-                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", VariableType.Current)).Frequency()
+                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", Units.Ampere)).Frequency()
                     .Parameter(new BaseParameters { Coefficient = 1 });
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                     {

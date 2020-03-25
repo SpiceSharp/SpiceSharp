@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <summary>
             /// Initializes the simulation state.
             /// </summary>
-            public override void Initialize(IEnumerable<Variable> shared)
+            public override void Initialize(IEnumerable<IVariable> shared)
             {
                 base.Initialize(shared);
                 OldSolution = new DenseVector<double>(Solver.Size);

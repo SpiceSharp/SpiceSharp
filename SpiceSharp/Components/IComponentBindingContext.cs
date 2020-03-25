@@ -25,6 +25,6 @@ namespace SpiceSharp.Components
         /// <value>
         /// The nodes.
         /// </value>
-        IReadOnlyList<Variable> Nodes { get; }
+        IReadOnlyList<IVariable> Nodes { get; }
     }
 }

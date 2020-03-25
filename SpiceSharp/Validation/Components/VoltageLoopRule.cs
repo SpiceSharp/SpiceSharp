@@ -12,7 +12,7 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IAppliedVoltageRule" />
     public class VoltageLoopRule : IAppliedVoltageRule
     {
-        private readonly Dictionary<Variable, Group> _groups = new Dictionary<Variable, Group>();
+        private readonly Dictionary<IVariable, Group> _groups = new Dictionary<IVariable, Group>();
         private readonly List<VoltageLoopRuleViolation> _violations = new List<VoltageLoopRuleViolation>();
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace SpiceSharp.Validation
         /// <param name="subject">The subject that applies to the rule.</param>
         /// <param name="a">The first variable.</param>
         /// <param name="b">The second variable.</param>
-        public void Fix(IRuleSubject subject, Variable a, Variable b)
+        public void Fix(IRuleSubject subject, IVariable a, IVariable b)
         {
             // If both variables are part of the same fixed-voltage group, then this rule is violated
             bool hasA = _groups.TryGetValue(a, out var groupA);

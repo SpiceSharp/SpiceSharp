@@ -30,7 +30,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The first node.
         /// </value>
-        public Variable First { get; }
+        public IVariable First { get; }
 
         /// <summary>
         /// Gets the second node that is being fixed.
@@ -38,7 +38,7 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The second node.
         /// </value>
-        public Variable Second { get; }
+        public IVariable Second { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageLoopRuleViolation"/> class.
@@ -47,7 +47,7 @@ namespace SpiceSharp.Validation
         /// <param name="subject">The subject.</param>
         /// <param name="first">The first node.</param>
         /// <param name="second">The second node.</param>
-        public VoltageLoopRuleViolation(VoltageLoopRule rule, IRuleSubject subject, Variable first, Variable second)
+        public VoltageLoopRuleViolation(VoltageLoopRule rule, IRuleSubject subject, IVariable first, IVariable second)
         {
             Rule = rule.ThrowIfNull(nameof(rule));
             Subject = subject.ThrowIfNull(nameof(subject));

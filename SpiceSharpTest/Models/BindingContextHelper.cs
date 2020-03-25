@@ -42,13 +42,13 @@ namespace SpiceSharpTest.Models
             }
         }
 
-        public static T Variable<T>(this T context, params Variable[] variables) where T : IBindingContext
+        public static T Variable<T>(this T context, params IVariable[] variables) where T : IBindingContext
         {
             if (variables == null || variables.Length == 0)
                 return context;
             var count = context.Variables.Count;
 
-            var newVariables = new Variable[count + variables.Length];
+            var newVariables = new IVariable[count + variables.Length];
             int index = 0;
             foreach (var v in context.Variables)
                 newVariables[index++] = v;
@@ -58,44 +58,44 @@ namespace SpiceSharpTest.Models
                 context.Variables.Contains(variables[i].Name).Returns(true);
                 context.Variables[variables[i].Name].Returns(variables[i]);
                 newVariables[index] = variables[i];
-                if (variables[i].UnknownType == VariableType.Voltage)
+                if (variables[i].Units == Units.Volt)
                 {
-                    context.Variables.MapNode(variables[i].Name, VariableType.Voltage).Returns(variables[i]);
-                    context.Variables.TryGetNode(variables[i].Name, out Arg.Any<Variable>()).Returns(x => { x[0] = variables[i]; return true; });
+                    context.Variables.MapNode(variables[i].Name, Units.Volt).Returns(variables[i]);
+                    context.Variables.TryGetNode(variables[i].Name, out Arg.Any<IVariable>()).Returns(x => { x[0] = variables[i]; return true; });
                     context.Variables.ContainsNode(variables[i].Name).Returns(true);
                 }
                 index++;
                 count++;
             }
             context.Variables.Count.Returns(count);
-            context.Variables.GetEnumerator().Returns(_ => ((IEnumerable<Variable>)newVariables).GetEnumerator());
+            context.Variables.GetEnumerator().Returns(_ => ((IEnumerable<IVariable>)newVariables).GetEnumerator());
             return context;
         }
         public static T Nodes<T>(this T context, params string[] nodeNames) where T : IComponentBindingContext
         {
             // Create our variables
-            var variables = new Variable[nodeNames.Length];
+            var variables = new IVariable[nodeNames.Length];
             for (var i = 0; i < variables.Length; i++)
             {
-                variables[i] = new Variable(nodeNames[i], VariableType.Voltage);
+                variables[i] = new Variable(nodeNames[i], Units.Volt);
                 context.Nodes[i].Returns(variables[i]);
             }
             context.Nodes.Count.Returns(variables.Length);
             context.Variable(variables);
             return context;
         }
-        public static T CreateVariable<T>(this T context, params Variable[] variables) where T : IBindingContext
+        public static T CreateVariable<T>(this T context, params IVariable[] variables) where T : IBindingContext
         {
             context.Variable(variables);
 
             // Make sure the context returns these variables when a new one is requested
-            var next = new Variable[variables.Length - 1];
+            var next = new IVariable[variables.Length - 1];
             for (var i = 1; i < next.Length; i++)
                 next[i - 1] = variables[i];
-            context.Variables.Create(Arg.Any<string>(), Arg.Any<VariableType>()).Returns(variables[0], next);
+            context.Variables.Create(Arg.Any<string>(), Arg.Any<Units>()).Returns(variables[0], next);
             return context;
         }
-        public static T BranchControlled<T>(this T context, Variable variable) where T : ICurrentControlledBindingContext
+        public static T BranchControlled<T>(this T context, IVariable variable) where T : ICurrentControlledBindingContext
         {
             context.Variable(variable);
             var behavior = Substitute.For<IBranchedBehavior>();

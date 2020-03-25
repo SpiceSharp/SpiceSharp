@@ -190,7 +190,7 @@ namespace SpiceSharpTest.Models
                 IComponentBindingContext context;
                 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Bias().Parameter(new BaseParameters(1e-9));
                 yield return new TestCaseData(context.AsProxy(), new double[]
                 {
@@ -207,7 +207,7 @@ namespace SpiceSharpTest.Models
                 IComponentBindingContext context;
 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Frequency(1.0).Parameter(new BaseParameters(1e-9));
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                 {
@@ -222,10 +222,10 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
+                var ibr = new Variable("branch", Units.Ampere);
 
                 context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").CreateVariable(new Variable("branch", VariableType.Current))
+                    .Nodes("a", "b").CreateVariable(new Variable("branch", Units.Ampere))
                     .Transient(0.5, 1e-3).Parameter(new BaseParameters(1e-6));
                 double g = 1e-6 / 1e-3;
                 double c = 1.0;

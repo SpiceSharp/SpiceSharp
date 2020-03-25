@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the branch equation.
         /// </summary>
-        public Variable Branch { get; private set; }
+        public IVariable Branch { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             context.TryGetState(out _method);
             _posNode = _biasing.Map[context.Nodes[0]];
             _negNode = _biasing.Map[context.Nodes[1]];
-            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
             _brNode = _biasing.Map[Branch];
             _elements = new ElementSet<double>(_biasing.Solver, new[] {
                 new MatrixLocation(_posNode, _brNode),

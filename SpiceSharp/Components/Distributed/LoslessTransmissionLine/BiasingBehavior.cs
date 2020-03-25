@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The left internal node.
         /// </value>
-        protected Variable Internal1 { get; private set; }
+        protected IVariable Internal1 { get; private set; }
 
         /// <summary>
         /// Gets the right-side internal node.
@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The right internal node.
         /// </value>
-        protected Variable Internal2 { get; private set; }
+        protected IVariable Internal2 { get; private set; }
 
         /// <summary>
         /// Gets the left-side branch.
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The left branch.
         /// </value>
-        protected Variable Branch1 { get; private set; }
+        protected IVariable Branch1 { get; private set; }
 
         /// <summary>
         /// Gets the right-side branch.
@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         /// <value>
         /// The right branch.
         /// </value>
-        protected Variable Branch2 { get; private set; }
+        protected IVariable Branch2 { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -95,13 +95,13 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             _pos2 = BiasingState.Map[context.Nodes[2]];
             _neg2 = BiasingState.Map[context.Nodes[3]];
             var variables = context.Variables;
-            Internal1 = variables.Create(Name.Combine("int1"), VariableType.Voltage);
+            Internal1 = variables.Create(Name.Combine("int1"), Units.Volt);
             _int1 = BiasingState.Map[Internal1];
-            Internal2 = variables.Create(Name.Combine("int2"), VariableType.Voltage);
+            Internal2 = variables.Create(Name.Combine("int2"), Units.Volt);
             _int2 = BiasingState.Map[Internal2];
-            Branch1 = variables.Create(Name.Combine("branch1"), VariableType.Current);
+            Branch1 = variables.Create(Name.Combine("branch1"), Units.Ampere);
             _br1 = BiasingState.Map[Branch1];
-            Branch2 = variables.Create(Name.Combine("branch2"), VariableType.Current);
+            Branch2 = variables.Create(Name.Combine("branch2"), Units.Ampere);
             _br2 = BiasingState.Map[Branch2];
             BiasingElements = new ElementSet<double>(BiasingState.Solver,
                 new MatrixLocation(_pos1, _pos1),

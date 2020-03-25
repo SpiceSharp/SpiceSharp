@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The variable.
         /// </value>
-        public Variable Variable { get; }
+        public IVariable Variable { get; }
 
         /// <summary>
         /// Gets the value for the convergence aid.
@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// <param name="variable">The variable.</param>
         /// <param name="state">The biasing simulation state.</param>
         /// <param name="value">The value.</param>
-        public ConvergenceAid(Variable variable, IBiasingSimulationState state, double value)
+        public ConvergenceAid(IVariable variable, IBiasingSimulationState state, double value)
         {
             Variable = variable.ThrowIfNull(nameof(variable));
             Value = value;
@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
             foreach (var v in _state.Map)
             {
                 // If the variable is a current, then we can't just set it to 0... 
-                if (v.Key.UnknownType == VariableType.Current)
+                if (v.Key.Units != Units.Volt)
                     hasOtherTypes = true;
                 else
                 {

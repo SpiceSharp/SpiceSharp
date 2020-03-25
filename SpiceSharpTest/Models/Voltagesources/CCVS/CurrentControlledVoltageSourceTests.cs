@@ -119,8 +119,8 @@ namespace SpiceSharpTest.Models
             get
             {
                 ICurrentControlledBindingContext context;
-                var ibr = new Variable("V1".Combine("branch"), VariableType.Current);
-                var ibrc = new Variable("VC".Combine("branch"), VariableType.Current);
+                var ibr = new Variable("V1".Combine("branch"), Units.Ampere);
+                var ibrc = new Variable("VC".Combine("branch"), Units.Ampere);
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()
@@ -141,8 +141,8 @@ namespace SpiceSharpTest.Models
             get
             {
                 ICurrentControlledBindingContext context;
-                var ibr = new Variable("V1".Combine("branch"), VariableType.Current);
-                var ibrc = new Variable("VC".Combine("branch"), VariableType.Current);
+                var ibr = new Variable("V1".Combine("branch"), Units.Ampere);
+                var ibrc = new Variable("VC".Combine("branch"), Units.Ampere);
 
                 // Simple DC
                 context = Substitute.For<ICurrentControlledBindingContext>()

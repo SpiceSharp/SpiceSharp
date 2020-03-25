@@ -128,7 +128,7 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
+                var ibr = new Variable("branch", Units.Ampere);
 
                 context = Substitute.For<IComponentBindingContext>()
                     .Nodes("a", "b", "c", "d").CreateVariable(ibr).Bias()
@@ -148,12 +148,12 @@ namespace SpiceSharpTest.Models
             get
             {
                 IComponentBindingContext context;
-                var ibr = new Variable("branch", VariableType.Current);
+                var ibr = new Variable("branch", Units.Ampere);
 
                 context = Substitute.For<IComponentBindingContext>()
                     .Nodes("a", "b", "c", "d").CreateVariable(ibr)
                     .Frequency().Parameter(new BaseParameters { Coefficient = 2 });
-                context.Variables.Create(Arg.Any<string>(), VariableType.Current).Returns(ibr);
+                context.Variables.Create(Arg.Any<string>(), Units.Ampere).Returns(ibr);
                 yield return new TestCaseData(context.AsProxy(), new Complex[]
                     {
                         double.NaN, double.NaN, double.NaN, double.NaN, 1.0, double.NaN,

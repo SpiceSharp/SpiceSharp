@@ -131,12 +131,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Gets the (internal) drain node.
         /// </summary>
-        protected Variable DrainPrime { get; private set; }
+        protected IVariable DrainPrime { get; private set; }
 
         /// <summary>
         /// Gets the (internal) source node.
         /// </summary>
-        protected Variable SourcePrime { get; private set; }
+        protected IVariable SourcePrime { get; private set; }
 
         /// <summary>
         /// Gets the state of the biasing.
@@ -171,14 +171,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             // Add series drain node if necessary
             if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.DrainSquares > 0)
-                DrainPrime = variables.Create(Name.Combine("drain"), VariableType.Voltage);
+                DrainPrime = variables.Create(Name.Combine("drain"), Units.Volt);
             else
                 DrainPrime = context.Nodes[0];
             _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
             if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.SourceSquares > 0)
-                SourcePrime = variables.Create(Name.Combine("source"), VariableType.Voltage);
+                SourcePrime = variables.Create(Name.Combine("source"), Units.Volt);
             else
                 SourcePrime = context.Nodes[2];
             _sourceNodePrime = BiasingState.Map[SourcePrime];

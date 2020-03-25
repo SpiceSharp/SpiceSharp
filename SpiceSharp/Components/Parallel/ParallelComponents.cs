@@ -172,10 +172,10 @@ namespace SpiceSharp.Components
         /// <returns>
         /// An enumerable for all nodes.
         /// </returns>
-        public IReadOnlyList<Variable> MapNodes(IVariableSet variables)
+        public IReadOnlyList<IVariable> MapNodes(IVariableSet variables)
         {
             variables.ThrowIfNull(nameof(variables));
-            var list = new List<Variable>();
+            var list = new List<IVariable>();
             if (Parameters.Entities != null)
             {
                 foreach (var entity in Parameters.Entities)

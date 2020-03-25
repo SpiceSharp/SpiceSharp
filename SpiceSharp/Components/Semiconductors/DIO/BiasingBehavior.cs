@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the positive internal node.
         /// </summary>
-        public Variable PosPrime { get; private set; }
+        public IVariable PosPrime { get; private set; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _negNode = BiasingState.Map[context.Nodes[1]];
             var variables = context.Variables;
             PosPrime = ModelParameters.Resistance > 0 ? 
-                variables.Create(Name.Combine("pos"), VariableType.Voltage) :
+                variables.Create(Name.Combine("pos"), Units.Volt) :
                 context.Nodes[0];
             _posPrimeNode = BiasingState.Map[PosPrime];
 

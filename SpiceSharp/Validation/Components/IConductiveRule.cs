@@ -14,7 +14,7 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="subject">The subject that applies the conductive paths.</param>
         /// <param name="variables">The variables that are connected.</param>
-        void AddPath(IRuleSubject subject, params Variable[] variables);
+        void AddPath(IRuleSubject subject, params IVariable[] variables);
 
         /// <summary>
         /// Specifies variables as being connected by a conductive path of the specified type.
@@ -22,7 +22,7 @@ namespace SpiceSharp.Validation
         /// <param name="subject">The subject that applies the conductive paths.</param>
         /// <param name="type">The type of path between these variables.</param>
         /// <param name="variables">The variables that are connected.</param>
-        void AddPath(IRuleSubject subject, ConductionTypes type, params Variable[] variables);
+        void AddPath(IRuleSubject subject, ConductionTypes type, params IVariable[] variables);
     }
 
     /// <summary>

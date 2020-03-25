@@ -44,7 +44,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                         case 1:
                             foreach (var node in state.Map)
                             {
-                                if (node.Key.UnknownType != VariableType.Voltage)
+                                if (node.Key.Units != Units.Volt)
                                     continue;
                                 index = node.Value;
 
@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                         case 2:
                             foreach (var node in state.Map)
                             {
-                                if (node.Key.UnknownType != VariableType.Voltage)
+                                if (node.Key.Units != Units.Volt)
                                     continue;
                                 index = node.Value;
 

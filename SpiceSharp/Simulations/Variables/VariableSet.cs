@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The unknowns.
         /// </value>
-        protected List<Variable> Unknowns { get; } = new List<Variable>();
+        protected List<IVariable> Unknowns { get; } = new List<IVariable>();
 
         /// <summary>
         /// Gets the map of variables that are searchable by their name.
@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The map.
         /// </value>
-        protected Dictionary<string, Variable> Map { get; }
+        protected Dictionary<string, IVariable> Map { get; }
 
         /// <summary>
         /// Event that is called when a variable is added to the set.
@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the ground node.
         /// </summary>
-        public Variable Ground { get; }
+        public IVariable Ground { get; }
 
         /// <summary>
         /// Gets the <see cref="IEqualityComparer{T}"/> that is used to determine equality of keys.
@@ -51,14 +51,15 @@ namespace SpiceSharp.Simulations
         public IEnumerable<string> Keys => Map.Keys;
 
         /// <summary>
-        /// Gets the <see cref="Variable"/> with the specified name.
+        /// Gets the <see cref="IVariable"/> with the specified identifier.
         /// </summary>
         /// <value>
-        /// The <see cref="Variable"/>.
+        /// The <see cref="IVariable"/>.
         /// </value>
-        /// <param name="id">The name.</param>
+        /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Variable this[string id]
+        /// <exception cref="VariableNotFoundException">Thrown if the variable wasn't found.</exception>
+        public IVariable this[string id]
         {
             get
             {
@@ -83,24 +84,26 @@ namespace SpiceSharp.Simulations
         public VariableSet(IEqualityComparer<string> comparer)
         {
             // Setup the ground node
-            Ground = new Variable("0", VariableType.Voltage);
-            Map = new Dictionary<string, Variable>(comparer)
+            Ground = new Variable("0", Units.Volt);
+            Map = new Dictionary<string, IVariable>(comparer)
             {
-                {Ground.Name, Ground}, 
-                {"GND", Ground}
+                { Ground.Name, Ground }, 
+                { "GND", Ground }
             };
         }
 
         /// <summary>
         /// This method maps a variable in the circuit. If a variable with the same name already exists, then that variable is returned.
         /// </summary>
+        /// <param name="id">The name of the variable.</param>
+        /// <param name="units">The unit of the variable.</param>
+        /// <returns>
+        /// A new variable with the specified name and type, or a previously mapped variable if it already existed.
+        /// </returns>
         /// <remarks>
         /// If the variable already exists, the variable type is ignored.
         /// </remarks>
-        /// <param name="id">The name of the variable.</param>
-        /// <param name="type">The type of the variable.</param>
-        /// <returns>A new variable with the specified name and type, or a previously mapped variable if it already existed.</returns>
-        public Variable MapNode(string id, VariableType type)
+        public IVariable MapNode(string id, Units units)
         {
             id.ThrowIfNull(nameof(id));
 
@@ -108,7 +111,7 @@ namespace SpiceSharp.Simulations
             if (Map.ContainsKey(id))
                 return Map[id];
 
-            var node = new Variable(id, type);
+            var node = new Variable(id, units);
             Unknowns.Add(node);
             Map.Add(id, node);
 
@@ -127,7 +130,7 @@ namespace SpiceSharp.Simulations
         /// This basically gives two names to the same variable. This can be used for example to make multiple names
         /// point to the ground node.
         /// </remarks>
-        public void AliasNode(Variable variable, string alias)
+        public void AliasNode(IVariable variable, string alias)
         {
             variable.ThrowIfNull(nameof(variable));
             alias.ThrowIfNull(nameof(alias));
@@ -137,15 +140,12 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Creates a new variable.
+        /// Creates the specified identifier.
         /// </summary>
-        /// <remarks>
-        /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)"/>.
-        /// </remarks>
-        /// <param name="id">The name of the new variable.</param>
-        /// <param name="type">The type of the variable.</param>
-        /// <returns>A new variable.</returns>
-        public Variable Create(string id, VariableType type)
+        /// <param name="id">The identifier.</param>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public IVariable Create(string id, Units type)
         {
             id.ThrowIfNull(nameof(id));
 
@@ -185,7 +185,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(string id, out Variable node) => Map.TryGetValue(id, out node);
+        public bool TryGetNode(string id, out IVariable node) => Map.TryGetValue(id, out node);
 
         /// <summary>
         /// Gets a mapped variable. If the node voltage does not exist, an exception will be thrown.
@@ -194,7 +194,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The node with the specified name.
         /// </returns>
-        public Variable GetNode(string id)
+        public IVariable GetNode(string id)
         {
             id.ThrowIfNull(nameof(id));
             if (Map.TryGetValue(id, out var result))
@@ -221,7 +221,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Variable> GetEnumerator() => Unknowns.GetEnumerator();
+        public IEnumerator<IVariable> GetEnumerator() => Unknowns.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.

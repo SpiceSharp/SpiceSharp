@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </value>
         /// <param name="id">The name.</param>
         /// <returns></returns>
-        public Variable this[string id] => _parent[_name.Combine(id)];
+        public IVariable this[string id] => _parent[_name.Combine(id)];
 
         /// <summary>
         /// Gets the number of variables.
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The ground.
         /// </value>
-        public Variable Ground => _parent.Ground;
+        public IVariable Ground => _parent.Ground;
 
         /// <summary>
         /// Gets the comparer used for variables.
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// This basically gives two names to the same variable. This can be used for example to make multiple names
         /// point to the ground node.
         /// </remarks>
-        public void AliasNode(Variable variable, string alias)
+        public void AliasNode(IVariable variable, string alias)
             => _parent.AliasNode(variable, _name.Combine(alias));
 
         /// <summary>
@@ -97,14 +97,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Creates a new variable.
         /// </summary>
         /// <param name="id">The name of the new variable.</param>
-        /// <param name="type">The type of the variable.</param>
+        /// <param name="units">The units of the variable.</param>
         /// <returns>
         /// A new variable.
         /// </returns>
-        /// <remarks>
-        /// Variables created using this method cannot be found back using the method <see cref="MapNode(string,VariableType)" />.
-        /// </remarks>
-        public Variable Create(string id, VariableType type) => _parent.Create(_name.Combine(id), type);
+        public IVariable Create(string id, Units units) => _parent.Create(_name.Combine(id), units);
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -112,24 +109,21 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Variable> GetEnumerator() => _parent.GetEnumerator();
+        public IEnumerator<IVariable> GetEnumerator() => _parent.GetEnumerator();
 
         /// <summary>
         /// This method maps a variable in the circuit. If a variable with the same name already exists, then that variable is returned.
         /// </summary>
         /// <param name="id">The name of the variable.</param>
-        /// <param name="type">The type of the variable.</param>
+        /// <param name="units">The unit of the variable.</param>
         /// <returns>
         /// A new variable with the specified name and type, or a previously mapped variable if it already existed.
         /// </returns>
-        /// <remarks>
-        /// If the variable already exists, the variable type is ignored.
-        /// </remarks>
-        public Variable MapNode(string id, VariableType type)
+        public IVariable MapNode(string id, Units units)
         {
             if (_parent.TryGetNode(id, out var result) && result == _parent.Ground)
                 return result;
-            return _parent.MapNode(_name.Combine(id), type);
+            return _parent.MapNode(_name.Combine(id), units);
         }
 
         /// <summary>
@@ -140,7 +134,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         ///   <c>true</c> if the variable was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetNode(string id, out Variable node)
+        public bool TryGetNode(string id, out IVariable node)
         {
             if (_parent.TryGetNode(id, out var result) && result == _parent.Ground)
             {

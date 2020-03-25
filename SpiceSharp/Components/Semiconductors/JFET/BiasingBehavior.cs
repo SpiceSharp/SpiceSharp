@@ -30,12 +30,12 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the drain node.
         /// </summary>
-        public Variable DrainPrime { get; private set; }
+        public IVariable DrainPrime { get; private set; }
 
         /// <summary>
         /// Gets the source node.
         /// </summary>
-        public Variable SourcePrime { get; private set; }
+        public IVariable SourcePrime { get; private set; }
 
         /// <summary>
         /// Gets the gate-source voltage.
@@ -109,11 +109,11 @@ namespace SpiceSharp.Components.JFETBehaviors
             _sourceNode = BiasingState.Map[context.Nodes[2]];
             var variables = context.Variables;
             DrainPrime = ModelParameters.DrainResistance > 0 ?
-                variables.Create(Name.Combine("drain"), VariableType.Voltage) :
+                variables.Create(Name.Combine("drain"), Units.Volt) :
                 context.Nodes[0];
             _drainPrimeNode = BiasingState.Map[DrainPrime];
             SourcePrime = ModelParameters.SourceResistance > 0 ? 
-                variables.Create(Name.Combine("source"), VariableType.Voltage) :
+                variables.Create(Name.Combine("source"), Units.Volt) :
                 context.Nodes[2];
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
             

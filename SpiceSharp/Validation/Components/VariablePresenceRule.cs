@@ -9,7 +9,7 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IConductiveRule" />
     public class VariablePresenceRule : IConductiveRule
     {
-        private readonly Variable _search;
+        private readonly IVariable _search;
 
         /// <summary>
         /// Gets the number of violations of this rule.
@@ -38,7 +38,7 @@ namespace SpiceSharp.Validation
         /// Initializes a new instance of the <see cref="VariablePresenceRule"/> class.
         /// </summary>
         /// <param name="search">The varibale that needs to be present.</param>
-        public VariablePresenceRule(Variable search)
+        public VariablePresenceRule(IVariable search)
         {
             _search = search.ThrowIfNull(nameof(search));
             ViolationCount = 1;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Validation
         /// </summary>
         /// <param name="subject">The rule subject.</param>
         /// <param name="variables">The variables.</param>
-        public void AddPath(IRuleSubject subject, params Variable[] variables)
+        public void AddPath(IRuleSubject subject, params IVariable[] variables)
         {
             foreach (var v in variables)
             {
@@ -72,7 +72,7 @@ namespace SpiceSharp.Validation
         /// <param name="subject">The subject that applies the conductive paths.</param>
         /// <param name="type">The type of path between these variables.</param>
         /// <param name="variables">The variables that are connected.</param>
-        public void AddPath(IRuleSubject subject, ConductionTypes type, params Variable[] variables)
+        public void AddPath(IRuleSubject subject, ConductionTypes type, params IVariable[] variables)
         {
             foreach (var v in variables)
             {

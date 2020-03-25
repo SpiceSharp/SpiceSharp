@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the controlling branch equation row.
         /// </summary>
-        protected Variable ControlBranch { get; private set; }
+        protected IVariable ControlBranch { get; private set; }
 
         /// <summary>
         /// Gets the branch equation.
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <value>
         /// The branch.
         /// </value>
-        public Variable Branch { get; private set; }
+        public IVariable Branch { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             ControlBranch = behavior.Branch;
             _cbrNode = _biasing.Map[ControlBranch];
             
-            Branch = context.Variables.Create(Name.Combine("branch"), VariableType.Current);
+            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
             _brNode = _biasing.Map[Branch];
 
             _elements = new ElementSet<double>(_biasing.Solver,

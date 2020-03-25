@@ -91,17 +91,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the collector prime node index.
         /// </summary>
-        public Variable CollectorPrime { get; private set; }
+        public IVariable CollectorPrime { get; private set; }
 
         /// <summary>
         /// Gets the base prime node index.
         /// </summary>
-        public Variable BasePrime { get; private set; }
+        public IVariable BasePrime { get; private set; }
 
         /// <summary>
         /// Gets the emitter prime node index.
         /// </summary>
-        public Variable EmitterPrime { get; private set; }
+        public IVariable EmitterPrime { get; private set; }
 
         /// <summary>
         /// Gets or modifies the base-emitter current.
@@ -169,19 +169,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Add a series collector node if necessary
             CollectorPrime = ModelParameters.CollectorResistance > 0 ?
-                variables.Create(Name.Combine("col"), VariableType.Voltage) :
+                variables.Create(Name.Combine("col"), Units.Volt) :
                 context.Nodes[0];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
 
             // Add a series base node if necessary
             BasePrime = ModelParameters.BaseResist > 0 ?
-                variables.Create(Name.Combine("base"), VariableType.Voltage) :
+                variables.Create(Name.Combine("base"), Units.Volt) :
                 context.Nodes[1];
             _basePrimeNode = BiasingState.Map[BasePrime];
 
             // Add a series emitter node if necessary
             EmitterPrime = ModelParameters.EmitterResistance > 0 ?
-                variables.Create(Name.Combine("emit"), VariableType.Voltage) :
+                variables.Create(Name.Combine("emit"), Units.Volt) :
                 context.Nodes[2];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
 
