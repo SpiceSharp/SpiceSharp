@@ -26,12 +26,21 @@ namespace SpiceSharp.Attributes
         public bool IsPrincipal { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets the exponent (scientific notation). Indicates that
+        /// the value will be multiplied with 10^Exponent internally.
+        /// </summary>
+        /// <value>
+        /// The exponent.
+        /// </value>
+        public sbyte Exponent { get; set; } = 0;
+
+        /// <summary>
         /// Gets the units of the parameter.
         /// </summary>
         /// <value>
         /// The units.
         /// </value>
-        public Units Units { get; }
+        public string Units { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterInfoAttribute"/> class.
@@ -40,17 +49,6 @@ namespace SpiceSharp.Attributes
         public ParameterInfoAttribute(string description)
         {
             Description = description;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterInfoAttribute"/> class.
-        /// </summary>
-        /// <param name="description">The description.</param>
-        /// <param name="units">The units.</param>
-        public ParameterInfoAttribute(string description, ulong units)
-        {
-            Description = description;
-            Units = units;
         }
     }
 }

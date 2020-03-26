@@ -11,13 +11,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the inductance parameter.
         /// </summary>
-        [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units.Henry, IsPrincipal = true)]
+        [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units = "H", IsPrincipal = true)]
         public double Inductance { get; set; }
 
         /// <summary>
         /// Gets the initial current parameter.
         /// </summary>
-        [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Units.Volt, Interesting = false)]
+        [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Units = "V", Interesting = false)]
         public GivenParameter<double> InitialCondition { get; set; }
 
         /// <summary>

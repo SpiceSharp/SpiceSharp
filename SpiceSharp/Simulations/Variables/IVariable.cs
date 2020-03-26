@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using SpiceSharp.Simulations.Variables;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Describes an unknown variable that will be solved by a simulation.
@@ -14,11 +16,11 @@
         string Name { get; }
 
         /// <summary>
-        /// Gets the units of the variable.
+        /// Gets the SI units of the quantity.
         /// </summary>
         /// <value>
-        /// The units of the variable.
+        /// The SI units.
         /// </value>
-        Units Units { get; }
+        IUnit Unit { get; }
     }
 }

@@ -635,7 +635,7 @@ namespace SpiceSharpTest.Models
             Console.WriteLine("- Solutions");
             Dictionary<int, string> variables = new Dictionary<int, string>();
             foreach (var variable in rstate.Map)
-                variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.Units}): {rstate.Solution[variable.Value]}");
+                variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.Unit}): {rstate.Solution[variable.Value]}");
             for (var i = 0; i <= state.MaxOrder; i++)
             {
                 var oldsolution = state.GetPreviousSolution(i);

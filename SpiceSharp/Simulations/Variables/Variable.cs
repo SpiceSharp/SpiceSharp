@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Simulations.Variables;
 
 namespace SpiceSharp.Simulations
 {
@@ -21,17 +22,17 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The units of the variable.
         /// </value>
-        public Units Units { get; }
+        public IUnit Unit { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Variable"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="units">The unit.</param>
-        public Variable(string name, Units units)
+        /// <param name="unit">The unit.</param>
+        public Variable(string name, IUnit unit)
         {
             Name = name;
-            Units = units;
+            Unit = unit;
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         public override string ToString()
         {
-            return "Node {0} ({1})".FormatString(Name, Units);
+            return "Node {0} ({1})".FormatString(Name, Unit);
         }
     }
 }

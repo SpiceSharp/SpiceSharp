@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -10,7 +11,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature")]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature", Units = "\u00b0C")]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -25,7 +26,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the area parameter.
         /// </summary>
-        [ParameterName("area"), ParameterInfo("Area factor")]
+        [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         public double Area { get; set; } = 1;
 
         /// <summary>
@@ -37,20 +38,20 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the initial base-emitter voltage parameter.
         /// </summary>
-        [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage")]
+        [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage", Units = "V")]
         public double InitialVoltageBe { get; set; }
 
         /// <summary>
         /// Gets the initial collector-emitter voltage parameter.
         /// </summary>
-        [ParameterName("icvce"), ParameterInfo("Initial C-E voltage")]
+        [ParameterName("icvce"), ParameterInfo("Initial C-E voltage", Units = "V")]
         public double InitialVoltageCe { get; set; }
 
         /// <summary>
         /// Set initial conditions of the device.
         /// </summary>
         /// <param name="value">The initial voltages (Vce, Vbe) or just (Vbe).</param>
-        [ParameterName("ic"), ParameterInfo("Initial condition vector")]
+        [ParameterName("ic"), ParameterInfo("Initial condition vector", Units = "V")]
         public void SetIc(double[] value)
         {
             value.ThrowIfNull(nameof(value));

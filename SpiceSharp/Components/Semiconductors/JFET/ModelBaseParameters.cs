@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {
@@ -11,6 +12,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets or sets the measurement temperature in degrees celsius.
         /// </summary>
+        [ParameterName("tnom"), ParameterInfo("Nominal temperature.", Units = "\u00b0C")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -20,61 +22,60 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the measurement temperature in Kelvin.
         /// </summary>
-        [ParameterName("tnom")]
         public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(300.15, false);
 
         /// <summary>
         /// Gets the threshold voltage.
         /// </summary>
-        [ParameterName("vt0"), ParameterName("vto"), ParameterInfo("Threshold voltage")]
+        [ParameterName("vt0"), ParameterName("vto"), ParameterInfo("Threshold voltage", Units = "V")]
         public double Threshold { get; set; } = -2;
 
         /// <summary>
         /// Gets the transconductance.
         /// </summary>
-        [ParameterName("beta"), ParameterInfo("Transconductance parameter")]
+        [ParameterName("beta"), ParameterInfo("Transconductance parameter", Units = "\u03a9^-1")]
         public double Beta { get; set; } = 1e-4;
 
         /// <summary>
         /// Gets the channel length modulation parameter.
         /// </summary>
-        [ParameterName("lambda"), ParameterInfo("Channel length modulation parameter")]
+        [ParameterName("lambda"), ParameterInfo("Channel length modulation parameter", Units = "V^-1")]
         public double LModulation { get; set; }
 
         /// <summary>
         /// Gets the drain resistance.
         /// </summary>
-        [ParameterName("rd"), ParameterInfo("Drain ohmic resistance")]
+        [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
         public double DrainResistance { get; set; }
 
         /// <summary>
         /// Gets the source resistance.
         /// </summary>
-        [ParameterName("rs"), ParameterInfo("Source ohmic resistance")]
+        [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
         public double SourceResistance { get; set; }
 
         /// <summary>
         /// Gets the gate-source junction capacitance.
         /// </summary>
-        [ParameterName("cgs"), ParameterInfo("G-S junction capacitance")]
+        [ParameterName("cgs"), ParameterInfo("G-S junction capacitance", Units = "F")]
         public double CapGs { get; set; }
 
         /// <summary>
         /// Gets the gate-drain junction capacitance.
         /// </summary>
-        [ParameterName("cgd"), ParameterInfo("G-D junction capacitance")]
+        [ParameterName("cgd"), ParameterInfo("G-D junction capacitance", Units = "F")]
         public double CapGd { get; set; }
 
         /// <summary>
         /// Gets the gate junction potential.
         /// </summary>
-        [ParameterName("pb"), ParameterInfo("Gate junction potential")]
+        [ParameterName("pb"), ParameterInfo("Gate junction potential", Units = "V")]
         public double GatePotential { get; set; } = 1;
 
         /// <summary>
         /// Gets the gate saturation current.
         /// </summary>
-        [ParameterName("is"), ParameterInfo("Gate junction saturation current")]
+        [ParameterName("is"), ParameterInfo("Gate junction saturation current", Units = "A")]
         public double GateSaturationCurrent { get; set; } = 1e-14;
 
         /// <summary>

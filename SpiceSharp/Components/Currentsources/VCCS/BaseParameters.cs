@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [ParameterName("gain"), ParameterInfo("Transconductance of the source (gain)", Units.Mho)]
+        [ParameterName("gain"), ParameterInfo("Transconductance of the source (gain)", Units = "\u03a9^-1")]
         public double Coefficient { get; set; }
 
         /// <summary>

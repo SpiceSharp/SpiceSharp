@@ -11,13 +11,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the resistance parameter.
         /// </summary>
-        [ParameterName("resistance"), ParameterInfo("Resistance", Units.Ohm, IsPrincipal = true)]
+        [ParameterName("resistance"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
         public GivenParameter<double> Resistance { get; set; }
 
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units.Celsius, Interesting = false)]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -32,13 +32,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the width parameter of the resistor.
         /// </summary>
-        [ParameterName("w"), ParameterInfo("Width", Units.Meter, Interesting = false)]
+        [ParameterName("w"), ParameterInfo("Width", Units = "m", Interesting = false)]
         public GivenParameter<double> Width { get; set; }
 
         /// <summary>
         /// Gets the length parameter of the resistor.
         /// </summary>
-        [ParameterName("l"), ParameterInfo("Length", Units.Meter, Interesting = false)]
+        [ParameterName("l"), ParameterInfo("Length", Units = "m", Interesting = false)]
         public GivenParameter<double> Length { get; set; }
 
         /// <summary>

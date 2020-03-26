@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Variables;
 
 namespace SpiceSharp.Diagnostics
 {
@@ -7,13 +6,13 @@ namespace SpiceSharp.Diagnostics
     /// Exception thrown when two units are not matched.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-    public class UnitsNotMatchedException : SpiceSharpException
+    public class InvalidExponentException : SpiceSharpException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitsNotMatchedException"/> class.
         /// </summary>
-        public UnitsNotMatchedException(IUnit first, IUnit second)
-            : base(Properties.Resources.Units_UnitsNotMatched.FormatString(first, second))
+        public InvalidExponentException(int numerator, int denominator)
+            : base(Properties.Resources.Units_InvalidExponent.FormatString(numerator, denominator))
         {
         }
     }

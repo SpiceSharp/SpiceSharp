@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Variables;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -101,7 +102,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// A new variable.
         /// </returns>
-        public IVariable Create(string id, Units units) => _parent.Create(_name.Combine(id), units);
+        public IVariable Create(string id, IUnit units) => _parent.Create(_name.Combine(id), units);
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -119,7 +120,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// A new variable with the specified name and type, or a previously mapped variable if it already existed.
         /// </returns>
-        public IVariable MapNode(string id, Units units)
+        public IVariable MapNode(string id, IUnit units)
         {
             if (_parent.TryGetNode(id, out var result) && result == _parent.Ground)
                 return result;

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
@@ -10,7 +11,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the area parameter.
         /// </summary>
-        [ParameterName("area"), ParameterInfo("Area factor")]
+        [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         public double Area { get; set; } = 1;
 
         /// <summary>
@@ -22,13 +23,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets or sets the initial condition.
         /// </summary>
-        [ParameterName("ic"), ParameterInfo("Initial device voltage")]
+        [ParameterName("ic"), ParameterInfo("Initial device voltage", Units = "V")]
         public double InitCond { get; set; }
         
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature")]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature", Units = "\u00b0C")]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;

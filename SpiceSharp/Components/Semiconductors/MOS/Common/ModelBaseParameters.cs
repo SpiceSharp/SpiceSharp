@@ -1,29 +1,30 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
     /// <summary>
     /// Common model parameters for mosfets.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public abstract class ModelBaseParameters : ParameterSet
     {
         /// <summary>
         /// Gets the default width for transistors using this model.
         /// </summary>
-        [ParameterName("w"), ParameterInfo("The default width for transistors using this model")]
+        [ParameterName("w"), ParameterInfo("The default width for transistors using this model", Units = "m")]
         public GivenParameter<double> Width { get; set; }
 
         /// <summary>
         /// Gets the default length for transistors using this model.
         /// </summary>
-        [ParameterName("l"), ParameterInfo("The default length for transistors using this model")]
+        [ParameterName("l"), ParameterInfo("The default length for transistors using this model", Units = "m")]
         public GivenParameter<double> Length { get; set; }
 
         /// <summary>
         /// Gets or sets the nominal temperature in degrees celsius.
         /// </summary>
-        [ParameterName("tnom"), DerivedProperty, ParameterInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), DerivedProperty, ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -33,85 +34,85 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets the base threshold voltage.
         /// </summary>
-        [ParameterName("vto"), ParameterName("vt0"), ParameterInfo("Threshold voltage")]
+        [ParameterName("vto"), ParameterName("vt0"), ParameterInfo("Threshold voltage", Units = "V")]
         public GivenParameter<double> Vt0 { get; set; }
 
         /// <summary>
         /// Gets the transconductance.
         /// </summary>
-        [ParameterName("kp"), ParameterInfo("Transconductance parameter")]
+        [ParameterName("kp"), ParameterInfo("Transconductance parameter", Units = "A/V^2")]
         public GivenParameter<double> Transconductance { get; set; } = new GivenParameter<double>(2e-5, false);
 
         /// <summary>
         /// Gets the bulk threshold parameter.
         /// </summary>
-        [ParameterName("gamma"), ParameterInfo("Bulk threshold parameter")]
+        [ParameterName("gamma"), ParameterInfo("Bulk threshold parameter", Units = "V^0.5")]
         public GivenParameter<double> Gamma { get; set; }
 
         /// <summary>
         /// Gets the surface potential.
         /// </summary>
-        [ParameterName("phi"), ParameterInfo("Surface potential")]
+        [ParameterName("phi"), ParameterInfo("Surface potential", Units = "V")]
         public GivenParameter<double> Phi { get; set; } = new GivenParameter<double>(0.6, false);
 
         /// <summary>
         /// Gets the drain ohmic resistance.
         /// </summary>
-        [ParameterName("rd"), ParameterInfo("Drain ohmic resistance")]
+        [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
         public double DrainResistance { get; set; }
 
         /// <summary>
         /// Gets the source ohmic resistance.
         /// </summary>
-        [ParameterName("rs"), ParameterInfo("Source ohmic resistance")]
+        [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
         public double SourceResistance { get; set; }
 
         /// <summary>
         /// Gets the bulk-drain junction capacitance.
         /// </summary>
-        [ParameterName("cbd"), ParameterInfo("B-D junction capacitance")]
+        [ParameterName("cbd"), ParameterInfo("B-D junction capacitance", Units = "F")]
         public GivenParameter<double> CapBd { get; set; }
 
         /// <summary>
         /// Gets the bulk-source junction capacitance
         /// </summary>
-        [ParameterName("cbs"), ParameterInfo("B-S junction capacitance")]
+        [ParameterName("cbs"), ParameterInfo("B-S junction capacitance", Units = "F")]
         public GivenParameter<double> CapBs { get; set; }
 
         /// <summary>
         /// Gets the bulk junction saturation current.
         /// </summary>
-        [ParameterName("is"), ParameterInfo("Bulk junction sat. current")]
+        [ParameterName("is"), ParameterInfo("Bulk junction saturation current", Units = "A")]
         public double JunctionSatCur { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets the bulk junction potential.
         /// </summary>
-        [ParameterName("pb"), ParameterInfo("Bulk junction potential")]
+        [ParameterName("pb"), ParameterInfo("Bulk junction potential", Units = "V")]
         public double BulkJunctionPotential { get; set; } = 0.8;
 
         /// <summary>
         /// Gets the gate-source overlap capacitance.
         /// </summary>
-        [ParameterName("cgso"), ParameterInfo("Gate-source overlap cap.")]
+        [ParameterName("cgso"), ParameterInfo("Gate-source overlap cap.", Units = "F/m")]
         public double GateSourceOverlapCapFactor { get; set; }
 
         /// <summary>
         /// Gets the gate-drain overlap capacitance.
         /// </summary>
-        [ParameterName("cgdo"), ParameterInfo("Gate-drain overlap cap.")]
+        [ParameterName("cgdo"), ParameterInfo("Gate-drain overlap cap.", Units = "F/m")]
         public double GateDrainOverlapCapFactor { get; set; }
 
         /// <summary>
         /// Gets the gate-bulk overlap capacitance.
         /// </summary>
-        [ParameterName("cgbo"), ParameterInfo("Gate-bulk overlap cap.")]
+        [ParameterName("cgbo"), ParameterInfo("Gate-bulk overlap cap.", Units = "F/m")]
         public double GateBulkOverlapCapFactor { get; set; }
 
         /// <summary>
         /// Gets the bottom junction capacitance per area.
         /// </summary>
-        [ParameterName("cj"), ParameterInfo("Bottom junction cap per area")]
+        [ParameterName("cj"), ParameterInfo("Bottom junction cap. per area", Units = "F/m^2")]
         public GivenParameter<double> BulkCapFactor { get; set; }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets the sidewall capacitance.
         /// </summary>
-        [ParameterName("cjsw"), ParameterInfo("Side junction cap per area")]
+        [ParameterName("cjsw"), ParameterInfo("Side junction cap. per area", Units = "F/m^2")]
         public GivenParameter<double> SidewallCapFactor { get; set; }
 
         /// <summary>
@@ -135,31 +136,31 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets the bulk junction saturation current density.
         /// </summary>
-        [ParameterName("js"), ParameterInfo("Bulk jct. sat. current density")]
+        [ParameterName("js"), ParameterInfo("Bulk jct. sat. current density", Units = "A/m^2")]
         public double JunctionSatCurDensity { get; set; }
 
         /// <summary>
         /// Gets the oxide thickness.
         /// </summary>
-        [ParameterName("tox"), ParameterInfo("Oxide thickness")]
+        [ParameterName("tox"), ParameterInfo("Oxide thickness", Units = "m")]
         public GivenParameter<double> OxideThickness { get; set; }
 
         /// <summary>
         /// Gets the lateral diffusion.
         /// </summary>
-        [ParameterName("ld"), ParameterInfo("Lateral diffusion")]
+        [ParameterName("ld"), ParameterInfo("Lateral diffusion", Units = "m")]
         public double LateralDiffusion { get; set; }
 
         /// <summary>
         /// Gets the sheet resistance.
         /// </summary>
-        [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
+        [ParameterName("rsh"), ParameterInfo("Sheet resistance", Units = "\u03a9")]
         public double SheetResistance { get; set; }
 
         /// <summary>
         /// Gets the surface mobility.
         /// </summary>
-        [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility")]
+        [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility", Units = "V/cm")]
         public double SurfaceMobility { get; set; } = 600;
 
         /// <summary>

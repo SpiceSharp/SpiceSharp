@@ -581,7 +581,7 @@ namespace SpiceSharp.Simulations
                 if (double.IsNaN(n))
                     throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(node));
 
-                if (node.Units == Units.Volt)
+                if (node.Unit == Units.Volt)
                 {
                     var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
@@ -10,13 +11,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the saturation current parameter.
         /// </summary>
-        [ParameterName("is"), ParameterInfo("Saturation current")]
+        [ParameterName("is"), ParameterInfo("Saturation current", Units = "A")]
         public double SaturationCurrent { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -31,7 +32,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the ohmic resistance parameter.
         /// </summary>
-        [ParameterName("rs"), ParameterInfo("Ohmic resistance")]
+        [ParameterName("rs"), ParameterInfo("Ohmic resistance", Units = "\u03a9")]
         public double Resistance { get; set; }
 
         /// <summary>
@@ -43,19 +44,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the transit time parameter.
         /// </summary>
-        [ParameterName("tt"), ParameterInfo("Transit Time")]
+        [ParameterName("tt"), ParameterInfo("Transit Time", Units = "s")]
         public double TransitTime { get; set; }
 
         /// <summary>
         /// Gets the junction capacitance parameter.
         /// </summary>
-        [ParameterName("cjo"), ParameterName("cj0"), ParameterInfo("Junction capacitance")]
+        [ParameterName("cjo"), ParameterName("cj0"), ParameterInfo("Junction capacitance", Units = "F")]
         public double JunctionCap { get; set; }
 
         /// <summary>
         /// Gets the junction built-in potential parameter.
         /// </summary>
-        [ParameterName("vj"), ParameterInfo("Junction potential")]
+        [ParameterName("vj"), ParameterInfo("Junction potential", Units = "V")]
         public double JunctionPotential { get; set; } = 1;
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the activation energy parameter.
         /// </summary>
-        [ParameterName("eg"), ParameterInfo("Activation energy")]
+        [ParameterName("eg"), ParameterInfo("Activation energy", Units = "eV")]
         public double ActivationEnergy { get; set; } = 1.11;
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <value>
         /// The breakdown voltage.
         /// </value>
-        [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage")]
+        [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage", Units = "V")]
         public double BreakdownVoltage { get; set; } = double.NaN;
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <value>
         /// The breakdown current.
         /// </value>
-        [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage")]
+        [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage", Units = "A")]
         public double BreakdownCurrent { get; set; } = 1e-3;
     }
 }

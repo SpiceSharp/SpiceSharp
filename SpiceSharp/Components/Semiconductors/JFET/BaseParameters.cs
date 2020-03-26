@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {
@@ -11,7 +12,7 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets or sets the temperature in degrees celsius.
         /// </summary>
-        [ParameterName("temp"), ParameterInfo("Instance temperature")]
+        [ParameterName("temp"), ParameterInfo("Instance temperature", Units = "\u00b0C")]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -26,19 +27,19 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Gets the area.
         /// </summary>
-        [ParameterName("area"), ParameterInfo("Area factor")]
+        [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         public double Area { get; set; } = 1;
 
         /// <summary>
         /// Gets the initial D-S voltage.
         /// </summary>
-        [ParameterName("ic-vds"), ParameterInfo("Initial D-S voltage")]
+        [ParameterName("ic-vds"), ParameterInfo("Initial D-S voltage", Units = "V")]
         public double InitialVds { get; set; }
 
         /// <summary>
         /// Gets the initial G-S voltage.
         /// </summary>
-        [ParameterName("ic-vgs"), ParameterInfo("Initial G-S voltage")]
+        [ParameterName("ic-vgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
         public double InitialVgs { get; set; }
 
         /// <summary>

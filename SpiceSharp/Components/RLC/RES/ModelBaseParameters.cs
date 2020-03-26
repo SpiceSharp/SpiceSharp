@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units.Celsius, Interesting = false)]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -26,13 +26,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the first-order temperature coefficient parameter.
         /// </summary>
-        [ParameterName("tc1"), ParameterInfo("First order temperature coefficient", Units.OhmPerKelvin)]
+        [ParameterName("tc1"), ParameterInfo("First order temperature coefficient", Units = "\u03a9/K")]
         public double TemperatureCoefficient1 { get; set; }
 
         /// <summary>
         /// Gets the second-order temperature coefficient parameter.
         /// </summary>
-        [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient", Units.OhmPerKelvin2)]
+        [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient", Units = "\u03a9/K^2")]
         public double TemperatureCoefficient2 { get; set; }
 
         /// <summary>
@@ -50,13 +50,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the default width parameter.
         /// </summary>
-        [ParameterName("defw"), ParameterInfo("Default device width", Units.Meter)]
+        [ParameterName("defw"), ParameterInfo("Default device width", Units = "m")]
         public double DefaultWidth { get; set; } = 10e-6;
 
         /// <summary>
         /// Gets the narrowing coefficient parameter.
         /// </summary>
-        [ParameterName("narrow"), ParameterInfo("Narrowing of resistor", Units.Meter)]
+        [ParameterName("narrow"), ParameterInfo("Narrowing of resistor", Units = "m")]
         public double Narrow { get; set; }
     }
 }

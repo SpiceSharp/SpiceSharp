@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -50,7 +51,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature")]
+        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -65,7 +66,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the saturation current parameter.
         /// </summary>
-        [ParameterName("is"), ParameterInfo("Saturation Current")]
+        [ParameterName("is"), ParameterInfo("Saturation Current", Units = "A")]
         public double SatCur { get; set; } = 1e-16;
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the forward Early voltage parameter.
         /// </summary>
-        [ParameterName("vaf"), ParameterName("va"), ParameterInfo("Forward Early voltage")]
+        [ParameterName("vaf"), ParameterName("va"), ParameterInfo("Forward Early voltage", Units = "V")]
         public double EarlyVoltageForward { get; set; }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base-emitter saturation current parameter.
         /// </summary>
-        [ParameterName("ise"), ParameterInfo("B-E leakage saturation current")]
+        [ParameterName("ise"), ParameterInfo("B-E leakage saturation current", Units = "A")]
         public GivenParameter<double> LeakBeCurrent { get; set; }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the reverse Early voltage parameter.
         /// </summary>
-        [ParameterName("var"), ParameterName("vb"), ParameterInfo("Reverse Early voltage")]
+        [ParameterName("var"), ParameterName("vb"), ParameterInfo("Reverse Early voltage", Units = "V")]
         public double EarlyVoltageReverse { get; set; }
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base-collector saturation current parameter.
         /// </summary>
-        [ParameterName("isc"), ParameterInfo("B-C leakage saturation current")]
+        [ParameterName("isc"), ParameterInfo("B-C leakage saturation current", Units = "A")]
         public GivenParameter<double> LeakBcCurrent { get; set; }
 
         /// <summary>
@@ -149,37 +150,37 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the current for base resistance (rb + rbm) / 2 parameter.
         /// </summary>
-        [ParameterName("irb"), ParameterInfo("Current for base resistance=(rb+rbm)/2")]
+        [ParameterName("irb"), ParameterInfo("Current for base resistance=(rb+rbm)/2", Units = "A")]
         public double BaseCurrentHalfResist { get; set; }
 
         /// <summary>
         /// Gets the minimum base resistance parameter.
         /// </summary>
-        [ParameterName("rbm"), ParameterInfo("Minimum base resistance")]
+        [ParameterName("rbm"), ParameterInfo("Minimum base resistance", Units = "\u03a9")]
         public GivenParameter<double> MinimumBaseResistance { get; set; }
 
         /// <summary>
         /// Gets the emitter resistance parameter.
         /// </summary>
-        [ParameterName("re"), ParameterInfo("Emitter resistance")]
+        [ParameterName("re"), ParameterInfo("Emitter resistance", Units = "\u03a9")]
         public double EmitterResistance { get; set; }
 
         /// <summary>
         /// Gets the collector resistance parameter.
         /// </summary>
-        [ParameterName("rc"), ParameterInfo("Collector resistance")]
+        [ParameterName("rc"), ParameterInfo("Collector resistance", Units = "\u03a9")]
         public double CollectorResistance { get; set; }
 
         /// <summary>
         /// Gets the zero-bias base-emitter depletion capacitance parameter.
         /// </summary>
-        [ParameterName("cje"), ParameterInfo("Zero bias B-E depletion capacitance")]
+        [ParameterName("cje"), ParameterInfo("Zero bias B-E depletion capacitance", Units = "F")]
         public double DepletionCapBe { get; set; }
 
         /// <summary>
         /// Gets the base-emitter built-in potential parameter.
         /// </summary>
-        [ParameterName("vje"), ParameterName("pe"), ParameterInfo("B-E built in potential")]
+        [ParameterName("vje"), ParameterName("pe"), ParameterInfo("B-E built in potential", Units = "V")]
         public double PotentialBe { get; set; } = 0.75;
 
         /// <summary>
@@ -191,7 +192,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the ideal forward transit time parameter.
         /// </summary>
-        [ParameterName("tf"), ParameterInfo("Ideal forward transit time")]
+        [ParameterName("tf"), ParameterInfo("Ideal forward transit time", Units = "s")]
         public double TransitTimeForward { get; set; }
 
         /// <summary>
@@ -227,7 +228,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base-collector built-in potential parameter.
         /// </summary>
-        [ParameterName("vjc"), ParameterName("pc"), ParameterInfo("B-C built in potential")]
+        [ParameterName("vjc"), ParameterName("pc"), ParameterInfo("B-C built in potential", Units = "V")]
         public double PotentialBc { get; set; } = 0.75;
 
         /// <summary>
@@ -245,19 +246,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the ideal reverse transit time parameter.
         /// </summary>
-        [ParameterName("tr"), ParameterInfo("Ideal reverse transit time")]
+        [ParameterName("tr"), ParameterInfo("Ideal reverse transit time", Units = "s")]
         public double TransitTimeReverse { get; set; }
 
         /// <summary>
         /// Gets the zero-bias collector-substrate capacitance parameter.
         /// </summary>
-        [ParameterName("cjs"), ParameterName("ccs"), ParameterInfo("Zero bias C-S capacitance")]
+        [ParameterName("cjs"), ParameterName("ccs"), ParameterInfo("Zero bias C-S capacitance", Units = "F")]
         public double CapCs { get; set; }
 
         /// <summary>
         /// Gets the substrate junction built-in potential parameter.
         /// </summary>
-        [ParameterName("vjs"), ParameterName("ps"), ParameterInfo("Substrate junction built in potential")]
+        [ParameterName("vjs"), ParameterName("ps"), ParameterInfo("Substrate junction built in potential", Units = "V")]
         public double PotentialSubstrate { get; set; } = 0.75;
 
         /// <summary>

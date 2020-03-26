@@ -327,6 +327,9 @@
   <data name="UnexpectedType" xml:space="preserve">
     <value>"Unexpected type encountered: expected {0}, but got {1}.</value>
   </data>
+  <data name="Units.InvalidExponent" xml:space="preserve">
+    <value>Invalid exponent. Cannot represent the exponent {0}/{1}.</value>
+  </data>
   <data name="Units.UnitsNotMatched" xml:space="preserve">
     <value>The units are not matched.</value>
   </data>

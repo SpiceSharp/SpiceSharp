@@ -38,11 +38,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Simulations\Variables\Units.Constants.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Units.Constants.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -53,10 +48,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Simulations\Variables\Units.Constants.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Units.Constants.cs</LastGenOutput>
-    </None>
     <None Update="Simulations\Variables\Units.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Units.cs</LastGenOutput>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Simulations.Variables;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -103,7 +104,7 @@ namespace SpiceSharp.Simulations
         /// <remarks>
         /// If the variable already exists, the variable type is ignored.
         /// </remarks>
-        public IVariable MapNode(string id, Units units)
+        public IVariable MapNode(string id, IUnit units)
         {
             id.ThrowIfNull(nameof(id));
 
@@ -145,7 +146,7 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The identifier.</param>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public IVariable Create(string id, Units type)
+        public IVariable Create(string id, IUnit type)
         {
             id.ThrowIfNull(nameof(id));
 

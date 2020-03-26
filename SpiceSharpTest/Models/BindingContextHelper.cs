@@ -6,6 +6,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Variables;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -58,7 +59,7 @@ namespace SpiceSharpTest.Models
                 context.Variables.Contains(variables[i].Name).Returns(true);
                 context.Variables[variables[i].Name].Returns(variables[i]);
                 newVariables[index] = variables[i];
-                if (variables[i].Units == Units.Volt)
+                if (variables[i].Unit == Units.Volt)
                 {
                     context.Variables.MapNode(variables[i].Name, Units.Volt).Returns(variables[i]);
                     context.Variables.TryGetNode(variables[i].Name, out Arg.Any<IVariable>()).Returns(x => { x[0] = variables[i]; return true; });
@@ -92,7 +93,7 @@ namespace SpiceSharpTest.Models
             var next = new IVariable[variables.Length - 1];
             for (var i = 1; i < next.Length; i++)
                 next[i - 1] = variables[i];
-            context.Variables.Create(Arg.Any<string>(), Arg.Any<Units>()).Returns(variables[0], next);
+            context.Variables.Create(Arg.Any<string>(), Arg.Any<IUnit>()).Returns(variables[0], next);
             return context;
         }
         public static T BranchControlled<T>(this T context, IVariable variable) where T : ICurrentControlledBindingContext

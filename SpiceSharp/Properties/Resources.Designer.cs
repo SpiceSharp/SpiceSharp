@@ -692,6 +692,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid exponent. Cannot represent the exponent {0}/{1}..
+        /// </summary>
+        internal static string Units_InvalidExponent {
+            get {
+                return ResourceManager.GetString("Units.InvalidExponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The units are not matched..
         /// </summary>
         internal static string Units_UnitsNotMatched {

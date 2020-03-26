@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SpiceSharp.Simulations.Variables;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -50,18 +51,18 @@ namespace SpiceSharp.Simulations
         /// <param name="id">The name of the variable.</param>
         /// <param name="units">The unit of the variable.</param>
         /// <returns>A new variable with the specified name and type, or a previously mapped variable if it already existed.</returns>
-        IVariable MapNode(string id, Units units);
+        IVariable MapNode(string id, IUnit units);
 
         /// <summary>
         /// Creates a new variable.
         /// </summary>
         /// <remarks>
-        /// Variables created using this method cannot be found back using the <see cref="MapNode(string,Units)" /> method.
+        /// Variables created using this method cannot be found back using the <see cref="MapNode(string,IUnit)" /> method.
         /// </remarks>
         /// <param name="id">The name of the new variable.</param>
         /// <param name="units">The units of the variable.</param>
         /// <returns>A new variable.</returns>
-        IVariable Create(string id, Units units);
+        IVariable Create(string id, IUnit units);
 
         /// <summary>
         /// Determines whether the set contains a mapped variable by a specified name.

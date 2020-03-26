@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
@@ -11,7 +12,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets or sets the temperature in degrees celsius.
         /// </summary>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature")]
+        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C")]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -26,37 +27,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets the mosfet width.
         /// </summary>
-        [ParameterName("w"), ParameterInfo("Width")]
+        [ParameterName("w"), ParameterInfo("Width", Units = "m")]
         public GivenParameter<double> Width { get; set; } = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
         /// Gets the mosfet length.
         /// </summary>
-        [ParameterName("l"), ParameterInfo("Length")]
+        [ParameterName("l"), ParameterInfo("Length", Units = "m")]
         public GivenParameter<double> Length { get; set; } = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
         /// Gets the source layout area.
         /// </summary>
-        [ParameterName("as"), ParameterInfo("Source area")]
+        [ParameterName("as"), ParameterInfo("Source area", Units = "m^2")]
         public double SourceArea { get; set; }
 
         /// <summary>
         /// Gets the drain layout area.
         /// </summary>
-        [ParameterName("ad"), ParameterInfo("Drain area")]
+        [ParameterName("ad"), ParameterInfo("Drain area", Units = "m^2")]
         public double DrainArea { get; set; }
 
         /// <summary>
         /// Gets the source layout perimeter.
         /// </summary>
-        [ParameterName("ps"), ParameterInfo("Source perimeter")]
+        [ParameterName("ps"), ParameterInfo("Source perimeter", Units = "m")]
         public double SourcePerimeter { get; set; }
 
         /// <summary>
         /// Gets the drain layout perimeter.
         /// </summary>
-        [ParameterName("pd"), ParameterInfo("Drain perimeter")]
+        [ParameterName("pd"), ParameterInfo("Drain perimeter", Units = "m")]
         public double DrainPerimeter { get; set; }
 
         /// <summary>
@@ -82,19 +83,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets the initial bulk-source voltage.
         /// </summary>
-        [ParameterName("icvbs"), ParameterInfo("Initial B-S voltage")]
+        [ParameterName("icvbs"), ParameterInfo("Initial B-S voltage", Units = "V")]
         public double InitialVoltageBs { get; set; }
 
         /// <summary>
         /// Gets the initial drain-source voltage.
         /// </summary>
-        [ParameterName("icvds"), ParameterInfo("Initial D-S voltage")]
+        [ParameterName("icvds"), ParameterInfo("Initial D-S voltage", Units = "V")]
         public double InitialVoltageDs { get; set; }
 
         /// <summary>
         /// Gets the initial gate-source voltage.
         /// </summary>
-        [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage")]
+        [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
         public double InitialVoltageGs { get; set; }
 
         /// <summary>

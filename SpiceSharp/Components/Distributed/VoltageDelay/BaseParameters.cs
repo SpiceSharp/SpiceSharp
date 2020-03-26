@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets or sets the delay in seconds.
         /// </summary>
-        [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.", Units.Second)]
+        [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.", Units = "s")]
         public double Delay { get; set; }
 
         /// <summary>

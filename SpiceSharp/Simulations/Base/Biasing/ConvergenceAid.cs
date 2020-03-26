@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
             foreach (var v in _state.Map)
             {
                 // If the variable is a current, then we can't just set it to 0... 
-                if (v.Key.Units != Units.Volt)
+                if (v.Key.Unit != Units.Volt)
                     hasOtherTypes = true;
                 else
                 {
