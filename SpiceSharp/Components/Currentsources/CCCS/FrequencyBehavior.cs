@@ -12,35 +12,28 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        private readonly int _posNode, _negNode, _brNode;
+        private readonly OnePort<Complex> _variables;
         private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
+        private readonly IVariable<Complex> _control;
 
         /// <summary>
         /// Get the voltage. 
         /// </summary>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
+        public Complex ComplexVoltage =>_variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => _complex.Solution[_brNode] * Parameters.Coefficient;
+        public Complex ComplexCurrent => _control.Value * Parameters.Coefficient;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
-        public Complex ComplexPower
-        {
-            get
-            {
-                var v = _complex.Solution[_posNode] - _complex.Solution[_negNode];
-                var i = _complex.Solution[_brNode] * Parameters.Coefficient;
-                return -v * Complex.Conjugate(i);
-            }
-        }
+        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -50,14 +43,16 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public FrequencyBehavior(string name, ICurrentControlledBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-            
-            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
-            _brNode = _complex.Map[context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>().Branch];
 
+            _variables = new OnePort<Complex>(_complex, context);
+            _control = context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
+
+            var pos = _complex.Map[_variables.Positive];
+            var neg = _complex.Map[_variables.Negative];
+            var br = _complex.Map[_control];
             _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_posNode, _brNode),
-                new MatrixLocation(_negNode, _brNode));
+                new MatrixLocation(pos, br),
+                new MatrixLocation(neg, br));
         }
 
         /// <summary>

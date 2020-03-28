@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         IParameterized<IndependentSourceFrequencyParameters>
     {
         private readonly IComplexSimulationState _complex;
-        private readonly int _posNode, _negNode;
+        private readonly OnePort<Complex> _variables;
         private readonly ElementSet<Complex> _elements;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
+        public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Get the power dissipation.
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             get
             {
-                var v = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                var v = _variables.Positive.Value - _variables.Negative.Value;
                 return -v * Complex.Conjugate(FrequencyParameters.Phasor);
             }
         }
@@ -67,9 +67,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         {
             FrequencyParameters = context.GetParameterSet<IndependentSourceFrequencyParameters>();
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
-            _elements = new ElementSet<Complex>(_complex.Solver, null, new[] { _posNode, _negNode });
+            _variables = new OnePort<Complex>(_complex, context);
+            _elements = new ElementSet<Complex>(_complex.Solver, null, _variables.GetRhsIndices(_complex.Map));
         }
 
         /// <summary>

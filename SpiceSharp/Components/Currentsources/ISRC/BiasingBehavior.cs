@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using IndependentSourceParameters = SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CurrentSourceBehaviors
 {
@@ -19,7 +20,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         private readonly IBiasingSimulationState _biasing;
         private readonly IIntegrationMethod _method;
         private readonly IIterationSimulationState _iteration;
-        private readonly int _posNode, _negNode;
+        private readonly OnePort<double> _variables;
         private readonly ElementSet<double> _elements;
 
         /// <summary>
@@ -42,13 +43,13 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
-        public double GetVoltage() => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+        public double GetVoltage() => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
-        public double GetPower() => (_biasing.Solution[_posNode] - _biasing.Solution[_posNode]) * -Current;
+        public double GetPower() => (_variables.Positive.Value - _variables.Negative.Value) * -Current;
 
         /// <summary>
         /// Get the current.
@@ -64,13 +65,11 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
         public BiasingBehavior(string name, IComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
-            context.Nodes.CheckNodes(2);
 
             Parameters = context.GetParameterSet<IndependentSourceParameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
-            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
+            _variables = new OnePort<double>(_biasing, context);
 
             context.TryGetState(out _method);
             Waveform = Parameters.Waveform?.Create(_method);
@@ -85,7 +84,7 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
                         : Properties.Resources.IndependentSources_NoDc.FormatString(Name));
             }
 
-            _elements = new ElementSet<double>(_biasing.Solver, null, new[] { _posNode, _negNode });
+            _elements = new ElementSet<double>(_biasing.Solver, null, _variables.GetRhsIndices(_biasing.Map));
         }
 
         /// <summary>

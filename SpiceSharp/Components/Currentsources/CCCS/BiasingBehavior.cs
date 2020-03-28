@@ -12,7 +12,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     public class BiasingBehavior : Behavior, IBiasingBehavior,
         IParameterized<BaseParameters>
     {
-        private readonly int _posNode, _negNode, _brNode;
+        private readonly OnePort<double> _variables;
+        private readonly IVariable<double> _control;
         private readonly IBiasingSimulationState _biasing;
         private readonly ElementSet<double> _elements;
 
@@ -28,19 +29,19 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Device methods and properties
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double Current => _biasing.Solution[_brNode] * Parameters.Coefficient;
+        public double Current => _control.Value * Parameters.Coefficient;
 
         /// <summary>
         /// Gets the volage over the source.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
-        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+        public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// The power dissipation by the source.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
-        public double Power => (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * _biasing.Solution[_brNode] * Parameters.Coefficient;
+        public double Power => -Voltage * Current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -53,12 +54,15 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             context.Nodes.CheckNodes(2);
             Parameters = context.GetParameterSet<BaseParameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
-            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
-            _brNode = _biasing.Map[context.ControlBehaviors.GetValue<IBranchedBehavior<double>>().Branch];
+            _variables = new OnePort<double>(_biasing, context);
+            _control = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>().Branch;
+
+            var pos = _biasing.Map[_variables.Positive];
+            var neg = _biasing.Map[_variables.Negative];
+            var br = _biasing.Map[_control];
             _elements = new ElementSet<double>(_biasing.Solver,
-                new MatrixLocation(_posNode, _brNode),
-                new MatrixLocation(_negNode, _brNode));
+                new MatrixLocation(pos, br),
+                new MatrixLocation(neg, br));
         }
 
         /// <summary>

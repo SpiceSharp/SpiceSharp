@@ -14,7 +14,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     {
         private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
-        private readonly int _posNode, _negNode, _cbrNode, _brNode;
+        private readonly OnePort<Complex> _variables;
+        private readonly IVariable<Complex> _control;
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -23,7 +24,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// The voltage.
         /// </returns>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
-        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
+        public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the current through the source.
@@ -32,7 +33,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// The current.
         /// </returns>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => _complex.Solution[_brNode];
+        public Complex ComplexCurrent => Branch.Value;
 
         /// <summary>
         /// Gets the power dissipated by the source.
@@ -41,15 +42,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// The power dissipation.
         /// </returns>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
-        public Complex ComplexPower
-        {
-            get
-            {
-                var v = _complex.Solution[_posNode] - _complex.Solution[_negNode];
-                var i = _complex.Solution[_brNode];
-                return -v * Complex.Conjugate(i);
-            }
-        }
+        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <summary>
         /// Gets the branch equation.
@@ -67,22 +60,21 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public FrequencyBehavior(string name, ICurrentControlledBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-
-            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
-
-            var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>();
-            _cbrNode = _complex.Map[behavior.Branch];
-
+            _variables = new OnePort<Complex>(_complex, context);
+            _control = context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
             Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
-            _brNode = _complex.Map[Branch];
+
+            var pos = _complex.Map[_variables.Positive];
+            var neg = _complex.Map[_variables.Negative];
+            var cbr = _complex.Map[_control];
+            var br = _complex.Map[Branch];
 
             _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_posNode, _brNode),
-                new MatrixLocation(_negNode, _brNode),
-                new MatrixLocation(_brNode, _posNode),
-                new MatrixLocation(_brNode, _negNode),
-                new MatrixLocation(_brNode, _cbrNode));
+                new MatrixLocation(pos, br),
+                new MatrixLocation(neg, br),
+                new MatrixLocation(br, pos),
+                new MatrixLocation(br, neg),
+                new MatrixLocation(br, cbr));
         }
 
         /// <summary>

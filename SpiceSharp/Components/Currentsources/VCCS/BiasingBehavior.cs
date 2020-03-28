@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 {
@@ -13,7 +14,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
     {
         private readonly ElementSet<double> _elements;
         private readonly IBiasingSimulationState _biasing;
-        private readonly int _posNode, _negNode, _contPosNode, _contNegNode;
+        private readonly TwoPort<double> _variables;
 
         /// <summary>
         /// Gets the parameter set.
@@ -27,27 +28,19 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         /// Get the voltage.
         /// </summary>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
-        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+        public double Voltage => _variables.Right.Positive.Value - _variables.Right.Negative.Value;
 
         /// <summary>
         /// Get the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double Current => (_biasing.Solution[_contPosNode] - _biasing.Solution[_contNegNode]) * Parameters.Coefficient;
+        public double Current => (_variables.Left.Positive.Value - _variables.Left.Negative.Value) * Parameters.Coefficient;
 
         /// <summary>
         /// Get the power dissipation.
         /// </summary>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
-        public double Power
-        {
-            get
-            {
-                var v = _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
-                var i = (_biasing.Solution[_contPosNode] - _biasing.Solution[_contNegNode]) * Parameters.Coefficient;
-                return -v * i;
-            }
-        }
+        public double Power => -Voltage * Current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -61,15 +54,17 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 
             _biasing = context.GetState<IBiasingSimulationState>();
             Parameters = context.GetParameterSet<BaseParameters>();
-            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
-            _contPosNode = _biasing.Map[_biasing.MapNode(context.Nodes[2])];
-            _contNegNode = _biasing.Map[_biasing.MapNode(context.Nodes[3])];
+            _variables = new TwoPort<double>(_biasing, context);
+
+            var pos = _biasing.Map[_variables.Right.Positive];
+            var neg = _biasing.Map[_variables.Right.Negative];
+            var contPos = _biasing.Map[_variables.Left.Positive];
+            var contNeg = _biasing.Map[_variables.Left.Negative];
             _elements = new ElementSet<double>(_biasing.Solver, new[] {
-                new MatrixLocation(_posNode, _contPosNode),
-                new MatrixLocation(_posNode, _contNegNode),
-                new MatrixLocation(_negNode, _contPosNode),
-                new MatrixLocation(_negNode, _contNegNode)
+                new MatrixLocation(pos, contPos),
+                new MatrixLocation(pos, contNeg),
+                new MatrixLocation(neg, contPos),
+                new MatrixLocation(neg, contNeg)
             });
         }
 

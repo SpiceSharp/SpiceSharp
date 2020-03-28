@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
     {
         private readonly IIntegrationMethod _method;
         private readonly IIterationSimulationState _iteration;
-        private readonly int _posNode, _negNode, _brNode;
+        private readonly OnePort<double> _variables;
         private readonly ElementSet<double> _elements;
         private readonly IBiasingSimulationState _biasing;
 
@@ -39,14 +39,14 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterName("i_r"), ParameterInfo("Voltage source current")]
-        public double Current => _biasing.Solution[_brNode];
+        public double Current => Branch.Value;
 
         /// <summary>
         /// Gets the power dissipated by the source.
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Instantaneous power")]
-        public double Power => (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * -_biasing.Solution[_brNode];
+        public double Power => Voltage * -Branch.Value;
 
         /// <summary>
         /// Gets the voltage applied by the source.
@@ -67,7 +67,6 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         public BiasingBehavior(string name, IComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
-            context.Nodes.CheckNodes(2);
 
             Parameters = context.GetParameterSet<IndependentSourceParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
@@ -93,17 +92,18 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             _biasing = context.GetState<IBiasingSimulationState>();
             context.TryGetState(out _method);
 
-            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
+            _variables = new OnePort<double>(_biasing, context);
             Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
-            _brNode = _biasing.Map[Branch];
+            var pos = _biasing.Map[_variables.Positive];
+            var neg = _biasing.Map[_variables.Negative];
+            var br = _biasing.Map[Branch];
 
             _elements = new ElementSet<double>(_biasing.Solver, new[] {
-                new MatrixLocation(_posNode, _brNode),
-                new MatrixLocation(_brNode, _posNode),
-                new MatrixLocation(_negNode, _brNode),
-                new MatrixLocation(_brNode, _negNode)
-            }, new[] { _brNode });
+                new MatrixLocation(pos, br),
+                new MatrixLocation(br, pos),
+                new MatrixLocation(neg, br),
+                new MatrixLocation(br, neg)
+            }, new[] { br });
         }
 
         /// <summary>
