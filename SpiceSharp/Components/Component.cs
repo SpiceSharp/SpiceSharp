@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
@@ -19,12 +20,12 @@ namespace SpiceSharp.Components
         private readonly string[] _connections;
 
         /// <summary>
-        /// Gets the number of nodes.
+        /// Gets the nodes.
         /// </summary>
         /// <value>
-        /// The number of nodes.
+        /// The nodes.
         /// </value>
-        public int PinCount => _connections.Length;
+        public IReadOnlyList<string> Nodes => new ReadOnlyCollection<string>(_connections);
 
         /// <summary>
         /// Gets or sets the model of the component.
@@ -77,22 +78,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Gets the node indexes (in order).
-        /// </summary>
-        /// <param name="variables">The set of variables.</param>
-        /// <returns>An enumerable for all nodes.</returns>
-        public IReadOnlyList<IVariable> MapNodes(IVariableSet variables)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            if (_connections == null)
-                return new IVariable[0];
-            var list = new IVariable[_connections.Length];
-            for (var i = 0; i < _connections.Length; i++)
-                list[i] = variables.MapNode(_connections[i], Units.Volt);
-            return list;
-        }
-
-        /// <summary>
         /// Clones the instance.
         /// </summary>
         /// <returns>
@@ -114,7 +99,7 @@ namespace SpiceSharp.Components
         {
             base.CopyFrom(source);
             var c = (Component)source;
-            for (var i = 0; i < PinCount; i++)
+            for (var i = 0; i < _connections.Length; i++)
                 _connections[i] = c._connections[i];
         }
 
@@ -125,8 +110,17 @@ namespace SpiceSharp.Components
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
-            foreach (var rule in rules.GetRules<IConductiveRule>())
-                rule.AddPath(this, MapNodes(p.Variables).ToArray());
+
+            // Map the connections to variables
+            if (_connections != null)
+            {
+                var variables = new IVariable[_connections.Length];
+                for (var i = 0; i < _connections.Length; i++)
+                    variables[i] = p.Factory.MapNode(_connections[i]);
+
+                foreach (var rule in rules.GetRules<IConductiveRule>())
+                    rule.AddPath(this, variables);
+            }
         }
     }
 }

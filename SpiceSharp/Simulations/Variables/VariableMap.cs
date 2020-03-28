@@ -6,28 +6,15 @@ using System.Linq;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A class that maps variables to indices.
+    /// A default implementation for a variable map.
     /// </summary>
     /// <remarks>
     /// Can be used to map to indices for a solver that uses matrix equations.
     /// </remarks>
     public class VariableMap : IVariableMap
     {
-        /// <summary>
-        /// The map of variables.
-        /// </summary>
-        /// <remarks>
-        /// We just want to search by reference!
-        /// </remarks>
-        private Dictionary<IVariable, int> _map = new Dictionary<IVariable, int>();
-
-        /// <summary>
-        /// Gets the ground node.
-        /// </summary>
-        /// <value>
-        /// The ground.
-        /// </value>
-        public IVariable Ground { get; }
+        private readonly IVariable _ground;
+        private readonly Dictionary<IVariable, int> _map = new Dictionary<IVariable, int>();
 
         /// <summary>
         /// Gets the number of mapped variables.
@@ -47,21 +34,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The variable index.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if the specified variable was null.</exception>
-        public int this[IVariable variable]
-        {
-            get
-            {
-                if (variable == null)
-                    throw new ArgumentNullException(nameof(variable));
-                if (!_map.TryGetValue(variable, out var index))
-                {
-                    index = _map.Count;
-                    _map.Add(variable, index);
-                }
-                return index;
-            }
-        }
+        public int this[IVariable variable] => _map[variable];
 
         /// <summary>
         /// Gets the <see cref="IVariable"/> at assiciated to the specified index.
@@ -74,23 +47,7 @@ namespace SpiceSharp.Simulations
         /// The associated variable.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
-        public IVariable this[int index]
-        {
-            get
-            {
-                if (index < 0 || index > Count)
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                return _map.FirstOrDefault(p => p.Value == index).Key;
-            }
-        }
-
-        /// <summary>
-        /// Gets all the variables in the map.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IEnumerable<IVariable> Variables => _map.Keys;
+        public IVariable this[int index] => _map.First(p => p.Value == index).Key;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableMap"/> class.
@@ -98,8 +55,8 @@ namespace SpiceSharp.Simulations
         /// <param name="ground">The ground variable.</param>
         public VariableMap(IVariable ground)
         {
-            Ground = ground.ThrowIfNull(nameof(ground));
-            _map.Add(Ground, 0);
+            _ground = ground.ThrowIfNull(nameof(ground));
+            _map.Add(_ground, 0);
         }
 
         /// <summary>
@@ -112,15 +69,17 @@ namespace SpiceSharp.Simulations
         public bool Contains(IVariable variable) => _map.ContainsKey(variable);
 
         /// <summary>
-        /// Tries to get the associated index of the specified variable.
+        /// Adds the specified variable.
         /// </summary>
         /// <param name="variable">The variable.</param>
-        /// <param name="index">The associated index.</param>
-        /// <returns>
-        ///   <c>true</c> if the variable has been found; otherwise, <c>false</c>.
-        /// </returns>
-        public bool TryGetIndex(IVariable variable, out int index)
-            => _map.TryGetValue(variable, out index);
+        /// <param name="index">The index.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the index is not strictly positive.</exception>
+        public void Add(IVariable variable, int index)
+        {
+            if (index <= 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            _map.Add(variable, index);
+        }
 
         /// <summary>
         /// Clears the map.

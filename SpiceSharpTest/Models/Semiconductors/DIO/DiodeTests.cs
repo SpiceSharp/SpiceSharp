@@ -299,6 +299,7 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
+        /*
         [TestCaseSource(nameof(ModelTemperature))]
         public void When_ModelTemperatureBehavior_Expect_Reference(Proxy<IBindingContext> context, IDictionary<string, double> expected)
         {
@@ -773,5 +774,6 @@ namespace SpiceSharpTest.Models
                 }
             }
         }
+        */
     }
 }

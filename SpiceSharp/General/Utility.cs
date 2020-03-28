@@ -58,7 +58,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="nodes">The nodes.</param>
         /// <param name="count">The number of expected nodes.</param>
-        public static void CheckNodes(this IReadOnlyCollection<IVariable> nodes, int count)
+        public static void CheckNodes(this IReadOnlyCollection<string> nodes, int count)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

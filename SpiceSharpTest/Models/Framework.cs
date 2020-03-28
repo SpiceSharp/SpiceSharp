@@ -27,9 +27,9 @@ namespace SpiceSharpTest.Models
                 {
                     context.ThrowIfNull(nameof(context));
                     _nodes = nodes;
-                    var variables = context.Variables;
+                    var state = context.GetState<IBiasingSimulationState>();
                     foreach (var node in _nodes)
-                        variables.MapNode(node, Units.Volt);
+                        state.MapNode(node);
                 }
                 void IBiasingBehavior.Load() { }
             }
@@ -623,9 +623,8 @@ namespace SpiceSharpTest.Models
                 Console.Write(entity.Name);
                 if (entity is Component c)
                 {
-                    for (var i = 0; i < c.PinCount; i++)
-                        Console.Write($"{c.GetNode(i)} ");
-                    Console.Write($"({string.Join(", ", c.MapNodes(tran.Variables))})");
+                    foreach (var node in c.Nodes)
+                        Console.Write($"{node} ");
                 }
                 Console.WriteLine();
             }

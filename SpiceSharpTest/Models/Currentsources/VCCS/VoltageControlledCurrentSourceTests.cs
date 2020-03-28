@@ -96,6 +96,7 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual("in", ((FloatingNodeRuleViolation)violations[1]).FloatingVariable.Name);
         }
 
+        /*
         [TestCaseSource(nameof(Biasing))]
         public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
         {
@@ -169,5 +170,6 @@ namespace SpiceSharpTest.Models
                     new[] { typeof(FloatingNodeRuleViolation), typeof(FloatingNodeRuleViolation), typeof(FloatingNodeRuleViolation) });
             }
         }
+        */
     }
 }

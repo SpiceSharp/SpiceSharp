@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
             // Execute base behavior
             base.Execute();
 
-            var cstate = ComplexState;
+            var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
             
             // Calculate the operating point
             cstate.Laplace = 0.0;

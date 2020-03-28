@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -74,7 +75,7 @@ namespace SpiceSharp.Components
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
-            var nodes = MapNodes(p.Variables);
+            var nodes = p.Factory.MapNodes(Nodes).ToArray();
             foreach (var rule in rules.GetRules<IConductiveRule>())
                 rule.AddPath(this, ConductionTypes.Ac, nodes[0], nodes[1]);
         }

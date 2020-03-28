@@ -15,6 +15,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
+        /// Gets the internal drain node.
+        /// </summary>
+        /// <value>
+        /// The internal drain node.
+        /// </value>
+        protected new IVariable<Complex> DrainPrime { get; }
+
+        /// <summary>
+        /// Gets the internal source node.
+        /// </summary>
+        /// <value>
+        /// The internal source node.
+        /// </value>
+        protected new IVariable<Complex> SourcePrime { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
@@ -22,12 +38,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _drainNode = _complex.Map[context.Nodes[0]];
-            _gateNode = _complex.Map[context.Nodes[1]];
-            _sourceNode = _complex.Map[context.Nodes[2]];
-            _bulkNode = _complex.Map[context.Nodes[3]];
+
+            DrainPrime = _complex.MapNode(context.Nodes[0]);
+            _drainNode = _complex.Map[DrainPrime];
+            _gateNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            SourcePrime = _complex.MapNode(context.Nodes[2]);
+            _sourceNode = _complex.Map[SourcePrime];
+            _bulkNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
+
+            // Add series drain node if necessary
+            if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
+                DrainPrime = _complex.Create(Name.Combine("drain"), Units.Volt);
             _drainNodePrime = _complex.Map[DrainPrime];
+
+            // Add series source node if necessary
+            if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
+                SourcePrime = _complex.Create(Name.Combine("source"), Units.Volt);
             _sourceNodePrime = _complex.Map[SourcePrime];
+
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_gateNode, _gateNode),
                 new MatrixLocation(_bulkNode, _bulkNode),

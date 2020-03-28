@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Variables;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -44,6 +46,43 @@ namespace SpiceSharp.Components.ParallelBehaviors
             {
                 _solver.Apply();
             }
+
+            /// <summary>
+            /// Maps a shared node in the simulation.
+            /// </summary>
+            /// <param name="name">The name of the shared node.</param>
+            /// <returns>
+            /// The shared node variable.
+            /// </returns>
+            public IVariable<double> MapNode(string name) => _parent.MapNode(name);
+
+            /// <summary>
+            /// Maps a number of nodes.
+            /// </summary>
+            /// <param name="names">The nodes.</param>
+            /// <returns>
+            /// The shared node variables.
+            /// </returns>
+            public IEnumerable<IVariable<double>> MapNodes(IEnumerable<string> names) => _parent.MapNodes(names);
+
+            /// <summary>
+            /// Creates a local variable that should not be shared by the state with anyone else.
+            /// </summary>
+            /// <param name="name">The name.</param>
+            /// <param name="unit">The unit of the variable.</param>
+            /// <returns>
+            /// The local variable.
+            /// </returns>
+            public IVariable<double> Create(string name, IUnit unit) => _parent.Create(name, unit);
+
+            /// <summary>
+            /// Determines whether the specified variable is a node without mapping it.
+            /// </summary>
+            /// <param name="name">The name of the node.</param>
+            /// <returns>
+            /// <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
+            /// </returns>
+            public bool HasNode(string name) => _parent.HasNode(name);
         }
     }
 }

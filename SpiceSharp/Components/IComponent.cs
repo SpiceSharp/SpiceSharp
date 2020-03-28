@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Entities;
-using SpiceSharp.Simulations;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components
@@ -19,12 +18,12 @@ namespace SpiceSharp.Components
         string Model { get; set; }
 
         /// <summary>
-        /// Gets the number of nodes.
+        /// Gets the nodes.
         /// </summary>
         /// <value>
-        /// The number of nodes.
+        /// The nodes.
         /// </value>
-        int PinCount { get; }
+        IReadOnlyList<string> Nodes { get; }
 
         /// <summary>
         /// Connects the component in the circuit.
@@ -32,19 +31,5 @@ namespace SpiceSharp.Components
         /// <param name="nodes">The node indices.</param>
         /// <returns>The instance calling the method for chaining.</returns>
         IComponent Connect(params string[] nodes);
-
-        /// <summary>
-        /// Gets the node name by pin index.
-        /// </summary>
-        /// <param name="index">The pin index.</param>
-        /// <returns>The node index.</returns>
-        string GetNode(int index);
-
-        /// <summary>
-        /// Gets the node indexes (in order).
-        /// </summary>
-        /// <param name="variables">The set of variables.</param>
-        /// <returns>An enumerable for all nodes.</returns>
-        IReadOnlyList<IVariable> MapNodes(IVariableSet variables);
     }
 }

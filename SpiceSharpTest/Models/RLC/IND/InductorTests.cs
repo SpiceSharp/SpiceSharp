@@ -129,6 +129,7 @@ namespace SpiceSharpTest.Models
             Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
         }
 
+        /*
         [TestCaseSource(nameof(Temperature))]
         public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double expected)
         {
@@ -253,5 +254,6 @@ namespace SpiceSharpTest.Models
                     new[] { typeof(VoltageLoopRuleViolation) });
             }
         }
+        */
     }
 }

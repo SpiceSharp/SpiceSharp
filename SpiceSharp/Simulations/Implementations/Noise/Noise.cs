@@ -98,16 +98,14 @@ namespace SpiceSharp.Simulations
         protected override void Execute()
         {
             base.Execute();
-
-            var state = GetState<IBiasingSimulationState>();
-            var cstate = ComplexState;
+            var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
 
             var noiseconfig = NoiseParameters;
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? state.Map[Variables[noiseconfig.Output]] : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? state.Map[Variables[noiseconfig.OutputRef]] : 0;
+            var posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.MapNode(noiseconfig.Output)] : 0;
+            var negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.MapNode(noiseconfig.OutputRef)] : 0;
 
             // Initialize
             var freq = FrequencyParameters.Frequencies.GetEnumerator();
@@ -158,7 +156,8 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         private void NzIterate(int posDrive, int negDrive)
         {
-            var solver = ComplexState.Solver;
+            var cstate = GetState<IComplexSimulationState>();
+            var solver = cstate.Solver;
 
             // Clear out the right hand side vector
             solver.ResetVector();
@@ -167,8 +166,8 @@ namespace SpiceSharp.Simulations
             solver.GetElement(posDrive).Add(1.0);
             solver.GetElement(negDrive).Subtract(1.0);
 
-            solver.SolveTransposed(ComplexState.Solution);
-            ComplexState.Solution[0] = 0.0;
+            solver.SolveTransposed(cstate.Solution);
+            cstate.Solution[0] = 0.0;
         }
     }
 }

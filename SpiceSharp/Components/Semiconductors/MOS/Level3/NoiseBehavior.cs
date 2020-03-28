@@ -56,7 +56,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             NoiseParameters = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
             _noise = context.GetState<INoiseSimulationState>();
-            MosfetNoise.Bind(context, context.Nodes[0], context.Nodes[1], context.Nodes[2], context.Nodes[3], DrainPrime, SourcePrime);
+            var complex = context.GetState<IComplexSimulationState>();
+            MosfetNoise.Bind(context,
+                complex.MapNode(context.Nodes[0]), complex.MapNode(context.Nodes[1]), complex.MapNode(context.Nodes[2]), complex.MapNode(context.Nodes[3]),
+                DrainPrime, SourcePrime);
         }
 
         /// <summary>

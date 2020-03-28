@@ -22,9 +22,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public FrequencyBehavior(string name, MutualInductanceBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            var bias = context.Inductor1Behaviors.GetValue<IBranchedBehavior>();
+            var bias = context.Inductor1Behaviors.GetValue<IBranchedBehavior<Complex>>();
             _br1 = _complex.Map[bias.Branch];
-            bias = context.Inductor2Behaviors.GetValue<IBranchedBehavior>();
+            bias = context.Inductor2Behaviors.GetValue<IBranchedBehavior<Complex>>();
             _br2 = _complex.Map[bias.Branch];
 
             _elements = new ElementSet<Complex>(_complex.Solver,

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Variables;
 using System;
 using System.Collections.Generic;
 
@@ -59,7 +60,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         {
             _parent = parent.ThrowIfNull(nameof(parent));
             Solver = solver.ThrowIfNull(nameof(solver));
-            Map = new VariableMap(parent.Map.Ground);
+            Map = new VariableMap(parent.MapNode(Constants.Ground));
         }
 
         /// <summary>
@@ -223,6 +224,21 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             Solver.Solve(Solution);
             Solution[0] = default;
             Updated = true;
+        }
+
+        public IVariable<T> MapNode(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVariable<T> Create(string name, IUnit unit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasNode(string name)
+        {
+            return _parent.HasNode(name);
         }
     }
 }

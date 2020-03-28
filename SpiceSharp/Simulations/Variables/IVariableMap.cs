@@ -9,14 +9,6 @@ namespace SpiceSharp.Simulations
     public interface IVariableMap : IEnumerable<KeyValuePair<IVariable, int>>
     {
         /// <summary>
-        /// Gets the ground node variable.
-        /// </summary>
-        /// <value>
-        /// The ground node variable.
-        /// </value>
-        IVariable Ground { get; }
-
-        /// <summary>
         /// Gets the number of mapped variables.
         /// </summary>
         /// <value>
@@ -37,24 +29,16 @@ namespace SpiceSharp.Simulations
         int this[IVariable variable] { get; }
 
         /// <summary>
-        /// Gets the <see cref="Variable"/> at assiciated to the specified index.
+        /// Gets the variable associated to the specified index.
         /// </summary>
         /// <value>
-        /// The <see cref="Variable"/>.
+        /// The variable.
         /// </value>
         /// <param name="index">The index.</param>
         /// <returns>
         /// The associated variable.
         /// </returns>
         IVariable this[int index] { get; }
-
-        /// <summary>
-        /// Gets all the variables in the map.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        IEnumerable<IVariable> Variables { get; }
 
         /// <summary>
         /// Determines whether a variable is mapped.
@@ -64,20 +48,5 @@ namespace SpiceSharp.Simulations
         ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
         /// </returns>
         bool Contains(IVariable variable);
-
-        /// <summary>
-        /// Tries to get the associated index of the specified variable.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <param name="index">The associated index.</param>
-        /// <returns>
-        ///     <c>true</c> if the variable has been found; otherwise, <c>false</c>.
-        /// </returns>
-        bool TryGetIndex(IVariable variable, out int index);
-
-        /// <summary>
-        /// Clears the map.
-        /// </summary>
-        void Clear();
     }
 }

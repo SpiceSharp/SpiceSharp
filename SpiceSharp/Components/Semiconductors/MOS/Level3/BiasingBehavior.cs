@@ -42,6 +42,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         protected BiasingParameters BaseConfiguration { get; }
 
         /// <summary>
+        /// Gets the internal drain node.
+        /// </summary>
+        /// <value>
+        /// The internal drain node.
+        /// </value>
+        protected IVariable<double> DrainPrime { get; }
+
+        /// <summary>
+        /// Gets the internal source node.
+        /// </summary>
+        /// <value>
+        /// The internal source node.
+        /// </value>
+        protected IVariable<double> SourcePrime { get; }
+
+        /// <summary>
         /// Gets or sets the drain current.
         /// </summary>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
@@ -131,16 +147,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public virtual double VoltageBd { get; protected set; }
 
         /// <summary>
-        /// Gets the (internal) drain node.
-        /// </summary>
-        protected IVariable DrainPrime { get; private set; }
-
-        /// <summary>
-        /// Gets the (internal) source node.
-        /// </summary>
-        protected IVariable SourcePrime { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
@@ -157,24 +163,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             Von = 0;
             Mode = 1;
 
-            _drainNode = BiasingState.Map[context.Nodes[0]];
-            _gateNode = BiasingState.Map[context.Nodes[1]];
-            _sourceNode = BiasingState.Map[context.Nodes[2]];
-            _bulkNode = BiasingState.Map[context.Nodes[3]];
-            var variables = context.Variables;
+            DrainPrime = BiasingState.MapNode(context.Nodes[0]);
+            _drainNode = BiasingState.Map[DrainPrime];
+            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            SourcePrime = BiasingState.MapNode(context.Nodes[2]);
+            _sourceNode = BiasingState.Map[SourcePrime];
+            _bulkNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
 
             // Add series drain node if necessary
-            if (ModelParameters.DrainResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.DrainSquares > 0)
-                DrainPrime = variables.Create(Name.Combine("drain"), Units.Volt);
-            else
-                DrainPrime = context.Nodes[0];
+            if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
+                DrainPrime = BiasingState.Create(Name.Combine("drain"), Units.Volt);
             _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
-            if (ModelParameters.SourceResistance > 0 || ModelParameters.SheetResistance > 0 && Parameters.SourceSquares > 0)
-                SourcePrime = variables.Create(Name.Combine("source"), Units.Volt);
-            else
-                SourcePrime = context.Nodes[2];
+            if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
+                SourcePrime = BiasingState.Create(Name.Combine("source"), Units.Volt);
             _sourceNodePrime = BiasingState.Map[SourcePrime];
 
             // Get matrix pointers

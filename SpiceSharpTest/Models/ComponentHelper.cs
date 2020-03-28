@@ -11,6 +11,7 @@ namespace SpiceSharpTest.Models
 {
     public static class ComponentHelper
     {
+        /*
         public static void DoBias<B>(this B behavior, IBindingContext context) where B : IBiasingBehavior
         {
             // First to temperature analysis if necessary
@@ -136,8 +137,7 @@ namespace SpiceSharpTest.Models
             where P : IParameterSet
             where B : ITemperatureBehavior
         {
-            var modelContext = Substitute.For<IBindingContext>()
-                .Parameter(parameters);
+            var modelContext = Substitute.For<IBindingContext>() .Parameter(parameters);
 
             // Add the same temperature state if possible
             if (context.TryGetState(out ITemperatureSimulationState temperature))
@@ -171,5 +171,6 @@ namespace SpiceSharpTest.Models
 
             return context;
         }
+        */
     }
 }

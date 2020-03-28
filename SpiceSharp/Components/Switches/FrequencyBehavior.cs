@@ -21,8 +21,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             var state = context.GetState<IComplexSimulationState>();
-            _posNode = state.Map[context.Nodes[0]];
-            _negNode = state.Map[context.Nodes[1]];
+            _posNode = state.Map[state.MapNode(context.Nodes[0])];
+            _negNode = state.Map[state.MapNode(context.Nodes[1])];
             _elements = new ElementSet<Complex>(state.Solver, new[] {
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),

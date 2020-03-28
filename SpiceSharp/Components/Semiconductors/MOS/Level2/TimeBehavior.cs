@@ -117,10 +117,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            _gateNode = BiasingState.Map[context.Nodes[1]];
-            _bulkNode = BiasingState.Map[context.Nodes[3]];
+
+            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            _bulkNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
             _drainNodePrime = BiasingState.Map[DrainPrime];
             _sourceNodePrime = BiasingState.Map[SourcePrime];
+            
             _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_gateNode, _gateNode),
                 new MatrixLocation(_bulkNode, _bulkNode),

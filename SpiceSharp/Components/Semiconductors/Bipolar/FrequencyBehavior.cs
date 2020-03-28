@@ -15,6 +15,30 @@ namespace SpiceSharp.Components.BipolarBehaviors
         private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode, _substrateNode;
 
         /// <summary>
+        /// Gets the internal collector node.
+        /// </summary>
+        /// <value>
+        /// The internal collector node.
+        /// </value>
+        protected new IVariable<Complex> CollectorPrime { get; private set; }
+
+        /// <summary>
+        /// Gets the internal base node.
+        /// </summary>
+        /// <value>
+        /// The internal base node.
+        /// </value>
+        protected new IVariable<Complex> BasePrime { get; private set; }
+
+        /// <summary>
+        /// Gets the internal emitter node.
+        /// </summary>
+        /// <value>
+        /// The internal emitter node.
+        /// </value>
+        protected new IVariable<Complex> EmitterPrime { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -22,13 +46,30 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _collectorNode = _complex.Map[context.Nodes[0]];
-            _baseNode = _complex.Map[context.Nodes[1]];
-            _emitterNode = _complex.Map[context.Nodes[2]];
-            _substrateNode = _complex.Map[context.Nodes[3]];
+
+            CollectorPrime = _complex.MapNode(context.Nodes[0]);
+            BasePrime = _complex.MapNode(context.Nodes[1]);
+            EmitterPrime = _complex.MapNode(context.Nodes[2]);
+            _collectorNode = _complex.Map[CollectorPrime];
+            _baseNode = _complex.Map[BasePrime];
+            _emitterNode = _complex.Map[EmitterPrime];
+            _substrateNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
+
+            // Add a series collector node if necessary
+            if (ModelParameters.CollectorResistance > 0)
+                CollectorPrime = _complex.Create(Name.Combine("col"), Units.Volt);
             _collectorPrimeNode = _complex.Map[CollectorPrime];
+
+            // Add a series base node if necessary
+            if (ModelParameters.BaseResist > 0)
+                BasePrime = _complex.Create(Name.Combine("base"), Units.Volt);
             _basePrimeNode = _complex.Map[BasePrime];
+
+            // Add a series emitter node if necessary
+            if (ModelParameters.EmitterResistance > 0)
+                EmitterPrime = _complex.Create(Name.Combine("emit"), Units.Volt);
             _emitterPrimeNode = _complex.Map[EmitterPrime];
+
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_collectorNode, _collectorNode),
                 new MatrixLocation(_baseNode, _baseNode),

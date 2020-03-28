@@ -120,10 +120,11 @@ namespace SpiceSharp.Simulations
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
 
             // Set up initial conditions
+            var state = GetState<IBiasingSimulationState>();
             foreach (var ic in TimeParameters.InitialConditions)
             {
-                if (Variables.TryGetNode(ic.Key, out var variable))
-                    _initialConditions.Add(new ConvergenceAid(variable, GetState<IBiasingSimulationState>(), ic.Value));
+                if (state.HasNode(ic.Key))
+                    _initialConditions.Add(new ConvergenceAid(state.MapNode(ic.Key), GetState<IBiasingSimulationState>(), ic.Value));
                 else
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(ic.Key));
             }
@@ -140,13 +141,14 @@ namespace SpiceSharp.Simulations
         {
             if (TimeParameters.Validate)
             {
-                var rules = new Biasing.Rules(Variables);
+                var state = GetState<IBiasingSimulationState>();
+                var rules = new Biasing.Rules(state);
 
-                // We want to add our own connections
+                // We want to add our own connections for initial conditions
                 foreach (var ic in _initialConditions)
                 {
                     foreach (var rule in rules.GetRules<IConductiveRule>())
-                        rule.AddPath(null, ConductionTypes.Dc, ic.Variable, Variables.Ground);
+                        rule.AddPath(null, ConductionTypes.Dc, ic.Variable, state.Map[0]);
                 }
                 Validate(rules, entities);
             }

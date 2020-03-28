@@ -4,6 +4,7 @@ using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Validation;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -82,7 +83,7 @@ namespace SpiceSharp.Components
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
-            var nodes = MapNodes(p.Variables);
+            var nodes = p.Factory.MapNodes(Nodes).ToArray();
             foreach (var r in rules.GetRules<IConductiveRule>())
                 r.AddPath(this, ConductionTypes.None, nodes[0], nodes[1]);
         }

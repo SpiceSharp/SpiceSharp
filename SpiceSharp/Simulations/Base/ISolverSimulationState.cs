@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// An <see cref="ISimulationState"/> that describes a solver.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface ISolverSimulationState<T> : ISimulationState where T : IFormattable
+    public interface ISolverSimulationState<T> : ISimulationState, IVariableFactory<IVariable<T>> where T : IFormattable
     {
         /// <summary>
         /// Gets the solver used to solve the system of equations.
@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
         IVector<T> Solution { get; }
 
         /// <summary>
-        /// Gets the map that maps <see cref="Variable"/> to indices for the solver.
+        /// Gets the map that maps variables to indices for the solver.
         /// </summary>
         /// <value>
         /// The map.

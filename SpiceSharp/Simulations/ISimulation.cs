@@ -4,6 +4,22 @@ using SpiceSharp.Entities;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
+    /// Interface that describes a simulation that outputs its solved variables.
+    /// </summary>
+    /// <typeparam name="V">The type of variables.</typeparam>
+    /// <seealso cref="ISimulation" />
+    public interface ISimulation<V> : ISimulation where V : IVariable
+    {
+        /// <summary>
+        /// Gets the variables that are solved by the simulation.
+        /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
+        IVariableSet<V> Solved { get; }
+    }
+
+    /// <summary>
     /// Interface that describes a simulation.
     /// </summary>
     /// <seealso cref="IStateful" />
@@ -28,14 +44,6 @@ namespace SpiceSharp.Simulations
         SimulationStatus Status { get; }
 
         /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        IVariableSet Variables { get; }
-
-        /// <summary>
         /// Gets the entity behaviors.
         /// </summary>
         /// <value>
@@ -48,36 +56,5 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Run(IEntityCollection entities);
-    }
-
-    /// <summary>
-    /// Possible statuses for a simulation.
-    /// </summary>
-    public enum SimulationStatus
-    {
-        /// <summary>
-        /// Indicates that the simulation has not started.
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// Indicates that the simulation is now in its setup phase.
-        /// </summary>
-        Setup,
-
-        /// <summary>
-        /// Indicates that the simulation is validating the input.
-        /// </summary>
-        Validation,
-
-        /// <summary>
-        /// Indicates that the simulation is running.
-        /// </summary>
-        Running,
-
-        /// <summary>
-        /// Indicates that the simulation is cleaning up all its resources.
-        /// </summary>
-        Unsetup
     }
 }

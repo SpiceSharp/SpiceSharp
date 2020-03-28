@@ -50,9 +50,11 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public FrequencyBehavior(string name, ICurrentControlledBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
-            _brNode = _complex.Map[ControlBranch];
+            
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            _brNode = _complex.Map[context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>().Branch];
+
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_negNode, _brNode));

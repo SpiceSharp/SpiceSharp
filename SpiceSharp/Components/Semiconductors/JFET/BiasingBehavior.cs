@@ -28,14 +28,20 @@ namespace SpiceSharp.Components.JFETBehaviors
         protected BiasingParameters BiasingParameters { get; }
 
         /// <summary>
-        /// Gets the drain node.
+        /// Gets the internal drain node.
         /// </summary>
-        public IVariable DrainPrime { get; private set; }
+        /// <value>
+        /// The internal drain node.
+        /// </value>
+        protected IVariable<double> DrainPrime { get; }
 
         /// <summary>
-        /// Gets the source node.
+        /// Gets the internal source node.
         /// </summary>
-        public IVariable SourcePrime { get; private set; }
+        /// <value>
+        /// The internal source node.
+        /// </value>
+        protected IVariable<double> SourcePrime { get; }
 
         /// <summary>
         /// Gets the gate-source voltage.
@@ -104,17 +110,19 @@ namespace SpiceSharp.Components.JFETBehaviors
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
-            _drainNode = BiasingState.Map[context.Nodes[0]];
-            _gateNode = BiasingState.Map[context.Nodes[1]];
-            _sourceNode = BiasingState.Map[context.Nodes[2]];
-            var variables = context.Variables;
-            DrainPrime = ModelParameters.DrainResistance > 0 ?
-                variables.Create(Name.Combine("drain"), Units.Volt) :
-                context.Nodes[0];
+
+            DrainPrime = BiasingState.MapNode(context.Nodes[0]);
+            _drainNode = BiasingState.Map[DrainPrime];
+            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            SourcePrime = BiasingState.MapNode(context.Nodes[2]);
+            _sourceNode = BiasingState.Map[SourcePrime];
+
+            if (ModelParameters.DrainResistance > 0)
+                DrainPrime = BiasingState.Create(Name.Combine("drain"), Units.Volt);
             _drainPrimeNode = BiasingState.Map[DrainPrime];
-            SourcePrime = ModelParameters.SourceResistance > 0 ? 
-                variables.Create(Name.Combine("source"), Units.Volt) :
-                context.Nodes[2];
+
+            if (ModelParameters.SourceResistance > 0)
+                SourcePrime = BiasingState.Create(Name.Combine("source"), Units.Volt);
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
             
             _elements = new ElementSet<double>(BiasingState.Solver, new[] {

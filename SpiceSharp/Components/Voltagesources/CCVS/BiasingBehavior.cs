@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     /// <summary>
     /// General behavior for <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior,
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior<double>,
         IParameterized<BaseParameters>
     {
         private readonly int _posNode, _negNode, _cbrNode, _brNode;
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the controlling branch equation row.
         /// </summary>
-        protected IVariable ControlBranch { get; private set; }
+        protected IVariable<double> ControlBranch { get; }
 
         /// <summary>
         /// Gets the branch equation.
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         /// <value>
         /// The branch.
         /// </value>
-        public IVariable Branch { get; private set; }
+        public IVariable<double> Branch { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -68,14 +68,14 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
 
             Parameters = context.GetParameterSet<BaseParameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
-            _posNode = _biasing.Map[context.Nodes[0]];
-            _negNode = _biasing.Map[context.Nodes[1]];
+            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
+            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
 
-            var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior>();
+            var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>();
             ControlBranch = behavior.Branch;
             _cbrNode = _biasing.Map[ControlBranch];
             
-            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
+            Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
             _brNode = _biasing.Map[Branch];
 
             _elements = new ElementSet<double>(_biasing.Solver,

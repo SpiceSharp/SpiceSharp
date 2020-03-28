@@ -1,32 +1,30 @@
-﻿using SpiceSharp.Algebra;
+﻿using System.Collections.Generic;
+using System.Numerics;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.Variables;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
-    public abstract partial class BiasingSimulation
+    public abstract partial class FrequencySimulation
     {
         /// <summary>
-        /// A simulation state for simulations using real numbers.
+        /// A simulation state using complex numbers.
         /// </summary>
-        /// <seealso cref="IBiasingSimulationState" />
-        private class SimulationState : IBiasingSimulationState
+        /// <seealso cref="IComplexSimulationState" />
+        protected class ComplexSimulationState : IComplexSimulationState
         {
             private readonly VariableMap _map;
-            private readonly VariableSet<IVariable<double>> _solved;
+            private readonly VariableSet<IVariable<Complex>> _solved;
 
             /// <summary>
-            /// Gets the solution vector.
+            /// Gets the solution.
             /// </summary>
-            public IVector<double> Solution { get; private set; }
+            public IVector<Complex> Solution { get; private set; }
 
             /// <summary>
-            /// Gets the previous solution vector.
+            /// Gets or sets the current laplace variable.
             /// </summary>
-            /// <remarks>
-            /// This vector is needed for determining convergence.
-            /// </remarks>
-            public IVector<double> OldSolution { get; private set; }
+            public Complex Laplace { get; set; } = new Complex();
 
             /// <summary>
             /// Gets the map that maps variables to indices for the solver.
@@ -37,22 +35,23 @@ namespace SpiceSharp.Simulations
             public IVariableMap Map => _map;
 
             /// <summary>
-            /// Gets the sparse solver.
+            /// Gets the solver.
             /// </summary>
             /// <value>
             /// The solver.
             /// </value>
-            public ISparseSolver<double> Solver { get; }
+            public ISparseSolver<Complex> Solver { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulationState" /> class.
+            /// Initializes a new instance of the <see cref="ComplexSimulationState" /> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            /// <param name="solvedVariables">The set of variables that tracks the solved variables.</param>
-            public SimulationState(ISparseSolver<double> solver, VariableSet<IVariable<double>> solvedVariables)
+            /// <param name="solvedVariables">The set with solved variables.</param>
+            public ComplexSimulationState(ISparseSolver<Complex> solver, VariableSet<IVariable<Complex>> solvedVariables)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
-                var gnd = new GroundVariable<double>();
+
+                var gnd = new GroundVariable<Complex>();
                 _map = new VariableMap(gnd);
                 _solved = solvedVariables;
                 _solved.Add(gnd);
@@ -65,7 +64,7 @@ namespace SpiceSharp.Simulations
             /// <returns>
             /// The shared node variable.
             /// </returns>
-            public IVariable<double> MapNode(string name)
+            public IVariable<Complex> MapNode(string name)
             {
                 if (_solved.TryGetValue(name, out var result))
                     return result;
@@ -81,10 +80,33 @@ namespace SpiceSharp.Simulations
             /// <returns>
             /// The shared node variables.
             /// </returns>
-            public IEnumerable<IVariable<double>> MapNodes(IEnumerable<string> names)
+            public IEnumerable<IVariable<Complex>> MapNodes(IEnumerable<string> names)
             {
                 foreach (var name in names)
                     yield return MapNode(name);
+            }
+
+            /// <summary>
+            /// Creates a local variable that should not be shared by the state with anyone else.
+            /// </summary>
+            /// <param name="name">The name.</param>
+            /// <param name="unit">The unit of the variable.</param>
+            /// <returns>
+            /// The local variable.
+            /// </returns>
+            public IVariable<Complex> Create(string name, IUnit unit)
+            {
+                var result = new SolverVariable<Complex>(this, name, _map.Count, unit);
+                _map.Add(result, _map.Count);
+                return result;
+            }
+
+            /// <summary>
+            /// Set up the simulation state for the simulation.
+            /// </summary>
+            public void Setup()
+            {
+                Solution = new DenseVector<Complex>(Solver.Size);
             }
 
             /// <summary>
@@ -95,42 +117,6 @@ namespace SpiceSharp.Simulations
             /// <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
             /// </returns>
             public bool HasNode(string name) => _solved.ContainsKey(name);
-
-            /// <summary>
-            /// Creates a local variable that should not be shared by the state with anyone else.
-            /// </summary>
-            /// <param name="name">The name.</param>
-            /// <param name="unit">The unit of the variable.</param>
-            /// <returns>
-            /// The local variable.
-            /// </returns>
-            public IVariable<double> Create(string name, IUnit unit)
-            {
-                var result = new SolverVariable<double>(this, name, _map.Count, unit);
-                _map.Add(result, _map.Count);
-                return result;
-            }
-
-            /// <summary>
-            /// Sets up the simulation state.
-            /// </summary>
-            public void Setup()
-            {
-                // Initialize all matrices
-                Solution = new DenseVector<double>(Solver.Size);
-                OldSolution = new DenseVector<double>(Solver.Size);
-                Solver.Reset();
-            }
-
-            /// <summary>
-            /// Stores the solution.
-            /// </summary>
-            public void StoreSolution()
-            {
-                var tmp = OldSolution;
-                OldSolution = Solution;
-                Solution = tmp;
-            }
         }
     }
 }

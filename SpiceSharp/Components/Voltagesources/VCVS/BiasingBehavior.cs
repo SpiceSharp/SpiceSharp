@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
     /// <summary>
     /// General behavior for a <see cref="VoltageControlledVoltageSource"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior,
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior<double>,
         IParameterized<BaseParameters>
     {
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         /// <summary>
         /// Gets the branch equation.
         /// </summary>
-        public IVariable Branch { get; private set; }
+        public IVariable<double> Branch { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -61,12 +61,14 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
 
             Parameters = context.GetParameterSet<BaseParameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
-            _posNode = _biasing.Map[context.Nodes[0]];
-            _negNode = _biasing.Map[context.Nodes[1]];
-            _contPosNode = _biasing.Map[context.Nodes[2]];
-            _contNegNode = _biasing.Map[context.Nodes[3]];
-            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
+
+            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
+            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
+            _contPosNode = _biasing.Map[_biasing.MapNode(context.Nodes[2])];
+            _contNegNode = _biasing.Map[_biasing.MapNode(context.Nodes[3])];
+            Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = _biasing.Map[Branch];
+
             _elements = new ElementSet<double>(_biasing.Solver,
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),

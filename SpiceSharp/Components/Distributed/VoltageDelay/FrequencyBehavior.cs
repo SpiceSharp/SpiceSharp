@@ -8,11 +8,16 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// <summary>
     /// Frequency behavior for a <see cref="VoltageDelay" />.
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
+
+        /// <summary>
+        /// Gets the branch equation row.
+        /// </summary>
+        public new IVariable<Complex> Branch { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -22,14 +27,16 @@ namespace SpiceSharp.Components.DelayBehaviors
         public FrequencyBehavior(string name, ComponentBindingContext context)
             : base(name, context)
         {
-            var state = context.GetState<IBiasingSimulationState>();
-            _posNode = state.Map[context.Nodes[0]];
-            _negNode = state.Map[context.Nodes[1]];
-            _contPosNode = state.Map[context.Nodes[2]];
-            _contNegNode = state.Map[context.Nodes[3]];
-            _branchEq = state.Map[Branch];
             _complex = context.GetState<IComplexSimulationState>();
-            _elements = new ElementSet<Complex>(_complex.Solver, new[] {
+
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            _contPosNode = _complex.Map[_complex.MapNode(context.Nodes[2])];
+            _contNegNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
+            Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
+            _branchEq = _complex.Map[Branch];
+
+            _elements = new ElementSet<Complex>(this._complex.Solver, new[] {
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),
                 new MatrixLocation(_branchEq, _posNode),

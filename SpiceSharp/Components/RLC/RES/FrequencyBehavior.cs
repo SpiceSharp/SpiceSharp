@@ -55,8 +55,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),

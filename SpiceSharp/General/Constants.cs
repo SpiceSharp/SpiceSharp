@@ -39,5 +39,14 @@
         /// Normalized thermal voltage (V/K)
         /// </summary>
         public const double KOverQ = Boltzmann / Charge;
+
+        /// <summary>
+        /// The name of the ground name.
+        /// </summary>
+        /// <remarks>
+        /// If you want to use other names for ground, make an <see cref="System.Collections.Generic.IEqualityComparer{T}" /> that
+        /// maps these extra node names to the ground node.
+        /// </remarks>
+        public const string Ground = "0";
     }
 }

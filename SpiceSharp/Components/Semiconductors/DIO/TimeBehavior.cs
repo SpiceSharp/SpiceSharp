@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public TimeBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            _negNode = BiasingState.Map[context.Nodes[1]];
+            _negNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
             _posPrimeNode = BiasingState.Map[PosPrime];
 
             var method = context.GetState<IIntegrationMethod>();

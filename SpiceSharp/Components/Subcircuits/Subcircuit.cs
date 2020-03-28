@@ -1,10 +1,10 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SubcircuitBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SpiceSharp.Components
 {
@@ -35,12 +35,12 @@ namespace SpiceSharp.Components
         public string Model { get; set; }
 
         /// <summary>
-        /// Gets the number of nodes.
+        /// Gets the nodes.
         /// </summary>
         /// <value>
-        /// The number of nodes.
+        /// The nodes.
         /// </value>
-        public int PinCount => Definition.PinCount;
+        public IReadOnlyList<string> Nodes => new ReadOnlyCollection<string>(_connections);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subcircuit"/> class.
@@ -92,20 +92,6 @@ namespace SpiceSharp.Components
             if (index < 0 || index >= _connections.Length)
                 throw new ArgumentOutOfRangeException(nameof(index));
             return _connections[index];
-        }
-
-        /// <summary>
-        /// Gets the node indexes (in order).
-        /// </summary>
-        /// <param name="variables">The set of variables.</param>
-        /// <returns>An enumerable for all nodes.</returns>
-        public IReadOnlyList<IVariable> MapNodes(IVariableSet variables)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            var list = new IVariable[_connections.Length];
-            for (var i = 0; i < _connections.Length; i++)
-                list[i] = variables.MapNode(_connections[i], Units.Volt);
-            return list;
         }
 
         /// <summary>

@@ -89,19 +89,28 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Gets the collector prime node index.
+        /// Gets the internal collector node.
         /// </summary>
-        public IVariable CollectorPrime { get; private set; }
+        /// <value>
+        /// The internal collector node.
+        /// </value>
+        protected IVariable<double> CollectorPrime { get; private set; }
 
         /// <summary>
-        /// Gets the base prime node index.
+        /// Gets the internal base node.
         /// </summary>
-        public IVariable BasePrime { get; private set; }
+        /// <value>
+        /// The internal base node.
+        /// </value>
+        protected IVariable<double> BasePrime { get; private set; }
 
         /// <summary>
-        /// Gets the emitter prime node index.
+        /// Gets the internal emitter node.
         /// </summary>
-        public IVariable EmitterPrime { get; private set; }
+        /// <value>
+        /// The internal emitter node.
+        /// </value>
+        protected IVariable<double> EmitterPrime { get; private set; }
 
         /// <summary>
         /// Gets or modifies the base-emitter current.
@@ -162,27 +171,26 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Get states
             Iteration = context.GetState<IIterationSimulationState>();
-            _collectorNode = BiasingState.Map[context.Nodes[0]];
-            _baseNode = BiasingState.Map[context.Nodes[1]];
-            _emitterNode = BiasingState.Map[context.Nodes[2]];
-            var variables = context.Variables;
+            CollectorPrime = BiasingState.MapNode(context.Nodes[0]);
+            BasePrime = BiasingState.MapNode(context.Nodes[1]);
+            EmitterPrime = BiasingState.MapNode(context.Nodes[2]);
+            _collectorNode = BiasingState.Map[CollectorPrime];
+            _baseNode = BiasingState.Map[BasePrime];
+            _emitterNode = BiasingState.Map[EmitterPrime];
 
             // Add a series collector node if necessary
-            CollectorPrime = ModelParameters.CollectorResistance > 0 ?
-                variables.Create(Name.Combine("col"), Units.Volt) :
-                context.Nodes[0];
+            if (ModelParameters.CollectorResistance > 0)
+                CollectorPrime = BiasingState.Create(Name.Combine("col"), Units.Volt);
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
 
             // Add a series base node if necessary
-            BasePrime = ModelParameters.BaseResist > 0 ?
-                variables.Create(Name.Combine("base"), Units.Volt) :
-                context.Nodes[1];
+            if (ModelParameters.BaseResist > 0)
+                BasePrime = BiasingState.Create(Name.Combine("base"), Units.Volt);
             _basePrimeNode = BiasingState.Map[BasePrime];
 
             // Add a series emitter node if necessary
-            EmitterPrime = ModelParameters.EmitterResistance > 0 ?
-                variables.Create(Name.Combine("emit"), Units.Volt) :
-                context.Nodes[2];
+            if (ModelParameters.EmitterResistance > 0)
+                EmitterPrime = BiasingState.Create(Name.Combine("emit"), Units.Volt);
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
 
             // Get solver pointers

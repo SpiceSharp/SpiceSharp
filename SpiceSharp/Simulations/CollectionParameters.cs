@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Validation;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -9,14 +10,6 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="ParameterSet" />
     public class CollectionParameters : ParameterSet
     {
-        /// <summary>
-        /// Gets or sets a factory for the variable set.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public Func<IVariableSet> Variables { get; set; }
-
         /// <summary>
         /// Gets or sets a factory for a rule provider that can be used to validate the simulation.
         /// </summary>

@@ -88,23 +88,11 @@ namespace SpiceSharp.Simulations
         public double GetVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
-            if (_simulation is IStateful<IBiasingSimulationState> sim)
+            if (_simulation is ISimulation<IVariable<double>> sim)
             {
-                var state = sim.State;
-
-                // Get the voltage of the positive node
-                var node = _simulation.Variables[positive];
-                var index = state.Map[node];
-                var voltage = state.Solution[index];
-
-                // Subtract negative node if necessary
+                var voltage = sim.Solved[positive].Value;
                 if (negative != null)
-                {
-                    node = _simulation.Variables[negative];
-                    index = state.Map[node];
-                    voltage -= state.Solution[index];
-                }
-
+                    voltage -= sim.Solved[negative].Value;
                 return voltage;
             }
             return double.NaN;
@@ -132,23 +120,11 @@ namespace SpiceSharp.Simulations
         public Complex GetComplexVoltage(string positive, string negative)
         {
             positive.ThrowIfNull(nameof(positive));
-            if (_simulation is IStateful<IComplexSimulationState> sim)
+            if (_simulation is ISimulation<IVariable<Complex>> sim)
             {
-                var state = sim.State;
-
-                // Get the voltage of the positive node
-                var node = _simulation.Variables[positive];
-                var index = state.Map[node];
-                var voltage = state.Solution[index];
-
-                // Subtract negative node if necessary
+                var voltage = sim.Solved[positive].Value;
                 if (negative != null)
-                {
-                    node = _simulation.Variables[negative];
-                    index = state.Map[node];
-                    voltage -= state.Solution[index];
-                }
-
+                    voltage -= sim.Solved[negative].Value;
                 return voltage;
             }
             return double.NaN;

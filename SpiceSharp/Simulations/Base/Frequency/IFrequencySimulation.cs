@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using System.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -8,7 +9,9 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IBiasingSimulation" />
     /// <seealso cref="IBehavioral{T}" />
     /// <seealso cref="IStateful{T}" />
-    public interface IFrequencySimulation : IBiasingSimulation,
+    public interface IFrequencySimulation : 
+        IBiasingSimulation,
+        ISimulation<IVariable<Complex>>,
         IBehavioral<IFrequencyBehavior>,
         IStateful<IComplexSimulationState>
     {

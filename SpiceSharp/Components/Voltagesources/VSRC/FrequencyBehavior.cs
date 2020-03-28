@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
     /// <summary>
     /// AC behavior for <see cref="VoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior,
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>,
         IParameterized<IndependentSourceFrequencyParameters>
     {
         private readonly int _posNode, _negNode, _brNode;
@@ -55,6 +55,11 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         }
 
         /// <summary>
+        /// Gets the branch equation.
+        /// </summary>
+        public new IVariable<Complex> Branch { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -65,9 +70,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
 
             // Connections
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
+
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
             _brNode = _complex.Map[Branch];
+
             _elements = new ElementSet<Complex>(_complex.Solver, new[] {
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_brNode, _posNode),

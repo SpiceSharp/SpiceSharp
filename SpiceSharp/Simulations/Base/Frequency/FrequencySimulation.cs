@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations.Frequency;
-using SpiceSharp.Validation;
 
 namespace SpiceSharp.Simulations
 {
@@ -26,6 +24,8 @@ namespace SpiceSharp.Simulations
         private BehaviorList<IFrequencyUpdateBehavior> _frequencyUpdateBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
+        private ComplexSimulationState _state;
+        private VariableSet<IVariable<Complex>> _variables;
 
         /// <summary>
         /// Gets the frequency parameters.
@@ -61,16 +61,9 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad;
 
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected ComplexSimulationState ComplexState { get; private set; }
-
-        IComplexSimulationState IStateful<IComplexSimulationState>.State => ComplexState;
+        IComplexSimulationState IStateful<IComplexSimulationState>.State => _state;
         FrequencyParameters IParameterized<FrequencyParameters>.Parameters => FrequencyParameters;
+        IVariableSet<IVariable<Complex>> ISimulation<IVariable<Complex>>.Solved => _variables;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
@@ -102,15 +95,18 @@ namespace SpiceSharp.Simulations
         {
             entities.ThrowIfNull(nameof(entities));
 
+            // Create the variables and use the same node comparer as the biasing simulation.
+            _variables = new VariableSet<IVariable<Complex>>(BiasingParameters.NodeComparer);
+
             // Setup the rest of the behaviors
             base.Setup(entities);
 
             // Cache local variables
             _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
             _frequencyUpdateBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyUpdateBehavior>();
-            _loadStateEventArgs = new LoadStateEventArgs(ComplexState);
+            _loadStateEventArgs = new LoadStateEventArgs(_state);
 
-            ComplexState.Setup(this);
+            _state.Setup();
         }
 
         /// <summary>
@@ -121,7 +117,7 @@ namespace SpiceSharp.Simulations
         protected override void Validate(IEntityCollection entities)
         {
             if (FrequencyParameters.Validate)
-                Validate(new Rules(Variables, FrequencyParameters.Frequencies), entities);
+                Validate(new Rules(GetState<IBiasingSimulationState>(), FrequencyParameters.Frequencies), entities);
             else
                 base.Validate(entities);
         }
@@ -139,9 +135,9 @@ namespace SpiceSharp.Simulations
         /// <param name="entities">The entities.</param>
         protected override void CreateBehaviors(IEntityCollection entities)
         {
-            ComplexState = new ComplexSimulationState(
+            _state = new ComplexSimulationState(
                 FrequencyParameters.Solver ?? LUHelper.CreateSparseComplexSolver(),
-                FrequencyParameters.Map ?? new VariableMap(Variables.Ground)
+                _variables
                 );
             /* var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;
@@ -178,8 +174,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void AcIterate()
         {
-            var cstate = ComplexState;
-            var solver = cstate.Solver;
+            var solver = _state.Solver;
 
             retry:
 
@@ -209,7 +204,7 @@ namespace SpiceSharp.Simulations
 
             // Solve
             Statistics.ComplexSolveTime.Start();
-            solver.Solve(cstate.Solution);
+            solver.Solve(_state.Solution);
             Statistics.ComplexSolveTime.Stop();
 
             // Update with the found solution
@@ -217,7 +212,7 @@ namespace SpiceSharp.Simulations
                 behavior.Update();
 
             // Reset values
-            cstate.Solution[0] = 0.0;
+            _state.Solution[0] = 0.0;
             Statistics.ComplexPoints++;
         }
 
@@ -251,7 +246,7 @@ namespace SpiceSharp.Simulations
         {
             OnBeforeFrequencyLoad(_loadStateEventArgs);
             Statistics.ComplexLoadTime.Start();
-            ComplexState.Solver.Reset();
+            _state.Solver.Reset();
             LoadFrequencyBehaviors();
             Statistics.ComplexLoadTime.Reset();
             OnAfterFrequencyLoad(_loadStateEventArgs);

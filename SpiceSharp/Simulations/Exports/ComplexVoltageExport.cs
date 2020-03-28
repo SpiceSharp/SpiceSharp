@@ -89,16 +89,18 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            var state = Simulation.GetState<IComplexSimulationState>();
-            if (Simulation.Variables.TryGetNode(PosNode, out var posNode))
+            if (Simulation is ISimulation<IVariable<Complex>> sim)
             {
-                PosIndex = state.Map[posNode];
-                if (NegNode == null)
-                    Extractor = () => state.Solution[PosIndex];
-                else if (Simulation.Variables.TryGetNode(NegNode, out var negNode))
+                if (sim.Solved.TryGetValue(PosNode, out var _node))
                 {
-                    NegIndex = state.Map[negNode];
-                    Extractor = () => state.Solution[PosIndex] - state.Solution[NegIndex];
+                    var posNode = (IVariable<Complex>)_node;
+                    if (NegNode == null)
+                        Extractor = () => posNode.Value;
+                    else if (sim.Solved.TryGetValue(NegNode, out _node))
+                    {
+                        var negNode = (IVariable<Complex>)_node;
+                        Extractor = () => posNode.Value - negNode.Value;
+                    }
                 }
             }
         }

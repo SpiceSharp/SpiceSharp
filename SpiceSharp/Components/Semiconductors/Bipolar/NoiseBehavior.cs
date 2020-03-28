@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Noise behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class NoiseBehavior : BiasingBehavior, INoiseBehavior
+    public class NoiseBehavior : FrequencyBehavior, INoiseBehavior
     {
         private readonly INoiseSimulationState _noise;
         private readonly ModelNoiseParameters _mnp;
@@ -43,8 +43,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             _mnp = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
+            var complex = context.GetState<IComplexSimulationState>();
             _noise = context.GetState<INoiseSimulationState>();
-            BipolarJunctionTransistorNoise.Bind(context, context.Nodes[0], context.Nodes[1], context.Nodes[2], context.Nodes[3],
+            BipolarJunctionTransistorNoise.Bind(context, 
+                complex.MapNode(context.Nodes[0]), complex.MapNode(context.Nodes[1]), complex.MapNode(context.Nodes[2]), complex.MapNode(context.Nodes[3]),
                 CollectorPrime, BasePrime, EmitterPrime);
         }
         

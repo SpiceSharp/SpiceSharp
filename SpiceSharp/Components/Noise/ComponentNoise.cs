@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
@@ -64,7 +65,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="nodes">The nodes.</param>
-        public void Bind(IComponentBindingContext context, params IVariable[] nodes)
+        public void Bind(IComponentBindingContext context, params IVariable<Complex>[] nodes)
         {
             context.ThrowIfNull(nameof(context));
             _cstate = context.GetState<IComplexSimulationState>();

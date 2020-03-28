@@ -50,6 +50,7 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
+        /*
         [TestCaseSource(nameof(Biasing))]
         public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
         {
@@ -188,5 +189,6 @@ namespace SpiceSharpTest.Models
                     new[] { typeof(VoltageLoopRuleViolation) });
             }
         }
+        */
     }
 }

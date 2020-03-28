@@ -28,6 +28,7 @@ namespace SpiceSharp.Simulations
         private bool _isPreordered, _shouldReorder;
         private SimulationState _state;
         private TemperatureSimulationState _temperature;
+        private VariableSet<IVariable<double>> _variables;
 
         /// <summary>
         /// Gets the variable that causes issues.
@@ -58,6 +59,7 @@ namespace SpiceSharp.Simulations
         IBiasingSimulationState IStateful<IBiasingSimulationState>.State => _state;
         TemperatureSimulationState IStateful<TemperatureSimulationState>.State => _temperature;
         BiasingParameters IParameterized<BiasingParameters>.Parameters => BiasingParameters;
+        IVariableSet<IVariable<double>> ISimulation<IVariable<double>>.Solved => _variables;
 
         #region Events
 
@@ -124,6 +126,7 @@ namespace SpiceSharp.Simulations
         protected override void Setup(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
+            _variables = new VariableSet<IVariable<double>>(BiasingParameters.NodeComparer);
 
             // Get behaviors and configuration data
             _temperature = new TemperatureSimulationState(BiasingParameters.Temperature, BiasingParameters.NominalTemperature);
@@ -142,7 +145,7 @@ namespace SpiceSharp.Simulations
             // Set up nodesets
             foreach (var ns in BiasingParameters.Nodesets)
             {
-                if (Variables.TryGetNode(ns.Key, out var variable))
+                if (_variables.TryGetValue(ns.Key, out var variable))
                     _nodesets.Add(new ConvergenceAid(variable, _state, ns.Value));
                 else
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(ns.Key));
@@ -157,7 +160,7 @@ namespace SpiceSharp.Simulations
         protected override void Validate(IEntityCollection entities)
         {
             if (BiasingParameters.Validate)
-                Validate(new Rules(Variables), entities);
+                Validate(new Rules(_state), entities);
         }
 
         /// <summary>
@@ -170,7 +173,7 @@ namespace SpiceSharp.Simulations
             // TODO: This may not be a terribly good idea (sharing solvers).
             _state = new SimulationState(
                 BiasingParameters.Solver ?? LUHelper.CreateSparseRealSolver(),
-                BiasingParameters.Map ?? new VariableMap(Variables.Ground));
+                _variables);
             Iteration.Gmin = BiasingParameters.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
@@ -579,7 +582,7 @@ namespace SpiceSharp.Simulations
                 var o = _state.OldSolution[v.Value];
 
                 if (double.IsNaN(n))
-                    throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(node));
+                    throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(v));
 
                 if (node.Unit == Units.Volt)
                 {

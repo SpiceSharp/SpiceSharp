@@ -1,12 +1,13 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// An interface describing a behavior with a branch equation.
     /// </summary>
-    public interface IBranchedBehavior : IBehavior
+    public interface IBranchedBehavior<T> : IBehavior where T : IFormattable
     {
         /// <summary>
         /// Gets the branch equation variable.
@@ -14,6 +15,6 @@ namespace SpiceSharp.Components
         /// <value>
         /// The branch equation variable.
         /// </value>
-        IVariable Branch { get; }
+        IVariable<T> Branch { get; }
     }
 }

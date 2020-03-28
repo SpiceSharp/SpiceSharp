@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using NSubstitute;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
-using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharpTest.Models
 {
@@ -81,6 +76,7 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual("out", ((FloatingNodeRuleViolation)violation).FloatingVariable.Name);
         }
 
+        /*
         [TestCaseSource(nameof(Biasing))]
         public void When_BiasingBehavior_Expect_Reference(Proxy<ICurrentControlledBindingContext> context, double[] expected)
         {
@@ -158,5 +154,6 @@ namespace SpiceSharpTest.Models
                     new[] { typeof(FloatingNodeRuleViolation) });
             }
         }
+        */
     }
 }

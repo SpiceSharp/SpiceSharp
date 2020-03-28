@@ -8,7 +8,8 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="ITemperatureSimulation" />
     /// <seealso cref="IBehavioral{T}" />
     /// <seealso cref="IStateful{T}" />
-    public interface IBiasingSimulation : ITemperatureSimulation,
+    public interface IBiasingSimulation : ISimulation<IVariable<double>>,
+        ITemperatureSimulation,
         IBehavioral<IBiasingBehavior>,
         IBehavioral<IConvergenceBehavior>,
         IStateful<IBiasingSimulationState>

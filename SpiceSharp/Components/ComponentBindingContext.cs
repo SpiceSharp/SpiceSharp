@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The pins.
         /// </value>
-        public IReadOnlyList<IVariable> Nodes { get; }
+        public IReadOnlyList<string> Nodes { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BindingContext"/> class.
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         public ComponentBindingContext(IComponent component, ISimulation simulation, bool linkParameters)
             : base(component, simulation, linkParameters)
         {
-            Nodes = component.MapNodes(simulation.Variables);
+            Nodes = component.Nodes;
             if (component.Model != null)
                 ModelBehaviors = simulation.EntityBehaviors[component.Model];
         }
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         public ComponentBindingContext(Component component, ISimulation simulation)
             : base(component, simulation)
         {
-            Nodes = component.MapNodes(simulation.Variables);
+            Nodes = component.Nodes;
             if (component.Model != null)
                 ModelBehaviors = simulation.EntityBehaviors[component.Model];
         }

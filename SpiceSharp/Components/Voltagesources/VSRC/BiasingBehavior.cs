@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
     /// <summary>
     /// General behavior for <see cref="VoltageSource"/>
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior,
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior<double>,
         IParameterized<IndependentSourceParameters>
     {
         private readonly IIntegrationMethod _method;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
         /// <summary>
         /// Gets the branch equation.
         /// </summary>
-        public IVariable Branch { get; private set; }
+        public IVariable<double> Branch { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -92,10 +92,12 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             // Connections
             _biasing = context.GetState<IBiasingSimulationState>();
             context.TryGetState(out _method);
-            _posNode = _biasing.Map[context.Nodes[0]];
-            _negNode = _biasing.Map[context.Nodes[1]];
-            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
+
+            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
+            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
+            Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
             _brNode = _biasing.Map[Branch];
+
             _elements = new ElementSet<double>(_biasing.Solver, new[] {
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_brNode, _posNode),

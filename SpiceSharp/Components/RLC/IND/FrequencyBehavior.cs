@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// Frequency behavior for <see cref="Inductor"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>
     {
         /// <summary>
         /// Gets the complex matrix elements.
@@ -29,6 +29,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         private int _posNode, _negNode, _branchEq;
 
         /// <summary>
+        /// Gets the branch equation index.
+        /// </summary>
+        public new IVariable<Complex> Branch { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -36,9 +41,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             ComplexState = context.GetState<IComplexSimulationState>();
-            _posNode = ComplexState.Map[context.Nodes[0]];
-            _negNode = ComplexState.Map[context.Nodes[1]];
+            
+            _posNode = ComplexState.Map[ComplexState.MapNode(context.Nodes[0])];
+            _negNode = ComplexState.Map[ComplexState.MapNode(context.Nodes[1])];
+            Branch = ComplexState.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = ComplexState.Map[Branch];
+
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_negNode, _branchEq),

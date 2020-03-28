@@ -148,6 +148,7 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual(1e-5, waveform.GetProperty<double>("per"), 1e-12);
         }
 
+        /*
         [TestCaseSource(nameof(Biasing))]
         public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
         {
@@ -267,5 +268,6 @@ namespace SpiceSharpTest.Models
                     new[] { typeof(FloatingNodeRuleViolation) });
             }
         }
+        */
     }
 }

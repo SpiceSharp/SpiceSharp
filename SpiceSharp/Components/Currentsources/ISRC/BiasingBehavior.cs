@@ -69,8 +69,8 @@ namespace SpiceSharp.Components.CurrentSourceBehaviors
             Parameters = context.GetParameterSet<IndependentSourceParameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
-            _posNode = _biasing.Map[context.Nodes[0]];
-            _negNode = _biasing.Map[context.Nodes[1]];
+            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
+            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
 
             context.TryGetState(out _method);
             Waveform = Parameters.Waveform?.Create(_method);

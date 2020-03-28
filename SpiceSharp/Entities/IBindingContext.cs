@@ -9,14 +9,6 @@ namespace SpiceSharp.Entities
     public interface IBindingContext
     {
         /// <summary>
-        /// Gets the defined variables.
-        /// </summary>
-        /// <value>
-        /// The defined variables.
-        /// </value>
-        public IVariableSet Variables { get; }
-
-        /// <summary>
         /// Gets a simulation state.
         /// </summary>
         /// <typeparam name="S">The type of simulation state.</typeparam>

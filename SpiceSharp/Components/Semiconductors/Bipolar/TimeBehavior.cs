@@ -96,11 +96,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public TimeBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             _time = context.GetState<ITimeSimulationState>();
-            _baseNode = BiasingState.Map[context.Nodes[1]];
-            _substrateNode = BiasingState.Map[context.Nodes[3]];
+            
+            _baseNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            _substrateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
             _basePrimeNode = BiasingState.Map[BasePrime];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
+
             _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_baseNode, _baseNode),
                 new MatrixLocation(_collectorPrimeNode, _collectorPrimeNode),

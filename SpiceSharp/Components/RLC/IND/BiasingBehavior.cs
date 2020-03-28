@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// DC biasing behavior for a <see cref="Inductor"/>
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IBranchedBehavior
+    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IBranchedBehavior<double>
     {
         private readonly int _posNode, _negNode, _branchEq;
         private readonly ElementSet<double> _elements;
@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the branch equation index.
         /// </summary>
-        public IVariable Branch { get; private set; }
+        public IVariable<double> Branch { get; }
 
         /// <summary>
         /// Gets the current.
@@ -58,9 +58,9 @@ namespace SpiceSharp.Components.InductorBehaviors
             context.Nodes.CheckNodes(2);
 
             BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
+            _posNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[0])];
+            _negNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            Branch = BiasingState.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = BiasingState.Map[Branch];
 
             _elements = new ElementSet<double>(BiasingState.Solver,

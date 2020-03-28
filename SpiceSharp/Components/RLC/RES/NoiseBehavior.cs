@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -20,7 +21,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="context"></param>
         public NoiseBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
-            ResistorNoise.Bind(context, context.Nodes[0], context.Nodes[1]);
+            var state = context.GetState<IComplexSimulationState>();
+            ResistorNoise.Bind(context, state.MapNode(context.Nodes[0]), state.MapNode(context.Nodes[1]));
         }
 
         /// <summary>

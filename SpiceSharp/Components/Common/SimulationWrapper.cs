@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Common
 {
     /// <summary>
     /// A common wrapper for a simulation. It allows an extra layer of an <see cref="ISimulation"/>.
-    /// The wrapper can inject configurations, states
+    /// The wrapper can inject configurations, states, solved variables, etc.
     /// </summary>
     /// <seealso cref="ISimulation" />
     public class SimulationWrapper : ISimulation
@@ -62,14 +62,6 @@ namespace SpiceSharp.Components.Common
         public SimulationStatus Status => Parent.Status;
 
         /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IVariableSet Variables { get; }
-
-        /// <summary>
         /// Gets the entity behaviors.
         /// </summary>
         /// <value>
@@ -91,16 +83,13 @@ namespace SpiceSharp.Components.Common
         /// <param name="parent">The parent.</param>
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="states">The simulation states.</param>
-        /// <param name="variables">The variables.</param>
         public SimulationWrapper(ISimulation parent, 
             IBehaviorContainerCollection behaviors,
-            ITypeDictionary<ISimulationState> states,
-            IVariableSet variables)
+            ITypeDictionary<ISimulationState> states)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
             EntityBehaviors = behaviors.ThrowIfNull(nameof(behaviors));
             LocalStates = states.ThrowIfNull(nameof(states));
-            Variables = variables.ThrowIfNull(nameof(variables));
         }
 
         /// <summary>

@@ -16,6 +16,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private readonly IComplexSimulationState _complex;
 
         /// <summary>
+        /// Gets the internal positive node.
+        /// </summary>
+        /// <value>
+        /// The internal positive node.
+        /// </value>
+        protected new IVariable<Complex> PosPrime { get; }
+
+        /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
@@ -48,9 +56,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
+
+            PosPrime = _complex.MapNode(context.Nodes[0]);
+            _posNode = _complex.Map[PosPrime];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            if (ModelParameters.Resistance > 0)
+                PosPrime = _complex.Create(Name.Combine("pos"), Units.Volt);
             _posPrimeNode = _complex.Map[PosPrime];
+
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_negNode, _negNode),

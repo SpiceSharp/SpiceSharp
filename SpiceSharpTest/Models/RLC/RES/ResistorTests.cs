@@ -241,6 +241,7 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
+        /*
         [TestCaseSource(nameof(Temperature))]
         public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double conductance)
         {
@@ -333,5 +334,6 @@ namespace SpiceSharpTest.Models
                 yield return new TestCaseData(context.AsProxy(), 1.65757549356e-3).SetName("{m}(Noise)");
             }
         }
+        */
     }
 }

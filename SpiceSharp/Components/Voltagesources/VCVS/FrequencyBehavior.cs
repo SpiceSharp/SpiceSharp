@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
     /// <summary>
     /// AC behavior for a <see cref="VoltageControlledVoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>
     {
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
         private readonly IComplexSimulationState _complex;
@@ -42,6 +42,11 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         }
 
         /// <summary>
+        /// Gets the branch equation.
+        /// </summary>
+        public new IVariable<Complex> Branch { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -49,11 +54,14 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
-            _contPosNode = _complex.Map[context.Nodes[2]];
-            _contNegNode = _complex.Map[context.Nodes[3]];
+
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            _contPosNode = _complex.Map[_complex.MapNode(context.Nodes[2])];
+            _contNegNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
+            Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = _complex.Map[Branch];
+
             _elements = new ElementSet<Complex>(_complex.Solver, new[] {
                 new MatrixLocation(_posNode, _branchEq),
                 new MatrixLocation(_branchEq, _posNode),

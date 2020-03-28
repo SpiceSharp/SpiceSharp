@@ -42,12 +42,19 @@ namespace SpiceSharpTest.Models
             {
             }
         }
-
-        public static T Variable<T>(this T context, params IVariable[] variables) where T : IBindingContext
+        
+        /*
+        /// <summary>
+        /// The context should return the following variables.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context">The context.</param>
+        /// <param name="variables">The variables.</param>
+        /// <returns></returns>
+        public static T Variable<T>(this T context, params IVariable<double>[] variables) where T : IBindingContext
         {
             if (variables == null || variables.Length == 0)
                 return context;
-            var count = context.Variables.Count;
 
             var newVariables = new IVariable[count + variables.Length];
             int index = 0;
@@ -96,12 +103,20 @@ namespace SpiceSharpTest.Models
             context.Variables.Create(Arg.Any<string>(), Arg.Any<IUnit>()).Returns(variables[0], next);
             return context;
         }
-        public static T BranchControlled<T>(this T context, IVariable variable) where T : ICurrentControlledBindingContext
+        public static T BranchControlled<T>(this T context, IVariable<double> variable) where T : ICurrentControlledBindingContext
         {
             context.Variable(variable);
-            var behavior = Substitute.For<IBranchedBehavior>();
+            var behavior = Substitute.For<IBranchedBehavior<double>>();
             behavior.Branch.Returns(variable);
-            context.ControlBehaviors.GetValue<IBranchedBehavior>().Returns(behavior);
+            context.ControlBehaviors.GetValue<IBranchedBehavior<double>>().Returns(behavior);
+            return context;
+        }
+        public static T BranchControlled<T>(this T context, IVariable<Complex> variable) where T : ICurrentControlledBindingContext
+        {
+            context.Variable(variable);
+            var behavior = Substitute.For<IBranchedBehavior<Complex>>();
+            behavior.Branch.Returns(variable);
+            context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>().Returns(behavior);
             return context;
         }
         public static T Parameter<T, P>(this T context, P parameters) where T : IBindingContext where P : IParameterSet
@@ -304,5 +319,6 @@ namespace SpiceSharpTest.Models
         /// <param name="value">The value.</param>
         /// <returns>The proxy.</returns>
         public static Proxy<T> AsProxy<T>(this T value) => new Proxy<T>(value);
+        */
     }
 }

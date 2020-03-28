@@ -27,8 +27,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public ParallelSimulation(ISimulation parent, IParameterized parameters)
             : base(parent,
                   new BehaviorContainerCollection(parent?.EntityBehaviors.Comparer),
-                  new InheritedTypeDictionary<ISimulationState>(),
-                  parent?.Variables)
+                  new InheritedTypeDictionary<ISimulationState>())
         {
             LocalParameters = parameters.ThrowIfNull(nameof(parameters));
         }

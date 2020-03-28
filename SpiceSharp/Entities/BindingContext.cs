@@ -117,14 +117,6 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IVariableSet Variables => Simulation.Variables;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BindingContext"/> class.
         /// </summary>
         /// <param name="entity">The entity creating the behavior.</param>

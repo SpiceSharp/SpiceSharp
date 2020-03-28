@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Simulations.Biasing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations.Frequency
 {
@@ -22,10 +21,10 @@ namespace SpiceSharp.Simulations.Frequency
         /// <summary>
         /// Initializes a new instance of the <see cref="Rules"/> class.
         /// </summary>
-        /// <param name="variables">The variables.</param>
+        /// <param name="state">The biasing simulation state.</param>
         /// <param name="frequencies">The frequencies that will be evaluated.</param>
-        public Rules(IVariableSet variables, IEnumerable<double> frequencies)
-            : base(variables)
+        public Rules(ISolverSimulationState<double> state, IEnumerable<double> frequencies)
+            : base(state)
         {
             FrequencyParameters = new RuleParameters(frequencies);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
@@ -84,7 +85,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="nodes">The nodes.</param>
-        public virtual void Bind(IComponentBindingContext context, IVariable[] nodes)
+        public virtual void Bind(IComponentBindingContext context, IVariable<Complex>[] nodes)
         {
             context.ThrowIfNull(nameof(context));
             nodes.ThrowIfNull(nameof(nodes));

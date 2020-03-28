@@ -32,22 +32,22 @@ namespace SpiceSharp.Components
         public string Model { get; set; }
 
         /// <summary>
-        /// Gets the number of nodes.
+        /// Gets the nodes.
         /// </summary>
         /// <value>
-        /// The number of nodes.
+        /// The nodes.
         /// </value>
-        public int PinCount
+        public IReadOnlyList<string> Nodes
         {
             get
             {
-                var count = 0;
+                var list = new List<string>();
                 foreach (var entity in Parameters.Entities)
                 {
                     if (entity is IComponent component)
-                        count += component.PinCount;
+                        list.AddRange(component.Nodes);
                 }
-                return count;
+                return list.AsReadOnly();
             }
         }
 
@@ -155,39 +155,15 @@ namespace SpiceSharp.Components
                 {
                     if (entity is IComponent component)
                     {
-                        if (index > component.PinCount)
-                            index -= component.PinCount;
+                        var nodes = component.Nodes;
+                        if (index > nodes.Count)
+                            index -= nodes.Count;
                         else
-                            return component.GetNode(index);
+                            return nodes[index];
                     }
                 }
             }
             throw new ArgumentOutOfRangeException(nameof(index));
-        }
-
-        /// <summary>
-        /// Gets the node indexes (in order).
-        /// </summary>
-        /// <param name="variables">The set of variables.</param>
-        /// <returns>
-        /// An enumerable for all nodes.
-        /// </returns>
-        public IReadOnlyList<IVariable> MapNodes(IVariableSet variables)
-        {
-            variables.ThrowIfNull(nameof(variables));
-            var list = new List<IVariable>();
-            if (Parameters.Entities != null)
-            {
-                foreach (var entity in Parameters.Entities)
-                {
-                    if (entity is IComponent component)
-                    {
-                        foreach (var variable in component.MapNodes(variables))
-                            list.Add(variable);
-                    }
-                }
-            }
-            return list.AsReadOnly();
         }
     }
 }

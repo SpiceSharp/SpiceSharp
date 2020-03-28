@@ -61,10 +61,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
 
             _biasing = context.GetState<IBiasingSimulationState>();
             Parameters = context.GetParameterSet<BaseParameters>();
-            _posNode = _biasing.Map[context.Nodes[0]];
-            _negNode = _biasing.Map[context.Nodes[1]];
-            _contPosNode = _biasing.Map[context.Nodes[2]];
-            _contNegNode = _biasing.Map[context.Nodes[3]];
+            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
+            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
+            _contPosNode = _biasing.Map[_biasing.MapNode(context.Nodes[2])];
+            _contNegNode = _biasing.Map[_biasing.MapNode(context.Nodes[3])];
             _elements = new ElementSet<double>(_biasing.Solver, new[] {
                 new MatrixLocation(_posNode, _contPosNode),
                 new MatrixLocation(_posNode, _contNegNode),

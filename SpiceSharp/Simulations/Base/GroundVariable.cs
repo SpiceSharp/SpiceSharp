@@ -1,14 +1,14 @@
-﻿using SpiceSharp.Simulations.Variables;
-using System;
+﻿using System;
+using SpiceSharp.Simulations.Variables;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Describes an <see cref="IVariable"/> that also returns its value.
+    /// A ground variable that always returns the reference.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="IVariable" />
-    public interface IVariable<T> : IVariable where T : IFormattable
+    /// <seealso cref="IVariable{T}" />
+    public class GroundVariable<T> : IVariable<T> where T : IEquatable<T>, IFormattable
     {
         /// <summary>
         /// Gets the value of the variable.
@@ -16,21 +16,15 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The value.
         /// </value>
-        T Value { get; }
-    }
+        public T Value => default;
 
-    /// <summary>
-    /// Describes an unknown variable that will be solved by a simulation.
-    /// </summary>
-    public interface IVariable
-    {
         /// <summary>
         /// Gets the name of the variable.
         /// </summary>
         /// <value>
         /// The name of the variable.
         /// </value>
-        string Name { get; }
+        public string Name => Constants.Ground;
 
         /// <summary>
         /// Gets the units of the quantity.
@@ -38,6 +32,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The units.
         /// </value>
-        IUnit Unit { get; }
+        public IUnit Unit => Units.Volt;
     }
 }

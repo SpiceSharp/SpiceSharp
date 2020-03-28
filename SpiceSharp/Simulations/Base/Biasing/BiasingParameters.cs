@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the nodesets.
         /// </summary>
-        public Dictionary<string, double> Nodesets { get; } = new Dictionary<string, double>();
+        public Dictionary<string, double> Nodesets { get; }
 
         /// <summary>
         /// Gets or sets the solver used to solve equations. If <c>null</c>, a default solver will be used.
@@ -97,16 +97,6 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("biasing.solver"), ParameterInfo("The solver used to solve equations.")]
         public ISparseSolver<double> Solver { get; set; }
-
-        /// <summary>
-        /// Gets or sets the mapper used to map <see cref="Variable"/> to equation indices. If <c>null</c>,
-        /// a default mapper will be used.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
-        [ParameterName("biasing.map"), ParameterInfo("The mapper used to map variables to node indices.")]
-        public IVariableMap Map { get; set; }
 
         /// <summary>
         /// Gets or sets the (initial) temperature in Kelvin of the simulation.
@@ -158,5 +148,23 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("biasing.validate"), ParameterInfo("Flag indicating whether the simulation should validate the circuit before executing")]
         public bool Validate { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the comparer used for node names.
+        /// </summary>
+        /// <value>
+        /// The comparer use for nodes.
+        /// </value>
+        public IEqualityComparer<string> NodeComparer { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BiasingParameters"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
+        public BiasingParameters(IEqualityComparer<string> comparer = null)
+        {
+            NodeComparer = comparer ?? EqualityComparer<string>.Default;
+            Nodesets = new Dictionary<string, double>(comparer);
+        }
     }
 }

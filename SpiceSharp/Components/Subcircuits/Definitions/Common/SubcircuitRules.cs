@@ -6,9 +6,9 @@ using System.Collections.Generic;
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// 
+    /// A wrapper for handling rules with subcircuits.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Validation.IRules" />
+    /// <seealso cref="IRules" />
     public class SubcircuitRules : IRules
     {
         private readonly IRules _parent;

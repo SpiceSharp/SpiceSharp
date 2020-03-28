@@ -33,6 +33,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Subcircuits\**" />
+    <EmbeddedResource Remove="Components\Subcircuits\**" />
+    <None Remove="Components\Subcircuits\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

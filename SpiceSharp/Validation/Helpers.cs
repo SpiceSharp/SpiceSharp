@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.Variables;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Validation
 {
@@ -9,7 +11,12 @@ namespace SpiceSharp.Validation
     /// </summary>
     public static class Helpers
     {
-        private static Func<IRules> _defaultRules = () => new Simulations.Biasing.Rules(new VariableSet());
+        private static readonly Func<IRules> _defaultRules = () =>
+        {
+            var factory = new VariableFactory();
+            var gnd = factory.MapNode("0");
+            return new Simulations.Biasing.Rules(factory);
+        };
 
         /// <summary>
         /// Returns true if the specified entity collection is valid under the default rules.

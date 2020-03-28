@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
     /// <summary>
     /// AC behavior for <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>
     {
         private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
@@ -52,6 +52,14 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         }
 
         /// <summary>
+        /// Gets the branch equation.
+        /// </summary>
+        /// <value>
+        /// The branch.
+        /// </value>
+        public new IVariable<Complex> Branch { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
         /// <param name="name">Name</param>
@@ -59,10 +67,16 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
         public FrequencyBehavior(string name, ICurrentControlledBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
-            _cbrNode = _complex.Map[ControlBranch];
+
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+
+            var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>();
+            _cbrNode = _complex.Map[behavior.Branch];
+
+            Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
             _brNode = _complex.Map[Branch];
+
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _brNode),
                 new MatrixLocation(_negNode, _brNode),

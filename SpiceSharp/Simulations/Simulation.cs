@@ -71,14 +71,6 @@ namespace SpiceSharp.Simulations
             }
         }
 
-        /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IVariableSet Variables { get; private set; }
-
         #region Events
         /// <summary>
         /// Occurs when simulation data can be exported.
@@ -222,10 +214,6 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
                 throw new SpiceSharpException(Properties.Resources.Simulations_NoEntities.FormatString(Name));
-
-            // Create the set of variables
-            Variables = CollectionParameters.Variables?.Invoke() ?? new VariableSet();
-            Variables.Clear();
 
             // Create all entity behaviors
             CreateBehaviors(entities);

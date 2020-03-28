@@ -16,9 +16,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private readonly IIterationSimulationState _iteration;
 
         /// <summary>
-        /// Gets the positive internal node.
+        /// Gets the internal positive node.
         /// </summary>
-        public IVariable PosPrime { get; private set; }
+        /// <value>
+        /// The internal positive node.
+        /// </value>
+        protected IVariable<double> PosPrime { get; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -86,12 +89,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             BiasingState = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
-            _posNode = BiasingState.Map[context.Nodes[0]];
-            _negNode = BiasingState.Map[context.Nodes[1]];
-            var variables = context.Variables;
-            PosPrime = ModelParameters.Resistance > 0 ? 
-                variables.Create(Name.Combine("pos"), Units.Volt) :
-                context.Nodes[0];
+            PosPrime = BiasingState.MapNode(context.Nodes[0]);
+            _posNode = BiasingState.Map[PosPrime];
+            _negNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            if (ModelParameters.Resistance > 0)
+                PosPrime = BiasingState.Create(Name.Combine("pos"), Units.Volt);
             _posPrimeNode = BiasingState.Map[PosPrime];
 
             // Get matrix elements

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.DelayBehaviors
     /// <summary>
     /// Biasing behavior for a <see cref="VoltageDelay" />.
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior,
+    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior<double>,
         IParameterized<BaseParameters>
     {
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.DelayBehaviors
         /// <summary>
         /// Gets the branch equation row.
         /// </summary>
-        public IVariable Branch { get; }
+        public IVariable<double> Branch { get; }
 
         /// <summary>
         /// Gets the matrix elements.
@@ -46,11 +46,11 @@ namespace SpiceSharp.Components.DelayBehaviors
 
             Parameters = context.GetParameterSet<BaseParameters>();
             var state = context.GetState<IBiasingSimulationState>();
-            _posNode = state.Map[context.Nodes[0]];
-            _negNode = state.Map[context.Nodes[1]];
-            _contPosNode = state.Map[context.Nodes[2]];
-            _contNegNode = state.Map[context.Nodes[3]];
-            Branch = context.Variables.Create(Name.Combine("branch"), Units.Ampere);
+            _posNode = state.Map[state.MapNode(context.Nodes[0])];
+            _negNode = state.Map[state.MapNode(context.Nodes[1])];
+            _contPosNode = state.Map[state.MapNode(context.Nodes[2])];
+            _contNegNode = state.Map[state.MapNode(context.Nodes[3])];
+            Branch = state.Create(Name.Combine("branch"), Units.Ampere);
             _branchEq = state.Map[Branch];
 
             BiasingElements = new ElementSet<double>(state.Solver, new[] {

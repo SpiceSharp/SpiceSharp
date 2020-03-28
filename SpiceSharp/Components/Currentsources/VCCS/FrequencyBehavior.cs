@@ -49,10 +49,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[context.Nodes[0]];
-            _negNode = _complex.Map[context.Nodes[1]];
-            _contPosNode = _complex.Map[context.Nodes[2]];
-            _contNegNode = _complex.Map[context.Nodes[3]];
+            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            _contPosNode = _complex.Map[_complex.MapNode(context.Nodes[2])];
+            _contNegNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _contPosNode),
                 new MatrixLocation(_posNode, _contNegNode),
