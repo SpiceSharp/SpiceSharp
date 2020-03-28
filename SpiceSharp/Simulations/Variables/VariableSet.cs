@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
@@ -93,9 +94,10 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsValue(IVariable variable)
+        public bool ContainsValue(V variable)
         {
-            variable.ThrowIfNull(nameof(variable));
+            if (variable == null)
+                throw new ArgumentNullException(nameof(variable));
             if (!_map.TryGetValue(variable.Name, out var result))
                 return false;
             return result.Equals(variable);
@@ -111,7 +113,7 @@ namespace SpiceSharp.Simulations
         /// </returns>
         public bool TryGetValue(string name, out V variable) => _map.TryGetValue(name, out variable);
 
-        bool IVariableSet<V>.TryGetValue(string name, out IVariable variable)
+        bool IVariableSet<V>.TryGetValue(string name, out V variable)
         {
             if (_map.TryGetValue(name, out var result))
             {

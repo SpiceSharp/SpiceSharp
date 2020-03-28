@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <remarks>
     /// This can be used to map variables into a solver.
     /// </remarks>
-    public interface IVariableSet<out V> : IEnumerable<V> where V : IVariable
+    public interface IVariableSet<V> : IEnumerable<V> where V : IVariable
     {
         /// <summary>
         /// Gets the number of variables in the set.
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the set contains the variable; otherwise, <c>false</c>.
         /// </returns>
-        bool ContainsValue(IVariable variable);
+        bool ContainsValue(V variable);
 
         /// <summary>
         /// Tries to get a variable by its name.
@@ -62,6 +62,6 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// <c>true</c> if the variable was found; otherwise, <c>false</c>.
         /// </returns>
-        bool TryGetValue(string name, out IVariable variable);
+        bool TryGetValue(string name, out V variable);
     }
 }
