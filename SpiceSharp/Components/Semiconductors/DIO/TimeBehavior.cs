@@ -27,9 +27,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public TimeBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            _negNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            _posPrimeNode = BiasingState.Map[PosPrime];
-
             var method = context.GetState<IIntegrationMethod>();
             _capCharge = method.CreateDerivative();
         }
@@ -39,7 +36,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         void ITimeBehavior.InitializeStates()
         {
-            double vd = (BiasingState.Solution[_posPrimeNode] - BiasingState.Solution[_negNode]) / Parameters.SeriesMultiplier;
+            double vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
             CalculateCapacitance(vd);
             _capCharge.Value = LocalCapCharge;
         }
@@ -54,9 +51,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 return;
 
             // Calculate the capacitance
-            var state = BiasingState;
             var n = Parameters.SeriesMultiplier;
-            double vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / n;
+            double vd = (Variables.PosPrime.Value - Variables.Negative.Value) / n;
             CalculateCapacitance(vd);
 
             // Integrate

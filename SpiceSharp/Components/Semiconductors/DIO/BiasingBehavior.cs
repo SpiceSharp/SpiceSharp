@@ -12,17 +12,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
     {
-        private readonly int _posNode, _negNode, _posPrimeNode;
         private readonly IIterationSimulationState _iteration;
 
         /// <summary>
-        /// Gets the internal positive node.
+        /// The variables used by the behavior.
         /// </summary>
-        /// <value>
-        /// The internal positive node.
-        /// </value>
-        protected IVariable<double> PosPrime { get; }
-
+        protected readonly DiodeVariables<double> Variables;
+        
         /// <summary>
         /// Gets the matrix elements.
         /// </summary>
@@ -71,14 +67,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected double LocalConductance;
 
         /// <summary>
-        /// Gets the biasing state.
-        /// </summary>
-        /// <value>
-        /// The biasing state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -87,25 +75,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             context.Nodes.CheckNodes(2);
 
-            BiasingState = context.GetState<IBiasingSimulationState>();
+            var state = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
-            PosPrime = BiasingState.MapNode(context.Nodes[0]);
-            _posNode = BiasingState.Map[PosPrime];
-            _negNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            if (ModelParameters.Resistance > 0)
-                PosPrime = BiasingState.Create(Name.Combine("pos"), Units.Volt);
-            _posPrimeNode = BiasingState.Map[PosPrime];
 
-            // Get matrix elements
-            Elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_negNode, _negNode),
-                new MatrixLocation(_posPrimeNode, _posPrimeNode),
-                new MatrixLocation(_negNode, _posPrimeNode),
-                new MatrixLocation(_posPrimeNode, _negNode),
-                new MatrixLocation(_posNode, _posPrimeNode),
-                new MatrixLocation(_posPrimeNode, _posNode)
-            }, new[] { _negNode, _posPrimeNode });
+            Variables = new DiodeVariables<double>(name, state, context);
+            Elements = new ElementSet<double>(state.Solver,
+                Variables.GetMatrixLocations(state.Map),
+                Variables.GetRhsIndicies(state.Map));
         }
 
         /// <summary>
@@ -184,7 +160,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         protected void Initialize(out double vd, out bool check)
         {
-            var state = BiasingState;
             check = false;
             if (_iteration.Mode == IterationModes.Junction)
             {
@@ -197,7 +172,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Get voltage over the diodes (without series resistance).
-                vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / Parameters.SeriesMultiplier;
+                vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
 
                 // Limit new junction voltage.
                 if (!double.IsNaN(ModelParameters.BreakdownVoltage) && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
@@ -219,8 +194,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <returns></returns>
         bool IConvergenceBehavior.IsConvergent()
         {
-            var state = BiasingState;
-            var vd = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) / Parameters.SeriesMultiplier;
+            var vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
 
             var delvd = vd - LocalVoltage;
             var cdhat = LocalCurrent + LocalConductance * delvd;

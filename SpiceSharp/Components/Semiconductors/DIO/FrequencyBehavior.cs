@@ -12,22 +12,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
-        private readonly int _posNode, _negNode, _posPrimeNode;
         private readonly IComplexSimulationState _complex;
 
         /// <summary>
-        /// Gets the internal positive node.
+        /// The copmplex variables used by the behavior.
         /// </summary>
-        /// <value>
-        /// The internal positive node.
-        /// </value>
-        protected new IVariable<Complex> PosPrime { get; }
+        protected readonly DiodeVariables<Complex> ComplexVariables;
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
-        public Complex ComplexVoltage => (_complex.Solution[_posPrimeNode] - _complex.Solution[_negNode]) / Parameters.SeriesMultiplier;
+        public Complex ComplexVoltage => (ComplexVariables.PosPrime.Value - ComplexVariables.Negative.Value) / Parameters.SeriesMultiplier;
 
         /// <summary>
         /// Gets the current.
@@ -56,22 +52,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-
-            PosPrime = _complex.MapNode(context.Nodes[0]);
-            _posNode = _complex.Map[PosPrime];
-            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
-            if (ModelParameters.Resistance > 0)
-                PosPrime = _complex.Create(Name.Combine("pos"), Units.Volt);
-            _posPrimeNode = _complex.Map[PosPrime];
-
+            ComplexVariables = new DiodeVariables<Complex>(name, _complex, context);
             _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_negNode, _negNode),
-                new MatrixLocation(_posPrimeNode, _posPrimeNode),
-                new MatrixLocation(_posNode, _posPrimeNode),
-                new MatrixLocation(_negNode, _posPrimeNode),
-                new MatrixLocation(_posPrimeNode, _posNode),
-                new MatrixLocation(_posPrimeNode, _negNode));
+                ComplexVariables.GetMatrixLocations(_complex.Map));
         }
 
         /// <summary>
@@ -101,7 +84,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             xceq *= m / n;
             _elements.Add(
                 gspr, new Complex(geq, xceq), new Complex(geq + gspr, xceq),
-                -gspr, -new Complex(geq, xceq), -gspr, -new Complex(geq, xceq));
+                -new Complex(geq, xceq), -new Complex(geq, xceq), -gspr, -gspr);
         }
     }
 }

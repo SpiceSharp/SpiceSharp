@@ -36,9 +36,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public NoiseBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             _mnp = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
-            var complex = context.GetState<IComplexSimulationState>();
             _state = context.GetState<INoiseSimulationState>();
-            DiodeNoise.Bind(context, complex.MapNode(context.Nodes[0]), PosPrime, complex.MapNode(context.Nodes[1]));
+            DiodeNoise.Bind(context, ComplexVariables.Variables);
         }
 
         /// <summary>
